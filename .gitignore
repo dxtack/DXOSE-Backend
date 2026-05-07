@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Runtime / generated storage
+logs/
+uploads/
+*.log
+
+# Build / cache
+dist/
+coverage/
+.cache/
+
+# OS/Editor artifacts
+.DS_Store
+.idea/
+.vscode/
