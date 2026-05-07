@@ -65,6 +65,7 @@ model Tenant {
   vendorMappings      VendorMapping[]
   incomingGetPasses   GetPass[]            @relation("GetPassTargetTenant")
   systemNotifications SystemNotification[]
+  lostFoundItems      LostFoundItem[]
 
   @@index([parentId])
   @@index([hasBranches])
@@ -124,6 +125,7 @@ model User {
   adminLogs                        SuperAdminLog[]      @relation("AdminLogUser")
   memberships                      TenantMember[]
   systemNotifications              SystemNotification[]
+  lostFoundItems                   LostFoundItem[]      @relation("LostFoundCreatedBy")
 
   @@map("users")
 }
@@ -1231,6 +1233,30 @@ model SystemNotification {
   @@map("system_notifications")
 }
 
+model LostFoundItem {
+  id              String          @id @default(uuid()) @db.Uuid
+  itemName        String
+  description     String?
+  locationFound   String
+  foundDate       DateTime        @default(now())
+  status          LostFoundStatus @default(FOUND)
+  photoKey        String?
+  storageLocation String?
+  handedOverTo    String?
+  handedOverDate  DateTime?
+  deliveryNotes   String?
+  tenantId        String          @db.Uuid
+  createdBy       String          @db.Uuid
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  tenant          Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdByUser   User            @relation("LostFoundCreatedBy", fields: [createdBy], references: [id], onDelete: Restrict)
+
+  @@index([tenantId, status, foundDate])
+  @@index([tenantId, createdAt])
+  @@map("lost_found_items")
+}
+
 model GetPassLine {
   id                          String            @id @default(uuid()) @db.Uuid
   getPassId                   String            @db.Uuid
@@ -1603,4 +1629,9 @@ enum ReportType {
   OMC
   TRANSFERS
   AGING
+}
+
+enum LostFoundStatus {
+  FOUND
+  RETURNED
 }

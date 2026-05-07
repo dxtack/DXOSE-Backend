@@ -55,6 +55,8 @@ router.use('/units', unitRoutes);
 router.use('/breakage', breakageRoutes);
 router.use('/lost', lostItemsRoutes);
 router.use('/lost-items', lostItemsRoutes);
+const lostFoundRoutes = require('./lostFound.routes');
+router.use('/lost-found', lostFoundRoutes);
 
 // M10: Stock Count
 router.use('/stock-count', stockCountRoutes);
