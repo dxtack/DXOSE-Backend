@@ -1,0 +1,8 @@
+2026-02-28 15:01:55 [32minfo[39m: [32m🚀 OS&E API Server running on port 4000 [development][39m
+2026-02-28 15:02:01 [32minfo[39m: [32mUser logged in: admin@grandhorizon.com [tenant: grand-horizon][39m
+2026-02-28 15:02:01 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:02:01 +0000] "POST /api/auth/login HTTP/1.1" 200 915 "-" "-"[39m
+2026-02-28 15:02:01 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:02:01 +0000] "POST /api/grn/cd207512-37bc-4369-a279-54c8e842d7af/validate HTTP/1.1" 422 277 "-" "-"[39m
+2026-02-28 15:02:01 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:02:01 +0000] "PATCH /api/grn/cf233415-b0cf-4cde-8940-492f0b3a3ae3 HTTP/1.1" 423 89 "-" "-"[39m
+2026-02-28 15:02:01 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:02:01 +0000] "DELETE /api/grn/cf233415-b0cf-4cde-8940-492f0b3a3ae3 HTTP/1.1" 423 101 "-" "-"[39m
+2026-02-28 15:02:01 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:02:01 +0000] "POST /api/grn/cf233415-b0cf-4cde-8940-492f0b3a3ae3/validate HTTP/1.1" 422 81 "-" "-"[39m
+2026-02-28 15:02:01 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:02:01 +0000] "DELETE /api/grn/173349e8-7cba-44a1-a554-06759d7bf9c0 HTTP/1.1" 200 41 "-" "-"[39m

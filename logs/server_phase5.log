@@ -1,0 +1,35 @@
+2026-02-28 15:31:32 [32minfo[39m: [32m🚀 OS&E API Server running on port 4000 [development][39m
+2026-02-28 15:31:39 [32minfo[39m: [32mUser logged in: admin@grandhorizon.com [tenant: grand-horizon][39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/auth/login HTTP/1.1" 200 915 "-" "-"[39m
+2026-02-28 15:31:39 [31merror[39m: [31mError: Direct ISSUE movements are not allowed. All stock issues must reference an approved Store Requisition.[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/movements HTTP/1.1" 403 132 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions HTTP/1.1" 201 898 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues HTTP/1.1" 403 104 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions HTTP/1.1" 201 897 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/53b2e364-a5ca-407d-b63d-976235326322/submit HTTP/1.1" 200 572 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/53b2e364-a5ca-407d-b63d-976235326322/approve HTTP/1.1" 200 642 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "GET /api/requisitions/53b2e364-a5ca-407d-b63d-976235326322 HTTP/1.1" 200 1162 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues HTTP/1.1" 422 121 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions HTTP/1.1" 201 898 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/a46a6ea9-6045-4a03-a653-3e73193c9f4e/submit HTTP/1.1" 200 572 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/a46a6ea9-6045-4a03-a653-3e73193c9f4e/approve HTTP/1.1" 200 642 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "GET /api/requisitions/a46a6ea9-6045-4a03-a653-3e73193c9f4e HTTP/1.1" 200 1163 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues HTTP/1.1" 422 210 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions HTTP/1.1" 201 898 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/5fec9d38-b9de-4408-a60e-62e46212c737/submit HTTP/1.1" 200 572 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/5fec9d38-b9de-4408-a60e-62e46212c737/approve HTTP/1.1" 200 642 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "GET /api/requisitions/5fec9d38-b9de-4408-a60e-62e46212c737 HTTP/1.1" 200 1163 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues HTTP/1.1" 201 743 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues/b9f6fff9-0ab5-4e79-b8fe-84ad44b8046e/post HTTP/1.1" 200 839 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "GET /api/requisitions/5fec9d38-b9de-4408-a60e-62e46212c737 HTTP/1.1" 200 1972 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues HTTP/1.1" 201 743 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues/31cb5d12-5a9d-46c1-878b-155507c25012/post HTTP/1.1" 200 839 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "GET /api/requisitions/5fec9d38-b9de-4408-a60e-62e46212c737 HTTP/1.1" 200 2809 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "PATCH /api/issues/b9f6fff9-0ab5-4e79-b8fe-84ad44b8046e HTTP/1.1" 423 85 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "DELETE /api/issues/b9f6fff9-0ab5-4e79-b8fe-84ad44b8046e HTTP/1.1" 423 87 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions HTTP/1.1" 201 897 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/f12c6bf9-9749-4187-b7ad-01cd792a34ad/submit HTTP/1.1" 200 572 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/requisitions/f12c6bf9-9749-4187-b7ad-01cd792a34ad/approve HTTP/1.1" 200 642 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "GET /api/requisitions/f12c6bf9-9749-4187-b7ad-01cd792a34ad HTTP/1.1" 200 1162 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues HTTP/1.1" 201 743 "-" "-"[39m
+2026-02-28 15:31:39 [35mhttp[39m: [35m::1 - - [28/Feb/2026:12:31:39 +0000] "POST /api/issues/0b07de09-689d-4a87-a760-3760bb916e0e/post HTTP/1.1" 500 121 "-" "-"[39m
