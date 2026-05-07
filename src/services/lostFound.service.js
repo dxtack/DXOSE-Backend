@@ -28,25 +28,18 @@ const attachSignedPhotoUrl = async (item) => {
 
 const createLostFoundItem = async (tenantId, userId, payload = {}) => {
     const itemName = String(payload.itemName || '').trim();
-    const locationFound = String(payload.locationFound || '').trim();
     const description = typeof payload.description === 'string' ? payload.description.trim() : null;
     const photoKey = typeof payload.photoKey === 'string' ? payload.photoKey.trim() : null;
-    const storageLocation = typeof payload.storageLocation === 'string' ? payload.storageLocation.trim() : null;
-    const foundDate = toDateOrNull(payload.foundDate, 'foundDate');
 
     if (!itemName) throw toClientError('itemName is required.');
-    if (!locationFound) throw toClientError('locationFound is required.');
 
     return prisma.lostFoundItem.create({
         data: {
             tenantId,
             createdBy: userId,
             itemName,
-            locationFound,
             description: description || null,
             photoKey: photoKey || null,
-            storageLocation: storageLocation || null,
-            ...(foundDate ? { foundDate } : {}),
         },
         include: {
             createdByUser: { select: { id: true, firstName: true, lastName: true } },
@@ -86,7 +79,6 @@ const listLostFoundItems = async (tenantId, query = {}) => {
 const markLostFoundItemReturned = async (tenantId, id, payload = {}) => {
     const handedOverTo = String(payload.handedOverTo || '').trim();
     const handedOverDate = toDateOrNull(payload.handedOverDate, 'handedOverDate');
-    const deliveryNotes = typeof payload.deliveryNotes === 'string' ? payload.deliveryNotes.trim() : null;
 
     if (!handedOverTo) throw toClientError('handedOverTo is required.');
 
@@ -102,7 +94,6 @@ const markLostFoundItemReturned = async (tenantId, id, payload = {}) => {
             status: 'RETURNED',
             handedOverTo,
             handedOverDate: handedOverDate || new Date(),
-            deliveryNotes: deliveryNotes || null,
         },
         include: {
             createdByUser: { select: { id: true, firstName: true, lastName: true } },
