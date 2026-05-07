@@ -1,5 +1,5 @@
 /**
- * System initializer — global Role rows + platform tenant + SUPER_ADMIN user.
+ * System initializer — global Role rows + SUPER_ADMIN user.
  *
  * Ensures `connectRole(...)` and tenant/org flows find every role code the API uses.
  * Roles are tenant-agnostic (`tenantId: null`).
@@ -124,7 +124,7 @@ async function seedRolePermissions() {
 }
 
 async function main() {
-    console.log('── System initializer (roles + platform + SUPER_ADMIN) ──\n');
+    console.log('── System initializer (roles + SUPER_ADMIN) ──\n');
 
     await seedSystemRoles();
     await seedPermissions();
@@ -137,42 +137,6 @@ async function main() {
     if (!superAdminRole) {
         throw new Error('SUPER_ADMIN role missing after seedSystemRoles()');
     }
-
-    let platform = await prisma.tenant.findUnique({ where: { slug: 'platform' } });
-    if (!platform) {
-        platform = await prisma.tenant.create({
-            data: {
-                name: 'OS&E Platform',
-                slug: 'platform',
-                subscriptionTier: 'ENTERPRISE',
-                isActive: true,
-            },
-        });
-        console.log(`\n  ✅ Platform tenant created: ${platform.id}`);
-    } else {
-        console.log(`\n  ℹ  Platform tenant already exists: ${platform.id}`);
-    }
-
-    await prisma.subscription.upsert({
-        where: { tenantId: platform.id },
-        create: {
-            tenantId: platform.id,
-            planType: 'ENTERPRISE',
-            status: 'ACTIVE',
-            maxUsers: 99999,
-            maxStores: 99999,
-            maxDepartments: 99999,
-            maxMonthlyMovements: 999999,
-        },
-        update: { status: 'ACTIVE' },
-    });
-    console.log('  ✅ Platform subscription (ENTERPRISE) set');
-
-    await prisma.tenantUsage.upsert({
-        where: { tenantId: platform.id },
-        create: { tenantId: platform.id, totalUsers: 1 },
-        update: {},
-    });
 
     const email = 'superadmin@ose.cloud';
     const password = 'superadmin@2026';
