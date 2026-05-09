@@ -3,6 +3,7 @@
 const express = require('express');
 const { authenticate } = require('../middleware/authenticate');
 const { getStorage } = require('../config/storage');
+const { uploadAttachment, buildAttachmentKey, putBuffer } = require('../middleware/upload.middleware');
 const logger = require('../utils/logger');
 
 const router = express.Router();
@@ -78,6 +79,30 @@ router.get('/signed-url', authenticate, async (req, res) => {
             success: false,
             message: 'Failed to generate signed URL',
         });
+    }
+});
+
+// Generic authenticated asset upload used by frontend FileService.
+router.post('/upload', authenticate, uploadAttachment.single('file'), async (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ success: false, message: 'file is required' });
+    }
+    try {
+        const key = buildAttachmentKey(req.user.tenantId, 'assets', 'generic', req.file.originalname);
+        await putBuffer(key, req.file);
+        // Keep compatibility with legacy clients expecting path/filePath keys.
+        return res.status(201).json({
+            success: true,
+            data: {
+                key,
+                path: key,
+                filePath: key,
+            },
+            message: 'File uploaded successfully.',
+        });
+    } catch (err) {
+        logger.error(`[file.routes] upload failed reason=${err.message}`);
+        return res.status(500).json({ success: false, message: 'Failed to upload file' });
     }
 });
 
