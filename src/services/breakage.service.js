@@ -32,6 +32,12 @@ const GET_PASS_ACCOUNTABILITY = new Set([
     'TARGET_HOTEL_COMPENSATION',
 ]);
 const SUGGESTED_ACTIONS = new Set(['EMPLOYEE', 'HOTEL']);
+const HIGH_LEVEL_AUTO_APPROVAL_ROLES = new Set([
+    'HOTEL_ADMIN',
+    'GM',
+    'GENERAL_MANAGER',
+    'ORG_MANAGER',
+]);
 
 /**
  * Same 4-step chain as manual breakage, with step 1 pre-approved (e.g. dept manager accepted get-pass return).
@@ -46,9 +52,14 @@ const createMovementApprovalRequest = async (tx, {
     firstStepComment,
     /** Pre-approved DEPT_MANAGER step: accountability from get-pass return lines (Workflow History). */
     firstStepAccountabilityType,
+    autoApproveAllSteps = false,
+    autoApprovedByUserId,
+    autoApprovalComment,
 }) => {
     const now = new Date();
     const comment = firstStepComment || AUTO_APPROVAL_NOTE;
+    const autoApproveAll = autoApproveAllSteps === true;
+    const actingUserId = autoApprovedByUserId || deptApproverUserId;
     const rawAccountability =
         typeof firstStepAccountabilityType === 'string' ? firstStepAccountabilityType.trim() : '';
     const step1Accountability = rawAccountability && GET_PASS_ACCOUNTABILITY.has(rawAccountability)
@@ -58,23 +69,26 @@ const createMovementApprovalRequest = async (tx, {
         data: {
             tenantId,
             requestType,
-            status: 'PENDING',
+            status: autoApproveAll ? 'APPROVED' : 'PENDING',
             documentId,
-            currentStep: 2,
+            currentStep: autoApproveAll ? APPROVAL_CHAIN.length : 2,
             totalSteps: APPROVAL_CHAIN.length,
             createdBy,
+            ...(autoApproveAll ? { resolvedAt: now } : {}),
             steps: {
                 create: APPROVAL_CHAIN.map((c) => ({
                     stepNumber: c.step,
                     requiredRole: connectRole(c.role),
-                    status: c.step === 1 ? 'APPROVED' : 'PENDING',
-                    ...(c.step === 1
+                    status: autoApproveAll || c.step === 1 ? 'APPROVED' : 'PENDING',
+                    ...(autoApproveAll || c.step === 1
                         ? {
-                              actedByUser: { connect: { id: deptApproverUserId } },
+                              actedByUser: { connect: { id: actingUserId } },
                               actedAt: now,
-                              comment,
+                              comment: autoApproveAll
+                                  ? (autoApprovalComment || AUTO_APPROVAL_NOTE)
+                                  : comment,
                               // Persist accountability on the auto-approved DEPT_MANAGER step (get-pass returns).
-                              ...(step1Accountability
+                              ...(c.step === 1 && step1Accountability
                                   ? { accountabilityType: step1Accountability }
                                   : {}),
                           }
@@ -84,7 +98,7 @@ const createMovementApprovalRequest = async (tx, {
         },
     });
 };
-const AUTO_APPROVAL_NOTE = 'Auto-approved on creation';
+const AUTO_APPROVAL_NOTE = 'Auto-approved by system due to high-level authority.';
 
 /** Cross-department list + approval-chain payload for these roles (tenant-wide). */
 const TENANT_WIDE_MOVEMENT_APPROVAL_ROLES = new Set([
@@ -254,6 +268,8 @@ const createBreakage = async (data, tenantId, userId, _userRole, photoFile = nul
         throw err('Suggested action is required and must be EMPLOYEE or HOTEL.');
     }
     const normalizedSuggestedAction = String(suggestedAction).trim().toUpperCase();
+    const normalizedCreatorRole = normalizeRole(_userRole || '');
+    const autoApproveOnCreate = HIGH_LEVEL_AUTO_APPROVAL_ROLES.has(normalizedCreatorRole);
 
     // Validate location
     const location = await prisma.location.findFirst({ where: { id: sourceLocationId, tenantId } });
@@ -290,6 +306,10 @@ const createBreakage = async (data, tenantId, userId, _userRole, photoFile = nul
             : typeof accountability === 'string' && accountability.trim()
                 ? accountability.trim()
                 : undefined;
+    const effectiveDocumentDate = documentDate ? new Date(documentDate) : new Date();
+    if (autoApproveOnCreate) {
+        await checkPeriodLock(tenantId, effectiveDocumentDate);
+    }
 
     return prisma.$transaction(async (tx) => {
         // INTERNAL manual breakage: enter the same 4-step chain as get-pass return — dept step recorded on
@@ -300,7 +320,7 @@ const createBreakage = async (data, tenantId, userId, _userRole, photoFile = nul
                 documentNo,
                 movementType: 'BREAKAGE',
                 sourceType: 'INTERNAL',
-                status: 'DEPT_APPROVED',
+                status: autoApproveOnCreate ? 'APPROVED' : 'DEPT_APPROVED',
                 sourceLocationId,
                 reason: reason.trim(),
                 notes: notes?.trim() || null,
@@ -310,8 +330,9 @@ const createBreakage = async (data, tenantId, userId, _userRole, photoFile = nul
                     typeof responsibleEmployeeName === 'string' && responsibleEmployeeName.trim()
                         ? responsibleEmployeeName.trim()
                         : null,
-                documentDate: documentDate ? new Date(documentDate) : new Date(),
+                documentDate: effectiveDocumentDate,
                 createdBy: userId,
+                ...(autoApproveOnCreate ? { postedAt: new Date() } : {}),
                 lines: {
                     create: lines.map(l => ({
                         itemId: l.itemId,
@@ -334,7 +355,14 @@ const createBreakage = async (data, tenantId, userId, _userRole, photoFile = nul
             deptApproverUserId: userId,
             firstStepComment: AUTO_APPROVAL_NOTE,
             firstStepAccountabilityType,
+            autoApproveAllSteps: autoApproveOnCreate,
+            autoApprovedByUserId: userId,
+            autoApprovalComment: AUTO_APPROVAL_NOTE,
         });
+
+        if (autoApproveOnCreate) {
+            await _postBreakageInTransaction(tx, doc, tenantId, userId);
+        }
 
         const created = await tx.movementDocument.findFirst({ where: { id: doc.id }, include: BREAKAGE_INCLUDE });
         return withBreakagePhotoUrl(created);

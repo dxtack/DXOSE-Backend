@@ -145,8 +145,14 @@ const GET_PASS_ACCOUNTABILITY = new Set([
     'TARGET_HOTEL_COMPENSATION',
 ]);
 const SUGGESTED_ACTIONS = new Set(['EMPLOYEE', 'HOTEL']);
+const HIGH_LEVEL_AUTO_APPROVAL_ROLES = new Set([
+    'HOTEL_ADMIN',
+    'GM',
+    'GENERAL_MANAGER',
+    'ORG_MANAGER',
+]);
 
-const AUTO_APPROVAL_NOTE = 'Auto-approved on creation';
+const AUTO_APPROVAL_NOTE = 'Auto-approved by system due to high-level authority.';
 
 const ensureCanApprove = (doc, userRole) => {
     const current = LOST_FLOW.find((s) => s.status === doc.status);
@@ -287,6 +293,8 @@ const createLost = async (tenantId, userId, _userRole, body = {}) => {
         throw err('Suggested action is required and must be EMPLOYEE or HOTEL.');
     }
     const normalizedSuggestedAction = String(suggestedAction).trim().toUpperCase();
+    const normalizedCreatorRole = normalizeRole(_userRole || '');
+    const autoApproveOnCreate = HIGH_LEVEL_AUTO_APPROVAL_ROLES.has(normalizedCreatorRole);
 
     const location = await prisma.location.findFirst({ where: { id: sourceLocationId, tenantId } });
     if (!location) throw err('Location not found.', 404);
@@ -299,6 +307,10 @@ const createLost = async (tenantId, userId, _userRole, body = {}) => {
             : typeof accountability === 'string' && accountability.trim()
                 ? accountability.trim()
                 : undefined;
+    const effectiveDocumentDate = documentDate ? new Date(documentDate) : new Date();
+    if (autoApproveOnCreate) {
+        await checkPeriodLock(tenantId, effectiveDocumentDate);
+    }
 
     return prisma.$transaction(async (tx) => {
         const doc = await tx.movementDocument.create({
@@ -307,7 +319,7 @@ const createLost = async (tenantId, userId, _userRole, body = {}) => {
                 documentNo,
                 movementType: 'LOST',
                 sourceType: 'INTERNAL',
-                status: 'DEPT_APPROVED',
+                status: autoApproveOnCreate ? 'APPROVED' : 'DEPT_APPROVED',
                 sourceLocationId,
                 reason: reason.trim(),
                 notes: notes?.trim() || null,
@@ -316,8 +328,9 @@ const createLost = async (tenantId, userId, _userRole, body = {}) => {
                     typeof responsibleEmployeeName === 'string' && responsibleEmployeeName.trim()
                         ? responsibleEmployeeName.trim()
                         : null,
-                documentDate: documentDate ? new Date(documentDate) : new Date(),
+                documentDate: effectiveDocumentDate,
                 createdBy: userId,
+                ...(autoApproveOnCreate ? { postedAt: new Date() } : {}),
                 lines: {
                     create: lines.map((line) => ({
                         itemId: line.itemId,
@@ -340,7 +353,14 @@ const createLost = async (tenantId, userId, _userRole, body = {}) => {
             deptApproverUserId: userId,
             firstStepComment: AUTO_APPROVAL_NOTE,
             firstStepAccountabilityType,
+            autoApproveAllSteps: autoApproveOnCreate,
+            autoApprovedByUserId: userId,
+            autoApprovalComment: AUTO_APPROVAL_NOTE,
         });
+
+        if (autoApproveOnCreate) {
+            await applyStockImpactOnFinalApproval(tx, doc, userId);
+        }
 
         return tx.movementDocument.findFirst({ where: { id: doc.id }, include: LOST_INCLUDE });
     });
