@@ -2,22 +2,25 @@ const express = require('express');
 const router = express.Router();
 const movementController = require('../controllers/movement.controller');
 const { authenticate: protect } = require('../middleware/authenticate');
-const { authorize } = require('../middleware/authorize');
+const { requirePermission } = require('../middleware/authorize');
+const {
+    requireMovementDocumentMutationPermission,
+} = require('../middleware/movementDocumentPermission.middleware');
 
 router.use(protect);
 
 router
     .route('/')
-    .post(authorize('SUPER_ADMIN', 'ADMIN', 'STOREKEEPER'), movementController.createMovement)
-    .get(movementController.getMovements);
+    .post(requirePermission('ADJUSTMENT_CREATE'), movementController.createMovement)
+    .get(requirePermission('MOVEMENTS_VIEW'), movementController.getMovements);
 
 router
     .route('/:id')
-    .get(movementController.getMovement)
-    .put(authorize('superadmin', 'admin', 'inventory_manager', 'storekeeper'), movementController.updateMovement);
+    .get(requirePermission('MOVEMENTS_VIEW'), movementController.getMovement)
+    .put(requireMovementDocumentMutationPermission, movementController.updateMovement);
 
 router
     .route('/:id/post')
-    .post(authorize('SUPER_ADMIN', 'ADMIN', 'STOREKEEPER'), movementController.postMovement);
+    .post(requireMovementDocumentMutationPermission, movementController.postMovement);
 
 module.exports = router;

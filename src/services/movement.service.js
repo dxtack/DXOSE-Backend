@@ -1,51 +1,40 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const settingService = require('./setting.service');
+const { assertMovementRegisterMutable } = require('./movementRegisterGuard.service');
+const { withUserFacingState } = require('../platform/lifecyclePresentation.service');
+const { generateDocNumber, prefixFromMovementType } = require('./docNumbering.service');
+const { assertConcurrencyVersion, bumpConcurrencyUpdate } = require('../platform/concurrency.service');
+const { EntityType } = require('./auditTrail.service');
+const {
+    assertCreateDraftOrigin,
+    assertDirectApiCreateType,
+} = require('./movementDirectAdjustment.guard');
+
+function assertPositiveLineQty(qty, label = 'Line quantity') {
+    const n = Number(qty);
+    if (!Number.isFinite(n) || n <= 0) {
+        throw Object.assign(new Error(`${label} must be greater than zero.`), { statusCode: 422 });
+    }
+    return n;
+}
 
 /**
- * Generate a unique Document Number
+ * Create a new draft movement document.
+ * @param {object} data
+ * @param {string} tenantId
+ * @param {string} userId
+ * @param {import('@prisma/client').Prisma.TransactionClient | import('@prisma/client').PrismaClient} [db]
+ * @param {{ origin: 'DIRECT_API' | 'INTERNAL' }} options — required; fail-closed (no default)
  */
-const generateDocumentNo = async (tenantId, movementType, db = prisma) => {
-    const prefixMap = {
-        OPENING_BALANCE: 'OB',
-        RECEIVE: 'REC',
-        ISSUE: 'ISS',
-        TRANSFER_OUT: 'TRO',
-        TRANSFER_IN: 'TRI',
-        RETURN: 'RET',
-        ADJUSTMENT: 'ADJ',
-        BREAKAGE: 'BRK',
-        COUNT_ADJUSTMENT: 'CNT'
-    };
+const createMovementDraft = async (data, tenantId, userId, db = prisma, options) => {
+    const origin = assertCreateDraftOrigin(options);
 
-    const prefix = prefixMap[movementType] || 'MOV';
-    const yearMonth = new Date().toISOString().slice(2, 7).replace('-', ''); // e.g., 2602 for Feb 2026
-
-    const startStr = `${prefix}-${yearMonth}-`;
-
-    const lastDoc = await db.movementDocument.findFirst({
-        where: {
-            tenantId,
-            documentNo: { startsWith: startStr }
-        },
-        orderBy: { documentNo: 'desc' }
-    });
-
-    let seqNum = 1;
-    if (lastDoc) {
-        const parts = lastDoc.documentNo.split('-');
-        if (parts.length === 3) {
-            seqNum = parseInt(parts[2], 10) + 1;
-        }
+    if (origin === 'DIRECT_API') {
+        assertDirectApiCreateType(data.movementType);
+        data.movementType = 'ADJUSTMENT';
     }
 
-    return `${startStr}${seqNum.toString().padStart(4, '0')}`;
-};
-
-/**
- * Create a new draft movement document
- */
-const createMovementDraft = async (data, tenantId, userId, db = prisma) => {
     // ── Phase 4 MANDATORY GUARD: No manual RECEIVE without a valid GRN ──────
     // Every RECEIVE movement MUST reference an approved GRN.
     // This is a strict control requirement — no exceptions.
@@ -96,18 +85,28 @@ const createMovementDraft = async (data, tenantId, userId, db = prisma) => {
 
     // ── Phase 6 MANDATORY GUARD: No manual TRANSFER_OUT / TRANSFER_IN ─────────
     if (data.movementType === 'TRANSFER_OUT') {
-        const err = new Error('Direct TRANSFER_OUT movements are not allowed. Use the Transfer Control Gate (/api/transfers/:id/dispatch).');
+        const err = new Error(
+            'Direct TRANSFER_OUT movements are not allowed. Transfers post via Finance approval on /api/transfers/:id/approve.',
+        );
         err.statusCode = 403;
         throw err;
     }
     if (data.movementType === 'TRANSFER_IN') {
-        const err = new Error('Direct TRANSFER_IN movements are not allowed. TRANSFER_IN is posted automatically when a transfer is received (/api/transfers/:id/receive).');
+        const err = new Error(
+            'Direct TRANSFER_IN movements are not allowed. Transfers post via Finance approval on /api/transfers/:id/approve.',
+        );
         err.statusCode = 403;
         throw err;
     }
     // ────────────────────────────────────────────────────────────────────────
 
-    const documentNo = await generateDocumentNo(tenantId, data.movementType, db);
+    const refDate = data.documentDate ? new Date(data.documentDate) : new Date();
+    const documentNo = await generateDocNumber(
+        tenantId,
+        prefixFromMovementType(data.movementType),
+        refDate,
+        db,
+    );
 
 
     // Sanitize optional UUID fields — convert empty strings to null
@@ -162,7 +161,7 @@ const createMovementDraft = async (data, tenantId, userId, db = prisma) => {
                     line.qtyRequested !== undefined && line.qtyRequested !== null
                         ? line.qtyRequested
                         : line.quantity;
-                const qtyReq = parseFloat(qtyInput) || 0;
+                const qtyReq = assertPositiveLineQty(parseFloat(qtyInput) || 0);
                 let unitCost = parseFloat(line.unitCost) || 0;
                 let totalValue = parseFloat(line.totalValue) || 0;
                 if (data.movementType === 'OPENING_BALANCE' && obCatalogPrices) {
@@ -260,7 +259,10 @@ const getMovements = async (tenantId, query) => {
         prisma.movementDocument.count({ where })
     ]);
 
-    return { documents, total };
+    return {
+        documents: documents.map((doc) => withUserFacingState('MOVEMENT', doc)),
+        total,
+    };
 };
 
 /**
@@ -295,20 +297,28 @@ const getMovementById = async (id, tenantId) => {
         throw error;
     }
 
-    return document;
+    return withUserFacingState('MOVEMENT', document);
 };
 
 /**
  * Update a DRAFT movement document
  */
-const updateMovementDraft = async (id, data, tenantId) => {
+const updateMovementDraft = async (id, data, tenantId, userId = null, expectedVersion = null) => {
     const document = await getMovementById(id, tenantId);
+
+    assertMovementRegisterMutable(document, 'update');
+    const { assertDocumentEditableByLifecycle } = require('../platform/lifecyclePresentation.service');
+    assertDocumentEditableByLifecycle('MOVEMENT', document.status, { notes: document.notes });
 
     if (document.status !== 'DRAFT' && document.status !== 'REJECTED') {
         const error = new Error(`Cannot update document in ${document.status} status`);
         error.statusCode = 400;
         throw error;
     }
+    assertConcurrencyVersion(expectedVersion, document.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.MOVEMENT, entityId: id, changedBy: userId ?? document.createdBy },
+    });
 
     // Handling full replacement of lines if provided
     if (data.lines) {
@@ -349,7 +359,7 @@ const updateMovementDraft = async (id, data, tenantId) => {
                         line.qtyRequested !== undefined && line.qtyRequested !== null
                             ? line.qtyRequested
                             : line.quantity;
-                    const qtyReq = parseFloat(qtyInput) || 0;
+                    const qtyReq = assertPositiveLineQty(parseFloat(qtyInput) || 0);
                     let unitCost = parseFloat(line.unitCost) || 0;
                     let totalValue = parseFloat(line.totalValue) || 0;
                     if (obCatalogPrices) {
@@ -387,10 +397,17 @@ const updateMovementDraft = async (id, data, tenantId) => {
     if (Object.keys(mainData).length > 0) {
         return prisma.movementDocument.update({
             where: { id },
-            data: mainData,
+            data: bumpConcurrencyUpdate(mainData),
             include: {
                 lines: { include: { item: { select: { name: true } } } }
             }
+        });
+    }
+
+    if (data.lines) {
+        await prisma.movementDocument.update({
+            where: { id },
+            data: bumpConcurrencyUpdate({}),
         });
     }
 

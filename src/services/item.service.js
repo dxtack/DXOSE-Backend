@@ -447,8 +447,24 @@ const createItem = async (data, tenantId, userId = null) => {
 };
 
 // ── LIST ───────────────────────────────────────────────────────────────────────
+const normalizeItemSearch = (raw) => {
+    if (raw == null || raw === '') return undefined;
+    const normalized = String(raw).replace(/\s+/g, ' ').trim();
+    return normalized.length > 0 ? normalized : undefined;
+};
+
 const getItems = async (tenantId, query = {}) => {
-    const { search, categoryId, subcategoryId, departmentId, locationId, isActive, catalog, forGetPass, slim } = query;
+    const {
+        categoryId,
+        subcategoryId,
+        departmentId,
+        locationId,
+        isActive,
+        catalog,
+        forGetPass,
+        slim,
+    } = query;
+    const search = normalizeItemSearch(query.search ?? query.q);
     const slimMode = isSlimQuery(slim);
     const catalogMode =
         !slimMode &&
@@ -461,21 +477,36 @@ const getItems = async (tenantId, query = {}) => {
 
     const hasExplicitIsActive = Object.prototype.hasOwnProperty.call(query, 'isActive');
 
+    const andConditions = [];
+
+    if (locationId) {
+        andConditions.push({
+            OR: [
+                { defaultStoreId: locationId },
+                { stockBalances: { some: { locationId } } },
+            ],
+        });
+    }
+
+    if (search) {
+        andConditions.push({
+            OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { code: { contains: search, mode: 'insensitive' } },
+                { barcode: { contains: search, mode: 'insensitive' } },
+                { department: { name: { contains: search, mode: 'insensitive' } } },
+            ],
+        });
+    }
+
     const where = {
         tenantId,
         ...(categoryId && { categoryId }),
         ...(subcategoryId && { subcategoryId }),
         ...(departmentId && { departmentId }),
-        ...(locationId && { stockBalances: { some: { locationId } } }),
         ...(catalogMode && !hasExplicitIsActive ? { isActive: true } : {}),
         ...(hasExplicitIsActive ? { isActive: isActive === 'true' } : {}),
-        ...(search && {
-            OR: [
-                { name: { contains: search, mode: 'insensitive' } },
-                { barcode: { contains: search, mode: 'insensitive' } },
-                { department: { name: { contains: search, mode: 'insensitive' } } },
-            ],
-        }),
+        ...(andConditions.length > 0 && { AND: andConditions }),
     };
 
     if (slimMode) {
@@ -512,148 +543,61 @@ const getItems = async (tenantId, query = {}) => {
     const enrichedItems = await Promise.all(
         items.map(async (it) => attachDisplayImageUrl(enrichItemWithOpeningFields(it, enrichCtx)))
     );
+    const rankedItems = search ? sortItemsBySearchRank(enrichedItems, search) : enrichedItems;
 
     return {
-        items: enrichedItems,
+        items: rankedItems,
         total,
         skip,
         take,
     };
 };
 
+const locationItemResolution = require('./location-item-resolution.service');
+const { sortItemsBySearchRank } = require('../utils/item-search-rank.util');
+
 /**
- * Items receivable at a warehouse (GRN destination): in stock there, default store = location,
- * or item category is linked to this location via LocationCategory.
- * Each row includes `currentStock` (qty on hand at this location, 0 if no balance row).
+ * Items at warehouse — default RECEIVING mode (GRN: balance + default store + category mapping).
+ * Pass mode=operational for StockBalance-only catalog.
  */
 const getItemsByLocationId = async (tenantId, locationId, query = {}) => {
-    if (!uuidValidate(locationId)) throw badRequest('Invalid locationId');
-
-    const location = await prisma.location.findFirst({
-        where: { id: locationId, tenantId },
-        select: { id: true },
-    });
-    if (!location) {
-        const e = new Error('Location not found');
-        e.statusCode = 404;
-        throw e;
+    const mode = query.mode || locationItemResolution.MODES.RECEIVING;
+    if (mode === locationItemResolution.MODES.OPERATIONAL) {
+        const { items } = await locationItemResolution.resolveItemsForLocation(tenantId, locationId, {
+            ...query,
+            mode: locationItemResolution.MODES.OPERATIONAL,
+        });
+        return items;
     }
 
-    const { search } = query;
-    const term = search && String(search).trim() ? String(search).trim() : '';
-
-    const locationOr = [
-        { stockBalances: { some: { locationId } } },
-        { defaultStoreId: locationId },
-        { category: { locationCategories: { some: { locationId } } } },
-    ];
-
-    const where = {
-        tenantId,
-        isActive: true,
-        AND: [
-            { OR: locationOr },
-            ...(term
-                ? [{
-                    OR: [
-                        { name: { contains: term, mode: 'insensitive' } },
-                        { barcode: { contains: term, mode: 'insensitive' } },
-                        { code: { contains: term, mode: 'insensitive' } },
-                    ],
-                }]
-                : []),
-        ],
-    };
-
+    const receiving = await locationItemResolution.resolveItemsForLocation(tenantId, locationId, {
+        ...query,
+        mode: locationItemResolution.MODES.RECEIVING,
+    });
     let take = parseInt(query.take, 10);
     if (!Number.isFinite(take) || take < 1) take = 500;
-    take = Math.min(take, 1000);
-
-    const items = await prisma.item.findMany({
-        where,
-        orderBy: { name: 'asc' },
-        take,
-        include: {
-            ...ITEM_CATALOG_INCLUDE,
-            stockBalances: {
-                where: { locationId },
-                select: { qtyOnHand: true },
-            },
-        },
-    });
-
-    return items.map((it) => {
-        const sb = it.stockBalances?.[0];
-        const currentStock = sb && sb.qtyOnHand != null ? Number(sb.qtyOnHand) : 0;
-        const { stockBalances, ...rest } = it;
-        return { ...rest, currentStock };
-    });
+    take = Math.min(take, receiving.items.length);
+    return receiving.items.slice(0, take);
 };
 
 /**
- * Lightweight list-select source: all active items tied to this location (no pagination).
- * Includes stock-derived relation, default store relation, or location-category relation.
+ * List-select at warehouse — default OPERATIONAL (StockBalance only).
+ * Pass mode=receiving for GRN-style expanded catalog.
  */
 const getAllItemsByLocationId = async (tenantId, locationId, query = {}) => {
-    if (!uuidValidate(locationId)) throw badRequest('Invalid locationId');
-
-    const location = await prisma.location.findFirst({
-        where: { id: locationId, tenantId },
-        select: { id: true },
+    const mode = query.mode || locationItemResolution.MODES.OPERATIONAL;
+    const { items } = await locationItemResolution.resolveItemsForLocation(tenantId, locationId, {
+        ...query,
+        mode,
+        includeZeroOnHand: query.includeZeroOnHand ?? 'true',
+        requirePositiveOnHand: query.requirePositiveOnHand,
     });
-    if (!location) {
-        const e = new Error('Location not found');
-        e.statusCode = 404;
-        throw e;
-    }
-
-    const { search } = query;
-    const term = search && String(search).trim() ? String(search).trim() : '';
-
-    const where = {
-        tenantId,
-        isActive: true,
-        AND: [
-            {
-                OR: [
-                    { stockBalances: { some: { locationId } } },
-                    { defaultStoreId: locationId },
-                    { category: { locationCategories: { some: { locationId } } } },
-                ],
-            },
-            ...(term
-                ? [{
-                    OR: [
-                        { name: { contains: term, mode: 'insensitive' } },
-                        { barcode: { contains: term, mode: 'insensitive' } },
-                        { code: { contains: term, mode: 'insensitive' } },
-                    ],
-                }]
-                : []),
-        ],
-    };
-
-    const items = await prisma.item.findMany({
-        where,
-        orderBy: { name: 'asc' },
-        select: {
-            id: true,
-            name: true,
-            code: true,
-            barcode: true,
-            stockBalances: {
-                where: { locationId },
-                select: { qtyOnHand: true },
-            },
-        },
-    });
-
     return items.map((it) => ({
         id: it.id,
         name: it.name,
         code: it.code,
         barcode: it.barcode,
-        currentStock: it.stockBalances?.[0]?.qtyOnHand != null ? Number(it.stockBalances[0].qtyOnHand) : 0,
+        currentStock: it.currentStock ?? 0,
     }));
 };
 
@@ -909,7 +853,8 @@ const updateItem = async (id, data, tenantId, userId = null) => {
                         },
                         tenantId,
                         userId,
-                        tx
+                        tx,
+                        { origin: 'INTERNAL' },
                     );
                 }
             } else {
@@ -1456,7 +1401,8 @@ const upsertOpeningBalanceForItemLocation = async (
         },
         tenantId,
         userId,
-        tx
+        tx,
+        { origin: 'INTERNAL' },
     );
 
     return { kind: 'draft_created', documentNo: obDoc.documentNo };
