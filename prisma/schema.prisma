@@ -34,6 +34,7 @@ model Tenant {
   departments         Department[]
   DocSequence         DocSequence[]
   emailLogs           EmailLog[]
+  auditWriteQueue     AuditWriteQueue[]
   generatedReports    GeneratedReport[]
   getPasses           GetPass[]
   grnImports          GrnImport[]
@@ -43,7 +44,8 @@ model Tenant {
   items               Item[]
   locations           Location[]
   movementDocuments   MovementDocument[]
-  periodCloses        PeriodClose[]
+  periodCloses           PeriodClose[]
+  periodAutoCloseSettings PeriodAutoCloseSettings?
   savedStockReports   SavedStockReport[]
   stockBalances       StockBalance[]
   countSessions       StockCountSession[]
@@ -64,8 +66,13 @@ model Tenant {
   uomMappings         UomMapping[]
   vendorMappings      VendorMapping[]
   incomingGetPasses   GetPass[]            @relation("GetPassTargetTenant")
-  systemNotifications SystemNotification[]
-  lostFoundItems      LostFoundItem[]
+  systemNotifications    SystemNotification[]
+  lostFoundItems         LostFoundItem[]
+  urAssignmentProperties UrAssignmentProperty[]
+  accWorkflowDefinitions AccWorkflowDefinition[]
+  accFieldSecurityRules  AccFieldSecurityRule[]
+  accScheduledAccess     AccScheduledAccess[]
+  accRuntimeSettings     AccRuntimeSetting[]
 
   @@index([parentId])
   @@index([hasBranches])
@@ -114,11 +121,13 @@ model User {
   refreshTokens                    RefreshToken[]
   stockReports                     SavedStockReport[]
   countSessions                    StockCountSession[]
+  stockCountLocationQtyEdits       StockCountLocationQty[] @relation("StockCountLocationQtyCountedBy")
   storeIssues                      StoreIssue[]         @relation("IssueIssuedBy")
   reqApproved                      StoreRequisition[]   @relation("ReqApprovedBy")
   reqRejected                      StoreRequisition[]   @relation("ReqRejectedBy")
   reqRequested                     StoreRequisition[]   @relation("ReqRequestedBy")
   trfApproved                      StoreTransfer[]      @relation("TrfApprovedBy")
+  trfPosted                        StoreTransfer[]      @relation("TrfPostedBy")
   trfReceived                      StoreTransfer[]      @relation("TrfReceivedBy")
   trfRejected                      StoreTransfer[]      @relation("TrfRejectedBy")
   trfRequested                     StoreTransfer[]      @relation("TrfRequestedBy")
@@ -126,6 +135,16 @@ model User {
   memberships                      TenantMember[]
   systemNotifications              SystemNotification[]
   lostFoundItems                   LostFoundItem[]      @relation("LostFoundCreatedBy")
+  urUserOverrides                  UrUserPermissionOverride[]
+  urUserScopes                     UrUserScope[]
+  urAssignments                    UrUserAssignment[]
+  urOverrides                      UrUserOverride[]
+  accFieldSecurityRules            AccFieldSecurityRule[]
+  accUserExceptions                AccUserException[]
+  accScheduledAccess               AccScheduledAccess[]
+  accRuntimeSettingsUpdated        AccRuntimeSetting[]  @relation("AccRuntimeSettingUpdatedBy")
+  urAuditEventsActor               UrAuditEvent[]   @relation("UrAuditActor")
+  urAuditEventsTarget              UrAuditEvent[]   @relation("UrAuditTarget")
 
   @@map("users")
 }
@@ -167,6 +186,41 @@ model EmailLog {
   @@map("email_logs")
 }
 
+/// Durable retry queue for failed audit_log writes (P0-C).
+/// Business operations continue; failed rows are retried by scheduler.js cron.
+model AuditWriteQueue {
+  id          String                @id @default(uuid()) @db.Uuid
+  tenantId    String                @db.Uuid
+  entityType  String
+  entityId    String
+  action      String
+  changedBy   String                @db.Uuid
+  note        String?
+  beforeValue Json?
+  afterValue  Json?
+  ipAddress   String?
+  userAgent   String?
+  status      AuditWriteQueueStatus @default(PENDING)
+  attempts    Int                   @default(0)
+  lastError   String?
+  nextRetryAt DateTime?
+  completedAt DateTime?
+  createdAt   DateTime              @default(now())
+  updatedAt   DateTime              @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([status, nextRetryAt])
+  @@index([tenantId])
+  @@map("audit_write_queue")
+}
+
+enum AuditWriteQueueStatus {
+  PENDING
+  COMPLETED
+  DEAD
+}
+
 enum EmailStatus {
   PENDING
   SENT
@@ -174,24 +228,12 @@ enum EmailStatus {
   DEAD
 }
 
-/// Stable role codes for memberships; keep in sync with `Role.code` and API validators.
-enum UserRole {
-  SUPER_ADMIN
-  ORG_MANAGER
-  ADMIN
-  STOREKEEPER
-  DEPT_MANAGER
-  COST_CONTROL
-  FINANCE_MANAGER
-  AUDITOR
-  SECURITY
-  GENERAL_MANAGER
-}
-
+/// Stable role codes for memberships; canonical values in role-codes.constants.js (String since S4B).
 model Role {
   id              String           @id @default(uuid()) @db.Uuid
-  code            UserRole         @unique
+  code            String           @unique
   name            String
+  description     String?
   tenantId        String?          @db.Uuid
   isActive        Boolean          @default(true)
   createdAt       DateTime         @default(now())
@@ -199,7 +241,12 @@ model Role {
   tenant          Tenant?          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   memberships     TenantMember[]
   rolePermissions RolePermission[]
-  approvalSteps   ApprovalStep[]
+  approvalSteps     ApprovalStep[]
+  urRolePermissions UrRolePermission[]
+  urAssignments     UrUserAssignment[]
+  accWorkflowStepDefinitions AccWorkflowStepDefinition[]
+  accFieldSecurityRules      AccFieldSecurityRule[]
+  accScheduledAccess         AccScheduledAccess[]
 
   @@index([tenantId])
   @@map("roles")
@@ -236,8 +283,10 @@ model TenantMember {
   isActive     Boolean     @default(true)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @default(now()) @updatedAt
-  departmentId String?     @db.Uuid
-  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  departmentId           String?     @db.Uuid
+  canViewAllDepartments  Boolean     @default(false)
+  canViewAllLocations    Boolean     @default(false)
+  department             Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
   tenant       Tenant?     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   user         User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   role         Role        @relation(fields: [roleId], references: [id])
@@ -280,6 +329,7 @@ model Category {
   items              Item[]
   locationCategories LocationCategory[]
   subcategories      Subcategory[]
+  countSessions      StockCountSession[]
 
   @@unique([tenantId, name])
   @@index([tenantId])
@@ -319,7 +369,9 @@ model Department {
   GetPass          GetPass[]
   items            Item[]
   locations        Location[]
-  memberships      TenantMember[]
+  memberships              TenantMember[]
+  countSessions            StockCountSession[]
+  urAssignmentDepartments  UrAssignmentDepartment[]
 
   @@unique([tenantId, name])
   @@unique([tenantId, code])
@@ -350,9 +402,12 @@ model Location {
   stockReports            SavedStockReport[]
   stockBalances           StockBalance[]
   countSessions           StockCountSession[]
+  stockCountSessionLocations StockCountSessionLocation[]
+  stockCountLocationQtys  StockCountLocationQty[]
   storeRequisitions       StoreRequisition[]
   transfersIn             StoreTransfer[]               @relation("TransferDest")
   transfersOut            StoreTransfer[]               @relation("TransferSource")
+  periodSnapshotLines     PeriodSnapshotLine[]
 
   @@unique([tenantId, name])
   @@index([tenantId])
@@ -473,9 +528,11 @@ model Item {
   stockReportLines SavedStockReportLine[]
   stockBalances    StockBalance[]
   countLines       StockCountLine[]
+  stockCountLocationQtys StockCountLocationQty[]
   issueLines       StoreIssueLine[]
   requisitionLines StoreRequisitionLine[]
   transferLines    StoreTransferLine[]
+  periodSnapshotLines PeriodSnapshotLine[]
 
   @@unique([tenantId, name])
   @@unique([tenantId, code])
@@ -486,34 +543,38 @@ model Item {
 }
 
 model InventoryLedger {
-  id               String           @id @default(uuid()) @db.Uuid
-  tenantId         String           @db.Uuid
-  itemId           String           @db.Uuid
-  locationId       String           @db.Uuid
-  movementType     MovementType
-  affectsValuation Boolean          @default(true)
-  qtyIn            Decimal          @default(0) @db.Decimal(15, 4)
-  qtyOut           Decimal          @default(0) @db.Decimal(15, 4)
-  unitCost         Decimal          @default(0) @db.Decimal(15, 4)
-  totalValue       Decimal          @default(0) @db.Decimal(15, 4)
-  balanceAfter     Decimal          @default(0) @db.Decimal(15, 4)
-  referenceType    String?
-  referenceId      String?          @db.Uuid
-  referenceNo      String?
-  requiresApproval Boolean          @default(false)
-  approvalId       String?          @db.Uuid
-  notes            String?
-  createdBy        String           @db.Uuid
-  createdAt        DateTime         @default(now())
-  approvalRequest  ApprovalRequest? @relation(fields: [approvalId], references: [id])
-  createdByUser    User             @relation("LedgerCreatedBy", fields: [createdBy], references: [id])
-  item             Item             @relation(fields: [itemId], references: [id], onDelete: Restrict)
-  location         Location         @relation(fields: [locationId], references: [id], onDelete: Restrict)
-  tenant           Tenant           @relation(fields: [tenantId], references: [id])
+  id                    String           @id @default(uuid()) @db.Uuid
+  tenantId              String           @db.Uuid
+  itemId                String           @db.Uuid
+  locationId            String           @db.Uuid
+  movementType          MovementType
+  affectsValuation      Boolean          @default(true)
+  qtyIn                 Decimal          @default(0) @db.Decimal(15, 4)
+  qtyOut                Decimal          @default(0) @db.Decimal(15, 4)
+  unitCost              Decimal          @default(0) @db.Decimal(15, 4)
+  totalValue            Decimal          @default(0) @db.Decimal(15, 4)
+  balanceAfter          Decimal          @default(0) @db.Decimal(15, 4)
+  referenceType         String?
+  referenceId           String?          @db.Uuid
+  referenceNo           String?
+  postingDate           DateTime?
+  assignedPostingPeriod String?
+  requiresApproval      Boolean          @default(false)
+  approvalId            String?          @db.Uuid
+  notes                 String?
+  createdBy             String           @db.Uuid
+  createdAt             DateTime         @default(now())
+  approvalRequest       ApprovalRequest? @relation(fields: [approvalId], references: [id])
+  createdByUser         User             @relation("LedgerCreatedBy", fields: [createdBy], references: [id])
+  item                  Item             @relation(fields: [itemId], references: [id], onDelete: Restrict)
+  location              Location         @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  tenant                Tenant           @relation(fields: [tenantId], references: [id])
 
   @@index([tenantId, itemId])
   @@index([tenantId, locationId])
   @@index([tenantId, createdAt])
+  @@index([tenantId, postingDate])
+  @@index([tenantId, assignedPostingPeriod])
   @@index([tenantId, movementType])
   @@index([tenantId, movementType, createdAt])
   @@index([tenantId, locationId, itemId])
@@ -549,10 +610,13 @@ model StockBalance {
 }
 
 model MovementDocument {
-  id               String              @id @default(uuid()) @db.Uuid
-  tenantId         String              @db.Uuid
-  documentNo       String
-  movementType     MovementType
+  id                     String              @id @default(uuid()) @db.Uuid
+  tenantId               String              @db.Uuid
+  documentNo             String
+  concurrencyVersion     Int                 @default(0)
+  postingDate            DateTime?
+  assignedPostingPeriod  String?
+  movementType           MovementType
   sourceType       MovementSourceType  @default(INTERNAL)
   getPassId        String?             @db.Uuid
   status           MovementStatus      @default(DRAFT)
@@ -602,6 +666,8 @@ model MovementLine {
   unitCost      Decimal          @default(0) @db.Decimal(15, 4)
   totalValue    Decimal          @default(0) @db.Decimal(15, 4)
   notes         String?
+  photoKey      String?
+  attachmentUrl String?
   document      MovementDocument @relation(fields: [documentId], references: [id], onDelete: Cascade)
   item          Item             @relation(fields: [itemId], references: [id], onDelete: Restrict)
   location      Location         @relation(fields: [locationId], references: [id], onDelete: Restrict)
@@ -619,20 +685,33 @@ model ApprovalRequest {
   status            ApprovalStatus      @default(PENDING)
   documentId        String?             @unique @db.Uuid
   storeTransferId   String?             @unique @db.Uuid
+  getPassId         String?             @unique @db.Uuid
+  grnImportId       String?             @db.Uuid
+  cycleNumber       Int                 @default(1)
   currentStep       Int                 @default(0)
   totalSteps        Int
   createdBy         String              @db.Uuid
   createdAt         DateTime            @default(now())
   resolvedAt        DateTime?
+  accWorkflowVersionId String?            @db.Uuid
   document          MovementDocument?   @relation(fields: [documentId], references: [id])
   storeTransfer     StoreTransfer?      @relation(fields: [storeTransferId], references: [id])
+  getPass           GetPass?            @relation(fields: [getPassId], references: [id])
+  grnImportHistory  GrnImport?          @relation("GrnApprovalHistory", fields: [grnImportId], references: [id], onDelete: SetNull)
+  grnImportActive   GrnImport?          @relation("GrnActiveApproval")
   tenant            Tenant              @relation(fields: [tenantId], references: [id])
+  accWorkflowVersion AccWorkflowVersion? @relation(fields: [accWorkflowVersionId], references: [id], onDelete: SetNull)
   steps             ApprovalStep[]
   ledgerEntries     InventoryLedger[]
   SavedStockReport  SavedStockReport?
   StockCountSession StockCountSession?
+  StoreRequisition  StoreRequisition?
 
   @@index([tenantId, status])
+  @@index([accWorkflowVersionId])
+  @@index([grnImportId])
+  @@index([getPassId])
+  @@unique([grnImportId, cycleNumber])
   @@map("approval_requests")
 }
 
@@ -696,9 +775,13 @@ model StockCountSession {
   id                 String            @id @default(uuid()) @db.Uuid
   tenantId           String            @db.Uuid
   locationId         String            @db.Uuid
+  departmentId       String?           @db.Uuid
+  categoryId         String?           @db.Uuid
   sessionNo          String
   countDate          DateTime          @default(now())
   notes              String?
+  blindMode          Boolean           @default(false)
+  currentRound       Int               @default(1)
   createdBy          String            @db.Uuid
   createdAt          DateTime          @default(now())
   approvalRequestId  String?           @unique @db.Uuid
@@ -707,10 +790,15 @@ model StockCountSession {
   snapshotAt         DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
   status             MovementStatus    @default(DRAFT)
+  concurrencyVersion Int               @default(0)
   lines              StockCountLine[]
+  scopedLocations    StockCountSessionLocation[]
+  locationQtys       StockCountLocationQty[]
   approvalRequest    ApprovalRequest?  @relation(fields: [approvalRequestId], references: [id])
   createdByUser      User              @relation(fields: [createdBy], references: [id])
   location           Location          @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  department         Department?       @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  category           Category?         @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   MovementDocument   MovementDocument? @relation(fields: [movementDocumentId], references: [id])
   tenant             Tenant            @relation(fields: [tenantId], references: [id])
 
@@ -718,6 +806,7 @@ model StockCountSession {
   @@index([tenantId])
   @@index([status])
   @@index([tenantId, status, snapshotAt])
+  @@index([tenantId, departmentId])
   @@map("stock_count_sessions")
 }
 
@@ -740,37 +829,109 @@ model StockCountLine {
   @@map("stock_count_lines")
 }
 
+model StockCountSessionLocation {
+  sessionId  String           @db.Uuid
+  locationId String           @db.Uuid
+  session    StockCountSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  location   Location          @relation(fields: [locationId], references: [id], onDelete: Restrict)
+
+  @@id([sessionId, locationId])
+  @@index([locationId])
+  @@map("stock_count_session_locations")
+}
+
+model StockCountLocationQty {
+  id         String           @id @default(uuid()) @db.Uuid
+  sessionId  String           @db.Uuid
+  itemId     String           @db.Uuid
+  locationId String           @db.Uuid
+  roundNo    Int              @default(1)
+
+  bookQty     Decimal         @default(0) @db.Decimal(15, 4)
+  countedQty  Decimal?        @db.Decimal(15, 4)
+  varianceQty Decimal         @default(0) @db.Decimal(15, 4)
+
+  countedBy   String?         @db.Uuid
+  countedAt   DateTime?
+  countNote   String?
+
+  session   StockCountSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  item      Item              @relation(fields: [itemId], references: [id], onDelete: Restrict)
+  location  Location          @relation(fields: [locationId], references: [id], onDelete: Restrict)
+  countedByUser User?         @relation("StockCountLocationQtyCountedBy", fields: [countedBy], references: [id], onDelete: SetNull)
+
+  @@unique([sessionId, itemId, locationId, roundNo])
+  @@index([sessionId, locationId, roundNo])
+  @@index([itemId])
+  @@map("stock_count_location_qtys")
+}
+
 model PeriodClose {
-  id        String           @id @default(uuid()) @db.Uuid
-  tenantId  String           @db.Uuid
-  year      Int
-  month     Int?
-  status    String           @default("OPEN")
-  closedAt  DateTime?
-  closedBy  String?          @db.Uuid
-  notes     String?
-  createdAt DateTime         @default(now())
-  tenant    Tenant           @relation(fields: [tenantId], references: [id])
-  snapshots PeriodSnapshot[]
+  id                        String                  @id @default(uuid()) @db.Uuid
+  tenantId                  String                  @db.Uuid
+  year                      Int
+  month                     Int
+  status                    PeriodCloseStatus       @default(OPEN)
+  closedAt                  DateTime?
+  closedBy                  String?                 @db.Uuid
+  notes                     String?
+  legacyAnnualPendingReview Boolean                 @default(false)
+  createdAt                 DateTime                @default(now())
+  updatedAt                 DateTime                @updatedAt
+  tenant                    Tenant                  @relation(fields: [tenantId], references: [id])
+  snapshotVersions          PeriodSnapshotVersion[]
 
   @@unique([tenantId, year, month])
   @@index([tenantId])
+  @@index([tenantId, status])
   @@map("period_closes")
 }
 
-model PeriodSnapshot {
-  id            String      @id @default(uuid()) @db.Uuid
-  periodCloseId String      @db.Uuid
-  itemId        String      @db.Uuid
-  locationId    String      @db.Uuid
-  closingQty    Decimal     @db.Decimal(15, 4)
-  closingValue  Decimal     @db.Decimal(15, 4)
-  wacUnitCost   Decimal     @db.Decimal(15, 4)
-  periodClose   PeriodClose @relation(fields: [periodCloseId], references: [id], onDelete: Cascade)
+model PeriodSnapshotVersion {
+  id            String                @id @default(uuid()) @db.Uuid
+  periodCloseId String                @db.Uuid
+  versionNumber Int
+  status        SnapshotVersionStatus @default(CURRENT)
+  closedAt      DateTime?
+  closedBy      String?               @db.Uuid
+  notes         String?
+  createdAt     DateTime              @default(now())
+  periodClose   PeriodClose           @relation(fields: [periodCloseId], references: [id], onDelete: Restrict)
+  lines         PeriodSnapshotLine[]
+  reports       GeneratedReport[]
 
-  @@unique([periodCloseId, itemId, locationId])
-  @@index([periodCloseId])
-  @@map("period_snapshots")
+  @@unique([periodCloseId, versionNumber])
+  @@index([periodCloseId, status])
+  @@map("period_snapshot_versions")
+}
+
+model PeriodSnapshotLine {
+  id                String                @id @default(uuid()) @db.Uuid
+  snapshotVersionId String                @db.Uuid
+  itemId            String                @db.Uuid
+  locationId        String                @db.Uuid
+  closingQty        Decimal               @db.Decimal(15, 4)
+  closingValue      Decimal               @db.Decimal(15, 4)
+  wacUnitCost       Decimal               @db.Decimal(15, 4)
+  snapshotVersion   PeriodSnapshotVersion @relation(fields: [snapshotVersionId], references: [id], onDelete: Restrict)
+  item              Item                  @relation(fields: [itemId], references: [id], onDelete: Restrict)
+  location          Location              @relation(fields: [locationId], references: [id], onDelete: Restrict)
+
+  @@unique([snapshotVersionId, itemId, locationId])
+  @@index([snapshotVersionId])
+  @@map("period_snapshot_lines")
+}
+
+model PeriodAutoCloseSettings {
+  tenantId      String   @id @db.Uuid
+  enabled       Boolean  @default(false)
+  dayOfMonth    Int      @default(5)
+  executionTime String   @default("02:00")
+  timezone      String   @default("UTC")
+  updatedAt     DateTime @updatedAt
+  tenant        Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@map("period_auto_close_settings")
 }
 
 model AuditLog {
@@ -811,6 +972,10 @@ model GrnImport {
   id                     String    @id @default(uuid()) @db.Uuid
   tenantId               String    @db.Uuid
   grnNumber              String
+  supplierInvoiceNumber  String?
+  concurrencyVersion     Int       @default(0)
+  postingDate            DateTime?
+  assignedPostingPeriod  String?
   vendorId               String?   @db.Uuid
   vendorNameSnapshot     String
   locationId             String    @db.Uuid
@@ -826,8 +991,13 @@ model GrnImport {
   rejectedBy             String?   @db.Uuid
   postedBy               String?   @db.Uuid
   postedAt               DateTime?
+  accWorkflowVersionId   String?   @db.Uuid
+  approvalRequestId      String?   @unique @db.Uuid
   createdAt              DateTime  @default(now())
   updatedAt              DateTime  @updatedAt
+  accWorkflowVersion     AccWorkflowVersion? @relation(fields: [accWorkflowVersionId], references: [id], onDelete: SetNull)
+  approvalRequest        ApprovalRequest?    @relation("GrnActiveApproval", fields: [approvalRequestId], references: [id], onDelete: SetNull)
+  approvalHistory        ApprovalRequest[]   @relation("GrnApprovalHistory")
   approvedByUser         User?     @relation("GrnApprovedBy", fields: [approvedBy], references: [id])
   importedByUser         User      @relation("GrnImportedBy", fields: [importedBy], references: [id])
   lastEditedByUser       User?     @relation("GrnLastEditedBy", fields: [lastEditedBy], references: [id])
@@ -842,6 +1012,7 @@ model GrnImport {
   @@index([tenantId, status])
   @@index([tenantId, vendorId])
   @@index([tenantId, locationId])
+  @@index([accWorkflowVersionId])
   @@map("grn_imports")
 }
 
@@ -933,8 +1104,12 @@ model StoreRequisition {
   approvedAt      DateTime?
   fullyIssuedAt   DateTime?
   closedAt        DateTime?
+  accWorkflowVersionId String?            @db.Uuid
+  approvalRequestId    String?            @unique @db.Uuid
   createdAt       DateTime               @default(now())
   updatedAt       DateTime               @updatedAt
+  accWorkflowVersion AccWorkflowVersion? @relation(fields: [accWorkflowVersionId], references: [id], onDelete: SetNull)
+  approvalRequest    ApprovalRequest?    @relation(fields: [approvalRequestId], references: [id], onDelete: SetNull)
   issues          StoreIssue[]
   lines           StoreRequisitionLine[]
   approvedByUser  User?                  @relation("ReqApprovedBy", fields: [approvedBy], references: [id])
@@ -1011,13 +1186,17 @@ model StoreIssueLine {
 }
 
 model StoreTransfer {
-  id               String              @id @default(uuid()) @db.Uuid
-  tenantId         String              @db.Uuid
-  transferNo       String
-  sourceLocationId String              @db.Uuid
+  id                     String              @id @default(uuid()) @db.Uuid
+  tenantId               String              @db.Uuid
+  transferNo             String
+  concurrencyVersion     Int                 @default(0)
+  postingDate            DateTime?
+  assignedPostingPeriod  String?
+  sourceLocationId       String              @db.Uuid
   destLocationId   String              @db.Uuid
   requestedBy      String              @db.Uuid
   approvedBy       String?             @db.Uuid
+  postedBy         String?             @db.Uuid
   rejectedBy       String?             @db.Uuid
   receivedBy       String?             @db.Uuid
   transferDate     DateTime            @default(now())
@@ -1027,6 +1206,7 @@ model StoreTransfer {
   rejectionReason  String?
   notes            String?
   approvedAt       DateTime?
+  postedAt         DateTime?
   dispatchedAt     DateTime?
   receivedAt       DateTime?
   closedAt         DateTime?
@@ -1034,6 +1214,7 @@ model StoreTransfer {
   updatedAt        DateTime            @updatedAt
   lines            StoreTransferLine[]
   approvedByUser   User?               @relation("TrfApprovedBy", fields: [approvedBy], references: [id])
+  postedByUser     User?               @relation("TrfPostedBy", fields: [postedBy], references: [id])
   destLocation     Location            @relation("TransferDest", fields: [destLocationId], references: [id], onDelete: Restrict)
   receivedByUser   User?               @relation("TrfReceivedBy", fields: [receivedBy], references: [id])
   rejectedByUser   User?               @relation("TrfRejectedBy", fields: [rejectedBy], references: [id])
@@ -1138,6 +1319,9 @@ model GetPass {
   id                            String             @id @default(uuid()) @db.Uuid
   tenantId                      String             @db.Uuid
   passNo                        String
+  concurrencyVersion            Int                @default(0)
+  postingDate                   DateTime?
+  assignedPostingPeriod         String?
   transferType                  GetPassType
   /// When true, items are sent to another hotel under the same organization (see targetTenantId).
   isInternalTransfer            Boolean            @default(false)
@@ -1169,6 +1353,22 @@ model GetPass {
   checkedOutAt                  DateTime?
   closedBy                      String?            @db.Uuid
   closedAt                      DateTime?
+  /// Governance justification when closed via force-close settlement (P3+); null on simple close.
+  closeReason                   String?
+  closedVia                     GetPassClosedVia?
+  /// Pending GM settlement payload (P3+); not used in P1/P2 simple close.
+  settlementPayload             Json?
+  settlementSubmittedBy         String?            @db.Uuid
+  settlementSubmittedAt         DateTime?
+  settlementApprovedBy          String?            @db.Uuid
+  settlementApprovedAt          DateTime?
+  /// Status before Finance submitted force-close settlement (restored on reject/cancel).
+  settlementPriorStatus         GetPassStatus?
+  settlementRejectionReason     String?
+  settlementRejectedBy          String?            @db.Uuid
+  settlementRejectedAt          DateTime?
+  settlementCancelledBy         String?            @db.Uuid
+  settlementCancelledAt         DateTime?
   receivedById                  String?            @db.Uuid
   receivedAt                    DateTime?
   receivedCondition             String?
@@ -1183,9 +1383,13 @@ model GetPass {
   reason                        String?
   notes                         String?
   rejectionReason               String?
+  /// P12 — pinned ACC published workflow version at submit.
+  accWorkflowVersionId          String?            @db.Uuid
   createdBy                     String             @db.Uuid
   createdAt                     DateTime           @default(now())
   updatedAt                     DateTime           @updatedAt
+  accWorkflowVersion            AccWorkflowVersion? @relation(fields: [accWorkflowVersionId], references: [id], onDelete: SetNull)
+  approvalRequest               ApprovalRequest?
   lines                         GetPassLine[]
   checkoutUser                  User?              @relation("GetPassCheckedOutBy", fields: [checkedOutBy], references: [id])
   closingUser                   User?              @relation("GetPassClosedBy", fields: [closedBy], references: [id])
@@ -1211,6 +1415,7 @@ model GetPass {
   @@index([targetTenantId])
   @@index([destinationDepartmentId])
   @@index([destinationLocationId])
+  @@index([accWorkflowVersionId])
   @@map("get_passes")
 }
 
@@ -1378,23 +1583,27 @@ model SavedStockReportLocationQty {
 }
 
 model GeneratedReport {
-  id              String      @id @default(uuid()) @db.Uuid
-  tenantId        String      @db.Uuid
-  reportType      ReportType
-  reportName      String
-  departmentId    String?     @db.Uuid
-  startDate       DateTime?
-  endDate         DateTime?
-  data            Json
-  generatedBy     String      @db.Uuid
-  createdAt       DateTime    @default(now())
-  department      Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
-  generatedByUser User        @relation("ReportGeneratedBy", fields: [generatedBy], references: [id])
-  tenant          Tenant      @relation(fields: [tenantId], references: [id])
+  id                String               @id @default(uuid()) @db.Uuid
+  tenantId          String               @db.Uuid
+  reportType        ReportType
+  reportName        String
+  departmentId      String?              @db.Uuid
+  startDate         DateTime?
+  endDate           DateTime?
+  data              Json
+  generatedBy       String               @db.Uuid
+  snapshotVersionId String?              @db.Uuid
+  versionStatus     ReportVersionStatus  @default(CURRENT)
+  createdAt         DateTime             @default(now())
+  department        Department?          @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  generatedByUser   User                 @relation("ReportGeneratedBy", fields: [generatedBy], references: [id])
+  tenant            Tenant               @relation(fields: [tenantId], references: [id])
+  snapshotVersion   PeriodSnapshotVersion? @relation(fields: [snapshotVersionId], references: [id], onDelete: SetNull)
 
   @@index([tenantId])
   @@index([tenantId, reportType])
   @@index([tenantId, departmentId])
+  @@index([snapshotVersionId])
   @@map("generated_reports")
 }
 
@@ -1457,13 +1666,21 @@ enum GetPassStatus {
   PENDING_SECURITY
   APPROVED
   OUT
+  DISPATCHED
+  IN_TRANSIT
   RECEIVED_AT_DESTINATION
   RETURNING
   RETURN_RECEIVED_AT_GATE
   PARTIALLY_RETURNED
   RETURNED
+  PENDING_FORCE_CLOSE_SETTLEMENT
   CLOSED
   REJECTED
+}
+
+enum GetPassClosedVia {
+  SIMPLE
+  FORCE_SETTLEMENT
 }
 
 enum GetPassLineStatus {
@@ -1492,6 +1709,13 @@ enum SuggestedAction {
 
 enum MovementStatus {
   DRAFT
+  COUNTING
+  REVEAL_REVIEW
+  RECOUNTING
+  PENDING_COST_CONTROL
+  PENDING_DEPT
+  PENDING_FINANCE
+  PENDING_GM
   DEPT_APPROVED
   COST_CONTROL_APPROVED
   FINANCE_APPROVED
@@ -1499,6 +1723,7 @@ enum MovementStatus {
   PENDING_APPROVAL
   POSTED
   VOID
+  CANCELLED
   REJECTED
 }
 
@@ -1525,9 +1750,12 @@ enum ApprovalRequestType {
   LOST
   COUNT_ADJUSTMENT
   GRN_IMPORT
+  GET_PASS
   STORE_REQUISITION
   STOCK_REPORT
   STORE_TRANSFER
+  ASSET_VERIFICATION
+  ASSET_DISPOSAL
 }
 
 enum RequisitionStatus {
@@ -1558,6 +1786,7 @@ enum TransferStatus {
   IN_TRANSIT
   RECEIVED
   CLOSED
+  POSTED
   REJECTED
 }
 
@@ -1565,6 +1794,7 @@ enum GrnStatus {
   DRAFT
   VALIDATED
   PENDING_APPROVAL
+  PENDING_FINANCE
   APPROVED
   POSTED
   REJECTED
@@ -1598,6 +1828,22 @@ enum CountSessionStatus {
   CLOSED
 }
 
+enum PeriodCloseStatus {
+  OPEN
+  CLOSING
+  CLOSED
+}
+
+enum SnapshotVersionStatus {
+  CURRENT
+  SUPERSEDED
+}
+
+enum ReportVersionStatus {
+  CURRENT
+  SUPERSEDED
+}
+
 enum AuditAction {
   CREATE
   UPDATE
@@ -1616,12 +1862,15 @@ enum AuditAction {
   FINALIZE_OB
   COUNT_APPROVE
   COUNT_REJECT
+  SEND_BACK
+  CANCEL
 }
 
 enum ReportType {
   SUMMARY
   DETAIL
   BREAKAGE
+  LOST
   OMC
   TRANSFERS
   AGING
@@ -1630,4 +1879,422 @@ enum ReportType {
 enum LostFoundStatus {
   FOUND
   RETURNED
+}
+
+// ─── User Rights Foundation (Phase 1 — Silent, Additive Only) ────────────────
+
+/// User Rights: A logical grouping / screen (e.g., 'GRN', 'BREAKAGE', 'REPORTS').
+model UrResource {
+  id            String         @id @default(uuid()) @db.Uuid
+  code          String         @unique
+  name          String
+  category      String
+  displayOrder  Int            @default(0)
+  createdAt     DateTime       @default(now())
+  urPermissions UrPermission[]
+
+  @@map("ur_resources")
+}
+
+/// User Rights: An action that can be performed (e.g., 'VIEW', 'CREATE', 'APPROVE').
+model UrAction {
+  id            String         @id @default(uuid()) @db.Uuid
+  code          String         @unique
+  name          String
+  displayOrder  Int            @default(0)
+  createdAt     DateTime       @default(now())
+  urPermissions UrPermission[]
+
+  @@map("ur_actions")
+}
+
+/// User Rights: One structured permission = Resource × Action, with a bridge to the legacy code.
+/// legacyCode is unique: each legacy permission string maps to exactly one UrPermission row.
+model UrPermission {
+  id              String                     @id @default(uuid()) @db.Uuid
+  resourceId      String                     @db.Uuid
+  actionId        String                     @db.Uuid
+  legacyCode      String                     @unique
+  name            String?
+  description     String?
+  createdAt       DateTime                   @default(now())
+  resource        UrResource                 @relation(fields: [resourceId], references: [id], onDelete: Restrict)
+  action          UrAction                   @relation(fields: [actionId], references: [id], onDelete: Restrict)
+  urRolePerms     UrRolePermission[]
+  urUserOverrides UrUserPermissionOverride[]
+  urOverrides     UrUserOverride[]
+  accUserExceptions AccUserException[]
+  accWorkflowSteps  AccWorkflowStepDefinition[]
+
+  @@index([resourceId, actionId])
+  @@map("ur_permissions")
+}
+
+/// User Rights: Default role → permission mapping that mirrors the Legacy RBAC matrix.
+/// This is read-only data seeded from rbac-matrix.constants.js / authorize.js.
+model UrRolePermission {
+  id           String       @id @default(uuid()) @db.Uuid
+  roleId       String       @db.Uuid
+  permissionId String       @db.Uuid
+  createdAt    DateTime     @default(now())
+  role         Role         @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   UrPermission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([roleId, permissionId])
+  @@index([roleId])
+  @@map("ur_role_permissions")
+}
+
+/// User Rights: Per-user permission overrides (grant extra or revoke default).
+/// isAllowed=true grants, isAllowed=false revokes. No enforcement yet in Phase 1.
+model UrUserPermissionOverride {
+  id           String       @id @default(uuid()) @db.Uuid
+  userId       String       @db.Uuid
+  tenantId     String       @db.Uuid
+  permissionId String       @db.Uuid
+  isAllowed    Boolean
+  reason       String?
+  expiresAt    DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  permission   UrPermission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId, permissionId])
+  @@index([userId, tenantId])
+  @@map("ur_user_permission_overrides")
+}
+
+/// User Rights: Per-user data scope restrictions (property / department / warehouse).
+/// No enforcement yet in Phase 1 — data structure only.
+model UrUserScope {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  tenantId  String   @db.Uuid
+  scopeType String
+  targetId  String   @db.Uuid
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, tenantId, scopeType, targetId])
+  @@index([userId, tenantId])
+  @@map("ur_user_scopes")
+}
+
+// ─── User Rights Wave 1 — Assignment & Audit Infrastructure ──────────────────
+// These models implement the approved Identity & Scope Architecture:
+//   Access = User + Role (What) + Scope (Where: Properties + Departments)
+// No enforcement yet. Wave 1 is additive and silent.
+// ─────────────────────────────────────────────────────────────────────────────
+
+/// Links a User to a Global Role.
+/// Properties and Departments are stored in junction tables below.
+/// Empty properties  = All Properties (Global access for this Role).
+/// Empty departments = All Departments within the scoped Properties.
+model UrUserAssignment {
+  id          String   @id @default(uuid()) @db.Uuid
+  userId      String   @db.Uuid
+  roleId      String   @db.Uuid
+  isActive    Boolean  @default(true)
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role         Role               @relation(fields: [roleId], references: [id], onDelete: Restrict)
+  properties   UrAssignmentProperty[]
+  departments  UrAssignmentDepartment[]
+  overrides    UrUserOverride[]
+  accUserExceptions AccUserException[]
+
+  @@index([userId])
+  @@index([roleId])
+  @@index([userId, isActive])
+  @@map("ur_user_assignments")
+}
+
+/// Junction: which Tenants (Properties / Hotels) are included in a UrUserAssignment.
+/// If no rows exist for an assignment → All Properties are implicitly included.
+model UrAssignmentProperty {
+  id           String           @id @default(uuid()) @db.Uuid
+  assignmentId String           @db.Uuid
+  propertyId   String           @db.Uuid
+  createdAt    DateTime         @default(now())
+
+  assignment   UrUserAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  property     Tenant           @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, propertyId])
+  @@index([assignmentId])
+  @@index([propertyId])
+  @@map("ur_assignment_properties")
+}
+
+/// Junction: which Departments are included in a UrUserAssignment.
+/// If no rows exist for an assignment → All Departments are implicitly included.
+model UrAssignmentDepartment {
+  id           String           @id @default(uuid()) @db.Uuid
+  assignmentId String           @db.Uuid
+  departmentId String           @db.Uuid
+  createdAt    DateTime         @default(now())
+
+  assignment   UrUserAssignment @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  department   Department       @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+
+  @@unique([assignmentId, departmentId])
+  @@index([assignmentId])
+  @@index([departmentId])
+  @@map("ur_assignment_departments")
+}
+
+/// Per-user permission override at Assignment level (or globally when assignmentId is null).
+/// isGranted = true  → Explicit GRANT (even if Role does not grant this permission).
+/// isGranted = false → Explicit DENY  (even if Role grants this permission).
+/// Deleting a row resets the user back to Role Default ("Reset to Default").
+/// No enforcement yet — Wave 1 is additive and silent.
+model UrUserOverride {
+  id           String            @id @default(uuid()) @db.Uuid
+  userId       String            @db.Uuid
+  assignmentId String?           @db.Uuid
+  permissionId String            @db.Uuid
+  isGranted    Boolean
+  reason       String?
+  expiresAt    DateTime?
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignment   UrUserAssignment? @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  permission   UrPermission      @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, assignmentId, permissionId])
+  @@index([userId])
+  @@index([assignmentId])
+  @@map("ur_user_overrides")
+}
+
+/// Append-only audit log for all User Rights changes.
+/// actorId   = who performed the action (admin).
+/// targetUserId = who was affected (optional).
+/// oldValue / newValue = JSON snapshots of what changed.
+model UrAuditEvent {
+  id             String   @id @default(uuid()) @db.Uuid
+  actorId        String   @db.Uuid
+  action         String
+  targetUserId   String?  @db.Uuid
+  targetRoleId   String?  @db.Uuid
+  targetEntityId String?  @db.Uuid
+  entityType     String?
+  oldValue       Json?
+  newValue       Json?
+  createdAt      DateTime @default(now())
+
+  actor      User  @relation(name: "UrAuditActor",  fields: [actorId],      references: [id], onDelete: Restrict)
+  targetUser User? @relation(name: "UrAuditTarget", fields: [targetUserId], references: [id], onDelete: SetNull)
+
+  @@index([actorId])
+  @@index([targetUserId])
+  @@index([createdAt])
+  @@map("ur_audit_events")
+}
+
+// ─── Access Control Center — Workflow Definition (Stage S3 — additive only) ───
+// Configuration store for module-centric approval workflows. Not read by runtime yet.
+
+enum AccWorkflowVersionStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+/// Registered business module keys (Breakage, Transfer, GRN, …).
+model AccModule {
+  id           String                  @id @default(uuid()) @db.Uuid
+  key          String                  @unique
+  name         String
+  description  String?
+  isActive     Boolean                 @default(true)
+  displayOrder Int                     @default(0)
+  createdAt    DateTime                @default(now())
+  updatedAt    DateTime                @updatedAt
+  definitions  AccWorkflowDefinition[]
+
+  @@map("acc_modules")
+}
+
+/// Workflow template container per module (e.g. Standard Breakage Approval).
+model AccWorkflowDefinition {
+  id          String               @id @default(uuid()) @db.Uuid
+  moduleId    String               @db.Uuid
+  key         String
+  name        String
+  description String?
+  tenantId    String?              @db.Uuid
+  isActive    Boolean              @default(true)
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  module      AccModule            @relation(fields: [moduleId], references: [id], onDelete: Restrict)
+  tenant      Tenant?              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  versions    AccWorkflowVersion[]
+
+  @@unique([moduleId, key, tenantId])
+  @@index([moduleId])
+  @@index([tenantId])
+  @@map("acc_workflow_definitions")
+}
+
+/// Immutable-published workflow versions; documents pin a version at submit time.
+model AccWorkflowVersion {
+  id            String                   @id @default(uuid()) @db.Uuid
+  definitionId  String                   @db.Uuid
+  versionNumber Int
+  status        AccWorkflowVersionStatus @default(DRAFT)
+  publishedAt   DateTime?
+  publishedById String?                  @db.Uuid
+  notes         String?
+  createdAt     DateTime                 @default(now())
+  updatedAt     DateTime                 @updatedAt
+  definition    AccWorkflowDefinition    @relation(fields: [definitionId], references: [id], onDelete: Cascade)
+  steps         AccWorkflowStepDefinition[]
+  approvalRequests ApprovalRequest[]
+  getPasses          GetPass[]
+  grnImports         GrnImport[]
+  storeRequisitions  StoreRequisition[]
+
+  @@unique([definitionId, versionNumber])
+  @@index([definitionId, status])
+  @@map("acc_workflow_versions")
+}
+
+/// Ordered approval steps for a workflow version.
+model AccWorkflowStepDefinition {
+  id             String             @id @default(uuid()) @db.Uuid
+  versionId      String             @db.Uuid
+  stepOrder      Int
+  label          String?
+  approverRoleId String?            @db.Uuid
+  /// P20 — permission required at this step (ACC catalog).
+  permissionId   String?            @db.Uuid
+  /// P20 — optional status key bound to this step (module-specific).
+  statusKey      String?
+  capabilityCode String?
+  autoApprove    Boolean            @default(false)
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  version        AccWorkflowVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  approverRole   Role?              @relation(fields: [approverRoleId], references: [id], onDelete: SetNull)
+  permission     UrPermission?      @relation(fields: [permissionId], references: [id], onDelete: SetNull)
+
+  @@unique([versionId, stepOrder])
+  @@index([approverRoleId])
+  @@index([permissionId])
+  @@map("acc_workflow_step_definitions")
+}
+
+// ─── Access Control Center — Advanced Policies (Stage S12 — additive only) ───
+// Field security, user exceptions, scheduled access. Configuration + observe only.
+
+enum AccFieldAccessLevel {
+  HIDDEN
+  READ_ONLY
+  READ_WRITE
+}
+
+enum AccUserExceptionType {
+  PERMISSION_GRANT
+  PERMISSION_DENY
+  TEMPORARY_ELEVATION
+  FIELD_ACCESS
+}
+
+/// Field-level visibility/edit rules per role or user (ACC configuration store).
+model AccFieldSecurityRule {
+  id           String              @id @default(uuid()) @db.Uuid
+  tenantId     String?             @db.Uuid
+  roleId       String?             @db.Uuid
+  userId       String?             @db.Uuid
+  resourceCode String
+  fieldKey     String
+  accessLevel  AccFieldAccessLevel @default(READ_ONLY)
+  isActive     Boolean             @default(true)
+  reason       String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  tenant       Tenant?             @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  role         Role?               @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  user         User?               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, resourceCode])
+  @@index([roleId])
+  @@index([userId])
+  @@map("acc_field_security_rules")
+}
+
+/// Advanced user-level policy exceptions (configuration; not enforced in S12).
+model AccUserException {
+  id            String               @id @default(uuid()) @db.Uuid
+  userId        String               @db.Uuid
+  assignmentId  String?              @db.Uuid
+  exceptionType AccUserExceptionType
+  permissionId  String?              @db.Uuid
+  resourceCode  String?
+  fieldKey      String?
+  payload       Json?
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  reason        String?
+  isActive      Boolean              @default(true)
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+  user          User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assignment    UrUserAssignment?    @relation(fields: [assignmentId], references: [id], onDelete: Cascade)
+  permission    UrPermission?        @relation(fields: [permissionId], references: [id], onDelete: SetNull)
+
+  @@index([userId, isActive])
+  @@index([assignmentId])
+  @@map("acc_user_exceptions")
+}
+
+/// Time-window access policies (configuration; not enforced in S12).
+model AccScheduledAccess {
+  id            String    @id @default(uuid()) @db.Uuid
+  tenantId      String?   @db.Uuid
+  userId        String?   @db.Uuid
+  roleId        String?   @db.Uuid
+  label         String
+  daysOfWeek    Int[]     @default([])
+  startMinutes  Int
+  endMinutes    Int
+  timezone      String    @default("UTC")
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  isActive      Boolean   @default(true)
+  notes         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  tenant        Tenant?   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user          User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role          Role?     @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@index([roleId])
+  @@map("acc_scheduled_access")
+}
+
+/// P19 — ACC runtime feature flags (DB SSOT; env is bootstrap-only).
+model AccRuntimeSetting {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String?  @db.Uuid
+  key         String
+  value       Json
+  updatedById String?  @db.Uuid
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  tenant      Tenant?  @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  updatedBy   User?    @relation("AccRuntimeSettingUpdatedBy", fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@unique([tenantId, key])
+  @@index([key])
+  @@map("acc_runtime_settings")
 }

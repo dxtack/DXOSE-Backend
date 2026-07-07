@@ -1,176 +1,313 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-const { getOBStatus } = require('./periodGuard.service');
-const { logAction, EntityType } = require('./auditTrail.service');
-const { generateDocNumber } = require('./docNumbering.service');
+'use strict';
 
-// ── GET PERIODS ───────────────────────────────────────────────────────────────
-const getPeriods = async (tenantId) => {
-    return prisma.periodClose.findMany({
+const { PrismaClient } = require('@prisma/client');
+const { v4: uuidv4 } = require('uuid');
+const prisma = new PrismaClient();
+const {
+    assertSequentialCloseAllowed,
+    assertLatestClosedForReopen,
+    getPeriodRegistryRow,
+} = require('./periodGuard.service');
+const { assertCloseBlockersZero, runMonthEndCloseChecklist } = require('./periodCloseGovernance.service');
+const { buildClosingSnapshotLines } = require('../platform/periodLedgerSnapshot.service');
+const { logAction, EntityType } = require('./auditTrail.service');
+
+async function ensurePeriodRecord(tenantId, year, month) {
+    if (!month || month < 1 || month > 12) {
+        throw Object.assign(new Error('Month must be 1–12. Annual close (month=null) is prohibited.'), {
+            statusCode: 422,
+            code: 'ANNUAL_CLOSE_PROHIBITED',
+        });
+    }
+    let row = await getPeriodRegistryRow(tenantId, year, month);
+    if (!row) {
+        row = await prisma.periodClose.create({
+            data: { tenantId, year, month, status: 'OPEN' },
+        });
+    }
+    return row;
+}
+
+const getPeriods = async (tenantId) =>
+    prisma.periodClose.findMany({
         where: { tenantId },
         orderBy: [{ year: 'desc' }, { month: 'desc' }],
+        include: {
+            snapshotVersions: {
+                orderBy: { versionNumber: 'desc' },
+                take: 3,
+                select: {
+                    id: true,
+                    versionNumber: true,
+                    status: true,
+                    closedAt: true,
+                    closedBy: true,
+                },
+            },
+        },
     });
-};
 
-// ── GET PERIOD BY ID ──────────────────────────────────────────────────────────
 const getPeriodById = async (id, tenantId) => {
     const period = await prisma.periodClose.findFirst({
         where: { id, tenantId },
         include: {
-            snapshots: {
-                take: 10, // preview only
+            snapshotVersions: {
+                orderBy: { versionNumber: 'desc' },
+                include: {
+                    lines: { take: 20 },
+                    _count: { select: { lines: true } },
+                },
             },
-            _count: { select: { snapshots: true } },
         },
     });
     if (!period) throw Object.assign(new Error('Period not found'), { status: 404 });
     return period;
 };
 
-// ── CLOSE PERIOD ──────────────────────────────────────────────────────────────
-// Takes a snapshot of ALL current balances and marks the period as CLOSED.
-const closePeriod = async (tenantId, { year, month, notes }, userId) => {
-    // Check if already closed
-    const existing = await prisma.periodClose.findUnique({
-        where: { tenantId_year_month: { tenantId, year, month: month || null } },
-    });
+async function startClosing(tenantId, { year, month }, userId) {
+    const period = await ensurePeriodRecord(tenantId, year, month);
+    if (period.status === 'CLOSED') {
+        throw Object.assign(new Error(`Period ${year}/${month} is already closed.`), { status: 400 });
+    }
+    await assertSequentialCloseAllowed(tenantId, year, month);
 
-    if (existing && existing.status === 'CLOSED') {
-        throw Object.assign(new Error(`Period ${year}${month ? '/' + month : ''} is already closed`), { status: 400 });
+    const updated =
+        period.status === 'CLOSING'
+            ? period
+            : await prisma.periodClose.update({
+                  where: { id: period.id },
+                  data: { status: 'CLOSING' },
+              });
+
+    const checklist = await runMonthEndCloseChecklist(tenantId, { year, month });
+
+    if (userId) {
+        await logAction({
+            tenantId,
+            entityType: EntityType.PERIOD_CLOSE,
+            entityId: updated.id,
+            action: 'START_CLOSE',
+            changedBy: userId,
+            note: `Period ${year}/${month} entered CLOSING`,
+        });
     }
 
-    // Get all current stock balances
-    const balances = await prisma.stockBalance.findMany({
-        where: { tenantId },
-        select: {
-            itemId: true,
-            locationId: true,
-            qtyOnHand: true,
-            wacUnitCost: true,
-        },
+    return { ...updated, monthEndChecklist: checklist };
+}
+
+async function cancelClosing(tenantId, { year, month }, userId) {
+    const period = await getPeriodRegistryRow(tenantId, year, month);
+    if (!period || period.status !== 'CLOSING') {
+        throw Object.assign(new Error('Period is not in CLOSING state.'), { status: 422, code: 'PERIOD_NOT_CLOSING' });
+    }
+    const updated = await prisma.periodClose.update({
+        where: { id: period.id },
+        data: { status: 'OPEN' },
     });
+    if (userId) {
+        await logAction({
+            tenantId,
+            entityType: EntityType.PERIOD_CLOSE,
+            entityId: period.id,
+            action: 'CANCEL_CLOSE',
+            changedBy: userId,
+            note: `Period ${year}/${month} returned to OPEN`,
+        });
+    }
+    return updated;
+}
 
-    // Create or update period with snapshots
+async function completeClose(tenantId, { year, month, notes }, userId) {
+    const period = await ensurePeriodRecord(tenantId, year, month);
+    if (period.status === 'CLOSED') {
+        throw Object.assign(new Error(`Period ${year}/${month} is already closed.`), { status: 400 });
+    }
+
+    if (period.status !== 'CLOSING') {
+        await startClosing(tenantId, { year, month }, userId);
+    }
+
+    const checklist = await assertCloseBlockersZero(tenantId, { year, month });
+    await assertSequentialCloseAllowed(tenantId, year, month);
+
+    const lines = await buildClosingSnapshotLines(tenantId, year, month);
+    const now = new Date();
+
     const result = await prisma.$transaction(async (tx) => {
-        // Upsert the period
-        const period = existing
-            ? await tx.periodClose.update({
-                where: { id: existing.id },
-                data: {
-                    status: 'CLOSED',
-                    closedAt: new Date(),
-                    closedBy: userId,
-                    notes,
-                },
-            })
-            : await tx.periodClose.create({
-                data: {
-                    tenantId,
-                    year,
-                    month: month || null,
-                    status: 'CLOSED',
-                    closedAt: new Date(),
-                    closedBy: userId,
-                    notes,
-                },
-            });
+        const current = await tx.periodClose.findUnique({ where: { id: period.id } });
+        const priorVersions = await tx.periodSnapshotVersion.findMany({
+            where: { periodCloseId: period.id },
+        });
+        const nextVersion = priorVersions.length ? Math.max(...priorVersions.map((v) => v.versionNumber)) + 1 : 1;
 
-        // Delete old snapshots if re-closing
-        if (existing) {
-            await tx.periodSnapshot.deleteMany({ where: { periodCloseId: period.id } });
+        if (priorVersions.some((v) => v.status === 'CURRENT')) {
+            await tx.periodSnapshotVersion.updateMany({
+                where: { periodCloseId: period.id, status: 'CURRENT' },
+                data: { status: 'SUPERSEDED' },
+            });
         }
 
-        // Create snapshots for all balances
-        if (balances.length > 0) {
-            await tx.periodSnapshot.createMany({
-                data: balances.map(b => ({
-                    periodCloseId: period.id,
-                    itemId: b.itemId,
-                    locationId: b.locationId,
-                    closingQty: b.qtyOnHand,
-                    closingValue: Number(b.qtyOnHand) * Number(b.wacUnitCost),
-                    wacUnitCost: b.wacUnitCost,
+        const version = await tx.periodSnapshotVersion.create({
+            data: {
+                id: uuidv4(),
+                periodCloseId: period.id,
+                versionNumber: nextVersion,
+                status: 'CURRENT',
+                closedAt: now,
+                closedBy: userId,
+                notes,
+            },
+        });
+
+        if (lines.length > 0) {
+            await tx.periodSnapshotLine.createMany({
+                data: lines.map((l) => ({
+                    id: uuidv4(),
+                    snapshotVersionId: version.id,
+                    itemId: l.itemId,
+                    locationId: l.locationId,
+                    closingQty: l.closingQty,
+                    closingValue: l.closingValue,
+                    wacUnitCost: l.wacUnitCost,
                 })),
             });
         }
 
-        // ── Auto-lock Opening Balance after Period Close ──────────────────────
-        // Once a period is officially closed, OB entries must be blocked.
-        // Any corrections must go through Adjustment movements.
+        const closed = await tx.periodClose.update({
+            where: { id: period.id },
+            data: {
+                status: 'CLOSED',
+                closedAt: now,
+                closedBy: userId,
+                notes: notes ?? current.notes,
+            },
+        });
+
         await tx.tenantSetting.upsert({
             where: { tenantId_key: { tenantId, key: 'allowOpeningBalance' } },
             update: {
                 value: 'LOCKED',
-                reason: `Auto-locked: Period ${year}${month ? '/' + month : ''} closed at ${new Date().toISOString()}`,
+                reason: `Auto-locked: Period ${year}/${month} closed at ${now.toISOString()}`,
             },
             create: {
                 tenantId,
                 key: 'allowOpeningBalance',
                 value: 'LOCKED',
-                reason: `Auto-locked: Period ${year}${month ? '/' + month : ''} closed at ${new Date().toISOString()}`,
+                reason: `Auto-locked: Period ${year}/${month} closed at ${now.toISOString()}`,
             },
         });
-        // ─────────────────────────────────────────────────────────────────────────
 
-        return period;
-    });
-
-    return { ...result, snapshotCount: balances.length };
-};
-
-// ── REOPEN PERIOD ─────────────────────────────────────────────────────────────
-const reopenPeriod = async (id, tenantId, userId) => {
-    const period = await prisma.periodClose.findFirst({ where: { id, tenantId } });
-    if (!period) throw Object.assign(new Error('Period not found'), { status: 404 });
-    if (period.status === 'OPEN') throw Object.assign(new Error('Period is already open'), { status: 400 });
-
-    const result = await prisma.periodClose.update({
-        where: { id },
-        data: { status: 'OPEN', closedAt: null, closedBy: null },
+        return { closed, version, lineCount: lines.length };
     });
 
     if (userId) {
         await logAction({
             tenantId,
             entityType: EntityType.PERIOD_CLOSE,
-            entityId: id,
-            action: 'REOPEN_PERIOD',
+            entityId: period.id,
+            action: 'CLOSE_PERIOD',
             changedBy: userId,
-            note: `Period ${period.year}${period.month ? '/' + period.month : ''} reopened`,
+            note: `Period ${year}/${month} closed — snapshot v${result.version.versionNumber} (${result.lineCount} lines)`,
+            afterValue: { snapshotVersionId: result.version.id, versionNumber: result.version.versionNumber },
         });
     }
+
+    return {
+        ...result.closed,
+        snapshotVersion: result.version,
+        snapshotCount: result.lineCount,
+        monthEndChecklist: checklist,
+    };
+}
+
+/** Manual close: OPEN/CLOSING → CLOSED when blockers=0 (Ch.6.3). */
+const closePeriod = async (tenantId, { year, month, notes }, userId) => {
+    if (!year) throw Object.assign(new Error('Year is required'), { status: 400 });
+    const m = parseInt(month, 10);
+    if (!m || m < 1 || m > 12) {
+        throw Object.assign(new Error('Month (1–12) is required. Annual close is prohibited.'), {
+            statusCode: 422,
+            code: 'ANNUAL_CLOSE_PROHIBITED',
+        });
+    }
+    return completeClose(tenantId, { year: parseInt(year, 10), month: m, notes }, userId);
+};
+
+const reopenPeriod = async (id, tenantId, userId, { reason } = {}) => {
+    const period = await assertLatestClosedForReopen(tenantId, id);
+
+    const normalizedReason = typeof reason === 'string' ? reason.trim() : '';
+    if (!normalizedReason) {
+        throw Object.assign(new Error('Reopen reason is required for audit traceability.'), {
+            statusCode: 400,
+            code: 'PERIOD_REOPEN_REASON_REQUIRED',
+        });
+    }
+
+    const result = await prisma.periodClose.update({
+        where: { id },
+        data: { status: 'OPEN', closedAt: null, closedBy: null },
+    });
+
+    await logAction({
+        tenantId,
+        entityType: EntityType.PERIOD_CLOSE,
+        entityId: id,
+        action: 'REOPEN_PERIOD',
+        changedBy: userId,
+        note: `Period ${period.year}/${period.month} reopened. Reason: ${normalizedReason}`,
+        afterValue: { reason: normalizedReason, year: period.year, month: period.month },
+    });
 
     return result;
 };
 
-// ── GET OPENING BALANCE (from last closed period before given year) ───────────
 const getOpeningBalance = async (tenantId, year) => {
-    // Find the last closed period before this year (annual close of previous year)
-    const lastClose = await prisma.periodClose.findFirst({
-        where: {
-            tenantId,
-            status: 'CLOSED',
-            year: year - 1,
-            month: null, // annual close
+    const decClose = await prisma.periodClose.findFirst({
+        where: { tenantId, status: 'CLOSED', year: year - 1, month: 12 },
+        include: {
+            snapshotVersions: {
+                where: { status: 'CURRENT' },
+                include: { lines: true },
+                take: 1,
+            },
         },
     });
+    if (!decClose?.snapshotVersions?.[0]) return null;
+    return decClose.snapshotVersions[0].lines;
+};
 
-    if (!lastClose) {
-        // Try monthly close of December of previous year
-        const decClose = await prisma.periodClose.findFirst({
-            where: { tenantId, status: 'CLOSED', year: year - 1, month: 12 },
-        });
-        if (!decClose) return null;
-        return prisma.periodSnapshot.findMany({ where: { periodCloseId: decClose.id } });
-    }
-
-    return prisma.periodSnapshot.findMany({ where: { periodCloseId: lastClose.id } });
+const getSnapshotHistory = async (periodId, tenantId) => {
+    const period = await prisma.periodClose.findFirst({
+        where: { id: periodId, tenantId },
+        include: {
+            snapshotVersions: {
+                orderBy: { versionNumber: 'asc' },
+                select: {
+                    id: true,
+                    versionNumber: true,
+                    status: true,
+                    closedAt: true,
+                    closedBy: true,
+                    notes: true,
+                    _count: { select: { lines: true } },
+                },
+            },
+        },
+    });
+    if (!period) throw Object.assign(new Error('Period not found'), { status: 404 });
+    return period.snapshotVersions;
 };
 
 module.exports = {
     getPeriods,
     getPeriodById,
+    ensurePeriodRecord,
+    startClosing,
+    cancelClosing,
+    completeClose,
     closePeriod,
     reopenPeriod,
     getOpeningBalance,
+    getSnapshotHistory,
 };

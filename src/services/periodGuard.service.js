@@ -1,143 +1,139 @@
+'use strict';
+
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const settingService = require('./setting.service');
+const { periodEndInstant, assignedPeriodKey } = require('../platform/postingPeriod.util');
 
-/**
- * ============================================================================
- * PERIOD GUARD — Shared Control Layer
- * ============================================================================
- * Enforces immutability of closed periods across the entire system.
- * 
- * Rules:
- *  1. No transaction with a date inside a closed period
- *  2. No OPENING_BALANCE entry when OB is locked
- *  3. No Stock Count session when period is closed
- *
- * Usage:
- *   const { checkPeriodLock, checkOBAllowed } = require('./periodGuard.service');
- *   await checkPeriodLock(tenantId, transactionDate);       // throws if locked
- *   await checkOBAllowed(tenantId);                         // throws if OB locked
- * ============================================================================
- */
+const startOfCalendarDay = (value) => {
+    const d = new Date(value);
+    d.setHours(0, 0, 0, 0);
+    return d;
+};
 
-/**
- * Checks if a given transaction date falls inside a closed period.
- * Throws a clear error if the period is locked.
- *
- * @param {string} tenantId
- * @param {Date|string} transactionDate
- */
-const checkPeriodLock = async (tenantId, transactionDate) => {
-    const txDate = transactionDate ? new Date(transactionDate) : new Date();
-    const txYear = txDate.getFullYear();
-    const txMonth = txDate.getMonth() + 1; // 1–12
-
-    // 1. Check if the full year is closed (annual close)
-    const annualClose = await prisma.periodClose.findFirst({
-        where: {
-            tenantId,
-            year: txYear,
-            month: null,
-            status: 'CLOSED',
-        },
-    });
-
-    if (annualClose) {
-        throw Object.assign(
-            new Error(`لا يمكن إنشاء حركة داخل سنة مغلقة (${txYear}). يُرجى استخدام حركة تصحيح في السنة الحالية.`),
-            { status: 422, code: 'PERIOD_LOCKED_ANNUAL' }
-        );
+const checkFuturePostingDate = (postingDate) => {
+    const pd = postingDate ? new Date(postingDate) : new Date();
+    if (Number.isNaN(pd.getTime())) {
+        throw Object.assign(new Error('Invalid posting date.'), { status: 422, code: 'INVALID_POSTING_DATE' });
     }
-
-    // 2. Check if the specific month is closed (monthly close)
-    const monthlyClose = await prisma.periodClose.findFirst({
-        where: {
-            tenantId,
-            year: txYear,
-            month: txMonth,
-            status: 'CLOSED',
-        },
-    });
-
-    if (monthlyClose) {
-        const monthName = txDate.toLocaleString('en-US', { month: 'long' });
-        throw Object.assign(
-            new Error(`لا يمكن إنشاء حركة داخل فترة مغلقة (${monthName} ${txYear}). يُرجى استخدام حركة تصحيح في الفترة الحالية.`),
-            { status: 422, code: 'PERIOD_LOCKED_MONTHLY' }
-        );
-    }
-
-    // 3. Check previous year annual close (for backdated transactions to prior year)
-    const prevYear = txYear - 1;
-    // Only applies if the txDate is in the current year but references prior year
-    // This is handled by the annual check above, but we also check prior year explicitly
-    // in case someone tries to post a document dated in prior year after it was closed
-    const prevAnnualClose = await prisma.periodClose.findFirst({
-        where: {
-            tenantId,
-            year: prevYear,
-            month: null,
-            status: 'CLOSED',
-        },
-    });
-
-    if (prevAnnualClose && txYear <= prevYear) {
-        throw Object.assign(
-            new Error(`لا يمكن تعديل بيانات سنة تم إغلاقها (${prevYear}). أي تصحيح يتم من خلال حركة في السنة الحالية.`),
-            { status: 422, code: 'PERIOD_LOCKED_PREV_YEAR' }
-        );
+    const postingDay = startOfCalendarDay(pd);
+    const today = startOfCalendarDay(new Date());
+    if (postingDay > today) {
+        throw Object.assign(new Error('Posting date cannot be in the future.'), {
+            status: 422,
+            code: 'FUTURE_POSTING_DATE',
+        });
     }
 };
 
-/**
- * Checks if Opening Balance entry is currently allowed.
- * Throws if OB is locked (either manually or auto-locked after close).
- *
- * @param {string} tenantId
- */
+async function getPeriodRegistryRow(tenantId, year, month) {
+    return prisma.periodClose.findUnique({
+        where: { tenantId_year_month: { tenantId, year, month } },
+    });
+}
+
+async function assertPeriodOpenForPosting(tenantId, postingDate) {
+    const pd = postingDate ? new Date(postingDate) : new Date();
+    const year = pd.getFullYear();
+    const month = pd.getMonth() + 1;
+    const row = await getPeriodRegistryRow(tenantId, year, month);
+    if (!row) {
+        throw Object.assign(
+            new Error(`No period registry record for ${assignedPeriodKey(year, month)}. Implicit open periods are prohibited.`),
+            { status: 422, code: 'PERIOD_NOT_REGISTERED' },
+        );
+    }
+    if (row.status !== 'OPEN') {
+        throw Object.assign(
+            new Error(`Posting is prohibited: period ${assignedPeriodKey(year, month)} is ${row.status}.`),
+            { status: 422, code: row.status === 'CLOSED' ? 'PERIOD_LOCKED_MONTHLY' : 'PERIOD_NOT_OPEN' },
+        );
+    }
+}
+
+const validatePostingDate = async (tenantId, postingDate) => {
+    const pd = postingDate ? new Date(postingDate) : new Date();
+    checkFuturePostingDate(pd);
+    await assertPeriodOpenForPosting(tenantId, pd);
+};
+
+const checkPeriodLock = async (tenantId, transactionDate) => {
+    await validatePostingDate(tenantId, transactionDate);
+};
+
+const assertSequentialCloseAllowed = async (tenantId, year, month) => {
+    if (!month || month < 1 || month > 12) {
+        throw Object.assign(new Error('Annual close is prohibited. Use monthly close (month 1–12).'), {
+            status: 422,
+            code: 'ANNUAL_CLOSE_PROHIBITED',
+        });
+    }
+    for (let m = 1; m < month; m += 1) {
+        const prior = await getPeriodRegistryRow(tenantId, year, m);
+        if (!prior || prior.status !== 'CLOSED') {
+            throw Object.assign(
+                new Error(`Cannot close ${year}/${String(month).padStart(2, '0')}: month ${m} must be closed first.`),
+                { status: 422, code: 'PERIOD_CLOSE_NOT_SEQUENTIAL' },
+            );
+        }
+    }
+    if (month === 1) {
+        const decPrior = await getPeriodRegistryRow(tenantId, year - 1, 12);
+        if (decPrior && decPrior.status !== 'CLOSED') {
+            throw Object.assign(
+                new Error(`Cannot close ${year}/01: December ${year - 1} must be closed first.`),
+                { status: 422, code: 'PERIOD_CLOSE_NOT_SEQUENTIAL' },
+            );
+        }
+    }
+};
+
+async function assertLatestClosedForReopen(tenantId, periodId) {
+    const target = await prisma.periodClose.findFirst({ where: { id: periodId, tenantId } });
+    if (!target) {
+        throw Object.assign(new Error('Period not found'), { status: 404 });
+    }
+    if (target.status !== 'CLOSED') {
+        throw Object.assign(new Error('Only a CLOSED period may be reopened.'), { status: 422, code: 'PERIOD_NOT_CLOSED' });
+    }
+    const latest = await prisma.periodClose.findFirst({
+        where: { tenantId, status: 'CLOSED' },
+        orderBy: [{ year: 'desc' }, { month: 'desc' }],
+    });
+    if (!latest || latest.id !== target.id) {
+        throw Object.assign(
+            new Error('Reopen is permitted only for the latest closed period (reverse sequential order).'),
+            { status: 422, code: 'PERIOD_REOPEN_NOT_LATEST' },
+        );
+    }
+    return target;
+}
+
 const checkOBAllowed = async (tenantId) => {
     const setting = await prisma.tenantSetting.findUnique({
         where: { tenantId_key: { tenantId, key: 'allowOpeningBalance' } },
     });
-
-    // If setting doesn't exist → OB is allowed (system never locked it)
     if (!setting) return;
-
     if (setting.value === 'LOCKED') {
         throw Object.assign(
-            new Error(`Opening Balance غير مسموح بعد إغلاق السنة السابقة. أي تعديل يتم من خلال Adjustment فقط.`),
-            { status: 422, code: 'OB_LOCKED' }
+            new Error('Opening Balance is locked after period close. Use Adjustment in an open period.'),
+            { status: 422, code: 'OB_LOCKED' },
         );
     }
 };
 
-/**
- * Combined check for Opening Balance movements specifically.
- * Checks both OB lock and period lock.
- *
- * @param {string} tenantId
- * @param {Date|string} transactionDate
- */
 const checkOpeningBalanceAllowed = async (tenantId, transactionDate) => {
     await checkOBAllowed(tenantId);
     await checkPeriodLock(tenantId, transactionDate);
 };
 
-/**
- * Returns the current OB setting status for display in UI.
- *
- * @param {string} tenantId
- * @returns {{ allowed: boolean, reason: string|null, lockedAt: Date|null }}
- */
 const getOBStatus = async (tenantId) => {
     const setting = await prisma.tenantSetting.findUnique({
         where: { tenantId_key: { tenantId, key: 'allowOpeningBalance' } },
     });
-
     if (!setting || setting.value !== 'LOCKED') {
         return { allowed: true, reason: null };
     }
-
     return {
         allowed: false,
         reason: setting.reason || 'Locked by system',
@@ -145,24 +141,28 @@ const getOBStatus = async (tenantId) => {
     };
 };
 
-/**
- * Blocks GRN, Get Pass, and similar operational flows while the tenant is still in
- * Opening Balance phase (aligned with `GET /items/check-requirements` → isOpeningBalanceAllowed).
- */
 const assertOperationalTransactionsAllowed = async (tenantId) => {
     const ob = await settingService.isOpeningBalanceAllowed(tenantId);
     if (ob.allowed) {
-        throw Object.assign(
-            new Error('Opening balance must be finalized before starting transactions.'),
-            { status: 403, statusCode: 403, code: 'OPENING_BALANCE_PHASE' },
-        );
+        throw Object.assign(new Error('Opening balance must be finalized before starting transactions.'), {
+            status: 403,
+            statusCode: 403,
+            code: 'OPENING_BALANCE_PHASE',
+        });
     }
 };
 
 module.exports = {
+    checkFuturePostingDate,
+    validatePostingDate,
+    assertSequentialCloseAllowed,
+    assertLatestClosedForReopen,
+    assertPeriodOpenForPosting,
+    getPeriodRegistryRow,
     checkPeriodLock,
     checkOBAllowed,
     checkOpeningBalanceAllowed,
     getOBStatus,
     assertOperationalTransactionsAllowed,
+    periodEndInstant,
 };
