@@ -1,0 +1,96 @@
+{
+  "generatedAt": "2026-07-03T18:38:59.231Z",
+  "baseUrl": "http://127.0.0.1:4300",
+  "phase": "after",
+  "buildPass": true,
+  "allPass": true,
+  "results": [
+    {
+      "id": "IM-ADD",
+      "path": "/items/new",
+      "checks": {
+        "topBack": 0,
+        "footerCancel": 1,
+        "cancelNavigated": true
+      },
+      "cancelDest": "http://127.0.0.1:4300/items",
+      "consoleErrors": [],
+      "screenshot": "screenshots/after/IM-ADD__1920x1080.png",
+      "pass": true
+    },
+    {
+      "id": "IM-IMPORT",
+      "path": "/inventory/items/import",
+      "checks": {
+        "headerBack": 0,
+        "footerCancel": 1,
+        "cancelNavigated": true
+      },
+      "cancelDest": "http://127.0.0.1:4300/items",
+      "consoleErrors": [],
+      "screenshot": "screenshots/after/IM-IMPORT__1920x1080.png",
+      "pass": true
+    },
+    {
+      "id": "GP-ADD",
+      "path": "/get-passes/new",
+      "checks": {
+        "topBack": 0,
+        "footerCancel": 1,
+        "cancelNavigated": true
+      },
+      "cancelDest": "http://127.0.0.1:4300/get-passes",
+      "consoleErrors": [],
+      "screenshot": "screenshots/after/GP-ADD__1920x1080.png",
+      "pass": true
+    },
+    {
+      "id": "TR-ADD",
+      "path": "/transfers/new",
+      "checks": {
+        "topBack": 0,
+        "footerCancel": 1,
+        "cancelNavigated": true
+      },
+      "cancelDest": "http://127.0.0.1:4300/transfers",
+      "consoleErrors": [],
+      "screenshot": "screenshots/after/TR-ADD__1920x1080.png",
+      "pass": true
+    },
+    {
+      "id": "MOV-ADD",
+      "path": "/movements/new",
+      "checks": {
+        "topBack": 0,
+        "actionCancel": 1,
+        "cancelNavigated": true
+      },
+      "cancelDest": "http://127.0.0.1:4300/movements",
+      "consoleErrors": [],
+      "screenshot": "screenshots/after/MOV-ADD__1920x1080.png",
+      "pass": true
+    },
+    {
+      "id": "MOV-POSTED",
+      "path": "/movements/mov-posted-1",
+      "checks": {
+        "topBack": 1,
+        "actionCancel": 0
+      },
+      "cancelDest": null,
+      "consoleErrors": [],
+      "screenshot": "screenshots/after/MOV-POSTED__1920x1080.png",
+      "pass": true
+    },
+    {
+      "id": "IM-IMPORT-WIZARD-BACK",
+      "path": "/inventory/items/import (step 1)",
+      "checks": {
+        "wizardBack": 1
+      },
+      "consoleErrors": [],
+      "screenshot": "screenshots/after/IM-IMPORT-WIZARD-BACK__1920x1080.png",
+      "pass": true
+    }
+  ]
+}

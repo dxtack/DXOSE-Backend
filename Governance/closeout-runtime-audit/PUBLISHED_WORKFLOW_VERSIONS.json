@@ -1,0 +1,660 @@
+{
+  "executedAt": "2026-06-27T16:32:57.371Z",
+  "approvedGetPassChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "note": "GM step in published GET_PASS version => STALE_WORKFLOW_CONFIGURATION for constitution comparison",
+  "tenants": {
+    "Hotel_A_grand_horizon": {
+      "GET_PASS": {
+        "moduleKey": "GET_PASS",
+        "moduleId": "ec7f0825-35dc-4c36-9776-bdae18985094",
+        "publishedVersions": [
+          {
+            "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+            "definitionKey": "standard",
+            "definitionName": "Standard Get Pass",
+            "tenantScoped": null,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "versionNumber": 3,
+            "publishedAt": "2026-06-22T19:07:57.678Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Department approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_DEPT",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Cost Control verification",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": "PENDING_COST_CONTROL",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 3,
+                "label": "Finance sign-off",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 4,
+                "label": "GM authorization",
+                "roleCode": "GENERAL_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_GM",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 5,
+                "label": "Security clearance",
+                "roleCode": "SECURITY",
+                "permissionCode": null,
+                "statusKey": "PENDING_SECURITY",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "staleVsApprovedGetPass": true
+          },
+          {
+            "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+            "definitionKey": "standard",
+            "definitionName": "Standard Get Pass",
+            "tenantScoped": null,
+            "versionId": "4a6d8cc5-20e2-4bee-b18a-fd0a9a3cc23c",
+            "versionNumber": 2,
+            "publishedAt": "2026-06-22T18:34:19.296Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Department approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Cost Control verification",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 3,
+                "label": "Finance sign-off",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 4,
+                "label": "GM authorization",
+                "roleCode": "GENERAL_MANAGER",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 5,
+                "label": "Security clearance",
+                "roleCode": "SECURITY",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "staleVsApprovedGetPass": true
+          }
+        ]
+      },
+      "BREAKAGE": {
+        "moduleKey": "BREAKAGE",
+        "moduleId": "377ef8d3-548a-4a32-b335-cd688e294230",
+        "publishedVersions": [
+          {
+            "definitionId": "e611879a-9fe1-4a2a-a252-0001c5f6925b",
+            "definitionKey": "standard",
+            "definitionName": "Standard Breakage",
+            "tenantScoped": null,
+            "versionId": "f1c40d9e-ce82-4836-ba80-bd58118a962f",
+            "versionNumber": 1,
+            "publishedAt": "2026-06-22T19:07:57.056Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "HOD Approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": "DEPT_APPROVED",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Cost Control Approval",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": "COST_CONTROL_APPROVED",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 3,
+                "label": "Finance Approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "FINANCE_APPROVED",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 4,
+                "label": "GM Approval",
+                "roleCode": "GENERAL_MANAGER",
+                "permissionCode": null,
+                "statusKey": "APPROVED",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "DEPT_APPROVED",
+              "COST_CONTROL_APPROVED",
+              "FINANCE_APPROVED",
+              "APPROVED"
+            ],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          }
+        ]
+      },
+      "LOST": {
+        "moduleKey": "LOST",
+        "error": "module_not_found"
+      },
+      "GRN": {
+        "moduleKey": "GRN",
+        "moduleId": "99316a1a-f523-43ea-83d8-a184d5d6b0b9",
+        "publishedVersions": [
+          {
+            "definitionId": "a48154ae-2c11-4534-b8eb-1ba25d81f9e2",
+            "definitionKey": "standard",
+            "definitionName": "Standard GRN",
+            "tenantScoped": null,
+            "versionId": "b842628d-670f-4f9a-bf41-16f070246b95",
+            "versionNumber": 2,
+            "publishedAt": "2026-06-22T19:07:57.376Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Cost Control review",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": "GRN_MANAGE",
+                "statusKey": "PENDING_APPROVAL",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Finance post approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": "GRN_MANAGE",
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_APPROVAL",
+              "PENDING_FINANCE"
+            ],
+            "orderedRoles": [
+              "COST_CONTROL",
+              "FINANCE_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          },
+          {
+            "definitionId": "a48154ae-2c11-4534-b8eb-1ba25d81f9e2",
+            "definitionKey": "standard",
+            "definitionName": "Standard GRN",
+            "tenantScoped": null,
+            "versionId": "98df12da-9790-4613-8913-201297daf855",
+            "versionNumber": 1,
+            "publishedAt": "2026-06-22T16:22:37.176Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Cost Control review",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": "PENDING_APPROVAL",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Finance post approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_APPROVAL",
+              "PENDING_FINANCE"
+            ],
+            "orderedRoles": [
+              "COST_CONTROL",
+              "FINANCE_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          }
+        ]
+      },
+      "TRANSFER": {
+        "moduleKey": "TRANSFER",
+        "moduleId": "a7fd9962-ced0-45ad-907f-77dce8af1ca9",
+        "publishedVersions": [
+          {
+            "definitionId": "ac1821f5-5c6c-4724-8db9-26380398dac9",
+            "definitionKey": "standard",
+            "definitionName": "Standard Store Transfer",
+            "tenantScoped": null,
+            "versionId": "1d7cf656-2ef6-4e5b-8131-a054b500adc3",
+            "versionNumber": 2,
+            "publishedAt": "2026-06-22T19:22:59.066Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Department approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_DEPT",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Finance approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_DEPT",
+              "PENDING_FINANCE"
+            ],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "FINANCE_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          }
+        ]
+      },
+      "INVENTORY_COUNT": {
+        "moduleKey": "INVENTORY_COUNT",
+        "error": "module_not_found"
+      }
+    },
+    "Hotel_B_dx_airport": {
+      "GET_PASS": {
+        "moduleKey": "GET_PASS",
+        "moduleId": "ec7f0825-35dc-4c36-9776-bdae18985094",
+        "publishedVersions": [
+          {
+            "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+            "definitionKey": "standard",
+            "definitionName": "Standard Get Pass",
+            "tenantScoped": null,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "versionNumber": 3,
+            "publishedAt": "2026-06-22T19:07:57.678Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Department approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_DEPT",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Cost Control verification",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": "PENDING_COST_CONTROL",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 3,
+                "label": "Finance sign-off",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 4,
+                "label": "GM authorization",
+                "roleCode": "GENERAL_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_GM",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 5,
+                "label": "Security clearance",
+                "roleCode": "SECURITY",
+                "permissionCode": null,
+                "statusKey": "PENDING_SECURITY",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "staleVsApprovedGetPass": true
+          },
+          {
+            "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+            "definitionKey": "standard",
+            "definitionName": "Standard Get Pass",
+            "tenantScoped": null,
+            "versionId": "4a6d8cc5-20e2-4bee-b18a-fd0a9a3cc23c",
+            "versionNumber": 2,
+            "publishedAt": "2026-06-22T18:34:19.296Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Department approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Cost Control verification",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 3,
+                "label": "Finance sign-off",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 4,
+                "label": "GM authorization",
+                "roleCode": "GENERAL_MANAGER",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 5,
+                "label": "Security clearance",
+                "roleCode": "SECURITY",
+                "permissionCode": null,
+                "statusKey": null,
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "staleVsApprovedGetPass": true
+          }
+        ]
+      },
+      "BREAKAGE": {
+        "moduleKey": "BREAKAGE",
+        "moduleId": "377ef8d3-548a-4a32-b335-cd688e294230",
+        "publishedVersions": [
+          {
+            "definitionId": "e611879a-9fe1-4a2a-a252-0001c5f6925b",
+            "definitionKey": "standard",
+            "definitionName": "Standard Breakage",
+            "tenantScoped": null,
+            "versionId": "f1c40d9e-ce82-4836-ba80-bd58118a962f",
+            "versionNumber": 1,
+            "publishedAt": "2026-06-22T19:07:57.056Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "HOD Approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": "DEPT_APPROVED",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Cost Control Approval",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": "COST_CONTROL_APPROVED",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 3,
+                "label": "Finance Approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "FINANCE_APPROVED",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 4,
+                "label": "GM Approval",
+                "roleCode": "GENERAL_MANAGER",
+                "permissionCode": null,
+                "statusKey": "APPROVED",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "DEPT_APPROVED",
+              "COST_CONTROL_APPROVED",
+              "FINANCE_APPROVED",
+              "APPROVED"
+            ],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          }
+        ]
+      },
+      "LOST": {
+        "moduleKey": "LOST",
+        "error": "module_not_found"
+      },
+      "GRN": {
+        "moduleKey": "GRN",
+        "moduleId": "99316a1a-f523-43ea-83d8-a184d5d6b0b9",
+        "publishedVersions": [
+          {
+            "definitionId": "a48154ae-2c11-4534-b8eb-1ba25d81f9e2",
+            "definitionKey": "standard",
+            "definitionName": "Standard GRN",
+            "tenantScoped": null,
+            "versionId": "b842628d-670f-4f9a-bf41-16f070246b95",
+            "versionNumber": 2,
+            "publishedAt": "2026-06-22T19:07:57.376Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Cost Control review",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": "GRN_MANAGE",
+                "statusKey": "PENDING_APPROVAL",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Finance post approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": "GRN_MANAGE",
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_APPROVAL",
+              "PENDING_FINANCE"
+            ],
+            "orderedRoles": [
+              "COST_CONTROL",
+              "FINANCE_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          },
+          {
+            "definitionId": "a48154ae-2c11-4534-b8eb-1ba25d81f9e2",
+            "definitionKey": "standard",
+            "definitionName": "Standard GRN",
+            "tenantScoped": null,
+            "versionId": "98df12da-9790-4613-8913-201297daf855",
+            "versionNumber": 1,
+            "publishedAt": "2026-06-22T16:22:37.176Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Cost Control review",
+                "roleCode": "COST_CONTROL",
+                "permissionCode": null,
+                "statusKey": "PENDING_APPROVAL",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Finance post approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_APPROVAL",
+              "PENDING_FINANCE"
+            ],
+            "orderedRoles": [
+              "COST_CONTROL",
+              "FINANCE_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          }
+        ]
+      },
+      "TRANSFER": {
+        "moduleKey": "TRANSFER",
+        "moduleId": "a7fd9962-ced0-45ad-907f-77dce8af1ca9",
+        "publishedVersions": [
+          {
+            "definitionId": "ac1821f5-5c6c-4724-8db9-26380398dac9",
+            "definitionKey": "standard",
+            "definitionName": "Standard Store Transfer",
+            "tenantScoped": null,
+            "versionId": "1d7cf656-2ef6-4e5b-8131-a054b500adc3",
+            "versionNumber": 2,
+            "publishedAt": "2026-06-22T19:22:59.066Z",
+            "steps": [
+              {
+                "stepOrder": 1,
+                "label": "Department approval",
+                "roleCode": "DEPT_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_DEPT",
+                "autoApprove": false
+              },
+              {
+                "stepOrder": 2,
+                "label": "Finance approval",
+                "roleCode": "FINANCE_MANAGER",
+                "permissionCode": null,
+                "statusKey": "PENDING_FINANCE",
+                "autoApprove": false
+              }
+            ],
+            "orderedStatusKeys": [
+              "PENDING_DEPT",
+              "PENDING_FINANCE"
+            ],
+            "orderedRoles": [
+              "DEPT_MANAGER",
+              "FINANCE_MANAGER"
+            ],
+            "staleVsApprovedGetPass": null
+          }
+        ]
+      },
+      "INVENTORY_COUNT": {
+        "moduleKey": "INVENTORY_COUNT",
+        "error": "module_not_found"
+      }
+    }
+  }
+}

@@ -1,0 +1,4492 @@
+[
+  {
+    "id": "C01-1.1-001",
+    "ch": "1",
+    "sec": "1.1",
+    "req": "The Constitution shall remain valid regardless of changes to frontend, backend, database, or integration technologies.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Technology-neutral governance enforced via docs; runtime neutrality not exhaustively verified",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C01-1.1-002",
+    "ch": "1",
+    "sec": "1.1",
+    "req": "The platform must fulfill governance obligations defined by this Constitution from a governance perspective.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Technology-neutral governance enforced via docs; runtime neutrality not exhaustively verified",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C01-1.1-003",
+    "ch": "1",
+    "sec": "1.1",
+    "req": "All subordinate governance, UX, workflow, access control, and implementation documents shall conform to this Constitution.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Technology-neutral governance enforced via docs; runtime neutrality not exhaustively verified",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C01-1.2-001",
+    "ch": "1",
+    "sec": "1.2",
+    "req": "When documents conflict, the higher-level document shall always prevail.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Normative stack precedence not enforced by automated gate",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C01-1.2-002",
+    "ch": "1",
+    "sec": "1.2",
+    "req": "No subordinate document may override or contradict this Constitution.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Normative stack precedence not enforced by automated gate",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C01-1.2-004",
+    "ch": "1",
+    "sec": "1.2",
+    "req": "The official governance library shall maintain the DX OSE UX Constitution at minimum.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Subordinate UX conformance not verified platform-wide",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C01-1.2-009",
+    "ch": "1",
+    "sec": "1.2",
+    "req": "The official governance library shall maintain the Implementation Guide at minimum.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "No standalone Implementation Guide artifact separate from Architecture & Implementation Guide",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C01-1.4-001",
+    "ch": "1",
+    "sec": "1.4",
+    "req": "Normative keywords shall be interpreted exactly as defined in Chapter 1.4.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "No automated gate enforcing Must/Shall/Should interpretation in code or docs CI",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C02-2.1-001",
+    "ch": "2",
+    "sec": "2.1",
+    "req": "DX OSE shall provide one consistent document lifecycle experience across all operational modules.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Lost Items, Movement, Inventory Count lack same lifecycle UX pattern",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.1-002",
+    "ch": "2",
+    "sec": "2.1",
+    "req": "Internal workflow implementation must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Constitution timeline API still exposes internal approval structures; Lost/Movement/Count modules not mapped",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.1-003",
+    "ch": "2",
+    "sec": "2.1",
+    "req": "Internal workflow step names must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "documentTimeline.service maps requiredRole.code and STEP_n for Transfer/Breakage",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.1-004",
+    "ch": "2",
+    "sec": "2.1",
+    "req": "Internal status codes must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Lost Items/Movement/Inventory Count UI renders internal status codes (e.g. DEPT_APPROVED, COUNTING)",
+    "modules": [
+      "Lost Items",
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C02-2.2-001",
+    "ch": "2",
+    "sec": "2.2",
+    "req": "Each user-facing lifecycle state shall represent one consistent business meaning across the entire DX OSE ERP Platform.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not applied platform-wide; module-local status vocabularies remain",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.2-002",
+    "ch": "2",
+    "sec": "2.2",
+    "req": "No module may redefine the standardized user-facing lifecycle state meanings.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Lost Items defines per-status i18n under LOST_ITEMS.STATUS.* independent of constitution mapper",
+    "modules": [
+      "Lost Items",
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C02-2.2-003",
+    "ch": "2",
+    "sec": "2.2",
+    "req": "No module may introduce additional user-facing lifecycle states unless first ratified in this Constitution.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Movement register introduces CANCELLED display status; Inventory Count uses module-specific session statuses",
+    "modules": [
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C02-2.2-004",
+    "ch": "2",
+    "sec": "2.2",
+    "req": "A separate user-facing state named Cancelled shall not be introduced unless ratified in this Constitution.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Remove or ratify Cancelled user-facing label (BDR-007)",
+    "modules": [
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C02-2.3-001",
+    "ch": "2",
+    "sec": "2.3",
+    "req": "Each module shall provide a consistent mapping between internal workflow states and standardized user-facing lifecycle states.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Lost Items, Movement, Inventory Count not mapped",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.3-002",
+    "ch": "2",
+    "sec": "2.3",
+    "req": "Internal workflow identifiers must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on Lost Items, Movement, Inventory Count; timeline slots may expose workflow ids",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.3-003",
+    "ch": "2",
+    "sec": "2.3",
+    "req": "Internal status codes must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Lost Items/Movement list and detail still show internal status codes to users",
+    "modules": [
+      "Lost Items",
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C02-2.3-004",
+    "ch": "2",
+    "sec": "2.3",
+    "req": "Internal enum names must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Lost Items templates translate raw enum keys (DEPT_APPROVED, etc.)",
+    "modules": [
+      "Lost Items",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C02-2.3-005",
+    "ch": "2",
+    "sec": "2.3",
+    "req": "Internal workflow step names must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "documentTimeline exposes requiredRole.code / STEP_n as stageTitle for Transfer/Breakage",
+    "modules": [
+      "Transfer",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C02-2.3-006",
+    "ch": "2",
+    "sec": "2.3",
+    "req": "Other internal implementation details must never be exposed to end users.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "API payloads still include internal status, approvalRequestId, accWorkflowVersionId fields",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.3-007",
+    "ch": "2",
+    "sec": "2.3",
+    "req": "Identical business outcomes shall always resolve to the same standardized user-facing lifecycle state across the DX OSE platform.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Unmapped modules may resolve same business outcome to different labels",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.4.1-001",
+    "ch": "2",
+    "sec": "2.4.1",
+    "req": "Posting is the single business commit point for all operational and financial effects within the DX OSE ERP Platform.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not all operational modules verified to route effects exclusively through postingEngine",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C02-2.4.1-002",
+    "ch": "2",
+    "sec": "2.4.1",
+    "req": "No operational or financial effect shall be considered official before Posting unless this Constitution explicitly states otherwise.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Reports still include APPROVED alongside POSTED in some queries",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.4.2-001",
+    "ch": "2",
+    "sec": "2.4.2",
+    "req": "Operational reports shall derive operational and financial results exclusively from Posted documents.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not exclusively POSTED; breakage report governance notes APPROVED ambiguity",
+    "modules": [
+      "Reports"
+    ]
+  },
+  {
+    "id": "C02-2.5-001",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Editability shall be governed exclusively by document lifecycle state, not by individual screen implementations.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Apply lifecyclePresentation.isEditableUserState() in backend update guards and FE edit/action gating for Lost Items, Movement, and Inventory Count; align Transfer/Breakage/Get Pass returned-state line edit with GRN send-back path",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Lost Items",
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C02-2.5-002",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Documents in Draft state shall be editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not exhaustively verified per module/screen",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.5-003",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Documents in Returned state shall be editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Line edit blocked after submission; Return edit path not uniform on Transfer/Breakage/Get Pass",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C02-2.5-004",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Documents in Submitted state shall not be editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on all modules",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C02-2.5-005",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Documents in In Review state shall not be editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Backend edit guards not centralized per lifecycle state across modules",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.5-006",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Documents in Posted state shall not be editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Posted immutability not verified on all document families",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C02-2.5-008",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Documents in Void or Cancelled state shall not be editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Void/Cancelled editability not governed centrally",
+    "modules": [
+      "Movement",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.5-009",
+    "ch": "2",
+    "sec": "2.5",
+    "req": "Documents in Closed state shall not be editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Closed-state edit guards not verified on all detail forms",
+    "modules": [
+      "Transfer",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.6-003",
+    "ch": "2",
+    "sec": "2.6",
+    "req": "Business termination shall use governed lifecycle actions (Cancel, Reject, Void, Close, etc.) instead of Delete after Draft.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Termination action set not uniform across modules",
+    "modules": [
+      "GRN",
+      "Breakage",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C02-2.7-001",
+    "ch": "2",
+    "sec": "2.7",
+    "req": "After Return, the workflow path shall be Edit then Submit.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Path is Validate-then-Submit after return, not direct Edit-then-Submit; other modules not verified",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C02-2.7-003",
+    "ch": "2",
+    "sec": "2.7",
+    "req": "Submit shall always represent entering the workflow, whether for the first time or after Return.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "After-return submit semantics not verified on Transfer/Breakage/Get Pass",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C02-2.7-005",
+    "ch": "2",
+    "sec": "2.7",
+    "req": "After Reject, a new document is required to repeat the operation.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on Transfer/Breakage/Lost/Get Pass",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C02-2.8-001",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing current state when applicable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Lost Items, Movement, Inventory Count not verified",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.8-002",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing workflow step when applicable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Get Pass constitution timeline returns empty workflowSlots",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C02-2.8-003",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing actor when applicable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not on all document detail views",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C02-2.8-004",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing date and time when applicable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "DATE_NOT_RECORDED fallback used when timestamp missing",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C02-2.8-005",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing mandatory reasons when applicable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Mandatory reasons not shown in unified timeline for all applicable events",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C02-2.8-006",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing workflow comments when applicable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on Transfer/Get Pass constitution timeline",
+    "modules": [
+      "GRN",
+      "Breakage",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C02-2.8-007",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing system events when applicable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "GRN UI timeline component does not render auditEvents from API payload",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C02-2.8-008",
+    "ch": "2",
+    "sec": "2.8",
+    "req": "Every document detail view shall present a unified timeline showing duration when applicable.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "No duration field found in returns-workflow-timeline or documentTimeline payloads",
+    "modules": [
+      "Requires Mapping"
+    ]
+  },
+  {
+    "id": "C03-3.1-001",
+    "ch": "3",
+    "sec": "3.1",
+    "req": "Users shall see only the actions they need for their role and document state.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Extend existing permission+userFacingState action gating (as on GRN/Transfer detail) to Movement and Inventory Count detail action bars; hide actions when user role or document state does not permit them",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Lost Items",
+      "Get Pass",
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C03-3.1-002",
+    "ch": "3",
+    "sec": "3.1",
+    "req": "Action behavior shall remain consistent across all DX OSE modules regardless of workflow implementation.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "GRN uses separate action model vs Transfer/Get Pass",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C03-3.1-003",
+    "ch": "3",
+    "sec": "3.1",
+    "req": "No module may invent alternative names for standard actions unless ratified in this Constitution.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Module-specific labels (VALIDATE, FINANCE_APPROVE_POST) not constitution-standard names",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C03-3.2-001",
+    "ch": "3",
+    "sec": "3.2",
+    "req": "Cancel is an action, not a lifecycle state.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Cancel semantics not uniform; some flows use Void",
+    "modules": [
+      "Inventory Count",
+      "GRN"
+    ]
+  },
+  {
+    "id": "C03-3.2-002",
+    "ch": "3",
+    "sec": "3.2",
+    "req": "Alternative Cancel labels with the same meaning (Abort, Discard, Cancel Document) must not be used.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Discard label found in user-rights admin screen",
+    "modules": [
+      "Admin"
+    ]
+  },
+  {
+    "id": "C03-3.3-001",
+    "ch": "3",
+    "sec": "3.3",
+    "req": "Reviewer actions shall be available only while the document is actively assigned to the current reviewer according to workflow definition and the permission model.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "GRN reviewer gating uses GRN_MANAGE permission broadly, not chain-step assignment only",
+    "modules": [
+      "Breakage",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C03-3.4-002",
+    "ch": "3",
+    "sec": "3.4",
+    "req": "Send Back shall allow edit.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Full line edit not restored; other modules lack Send Back",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C03-3.4-004",
+    "ch": "3",
+    "sec": "3.4",
+    "req": "Send Back next step shall be Edit then Submit.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Intermediate Validate step required; not verified on other modules",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C03-3.4-005",
+    "ch": "3",
+    "sec": "3.4",
+    "req": "Send Back shall continue the business transaction.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Send Back not implemented on Transfer/Breakage/Get Pass",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C03-3.4-006",
+    "ch": "3",
+    "sec": "3.4",
+    "req": "Reject shall end the document.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on Transfer/Get Pass/Lost uniformly",
+    "modules": [
+      "GRN",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C03-3.4-009",
+    "ch": "3",
+    "sec": "3.4",
+    "req": "Reject next step shall require a new document if the operation repeats.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on other document families",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C03-3.4-010",
+    "ch": "3",
+    "sec": "3.4",
+    "req": "Reject shall terminate the business transaction.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Business-transaction termination semantics not uniform",
+    "modules": [
+      "GRN",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C03-3.5-001",
+    "ch": "3",
+    "sec": "3.5",
+    "req": "There shall be only one primary action for the current document state.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Multiple contextual bars/overlays possible; not verified platform-wide",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C03-3.6-001",
+    "ch": "3",
+    "sec": "3.6",
+    "req": "Button order shall be Primary, then Secondary, then Neutral, then Danger.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Transfer detail shows nzDanger before primary in some blocks",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C04-4.1-001",
+    "ch": "4",
+    "sec": "4.1",
+    "req": "Operation permissions govern authorization only.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "No exhaustive proof permissions never grant business execution alone",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C04-4.1-002",
+    "ch": "4",
+    "sec": "4.1",
+    "req": "Operation permissions shall never replace workflow validation.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Not centrally documented/enforced; module-by-module pattern",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C04-4.1-003",
+    "ch": "4",
+    "sec": "4.1",
+    "req": "Operation permissions shall never replace lifecycle validation.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Add lifecycle status guards (assertStatus / LOCKED-status lists) on Breakage, Get Pass, Lost Items, and Movement mutation routes mirroring grn.service.js and transfer.service.js",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Lost Items",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C04-4.1-004",
+    "ch": "4",
+    "sec": "4.1",
+    "req": "Operation permissions shall never replace business rule enforcement.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Not proven for every operation endpoint",
+    "modules": [
+      "GRN",
+      "Posting"
+    ]
+  },
+  {
+    "id": "C04-4.2-001",
+    "ch": "4",
+    "sec": "4.2",
+    "req": "Evidence Package does not require a separate permission in the current DX OSE release.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Verify all evidence-pack download routes follow same pattern",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C04-4.3-001",
+    "ch": "4",
+    "sec": "4.3",
+    "req": "Permissions shall never bypass document lifecycle rules.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Add service-layer lifecycle status guards on Breakage/Get Pass/Lost/Movement mutation endpoints so requirePermission alone cannot execute workflow actions",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Lost Items",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C04-4.3-002",
+    "ch": "4",
+    "sec": "4.3",
+    "req": "Permissions grant eligibility, not execution authority.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Ensure mutation endpoints require workflow-step eligibility beyond permission alone: extend grn.service _assertGrnDualGate pattern (or returns-workflow.helpers equivalent) to Transfer/Get Pass/Breakage approve/reject/submit handlers",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C04-4.3-003",
+    "ch": "4",
+    "sec": "4.3",
+    "req": "Action Allowed shall equal Permission plus Workflow plus Lifecycle plus Business Rules plus Scope.",
+    "scope": "Platform-wide",
+    "impl": "No",
+    "rw": "Wire permission + workflow-step + lifecycle-state + scope checks into each module action bar/API handler (extend returns-workflow.helpers to GRN/Transfer/Get Pass; add lifecycle-state and business-rule guards on backend mutation paths)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C04-4.3-004",
+    "ch": "4",
+    "sec": "4.3",
+    "req": "Modules shall not introduce alternative operation names for standardized operations.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Module-specific operation names remain (VALIDATE, FINANCE_APPROVE_POST)",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.1-001",
+    "ch": "5",
+    "sec": "5.1",
+    "req": "Posting is the single irreversible business commit point for all operational and financial effects within the DX OSE Platform.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not all modules audited for alternate commit paths",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C05-5.1-002",
+    "ch": "5",
+    "sec": "5.1",
+    "req": "Posting is the only operation permitted to create official operational and financial business effects.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Legacy posting.service paths still exist for some document types",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C05-5.1-003",
+    "ch": "5",
+    "sec": "5.1",
+    "req": "Documents become business-immutable after Posting except through formally governed reversal or adjustment procedures.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Reversal/adjustment coverage not verified for all families",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.2-001",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Before Posting, the platform shall verify user authority.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Authority verification not uniform across all post entry points",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C05-5.2-002",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Before Posting, the platform shall verify valid workflow state.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Manual post deprecated on GRN; other modules need audit",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.2-003",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Before Posting, the platform shall verify open inventory/financial period for Posting Date.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified every posting entry point uses centralized period guard",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C05-5.2-004",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Before Posting, the platform shall perform full document revalidation.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Full-document revalidation policy not identical across modules",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.2-005",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Before Posting, the platform shall verify stock availability for outbound documents.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Inbound GRN post does not check stock availability (N/A); other outbound modules need audit",
+    "modules": [
+      "Transfer",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C05-5.2-006",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Full revalidation shall occur immediately before Posting regardless of prior validation.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "No platform assertion that prior validation is ignored everywhere",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.2-008",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Partial posting is prohibited.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Partial posting paths not exhaustively ruled out platform-wide",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.2-009",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Any posting failure shall leave the document and related business data completely unchanged.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Failure atomicity not integration-tested on all modules",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.2-010",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Repeating the same posting request shall never create additional effects.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Get Pass/Breakage/Movement idempotency not verified in this pass",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C05-5.2-011",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Posting shall be automatically triggered upon successful final workflow approval unless a document-specific governance policy defines otherwise.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Auto-post on final approval not verified on Transfer/Breakage/Get Pass",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C05-5.2-012",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Final Workflow Approval equals business authorization for Posting.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Other modules may require separate post actions",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C05-5.2-013",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "No additional posting confirmation is required by default.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Other modules may still have distinct post confirmations",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C05-5.2-014",
+    "ch": "5",
+    "sec": "5.2",
+    "req": "Posting behavior shall remain deterministic and repeat-safe throughout the platform.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Deterministic repeat-safe behavior not proven on all posting surfaces",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C06-6.3-001",
+    "ch": "6",
+    "sec": "6.3",
+    "req": "Each document shall permanently maintain Document Date.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on all document families (Lost Items, Inventory Count, Issue)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C06-6.3-002",
+    "ch": "6",
+    "sec": "6.3",
+    "req": "Each document shall permanently maintain Posting Date.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Movement, Lost Items, Inventory Count — not verified",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C06-6.3-003",
+    "ch": "6",
+    "sec": "6.3",
+    "req": "Each document shall permanently maintain Assigned Posting Period.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Same module coverage gap as C06-6.3-002",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C06-6.3-004",
+    "ch": "6",
+    "sec": "6.3",
+    "req": "Document Date and Posting Date must never be treated as interchangeable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "GRN post derives postingDate from receivingDate; cross-module consistency not verified",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C06-6.5-001",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Posting is permitted only when Posting Period is Open and all validations pass.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not exhaustively verified on every post path",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C06-6.5-002",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Future posting restrictions shall apply to Posting Date only, not Document Date.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Add future-posting-date validation on postingDate at post handlers in postingGoverned*.service.js and period-close posting-date inputs; allow historical documentDate when posting period is open",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement",
+      "Period Close"
+    ]
+  },
+  {
+    "id": "C06-6.5-003",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Posting into a Closed period is prohibited.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Verify all posting entry points invoke checkPeriodLock",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C06-6.5-004",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Periods shall close sequentially.",
+    "scope": "Financial",
+    "impl": "No",
+    "rw": "No sequential-close enforcement found in periodClose.service.js",
+    "modules": [
+      "Period Close"
+    ]
+  },
+  {
+    "id": "C06-6.5-005",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Periods must not overlap.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "Runtime overlap validation beyond DB uniqueness not verified",
+    "modules": [
+      "Period Close"
+    ]
+  },
+  {
+    "id": "C06-6.5-006",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Period validation shall be centralized.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "Grep and remove/replace any period-lock checks outside periodGuard.service.js; ensure all posting and period-sensitive mutations import checkPeriodLock only",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement",
+      "Period Close"
+    ]
+  },
+  {
+    "id": "C06-6.5-007",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Modules shall not implement independent period logic.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "Independent period logic may exist outside periodGuard — not exhaustively ruled out",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C06-6.5-008",
+    "ch": "6",
+    "sec": "6.5",
+    "req": "Assigned Posting Period shall be immutable after Posting.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "No explicit immutability guard on PATCH/update paths verified",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C06-6.6-001",
+    "ch": "6",
+    "sec": "6.6",
+    "req": "Period Close validation phase shall use centralized validation with progress indication when Close Period is initiated.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "No centralized validation progress UI/checklist display on period-close page",
+    "modules": [
+      "Period Close"
+    ]
+  },
+  {
+    "id": "C06-6.6-002",
+    "ch": "6",
+    "sec": "6.6",
+    "req": "The platform shall provide governed period-close resolution whenever blocking conditions exist, rather than merely rejecting the request.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "Revalidate & Close not wired; per-document resolution actions not implemented",
+    "modules": [
+      "Period Close"
+    ]
+  },
+  {
+    "id": "C07-7.1-001",
+    "ch": "7",
+    "sec": "7.1",
+    "req": "Document State Protection and Draft and Recovery must remain separate policies.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Keep draft persistence in draftGovernance.service.js and unsaved-change warnings in document-draft-can-deactivate guard; wire canDeactivate guard to Transfer/Get Pass/Breakage create routes without merging draft-save into navigation-warning logic",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.2-001",
+    "ch": "7",
+    "sec": "7.2",
+    "req": "Every operational document shall begin as a server-recognized draft unless Workflow Contracts define otherwise.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "GRN create enters VALIDATED not DRAFT; Breakage create enters DEPT_APPROVED",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.4-001",
+    "ch": "7",
+    "sec": "7.4",
+    "req": "The platform shall define draft owner.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Add draftOwner (or equivalent createdBy/owner) field and enforcement on governed document models; default owner to creating user at first server draft",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.4-002",
+    "ch": "7",
+    "sec": "7.4",
+    "req": "The platform shall define draft access rights.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Define and enforce who may open/edit server drafts (owner, delegate, or role per ACC) in draftGovernance save/load paths for each document family",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.4-003",
+    "ch": "7",
+    "sec": "7.4",
+    "req": "The platform shall define draft ownership transfer rules if permitted.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Implement governed draft-owner transfer (or explicit BDR denial) on DRAFT documents per document family",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.4-004",
+    "ch": "7",
+    "sec": "7.4",
+    "req": "The platform shall define handling of drafts for inactive or departed users.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Define handling when draft owner is deactivated (reassign, admin recovery, or block edit) in draftGovernance for each document family",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.5-001",
+    "ch": "7",
+    "sec": "7.5",
+    "req": "Rules for opening the same draft from multiple sessions or devices shall align with Chapter 8 (Concurrency).",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Multi-session draft open rules not documented; FE concurrencyVersion gaps on some modules",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.7-001",
+    "ch": "7",
+    "sec": "7.7",
+    "req": "Auto-save shall occur on meaningful business events.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Trigger saveGrnDraft / equivalent server-draft save on meaningful business events (row add/delete, field changes) on GRN create; extend same pattern to Transfer/Get Pass/Breakage create forms",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.7-002",
+    "ch": "7",
+    "sec": "7.7",
+    "req": "Auto-save shall occur on add or delete row.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Auto-save server draft on line add/delete in GRN create and equivalent line grids on Transfer/Get Pass/Breakage create",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.7-003",
+    "ch": "7",
+    "sec": "7.7",
+    "req": "Auto-save shall occur on quantity or price change.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Auto-save server draft on quantity/price field change in document create/edit line grids",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.7-004",
+    "ch": "7",
+    "sec": "7.7",
+    "req": "Auto-save shall occur on supplier or warehouse change.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Auto-save server draft on supplier/warehouse (or store/from-to) header field change on create forms",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.7-005",
+    "ch": "7",
+    "sec": "7.7",
+    "req": "Auto-save shall occur on attachment change.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Auto-save server draft when attachments are added or removed on document create/edit forms",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.7-006",
+    "ch": "7",
+    "sec": "7.7",
+    "req": "Auto-save shall occur on notes change.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Auto-save server draft on notes/comments field change on document create/edit forms",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.7-007",
+    "ch": "7",
+    "sec": "7.7",
+    "req": "Auto-save shall occur before navigation.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Route guard prompts on leave but does not auto-save before navigation",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C07-7.8-001",
+    "ch": "7",
+    "sec": "7.8",
+    "req": "Recovered drafts shall not bypass current validation.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Implement Continue/Discard recovery prompt on reopening server drafts with full current-validation run before continue or submit",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.8-002",
+    "ch": "7",
+    "sec": "7.8",
+    "req": "Restored documents must be revalidated before continue or submit.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Block continue/submit on recovered drafts until backend validation passes against current rules (prices, periods, stock, required fields)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.9-001",
+    "ch": "7",
+    "sec": "7.9",
+    "req": "A draft registry is required per document family.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Add per-family draft registry table or equivalent query surface listing active server drafts with owner, createdAt, and document id",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.9-002",
+    "ch": "7",
+    "sec": "7.9",
+    "req": "Default draft retention shall be 30 days.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Implement 30-day default draft retention job per document family registry",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.9-003",
+    "ch": "7",
+    "sec": "7.9",
+    "req": "Draft expiration policy (delete, archive, expired state) shall be defined by platform policy.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Define and implement expiration action (delete, archive, or expired state) for drafts past retention per document family",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.10-001",
+    "ch": "7",
+    "sec": "7.10",
+    "req": "Document State Protection shall apply to route navigation.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Transfer, Get Pass, Breakage create forms — not verified",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C07-7.10-002",
+    "ch": "7",
+    "sec": "7.10",
+    "req": "Document State Protection shall apply to browser refresh.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "No beforeunload handler on GRN create for browser refresh",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C07-7.10-003",
+    "ch": "7",
+    "sec": "7.10",
+    "req": "Document State Protection shall apply to browser or tab close.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "No tab-close protection beyond route guard",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C07-7.10-004",
+    "ch": "7",
+    "sec": "7.10",
+    "req": "Document State Protection shall apply to back navigation.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Only GRN /new route wired",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C07-7.10-005",
+    "ch": "7",
+    "sec": "7.10",
+    "req": "Document State Protection shall apply to session expiration with unsaved changes.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "On auth session expiry with dirty create form, prompt save-or-discard (or auto-save draft) before redirect to login; wire into auth interceptor for document create routes",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C07-7.10-006",
+    "ch": "7",
+    "sec": "7.10",
+    "req": "Successful Save Draft or Submit shall return the document to a clean state.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Save Draft / Submit clean-state pattern not verified platform-wide",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C07-7.11-001",
+    "ch": "7",
+    "sec": "7.11",
+    "req": "Upon successful creation of the first Server Draft, the System Document Number becomes permanently reserved per Chapter 9.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "GRN standard create assigns number at create (VALIDATED), not separate draft-save endpoint",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C08-8.2-001",
+    "ch": "8",
+    "sec": "8.2",
+    "req": "Every editable document shall maintain a Concurrency Version for conflict detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "FE does not consistently send concurrencyVersion on Transfer/Get Pass/Breakage mutations",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C08-8.3-001",
+    "ch": "8",
+    "sec": "8.3",
+    "req": "Concurrency shall apply to the entire governed document, not isolated fields only.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Field-level-only concurrency not ruled out on all screens",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C08-8.4-001",
+    "ch": "8",
+    "sec": "8.4",
+    "req": "Concurrent edits must be detected at the Draft stage.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Optional version (null skips check) weakens draft detection",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C08-8.4-002",
+    "ch": "8",
+    "sec": "8.4",
+    "req": "Last write wins is prohibited for concurrent draft edits.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Last-write-wins still possible when client omits version",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C08-8.4-003",
+    "ch": "8",
+    "sec": "8.4",
+    "req": "Conflicting draft operations shall be rejected.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Coverage incomplete when version omitted",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C08-8.4-004",
+    "ch": "8",
+    "sec": "8.4",
+    "req": "Users shall reload the latest version after a conflicting draft operation.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Reload workflow not verified on all modules",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C08-8.5-001",
+    "ch": "8",
+    "sec": "8.5",
+    "req": "After Submit, the document shall be read-only except via Return workflow.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on all operational modules",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C08-8.6-001",
+    "ch": "8",
+    "sec": "8.6",
+    "req": "Save Draft must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Save-draft idempotency not verified all modules",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C08-8.6-002",
+    "ch": "8",
+    "sec": "8.6",
+    "req": "Submit must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not all submit endpoints require concurrencyVersion",
+    "modules": [
+      "GRN",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C08-8.6-003",
+    "ch": "8",
+    "sec": "8.6",
+    "req": "Approve must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Approve double-execution guards not exhaustively verified",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C08-8.6-004",
+    "ch": "8",
+    "sec": "8.6",
+    "req": "Reject must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Reject double-execution via version not verified",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C08-8.6-005",
+    "ch": "8",
+    "sec": "8.6",
+    "req": "Send Back must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Other modules send-back not verified",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C08-8.6-006",
+    "ch": "8",
+    "sec": "8.6",
+    "req": "Cancel must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Cancel uses status guard (e.g. DRAFT-only) but no concurrencyVersion/idempotent cancel detection platform-wide",
+    "modules": [
+      "Requires Mapping"
+    ]
+  },
+  {
+    "id": "C08-8.6-007",
+    "ch": "8",
+    "sec": "8.6",
+    "req": "Post must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Post-on-same-version concurrency check not uniform",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C08-8.7-001",
+    "ch": "8",
+    "sec": "8.7",
+    "req": "Posting must not execute except on the latest valid document version after concurrency verification.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "concurrencyVersion on document updates (Transfer/Get Pass) but postingGovernedGrn lacks version check at post",
+    "modules": [
+      "Requires Mapping"
+    ]
+  },
+  {
+    "id": "C08-8.8-001",
+    "ch": "8",
+    "sec": "8.8",
+    "req": "The platform shall reject conflicting updates.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Optional version weakens guarantee",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C08-8.8-002",
+    "ch": "8",
+    "sec": "8.8",
+    "req": "The platform shall not overwrite another user's changes during conflict.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Overwrite possible when version omitted",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C08-8.8-003",
+    "ch": "8",
+    "sec": "8.8",
+    "req": "The platform shall require reload before retry after a conflicting update.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Automatic reload not implemented; user must manually reload",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C08-8.10-001",
+    "ch": "8",
+    "sec": "8.10",
+    "req": "Concurrency conflicts shall be recorded in audit when appropriate.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "No audit record on concurrency conflict found",
+    "modules": [
+      "Requires Mapping"
+    ]
+  },
+  {
+    "id": "C09-9.2-004",
+    "ch": "9",
+    "sec": "9.2",
+    "req": "System Document Numbers shall be assigned at first Server Draft Save.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Add server-draft-save numbering endpoints (or align first-persist create) for Transfer, Breakage, Get Pass, Movement; route GRN primary create through server-draft path or document that validated-create is the first server persist.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C09-9.3-002",
+    "ch": "9",
+    "sec": "9.3",
+    "req": "Upon first Server Draft, the System Document Number shall be permanently reserved.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Verify first-persist draft always retains assigned number after successful server draft save; accept sequence gaps on failed transactions per §9.3.7.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C09-9.3-007",
+    "ch": "9",
+    "sec": "9.3",
+    "req": "Modules must not configure document number prefixes independently unless authorized.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Replace `movement.service.js` `generateDocumentNo` local `prefixMap` with `docNumbering.service` `DocPrefix`; grep for other hardcoded document prefixes outside `DocPrefix`.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C09-9.3-009",
+    "ch": "9",
+    "sec": "9.3",
+    "req": "Once assigned, a System Document Number shall be immutable for the entire document lifecycle.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Explicit immutability enforcement not verified all models",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C09-9.3-010",
+    "ch": "9",
+    "sec": "9.3",
+    "req": "System Document Number allocation shall be traceable through platform audit mechanisms.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Add CREATE audit note/afterValue including allocated system number for GRN, Breakage, Get Pass (Transfer already covered).",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C10-10.2-003",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "Quantity must be greater than zero.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Reject qty<=0 on Movement draft create/update and verify all line-entry APIs (Transfer/Breakage/GRN/Get Pass) reject non-positive qty before post.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Movement",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C10-10.2-004",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "Zero-quantity lines are prohibited.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Block zero-qty lines at Movement draft save; align Transfer/Breakage/GRN draft entry to reject zero-qty lines (post-time skip/abort already partial).",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C10-10.2-005",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "Quantity precision shall follow platform settings and validation shall use precise values.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Platform settings-driven precision validation not verified",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C10-10.2-007",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "All inventory calculations shall use the base unit.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "All inventory calculations base-unit-only not exhaustively verified",
+    "modules": [
+      "GRN",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C10-10.2-008",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "No transaction shall violate constitutional stock integrity rules.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Confirm outbound post stock guards on Get Pass checkout/dispatch and any remaining governed post engines not yet covered by postingGoverned* services.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C10-10.2-010",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "Posted inventory movements shall never be edited.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Posted ledger row edit prevention not fully verified",
+    "modules": [
+      "Movement"
+    ]
+  },
+  {
+    "id": "C10-10.2-011",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "Posted inventory movement corrections shall be made via new governed transactions.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Document and verify governed reversal/adjustment entry points for posted movement register rows (beyond `movementRegisterGuard` direct-post block).",
+    "modules": [
+      "Movement",
+      "GRN"
+    ]
+  },
+  {
+    "id": "C10-10.2-014",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "Client-side outbound stock checks may warn only and shall not be authoritative.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Client may block UI but backend remains authoritative — pattern not uniform",
+    "modules": [
+      "Breakage",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C10-10.2-015",
+    "ch": "10",
+    "sec": "10.2",
+    "req": "Valuation at Posting shall follow Chapter 5 posting rules.",
+    "scope": "Inventory",
+    "impl": "Partial",
+    "rw": "Verify `resolveUnitCost`/WAC usage at post for Transfer, Breakage, Get Pass, and movement/OB post paths in `posting.service.js` / postingGoverned* services.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Inventory Count",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C11-11.3-001",
+    "ch": "11",
+    "sec": "11.3",
+    "req": "Changing display currency shall change symbol and format only.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "Complete for §11.3 semantics — `formatAmount`/`displayCurrency` pipe already format-only; track SAR hardcoding under C11-11.4-*.",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C11-11.4-001",
+    "ch": "11",
+    "sec": "11.4",
+    "req": "Display Currency shall apply consistently across all user interfaces unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "Replace SAR hardcoding with `displayCurrency` pipe/`ConstitutionPlatformService.formatAmount` on dashboard, stock-balances, stock-report-detail, movement-form, breakage-detail, lost-items-detail, and remaining operational detail screens.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Dashboard",
+      "Reports",
+      "Stock",
+      "Stock Report",
+      "Movement",
+      "Breakage",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C11-11.4-002",
+    "ch": "11",
+    "sec": "11.4",
+    "req": "Display Currency shall apply consistently across reports unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "impl": "No",
+    "rw": "Report engine still uses hardcoded SAR headers/presentation",
+    "modules": [
+      "Reports"
+    ]
+  },
+  {
+    "id": "C11-11.4-003",
+    "ch": "11",
+    "sec": "11.4",
+    "req": "Display Currency shall apply consistently across dashboards unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "impl": "No",
+    "rw": "Dashboard fmtSAR hardcoded",
+    "modules": [
+      "Dashboard"
+    ]
+  },
+  {
+    "id": "C11-11.4-004",
+    "ch": "11",
+    "sec": "11.4",
+    "req": "Display Currency shall apply consistently across exported documents unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "impl": "No",
+    "rw": "Report Excel export paths use hardcoded SAR column labels, not displayCurrency",
+    "modules": [
+      "Reports"
+    ]
+  },
+  {
+    "id": "C11-11.4-005",
+    "ch": "11",
+    "sec": "11.4",
+    "req": "Display Currency shall apply consistently across printed outputs unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "impl": "No",
+    "rw": "Wire `displayCurrency.service` (or tenant display currency) into PDF generators under `OSE-backend/src/services/pdf/` replacing hardcoded SAR labels.",
+    "modules": [
+      "Reports"
+    ]
+  },
+  {
+    "id": "C11-11.4-006",
+    "ch": "11",
+    "sec": "11.4",
+    "req": "Reports and PDF shall use property display currency as each channel is brought under this standard.",
+    "scope": "Financial",
+    "impl": "Partial",
+    "rw": "Reports/PDF channels not yet on property display currency standard",
+    "modules": [
+      "Reports"
+    ]
+  },
+  {
+    "id": "C12-12.2-001",
+    "ch": "12",
+    "sec": "12.2",
+    "req": "Optional header fields omitted when not applicable shall not cause positions to shift arbitrarily.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "No shared placeholder-slot contract; optional fields may shift layout per module",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Movement",
+      "Breakage",
+      "Get Pass",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C12-12.3-001",
+    "ch": "12",
+    "sec": "12.3",
+    "req": "System header fields including document number, status, created by/at, and posted by/at must not be user-editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on all document families; no centralized read-only header component",
+    "modules": [
+      "GRN",
+      "Movement",
+      "Transfer",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C12-12.4-001",
+    "ch": "12",
+    "sec": "12.4",
+    "req": "Header fields shall become read-only once the document enters a non-editable lifecycle state unless explicitly governed otherwise.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Header read-only enforcement not centralized; module coverage incomplete",
+    "modules": [
+      "Movement",
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C12-12.5-001",
+    "ch": "12",
+    "sec": "12.5",
+    "req": "Changes to property, department, or warehouse after lines exist or after workflow progress must require confirmation.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Add governed confirmation when lines exist or workflow progressed (BDR-009)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Movement"
+    ]
+  },
+  {
+    "id": "C12-12.5-002",
+    "ch": "12",
+    "sec": "12.5",
+    "req": "Changes to property, department, or warehouse after lines exist or after workflow progress shall follow document business rules.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "No unified business-rule engine; behavior differs by module; no explicit BDR line-clear policy in code",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C12-12.6-001",
+    "ch": "12",
+    "sec": "12.6",
+    "req": "Header information and document lines shall remain logically consistent throughout the lifecycle unless explicitly governed otherwise.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Extend header–line consistency guards to Get Pass and any remaining document families lacking backend assertions on save/update.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Movement",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C12-12.7-001",
+    "ch": "12",
+    "sec": "12.7",
+    "req": "Modules adding header fields shall preserve standard header order and positions.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "No enforced header-order registry; modules can diverge on extra fields",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Movement",
+      "Breakage",
+      "Get Pass",
+      "Lost Items",
+      "Items"
+    ]
+  },
+  {
+    "id": "C13-13.4-001",
+    "ch": "13",
+    "sec": "13.4",
+    "req": "Posted document lines shall be immutable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Coverage not verified on all modules; some use status-specific guards only",
+    "modules": [
+      "GRN",
+      "Movement",
+      "Breakage",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C13-13.4-002",
+    "ch": "13",
+    "sec": "13.4",
+    "req": "Posted document line corrections shall be made via new governed business transactions.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Verify each document family exposes governed correction/reversal transaction entry for posted lines (backend workflow); no unified reversal UI required.",
+    "modules": [
+      "Movement",
+      "GRN",
+      "Transfer",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C13-13.5-001",
+    "ch": "13",
+    "sec": "13.5",
+    "req": "Line values and calculated fields shall recalculate automatically per governed business rules when relevant data changes.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not a shared recalculation engine; module-specific only",
+    "modules": [
+      "GRN",
+      "Movement",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C13-13.6-001",
+    "ch": "13",
+    "sec": "13.6",
+    "req": "All document lines shall remain consistent with governing business context in the header unless explicitly governed otherwise.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Add header–line context assertions for Get Pass and remaining line-based documents on save/update.",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Movement",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C13-13.7-001",
+    "ch": "13",
+    "sec": "13.7",
+    "req": "Document totals must not be directly user-editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not verified on all document types with totals",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C13-13.7-002",
+    "ch": "13",
+    "sec": "13.7",
+    "req": "Line totals must not be directly user-editable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Editable qty/price fields exist; total cells not inputs but pattern not platform-wide",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C13-13.8-001",
+    "ch": "13",
+    "sec": "13.8",
+    "req": "Duplicate line behavior shall be defined by each business document according to functional requirements.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Not documented/implemented for all document families per BDR-003",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C13-13.9-001",
+    "ch": "13",
+    "sec": "13.9",
+    "req": "Significant line-level business changes shall be auditable per platform audit policy.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Line-level change audit not verified on all modules",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C13-13.10-001",
+    "ch": "13",
+    "sec": "13.10",
+    "req": "Large document line datasets shall not degrade usability per Chapter 27.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Movement/Breakage/Get Pass line grids not verified; no virtual scroll platform standard",
+    "modules": [
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C14-14.3-001",
+    "ch": "14",
+    "sec": "14.3",
+    "req": "Posted attachments shall not be modified except by explicit admin governance.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Other attachment-bearing modules not verified",
+    "modules": [
+      "GRN",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C14-14.3-002",
+    "ch": "14",
+    "sec": "14.3",
+    "req": "Posted attachments shall not be replaced except by explicit admin governance.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Explicit replace-path not verified separately on all modules",
+    "modules": [
+      "GRN",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C14-14.3-003",
+    "ch": "14",
+    "sec": "14.3",
+    "req": "Posted attachments shall not be deleted except by explicit admin governance.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "No dedicated delete-attachment API audit across modules",
+    "modules": [
+      "GRN",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C14-14.3-004",
+    "ch": "14",
+    "sec": "14.3",
+    "req": "Required attachments must block submit when missing.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Blocks at validate not explicitly at submit; other modules not verified",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C14-14.4-001",
+    "ch": "14",
+    "sec": "14.4",
+    "req": "The platform shall enforce allowed attachment file types per platform policy.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Policy not centralized in one config; per-route limits differ (GRN 20MB PDF)",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C14-14.4-002",
+    "ch": "14",
+    "sec": "14.4",
+    "req": "The platform shall enforce maximum attachment file size per platform policy.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Inconsistent limits across routes; not single platform policy file",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C14-14.4-003",
+    "ch": "14",
+    "sec": "14.4",
+    "req": "The platform shall enforce maximum attachment count per platform policy.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Server-side max count not enforced platform-wide",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C14-14.5-001",
+    "ch": "14",
+    "sec": "14.5",
+    "req": "Uploaded attachment files shall comply with platform security validation policy.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Document platform upload security policy (types/size/tenant isolation); optional hardening beyond constitution is out of scope for this requirement.",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C14-14.6-001",
+    "ch": "14",
+    "sec": "14.6",
+    "req": "Attachment download shall be subject to the same authorization as document view.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Download auth not proven equivalent to document-view permission on all attachment endpoints",
+    "modules": [
+      "Platform",
+      "Items",
+      "GRN"
+    ]
+  },
+  {
+    "id": "C14-14.9-001",
+    "ch": "14",
+    "sec": "14.9",
+    "req": "All attachment operations shall be auditable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "breakage addAttachment() has no audit call; attachment ops not fully auditable",
+    "modules": [
+      "GRN",
+      "Breakage",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C15-15.2-003",
+    "ch": "15",
+    "sec": "15.2",
+    "req": "Cancel shall require a reason where defined.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Governance: define which cancel/void actions require user reason in workflow contracts; then add reason param + API/UI validation for those paths (e.g. inventoryCount.cancelSession, breakage.voidBreakage).",
+    "modules": [
+      "Inventory Count",
+      "Breakage",
+      "Stock Count"
+    ]
+  },
+  {
+    "id": "C15-15.3-002",
+    "ch": "15",
+    "sec": "15.3",
+    "req": "System notes shall become immutable once recorded.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "No explicit immutability constraint on all note fields",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C15-15.4-001",
+    "ch": "15",
+    "sec": "15.4",
+    "req": "System notes shall be generated exclusively by the platform.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Mixed user notes and system notes in document.notes fields",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C15-15.5-001",
+    "ch": "15",
+    "sec": "15.5",
+    "req": "Notes and comments shall appear in chronological order within the unified timeline.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Add merged audit/workflow timeline to Movement detail (and any remaining governed detail screens without `returns-workflow-timeline`).",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement",
+      "Inventory Count",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C16-16.3-003",
+    "ch": "16",
+    "sec": "16.3",
+    "req": "Item images in grids shall use thumbnails, not full resolution.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Transfer/Breakage/Get Pass/Stock Report line grids show no item thumbnails; count-sheet export image compatibility not verified",
+    "modules": [
+      "Items",
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Stock Report"
+    ]
+  },
+  {
+    "id": "C16-16.3-004",
+    "ch": "16",
+    "sec": "16.3",
+    "req": "Maximum item image size shall be 1 MB per image.",
+    "scope": "Platform-wide",
+    "impl": "No",
+    "rw": "Align upload.middleware uploadImage limit to 1 MB or register BDR exception",
+    "modules": [
+      "Items"
+    ]
+  },
+  {
+    "id": "C16-16.3-005",
+    "ch": "16",
+    "sec": "16.3",
+    "req": "Supported item image formats and dimensions shall follow platform media policy.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "No dimension validation; 5 MB limit on `uploadImage` conflicts with Ch.16.3-004 1 MB rule; no wired media-policy doc",
+    "modules": [
+      "Items",
+      "API"
+    ]
+  },
+  {
+    "id": "C16-16.3-006",
+    "ch": "16",
+    "sec": "16.3",
+    "req": "Unified export behavior shall apply when an item image is absent.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Absent-image fallback verified in some report/PDF paths only; inventory-count and stock-report exports not verified",
+    "modules": [
+      "Reports",
+      "PDF",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C17-17.2-001",
+    "ch": "17",
+    "sec": "17.2",
+    "req": "Keyboard navigation shall be keyboard-first across governed experiences.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Extend governed keyboard-first line-entry pattern to Transfer, Breakage, Get Pass, Items, and other document workspaces",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Items",
+      "Reports"
+    ]
+  },
+  {
+    "id": "C17-17.2-002",
+    "ch": "17",
+    "sec": "17.2",
+    "req": "Enter shall move to the next field and shall not submit, post, or delete.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Add governed Enter behavior preventing submit/post/delete",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C17-17.2-003",
+    "ch": "17",
+    "sec": "17.2",
+    "req": "Enter at row end shall move to the next row or add a row.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Row-end Enter to next row / add row not implemented as shared behavior",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C17-17.2-004",
+    "ch": "17",
+    "sec": "17.2",
+    "req": "Shift+Enter shall move to the previous field.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Shift+Enter previous-field navigation not implemented",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C17-17.2-006",
+    "ch": "17",
+    "sec": "17.2",
+    "req": "Esc shall close lookup, calendar, or small overlay components.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Document framework Esc behavior; add explicit Esc contract when shared lookup overlay (Ch.23) lands",
+    "modules": [
+      "Platform",
+      "GRN"
+    ]
+  },
+  {
+    "id": "C17-17.2-008",
+    "ch": "17",
+    "sec": "17.2",
+    "req": "Invalid fields shall retain focus.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Add validation focus management on failed submit",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C17-17.2-009",
+    "ch": "17",
+    "sec": "17.2",
+    "req": "After item pick in line entry, focus shall move to quantity.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "After item pick in GRN `addItem()`, focus does not move to quantity field on new line",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Items"
+    ]
+  },
+  {
+    "id": "C17-17.3-001",
+    "ch": "17",
+    "sec": "17.3",
+    "req": "Keyboard behavior shall be consistent across all modules.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Wire `appKeyboardNav` beyond GRN to Transfer, Breakage, Get Pass, and other governed document screens",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement",
+      "Items"
+    ]
+  },
+  {
+    "id": "C17-17.3-002",
+    "ch": "17",
+    "sec": "17.3",
+    "req": "Focus shall be visually distinguishable.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Ant Design focus rings present; audit custom controls (e.g. thumb-button) for WCAG-visible focus on keyboard nav",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C17-17.3-003",
+    "ch": "17",
+    "sec": "17.3",
+    "req": "Keyboard navigation shall skip disabled controls.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Not verified as explicit keyboard-skip policy",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement",
+      "Items"
+    ]
+  },
+  {
+    "id": "C17-17.3-004",
+    "ch": "17",
+    "sec": "17.3",
+    "req": "Keyboard navigation shall skip hidden controls.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "CSS-hidden elements not audited",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Movement",
+      "Items"
+    ]
+  },
+  {
+    "id": "C17-17.3-005",
+    "ch": "17",
+    "sec": "17.3",
+    "req": "Dialogs shall assign initial focus to the primary interactive element.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "No explicit primary-element focus contract in app modals",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C17-17.3-006",
+    "ch": "17",
+    "sec": "17.3",
+    "req": "Global shortcuts shall be centrally governed.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Publish shortcut registry and adopt directive on all governed document workspaces",
+    "modules": [
+      "Platform",
+      "GRN"
+    ]
+  },
+  {
+    "id": "C17-17.3-007",
+    "ch": "17",
+    "sec": "17.3",
+    "req": "Modules must not introduce independent global shortcuts.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Audit module-local `keydown.enter` handlers (dashboard KPI rows, etc.) against central shortcut registry rule",
+    "modules": [
+      "GRN",
+      "Dashboard",
+      "Items",
+      "Reports"
+    ]
+  },
+  {
+    "id": "C18-18.1-001",
+    "ch": "18",
+    "sec": "18.1",
+    "req": "Each error type shall use exactly one display channel.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Golden-rule channel map documented in constitution only; no FE registry enforcing field/row/banner/toast routing",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-001",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "Validation errors shall disappear when fixed.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Auto-clear validation UI exists on GRN create only; not shared across governed forms",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C18-18.2-002",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "On submit, focus shall move to the first validation error.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Focus first validation error on submit",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-003",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "When many errors exist, the summary banner shall show the error count.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Summary banner with error count on multi-error submit",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-004",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "When many errors exist, error details shall appear at fields or rows.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Row/field error highlighting partial on GRN; Get Pass has sparse `role=alert` field errors only",
+    "modules": [
+      "GRN",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C18-18.2-005",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "All validation and error messages shall support localization.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "i18n covers common codes; `ValidationOrchestratorService` still emits English `${field} is required` literals",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-006",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "Backend validation shall return codes.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Structured `code`/`errorFamily` only when services throw `err.code`; many validation throws use plain message strings",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-007",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "The platform shall present translated text for backend validation codes.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Map backend validation codes to i18n keys beyond `COMMON.CONCURRENCY_CONFLICT`; most 400s show raw server text",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-009",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "Validation shall occur at data entry per business rules.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Client `requireFields`/`shared-upload` checks on subset of screens; Transfer/Breakage/Get Pass lack uniform pre-submit assist",
+    "modules": [
+      "GRN",
+      "Items",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C18-18.2-014",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "Validation messages shall be presented in logical order: header, then lines, then document.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Implement ValidationOrchestrator presentation order contract",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-015",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "Warnings shall be informational unless governed otherwise.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Ad hoc `nz-alert` warning vs error on GRN detail invoice link; no platform warning taxonomy",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Platform"
+    ]
+  },
+  {
+    "id": "C18-18.2-017",
+    "ch": "18",
+    "sec": "18.2",
+    "req": "The same error must not be duplicated across display channels.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "GRN create duplicates some errors via `error` signal + `message.error()` while interceptor also toasts 400s",
+    "modules": [
+      "Platform",
+      "GRN"
+    ]
+  },
+  {
+    "id": "C19-19.2-001",
+    "ch": "19",
+    "sec": "19.2",
+    "req": "Error placement shall match severity.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Define and enforce error-severity placement contract (field vs banner vs toast) platform-wide",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C19-19.2-002",
+    "ch": "19",
+    "sec": "19.2",
+    "req": "Errors must not use duplicate display channels.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "GRN create: dual-channel on invoice/OB errors (`error.set` + `message.error`); audit Transfer/Get Pass submit paths",
+    "modules": [
+      "GRN",
+      "Platform"
+    ]
+  },
+  {
+    "id": "C19-19.3-001",
+    "ch": "19",
+    "sec": "19.3",
+    "req": "User-facing error messages shall be clear and actionable.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Build unified actionable-message dictionary; `formatApiValidationErrors` still surfaces raw field names",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C19-19.3-002",
+    "ch": "19",
+    "sec": "19.3",
+    "req": "User-facing error messages shall be free of technical implementation details.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "404 handler exposes route path; some 422 validation responses include Prisma `field_name` in body",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C19-19.3-004",
+    "ch": "19",
+    "sec": "19.3",
+    "req": "SQL details must never be exposed to end users.",
+    "scope": "Security",
+    "impl": "Partial",
+    "rw": "P2003 FK errors may expose `field_name`; dev-mode responses may include stack in logs only (response sanitized for 500)",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C19-19.3-005",
+    "ch": "19",
+    "sec": "19.3",
+    "req": "Internal IDs must never be exposed to end users in error messages.",
+    "scope": "Security",
+    "impl": "Partial",
+    "rw": "Tenant-slug conflict returns `existingTenantId` UUID; validation `errors[].field` may carry internal IDs",
+    "modules": [
+      "Platform",
+      "Super Admin",
+      "Tenants"
+    ]
+  },
+  {
+    "id": "C19-19.5-001",
+    "ch": "19",
+    "sec": "19.5",
+    "req": "Equivalent error conditions shall produce consistent error codes and user experience.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "FE/BE `classifyCode` exists; most service throws omit stable VAL-/BUS-/STK- codes; UX not normalized per family",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C19-19.7-001",
+    "ch": "19",
+    "sec": "19.7",
+    "req": "The first validation error shall be focusable.",
+    "scope": "Accessibility",
+    "impl": "No",
+    "rw": "Implement focus management on validation failure across governed forms",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C19-19.7-002",
+    "ch": "19",
+    "sec": "19.7",
+    "req": "The first validation error shall be announced to assistive technology.",
+    "scope": "Accessibility",
+    "impl": "Partial",
+    "rw": "Sparse `role=alert` on Get Pass and approve modal only; no systematic aria-live announcement on first validation error",
+    "modules": [
+      "Get Pass",
+      "GRN",
+      "Platform"
+    ]
+  },
+  {
+    "id": "C20-20.2-001",
+    "ch": "20",
+    "sec": "20.2",
+    "req": "Notifications shall use a unified dictionary.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Fragmented notification sources (bell alerts, NzMessage interceptor, inline nz-alert); no unified event dictionary",
+    "modules": [
+      "Workflow Pipeline",
+      "Platform",
+      "GRN",
+      "Transfer"
+    ]
+  },
+  {
+    "id": "C20-20.2-002",
+    "ch": "20",
+    "sec": "20.2",
+    "req": "Notifications for the same event shall be deduplicated.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Add dedupe policy for toast/bell/inline for same event",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C20-20.2-003",
+    "ch": "20",
+    "sec": "20.2",
+    "req": "Notifications must not rely on color alone.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "NzMessage types and nz-tag icons cover many surfaces; workflow-bell severity badges and custom status chips not audited",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C20-20.5-001",
+    "ch": "20",
+    "sec": "20.5",
+    "req": "The platform must not notify a user to open a document they cannot access.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Filter alerts with userCanActOnItem or equivalent view permission before notify/deeplink",
+    "modules": [
+      "Workflow Pipeline"
+    ]
+  },
+  {
+    "id": "C21-21.1-001",
+    "ch": "21",
+    "sec": "21.1",
+    "req": "Loading scope shall match the operation scope.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Per-component loading signals; no lint/guard that spinner scope matches operation (e.g. full-page vs table-only)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Reports",
+      "Items",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C21-21.1-002",
+    "ch": "21",
+    "sec": "21.1",
+    "req": "Long operations shall show progress or status.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "nzLoading on tables/buttons; bulk image ZIP and long report jobs lack progress % (admin tenants-list has nz-progress exception)",
+    "modules": [
+      "GRN",
+      "Reports",
+      "Items",
+      "Admin"
+    ]
+  },
+  {
+    "id": "C21-21.1-003",
+    "ch": "21",
+    "sec": "21.1",
+    "req": "Action buttons shall be disabled during the action.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Verify `[disabled]` on submit/save across Items create, Inventory Count post, Transfer form create",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Items",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C21-21.1-004",
+    "ch": "21",
+    "sec": "21.1",
+    "req": "Double submission is prohibited.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "GRN `submit()` lacks `if (loading()) return`; Alt+S keyboard-save can enqueue duplicate create while in-flight",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C21-21.2-001",
+    "ch": "21",
+    "sec": "21.2",
+    "req": "Partial operations must not block the entire application.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Shell layout stays interactive during child route loads; no automated test that partial exports/imports never block sidebar navigation",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C21-21.3-001",
+    "ch": "21",
+    "sec": "21.3",
+    "req": "If loading exceeds a reasonable duration, the user shall be informed the operation continues.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Add long-running operation feedback beyond button spinners",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C22-22.2-001",
+    "ch": "22",
+    "sec": "22.2",
+    "req": "Every workflow action must generate an audit record.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Breakage module missing all workflow audit; GRN CREATE/SUBMIT not logged; verify each Ch.22.2 event type per module",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Inventory Count",
+      "Posting"
+    ]
+  },
+  {
+    "id": "C22-22.2-002",
+    "ch": "22",
+    "sec": "22.2",
+    "req": "Every significant attachment change must generate an audit record.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Emit governed audit on attachment add/replace/delete for Breakage and GRN invoice attachment",
+    "modules": [
+      "Breakage",
+      "GRN"
+    ]
+  },
+  {
+    "id": "C22-22.2-003",
+    "ch": "22",
+    "sec": "22.2",
+    "req": "Every significant line change must generate an audit record.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Transfer `updateTransfer()` replaces lines with no logAction; GRN draft line edits unlogged; Breakage line media changes unlogged",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C22-22.3-001",
+    "ch": "22",
+    "sec": "22.3",
+    "req": "The document timeline shall be a single chronological timeline.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "GRN FE must merge auditEvents; Transfer/Breakage/Get Pass/Inventory Count never consume constitution timeline API",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C22-22.3-002",
+    "ch": "22",
+    "sec": "22.3",
+    "req": "Audit records shall be immutable.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Insert-only writer confirmed; add DB immutability constraint or governance smoke test",
+    "modules": [
+      "Audit Log",
+      "Platform"
+    ]
+  },
+  {
+    "id": "C22-22.3-003",
+    "ch": "22",
+    "sec": "22.3",
+    "req": "Audit timestamps shall be stored internally in UTC.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "UTC via server `now()`/ISO export; document explicit UTC storage policy in Architecture Guide",
+    "modules": [
+      "Audit Log",
+      "Platform"
+    ]
+  },
+  {
+    "id": "C22-22.3-004",
+    "ch": "22",
+    "sec": "22.3",
+    "req": "Audit timestamps shall be displayed per user time zone.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Implement user-timezone display using profile/ACC timezone setting",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C22-22.3-005",
+    "ch": "22",
+    "sec": "22.3",
+    "req": "Timeline filtering is permitted without altering audit records.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "BE audit log supports filters; timeline UI filtering not unified—workflow timeline component has no user filter controls",
+    "modules": [
+      "Audit Log",
+      "Reports",
+      "GRN",
+      "Transfer",
+      "Breakage",
+      "Get Pass"
+    ]
+  },
+  {
+    "id": "C23-23.1-001",
+    "ch": "23",
+    "sec": "23.1",
+    "req": "Lookup behavior shall be unified for items, parties, locations, and references.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Extend shared lookup widget to GRN item line; migrate supplier/location/party pickers from bulk client loads to server-assisted lookup per profile",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Master Data",
+      "Items",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C23-23.2-001",
+    "ch": "23",
+    "sec": "23.2",
+    "req": "Lookup profiles (Receiving, stock-based, catalog, issue) shall use the same UX with differing data scope only.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Adopt shared lookup widget on GRN item line; align profile params (receiving/stock/catalog/issue) on existing nz-select surfaces—no new UX paradigm",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Master Data",
+      "Items"
+    ]
+  },
+  {
+    "id": "C23-23.3-001",
+    "ch": "23",
+    "sec": "23.3",
+    "req": "Lookup search shall support code, name, and barcode.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Add code to item search OR clause; ensure all lookup paths call the same ranked search API",
+    "modules": [
+      "Items",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.3-002",
+    "ch": "23",
+    "sec": "23.3",
+    "req": "Lookup search ranking shall be exact code, then exact barcode, then prefix, then contains.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Implement constitution search ranking in item.service",
+    "modules": [
+      "Items"
+    ]
+  },
+  {
+    "id": "C23-23.3-003",
+    "ch": "23",
+    "sec": "23.3",
+    "req": "Lookup search shall debounce before executing search.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Apply debounceTime to all server-driven lookup queries (GRN item line + future shared lookup); client-filter nz-select paths exempt only where catalog is already scoped small",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Items",
+      "Master Data"
+    ]
+  },
+  {
+    "id": "C23-23.3-004",
+    "ch": "23",
+    "sec": "23.3",
+    "req": "Lookup search shall normalize case and spaces insensitively.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Normalize search input (trim/collapse spaces) in item.service getItems() before Prisma query",
+    "modules": [
+      "Items",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.4-001",
+    "ch": "23",
+    "sec": "23.4",
+    "req": "Lookup keyboard navigation shall support arrow up and arrow down.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Add arrow-key highlighting to GRN custom item dropdown (or replace with shared lookup widget)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.4-002",
+    "ch": "23",
+    "sec": "23.4",
+    "req": "Lookup keyboard navigation shall support Enter, Esc, and Tab.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Implement Enter/Esc/Tab contract on GRN custom item dropdown (or migrate to shared lookup)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.4-003",
+    "ch": "23",
+    "sec": "23.4",
+    "req": "Lookup shall close on select.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Generalize to all lookup profiles",
+    "modules": [
+      "GRN"
+    ]
+  },
+  {
+    "id": "C23-23.4-004",
+    "ch": "23",
+    "sec": "23.4",
+    "req": "Lookup shall close on outside click.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Add click-outside dismiss to GRN custom item dropdown (or migrate to shared lookup)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.4-005",
+    "ch": "23",
+    "sec": "23.4",
+    "req": "Lookup shall close on field exit.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Close GRN custom item dropdown on input blur",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.4-006",
+    "ch": "23",
+    "sec": "23.4",
+    "req": "Only one lookup shall be open at a time.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Enforce one-open lookup registry",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C23-23.4-007",
+    "ch": "23",
+    "sec": "23.4",
+    "req": "After item pick in line entry, focus shall move to quantity.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "After item pick in line entry, focus quantity input on GRN/Transfer/Get Pass/Breakage create forms",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.5-001",
+    "ch": "23",
+    "sec": "23.5",
+    "req": "Lookup loading, no-results, and error-with-retry states shall use unified messaging.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Add shared lookup loading/empty/error+retry messaging component; wire on GRN item line first, then profile lookups",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Platform"
+    ]
+  },
+  {
+    "id": "C23-23.5-002",
+    "ch": "23",
+    "sec": "23.5",
+    "req": "Lookup shall use unified empty states.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Shared lookup empty-state component",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C23-23.6-001",
+    "ch": "23",
+    "sec": "23.6",
+    "req": "Lookup results shall be filtered by permission to show only authorized data.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Verify route permission + scope filters on supplier/location/stock lookup APIs per profile",
+    "modules": [
+      "Items",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Master Data"
+    ]
+  },
+  {
+    "id": "C23-23.6-002",
+    "ch": "23",
+    "sec": "23.6",
+    "req": "Lookup shall enforce tenant isolation with no cross-tenant data.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Add lookup cross-tenant negative test to constitution smoke suite (governance verification artifact)",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C23-23.6-003",
+    "ch": "23",
+    "sec": "23.6",
+    "req": "Large lookup result sets shall use paging or infinite scroll per platform policy.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Apply consistent paging/limit policy to all large lookup result sets (SharedLookup limit=20 baseline)",
+    "modules": [
+      "Items",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.6-004",
+    "ch": "23",
+    "sec": "23.6",
+    "req": "Large catalogs shall use server-side search.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Replace client-preloaded item catalogs with server-assisted search on Transfer/Get Pass/Breakage line pickers",
+    "modules": [
+      "Items",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C23-23.6-005",
+    "ch": "23",
+    "sec": "23.6",
+    "req": "Loading entire large catalogs into the client is prohibited.",
+    "scope": "UX",
+    "impl": "No",
+    "rw": "Replace bulk client catalog loads with server-assisted lookup on all party/location/item pickers",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Master Data"
+    ]
+  },
+  {
+    "id": "C24-24.2-001",
+    "ch": "24",
+    "sec": "24.2",
+    "req": "Minimum supported resolution shall be 1366x768.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Record ch24.6 matrix sign-off at 1366×768 @100% (governance QA artifact); fix layout only where matrix finds violations",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C24-24.3-001",
+    "ch": "24",
+    "sec": "24.3",
+    "req": "Zoom support from 80% to 125% is required for release acceptance.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Execute and record ch24.6 zoom matrix (1366×768 @80/90/100/110/125%) per §29.3 DoD",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C24-24.4-001",
+    "ch": "24",
+    "sec": "24.4",
+    "req": "Pages shall not require horizontal page scroll except inside grids.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Audit routes in ch24.6 matrix for page-level horizontal scroll; confine overflow-x to table/grid owners where found",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Reports",
+      "Registry lists",
+      "Items",
+      "Inventory Count",
+      "Movements",
+      "Master Data"
+    ]
+  },
+  {
+    "id": "C24-24.4-002",
+    "ch": "24",
+    "sec": "24.4",
+    "req": "Titles shall not be clipped.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Execute ch24.6 matrix spot-check for page/masthead titles at 1366×768; fix CSS only where clipping is observed (governance QA first, code second)",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Reports",
+      "Registry lists",
+      "Dashboard",
+      "Admin"
+    ]
+  },
+  {
+    "id": "C24-24.4-003",
+    "ch": "24",
+    "sec": "24.4",
+    "req": "Buttons shall not overlap.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Execute ch24.6 matrix spot-check for action bars at 1366×768; fix flex/wrap/gap only where overlap is observed",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Reports",
+      "Document detail",
+      "Workflow Pipeline"
+    ]
+  },
+  {
+    "id": "C24-24.4-004",
+    "ch": "24",
+    "sec": "24.4",
+    "req": "Create screen primary actions shall be visible at 1366x768 and 100% zoom.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Record ch24.6 matrix sign-off for create-route primary actions at 1366×768 @100%; adjust footer/sticky layout only if actions not visible",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C24-24.4-005",
+    "ch": "24",
+    "sec": "24.4",
+    "req": "Dialogs shall fit the viewport with internal scroll.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Verify ng-zorro modals fit viewport with nzBodyStyle/maxHeight internal scroll; fix outliers found in ch24.6 matrix",
+    "modules": [
+      "Platform",
+      "ACC",
+      "Master Data",
+      "Breakage",
+      "GRN",
+      "Admin"
+    ]
+  },
+  {
+    "id": "C24-24.4-006",
+    "ch": "24",
+    "sec": "24.4",
+    "req": "Tables shall scroll internally.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Migrate remaining nz-table surfaces without registry-work-card__scroll / overflow-x owner to internal-scroll pattern",
+    "modules": [
+      "Registry lists",
+      "Reports",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Items",
+      "Inventory Count",
+      "Movements",
+      "Ledger",
+      "Master Data"
+    ]
+  },
+  {
+    "id": "C24-24.5-001",
+    "ch": "24",
+    "sec": "24.5",
+    "req": "Supported browsers shall follow the platform browser support matrix.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Reference Architecture Guide browser matrix in release QA checklist with recorded sign-off (governance artifact)",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C24-24.5-002",
+    "ch": "24",
+    "sec": "24.5",
+    "req": "High DPI displays (2K/4K) shall be supported.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Include 2K/4K display spot-check in ch24.6/release QA matrix; fix scaling only where defects observed",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C24-24.5-003",
+    "ch": "24",
+    "sec": "24.5",
+    "req": "Multi-monitor presentation shall be consistent.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Record multi-monitor/DPI spot-check in release QA matrix (governance sign-off); no code change unless inconsistency found",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C24-24.6-001",
+    "ch": "24",
+    "sec": "24.6",
+    "req": "Responsive test matrix 1366x768 at 80/90/100/110/125% zoom is required for Definition of Done.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "No checked-in test results for full matrix",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C24-24.6-002",
+    "ch": "24",
+    "sec": "24.6",
+    "req": "Responsive test matrix 1440/1600/1920 at 100% zoom is required for Definition of Done.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Execute and record 1440/1600/1920 @100% matrix",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C25-25.2-001",
+    "ch": "25",
+    "sec": "25.2",
+    "req": "Modules must not invent unrelated document layouts.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Converge create/edit and detail layouts to declared archetypes (A-DT/A-TX) per UX Constitution; GRN golden reference per §25.7",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Lost Items",
+      "Movement",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C25-25.2-002",
+    "ch": "25",
+    "sec": "25.2",
+    "req": "All modules must declare and follow one document layout archetype.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "SCREEN-REGISTRY archetype mapping incomplete vs all operational modules",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C25-25.3-001",
+    "ch": "25",
+    "sec": "25.3",
+    "req": "Primary scroll owner shall be defined per document layout archetype.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Register primary scroll owner per route in SCREEN-REGISTRY; align implementation to VSL archetype owner",
+    "modules": [
+      "Registry lists",
+      "Document detail",
+      "Reports",
+      "Items",
+      "Inventory Count",
+      "Movements",
+      "Master Data",
+      "Dashboard"
+    ]
+  },
+  {
+    "id": "C25-25.3-002",
+    "ch": "25",
+    "sec": "25.3",
+    "req": "Primary scroll owner shall be consistent per archetype.",
+    "scope": "UX",
+    "impl": "Partial",
+    "rw": "Apply registry-work-card__scroll (or archetype-equivalent owner) to non-registry screens with divergent scroll behavior",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Lost Items",
+      "Movements",
+      "Items",
+      "Inventory Count",
+      "Reports",
+      "Master Data"
+    ]
+  },
+  {
+    "id": "C26-26.1-001",
+    "ch": "26",
+    "sec": "26.1",
+    "req": "Print and PDF export must match.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Verify print CSS matches PDF presentation per document family; align detail browser-print with evidence PDF chrome",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Lost Items",
+      "Reports",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C26-26.1-002",
+    "ch": "26",
+    "sec": "26.1",
+    "req": "Printed and exported documents shall include status watermarks such as draft, posted, and void.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Ensure draft/posted/void status watermark or pill on every evidence PDF export type",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Lost Items",
+      "Reports"
+    ]
+  },
+  {
+    "id": "C26-26.1-003",
+    "ch": "26",
+    "sec": "26.1",
+    "req": "Printed and exported documents shall include header and footer with organization identity.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Organization identity varies by report; not unified tenant branding injection everywhere",
+    "modules": [
+      "Reports",
+      "Evidence PDFs"
+    ]
+  },
+  {
+    "id": "C26-26.1-004",
+    "ch": "26",
+    "sec": "26.1",
+    "req": "Printed and exported documents shall include page numbers and print metadata.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Verify page numbers and print metadata on all export routes (evidence PDF, get-pass pdf, count session pdf)",
+    "modules": [
+      "Reports",
+      "Evidence PDFs",
+      "Get Pass",
+      "Inventory Count",
+      "GRN",
+      "Transfer",
+      "Lost Items"
+    ]
+  },
+  {
+    "id": "C26-26.2-001",
+    "ch": "26",
+    "sec": "26.2",
+    "req": "The platform electronic record is authoritative over printed or exported copies.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Add authoritative-copy disclaimer string to PDF footers and browser-print shells (electronic record is SSOT)",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Reports"
+    ]
+  },
+  {
+    "id": "C26-26.3-001",
+    "ch": "26",
+    "sec": "26.3",
+    "req": "Print shall be subject to the same permission model as document view.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Confirm evidence print/download buttons absent when user lacks document-view permission on all detail routes (edge-case audit, not new permission model)",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Reports"
+    ]
+  },
+  {
+    "id": "C26-26.3-002",
+    "ch": "26",
+    "sec": "26.3",
+    "req": "Export shall be subject to the same permission model as document view.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Audit client-side print/CSV/export entry points for REPORTS_EXPORT or document-family export permission parity",
+    "modules": [
+      "Reports",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Lost Items",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C26-26.3-003",
+    "ch": "26",
+    "sec": "26.3",
+    "req": "Export authorization shall be explicit.",
+    "scope": "Document-specific",
+    "impl": "Partial",
+    "rw": "Catalog export authorization per document family in ACC permission matrix (beyond REPORTS_EXPORT)",
+    "modules": [
+      "Reports",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Lost Items",
+      "Inventory Count",
+      "ACC"
+    ]
+  },
+  {
+    "id": "C26-26.4-001",
+    "ch": "26",
+    "sec": "26.4",
+    "req": "Sensitive data shall be masked per authorization on export and print.",
+    "scope": "Document-specific",
+    "impl": "No",
+    "rw": "Implement authorization-based field masking on print/export",
+    "modules": [
+      "Reports",
+      "PDF"
+    ]
+  },
+  {
+    "id": "C27-27.1-001",
+    "ch": "27",
+    "sec": "27.1",
+    "req": "Large lists shall use paging or virtual presentation.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Replace bulk client list loads with server paging on remaining selectors (suppliers, stock catalogs)",
+    "modules": [
+      "Items",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Movements",
+      "Lost Items",
+      "Inventory Count",
+      "Admin",
+      "Reports"
+    ]
+  },
+  {
+    "id": "C27-27.1-002",
+    "ch": "27",
+    "sec": "27.1",
+    "req": "Server-assisted search shall be used when warranted for large lists.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Convert remaining large-list selectors to server-assisted search with q param",
+    "modules": [
+      "Items",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Reports",
+      "Master Data",
+      "Movements"
+    ]
+  },
+  {
+    "id": "C27-27.1-003",
+    "ch": "27",
+    "sec": "27.1",
+    "req": "Search requests shall use debounce and cancel in-flight requests.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Apply debounceTime+switchMap cancel pattern to all server-driven search/filter HTTP calls",
+    "modules": [
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Items",
+      "Reports",
+      "Master Data",
+      "Movements"
+    ]
+  },
+  {
+    "id": "C27-27.1-004",
+    "ch": "27",
+    "sec": "27.1",
+    "req": "Heavy export and print operations shall be asynchronous with user feedback.",
+    "scope": "Platform-wide",
+    "impl": "Partial",
+    "rw": "Ensure exporting/disabled loading state on all heavy PDF/Excel triggers (extend report-viewer pattern to evidence-pack downloads)",
+    "modules": [
+      "Reports",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Evidence PDFs"
+    ]
+  },
+  {
+    "id": "C28-28.1-001",
+    "ch": "28",
+    "sec": "28.1",
+    "req": "Interactive elements shall be labeled.",
+    "scope": "Accessibility",
+    "impl": "Partial",
+    "rw": "Add aria-label (or visible text) to icon-only action buttons on operational toolbars",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Reports",
+      "Admin",
+      "Registry lists"
+    ]
+  },
+  {
+    "id": "C28-28.1-002",
+    "ch": "28",
+    "sec": "28.1",
+    "req": "Color shall not be the sole state indicator.",
+    "scope": "Accessibility",
+    "impl": "Partial",
+    "rw": "Audit status indicators for text/icon cue beyond color; fix tags lacking non-color affordance",
+    "modules": [
+      "Platform",
+      "GRN",
+      "Transfer",
+      "Get Pass",
+      "Breakage",
+      "Workflow Pipeline",
+      "Inventory Count"
+    ]
+  },
+  {
+    "id": "C28-28.1-003",
+    "ch": "28",
+    "sec": "28.1",
+    "req": "Contrast shall meet agreed accessibility targets.",
+    "scope": "Accessibility",
+    "impl": "No",
+    "rw": "Include contrast spot-check on primary controls in release QA gate per agreed targets (governance verification)",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C28-28.2-001",
+    "ch": "28",
+    "sec": "28.2",
+    "req": "The platform shall support screen reader compatibility for governed interactions.",
+    "scope": "Accessibility",
+    "impl": "No",
+    "rw": "Add aria labels/roles to lookup widget, workflow action buttons, and data tables per §28.1–28.3 (no full certification program)",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C28-28.3-001",
+    "ch": "28",
+    "sec": "28.3",
+    "req": "Validation messages shall be accessible to assistive technology.",
+    "scope": "Accessibility",
+    "impl": "Partial",
+    "rw": "Expose inline validation errors with role=alert (or aria-describedby) on document create/edit forms",
+    "modules": [
+      "Platform",
+      "Get Pass",
+      "GRN",
+      "Transfer",
+      "Breakage"
+    ]
+  },
+  {
+    "id": "C28-28.3-002",
+    "ch": "28",
+    "sec": "28.3",
+    "req": "Error messages shall be accessible to assistive technology.",
+    "scope": "Accessibility",
+    "impl": "Partial",
+    "rw": "Ensure api-error interceptor and inline validation surfaces use aria-live region for assistive technology",
+    "modules": [
+      "Platform"
+    ]
+  },
+  {
+    "id": "C29-29.1-001",
+    "ch": "29",
+    "sec": "29.1",
+    "req": "New capabilities must declare applicable Constitution chapters before release.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "No enforced pre-release chapter declaration workflow for new capabilities",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C29-29.1-002",
+    "ch": "29",
+    "sec": "29.1",
+    "req": "Revised capabilities must declare applicable Constitution chapters before release.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Revised-capability chapter declaration not gated in PR/CI",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C29-29.1-003",
+    "ch": "29",
+    "sec": "29.1",
+    "req": "New and revised capabilities must demonstrate Constitution compliance before release.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Ch.19–29 compliance demonstration not automated; most rows Not Verified",
+    "modules": [
+      "Governance",
+      "Platform"
+    ]
+  },
+  {
+    "id": "C29-29.3-001",
+    "ch": "29",
+    "sec": "29.3",
+    "req": "A screen or capability is compliant only when all mandatory rules in applicable chapters are satisfied.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Complete evidence register rows for each operational module release per applicable chapters",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C29-29.3-002",
+    "ch": "29",
+    "sec": "29.3",
+    "req": "Compliance Definition of Done shall include the responsive test matrix where applicable.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "DoD checklist not wired to release gate with recorded results",
+    "modules": [
+      "Governance",
+      "QA"
+    ]
+  },
+  {
+    "id": "C29-29.4-001",
+    "ch": "29",
+    "sec": "29.4",
+    "req": "Exceptions require documented approval, scope, expiry, and registration.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Add approval date, approver, and expiry fields to EXCEPTION_REGISTER.md entries per §29.4",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C29-29.4-002",
+    "ch": "29",
+    "sec": "29.4",
+    "req": "Exceptions must not weaken audit rules.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Manual constitutional review confirms new exceptions do not weaken audit rules (per §29.4 review gate)",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C29-29.4-003",
+    "ch": "29",
+    "sec": "29.4",
+    "req": "Exceptions must not weaken posting rules.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Exceptions (e.g. EX-004 mixed posting triggers) remain documented deviations",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C29-29.4-004",
+    "ch": "29",
+    "sec": "29.4",
+    "req": "Exceptions must not weaken period rules.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Period exceptions must not weaken close rules in production without expiry",
+    "modules": [
+      "Governance",
+      "Period Close"
+    ]
+  },
+  {
+    "id": "C29-29.5-001",
+    "ch": "29",
+    "sec": "29.5",
+    "req": "New operational modules must undergo constitutional review before production approval.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "No evidenced constitutional review gate before each new module production approval",
+    "modules": [
+      "Governance"
+    ]
+  },
+  {
+    "id": "C29-29.6-001",
+    "ch": "29",
+    "sec": "29.6",
+    "req": "QA shall validate against this Constitution and the UX Constitution.",
+    "scope": "Governance",
+    "impl": "Partial",
+    "rw": "Wire release QA checklist (UAT-OB + ch24.6 matrix + module evidence) to sign-off gate; extend smoke script incrementally",
+    "modules": [
+      "QA",
+      "Governance"
+    ]
+  }
+]

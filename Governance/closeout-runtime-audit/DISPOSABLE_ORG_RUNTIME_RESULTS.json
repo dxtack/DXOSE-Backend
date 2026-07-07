@@ -1,0 +1,44 @@
+{
+  "executedAt": "2026-06-27T00:22:34.446Z",
+  "disposableOrg": "closeout-audit-org-disposable",
+  "disposableHotel": "closeout-audit-hotel-disposable",
+  "grandHorizonNotUsed": true,
+  "results": {
+    "orgSwitch": {
+      "ok": true,
+      "loginTenant": "closeout-audit-org-disposable",
+      "switchHttp": 200,
+      "canonicalTenantSlug": "closeout-audit-hotel-disposable",
+      "canonicalTenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "jwtRole": "ORG_MANAGER",
+      "jwtPermissionsSample": [
+        "GET_PASS_APPROVE_RETURN",
+        "GET_PASS_CONFIRM_DESTINATION",
+        "GET_PASS_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_APPROVE",
+        "GET_PASS_APPROVE_FINAL",
+        "GET_PASS_APPROVE_EXIT",
+        "GET_PASS_FORCE_CLOSE_INITIATE"
+      ],
+      "error": "Tenant switched successfully."
+    },
+    "getPassActor": {
+      "createHttp": 201,
+      "submitHttp": 200,
+      "statusAfter": "PENDING_SECURITY",
+      "orgManagerOnDisposable": true,
+      "noOrgSwitchFailed": true
+    },
+    "legacyProbes": [
+      {
+        "route": "POST /lost-items/:id/approve-dept",
+        "fixture": "INTERNAL_LOST disposable",
+        "http": 403,
+        "statusAfter": "DRAFT",
+        "tenant": "closeout-audit-hotel-disposable"
+      }
+    ]
+  },
+  "orgSwitchFailedRemaining": false
+}

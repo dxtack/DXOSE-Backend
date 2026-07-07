@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-06-27T18:22:36.776Z",
+  "sources": {
+    "CONSTITUTION_FRESH_REGISTER_csv": {
+      "rows": 476,
+      "note": "Gate A.3 extraction from PDF — includes definitions, context, optional, product enforceable"
+    },
+    "requirements_json": {
+      "count": 393,
+      "type": "array"
+    },
+    "CONSTITUTION_TRACEABILITY_MATRIX_md": {
+      "requirementRows": 393,
+      "note": "Implementation register — SSOT for 393 count"
+    },
+    "CONSTITUTION_STATUS_COUNTS_json": {
+      "total": 393,
+      "sum": 393,
+      "statusCounts": {
+        "Runtime Verified Complete": 0,
+        "Static Verified — appropriate for static requirement": 168,
+        "Partial": 61,
+        "Not Run": 148,
+        "Failed Runtime": 6,
+        "Governance Conflict": 10,
+        "Not Applicable": 0
+      },
+      "generatorNote": "Runtime Verified Complete requires multi-module proof per requirement — most remain Partial until full linkage"
+    },
+    "CONSTITUTION_REQUIREMENT_COVERAGE_GAPS_json": {
+      "partialCount": 61,
+      "notRunCount": 148,
+      "executedAt": "2026-06-27T00:54:31.818Z"
+    }
+  },
+  "explanation": {
+    "why_476": "Fresh register CSV has 476 rows — all extracted clauses including descriptive context, governance definitions, out-of-scope, optional capabilities, and product enforceable requirements.",
+    "why_393": "Traceability matrix has 393 requirement rows — deduplicated normative implementation register (requirements.json aligns: 393).",
+    "delta_476_minus_393": 83,
+    "delta_composition": "Difference is primarily non-implementable rows: Descriptive Context, Governance Definition, Authoring Guidance, Out of Scope, Optional Capability, Excluded Pending Ratification — not duplicate product requirements.",
+    "notRun_count_correction": "CONSTITUTION_STATUS_COUNTS.json (authoritative closeout artifact) reports Not Run = 148. CONSTITUTION_REQUIREMENT_COVERAGE_GAPS.json reports notRunCount = 148 — use STATUS_COUNTS as SSOT; 144 was stale reference from earlier partial register pass.",
+    "ssot_for_audit": "393 = CONSTITUTION_TRACEABILITY_MATRIX requirement rows (implementation obligations). 476 = full constitution extraction register (audit source text)."
+  },
+  "freshRegisterCategoryBreakdown": {
+    "Unknown": 476
+  },
+  "estimatedNonImplementableRows": 0,
+  "estimatedProductEnforceableInFreshRegister": 0,
+  "statusSumCheck": 393
+}

@@ -1,0 +1,18 @@
+{
+  "scenario": "ApprovalRequest.currentStep = 0 shows Creator pending correction",
+  "test": "Creator pending entry when currentStep = 0",
+  "entry": {
+    "entryType": "APPROVAL_STEP_CURRENT",
+    "stageKey": "CREATOR",
+    "displayTitleKey": "TIMELINE.STAGE.CREATOR_PENDING_CORRECTION",
+    "status": "IN_PROGRESS",
+    "stepNumber": 0
+  },
+  "behaviorUnchanged": {
+    "currentStep": "not modified",
+    "approvalRequest": "not modified",
+    "resubmit": "not modified",
+    "database": "not modified"
+  },
+  "verified": true
+}

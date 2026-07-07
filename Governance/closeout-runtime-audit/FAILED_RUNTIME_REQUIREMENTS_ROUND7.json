@@ -1,0 +1,60 @@
+{
+  "executedAt": "2026-06-27T00:50:01.151Z",
+  "count": 6,
+  "rows": [
+    {
+      "requirementId": "C02-2.7-003",
+      "requirement": "Submit shall always represent entering the workflow, whether for the first time or after Return.",
+      "failedScenario": "GP-submit-NO_ASSIGN — HTTP 200 without UrUserAssignment",
+      "runtimeEvidence": "GET_PASS_PERMISSION_MATRIX.json, NO_ASSIGN_CROSS_MODULE_MATRIX.json",
+      "affectedModules": [
+        "Unknown"
+      ]
+    },
+    {
+      "requirementId": "C04-4.2-001",
+      "requirement": "Evidence Package does not require a separate permission in the current DX OSE release.",
+      "failedScenario": "Cross-tenant Get Pass foreign/random ID → HTTP 500",
+      "runtimeEvidence": "GET_PASS_CROSS_TENANT_EXPANDED.json",
+      "affectedModules": [
+        "Unknown"
+      ]
+    },
+    {
+      "requirementId": "C07-7.8-002",
+      "requirement": "Restored documents must be revalidated before continue or submit.",
+      "failedScenario": "Workflow pipeline read without assignment — 50 rows",
+      "runtimeEvidence": "WORKFLOW_PIPELINE_ASSIGNMENT_SCOPE_MATRIX.json",
+      "affectedModules": [
+        "Unknown"
+      ]
+    },
+    {
+      "requirementId": "C07-7.10-006",
+      "requirement": "Successful Save Draft or Submit shall return the document to a clean state.",
+      "failedScenario": "Get Pass submit mutation without scope resolver",
+      "runtimeEvidence": "GET_PASS_PERMISSION_MATRIX.json",
+      "affectedModules": [
+        "Unknown"
+      ]
+    },
+    {
+      "requirementId": "C08-8.5-001",
+      "requirement": "After Submit, the document shall be read-only except via Return workflow.",
+      "failedScenario": "Assignment gate bypass on operational mutation",
+      "runtimeEvidence": "ASSIGNMENT_GATE_ROUTE_INVENTORY_FINAL.csv",
+      "affectedModules": [
+        "Unknown"
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-002",
+      "requirement": "Submit must not execute twice on the same version without detection.",
+      "failedScenario": "Stale JWT operational read after assignment delete",
+      "runtimeEvidence": "STALE_FRESH_JWT_ASSIGNMENT_MATRIX.json",
+      "affectedModules": [
+        "Unknown"
+      ]
+    }
+  ]
+}

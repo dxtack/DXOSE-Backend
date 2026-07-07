@@ -1,0 +1,392 @@
+{
+  "executedAt": "2026-06-28T00:07:38.218Z",
+  "gateVersion": "phase1-corrected-v2",
+  "tenant": {
+    "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+    "slug": "closeout-audit-hotel-disposable"
+  },
+  "foreignTenant": {
+    "id": "bf7638b8-04db-4051-94d1-0cf039827c00",
+    "slug": "dx-airport-hotel"
+  },
+  "apiBase": "http://127.0.0.1:4000/api",
+  "fixtures": {
+    "inScopeId": "af94b17b-acf6-4c79-a867-5be887b6dc04",
+    "outScopeId": "25d538e6-c287-4d78-af5a-4119d65b88f0",
+    "overdueInId": "0be644a3-2602-490f-a633-e87dffc1e379",
+    "overdueOutId": "24af5e0f-6903-405d-99fc-58a8c37a26ce",
+    "tag": 1782605213999
+  },
+  "foreignGetPassId": "5e7ec67d-e28c-4350-a54e-66ab5f1093af",
+  "scenarios": [
+    {
+      "id": 11,
+      "name": "Never-assigned pipeline list → denied/empty",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "items": [],
+      "documentIds": [],
+      "total": 0,
+      "apiFailure": false
+    },
+    {
+      "id": 12,
+      "name": "Never-assigned pipeline summary → denied/empty",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "total": 0,
+      "apiFailure": false
+    },
+    {
+      "id": 13,
+      "name": "Never-assigned pipeline alerts → denied/empty",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "items": [],
+      "documentIds": [],
+      "apiFailure": false
+    },
+    {
+      "id": 14,
+      "name": "Wrong-property user sees no rows/IDs",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "items": [],
+      "documentIds": [],
+      "total": 0,
+      "apiFailure": false
+    },
+    {
+      "id": 15,
+      "name": "Authorized user sees scoped pipeline only",
+      "pass": true,
+      "listHttp": 200,
+      "summaryHttp": 200,
+      "alertsHttp": 200,
+      "documentIds": [
+        "0be644a3-2602-490f-a633-e87dffc1e379",
+        "af94b17b-acf6-4c79-a867-5be887b6dc04"
+      ],
+      "expectedInScope": "af94b17b-acf6-4c79-a867-5be887b6dc04",
+      "expectedOutScope": "25d538e6-c287-4d78-af5a-4119d65b88f0",
+      "summaryGetPassModule": 2
+    },
+    {
+      "id": 16,
+      "name": "Never-assigned dashboard ops metrics → empty",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "total": 0,
+      "allDetailIds": [],
+      "overdueLoanIds": [],
+      "overdueLoansCount": 0,
+      "pipelineTotal": null,
+      "apiFailure": false
+    },
+    {
+      "id": 17,
+      "name": "Wrong-property dashboard metrics do not leak",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "total": 0,
+      "allDetailIds": [],
+      "overdueLoanIds": [],
+      "overdueLoansCount": 0,
+      "pipelineTotal": null,
+      "apiFailure": false
+    },
+    {
+      "id": 18,
+      "name": "Authorized dashboard scoped to assignment",
+      "pass": true,
+      "http": 200,
+      "overdueLoanIds": [
+        "0be644a3-2602-490f-a633-e87dffc1e379"
+      ],
+      "expectedOverdueIn": "0be644a3-2602-490f-a633-e87dffc1e379",
+      "expectedOverdueOut": "24af5e0f-6903-405d-99fc-58a8c37a26ce",
+      "overdueLoansCount": 1
+    },
+    {
+      "id": 1,
+      "name": "Never assigned Submit → denied",
+      "pass": true,
+      "http": 403,
+      "statusAfter": "DRAFT"
+    },
+    {
+      "id": 2,
+      "name": "Inactive Assignment Submit → denied",
+      "pass": true,
+      "createHttp": 403,
+      "submitHttp": 403,
+      "statusAfter": null
+    },
+    {
+      "id": 3,
+      "name": "Deleted Assignment Submit → denied",
+      "pass": true,
+      "createHttp": 403
+    },
+    {
+      "id": 4,
+      "name": "Wrong-property Assignment Submit → denied",
+      "pass": true,
+      "createHttp": 403
+    },
+    {
+      "id": 5,
+      "name": "Stale JWT after deactivate → denied",
+      "pass": true,
+      "http": 401,
+      "code": "PERMISSIONS_STALE"
+    },
+    {
+      "id": 6,
+      "name": "Valid Active Assignment Submit → success",
+      "pass": true,
+      "http": 200,
+      "statusAfter": "PENDING_DEPT"
+    },
+    {
+      "id": 7,
+      "name": "Denied scenarios do not change DRAFT status",
+      "pass": true,
+      "never": "DRAFT",
+      "inactive": null
+    },
+    {
+      "id": 8,
+      "name": "Cross-tenant read → 404",
+      "pass": true,
+      "http": 404,
+      "foreignPassId": "5e7ec67d-e28c-4350-a54e-66ab5f1093af",
+      "foreignTenantId": "bf7638b8-04db-4051-94d1-0cf039827c00"
+    },
+    {
+      "id": 9,
+      "name": "Finance creator does not bypass Dept/CC",
+      "pass": true,
+      "statusAfter": "PENDING_DEPT",
+      "row": {
+        "status": "PENDING_DEPT",
+        "deptApprovedBy": null,
+        "costControlApprovedBy": null,
+        "financeApprovedBy": null
+      }
+    },
+    {
+      "id": 10,
+      "name": "ORG_MANAGER creator does not self-stamp stages",
+      "pass": true,
+      "statusAfter": "PENDING_DEPT",
+      "stampedCount": 0
+    },
+    {
+      "id": 19,
+      "name": "No-assignment movement create → denied",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "id": 20,
+      "name": "Cross-property movement create → denied without 500",
+      "pass": true,
+      "http": 404,
+      "foreignLocationId": "83f8f33c-11fb-4145-9120-6589b6cc41ae",
+      "foreignTenantId": "bf7638b8-04db-4051-94d1-0cf039827c00"
+    },
+    {
+      "id": 23,
+      "name": "Wrong-property denial does not create ledger",
+      "pass": true,
+      "before": 0,
+      "after": 0
+    },
+    {
+      "id": 24,
+      "name": "Wrong-property denial does not change stock",
+      "pass": true,
+      "before": 100,
+      "after": 100
+    },
+    {
+      "id": 21,
+      "name": "Valid movement create → success",
+      "pass": true,
+      "http": 201
+    },
+    {
+      "id": 22,
+      "name": "Valid movement post → success",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "id": 25,
+      "name": "Duplicate post behavior unchanged",
+      "pass": true,
+      "http": 400
+    },
+    {
+      "id": 26,
+      "name": "Movement post after assignment deactivation → denied",
+      "pass": true,
+      "http": 401,
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "stockBefore": 101,
+      "stockAfter": 101
+    },
+    {
+      "id": 27,
+      "name": "Movement post with wrong-property assignment → denied",
+      "pass": true,
+      "http": 403,
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "stockBefore": 101,
+      "stockAfter": 101
+    },
+    {
+      "id": 28,
+      "name": "Movement post with stale JWT → denied",
+      "pass": true,
+      "http": 401,
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "stockBefore": 101,
+      "stockAfter": 101
+    },
+    {
+      "id": 29,
+      "name": "Movement post with no assignment → denied",
+      "pass": true,
+      "http": 403,
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "stockBefore": 101,
+      "stockAfter": 101
+    }
+  ],
+  "regression": [
+    {
+      "name": "GRN authorized list + detail",
+      "pass": true,
+      "listHttp": 200,
+      "detailHttp": 200,
+      "grnId": "e253fa96-cd11-4b51-9930-0ed92dda6f68"
+    },
+    {
+      "name": "Transfer authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Breakage authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Lost Items authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Inventory Count authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Get Pass authorized create",
+      "pass": true,
+      "http": 201,
+      "id": "736e4fa9-9637-48d2-b274-66525a5ba724"
+    },
+    {
+      "name": "Get Pass authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Get Pass authorized detail",
+      "pass": true,
+      "http": 200,
+      "id": "736e4fa9-9637-48d2-b274-66525a5ba724"
+    },
+    {
+      "name": "Tenant switch permission refresh",
+      "pass": true,
+      "http": 200,
+      "hasNewToken": true
+    },
+    {
+      "name": "Workflow Pipeline authorized summary",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Movement authorized create",
+      "pass": true,
+      "http": 201
+    },
+    {
+      "name": "verify-acc-p12-cutover-wave2.js",
+      "pass": true
+    },
+    {
+      "name": "movement-adjustment-rbac.test.js",
+      "pass": true
+    },
+    {
+      "name": "getPass.service.test.js",
+      "pass": true
+    },
+    {
+      "name": "Frontend development build",
+      "pass": true
+    }
+  ],
+  "totals": {
+    "runtimePass": 29,
+    "runtimeFail": 0,
+    "regressionPass": 15,
+    "regressionFail": 0
+  },
+  "gateChecklist": {
+    "Get Pass invalid assignments denied": true,
+    "Get Pass valid assignment succeeds": true,
+    "Stale authorization denied": true,
+    "Pipeline list scope": true,
+    "Pipeline summary scope": true,
+    "Pipeline alerts scope": true,
+    "Pipeline authorized in-scope only": true,
+    "Dashboard scope": true,
+    "Movements cross-property denial": true,
+    "Movements valid create/post": true,
+    "Movement unauthorized post denied": true,
+    "Finance fast-forward blocked": true,
+    "ORG_MANAGER fast-forward blocked": true,
+    "Cross-tenant read remains 404": true,
+    "No unauthorized mutation": true,
+    "No unauthorized ledger/stock effect": true,
+    "Full regression suite": true,
+    "Frontend build": true,
+    "Backend relevant tests": true
+  },
+  "phaseClosed": true
+}

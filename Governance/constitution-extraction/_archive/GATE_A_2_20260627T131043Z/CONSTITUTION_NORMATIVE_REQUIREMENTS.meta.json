@@ -1,0 +1,23 @@
+{
+  "generated_by": "gate_a_review_pack.py",
+  "generation_timestamp": "2026-06-27T13:00:37Z",
+  "source_csv": "C:\\DX OS&E\\Governance\\constitution-extraction\\CONSTITUTION_FRESH_REGISTER.csv",
+  "product_enforceable_requirements": 141,
+  "strong_recommendations": 6,
+  "total_normative_export_rows": 147,
+  "checks": {
+    "product_enforceable_rows_match_csv": true,
+    "strong_recommendations_match_csv": true,
+    "bdr_007_not_in_export": true,
+    "appendix_a_not_in_export": true,
+    "no_authoring_guidance_in_export": true,
+    "no_reference_index_in_export": true,
+    "no_needs_review_in_export": true,
+    "no_descriptive_in_export": true
+  },
+  "all_checks_passed": true,
+  "bdr_007_in_export_ids": [],
+  "appendix_a_in_export_ids": [],
+  "authoring_guidance_in_export_ids": [],
+  "needs_review_in_export_ids": []
+}

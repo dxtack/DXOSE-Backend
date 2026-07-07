@@ -1,0 +1,211 @@
+{
+  "executedAt": "2026-06-27T00:38:09.780Z",
+  "nodeVersion": "v25.6.0",
+  "rows": [
+    {
+      "file": "scripts/verify-grn-create-runtime.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "GRN",
+      "command": "node scripts/verify-grn-create-runtime.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "failureRootCause": null,
+      "productTestEnv": "Test"
+    },
+    {
+      "file": "scripts/verify-grn-detail-timeline-phase4.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "GRN",
+      "command": "node scripts/verify-grn-detail-timeline-phase4.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "failureRootCause": null,
+      "productTestEnv": "Test"
+    },
+    {
+      "file": "scripts/verify-grn-create-excel-layout.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "GRN",
+      "command": "node scripts/verify-grn-create-excel-layout.mjs",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "scripts/verify-phase5-detail-timeline.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "Transfer",
+      "command": "node scripts/verify-phase5-detail-timeline.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "failureRootCause": null,
+      "productTestEnv": "Test"
+    },
+    {
+      "file": "scripts/verify-phase6-detail-timeline.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "Breakage/Lost",
+      "command": "node scripts/verify-phase6-detail-timeline.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "failureRootCause": null,
+      "productTestEnv": "Test"
+    },
+    {
+      "file": "scripts/verify-phase7-detail-timeline.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "GetPass",
+      "command": "node scripts/verify-phase7-detail-timeline.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "failureRootCause": null,
+      "productTestEnv": "Test"
+    },
+    {
+      "file": "scripts/measure-inventory-count-workspace-spacing.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "InventoryCount",
+      "command": "node scripts/measure-inventory-count-workspace-spacing.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "failureRootCause": null,
+      "productTestEnv": "Test"
+    },
+    {
+      "file": "scripts/measure-inventory-count-detail-spacing.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "InventoryCount",
+      "command": "node scripts/measure-inventory-count-detail-spacing.mjs",
+      "exit": 0,
+      "result": "PASS",
+      "failureRootCause": null,
+      "productTestEnv": "Test"
+    },
+    {
+      "file": "scripts/capture-acc-overview-screenshot.mjs",
+      "active": true,
+      "obsolete": false,
+      "module": "ACC",
+      "command": "node scripts/capture-acc-overview-screenshot.mjs",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/features/grn/utils/grn-detail-timeline.util.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "GRN",
+      "command": "npx vitest run src/app/features/grn/utils/grn-detail-timeline.util.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/shared/utils/timeline-entry-render.util.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "Shared",
+      "command": "npx vitest run src/app/shared/utils/timeline-entry-render.util.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-list-display.util.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "GetPass",
+      "command": "npx vitest run src/app/features/get-pass/utils/get-pass-list-display.util.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-line-outcome.util.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "GetPass",
+      "command": "npx vitest run src/app/features/get-pass/utils/get-pass-line-outcome.util.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/core/directives/has-permission.directive.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "Shared",
+      "command": "npx vitest run src/app/core/directives/has-permission.directive.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-return-validation.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "GetPass",
+      "command": "npx vitest run src/app/features/get-pass/utils/get-pass-return-validation.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/app.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "Shared",
+      "command": "npx vitest run src/app/app.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/features/grn/grn-detail/grn-detail.component.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "GRN",
+      "command": "npx vitest run src/app/features/grn/grn-detail/grn-detail.component.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    },
+    {
+      "file": "src/app/shared/components/returns-workflow-timeline/returns-workflow-timeline.component.spec.ts",
+      "active": true,
+      "obsolete": false,
+      "module": "Shared",
+      "command": "npx vitest run src/app/shared/components/returns-workflow-timeline/returns-workflow-timeline.component.spec.ts",
+      "exit": 1,
+      "result": "FAIL",
+      "failureRootCause": "Frontend :4200 not reachable",
+      "productTestEnv": "Environment"
+    }
+  ],
+  "summary": {
+    "totalFiles": 18,
+    "executed": 18,
+    "pass": 7,
+    "fail": 11,
+    "notRun": 0
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "generatedAt": "2026-06-28T14:40:23.079Z",
+  "phase": "phase-5-operational-details",
+  "addendum": "final-clean-verification",
+  "phaseClosed": true,
+  "closureCounters": {
+    "runtimeFailCount": 0,
+    "browserFailCount": 0,
+    "regressionFailCount": 0,
+    "skippedCount": 0,
+    "vacuousCount": 0,
+    "requestRewriteCount": 0,
+    "missingAllowBindingCount": 0,
+    "missingDenyBindingCount": 0,
+    "unexecutedActionBindingCount": 0,
+    "ledgerFieldMismatchCount": 0,
+    "missingVoidTimelineCount": 0,
+    "unauthorizedVisibleMutationButtonCount": 0,
+    "missingScenarioIdCount": 0,
+    "frontendProductionBuildPass": true
+  },
+  "runtimeEvidence": {
+    "passCount": 98,
+    "failCount": 0,
+    "regPass": 6,
+    "regFail": 0
+  },
+  "browserEvidence": {
+    "passCount": 33,
+    "failCount": 0,
+    "requestRewriteCount": 0
+  },
+  "productChanges": [
+    {
+      "path": "OSE-backend/src/platform/timeline/approvalTimeline.builder.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-012",
+      "reason": "Suppress current/future approval steps when document is VOID"
+    },
+    {
+      "path": "OSE-backend/src/platform/documentTimeline.service.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-012",
+      "reason": "Pass documentStatus VOID into breakage timeline builder"
+    },
+    {
+      "path": "OSE-backend/src/platform/timeline/approvalTimeline.builder.test.js",
+      "changeType": "test",
+      "defectId": "P5-DEF-012",
+      "reason": "Void terminal timeline regression tests"
+    },
+    {
+      "path": "OSE-backend/src/services/breakage.service.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-001,P5-DEF-004",
+      "reason": "Await list media URLs; allow void on DRAFT/REJECTED"
+    },
+    {
+      "path": "OSE-backend/src/platform/timeline/approvalTimeline.builder.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-008",
+      "reason": "Emit VOID lifecycle timeline entry from audit logs"
+    },
+    {
+      "path": "OSE-backend/src/platform/timeline/timelineEntry.types.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-008",
+      "reason": "Allow lifecycleEventType VOID in timeline validation"
+    },
+    {
+      "path": "OSE-backend/src/platform/timeline/timelineEntry.sort.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-008",
+      "reason": "Sort VOID lifecycle events with terminal lifecycle tier"
+    },
+    {
+      "path": "OSE-backend/src/platform/timeline/approvalTimeline.builder.test.js",
+      "changeType": "test",
+      "defectId": "P5-DEF-008",
+      "reason": "Regression test for VOID lifecycle entry with reason"
+    },
+    {
+      "path": "OSE-backend/src/platform/draftGovernance.service.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-010",
+      "reason": "Draft owner lookup via tenant membership not user.tenantId"
+    },
+    {
+      "path": "OSE-backend/src/platform/concurrency.service.js",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-011",
+      "reason": "Parse concurrencyVersion from query string on DELETE"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/transfers/transfer-detail/transfer-detail.component.ts",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-002",
+      "reason": "Send concurrencyVersion on transfer submit/approve/reject"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/transfers/models/transfer.model.ts",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-002,P5-DEF-007",
+      "reason": "concurrencyVersion on row model; restore TransferListApiPayload"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/transfers/transfer-detail/transfer-detail.component.html",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-003",
+      "reason": "DRAFT timeline neutral empty state"
+    },
+    {
+      "path": "OSE-Frontend/public/i18n/en.json",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-003,P5-DEF-008",
+      "reason": "DRAFT empty message; Voided timeline label"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/breakage/breakage-detail/breakage-detail.component.ts",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-005,P5-DEF-006,P5-DEF-009",
+      "reason": "Void reason/concurrency; approve/reject concurrencyVersion"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-005,P5-DEF-006,P5-DEF-009",
+      "reason": "Approve/void/reject bodies include concurrencyVersion"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/breakage/models/breakage.model.ts",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-006",
+      "reason": "BreakageDetail.concurrencyVersion field"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/breakage/breakage-list/breakage-list.component.ts",
+      "changeType": "bugfix",
+      "defectId": "P5-DEF-006",
+      "reason": "List approve sends concurrencyVersion"
+    }
+  ],
+  "governanceAddedOrUpdated": [
+    "Governance/phase-5-operational-details/PHASE_5_ACTION_MATRIX.json",
+    "Governance/phase-5-operational-details/PHASE_5_FIXTURES.json",
+    "Governance/phase-5-operational-details/PHASE_5_RUNTIME_RESULTS.json",
+    "Governance/phase-5-operational-details/PHASE_5_BROWSER_RESULTS.json",
+    "Governance/phase-5-operational-details/PHASE_5_CLEAN_VERIFICATION_MANIFEST.json",
+    "Governance/phase-5-operational-details/PHASE_5_ROOT_CAUSE_AUDIT.md",
+    "Governance/phase-5-operational-details/PHASE_5_REMEDIATION_REPORT.md",
+    "Governance/phase-5-operational-details/PHASE_5_CHANGED_FILES.json",
+    "Governance/phase-5-operational-details/phase-5-fixture-seed.cjs",
+    "Governance/phase-5-operational-details/phase-5-operational-details-gate.cjs",
+    "Governance/phase-5-operational-details/phase-5-operational-details-browser.cjs",
+    "Governance/phase-5-operational-details/phase-5-browser-clean.lib.cjs",
+    "Governance/phase-5-operational-details/phase-5-closure.lib.cjs",
+    "Governance/phase-5-operational-details/phase-5-detail-assertions.lib.cjs",
+    "Governance/phase-5-operational-details/phase-5-posting-assertions.lib.cjs",
+    "Governance/phase-5-operational-details/phase-5-mutation-harness.lib.cjs",
+    "Governance/phase-5-operational-details/phase-5-void-timeline-browser.cjs",
+    "Governance/phase-5-operational-details/PHASE_5_VOID_TIMELINE_RESULTS.json"
+  ],
+  "frozenUntouched": [
+    "Phases 1–4",
+    "GRN / Get Pass / Inventory Count modules",
+    "ACC workflow definitions",
+    "Detail page layout redesign",
+    "Phase-5-Closed backup (not created per addendum STOP condition)"
+  ]
+}

@@ -1,0 +1,291 @@
+{
+  "title": "Wave 5 — Transfer Legacy Cleanup Final Verification",
+  "generatedAt": "2026-07-05T08:39:41.340Z",
+  "requirement": "SYS-DEC-07",
+  "runId": "W5-RV-1783240776433",
+  "summary": {
+    "total": 21,
+    "pass": 21,
+    "fail": 0,
+    "blocked": 0,
+    "gate": "PASS"
+  },
+  "sections": {
+    "dataAudit": {
+      "generatedAt": "2026-07-05T07:17:05.217Z",
+      "database": "test",
+      "totals": {
+        "transfers": 6,
+        "ledgerTransferEntries": 0
+      },
+      "byStatus": [
+        {
+          "status": "DRAFT",
+          "count": 6
+        }
+      ],
+      "legacyStatusCounts": {
+        "IN_TRANSIT": 0,
+        "RECEIVED": 0,
+        "CLOSED": 0,
+        "SUBMITTED": 0,
+        "APPROVED": 0,
+        "PENDING_FINAL": 0
+      },
+      "legacyFieldCounts": {
+        "dispatchedAtPopulated": 0,
+        "receivedAtPopulated": 0,
+        "postedAtPopulated": 0,
+        "statusPosted": 0
+      },
+      "tenantStatusMatrix": [
+        {
+          "tenantId": "9970297d-a9fe-4438-b5c0-e8a424b4e9e6",
+          "status": "DRAFT",
+          "count": 1
+        },
+        {
+          "tenantId": "0f3dd078-abd7-45ea-9641-11b6d8bbf3c6",
+          "status": "DRAFT",
+          "count": 1
+        },
+        {
+          "tenantId": "9a7719a6-b3c5-4bed-acac-0b904294870a",
+          "status": "DRAFT",
+          "count": 1
+        },
+        {
+          "tenantId": "bf0db9f8-d59c-4cea-bad2-eb3dc4482c12",
+          "status": "DRAFT",
+          "count": 1
+        },
+        {
+          "tenantId": "f017b7ca-85a4-4d89-a9e4-7ca24790354c",
+          "status": "DRAFT",
+          "count": 1
+        },
+        {
+          "tenantId": "224b990b-91de-4ba9-8e27-83a63c899eff",
+          "status": "DRAFT",
+          "count": 1
+        }
+      ],
+      "legacySamples": [],
+      "v2PostedSample": [],
+      "classification": {
+        "activeOperational": [
+          "DRAFT",
+          "PENDING_DEPT",
+          "PENDING_FINANCE",
+          "POSTED",
+          "REJECTED"
+        ],
+        "historicalReadOnly": [],
+        "deadStatuses": [
+          "IN_TRANSIT",
+          "RECEIVED",
+          "CLOSED",
+          "SUBMITTED",
+          "APPROVED",
+          "PENDING_FINAL"
+        ]
+      }
+    },
+    "activeOperationalStatuses": [
+      "DRAFT",
+      "PENDING_DEPT",
+      "PENDING_FINANCE",
+      "POSTED",
+      "REJECTED"
+    ],
+    "historicalReadOnlyStatuses": [
+      "SUBMITTED",
+      "PENDING_FINAL",
+      "APPROVED",
+      "IN_TRANSIT",
+      "RECEIVED",
+      "CLOSED"
+    ],
+    "deadStatusesInDb": [
+      "IN_TRANSIT",
+      "RECEIVED",
+      "CLOSED",
+      "SUBMITTED",
+      "APPROVED",
+      "PENDING_FINAL"
+    ],
+    "routesRemoved": [
+      "POST /transfers/:id/dispatch",
+      "POST /transfers/:id/receive"
+    ],
+    "permissionAudit": {
+      "TRANSFER_DISPATCH_RECEIVE": "Deprecated — catalog retained; no active routes; safe to remove after role grant audit",
+      "TRANSFER_VIEW": "Active — read",
+      "TRANSFER_CREATE": "Active — create/submit draft",
+      "TRANSFER_APPROVE": "Active — approval chain + finance post"
+    },
+    "databaseChanges": "None — enum values retained for historical compatibility; no data migration required (0 legacy rows)",
+    "executionBlockers": []
+  },
+  "scenarios": [
+    {
+      "id": "W5-AUDIT-01",
+      "name": "Data audit artifact present",
+      "result": "PASS",
+      "totalTransfers": 6,
+      "byStatus": [
+        {
+          "status": "DRAFT",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "id": "W5-AUDIT-02",
+      "name": "No legacy-status transfer rows in DB",
+      "result": "PASS",
+      "legacyStatusCounts": {
+        "IN_TRANSIT": 0,
+        "RECEIVED": 0,
+        "CLOSED": 0,
+        "SUBMITTED": 0,
+        "APPROVED": 0,
+        "PENDING_FINAL": 0
+      }
+    },
+    {
+      "id": "W5-STATUS-CLASS",
+      "name": "Active vs historical vs dead status classification",
+      "result": "PASS",
+      "activeOperational": [
+        "DRAFT",
+        "PENDING_DEPT",
+        "PENDING_FINANCE",
+        "POSTED",
+        "REJECTED"
+      ],
+      "historicalReadOnly": [],
+      "deadStatuses": [
+        "IN_TRANSIT",
+        "RECEIVED",
+        "CLOSED",
+        "SUBMITTED",
+        "APPROVED",
+        "PENDING_FINAL"
+      ]
+    },
+    {
+      "id": "W5-ROUTE-01",
+      "name": "Dispatch/receive routes removed",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-ROUTE-02",
+      "name": "Controller dispatch/receive handlers removed",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-ROUTE-03",
+      "name": "Service dispatch/receive exports removed",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-FE-01",
+      "name": "Frontend transfer service has no dispatch/receive methods",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-FE-02",
+      "name": "Orphan dispatch/receive i18n removed",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-PERM-01",
+      "name": "TRANSFER_DISPATCH_RECEIVE classified Deprecated in ACC catalog",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-PERM-02",
+      "name": "Runtime pipeline no longer references TRANSFER_DISPATCH_RECEIVE",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-DOC-01",
+      "name": "WORKFLOW_MATRIX reflects SYS-DEC-07",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-DOC-02",
+      "name": "SEMANTIC_GLOSSARY reflects SYS-DEC-07",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-HIST-01",
+      "name": "Legacy transfer statuses map to user-facing labels",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-TEST-01",
+      "name": "wave1-route-permissions tests pass",
+      "result": "PASS"
+    },
+    {
+      "id": "W5-POST-01",
+      "name": "Create does not post",
+      "result": "PASS",
+      "status": "DRAFT",
+      "ledgerEntries": 0
+    },
+    {
+      "id": "W5-POST-02",
+      "name": "Submit does not post",
+      "result": "PASS",
+      "status": "PENDING_DEPT"
+    },
+    {
+      "id": "W5-POST-03",
+      "name": "Dept approval does not post",
+      "result": "PASS",
+      "status": "PENDING_FINANCE"
+    },
+    {
+      "id": "W5-POST-04",
+      "name": "Finance final approval posts once",
+      "result": "PASS",
+      "status": "POSTED",
+      "ledgerEntries": 2
+    },
+    {
+      "id": "W5-POST-05",
+      "name": "Stock balance moves once (5 units)",
+      "result": "PASS",
+      "srcDelta": 5,
+      "destDelta": 5
+    },
+    {
+      "id": "W5-POST-06",
+      "name": "Double approval blocked — ledger unchanged",
+      "result": "PASS",
+      "ledgerEntries": 2
+    },
+    {
+      "id": "W5-SEC-01",
+      "name": "Foreign tenant returns 404",
+      "result": "PASS"
+    }
+  ],
+  "filesTouched": [
+    "src/routes/transfer.routes.js",
+    "src/controllers/transfer.controller.js",
+    "src/services/transfer.service.js",
+    "src/acc-authority/workflow-step-permissions.js",
+    "src/acc-authority/catalog.constitution.js",
+    "src/platform/lifecyclePresentation.service.js",
+    "src/routes/wave1-route-permissions.test.js",
+    "docs/governance/WORKFLOW_MATRIX.md",
+    "docs/governance/SEMANTIC_GLOSSARY.md",
+    "OSE-Frontend/public/i18n/en.json",
+    "Governance/wave5/wave5-data-audit.js",
+    "Governance/wave5/wave5-runtime-verification.js"
+  ]
+}

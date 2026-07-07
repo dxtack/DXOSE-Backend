@@ -1,0 +1,25 @@
+{
+  "audit_complete": true,
+  "audit_timestamp_utc": "2026-06-27T16:23:37Z",
+  "matrix_rows": 476,
+  "status_counts": {
+    "NOT APPLICABLE": 208,
+    "PASS": 127,
+    "PARTIAL": 118,
+    "UNVERIFIED / BLOCKED": 23
+  },
+  "findings_by_severity": {
+    "Medium": 5,
+    "Low": 6,
+    "High": 1
+  },
+  "findings_total": 12,
+  "runtime_scenarios": {
+    "passed": 2,
+    "failed": 0,
+    "blocked": 3
+  },
+  "gate_a_unmodified": true,
+  "remediation_started": false,
+  "gate_b_remediation_started": false
+}

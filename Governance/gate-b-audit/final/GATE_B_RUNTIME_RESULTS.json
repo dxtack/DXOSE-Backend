@@ -1,0 +1,116 @@
+{
+  "executedAt": "2026-06-27T16:46:20.900Z",
+  "tenant": {
+    "slug": "grand-horizon",
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+  },
+  "createdDocs": [
+    {
+      "type": "getPass",
+      "id": "b97380fd-5323-44a5-8388-fcf209e46d20"
+    }
+  ],
+  "cleanupNote": "Test documents tagged CLOSEOUT_RT_AUDIT; retained for audit trace",
+  "counts": {
+    "Passed": 4,
+    "Failed": 2,
+    "Blocked": 0
+  },
+  "scenarios": [
+    {
+      "scenario_id": "RS-POST-001",
+      "requirement_ids": [
+        "C5-5.1-003",
+        "C13-13.4-001"
+      ],
+      "description": "PATCH posted GRN must be rejected",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "grnId": "72542334-42d3-4fd7-b3b7-4c4de04eb0c8",
+        "grnNumber": "GRN-E2E-CONVERT-1776506844123",
+        "http": 423,
+        "body": {
+          "success": false,
+          "message": "GRN is POSTED and is fully read-only."
+        }
+      },
+      "executed_at": "2026-06-27T16:46:20.900Z"
+    },
+    {
+      "scenario_id": "RS-WF-001",
+      "requirement_ids": [
+        "C3-3.3-002",
+        "C4-4.3-003"
+      ],
+      "description": "Breakage create by dept manager",
+      "status": "Failed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "http": 403
+      },
+      "executed_at": "2026-06-27T16:46:20.900Z"
+    },
+    {
+      "scenario_id": "RS-GP-001",
+      "requirement_ids": [
+        "C3-3.1-001",
+        "C2-2.8-001"
+      ],
+      "description": "Get Pass create",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "http": 201,
+        "documentId": "b97380fd-5323-44a5-8388-fcf209e46d20"
+      },
+      "executed_at": "2026-06-27T16:46:20.900Z"
+    },
+    {
+      "scenario_id": "RS-GP-002",
+      "requirement_ids": [
+        "C3-3.1-001"
+      ],
+      "description": "Get Pass submit",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "http": 200,
+        "documentId": "b97380fd-5323-44a5-8388-fcf209e46d20"
+      },
+      "executed_at": "2026-06-27T16:46:20.900Z"
+    },
+    {
+      "scenario_id": "RS-XT-001",
+      "requirement_ids": [
+        "C23-23.6-002"
+      ],
+      "description": "Cross-tenant getPass read must not 200",
+      "status": "Failed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "http": 500,
+        "targetId": "e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+        "note": "HTTP 500 tenant isolation defect"
+      },
+      "executed_at": "2026-06-27T16:46:20.900Z"
+    },
+    {
+      "scenario_id": "RS-CONC-001",
+      "requirement_ids": [
+        "C8-8.1-001",
+        "C8-8.2-001"
+      ],
+      "description": "Stale concurrencyVersion must reject",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "http": 409,
+        "documentId": "d184f983-2d78-428e-ab84-83b37491536e"
+      },
+      "executed_at": "2026-06-27T16:46:20.900Z"
+    }
+  ],
+  "session_scope": "current_session_only",
+  "historical_note": "Harness results moved to GATE_B_HISTORICAL_EVIDENCE.json — not counted here"
+}

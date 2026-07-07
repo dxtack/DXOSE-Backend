@@ -1,0 +1,120 @@
+{
+  "archive_version": "Gate A.2",
+  "archive_path": "C:\\DX OS&E\\Governance\\constitution-extraction\\_archive\\GATE_A_2_20260627T131043Z",
+  "archived_at": "2026-06-27T13:10:43Z",
+  "file_count": 14,
+  "files": [
+    {
+      "file_name": "_sections_dump.txt",
+      "file_size_bytes": 9500,
+      "sha256": "443FF0AB19720D8B9B096C8E4A123BF5EEAE79CF6B541BF7936B065F378C44AD",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_EXTRACTION_SOURCE.json",
+      "file_size_bytes": 602,
+      "sha256": "BDE73864BC65D09B52069851B538973CFFBE8CFCD8541924529468D3827DCB12",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_EXTRACTION_VALIDATION.json",
+      "file_size_bytes": 3359,
+      "sha256": "968728F335B7603C14F8278DFCA5C9A206EF0D82E4E072EB02ED4C5AD9E51370",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_FRESH_REGISTER.csv",
+      "file_size_bytes": 208186,
+      "sha256": "B508A8481AAD244CE216512A731C6C2EA749B4A9837C7666E5BA908385EEC703",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_FRESH_REGISTER.md",
+      "file_size_bytes": 71296,
+      "sha256": "E208F2C5F0111C3DE1755D19B5EFFF4590C996D4F5A7461E1AE322EFB44D2AA0",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_FRESH_REGISTER.v1.csv",
+      "file_size_bytes": 137733,
+      "sha256": "8D2EA9774DC4F803D47E1B65D539B29A797DEABF387DF169451D0B510B0A2DFF",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_NORMATIVE_REQUIREMENTS.csv",
+      "file_size_bytes": 69577,
+      "sha256": "1D6855D1648A69A2DF10530A1E34FE08E220E421BD9E0E863B6425CCF789B314",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_NORMATIVE_REQUIREMENTS.meta.json",
+      "file_size_bytes": 851,
+      "sha256": "6E8DA4D71BC255C87CA36BD40550D61EF0B96F3CF8542C51E89A32B180A83109",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "CONSTITUTION_SOURCE_FIDELITY.json",
+      "file_size_bytes": 865,
+      "sha256": "B2397045C37BC264D8D2A3C53CB53C1C22A320C9D8DBD1F388631BABCC98C261",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "GATE_A_CHAPTER_REVIEW_SAMPLES.md",
+      "file_size_bytes": 115297,
+      "sha256": "6A2D443230EF5E5057B333DFE1875CD59F5E8F3A6C2168531AE3331713929FBA",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "GATE_A_FILE_INTEGRITY.json",
+      "file_size_bytes": 4580,
+      "sha256": "374A51B8B5E39CD7D6528C1CF8F08120826D7E713D86BB9B605B3C46FBF214EF",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "GATE_A_ID_MIGRATION.json",
+      "file_size_bytes": 9540,
+      "sha256": "D5BC30604FB570366DFE4A39813952B29BDD4CA0AF1F34565436F56FE71FDE4D",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "GATE_A_MD_REPRODUCTION.json",
+      "file_size_bytes": 764,
+      "sha256": "359CAF3ED25509AAD8ED0C9520BE2DA094C4C0E9619ED4D076D424E874946F1B",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    },
+    {
+      "file_name": "GATE_A_SEMANTIC_REVIEW.md",
+      "file_size_bytes": 28463,
+      "sha256": "F5D338A97C1B7A15282B75609081AB0FA845EF3DE610A0511510A0AD83BB9A97",
+      "source_gate": "Gate A.2",
+      "archived_at": "2026-06-27T13:10:43Z",
+      "archive_reason": "Replaced by Gate A.3 canonical rebuild"
+    }
+  ]
+}

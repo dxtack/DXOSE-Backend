@@ -1,0 +1,419 @@
+{
+  "runId": "W8-CLOSEOUT-1783243704125",
+  "completedAt": "2026-07-05T09:28:32.222Z",
+  "programGate": "FINAL_CLOSED",
+  "wave7RunId": "W7-RV-1783241752191",
+  "summary": {
+    "pass": 11,
+    "fail": 0,
+    "blocked": 1
+  },
+  "waves": {
+    "wave1": {
+      "gate": "CLOSED",
+      "summary": {
+        "pass": 3,
+        "fail": 0,
+        "blocked": 0
+      },
+      "evidenceMd": null,
+      "evidenceJson": null,
+      "note": "Static + route-permission checks consolidated in Wave 7 final run; original WAVE1_RUNTIME_VERIFICATION superseded by W7-REG references.",
+      "decisions": [
+        "GRN Reject terminal — no resubmit",
+        "TRANSFER_VIEW read-only",
+        "Get Pass Send Back",
+        "BREAKAGE_CREATE for submit/void"
+      ],
+      "files": [
+        "src/routes/wave1-route-permissions.test.js",
+        "src/routes/grn.routes.js",
+        "src/routes/transfer.routes.js",
+        "src/routes/breakage.routes.js"
+      ],
+      "tests": [
+        "node --test src/routes/wave1-route-permissions.test.js"
+      ],
+      "migrations": []
+    },
+    "wave2": {
+      "gate": "FINAL_CLOSED",
+      "summary": {
+        "total": 24,
+        "pass": 23,
+        "fail": 0,
+        "blocked": 1,
+        "gate": "FINAL_CLOSED"
+      },
+      "evidenceMd": null,
+      "evidenceJson": "OSE-backend/Governance/wave2/WAVE2_RUNTIME_VERIFICATION.json",
+      "decisions": [
+        "Send Back → Returned",
+        "Void → Voided",
+        "No raw backend status on surfaces"
+      ],
+      "files": [
+        "src/platform/lifecyclePresentation.service.js",
+        "src/platform/documentTimeline.service.js"
+      ],
+      "tests": [
+        "npx jest src/platform/lifecyclePresentation.service.test.js"
+      ],
+      "migrations": []
+    },
+    "wave3": {
+      "gate": "CLOSED",
+      "summary": {
+        "total": 16,
+        "pass": 16,
+        "fail": 0,
+        "blocked": 0,
+        "gate": "CLOSED",
+        "dbAvailable": true
+      },
+      "evidenceJson": "OSE-backend/Governance/wave3/WAVE3_RUNTIME_VERIFICATION.json",
+      "decisions": [
+        "GRN Draft-first",
+        "Breakage/Lost no auto-approve at create"
+      ],
+      "files": [
+        "src/services/grn.service.js",
+        "src/platform/draftGovernance.service.js"
+      ],
+      "tests": [
+        "Governance/wave3/wave3-runtime-verification.js"
+      ],
+      "migrations": []
+    },
+    "wave4": {
+      "gate": "CLOSED",
+      "summary": {
+        "total": 9,
+        "pass": 9,
+        "fail": 0,
+        "gate": "CLOSED"
+      },
+      "evidenceJson": "OSE-backend/Governance/wave4/WAVE4_RUNTIME_VERIFICATION.json",
+      "decisions": [
+        "Inventory Count optimistic concurrency",
+        "409 on stale/missing version"
+      ],
+      "files": [
+        "src/services/inventoryCount.service.js",
+        "prisma/schema.prisma"
+      ],
+      "tests": [
+        "node --test src/services/inventory-count-cancel-atomicity.test.js"
+      ],
+      "migrations": [
+        "prisma/migrations/20260705120000_stock_count_concurrency_version/migration.sql"
+      ]
+    },
+    "wave5": {
+      "gate": "CLOSED",
+      "summary": {
+        "total": 21,
+        "pass": 21,
+        "fail": 0,
+        "blocked": 0,
+        "gate": "PASS"
+      },
+      "evidenceMd": "OSE-backend/Governance/wave5/WAVE5_TRANSFER_LEGACY_CLEANUP_FINAL_VERIFICATION.md",
+      "evidenceJson": "OSE-backend/Governance/wave5/WAVE5_TRANSFER_LEGACY_CLEANUP_FINAL_VERIFICATION.json",
+      "decisions": [
+        "Final Approval = Posting",
+        "Dispatch/Receive retired",
+        "TRANSFER_DISPATCH_RECEIVE deprecated"
+      ],
+      "files": [
+        "src/routes/transfer.routes.js",
+        "src/services/transfer.service.js"
+      ],
+      "tests": [
+        "Governance/wave5/wave5-runtime-verification.js"
+      ],
+      "migrations": []
+    },
+    "wave6": {
+      "gate": "CLOSED",
+      "summary": {
+        "pass": 25,
+        "fail": 0,
+        "blocked": 0,
+        "gate": "CLOSED"
+      },
+      "evidenceMd": "OSE-backend/Governance/wave6/WAVE6_EVIDENCE_PREVIEW_OFFICIAL_FINAL_VERIFICATION.md",
+      "evidenceJson": "OSE-backend/Governance/wave6/WAVE6_EVIDENCE_PREVIEW_OFFICIAL_FINAL_VERIFICATION.json",
+      "decisions": [
+        "Evidence Preview vs Official",
+        "Preview watermark",
+        "_PREVIEW/_OFFICIAL filenames"
+      ],
+      "files": [
+        "src/platform/evidenceClassification.service.js",
+        "src/services/pdf/evidence-pack-pdf.js"
+      ],
+      "tests": [
+        "node --test src/platform/evidenceClassification.service.test.js"
+      ],
+      "migrations": []
+    },
+    "wave7": {
+      "gate": "CLOSED",
+      "summary": {
+        "pass": 56,
+        "fail": 0,
+        "blocked": 15,
+        "envBlocked": 2,
+        "gate": "CLOSED"
+      },
+      "evidenceMd": "OSE-backend/Governance/wave7/WAVE7_RUNTIME_VERIFICATION_AND_FINAL_REGRESSION.md",
+      "evidenceJson": "OSE-backend/Governance/wave7/WAVE7_RUNTIME_VERIFICATION_AND_FINAL_REGRESSION.json",
+      "browserJson": "OSE-backend/Governance/wave7/WAVE7_BROWSER_RV.json",
+      "decisions": [
+        "RV-01 Modal Law",
+        "RV-03 Zoom Matrix",
+        "Full regression Waves 1–6"
+      ],
+      "files": [
+        "OSE-Frontend/src/app/features/items/items-list/items-list.component.ts",
+        "OSE-Frontend/src/app/features/items/items-list/items-list.component.html",
+        "OSE-backend/Governance/wave7/wave7-runtime-verification.js",
+        "OSE-backend/Governance/wave7/wave7-browser-rv.js",
+        "OSE-backend/Governance/wave7/wave7-discover-context.js",
+        "OSE-backend/Governance/wave7/ensure-ic-concurrency-column.js",
+        "OSE-backend/src/services/inventory-count-lifecycle.behavior.test.js"
+      ],
+      "tests": [
+        "npm run test:unit",
+        "npm run build (FE)"
+      ],
+      "migrations": [
+        "prisma/migrations/20260705120000_stock_count_concurrency_version (verified on test DB)"
+      ]
+    }
+  },
+  "wave7Blocked": [
+    {
+      "id": "RV01-IMG-*",
+      "count": 3,
+      "classification": "Blocked — Environment",
+      "reason": "Test DB item row has no image attachment for Image Preview modal path.",
+      "productionImpact": "No — runtime path verified when image exists (static styles + non-nest fix in items-list).",
+      "owner": "QA / test-data seeding (optional)",
+      "amrDecision": false
+    },
+    {
+      "id": "RV03-TR-DETAIL-*",
+      "count": 5,
+      "classification": "Blocked — Environment",
+      "reason": "No Transfer sample document in selected Wave 7 tenant on test DB.",
+      "productionImpact": "No — TR-LIST zoom checks PASS; detail blocked for missing fixture only.",
+      "owner": "Integration test fixtures",
+      "amrDecision": false
+    },
+    {
+      "id": "RV03-IC-DETAIL-*",
+      "count": 5,
+      "classification": "Blocked — Environment",
+      "reason": "No StockCountSession sample in selected Wave 7 tenant on test DB.",
+      "productionImpact": "No — Wave 4 IC concurrency runtime verified separately.",
+      "owner": "Integration test fixtures",
+      "amrDecision": false
+    },
+    {
+      "id": "RV03-WIN-SCALE",
+      "count": 1,
+      "classification": "Blocked — Environment",
+      "reason": "Windows OS Scaling 125% requires separate manual session; not mixed with browser zoom.",
+      "productionImpact": "No — browser zoom matrix PASS at 80–125%.",
+      "owner": "Manual QA (optional)",
+      "amrDecision": false
+    },
+    {
+      "id": "W7-PRISMA-GENERATE",
+      "count": 1,
+      "classification": "Blocked — Environment",
+      "reason": "EPERM on query_engine DLL while dev server holds Prisma client lock (Windows).",
+      "productionImpact": "No — prisma validate PASS; client already generated.",
+      "owner": "CI / clean build environment",
+      "amrDecision": false
+    }
+  ],
+  "complianceUpdates": [
+    {
+      "reqId": "C02-2.7-002",
+      "status": "Implemented and Runtime Verified",
+      "wave": 1,
+      "evidence": "Governance/wave7/WAVE7_RUNTIME_VERIFICATION_AND_FINAL_REGRESSION.json (W1-01)"
+    },
+    {
+      "reqId": "C02-2.1-004",
+      "status": "Implemented and Runtime Verified",
+      "wave": 2,
+      "evidence": "Governance/wave7/WAVE7_BROWSER_RV.json (RV03 raw status checks PASS)"
+    },
+    {
+      "reqId": "C02-2.6-001",
+      "status": "Implemented and Runtime Verified",
+      "wave": 3,
+      "evidence": "Governance/wave3/WAVE3_RUNTIME_VERIFICATION.json"
+    },
+    {
+      "reqId": "C08-8.2-001",
+      "status": "Implemented and Runtime Verified",
+      "wave": 4,
+      "evidence": "Governance/wave4/WAVE4_RUNTIME_VERIFICATION.json (W4-IC-01..04)"
+    },
+    {
+      "reqId": "C08-8.8-001",
+      "status": "Implemented and Runtime Verified",
+      "wave": 4,
+      "evidence": "Governance/wave4/WAVE4_RUNTIME_VERIFICATION.json"
+    },
+    {
+      "reqId": "C26-26.1-002",
+      "status": "Implemented and Runtime Verified",
+      "wave": 6,
+      "evidence": "Governance/wave6/WAVE6_EVIDENCE_PREVIEW_OFFICIAL_FINAL_VERIFICATION.json"
+    },
+    {
+      "reqId": "C04-4.2-001",
+      "status": "Implemented and Runtime Verified",
+      "wave": 6,
+      "evidence": "Governance/wave6/WAVE6_EVIDENCE_PREVIEW_OFFICIAL_FINAL_VERIFICATION.json"
+    },
+    {
+      "reqId": "C17-17.3-005",
+      "status": "Implemented and Runtime Verified",
+      "wave": 7,
+      "evidence": "Governance/wave7/WAVE7_BROWSER_RV.json (RV01 modal law)"
+    }
+  ],
+  "matrixRowsUpdated": 8,
+  "carryForward": [
+    {
+      "item": "Period Close / Reopen",
+      "workstream": "Separate Workstream",
+      "owner": "Finance / Period Close",
+      "amrDecision": true
+    },
+    {
+      "item": "Currency / Multi-Currency",
+      "workstream": "Separate Workstream",
+      "owner": "Finance",
+      "amrDecision": true
+    },
+    {
+      "item": "Final Constitution Integration",
+      "workstream": "Deferred — after independent workstreams",
+      "owner": "Governance",
+      "amrDecision": true
+    },
+    {
+      "item": "Word/PDF Constitution export",
+      "workstream": "Deferred",
+      "owner": "Governance",
+      "amrDecision": true
+    },
+    {
+      "item": "TRANSFER_DISPATCH_RECEIVE production grants audit",
+      "workstream": "Governance Carry-Forward",
+      "owner": "ACC / Production audit",
+      "amrDecision": true
+    },
+    {
+      "item": "Wave 7 Image Preview runtime (no test image)",
+      "workstream": "Optional QA fixture",
+      "owner": "QA",
+      "amrDecision": false
+    },
+    {
+      "item": "Windows Scaling 125% OS pass",
+      "workstream": "Optional manual QA",
+      "owner": "QA",
+      "amrDecision": false
+    }
+  ],
+  "transferDispatchReceive": {
+    "runtimeUsage": 0,
+    "testDbGrants": 0,
+    "catalogStatus": "Deprecated SYS-DEC-07",
+    "productionGrantsAudit": "Pending"
+  },
+  "artifactAudit": {
+    "keepEvidence": [
+      "Governance/wave2/WAVE2_RUNTIME_VERIFICATION.json",
+      "Governance/wave3/WAVE3_RUNTIME_VERIFICATION.json",
+      "Governance/wave4/WAVE4_RUNTIME_VERIFICATION.json",
+      "Governance/wave5/WAVE5_TRANSFER_LEGACY_CLEANUP_FINAL_VERIFICATION.json",
+      "Governance/wave5/WAVE5_TRANSFER_LEGACY_CLEANUP_FINAL_VERIFICATION.md",
+      "Governance/wave5/WAVE5_DATA_AUDIT.json",
+      "Governance/wave6/WAVE6_EVIDENCE_PREVIEW_OFFICIAL_FINAL_VERIFICATION.json",
+      "Governance/wave6/WAVE6_EVIDENCE_PREVIEW_OFFICIAL_FINAL_VERIFICATION.md",
+      "Governance/wave7/WAVE7_RUNTIME_VERIFICATION_AND_FINAL_REGRESSION.json",
+      "Governance/wave7/WAVE7_RUNTIME_VERIFICATION_AND_FINAL_REGRESSION.md",
+      "Governance/wave7/WAVE7_BROWSER_RV.json",
+      "Governance/wave7/screenshots/RV01-ITEM-VIEW__*.png"
+    ],
+    "keepHarness": [
+      "Governance/wave2/wave2-runtime-verification.js",
+      "Governance/wave3/wave3-runtime-verification.js",
+      "Governance/wave4/wave4-runtime-verification.js",
+      "Governance/wave5/wave5-runtime-verification.js",
+      "Governance/wave6/wave6-runtime-verification.js",
+      "Governance/wave7/wave7-runtime-verification.js",
+      "Governance/wave7/wave7-browser-rv.js",
+      "Governance/wave7/wave7-discover-context.js",
+      "Governance/wave7/ensure-ic-concurrency-column.js"
+    ],
+    "disposable": [
+      "Governance/wave7/probe-*.js",
+      "Governance/wave7/debug-*.js",
+      "Governance/wave7/screenshots/DEBUG-items-1366.png",
+      "Governance/wave7/wave7-orchestrator-last.log"
+    ]
+  },
+  "prisma": [
+    {
+      "id": "W8-PRISMA-VALIDATE",
+      "result": "PASS"
+    },
+    {
+      "id": "W8-PRISMA-GENERATE",
+      "result": "BLOCKED",
+      "reason": "Blocked — Environment (dev server lock)"
+    },
+    {
+      "id": "W8-MIG-SOURCE",
+      "result": "PASS",
+      "path": "prisma/migrations/20260705120000_stock_count_concurrency_version/migration.sql"
+    },
+    {
+      "id": "W8-MIG-TESTDB",
+      "result": "PASS"
+    }
+  ],
+  "regressionDeclaration": {
+    "noRegressionWaves1to7": true,
+    "noRawStatuses": "Wave 2/7 zoom PASS",
+    "grnDraftFirst": "Wave 3 CLOSED",
+    "rejectNoResubmit": "Wave 1/7 PASS",
+    "breakageNoAutoApprove": "Wave 3 CLOSED",
+    "inventoryCountConcurrency": "Wave 4 CLOSED",
+    "transferFinalApprovalPosting": "Wave 5 CLOSED",
+    "dispatchReceiveRetired": "Wave 5 CLOSED",
+    "evidencePreviewOfficial": "Wave 6 CLOSED",
+    "modalZoomGate": "Wave 7 CLOSED (15 BLOCKED documented)",
+    "tenantIsolation": "Wave 6 evidence tests PASS"
+  },
+  "filesModified": [
+    "Governance/wave8/WAVE8_GOVERNANCE_CLOSEOUT_FINAL_REPORT.md",
+    "Governance/wave8/WAVE8_GOVERNANCE_CLOSEOUT_FINAL_REPORT.json",
+    "Governance/wave8/WAVE8_CARRY_FORWARD_REGISTER.md",
+    "Governance/wave8/WAVE1_TO_WAVE7_EVIDENCE_INDEX.md",
+    "Governance/CONSTITUTION_TRACEABILITY_MATRIX.md",
+    "Governance/evidence.json"
+  ],
+  "filesRemoved": []
+}

@@ -1,0 +1,147 @@
+{
+  "executedAt": "2026-06-28T02:17:46.049Z",
+  "gateVersion": "phase3-browser-strict-v1",
+  "feBase": "http://127.0.0.1:4200",
+  "apiBase": "http://127.0.0.1:4000/api",
+  "tenantSlug": "closeout-audit-hotel-disposable",
+  "actor": "p3-browser-fm@phase3-gate.local",
+  "pass": true,
+  "steps": {
+    "loginAuthorizedFinanceManager": true,
+    "movementRegisterOpened": true,
+    "adjustmentCreatedViaUi": true,
+    "draftStatusOnDetail": true,
+    "openedDocumentByExactId": true,
+    "postConfirmationCompleted": true,
+    "postHttp2xx": true,
+    "postedStatusOnDetail": true,
+    "postedOnListAfterRefresh": true,
+    "ledgerScreenReachable": true,
+    "ledgerHistoryVisible": true,
+    "ledgerExactMatch": true,
+    "unauthorizedActionsHiddenAfterPost": true
+  },
+  "failedSteps": [],
+  "evidence": {
+    "docId": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+    "documentNo": "ADJ-2026-00108",
+    "postHttp": 200,
+    "ledgerRows": [],
+    "listRowStatus": "status-badge status-posted",
+    "createHttp": 201,
+    "createMessage": "Movement document created successfully",
+    "createBody": {
+      "success": true,
+      "message": "Movement document created successfully",
+      "data": {
+        "id": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+        "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+        "documentNo": "ADJ-2026-00108",
+        "concurrencyVersion": 0,
+        "postingDate": null,
+        "assignedPostingPeriod": null,
+        "movementType": "ADJUSTMENT",
+        "sourceType": "INTERNAL",
+        "getPassId": null,
+        "status": "DRAFT",
+        "sourceLocationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+        "destLocationId": null,
+        "documentDate": "2026-06-28T00:00:00.000Z",
+        "supplierId": null,
+        "department": null,
+        "reason": null,
+        "notes": "PHASE3_BROWSER_ADJ",
+        "attachmentUrl": null,
+        "photoKey": null,
+        "suggestedAction": null,
+        "responsibleEmployeeName": null,
+        "createdBy": "1a17cedb-1059-437a-9644-bd210f855b6f",
+        "postedAt": null,
+        "voidedAt": null,
+        "createdAt": "2026-06-28T02:17:35.266Z",
+        "updatedAt": "2026-06-28T02:17:35.266Z",
+        "lines": [
+          {
+            "id": "189b3624-3cb9-40ba-bef7-65689a716373",
+            "documentId": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+            "itemId": "c872fb39-a83e-44cd-8719-03d62c932daa",
+            "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+            "unitId": null,
+            "qtyRequested": "3",
+            "qtyInBaseUnit": "3",
+            "unitCost": "5",
+            "totalValue": "15",
+            "notes": null,
+            "photoKey": null,
+            "attachmentUrl": null,
+            "item": {
+              "name": "PHASE3_BROWSER_ADJ Item",
+              "barcode": null
+            }
+          }
+        ],
+        "createdByUser": {
+          "firstName": "Phase3",
+          "lastName": "BrowserFM"
+        }
+      }
+    },
+    "ledgerUiRows": [
+      {
+        "item": "PHASE3_BROWSER_ADJ Item",
+        "location": "CLOSEOUT_RT_AUDIT Store",
+        "type": "Adjustment",
+        "qtyIn": "+3",
+        "qtyOut": "—",
+        "unitCost": "5.00",
+        "totalValue": "15.00 SAR"
+      }
+    ],
+    "ledgerApiRows": [
+      {
+        "id": "eae9a012-6378-4949-a7ad-2e0fad4dab80",
+        "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+        "itemId": "c872fb39-a83e-44cd-8719-03d62c932daa",
+        "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+        "movementType": "ADJUSTMENT",
+        "affectsValuation": true,
+        "qtyIn": "3",
+        "qtyOut": "0",
+        "unitCost": "5",
+        "totalValue": "15",
+        "balanceAfter": "203",
+        "referenceType": "MOVEMENT",
+        "referenceId": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+        "referenceNo": "ADJ-2026-00108",
+        "requiresApproval": false,
+        "approvalId": null,
+        "notes": null,
+        "createdBy": "1a17cedb-1059-437a-9644-bd210f855b6f",
+        "createdAt": "2026-06-28T02:17:38.445Z",
+        "item": {
+          "id": "c872fb39-a83e-44cd-8719-03d62c932daa",
+          "name": "PHASE3_BROWSER_ADJ Item",
+          "barcode": null
+        },
+        "location": {
+          "id": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+          "name": "CLOSEOUT_RT_AUDIT Store"
+        },
+        "runningBalance": "203"
+      }
+    ],
+    "ledgerApiHttp": 200,
+    "unauthorized": {
+      "postBtnAfter": 0,
+      "saveDraftAfter": 0,
+      "voidBtnAfter": 0
+    },
+    "expected": {
+      "qty": 3,
+      "unitCost": 5,
+      "totalValue": 15,
+      "itemId": "c872fb39-a83e-44cd-8719-03d62c932daa",
+      "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db"
+    }
+  }
+}

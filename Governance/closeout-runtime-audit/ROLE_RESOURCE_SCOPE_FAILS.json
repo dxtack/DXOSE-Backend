@@ -1,0 +1,132 @@
+{
+  "executedAt": "2026-06-27T00:55:31.155Z",
+  "failCount": 14,
+  "rows": [
+    {
+      "resource": "items",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property-shared reference data",
+      "actualData": "count=11",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "items",
+      "operation": "read_own_id",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property-shared reference data",
+      "actualData": "ALLOWED",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "items",
+      "operation": "read_foreign_dept_id",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property-shared reference data",
+      "actualData": "ALLOWED_CROSS",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "departments",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property reference",
+      "actualData": "count=0",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "categories",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property reference",
+      "actualData": "count=6",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "units",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property reference",
+      "actualData": "count=10",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "suppliers",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property reference",
+      "actualData": "count=3",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "locations",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Store/location-scoped",
+      "actualData": "count=0",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "transfer",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Document/location scoped",
+      "actualData": "count=0",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "breakage",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Document-owner-scoped",
+      "actualData": "count=0",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "lost",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Document-owner-scoped",
+      "actualData": "count=0",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "getPass",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Document-owner-scoped",
+      "actualData": "count=0",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "workflowPipeline",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property-wide pipeline view",
+      "actualData": "count=50",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    },
+    {
+      "resource": "dashboard",
+      "operation": "list",
+      "role": "NO_ASSIGN",
+      "expectedScope": "Property-wide summary",
+      "actualData": "count=0",
+      "http": 200,
+      "defect": "Read scope — operational data without assignment or policy mismatch"
+    }
+  ]
+}

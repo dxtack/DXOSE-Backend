@@ -1,0 +1,104 @@
+{
+  "executedAt": "2026-06-27T00:49:56.653Z",
+  "round": 7,
+  "checklist": [
+    "Create",
+    "Submit",
+    "Department approval",
+    "Finance approval",
+    "Posting",
+    "Reject",
+    "Same store",
+    "Insufficient stock",
+    "Wrong role",
+    "No permission",
+    "No assignment",
+    "Inactive assignment",
+    "Wrong property",
+    "Out of scope",
+    "Duplicate approval",
+    "Duplicate posting",
+    "Concurrent approval",
+    "Timeline",
+    "Audit",
+    "Source balance deduction",
+    "Destination balance addition",
+    "Cost/WAC preservation"
+  ],
+  "covered": [
+    "No assignment",
+    "Same store",
+    "Insufficient stock"
+  ],
+  "missing": [
+    "Create",
+    "Submit",
+    "Department approval",
+    "Finance approval",
+    "Posting",
+    "Reject",
+    "Wrong role",
+    "No permission",
+    "Inactive assignment",
+    "Wrong property",
+    "Out of scope",
+    "Duplicate approval",
+    "Duplicate posting",
+    "Concurrent approval",
+    "Timeline",
+    "Audit",
+    "Source balance deduction",
+    "Destination balance addition",
+    "Cost/WAC preservation"
+  ],
+  "results": [
+    {
+      "checklistItem": "Create",
+      "id": "TR-CREATE",
+      "http": 403,
+      "message": "Location outside your assigned scope (create).",
+      "pass": false
+    },
+    {
+      "checklistItem": "No assignment",
+      "id": "TR-NO-ASSIGN",
+      "http": 403,
+      "message": "Location outside your assigned scope (create).",
+      "pass": true
+    },
+    {
+      "checklistItem": "Inactive assignment",
+      "id": "TR-INACTIVE",
+      "http": 401,
+      "message": "Authentication required. Please provide a valid token.",
+      "pass": false
+    },
+    {
+      "checklistItem": "Same store",
+      "id": "TR-SAME-STORE",
+      "http": 400,
+      "message": "Source and destination must be different locations",
+      "pass": true
+    },
+    {
+      "checklistItem": "Insufficient stock",
+      "id": "TR-INSUFFICIENT",
+      "http": 403,
+      "message": "Location outside your assigned scope (create).",
+      "pass": true
+    },
+    {
+      "checklistItem": "Wrong role",
+      "id": "TR-WRONG-ROLE",
+      "http": 500,
+      "message": "\nInvalid `prisma.storeTransfer.create()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\services\\transfer.service.js:210:48\n\n  207 \n  208 const transferNo = await generateTransferNo(tenantId);\n  209 \n→ 210 const created = await prisma.storeTransfer.create({\n        data: {\n          tenantId: \"d7f5e85c-86f9-487d-b17d-708cebcf9ca3\",\n          transferNo: \"TRF-2026-00007\",\n          sourceLocationId: \"c031c268-194d-4211-beb8-0910da8f131d\",\n          destLocationId: \"8f3ae500-48b0-433c-9235-254f69251f8b\",\n          requestedBy: \"b4888926-b46e-433e-9ca9-be5c4e4982b5\",\n          transferDate: new Date(\"2026-06-27T00:49:56.036Z\"),\n          requiredBy: null,\n          reason: \"CLOSEOUT_RT_AUDIT\",\n          notes: undefined,\n          lines: {\n            create: [\n              {\n                itemId: \"f7e4d2a3-d93c-4850-b306-a11321ff3aa2\",\n                uomId: undefined,\n                requestedQty: undefined,\n                notes: undefined\n              }\n            ]\n          }\n        },\n        include: {\n          lines: true\n        }\n      })\n\nArgument `requestedQty` is missing.",
+      "pass": false
+    },
+    {
+      "checklistItem": "Stale JWT",
+      "id": "TR-STALE",
+      "http": 401,
+      "pass": false
+    }
+  ]
+}

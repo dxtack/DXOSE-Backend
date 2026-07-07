@@ -1,0 +1,47 @@
+{
+  "executedAt": "2026-06-27T00:11:51.965Z",
+  "rows": [
+    {
+      "scenario": "GP-FF-GM",
+      "prior": "NOT_APPLICABLE",
+      "newClassification": "PASS",
+      "why": "CREATE_FORBIDDEN_FOR_ROLE — negative test",
+      "authority": "Get Pass create permission matrix"
+    },
+    {
+      "scenario": "GP-FF-SUPER_ADMIN_OP",
+      "prior": "NOT_APPLICABLE",
+      "newClassification": "PASS",
+      "why": "CREATE_FORBIDDEN_FOR_ROLE — negative test",
+      "authority": "Get Pass create permission matrix"
+    },
+    {
+      "scenario": "GP-FF-DEPT_MANAGER_FB",
+      "prior": "NOT_APPLICABLE",
+      "newClassification": "BLOCKED",
+      "why": "STALE_WORKFLOW_CONFIGURATION — not executed for product verification",
+      "authority": "System-wide GET_PASS governance drift"
+    },
+    {
+      "scenario": "GP-FF-FINANCE",
+      "prior": "NOT_APPLICABLE",
+      "newClassification": "BLOCKED",
+      "why": "STALE_WORKFLOW_CONFIGURATION",
+      "authority": "System-wide GET_PASS governance drift"
+    },
+    {
+      "scenario": "GP-FF-ORG_MANAGER",
+      "prior": "NOT_APPLICABLE",
+      "newClassification": "BLOCKED",
+      "why": "STALE_WORKFLOW_CONFIGURATION",
+      "authority": "System-wide GET_PASS governance drift"
+    },
+    {
+      "scenario": "GP-FF-COST_CONTROL",
+      "prior": "NOT_APPLICABLE",
+      "newClassification": "BLOCKED",
+      "why": "STALE_WORKFLOW_CONFIGURATION",
+      "authority": "System-wide GET_PASS governance drift"
+    }
+  ]
+}

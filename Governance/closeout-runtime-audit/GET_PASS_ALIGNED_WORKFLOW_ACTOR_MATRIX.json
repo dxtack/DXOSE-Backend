@@ -1,0 +1,266 @@
+{
+  "executedAt": "2026-06-27T00:22:32.796Z",
+  "tenant": "closeout-audit-hotel-disposable",
+  "workflowChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "fixturePolicy": "Disposable hotel only — cleanup in finally",
+  "rows": [
+    {
+      "actor": "dept_creator",
+      "role": "DEPT_MANAGER",
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "firstExpectedStep": "PENDING_DEPT or skip if creator auto-advance",
+      "actualStatus": "PENDING_COST_CONTROL",
+      "pinnedVersionId": "6aeb46a9-a6cd-4302-a9a7-ae03fc510386",
+      "usesFixture": true,
+      "stepsStamped": {
+        "dept": true,
+        "costControl": false,
+        "finance": false,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {
+        "dept": "d0c1b1aa-2e4c-4cfd-b0ce-5095afc53a6e",
+        "costControl": null,
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "creatorIsSubmitter": true,
+      "costControlSkipped": false,
+      "deptSkipped": false,
+      "financeSelfStampOnSubmit": false,
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "constitutionResult": "See stepsStamped"
+    },
+    {
+      "actor": "dept_manager",
+      "role": "DEPT_MANAGER",
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "firstExpectedStep": "PENDING_DEPT or skip if creator auto-advance",
+      "actualStatus": "PENDING_COST_CONTROL",
+      "pinnedVersionId": "6aeb46a9-a6cd-4302-a9a7-ae03fc510386",
+      "usesFixture": true,
+      "stepsStamped": {
+        "dept": true,
+        "costControl": false,
+        "finance": false,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {
+        "dept": "10838810-4e2d-4c0d-8736-8c360eb3b869",
+        "costControl": null,
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "creatorIsSubmitter": true,
+      "costControlSkipped": false,
+      "deptSkipped": false,
+      "financeSelfStampOnSubmit": false,
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "constitutionResult": "See stepsStamped"
+    },
+    {
+      "actor": "cost_control",
+      "role": "COST_CONTROL",
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "firstExpectedStep": "PENDING_* per chain",
+      "actualStatus": "PENDING_FINANCE",
+      "pinnedVersionId": "6aeb46a9-a6cd-4302-a9a7-ae03fc510386",
+      "usesFixture": true,
+      "stepsStamped": {
+        "dept": false,
+        "costControl": true,
+        "finance": false,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {
+        "dept": null,
+        "costControl": "534e139b-9d84-4956-85bb-61aad05d1592",
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "creatorIsSubmitter": true,
+      "costControlSkipped": false,
+      "deptSkipped": true,
+      "financeSelfStampOnSubmit": false,
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "constitutionResult": "See stepsStamped"
+    },
+    {
+      "actor": "finance",
+      "role": "FINANCE_MANAGER",
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "firstExpectedStep": "PENDING_FINANCE or fast-forward per creator role BDR",
+      "actualStatus": "PENDING_SECURITY",
+      "pinnedVersionId": "6aeb46a9-a6cd-4302-a9a7-ae03fc510386",
+      "usesFixture": true,
+      "stepsStamped": {
+        "dept": false,
+        "costControl": false,
+        "finance": true,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {
+        "dept": null,
+        "costControl": null,
+        "finance": "b665a8f6-5250-45d6-b4d4-88fc1a136fad",
+        "gm": null,
+        "security": null
+      },
+      "creatorIsSubmitter": true,
+      "costControlSkipped": true,
+      "deptSkipped": true,
+      "financeSelfStampOnSubmit": true,
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "constitutionResult": "OBSERVE — Finance creator fast-forward skipped CC/Dept stamps"
+    },
+    {
+      "actor": "gm",
+      "role": "GENERAL_MANAGER",
+      "createAllowed": false,
+      "createHttp": 403,
+      "submitAllowed": null,
+      "firstExpectedStep": "PENDING_* per chain",
+      "actualStatus": null,
+      "usesFixture": false,
+      "stepsStamped": {
+        "dept": false,
+        "costControl": false,
+        "finance": false,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {},
+      "creatorIsSubmitter": false,
+      "costControlSkipped": null,
+      "deptSkipped": null,
+      "financeSelfStampOnSubmit": false,
+      "auditActions": [],
+      "constitutionResult": "See stepsStamped"
+    },
+    {
+      "actor": "storekeeper",
+      "role": "STOREKEEPER",
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": null,
+      "firstExpectedStep": "PENDING_* per chain",
+      "actualStatus": null,
+      "pinnedVersionId": null,
+      "usesFixture": false,
+      "stepsStamped": {
+        "dept": false,
+        "costControl": false,
+        "finance": false,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {
+        "dept": null,
+        "costControl": null,
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "creatorIsSubmitter": true,
+      "costControlSkipped": null,
+      "deptSkipped": null,
+      "financeSelfStampOnSubmit": false,
+      "auditActions": [],
+      "constitutionResult": "See stepsStamped"
+    },
+    {
+      "actor": "security",
+      "role": "SECURITY",
+      "createAllowed": false,
+      "createHttp": 403,
+      "submitAllowed": null,
+      "firstExpectedStep": "PENDING_* per chain",
+      "actualStatus": null,
+      "usesFixture": false,
+      "stepsStamped": {
+        "dept": false,
+        "costControl": false,
+        "finance": false,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {},
+      "creatorIsSubmitter": false,
+      "costControlSkipped": null,
+      "deptSkipped": null,
+      "financeSelfStampOnSubmit": false,
+      "auditActions": [],
+      "constitutionResult": "See stepsStamped"
+    },
+    {
+      "actor": "create_only",
+      "role": "DEPT_MANAGER",
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": null,
+      "firstExpectedStep": "PENDING_DEPT or skip if creator auto-advance",
+      "actualStatus": null,
+      "pinnedVersionId": null,
+      "usesFixture": false,
+      "stepsStamped": {
+        "dept": false,
+        "costControl": false,
+        "finance": false,
+        "gm": false,
+        "security": false
+      },
+      "actorsStamped": {
+        "dept": null,
+        "costControl": null,
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "creatorIsSubmitter": true,
+      "costControlSkipped": null,
+      "deptSkipped": null,
+      "financeSelfStampOnSubmit": false,
+      "auditActions": [],
+      "constitutionResult": "See stepsStamped"
+    }
+  ],
+  "explicitAnswers": {
+    "q1_financeAllowedCreate": true,
+    "q2_financeStartingStep": "Fast-forward to PENDING_SECURITY — skipped visible CC/Dept queue",
+    "q3_bdrFastForwardByCreatorRole": "Submit uses getSubmitInitialWorkflowFromContext(user.role) — creator role determines initial status/stamps",
+    "q4_submitVsApproval": "Submit applies workflow transition + may stamp creator on skipped steps — not merely queue send",
+    "q5_unexecutedStampsRecorded": "YES — status advanced without costControl/dept stamp IDs"
+  }
+}

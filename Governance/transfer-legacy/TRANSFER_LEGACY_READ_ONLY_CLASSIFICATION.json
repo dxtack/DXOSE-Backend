@@ -1,0 +1,453 @@
+{
+  "workstream": "Transfer Legacy — Read-Only Data Classification",
+  "focusStatus": "PENDING_FINAL",
+  "executionTimestamp": "2026-07-02T17:47:20.285Z",
+  "finishedAt": "2026-07-02T17:47:20.417Z",
+  "readOnlyConfirmation": {
+    "guard": "Prisma client wrapped; write methods throw. No $transaction/$executeRaw used.",
+    "zeroDatabaseWrites": true
+  },
+  "environment": {
+    "database": {
+      "present": true,
+      "protocol": "postgresql",
+      "host": "127.0.0.1",
+      "port": "5433",
+      "database": "ose_inventory",
+      "user": "os***",
+      "credentialsMasked": true
+    },
+    "isLocalHost": true,
+    "classification": "LOCAL_DEV_TEST",
+    "productionSuspected": false
+  },
+  "dataInventory": {
+    "totalTransfers": 519,
+    "statusCounts": {
+      "DRAFT": 137,
+      "SUBMITTED": 0,
+      "PENDING_DEPT": 94,
+      "PENDING_FINANCE": 97,
+      "PENDING_FINAL": 1,
+      "APPROVED": 0,
+      "IN_TRANSIT": 0,
+      "RECEIVED": 0,
+      "CLOSED": 0,
+      "POSTED": 108,
+      "REJECTED": 82
+    },
+    "extraStatusesObserved": {},
+    "dateRangeByStatus": {
+      "POSTED": {
+        "count": 108,
+        "oldestCreatedAt": "2026-05-13T13:40:09.055Z",
+        "newestCreatedAt": "2026-06-28T15:31:33.035Z",
+        "oldestUpdatedAt": "2026-05-13T13:40:09.929Z",
+        "newestUpdatedAt": "2026-06-28T15:31:34.015Z"
+      },
+      "PENDING_FINAL": {
+        "count": 1,
+        "oldestCreatedAt": "2026-05-18T14:00:19.691Z",
+        "newestCreatedAt": "2026-05-18T14:00:19.691Z",
+        "oldestUpdatedAt": "2026-05-18T14:01:24.093Z",
+        "newestUpdatedAt": "2026-05-18T14:01:24.093Z"
+      },
+      "PENDING_DEPT": {
+        "count": 94,
+        "oldestCreatedAt": "2026-06-28T11:19:36.682Z",
+        "newestCreatedAt": "2026-06-28T15:31:45.988Z",
+        "oldestUpdatedAt": "2026-06-28T11:19:36.749Z",
+        "newestUpdatedAt": "2026-06-28T15:31:46.023Z"
+      },
+      "DRAFT": {
+        "count": 137,
+        "oldestCreatedAt": "2026-06-26T23:47:45.552Z",
+        "newestCreatedAt": "2026-06-28T15:31:45.823Z",
+        "oldestUpdatedAt": "2026-06-26T23:47:45.552Z",
+        "newestUpdatedAt": "2026-06-28T15:31:45.823Z"
+      },
+      "PENDING_FINANCE": {
+        "count": 97,
+        "oldestCreatedAt": "2026-06-28T11:19:37.910Z",
+        "newestCreatedAt": "2026-06-28T15:31:47.522Z",
+        "oldestUpdatedAt": "2026-06-28T11:19:39.101Z",
+        "newestUpdatedAt": "2026-06-28T15:31:48.108Z"
+      },
+      "REJECTED": {
+        "count": 82,
+        "oldestCreatedAt": "2026-06-07T10:55:07.996Z",
+        "newestCreatedAt": "2026-06-28T15:31:34.561Z",
+        "oldestUpdatedAt": "2026-06-07T11:10:24.505Z",
+        "newestUpdatedAt": "2026-06-28T15:31:35.537Z"
+      }
+    },
+    "legacyOpenStatuses": [
+      "SUBMITTED",
+      "PENDING_FINAL",
+      "APPROVED",
+      "IN_TRANSIT"
+    ]
+  },
+  "tenantDistribution": {
+    "closeout-audit-hotel-disposable": {
+      "total": 502,
+      "byStatus": {
+        "POSTED": 94,
+        "PENDING_FINANCE": 97,
+        "DRAFT": 136,
+        "PENDING_DEPT": 94,
+        "REJECTED": 81
+      }
+    },
+    "roma-1": {
+      "total": 3,
+      "byStatus": {
+        "POSTED": 1,
+        "PENDING_FINAL": 1,
+        "REJECTED": 1
+      }
+    },
+    "grand-horizon": {
+      "total": 8,
+      "byStatus": {
+        "DRAFT": 1,
+        "POSTED": 7
+      }
+    },
+    "dx-airport-hotel": {
+      "total": 1,
+      "byStatus": {
+        "POSTED": 1
+      }
+    },
+    "dx-marina-hotel": {
+      "total": 5,
+      "byStatus": {
+        "POSTED": 5
+      }
+    }
+  },
+  "impactAggregates": {
+    "withLedgerEntries": 108,
+    "withStockImpact": 108,
+    "withApprovalHistory": 382,
+    "withWorkflowVersionRef": 376,
+    "duplicateDocumentNumbers": 0,
+    "missingReferences": 0
+  },
+  "pendingFinal": {
+    "count": 1,
+    "ids": [
+      "6fdf53fb-c1ca-4e4c-8c02-568b7fbfd9b1"
+    ],
+    "inspections": [
+      {
+        "transferId": "6fdf53fb-c1ca-4e4c-8c02-568b7fbfd9b1",
+        "documentNo": "TRF-202605-0001",
+        "tenant": "roma-1",
+        "createdAt": "2026-05-18T14:00:19.691Z",
+        "updatedAt": "2026-05-18T14:01:24.093Z",
+        "transferDate": "2026-05-18T14:00:19.687Z",
+        "createdBy": "Amr Seif_Test",
+        "createdByActive": true,
+        "sourceStore": {
+          "id": "a96285bf-7766-405b-a12b-0a2acf8c3284",
+          "name": "F&B Horizon",
+          "active": true,
+          "departmentId": "a61531f7-ee2d-4aa8-830e-e0908b3b3995"
+        },
+        "destStore": {
+          "id": "06119664-edfc-40fb-b715-692d52e5ee1e",
+          "name": "Store Floor 1",
+          "active": true,
+          "departmentId": "979151ec-fc4d-46df-ac2e-4dbbf203f1e8"
+        },
+        "lineCount": 1,
+        "totalRequestedQty": 3,
+        "totalValue": 0,
+        "currentLegacyStatus": "PENDING_FINAL",
+        "approvedBy": null,
+        "postedBy": null,
+        "receivedBy": null,
+        "approvedAt": null,
+        "postedAt": null,
+        "dispatchedAt": null,
+        "receivedAt": null,
+        "closedAt": null,
+        "approvalRequest": {
+          "id": "72a61102-83ab-42d7-8994-b900e1025959",
+          "status": "PENDING",
+          "requestType": "STORE_TRANSFER",
+          "currentStep": 3,
+          "totalSteps": 3,
+          "accWorkflowVersionId": null,
+          "createdAt": "2026-05-18T14:00:19.793Z",
+          "resolvedAt": null
+        },
+        "approvalHistory": [
+          {
+            "stepNumber": 1,
+            "status": "APPROVED",
+            "requiredRole": "DEPT_MANAGER",
+            "actedBy": "209710ef-a9e0-4504-a8d2-b12eebee1afb",
+            "actedAt": "2026-05-18T14:00:56.929Z"
+          },
+          {
+            "stepNumber": 2,
+            "status": "APPROVED",
+            "requiredRole": "FINANCE_MANAGER",
+            "actedBy": "b825c833-eb64-489f-8b10-1860d44f9b35",
+            "actedAt": "2026-05-18T14:01:24.093Z"
+          },
+          {
+            "stepNumber": 3,
+            "status": "PENDING",
+            "requiredRole": "ADMIN",
+            "actedBy": null,
+            "actedAt": null
+          }
+        ],
+        "workflowVersionRef": null,
+        "ledger": [],
+        "ledgerCount": 0,
+        "stockMovementExists": false,
+        "stockBalanceImpact": "NONE",
+        "auditLogs": [
+          {
+            "action": "CREATE",
+            "note": "STORE_TRANSFER_CREATE transferNo=TRF-202605-0001",
+            "changedBy": "b4191e46-4d91-4aa0-b2a6-24e01c069558",
+            "changedAt": "2026-05-18T14:00:19.731Z"
+          },
+          {
+            "action": "SUBMIT",
+            "note": "STORE_TRANSFER_SUBMIT transferNo=TRF-202605-0001",
+            "changedBy": "b4191e46-4d91-4aa0-b2a6-24e01c069558",
+            "changedAt": "2026-05-18T14:00:19.889Z"
+          },
+          {
+            "action": "APPROVE",
+            "note": "STORE_TRANSFER_APPROVE_STEP transferNo=TRF-202605-0001 status=PENDING_FINANCE",
+            "changedBy": "209710ef-a9e0-4504-a8d2-b12eebee1afb",
+            "changedAt": "2026-05-18T14:00:56.962Z"
+          },
+          {
+            "action": "APPROVE",
+            "note": "STORE_TRANSFER_APPROVE_STEP transferNo=TRF-202605-0001 status=PENDING_FINAL",
+            "changedBy": "b825c833-eb64-489f-8b10-1860d44f9b35",
+            "changedAt": "2026-05-18T14:01:24.127Z"
+          }
+        ],
+        "auditCount": 4,
+        "relatedMovementIds": [],
+        "postingState": "NOT_STARTED",
+        "supersededByPostedSibling": "TRF-202605-0002",
+        "supersedeDetail": {
+          "siblingTransferNo": "TRF-202605-0002",
+          "siblingStatus": "POSTED",
+          "siblingCreatedAt": "2026-05-18T18:37:00.399Z",
+          "siblingReceivedAt": "2026-05-18T18:37:41.882Z",
+          "sameRoute": true,
+          "sameItemSet": true,
+          "sameRequestedQty": true,
+          "siblingLedgerRows": 2,
+          "siblingPostedStockForSameItems": true
+        },
+        "doublePostingRiskIfCompleted": "HIGH — a POSTED sibling already moved identical stock; completing/migrating this record would post the same movement twice.",
+        "missingReferences": [],
+        "analyticalClassification": {
+          "classification": "DUPLICATE_OR_SUPERSEDED",
+          "evidence": [
+            "A sibling transfer with identical source/dest/lines is already POSTED (TRF-202605-0002)."
+          ]
+        }
+      }
+    ]
+  },
+  "migrateFeasibility": {
+    "accTransferModuleExists": true,
+    "publishedTransferWorkflowVersionCount": 1,
+    "publishedTransferWorkflowVersions": [
+      {
+        "id": "1d7cf656-2ef6-4e5b-8131-a054b500adc3",
+        "versionNumber": 2,
+        "publishedAt": "2026-06-22T19:22:59.066Z"
+      }
+    ],
+    "pinnableVersion": true,
+    "notes": [
+      "A published ACC TRANSFER workflow version exists and is pinnable.",
+      "PENDING_FINAL is a legacy logistics status with no equivalent ACC approval step; the correct current step cannot be derived deterministically from status+date alone.",
+      "Application code never writes PENDING_FINAL (transfer.service only writes PENDING_DEPT and POSTED); such records are read-only (isTransferReadOnly=true) and cannot be advanced through the V2 flow."
+    ]
+  },
+  "activeRouteVerification": {
+    "transferRoutesMounted": true,
+    "mountPoint": "/api/transfers (src/routes/index.js → transfer.routes.js)",
+    "activeEndpoints": [
+      "POST /transfers (TRANSFER_CREATE)",
+      "POST /transfers/:id/submit",
+      "POST /transfers/:id/approve",
+      "POST /transfers/:id/reject",
+      "POST /transfers/:id/dispatch",
+      "POST /transfers/:id/receive",
+      "GET /transfers, GET /transfers/:id, GET /transfers/:id/evidence(/pdf)",
+      "PATCH/DELETE /transfers/:id (DRAFT only)"
+    ],
+    "legacyStatusPathActive": false,
+    "note": "Create/approve/post routes are ACTIVE for NEW transfers (V2: DRAFT→PENDING_DEPT→POSTED). However PENDING_FINAL is a legacy status the code never writes; such a record resolves as workflowGeneration=LEGACY and isTransferReadOnly=true, so it cannot be advanced/posted through the live V2 endpoints. Its only surfaces are the workflow pipeline/dashboard (as a legacy item) and the transfers list (Awaiting Posting bucket)."
+  },
+  "closeFeasibility": {
+    "note": "Options are analytical only — no new status is proposed and none is selected.",
+    "options": [
+      {
+        "option": "Reject with explicit legacy reason (status REJECTED)",
+        "stockImpact": "None (no ledger exists).",
+        "ledgerImpact": "None.",
+        "reports": "Appears as Rejected; removed from open/pipeline counts.",
+        "pipelineDashboard": "Drops out of TRANSFER_LEGACY_OPEN_STATUSES → disappears from pipeline & SLA breach.",
+        "auditability": "Preserved; adds an explicit REJECT audit with reason.",
+        "misleadingRisk": "Slight — \"Rejected\" implies a decision to refuse, whereas it was actually superseded/abandoned. Reason text must state \"superseded by TRF-202605-0002\"."
+      },
+      {
+        "option": "Void/Cancel with explicit legacy reason",
+        "stockImpact": "None.",
+        "ledgerImpact": "None.",
+        "pipelineDashboard": "Drops out of open statuses.",
+        "reports": "Shows as voided/cancelled historical record.",
+        "auditability": "Preserved with explicit reason.",
+        "misleadingRisk": "Low if reason references the superseding posted transfer. NOTE: TransferStatus enum has no VOID/CANCELLED value today (would require schema change — OUT OF SCOPE)."
+      },
+      {
+        "option": "Archive as non-operational historical record (leave status, exclude from open lists)",
+        "stockImpact": "None.",
+        "ledgerImpact": "None.",
+        "pipelineDashboard": "Requires removing PENDING_FINAL from TRANSFER_LEGACY_OPEN_STATUSES (code change) — affects only this legacy bucket.",
+        "reports": "Remains visible in history; hidden from operational queues.",
+        "auditability": "Fully preserved (no record mutation).",
+        "misleadingRisk": "Lowest — preserves exact history; but leaves a permanently \"PENDING_FINAL\" row that future readers may misread without the archive note."
+      },
+      {
+        "option": "Mark as manually resolved without stock impact",
+        "stockImpact": "None.",
+        "ledgerImpact": "None.",
+        "pipelineDashboard": "Drops out of open statuses once mapped to a terminal state.",
+        "reports": "Shows as resolved.",
+        "auditability": "Preserved with explicit manual-resolution note.",
+        "misleadingRisk": "Low with a clear note; needs a terminal state to map to."
+      }
+    ]
+  },
+  "codeReferenceInventory": [
+    {
+      "file": "OSE-backend/src/services/workflow-pipeline/workflow-pending.definitions.js",
+      "role": "SSOT for open-status predicates + SLA",
+      "statuses": "TRANSFER_LEGACY_OPEN_STATUSES = [SUBMITTED, PENDING_FINAL, APPROVED, IN_TRANSIT]; SLA_RULES.TRANSFER_LEGACY 24h/48h",
+      "includesPendingFinal": true,
+      "removableAfterResolution": true,
+      "kind": "Operational (pipeline/SLA)"
+    },
+    {
+      "file": "OSE-backend/src/services/workflow-pipeline/workflow-pipeline.collectors.js",
+      "role": "collectTransfers() surfaces legacy transfers in pipeline/dashboard with currentStep \"Legacy transfer — resolve via migration\"",
+      "statuses": "TRANSFER_PIPELINE_STATUSES (incl. legacy)",
+      "includesPendingFinal": true,
+      "removableAfterResolution": true,
+      "kind": "Operational (pipeline/dashboard)"
+    },
+    {
+      "file": "OSE-backend/src/services/transferWorkflow.util.js",
+      "role": "LEGACY_TRANSFER_STATUSES, resolveWorkflowGeneration (LEGACY), isTransferReadOnly (true), Awaiting-Posting/Pending-Review list buckets",
+      "statuses": "PENDING_FINAL classified LEGACY + AWAITING_POSTING",
+      "includesPendingFinal": true,
+      "removableAfterResolution": false,
+      "kind": "Operational (list display, read-only gating)"
+    },
+    {
+      "file": "OSE-backend/src/acc-authority/workflow-step-permissions.js",
+      "role": "TRANSFER_LEGACY_STATUSES gate for waiting-permission resolution",
+      "statuses": "incl. PENDING_FINAL",
+      "includesPendingFinal": true,
+      "removableAfterResolution": true,
+      "kind": "Operational (permission gating)"
+    },
+    {
+      "file": "OSE-backend/src/platform/lifecyclePresentation.service.js",
+      "role": "User-facing state mapping PENDING_FINAL → \"In Review\"",
+      "statuses": "PENDING_FINAL",
+      "includesPendingFinal": true,
+      "removableAfterResolution": false,
+      "kind": "Presentation"
+    },
+    {
+      "file": "OSE-backend/src/constants/governed-movement.constants.js",
+      "role": "Governed-movement status constant list includes PENDING_FINAL",
+      "statuses": "PENDING_FINAL",
+      "includesPendingFinal": true,
+      "removableAfterResolution": false,
+      "kind": "Constant"
+    },
+    {
+      "file": "OSE-backend/src/routes/transfer.routes.js + controllers/transfer.controller.js + services/transfer.service.js",
+      "role": "ACTIVE V2 transfer routes; never write PENDING_FINAL (only PENDING_DEPT/POSTED)",
+      "statuses": "V2",
+      "includesPendingFinal": false,
+      "removableAfterResolution": false,
+      "kind": "Operational (active routes)"
+    },
+    {
+      "file": "OSE-backend/scripts/assess-transfer-migration.js",
+      "role": "EXISTING migration/auto-post assessment script — CONTAINS WRITE PATHS (--apply-auto-post). NOT used by this read-only analysis.",
+      "statuses": "legacy set incl. PENDING_FINAL",
+      "includesPendingFinal": true,
+      "removableAfterResolution": false,
+      "kind": "Tooling (write-capable — excluded here)"
+    },
+    {
+      "file": "OSE-Frontend/src/app/core/models/enums.ts",
+      "role": "TransferStatus union includes PENDING_FINAL",
+      "statuses": "PENDING_FINAL",
+      "includesPendingFinal": true,
+      "removableAfterResolution": false,
+      "kind": "FE type"
+    },
+    {
+      "file": "OSE-Frontend/src/app/features/transfers/utils/transfer-workflow.helpers.ts",
+      "role": "LEGACY status set + workflowGeneration detection",
+      "statuses": "PENDING_FINAL (LEGACY)",
+      "includesPendingFinal": true,
+      "removableAfterResolution": false,
+      "kind": "FE display"
+    },
+    {
+      "file": "OSE-Frontend/src/app/features/transfers/utils/transfer-status-display.util.ts",
+      "role": "AWAITING_POSTING display mapping",
+      "statuses": "legacy → AWAITING_POSTING",
+      "includesPendingFinal": false,
+      "removableAfterResolution": false,
+      "kind": "FE display"
+    },
+    {
+      "file": "OSE-Frontend/src/app/features/movements/utils/movement-register-display.util.ts",
+      "role": "Movement register display incl. PENDING_FINAL → AWAITING_POSTING",
+      "statuses": "PENDING_FINAL",
+      "includesPendingFinal": true,
+      "removableAfterResolution": false,
+      "kind": "FE display"
+    }
+  ],
+  "unresolvedQuestions": [
+    "Business intent: was TRF-202605-0001 abandoned and deliberately re-created as TRF-202605-0002 (which posted the identical F&B Horizon→Store Floor 1, item 575826b3, qty 3)? Amr to confirm.",
+    "Preferred terminal representation for close: Reject-with-reason vs Archive vs a new terminal state (the latter needs a schema change and is out of the current read-only scope).",
+    "Whether PENDING_FINAL should be permanently removed from TRANSFER_LEGACY_OPEN_STATUSES after this single record is resolved (no other rows carry legacy-open statuses today)."
+  ],
+  "zeroWriteConfirmation": "ZERO DATABASE WRITES",
+  "explicitCloseExecution": {
+    "executedAt": "2026-07-02T17:53:32.991Z",
+    "verdict": "CLOSED — EXPLICITLY RESOLVED",
+    "terminalStatus": "REJECTED",
+    "auditAction": "CANCEL",
+    "evidenceFile": "TRANSFER_LEGACY_EXPLICIT_CLOSE_EVIDENCE.json"
+  },
+  "status": "CLOSED — EXPLICITLY RESOLVED"
+}

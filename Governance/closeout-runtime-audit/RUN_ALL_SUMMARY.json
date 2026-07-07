@@ -1,0 +1,1301 @@
+{
+  "executedAt": "2026-06-27T00:03:38.146Z",
+  "scriptOutcomes": [
+    {
+      "script": "00-seed-test-identities.js",
+      "exit": 0
+    },
+    {
+      "script": "00a-dept-stock-fixtures.js",
+      "exit": 0
+    },
+    {
+      "script": "00b-published-workflow-versions.js",
+      "exit": 0
+    },
+    {
+      "script": "00c-org-hierarchy-fixture.js",
+      "exit": 0
+    },
+    {
+      "script": "01-discover-environment.js",
+      "exit": 0
+    },
+    {
+      "script": "12-no-assign-investigation.js",
+      "exit": 1
+    },
+    {
+      "script": "12b-get-pass-workflow-config-audit.js",
+      "exit": 0
+    },
+    {
+      "script": "12c-cross-tenant-getpass-investigation.js",
+      "exit": 1
+    },
+    {
+      "script": "02-acc-operational-legacy.js",
+      "exit": 0
+    },
+    {
+      "script": "03-get-pass-permission-matrix.js",
+      "exit": 1
+    },
+    {
+      "script": "04-role-resource-scope.js",
+      "exit": 0
+    },
+    {
+      "script": "05-cross-tenant.js",
+      "exit": 1
+    },
+    {
+      "script": "06-workflow-runtime.js",
+      "exit": 1
+    },
+    {
+      "script": "09-grn-runtime.js",
+      "exit": 0
+    },
+    {
+      "script": "10-transfer-runtime.js",
+      "exit": 0
+    },
+    {
+      "script": "11-inventory-count-runtime.js",
+      "exit": 0
+    },
+    {
+      "script": "08-test-execution.js",
+      "exit": 0
+    },
+    {
+      "script": "07-constitution-mapping.js",
+      "exit": 0
+    }
+  ],
+  "harnessSummaries": [
+    {
+      "executedAt": "2026-06-27T00:00:06.530Z",
+      "script": "02-acc-operational-legacy",
+      "harnessExit": 0,
+      "counts": {
+        "PASS": 111,
+        "FAIL": 0,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 6
+      },
+      "total": 117,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": false,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {
+        "fixtureTag": "CLOSEOUT_RT_AUDIT",
+        "tenant": {
+          "slug": "grand-horizon",
+          "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        }
+      },
+      "scenarios": [
+        {
+          "id": "BL-CREATE-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 201,
+          "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+        },
+        {
+          "id": "BL-CREATE-DEPT_MANAGER_HK",
+          "result": "PASS",
+          "http": 201,
+          "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+        },
+        {
+          "id": "BL-CREATE-DEPT_CREATOR_FB",
+          "result": "PASS",
+          "http": 201,
+          "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+        },
+        {
+          "id": "BL-CREATE-STOREKEEPER",
+          "result": "PASS",
+          "http": 201,
+          "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+        },
+        {
+          "id": "BL-CREATE-FINANCE",
+          "result": "PASS",
+          "http": 201,
+          "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+        },
+        {
+          "id": "BL-CREATE-COST_CONTROL",
+          "result": "PASS",
+          "http": 403,
+          "interpretation": "PERMISSION_OR_SCOPE_DENIED"
+        },
+        {
+          "id": "BL-CREATE-GM",
+          "result": "PASS",
+          "http": 403,
+          "interpretation": "PERMISSION_OR_SCOPE_DENIED"
+        },
+        {
+          "id": "BL-CREATE-ORG_MANAGER",
+          "result": "PASS",
+          "http": 201,
+          "interpretation": "HIGH_LEVEL_AUTO_APPROVE_ALL_STEPS"
+        },
+        {
+          "id": "BL-CREATE-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403,
+          "interpretation": "PERMISSION_OR_SCOPE_DENIED"
+        },
+        {
+          "id": "LOST-CREATE-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 201
+        },
+        {
+          "id": "LOST-CREATE-STOREKEEPER",
+          "result": "PASS",
+          "http": 201
+        },
+        {
+          "id": "LOST-CREATE-FINANCE",
+          "result": "PASS",
+          "http": 201
+        },
+        {
+          "id": "LOST-CREATE-GM",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-dept-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-dept-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-dept-COST_CONTROL",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-dept-FINANCE",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-dept-GM",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-dept-ORG_MANAGER",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-dept-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-cost-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-cost-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-cost-COST_CONTROL",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-cost-FINANCE",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-cost-GM",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-cost-ORG_MANAGER",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-cost-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-finance-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-finance-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-finance-COST_CONTROL",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-finance-FINANCE",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-finance-GM",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-finance-ORG_MANAGER",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-finance-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-gm-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-gm-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-gm-COST_CONTROL",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-gm-FINANCE",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-gm-GM",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-gm-ORG_MANAGER",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_BREAKAGE-approve-gm-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-dept-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-dept-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-dept-COST_CONTROL",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-dept-FINANCE",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-dept-GM",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-dept-ORG_MANAGER",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-dept-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-finance-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-finance-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-finance-COST_CONTROL",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-finance-FINANCE",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-finance-GM",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-finance-ORG_MANAGER",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-finance-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-gm-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-gm-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-gm-COST_CONTROL",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-gm-FINANCE",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-gm-GM",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-gm-ORG_MANAGER",
+          "result": "PASS",
+          "http": 400
+        },
+        {
+          "id": "LEG-INTERNAL_LOST-approve-gm-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-dept-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-dept-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-dept-COST_CONTROL",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-dept-FINANCE",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-dept-GM",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-dept-ORG_MANAGER",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-dept-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-cost-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-cost-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-cost-COST_CONTROL",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-cost-FINANCE",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-cost-GM",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-cost-ORG_MANAGER",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-cost-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-finance-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-finance-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-finance-COST_CONTROL",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-finance-FINANCE",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-finance-GM",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-finance-ORG_MANAGER",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-finance-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-gm-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-gm-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-gm-COST_CONTROL",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-gm-FINANCE",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-gm-GM",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-gm-ORG_MANAGER",
+          "result": "PASS",
+          "http": 409
+        },
+        {
+          "id": "LEG-ACC_BREAKAGE-approve-gm-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-dept-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-dept-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-dept-COST_CONTROL",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-dept-FINANCE",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-dept-GM",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-dept-ORG_MANAGER",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-dept-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-finance-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-finance-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-finance-COST_CONTROL",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-finance-FINANCE",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-finance-GM",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-finance-ORG_MANAGER",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-finance-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-gm-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-gm-STOREKEEPER",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-gm-COST_CONTROL",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-gm-FINANCE",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-gm-GM",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-gm-ORG_MANAGER",
+          "result": "PASS",
+          "http": 423
+        },
+        {
+          "id": "LEG-ACC_LOST-approve-gm-SUPER_ADMIN_OP",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "GP-FF-DEPT_MANAGER_FB",
+          "result": "NOT_APPLICABLE",
+          "reason": "STALE_WORKFLOW_CONFIGURATION",
+          "http": 200
+        },
+        {
+          "id": "GP-FF-FINANCE",
+          "result": "NOT_APPLICABLE",
+          "reason": "STALE_WORKFLOW_CONFIGURATION",
+          "http": 200
+        },
+        {
+          "id": "GP-FF-GM",
+          "result": "NOT_APPLICABLE",
+          "reason": {
+            "reason": "CREATE_FORBIDDEN_FOR_ROLE",
+            "http": 403
+          }
+        },
+        {
+          "id": "GP-FF-ORG_MANAGER",
+          "result": "NOT_APPLICABLE",
+          "reason": "STALE_WORKFLOW_CONFIGURATION",
+          "http": 200
+        },
+        {
+          "id": "GP-FF-SUPER_ADMIN_OP",
+          "result": "NOT_APPLICABLE",
+          "reason": {
+            "reason": "CREATE_FORBIDDEN_FOR_ROLE",
+            "http": 403
+          }
+        },
+        {
+          "id": "GP-FF-COST_CONTROL",
+          "result": "NOT_APPLICABLE",
+          "reason": "STALE_WORKFLOW_CONFIGURATION",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "executedAt": "2026-06-27T00:00:17.099Z",
+      "script": "03-get-pass-permission-matrix",
+      "harnessExit": 1,
+      "counts": {
+        "PASS": 10,
+        "FAIL": 8,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "total": 18,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": false,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {},
+      "scenarios": [
+        {
+          "id": "GP-PERM-submit-AUDITOR",
+          "result": "PASS",
+          "http": 403,
+          "note": "PERMISSION_DENIED_NO_MUTATION"
+        },
+        {
+          "id": "GP-PERM-submit-NO_ASSIGN",
+          "result": "FAIL",
+          "http": 200,
+          "note": "AUTHORIZATION_BYPASS"
+        },
+        {
+          "id": "GP-PERM-submit-DEPT_MANAGER_FB",
+          "result": "PASS",
+          "http": 200,
+          "note": "ALLOWED"
+        },
+        {
+          "id": "GP-PERM-submit-FINANCE",
+          "result": "PASS",
+          "http": 200,
+          "note": "ALLOWED"
+        },
+        {
+          "id": "GP-PERM-submit-COST_CONTROL",
+          "result": "PASS",
+          "http": 200,
+          "note": "ALLOWED"
+        },
+        {
+          "id": "GP-PERM-submit-GM",
+          "result": "FAIL",
+          "http": 403,
+          "note": "UNEXPECTED_DENY"
+        },
+        {
+          "id": "GP-PERM-approve-AUDITOR",
+          "result": "PASS",
+          "http": 403,
+          "note": "PERMISSION_DENIED_NO_MUTATION"
+        },
+        {
+          "id": "GP-PERM-approve-NO_ASSIGN",
+          "result": "PASS",
+          "http": 403,
+          "note": "PERMISSION_DENIED_NO_MUTATION"
+        },
+        {
+          "id": "GP-PERM-approve-DEPT_MANAGER_FB",
+          "result": "FAIL",
+          "http": 403,
+          "note": "UNEXPECTED_DENY"
+        },
+        {
+          "id": "GP-PERM-approve-FINANCE",
+          "result": "FAIL",
+          "http": 403,
+          "note": "UNEXPECTED_DENY"
+        },
+        {
+          "id": "GP-PERM-approve-COST_CONTROL",
+          "result": "PASS",
+          "http": 200,
+          "note": "ALLOWED"
+        },
+        {
+          "id": "GP-PERM-approve-GM",
+          "result": "FAIL",
+          "http": 403,
+          "note": "UNEXPECTED_DENY"
+        },
+        {
+          "id": "GP-PERM-reject-AUDITOR",
+          "result": "PASS",
+          "http": 403,
+          "note": "PERMISSION_DENIED_NO_MUTATION"
+        },
+        {
+          "id": "GP-PERM-reject-NO_ASSIGN",
+          "result": "PASS",
+          "http": 403,
+          "note": "PERMISSION_DENIED_NO_MUTATION"
+        },
+        {
+          "id": "GP-PERM-reject-DEPT_MANAGER_FB",
+          "result": "FAIL",
+          "http": 403,
+          "note": "UNEXPECTED_DENY"
+        },
+        {
+          "id": "GP-PERM-reject-FINANCE",
+          "result": "FAIL",
+          "http": 403,
+          "note": "UNEXPECTED_DENY"
+        },
+        {
+          "id": "GP-PERM-reject-COST_CONTROL",
+          "result": "PASS",
+          "http": 200,
+          "note": "ALLOWED"
+        },
+        {
+          "id": "GP-PERM-reject-GM",
+          "result": "FAIL",
+          "http": 403,
+          "note": "UNEXPECTED_DENY"
+        }
+      ]
+    },
+    {
+      "executedAt": "2026-06-27T00:00:19.667Z",
+      "script": "04-role-resource-scope",
+      "harnessExit": 0,
+      "counts": {
+        "PASS": 13,
+        "FAIL": 0,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "total": 13,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": false,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {},
+      "scenarios": [
+        {
+          "id": "SCOPE-breakage-DEPT_MANAGER_FB-LIST",
+          "result": "PASS",
+          "listCount": 0
+        },
+        {
+          "id": "SCOPE-breakage-DEPT_MANAGER_FB-FOREIGN-READ",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "SCOPE-breakage-DEPT_MANAGER_HK-LIST",
+          "result": "PASS",
+          "listCount": 0
+        },
+        {
+          "id": "SCOPE-breakage-DEPT_MANAGER_HK-FOREIGN-READ",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "SCOPE-breakage-FINANCE-LIST",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "SCOPE-items-DEPT_MANAGER_FB-LIST",
+          "result": "PASS",
+          "listCount": 11
+        },
+        {
+          "id": "SCOPE-items-DEPT_MANAGER_HK-LIST",
+          "result": "PASS",
+          "listCount": 11
+        },
+        {
+          "id": "SCOPE-items-FINANCE-LIST",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "SCOPE-locations-DEPT_MANAGER_FB-LIST",
+          "result": "PASS",
+          "listCount": 1
+        },
+        {
+          "id": "SCOPE-locations-DEPT_MANAGER_FB-FOREIGN-READ",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "SCOPE-locations-DEPT_MANAGER_HK-LIST",
+          "result": "PASS",
+          "listCount": 1
+        },
+        {
+          "id": "SCOPE-locations-DEPT_MANAGER_HK-FOREIGN-READ",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "SCOPE-locations-FINANCE-LIST",
+          "result": "PASS",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "executedAt": "2026-06-27T00:00:22.034Z",
+      "script": "05-cross-tenant",
+      "harnessExit": 1,
+      "counts": {
+        "PASS": 24,
+        "FAIL": 4,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 1
+      },
+      "total": 29,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": true,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {},
+      "scenarios": [
+        {
+          "id": "XT-A-LIST-items",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "XT-A-READ-B-items",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-WRONG-TENANT-items",
+          "result": "PASS",
+          "http": 404
+        },
+        {
+          "id": "XT-B-READ-A-items",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-LIST-breakage",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "XT-A-READ-B-breakage",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-WRONG-TENANT-breakage",
+          "result": "PASS",
+          "http": 404
+        },
+        {
+          "id": "XT-A-MUT-B-breakage",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-B-READ-A-breakage",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-LIST-getPass",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "XT-A-READ-B-getPass",
+          "result": "FAIL",
+          "http": 500,
+          "leak": "UNEXPECTED_500"
+        },
+        {
+          "id": "XT-A-WRONG-TENANT-getPass",
+          "result": "FAIL",
+          "http": 500
+        },
+        {
+          "id": "XT-A-MUT-B-getPass",
+          "result": "FAIL",
+          "http": 500,
+          "leak": "UNEXPECTED_500"
+        },
+        {
+          "id": "XT-B-READ-A-getPass",
+          "result": "FAIL",
+          "http": 500,
+          "leak": "UNEXPECTED_500"
+        },
+        {
+          "id": "XT-A-LIST-grn",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "XT-A-READ-B-grn",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-WRONG-TENANT-grn",
+          "result": "PASS",
+          "http": 404
+        },
+        {
+          "id": "XT-B-READ-A-grn",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-LIST-transfers",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "XT-A-READ-B-transfers",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-WRONG-TENANT-transfers",
+          "result": "PASS",
+          "http": 404
+        },
+        {
+          "id": "XT-B-READ-A-transfers",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-LIST-inventoryCount",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "XT-A-READ-B-inventoryCount",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-WRONG-TENANT-inventoryCount",
+          "result": "PASS",
+          "http": 404
+        },
+        {
+          "id": "XT-B-READ-A-inventoryCount",
+          "result": "PASS",
+          "http": 404,
+          "leak": null
+        },
+        {
+          "id": "XT-A-LIST-audit",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "XT-A-LIST-reports",
+          "result": "NOT_APPLICABLE",
+          "http": 404
+        },
+        {
+          "id": "XT-A-LIST-dashboard",
+          "result": "PASS",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "executedAt": "2026-06-27T00:00:23.997Z",
+      "script": "06-workflow-runtime",
+      "harnessExit": 1,
+      "counts": {
+        "PASS": 4,
+        "FAIL": 1,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "total": 5,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": false,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {},
+      "scenarios": [
+        {
+          "id": "WF-BRK-CREATE",
+          "result": "PASS",
+          "http": 201
+        },
+        {
+          "id": "WF-BRK-WRONG-ROLE",
+          "result": "PASS",
+          "http": 403
+        },
+        {
+          "id": "WF-BRK-CC-APPROVE",
+          "result": "FAIL",
+          "http": 409
+        },
+        {
+          "id": "WF-GP-CREATE",
+          "result": "PASS",
+          "http": 201
+        },
+        {
+          "id": "WF-GP-SUBMIT",
+          "result": "PASS",
+          "http": 200
+        }
+      ]
+    },
+    {
+      "executedAt": "2026-06-27T00:00:26.359Z",
+      "script": "09-grn-runtime",
+      "harnessExit": 0,
+      "counts": {
+        "PASS": 6,
+        "FAIL": 0,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "total": 6,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": false,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {},
+      "scenarios": [
+        {
+          "id": "GRN-LIST",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "GRN-READ",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "GRN-SUBMIT",
+          "result": "PASS",
+          "http": 409,
+          "note": "lifecycle_or_perm"
+        },
+        {
+          "id": "GRN-APPROVE-CC",
+          "result": "PASS",
+          "http": 409,
+          "note": "lifecycle_or_perm"
+        },
+        {
+          "id": "GRN-REJECT-WRONG",
+          "result": "PASS",
+          "http": 409,
+          "note": "lifecycle_or_perm"
+        },
+        {
+          "id": "GRN-NO-PERM",
+          "result": "PASS",
+          "http": 403
+        }
+      ]
+    },
+    {
+      "executedAt": "2026-06-27T00:00:29.553Z",
+      "script": "10-transfer-runtime",
+      "harnessExit": 0,
+      "counts": {
+        "PASS": 5,
+        "FAIL": 0,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "total": 5,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": false,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {},
+      "scenarios": [
+        {
+          "id": "TR-CREATE",
+          "result": "PASS",
+          "http": 201
+        },
+        {
+          "id": "TR-SUBMIT",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "TR-DEPT-APPROVE",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "TR-FINANCE-APPROVE",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "TR-NO-PERM",
+          "result": "PASS",
+          "http": 403
+        }
+      ]
+    },
+    {
+      "executedAt": "2026-06-27T00:00:32.023Z",
+      "script": "11-inventory-count-runtime",
+      "harnessExit": 0,
+      "counts": {
+        "PASS": 6,
+        "FAIL": 0,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 1
+      },
+      "total": 7,
+      "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+      "hadUnexpected500": false,
+      "missingFixtures": [],
+      "missingIdentities": [],
+      "meta": {},
+      "scenarios": [
+        {
+          "id": "IC-CREATE",
+          "result": "PASS",
+          "http": 201
+        },
+        {
+          "id": "IC-START",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "IC-COUNT-LINES",
+          "result": "PASS",
+          "lines": 1
+        },
+        {
+          "id": "IC-SUBMIT-COUNTS",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "IC-SUBMIT-APPROVAL",
+          "result": "PASS",
+          "http": 200
+        },
+        {
+          "id": "IC-FINANCE-APPROVE",
+          "result": "NOT_APPLICABLE",
+          "http": 403
+        },
+        {
+          "id": "IC-NO-PERM",
+          "result": "PASS",
+          "http": 403
+        }
+      ]
+    }
+  ],
+  "harnessExit": 1,
+  "note": "Exit 0 = all scripts finished with no FAIL/BLOCKED/NOT_EXECUTED/missing fixture/identity. Not system PASS."
+}

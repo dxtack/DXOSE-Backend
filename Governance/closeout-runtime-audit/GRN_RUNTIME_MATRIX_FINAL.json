@@ -1,0 +1,158 @@
+{
+  "executedAt": "2026-06-27T00:49:52.290Z",
+  "round": 7,
+  "checklist": [
+    "Create",
+    "Validate",
+    "Submit",
+    "Cost Control approval",
+    "Send Back",
+    "Edit",
+    "Resubmit",
+    "Finance approval",
+    "Reject path",
+    "Posting",
+    "Duplicate submit",
+    "Duplicate approve",
+    "Duplicate posting",
+    "Wrong role",
+    "No permission",
+    "No assignment",
+    "Inactive assignment",
+    "Other property",
+    "Out of scope",
+    "Stale JWT",
+    "Concurrent approval",
+    "Timeline",
+    "Audit",
+    "Ledger RECEIVE",
+    "Stock",
+    "WAC"
+  ],
+  "covered": [
+    "Cost Control approval",
+    "Create",
+    "Duplicate submit",
+    "Finance approval",
+    "No assignment",
+    "Posting",
+    "Reject path",
+    "Send Back",
+    "Submit",
+    "Validate",
+    "Wrong role"
+  ],
+  "missing": [
+    "Edit",
+    "Resubmit",
+    "Duplicate approve",
+    "Duplicate posting",
+    "No permission",
+    "Inactive assignment",
+    "Other property",
+    "Out of scope",
+    "Stale JWT",
+    "Concurrent approval",
+    "Timeline",
+    "Audit",
+    "Ledger RECEIVE",
+    "Stock",
+    "WAC"
+  ],
+  "passCount": 10,
+  "failCount": 3,
+  "results": [
+    {
+      "checklistItem": "Validate",
+      "id": "GRN-VALIDATE",
+      "http": 200,
+      "message": null,
+      "pass": true
+    },
+    {
+      "checklistItem": "Submit",
+      "id": "GRN-SUBMIT",
+      "http": 200,
+      "message": null,
+      "pass": true
+    },
+    {
+      "checklistItem": "Cost Control approval",
+      "id": "GRN-CC",
+      "http": 200,
+      "message": null,
+      "pass": true
+    },
+    {
+      "checklistItem": "Finance approval",
+      "id": "GRN-FIN",
+      "http": 200,
+      "message": null,
+      "pass": true
+    },
+    {
+      "checklistItem": "Posting",
+      "id": "GRN-POST",
+      "http": 422,
+      "message": "GRN must be awaiting Finance approval. Current status: POSTED",
+      "pass": true,
+      "stockDelta": 0
+    },
+    {
+      "checklistItem": "Send Back",
+      "id": "GRN-SB",
+      "http": 200,
+      "message": null,
+      "pass": true
+    },
+    {
+      "checklistItem": "Reject path",
+      "id": "GRN-REJ",
+      "http": 200,
+      "message": null,
+      "pass": true
+    },
+    {
+      "checklistItem": "No assignment",
+      "id": "GRN-NO-ASSIGN",
+      "http": 403,
+      "message": "Access denied. Insufficient permissions.",
+      "pass": true
+    },
+    {
+      "checklistItem": "Wrong role",
+      "id": "GRN-WR",
+      "http": 403,
+      "message": "Access denied. Insufficient permissions.",
+      "pass": true
+    },
+    {
+      "checklistItem": "Duplicate submit",
+      "id": "GRN-DUP-SUB",
+      "http": 422,
+      "message": "GRN must be VALIDATED to submit. Current status: PENDING_APPROVAL",
+      "pass": true
+    },
+    {
+      "checklistItem": "Inactive assignment",
+      "id": "GRN-INACTIVE",
+      "http": 401,
+      "message": "Authentication required. Please provide a valid token.",
+      "pass": false
+    },
+    {
+      "checklistItem": "Stale JWT",
+      "id": "GRN-STALE",
+      "http": 401,
+      "message": "Session expired. Please login again.",
+      "pass": false
+    },
+    {
+      "checklistItem": "Duplicate approve",
+      "id": "GRN-DUP-APR",
+      "http": 200,
+      "message": null,
+      "pass": false
+    }
+  ]
+}

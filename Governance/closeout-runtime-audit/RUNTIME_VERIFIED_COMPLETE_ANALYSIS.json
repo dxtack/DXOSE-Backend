@@ -1,0 +1,13 @@
+{
+  "executedAt": "2026-06-27T00:50:01.150Z",
+  "runtimeVerifiedCompleteCount": 0,
+  "conclusion": "Generator does not promote any requirement to Runtime Verified Complete — no requirement has full multi-module runtime proof for all applicable modules",
+  "reasons": [
+    "Upgrade rule requires all applicable modules tested and PASS — most requirements map to multiple modules but harness links single-module probes only",
+    "Partial requirements retain Partial status even when one module PASS (e.g. GRN only) because GetPass/Transfer/IC gaps remain on same ID",
+    "Failed Runtime and Governance Conflict IDs block promotion of related requirements"
+  ],
+  "partialCount": 61,
+  "notRunCount": 148,
+  "upgradeEligibleNone": 0
+}

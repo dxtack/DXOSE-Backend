@@ -1,0 +1,211 @@
+{
+  "executedAt": "2026-06-27T00:54:31.362Z",
+  "feCwd": "C:\\DX-OSE-Frontend",
+  "nodeVersion": "v25.6.0",
+  "rows": [
+    {
+      "file": "scripts/verify-grn-create-runtime.mjs",
+      "module": "GRN",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/verify-grn-create-runtime.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "scripts/verify-grn-detail-timeline-phase4.mjs",
+      "module": "GRN",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/verify-grn-detail-timeline-phase4.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "scripts/verify-grn-create-excel-layout.mjs",
+      "module": "GRN",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/verify-grn-create-excel-layout.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 1,
+      "result": "FAIL",
+      "rootCause": "\nlocator.click: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('.grn-create-page__tabs .ant-tabs-tab').nth(1)\n    - locator resolved to <div class=\"ant-tabs-tab\">…</div>\n  - attempting click action\n    2 × waiting for element to be visible, enabled and stable\n      - element is visible,",
+      "finalClassification": "FAIL"
+    },
+    {
+      "file": "scripts/verify-phase5-detail-timeline.mjs",
+      "module": "Transfer",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/verify-phase5-detail-timeline.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "scripts/verify-phase6-detail-timeline.mjs",
+      "module": "Breakage/Lost",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/verify-phase6-detail-timeline.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "scripts/verify-phase7-detail-timeline.mjs",
+      "module": "GetPass",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/verify-phase7-detail-timeline.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "scripts/measure-inventory-count-workspace-spacing.mjs",
+      "module": "InventoryCount",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/measure-inventory-count-workspace-spacing.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "scripts/measure-inventory-count-detail-spacing.mjs",
+      "module": "InventoryCount",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/measure-inventory-count-detail-spacing.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "scripts/capture-acc-overview-screenshot.mjs",
+      "module": "ACC",
+      "nodeVersion": "v25.6.0",
+      "command": "node scripts/capture-acc-overview-screenshot.mjs",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 1,
+      "result": "FAIL",
+      "rootCause": "\nlocator.waitFor: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator('#acc-overview-kpi-title') to be visible\n\n    at main (C:\\DX OS&E\\OSE-Frontend\\scripts\\capture-acc-overview-screenshot.mjs:37:49) {\n  log: [\n    \"  - waiting for locator('#acc-overview-kpi-title') to be visible\"\n  ],\n  nam",
+      "finalClassification": "FAIL"
+    },
+    {
+      "file": "src/app/features/grn/utils/grn-detail-timeline.util.spec.ts",
+      "module": "GRN",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/features/grn/utils/grn-detail-timeline.util.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "src/app/shared/utils/timeline-entry-render.util.spec.ts",
+      "module": "Shared",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/shared/utils/timeline-entry-render.util.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-list-display.util.spec.ts",
+      "module": "GetPass",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/features/get-pass/utils/get-pass-list-display.util.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-line-outcome.util.spec.ts",
+      "module": "GetPass",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/features/get-pass/utils/get-pass-line-outcome.util.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "src/app/core/directives/has-permission.directive.spec.ts",
+      "module": "Shared",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/core/directives/has-permission.directive.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 1,
+      "result": "FAIL",
+      "rootCause": "\n RUN  v4.1.0 C:/DX-OSE-Frontend\n\n ❯ src/app/core/directives/has-permission.directive.spec.ts (0 test)\n\n Test Files  1 failed (1)\n      Tests  no tests\n   Start at  03:54:17\n   Duration  1.48s (transform 341ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)\n\n\n\n⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯\n\n FA",
+      "finalClassification": "FAIL"
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-return-validation.spec.ts",
+      "module": "GetPass",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/features/get-pass/utils/get-pass-return-validation.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 0,
+      "result": "PASS",
+      "rootCause": null,
+      "finalClassification": "Harness PASS"
+    },
+    {
+      "file": "src/app/app.spec.ts",
+      "module": "Shared",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/app.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 1,
+      "result": "FAIL",
+      "rootCause": "\n RUN  v4.1.0 C:/DX-OSE-Frontend\n\n ❯ src/app/app.spec.ts (0 test)\n\n Test Files  1 failed (1)\n      Tests  no tests\n   Start at  03:54:23\n   Duration  534ms (transform 75ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)\n\n\nstderr | src/app/app.spec.ts\nJIT compilation failed for injectable [class ",
+      "finalClassification": "FAIL"
+    },
+    {
+      "file": "src/app/features/grn/grn-detail/grn-detail.component.spec.ts",
+      "module": "GRN",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/features/grn/grn-detail/grn-detail.component.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 1,
+      "result": "FAIL",
+      "rootCause": "Angular TestBed",
+      "finalClassification": "Test Environment Defect"
+    },
+    {
+      "file": "src/app/shared/components/returns-workflow-timeline/returns-workflow-timeline.component.spec.ts",
+      "module": "Shared",
+      "nodeVersion": "v25.6.0",
+      "command": "npx vitest run src/app/shared/components/returns-workflow-timeline/returns-workflow-timeline.component.spec.ts",
+      "cwd": "C:\\DX-OSE-Frontend",
+      "exit": 1,
+      "result": "FAIL",
+      "rootCause": "\n RUN  v4.1.0 C:/DX-OSE-Frontend\n\n ❯ src/app/shared/components/returns-workflow-timeline/returns-workflow-timeline.component.spec.ts (0 test)\n\n Test Files  1 failed (1)\n      Tests  no tests\n   Start at  03:54:30\n   Duration  577ms (transform 102ms, setup 0ms, import 0ms, tests 0ms, environment 0ms)",
+      "finalClassification": "FAIL"
+    }
+  ],
+  "summary": {
+    "totalFiles": 18,
+    "pass": 12,
+    "fail": 6,
+    "testEnvFail": 1
+  }
+}

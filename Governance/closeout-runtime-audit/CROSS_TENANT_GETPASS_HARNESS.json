@@ -1,0 +1,35 @@
+{
+  "executedAt": "2026-06-27T00:04:18.525Z",
+  "script": "12c-cross-tenant-getpass",
+  "harnessExit": 1,
+  "counts": {
+    "PASS": 0,
+    "FAIL": 3,
+    "BLOCKED": 0,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 3,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": true,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "XT-GP-READ-B",
+      "result": "FAIL",
+      "http": 500
+    },
+    {
+      "id": "XT-GP-WRONG-HDR",
+      "result": "FAIL",
+      "http": 500
+    },
+    {
+      "id": "XT-GP-READ-A",
+      "result": "FAIL",
+      "http": 500
+    }
+  ]
+}

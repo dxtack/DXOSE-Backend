@@ -1,0 +1,55 @@
+{
+  "executedAt": "2026-06-27T17:09:38.017Z",
+  "gate_c_regression_probe": true,
+  "backend": {
+    "getPass_same_tenant": { "status": "Passed", "scenario": "GC-XT-001", "http": 200 },
+    "getPass_cross_tenant": { "status": "Passed", "scenario": "RS-XT-001 / GC-XT-002", "http": 404, "note": "Was HTTP 500 before remediation" },
+    "getPass_permission_denial": { "status": "Passed", "scenario": "GC-XT-004", "http": 401 },
+    "getPass_service_unit_tests": {
+      "status": "Pre-existing failures",
+      "command": "node --test src/services/getPass.service.test.js",
+      "note": "3 tests fail on validatePostingDate mock (unrelated to FIND-002); not introduced by Gate C"
+    },
+    "gate_b_runtime_rerun": {
+      "status": "Partial",
+      "passed": 5,
+      "failed": 1,
+      "failed_scenario": "RS-WF-001 (breakage create 403 — pre-existing ACC/scope, out of Gate C scope)",
+      "rs_xt_001": "Passed HTTP 404"
+    }
+  },
+  "frontend": {
+    "lost_items_list_detail_api": { "status": "Passed", "scenarios": ["GC-LI-001", "GC-LI-002"] },
+    "lost_items_templates_no_raw_status": {
+      "status": "Passed",
+      "grep": "LOST_ITEMS.STATUS only in lost-items-status-display.util.ts (internal i18n lookup, not user-facing fallback)"
+    },
+    "keyboard_nav_wiring": {
+      "status": "Passed",
+      "applicable_shells": 7,
+      "wired_shells": 7,
+      "verification": "Static grep of appKeyboardNav imports + production build"
+    },
+    "production_build": {
+      "status": "Passed",
+      "command": "npm run build",
+      "output": "OSE-Frontend/dist/OSE"
+    },
+    "enter_does_not_submit": {
+      "status": "Passed",
+      "verification": "Directive code: Enter prevented on buttons; submitIntent guard; textarea exempt"
+    }
+  },
+  "cross_module": {
+    "shared_mapper_side_effects": "None — constitutionUserFacingStateLabel used only in lost-items util",
+    "keyboard_directive_side_effects": "None — adoption limited to 7 document shells"
+  },
+  "gate_artifacts_unchanged": {
+    "gate_a_register_sha256": "BBAA877C60C92D47920AFE16D67B77E613BA2AFECA8A1514D61797E77338AAE9",
+    "gate_b_closeout_summary_sha256": "2D152A877136E550CCF15DC3A64C7252FA6F101EE5D9BA7C7D372394B13F8A17",
+    "gate_b_findings_sha256": "7B76D95EBE6C2224A392A415945558B5C7E9796DF6ED25A9D154B538726C813A",
+    "gate_b_matrix_sha256": "59E3EAD6260905902D7E595E99D3E0FBFBA91D32413682D47B731CCF33B1E838",
+    "role_permission_fallback_sha256": "0DBCE02D4A32E29164F96A84FD21190093E655B2ACBBFCE8B783AC565E98CDD9",
+    "note": "GATE_B_RUNTIME_RESULTS.json refreshed by regression re-run; closeout decision artifacts unchanged"
+  }
+}

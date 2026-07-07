@@ -1,0 +1,159 @@
+{
+  "executedAt": "2026-06-27T17:08:48.264Z",
+  "gate": "Gate C Remediation",
+  "tenant": {
+    "slug": "grand-horizon",
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+  },
+  "createdDocs": [],
+  "cleanupNote": "Documents tagged CLOSEOUT_RT_AUDIT / gate-c retained for audit trace",
+  "counts": {
+    "Passed": 7,
+    "Failed": 0,
+    "Blocked": 0
+  },
+  "counting_correction": {
+    "note": "Superseded by GATE_C_FINAL_RUNTIME_RESULTS.json for final verification",
+    "unique_gate_c_scenarios": 7,
+    "regression_scenarios": 0,
+    "missing_in_this_file": ["GC-XT-006", "GC-LI-003", "RS-XT-001"]
+  },
+  "scenarios": [
+    {
+      "scenario_id": "GC-XT-001",
+      "finding_id": "FIND-002",
+      "description": "Same tenant + authorized + valid Get Pass ID → success",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "user": "finance@grandhorizon.com",
+        "role": "FINANCE_MANAGER",
+        "endpoint": "GET /get-passes/b97380fd-5323-44a5-8388-fcf209e46d20",
+        "http": 200,
+        "hasData": true
+      },
+      "executed_at": "2026-06-27T17:08:48.264Z"
+    },
+    {
+      "scenario_id": "GC-XT-002",
+      "finding_id": "FIND-002",
+      "description": "Foreign tenant + existing Get Pass ID → safe non-500 denial",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "currentTenant": "grand-horizon",
+        "foreignTenant": "dx-airport-hotel",
+        "targetId": "e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+        "endpoint": "GET /get-passes/e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+        "http": 404,
+        "body": {
+          "success": false,
+          "message": "Get Pass not found."
+        },
+        "foreignFieldsDisclosed": false
+      },
+      "executed_at": "2026-06-27T17:08:48.264Z"
+    },
+    {
+      "scenario_id": "GC-XT-003",
+      "finding_id": "FIND-002",
+      "description": "Random nonexistent Get Pass ID → safe response (no 500)",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "targetId": "7db158f8-41e5-4672-98fc-b726ac9b1b18",
+        "endpoint": "GET /get-passes/7db158f8-41e5-4672-98fc-b726ac9b1b18",
+        "http": 404,
+        "body": {
+          "success": false,
+          "message": "Get Pass not found."
+        },
+        "matchesExistingDenial": true
+      },
+      "executed_at": "2026-06-27T17:08:48.264Z"
+    },
+    {
+      "scenario_id": "GC-XT-004",
+      "finding_id": "FIND-002",
+      "description": "Unauthenticated Get Pass read → safe denial",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "user": "unauthenticated",
+        "endpoint": "GET /get-passes/b97380fd-5323-44a5-8388-fcf209e46d20",
+        "http": 401,
+        "body": {
+          "success": false,
+          "message": "Authentication required. Please provide a valid token."
+        }
+      },
+      "executed_at": "2026-06-27T17:08:48.264Z"
+    },
+    {
+      "scenario_id": "GC-XT-005",
+      "finding_id": "FIND-002",
+      "description": "Cross-tenant response must not contain foreign document fields",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "targetId": "e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+        "http": 404,
+        "foreignFieldsDisclosed": false
+      },
+      "executed_at": "2026-06-27T17:08:48.264Z"
+    },
+    {
+      "scenario_id": "GC-LI-001",
+      "finding_id": "FIND-001",
+      "description": "Lost Items list API exposes userFacingState for status presentation",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "http": 200,
+        "sampleCount": 5,
+        "samples": [
+          {
+            "id": "fb3cd0b4-7a30-4dfc-9271-5080ec7eb29c",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "4102ba06-b27f-4dd5-94b3-6e3c5008a6d1",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "05c0f38d-bf82-466f-8700-43587348eedf",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "573e0846-0773-45d3-b125-f110ce88a82e",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "a884f37c-64e0-4e6e-9fe3-9bcce31502fc",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          }
+        ]
+      },
+      "executed_at": "2026-06-27T17:08:48.264Z"
+    },
+    {
+      "scenario_id": "GC-LI-002",
+      "finding_id": "FIND-001",
+      "description": "Lost Items detail API exposes userFacingState",
+      "status": "Passed",
+      "tenant": "grand-horizon",
+      "detail": {
+        "id": "fb3cd0b4-7a30-4dfc-9271-5080ec7eb29c",
+        "http": 200,
+        "status": "APPROVED",
+        "userFacingState": "Posted"
+      },
+      "executed_at": "2026-06-27T17:08:48.264Z"
+    }
+  ]
+}

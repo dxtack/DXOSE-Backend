@@ -1,0 +1,2004 @@
+{
+  "executedAt": "2026-06-27T00:22:52.128Z",
+  "totalScenarios": 226,
+  "scenariosPerResource": {
+    "items": 27,
+    "departments": 27,
+    "categories": 9,
+    "units": 9,
+    "suppliers": 9,
+    "locations": 27,
+    "movements": 9,
+    "inventoryCount": 9,
+    "grn": 9,
+    "transfer": 9,
+    "breakage": 9,
+    "lost": 9,
+    "getPass": 9,
+    "ledger": 9,
+    "stock": 9,
+    "inventoryHistory": 9,
+    "reports": 9,
+    "workflowPipeline": 9,
+    "dashboard": 9
+  },
+  "roles": 11,
+  "resources": 19,
+  "matrix": [
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 1,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 1,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_FB",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 1,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 1,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 13,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_MANAGER_HK",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 1,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 1,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "DEPT_CREATOR_FB",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 25,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "STOREKEEPER",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 25,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "FINANCE",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 25,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "COST_CONTROL",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "GM",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "GM",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "GM",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "GM",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "GM",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "GM",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "ORG_MANAGER",
+      "error": "login_failed"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 5,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 25,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 20,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "AUDITOR",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 11,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_own_id",
+      "http": 200,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "operation": "read_foreign_dept_id",
+      "http": 200,
+      "result": "ALLOWED_CROSS"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_own_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "departments",
+      "policy": "Property reference",
+      "operation": "read_foreign_dept_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "categories",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 6,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "units",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 10,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 3,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_own_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "operation": "read_foreign_dept_id",
+      "http": 403,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "operation": "list",
+      "http": 403,
+      "returnedCount": 0,
+      "result": "DENIED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "operation": "list",
+      "http": 404,
+      "returnedCount": 0,
+      "result": "HTTP_404"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 50,
+      "result": "ALLOWED"
+    },
+    {
+      "role": "NO_ASSIGN",
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "operation": "list",
+      "http": 200,
+      "returnedCount": 0,
+      "result": "ALLOWED"
+    }
+  ]
+}

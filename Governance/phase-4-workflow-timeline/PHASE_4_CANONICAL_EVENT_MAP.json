@@ -1,0 +1,28 @@
+{
+  "generatedAt": "2026-06-28T09:10:00.000Z",
+  "canonicalLabels": {
+    "SUBMIT_FOR_APPROVAL": { "userFacing": "Submitted", "i18nKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL", "badgeKey": "TIMELINE.STATUS.SUBMITTED" },
+    "APPROVAL_STEP_COMPLETED": { "userFacing": "Approved", "badgeKey": "TIMELINE.STATUS.APPROVED" },
+    "SEND_BACK": { "userFacing": "Sent Back", "i18nKey": "TIMELINE.LIFECYCLE.SEND_BACK", "badgeKey": "TIMELINE.STATUS.SENT_BACK", "notReturned": true },
+    "RESUBMIT": { "userFacing": "Resubmitted", "i18nKey": "TIMELINE.LIFECYCLE.RESUBMIT", "badgeKey": "TIMELINE.STATUS.RESUBMITTED" },
+    "REJECT": { "userFacing": "Rejected", "i18nKey": "TIMELINE.LIFECYCLE.REJECT", "badgeKey": "TIMELINE.STATUS.REJECTED" },
+    "POSTING": { "userFacing": "Posted", "i18nKey": "TIMELINE.STAGE.POSTED_COMPLETED", "badgeKey": "TIMELINE.STATUS.POSTED" },
+    "CANCEL": { "userFacing": "Cancelled", "i18nKey": "TIMELINE.LIFECYCLE.CANCEL" },
+    "VOID": { "userFacing": "Voided", "lifecycleState": "Void" },
+    "SECURITY_OUT": { "userFacing": "Checked Out", "i18nKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED" },
+    "RETURN_PROCESSED": { "userFacing": "Returned", "i18nKey": "TIMELINE.STAGE.RETURN_PROCESSED_COMPLETED", "physicalOnly": true },
+    "DRAFT_SEND_BACK_STATE": { "userFacing": "Sent Back", "lifecycleState": "Sent Back", "previousBug": "Returned" }
+  },
+  "separationRules": [
+    "Sent Back (workflow) MUST NOT use Returned label",
+    "Physical Get Pass return MUST NOT use Sent Back label",
+    "Resubmitted MUST NOT collapse into initial Submitted",
+    "Posted MUST NOT display as generic Completed when POSTING entry exists"
+  ],
+  "metaLabels": {
+    "timelineTitle": "Workflow Timeline",
+    "actorPrefix": "By",
+    "reasonPrefix": "Reason:",
+    "previousActorLabel": "Acted by"
+  }
+}

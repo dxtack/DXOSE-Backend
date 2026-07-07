@@ -1,0 +1,14 @@
+{
+  "total": 393,
+  "sum": 393,
+  "statusCounts": {
+    "Runtime Verified Complete": 0,
+    "Static Verified — appropriate for static requirement": 168,
+    "Partial": 61,
+    "Not Run": 148,
+    "Failed Runtime": 6,
+    "Governance Conflict": 10,
+    "Not Applicable": 0
+  },
+  "generatorNote": "Runtime Verified Complete requires multi-module proof per requirement — most remain Partial until full linkage"
+}

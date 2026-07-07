@@ -1,0 +1,131 @@
+{
+  "generatedAt": "2026-06-27T18:45:21.850Z",
+  "checklist": [
+    {
+      "item": "Product tree identity (manifest)",
+      "result": "FAIL",
+      "note": "Only 3 Gate C file SHA256 captured at closure; keyboard-navigation.directive.ts modified post–Gate C browser remediation; full product tree untracked in git — byte-exact tree match not provable.",
+      "evidence": "Governance/runtime-revalidation/PRODUCT_MANIFEST.json"
+    },
+    {
+      "item": "Gate C API regression (accepted closed — not re-run)",
+      "result": "PASS",
+      "note": "10/10 per Gate C closure",
+      "evidence": "Governance/gate-c-remediation/GATE_C_FINAL_RUNTIME_RESULTS.json"
+    },
+    {
+      "item": "Gate C keyboard / lost status / build (accepted closed)",
+      "result": "PASS",
+      "note": "Not re-run in v2 per instruction",
+      "evidence": "Governance/gate-c-remediation/"
+    },
+    {
+      "item": "GP never-assigned submit denied",
+      "scenarioId": "V2-CF-GP-NEVER-SUBMIT",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-CF-GP-NEVER-SUBMIT"
+    },
+    {
+      "item": "GP assignment scope v2 (independent docs + DB snap)",
+      "scenarioId": "V2-A-*",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-A-NEVER-SUBMIT"
+    },
+    {
+      "item": "GP cross-tenant read 404",
+      "scenarioId": "V2-CF-GP-XT-READ",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-CF-GP-XT-READ"
+    },
+    {
+      "item": "Workflow pipeline never-assigned scope (disposable DB proof)",
+      "scenarioId": "V2-B-*",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-B-NEVER-LIST"
+    },
+    {
+      "item": "Effective GET_PASS workflow via runtime resolver",
+      "scenarioId": "V2-C-WF-EFFECTIVE",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/GP_EFFECTIVE_WORKFLOW_V2.json"
+    },
+    {
+      "item": "Finance creator GP fast-forward (FAIL not PASS)",
+      "scenarioId": "V2-CF-GP-FF-FINANCE",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-CF-GP-FF-FINANCE"
+    },
+    {
+      "item": "ORG_MANAGER creator GP fast-forward",
+      "scenarioId": "V2-CF-GP-FF-ORG",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-CF-GP-FF-ORG"
+    },
+    {
+      "item": "Lost legacy /approve-dept",
+      "scenarioId": "V2-CF-LEG-LOST-DEPT",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-CF-LEG-LOST-DEPT"
+    },
+    {
+      "item": "GRN send-back full cycle (validate+submit)",
+      "scenarioId": "V2-D-GRN-SUBMIT-AFTER-SB",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-D-GRN-SUBMIT-AFTER-SB"
+    },
+    {
+      "item": "GRN /resubmit backend dead vs FE",
+      "scenarioId": "V2-CF-GRN-RESUBMIT-DEAD",
+      "result": "PASS",
+      "evidence": "OSE-Frontend/src/app/features/grn/services/grn.service.ts:137"
+    },
+    {
+      "item": "Breakage/Lost full workflow + posting",
+      "scenarioId": "V2-E-*",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-E-BRK-FINAL"
+    },
+    {
+      "item": "Reports financial visibility for completed docs",
+      "scenarioId": "V2-F-*",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-F-RPT-POSTED-IN"
+    },
+    {
+      "item": "Movements authorized create/post/idempotency",
+      "scenarioId": "V2-G-CREATE",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-G-POST"
+    },
+    {
+      "item": "Movements property scope denial",
+      "scenarioId": "V2-G-WRONG-SCOPE",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-G-WRONG-SCOPE"
+    },
+    {
+      "item": "Send-back/return cross-module",
+      "scenarioId": "V2-H-*",
+      "result": "BLOCKED",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-H-TRANSFER-RETURN"
+    },
+    {
+      "item": "Requisition excluded from pipeline",
+      "scenarioId": "V2-I-REQ-PIPELINE",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V2_RESULTS.json#V2-I-REQ-PIPELINE"
+    },
+    {
+      "item": "393-requirement full matrix runtime closure",
+      "scenarioId": "REQ-393",
+      "result": "BLOCKED",
+      "note": "148 Not Run in CONSTITUTION_STATUS_COUNTS SSOT",
+      "evidence": "Governance/closeout-runtime-audit/CONSTITUTION_STATUS_COUNTS.json"
+    }
+  ],
+  "summary": {
+    "FAIL": 10,
+    "PASS": 8,
+    "BLOCKED": 2
+  }
+}

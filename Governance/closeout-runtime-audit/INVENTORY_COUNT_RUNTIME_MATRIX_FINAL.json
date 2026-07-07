@@ -1,0 +1,133 @@
+{
+  "executedAt": "2026-06-27T00:55:30.980Z",
+  "round": 7,
+  "sessionId": "dca4dcc2-5818-4fab-8b99-f7dccf2e68e0",
+  "checklist": [
+    "Session create",
+    "Snapshot",
+    "Count",
+    "Variance",
+    "Recount",
+    "Submit",
+    "Every approval step",
+    "Positive adjustment",
+    "Negative adjustment",
+    "Concurrent movement",
+    "Wrong role",
+    "No permission",
+    "No assignment",
+    "Inactive assignment",
+    "Wrong property",
+    "Out of scope",
+    "Duplicate posting",
+    "Timeline",
+    "Audit",
+    "Ledger",
+    "Balance reconciliation"
+  ],
+  "covered": [
+    "Session create",
+    "Snapshot",
+    "Count",
+    "Submit",
+    "Variance",
+    "Every approval step",
+    "Duplicate posting",
+    "No assignment"
+  ],
+  "missing": [
+    "Recount",
+    "Positive adjustment",
+    "Negative adjustment",
+    "Concurrent movement",
+    "Wrong role",
+    "No permission",
+    "Inactive assignment",
+    "Wrong property",
+    "Out of scope",
+    "Timeline",
+    "Audit",
+    "Ledger",
+    "Balance reconciliation"
+  ],
+  "results": [
+    {
+      "checklistItem": "Session create",
+      "id": "IC-CREATE",
+      "http": 201,
+      "pass": true
+    },
+    {
+      "checklistItem": "Snapshot",
+      "id": "IC-START",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "checklistItem": "Submit",
+      "id": "IC-SUBMIT-COUNTS",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "checklistItem": "Variance",
+      "id": "IC-VARIANCE",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "checklistItem": "Every approval step",
+      "id": "IC-SUBMIT-APPROVAL",
+      "http": 200,
+      "pass": true
+    },
+    {
+      "checklistItem": "Every approval step",
+      "id": "IC-APPROVE-CC",
+      "http": 403,
+      "pass": true
+    },
+    {
+      "checklistItem": "Every approval step",
+      "id": "IC-APPROVE-FIN",
+      "http": 403,
+      "pass": true
+    },
+    {
+      "checklistItem": "Ledger",
+      "id": "IC-POST",
+      "http": 404,
+      "pass": false
+    },
+    {
+      "checklistItem": "Duplicate posting",
+      "id": "IC-DUP-POST",
+      "http": 404,
+      "pass": true
+    },
+    {
+      "checklistItem": "No assignment",
+      "id": "IC-NO-ASSIGN",
+      "http": 403,
+      "pass": true
+    },
+    {
+      "checklistItem": "Inactive assignment",
+      "id": "IC-INACTIVE",
+      "http": 401,
+      "pass": false
+    },
+    {
+      "checklistItem": "Stale JWT",
+      "id": "IC-STALE",
+      "http": 401,
+      "pass": false
+    },
+    {
+      "checklistItem": "Balance reconciliation",
+      "id": "IC-BAL-SNAPSHOT",
+      "pass": true,
+      "qtyOnHand": "3"
+    }
+  ]
+}

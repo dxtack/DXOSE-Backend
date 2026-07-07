@@ -1,0 +1,551 @@
+{
+  "generatedAt": "2026-06-28T15:31:31.619Z",
+  "fixtureTag": "PHASE5_DETAIL_GATE",
+  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+  "tenantSlug": "closeout-audit-hotel-disposable",
+  "actors": {
+    "orgManager": "p5-org_manager-org@phase5-detail-gate.local",
+    "storekeeper": "p5-storekeeper-sk@phase5-detail-gate.local",
+    "deptManager": "p5-dept_manager-dm@phase5-detail-gate.local",
+    "costControl": "p5-cost_control-cc@phase5-detail-gate.local",
+    "financeManager": "p5-finance_manager-fin@phase5-detail-gate.local",
+    "generalManager": "p5-general_manager-gm@phase5-detail-gate.local",
+    "noAssign": "p5-finance_manager-noassign@phase5-detail-gate.local",
+    "viewOnly": "p5-auditor-view@phase5-detail-gate.local",
+    "inactiveAssign": "p5-dept_manager-inactive@phase5-detail-gate.local",
+    "wrongProperty": "p5-dept_manager-wrongprop@phase5-detail-gate.local",
+    "deletedAssign": "p5-dept_manager-deleted@phase5-detail-gate.local"
+  },
+  "transfer": {
+    "draft": {
+      "id": "a3dfba10-006c-4009-afd7-7a27db1934e9",
+      "http": 200,
+      "documentNo": "TRF-2026-00439",
+      "status": "DRAFT",
+      "userFacingState": "Draft",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": 1,
+          "unitCost": 0,
+          "totalValue": 0
+        }
+      ],
+      "scenario": "DRAFT"
+    },
+    "pendingDept": {
+      "id": "0f410abb-e648-47f8-a009-9981abdc909b",
+      "http": 200,
+      "documentNo": "TRF-2026-00440",
+      "status": "PENDING_DEPT",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": 1,
+          "unitCost": 0,
+          "totalValue": 0
+        }
+      ],
+      "scenario": "PENDING_DEPT"
+    },
+    "pendingFinance": {
+      "id": "6a715575-823d-48ec-b85a-9b71c80fc2a3",
+      "http": 200,
+      "documentNo": "TRF-2026-00441",
+      "status": "PENDING_FINANCE",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": 1,
+          "unitCost": 0,
+          "totalValue": 0
+        }
+      ],
+      "scenario": "PENDING_FINANCE"
+    },
+    "posted": {
+      "id": "42d4e3e5-58bd-4674-90ba-46d990017fb6",
+      "http": 200,
+      "documentNo": "TRF-2026-00442",
+      "status": "POSTED",
+      "userFacingState": "Posted",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": 1,
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "POSTED",
+      "ledgerRows": 2,
+      "stockSource": 499
+    },
+    "rejected": {
+      "id": "432e7afb-70c1-4a08-9b6e-b0b0cba505ac",
+      "http": 200,
+      "documentNo": "TRF-2026-00443",
+      "status": "REJECTED",
+      "userFacingState": "Rejected",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": 1,
+          "unitCost": 0,
+          "totalValue": 0
+        }
+      ],
+      "scenario": "REJECTED"
+    },
+    "draftDelete": {
+      "id": "16985fc2-25d5-41ad-bfa2-0f994a2fc039",
+      "http": 200,
+      "documentNo": "TRF-2026-00444",
+      "status": "DRAFT",
+      "userFacingState": "Draft",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": 1,
+          "unitCost": 0,
+          "totalValue": 0
+        }
+      ],
+      "scenario": "DRAFT_DELETE"
+    },
+    "pendingFinanceReject": {
+      "id": "c86c7b09-3015-4a35-9523-72b96efe2552",
+      "http": 200,
+      "documentNo": "TRF-2026-00445",
+      "status": "PENDING_FINANCE",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": 1,
+          "unitCost": 0,
+          "totalValue": 0
+        }
+      ],
+      "scenario": "PENDING_FINANCE_REJECT"
+    }
+  },
+  "breakage": {
+    "draft": {
+      "id": "31f171fe-ac38-4901-9738-74065233eb0e",
+      "http": 200,
+      "documentNo": "BRK-2026-00664",
+      "status": "DRAFT",
+      "userFacingState": "Draft",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "DRAFT"
+    },
+    "draftSubmit": {
+      "id": "4aef3a21-bcd8-4bcd-8036-6890fe57c7f1",
+      "http": 200,
+      "documentNo": "BRK-2026-00665",
+      "status": "DRAFT",
+      "userFacingState": "Draft",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "DRAFT_SUBMIT"
+    },
+    "pendingCostControl": {
+      "id": "9a9507e2-80e5-4dac-99e6-86f3e10b41ab",
+      "http": 200,
+      "documentNo": "BRK-2026-00666",
+      "status": "DEPT_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "PENDING_COST_CONTROL"
+    },
+    "pendingCostControlReject": {
+      "id": "b57cdc62-b9ff-4e47-a5a2-fa57707cb0bf",
+      "http": 200,
+      "documentNo": "BRK-2026-00667",
+      "status": "DEPT_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "PENDING_CC_REJECT"
+    },
+    "approved": {
+      "id": "587c0d47-dc5e-4844-8511-6f6bd9ebe291",
+      "http": 200,
+      "documentNo": "BRK-2026-00668",
+      "status": "APPROVED",
+      "userFacingState": "Posted",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "APPROVED",
+      "ledgerRows": 1
+    },
+    "pendingFinance": {
+      "id": "8ea2f8b4-6e3e-4132-85a3-4411073dffa7",
+      "http": 200,
+      "documentNo": "BRK-2026-00669",
+      "status": "COST_CONTROL_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "PENDING_FINANCE"
+    },
+    "pendingGm": {
+      "id": "33889c1d-9f4f-4e12-94bb-c05baf9b3f08",
+      "http": 200,
+      "documentNo": "BRK-2026-00670",
+      "status": "FINANCE_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "PENDING_GM"
+    },
+    "rejected": {
+      "id": "9549a5ca-46be-4149-bfcc-8ead32eb6cc0",
+      "http": 200,
+      "documentNo": "BRK-2026-00671",
+      "status": "REJECTED",
+      "userFacingState": "Rejected",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "REJECTED"
+    },
+    "void": {
+      "id": "fa9953cd-8f35-40f1-a397-83ab2d37e0db",
+      "http": 200,
+      "documentNo": "BRK-2026-00672",
+      "status": "VOID",
+      "userFacingState": "Void",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "VOID"
+    }
+  },
+  "lost": {
+    "deptApproved": {
+      "id": "770fb3e5-f613-478d-99ff-a67a8a2c526b",
+      "http": 200,
+      "documentNo": "LST-2026-00482",
+      "status": "DEPT_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "DEPT_APPROVED"
+    },
+    "deptApprovedReject": {
+      "id": "27f43d49-785f-4ad2-aeca-7006bb8e76b0",
+      "http": 200,
+      "documentNo": "LST-2026-00483",
+      "status": "DEPT_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "DEPT_APPROVED_REJECT"
+    },
+    "pendingFinance": {
+      "id": "9bad1902-9d49-4ef2-a567-9536031961fc",
+      "http": 200,
+      "documentNo": "LST-2026-00484",
+      "status": "COST_CONTROL_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "PENDING_FINANCE"
+    },
+    "pendingGm": {
+      "id": "83280d8e-3e83-4dac-a67e-ac299ad964f9",
+      "http": 200,
+      "documentNo": "LST-2026-00485",
+      "status": "FINANCE_APPROVED",
+      "userFacingState": "In Review",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "PENDING_GM"
+    },
+    "approvedEmployee": {
+      "id": "89f80fe2-8bfc-4cfa-88f2-d90ffd46cb10",
+      "http": 200,
+      "documentNo": "LST-2026-00486",
+      "status": "APPROVED",
+      "userFacingState": "Posted",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "APPROVED_EMPLOYEE"
+    },
+    "approvedHotel": {
+      "id": "c9026ccc-2ce0-4857-9280-dfd673ea81d4",
+      "http": 200,
+      "documentNo": "LST-2026-00487",
+      "status": "APPROVED",
+      "userFacingState": "Posted",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "APPROVED_HOTEL"
+    },
+    "rejected": {
+      "id": "475bed74-daab-43a7-90ae-def41e6aec97",
+      "http": 200,
+      "documentNo": "LST-2026-00488",
+      "status": "REJECTED",
+      "userFacingState": "Rejected",
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5,
+      "lines": [
+        {
+          "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+          "qty": "1",
+          "unitCost": 5,
+          "totalValue": 5
+        }
+      ],
+      "scenario": "REJECTED"
+    }
+  },
+  "crossTenant": {
+    "foreignTransferId": "1d61ecaa-e9cc-47d1-a75e-af1101f21069",
+    "expectedStatus": 404
+  },
+  "outOfScope": {
+    "scopedUserEmail": "p5-dept_manager-scoped@phase5-detail-gate.local",
+    "transfer": {
+      "id": "01475038-c70f-4fda-90ab-1f31143fa0eb",
+      "http": 403
+    },
+    "breakage": {
+      "id": "9c8e664c-2a1f-4918-bc06-1ab273e5a55c",
+      "http": 403
+    },
+    "lost": {
+      "id": "c295071a-6055-4026-bb53-deb5995951a8",
+      "http": 403
+    },
+    "expectedStatus": 403
+  },
+  "browserFlows": {
+    "transferPost": {
+      "id": "095f501c-26f9-4ca0-9525-8f1b3085f3d7",
+      "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+      "sourceLocationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+      "destLocationId": "1ab25f08-8733-40d3-b732-62e57e06c6dd",
+      "qty": 1,
+      "stockBefore": {
+        "source": {
+          "qtyOnHand": 496,
+          "totalQtyDamage": 89,
+          "totalQtyLost": 174
+        },
+        "dest": {
+          "qtyOnHand": 51,
+          "totalQtyDamage": 0,
+          "totalQtyLost": 0
+        }
+      }
+    },
+    "breakageApprove": {
+      "pendingCcId": "a1ae6c56-1c45-40b6-8d27-21ca05b1e44f",
+      "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+      "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+      "qty": 1,
+      "stockBefore": {
+        "qtyOnHand": 496,
+        "totalQtyDamage": 89,
+        "totalQtyLost": 174
+      }
+    },
+    "breakageVoidDraft": {
+      "draftId": "b85dbb38-ef8a-45a3-8fd7-7062a285de0d"
+    },
+    "breakageVoidRejected": {
+      "rejectedId": "255c6242-819d-4630-839a-8091df69e046"
+    },
+    "lostChain": {
+      "deptApprovedId": "3a972ad4-0fdc-44f3-b4c6-a8f82b589c8b",
+      "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+      "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+      "qty": 1
+    },
+    "lostChainHotel": {
+      "deptApprovedId": "5236967f-e750-4b8b-8a59-5ae13a3efcc7",
+      "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+      "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+      "qty": 1
+    },
+    "lostReject": {
+      "deptApprovedId": "2cfb5aef-e999-4bb8-af5a-96e16c6918e7"
+    },
+    "transferReject": {
+      "pendingFinanceId": "e1016e41-6d2b-42ba-8243-59ff709715c0"
+    },
+    "breakageReject": {
+      "pendingCcId": "a0882a72-07d8-4eaa-afde-38717a9686e9"
+    }
+  },
+  "negativeActors": {
+    "noAssign": "p5-finance_manager-noassign@phase5-detail-gate.local",
+    "inactiveAssign": "p5-dept_manager-inactive@phase5-detail-gate.local",
+    "wrongProperty": "p5-dept_manager-wrongprop@phase5-detail-gate.local",
+    "deletedAssign": "p5-dept_manager-deleted@phase5-detail-gate.local",
+    "viewOnly": "p5-auditor-view@phase5-detail-gate.local"
+  }
+}

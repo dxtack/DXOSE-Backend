@@ -1,0 +1,120 @@
+{
+  "archive_version": "Gate A.3",
+  "archive_path": "C:\\DX OS&E\\Governance\\constitution-extraction\\_archive\\GATE_A_3_20260627T154826Z",
+  "archived_at": "2026-06-27T15:48:26Z",
+  "file_count": 14,
+  "files": [
+    {
+      "file_name": "CONSTITUTION_EXTRACTION_SOURCE.json",
+      "file_size_bytes": 602,
+      "sha256": "D22AE61B14B24840332AB351D2E4AFEE5A48D284F5B4957AB05909F01F03A830",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_EXTRACTION_VALIDATION.json",
+      "file_size_bytes": 2053,
+      "sha256": "99CAAA80E9A6A4D31EA2C49E234CABFB89407323A613578E1BBA95922EA97624",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_FRESH_REGISTER.csv",
+      "file_size_bytes": 241858,
+      "sha256": "5323044D09835CB80B5EF9B5F79E6560C7C3C88C3CD8976416B3E35D47B2E957",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_FRESH_REGISTER.md",
+      "file_size_bytes": 50427,
+      "sha256": "9BCB13F81DD27378E8626907FDBDBF76DBE562C81089B189913848687B0D3F84",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_GOVERNANCE_REQUIREMENTS.csv",
+      "file_size_bytes": 24184,
+      "sha256": "4047233E15A04D676F17C4EF9EFE8E1C882ED9137BF907EAAAB311A292161FD7",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_PRODUCT_REQUIREMENTS.csv",
+      "file_size_bytes": 74236,
+      "sha256": "352DEFEE8EA245358C7B17F1A43BFEB1F231E31EE72FDE337D7812980405AC02",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_SOURCE_FIDELITY.json",
+      "file_size_bytes": 466,
+      "sha256": "3A3E42AE3041F07710283B16DCE1B411B3C16C1A9E58CEAC99CD0DFA5E429699",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_STRONG_RECOMMENDATIONS.csv",
+      "file_size_bytes": 1016,
+      "sha256": "49183553BC592048496577C6A4A889AD5CF069EDE1FC0100170BD4BE7DA39DEE",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CONSTITUTION_UX_QA_REQUIREMENTS.csv",
+      "file_size_bytes": 25561,
+      "sha256": "E51BBD6ED57BE737D90A9A37DFC9EA64B5E2A195D8A48672CD72CD2511033926",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "CURRENT_GATE_A_VERSION.json",
+      "file_size_bytes": 840,
+      "sha256": "B34269F032B3A1A856829987347D4CBD90BBD85F126F32C365D665BF74557A09",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "GATE_A_CHAPTER_REVIEW_SAMPLES.md",
+      "file_size_bytes": 9453,
+      "sha256": "CFEE2DFD8A6D4926FF962FC36E0A48A71E8A45E8C96E8114C7B98CCE22686D34",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "GATE_A_FILE_INTEGRITY.json",
+      "file_size_bytes": 7123,
+      "sha256": "0DED174EA7E1FE5D3E4D02CE036B1BE65C9A6720365AC87A211A06B0AAE83760",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "GATE_A_ID_MIGRATION.json",
+      "file_size_bytes": 10180,
+      "sha256": "43E918CB93F988EE8558FCB43A86ADD79A370B7948C19068432E01FD68801DE4",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    },
+    {
+      "file_name": "GATE_A_MD_REPRODUCTION.json",
+      "file_size_bytes": 169,
+      "sha256": "024BE490277685F4FE2D024920538326A2F3A514DA424A9B3917E1426AB7A626",
+      "source_gate": "Gate A.3",
+      "archived_at": "2026-06-27T15:48:26Z",
+      "archive_reason": "Snapshot before Gate A FINAL adjudication apply"
+    }
+  ]
+}

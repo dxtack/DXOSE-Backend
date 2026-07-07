@@ -1,0 +1,477 @@
+fresh_id,status,method,reason,probes
+C1-1.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C1-1.1-002,PASS,evidence_based_probes,,governance-docs-exist
+C1-1.1-003,PASS,evidence_based_probes,,governance-docs-exist
+C1-1.1-004,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C1-1.1-005,PASS,evidence_based_probes,,governance-docs-exist
+C1-1.2-001,PASS,evidence_based_probes,,governance-docs-exist
+C1-1.2-002,PASS,evidence_based_probes,,governance-docs-exist
+C1-1.2-003,PASS,evidence_based_probes,,governance-docs-exist
+C1-1.2-004,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.2-005,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.2-006,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.2-007,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.2-008,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.2-009,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.2-010,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C1-1.3-002,PASS,evidence_based_probes,,governance-docs-exist
+C1-1.4-001,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.4-002,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.4-003,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.4-004,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.4-005,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C1-1.4-006,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C1-1.4-007,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C1-1.4-008,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C1-1.4-009,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.5-001,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C1-1.5-002,NOT APPLICABLE,category_verification,Authoring guidance for constitution maintenance,
+C1-1.5-003,NOT APPLICABLE,category_verification,Authoring guidance for constitution maintenance,
+C2-2.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,lifecycle-presentation|lifecycle-mapper-fe
+C2-2.1-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.1-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.1-004,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C2-2.1-005,FAIL,evidence_based_probes,,lost-items-raw-status
+C2-2.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,lifecycle-presentation|lifecycle-mapper-fe
+C2-2.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-these
+C2-2.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-introduce
+C2-2.2-004,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C2-2.2-005,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-006,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-007,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-008,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C2-2.2-009,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-010,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-011,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-012,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-013,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.2-014,NOT APPLICABLE,category_verification,Excluded pending ratification,
+C2-2.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,lifecycle-presentation|lifecycle-mapper-fe
+C2-2.3-002,FAIL,evidence_based_probes,,lost-items-raw-status
+C2-2.3-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-identical
+C2-2.4.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.4.1-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-operational
+C2-2.4.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.4.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-operational
+C2-2.4.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.4.3-002,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C2-2.4.4-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.4.4-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.4.4-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.4.5-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.4.5-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-governed
+C2-2.6-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.6-002,UNVERIFIED / BLOCKED,evidence_based_probes,,draft-governance
+C2-2.6-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-business
+C2-2.6-004,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.6-005,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-enters
+C2-2.7-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.7-002,UNVERIFIED / BLOCKED,evidence_based_probes,,no-resubmit-route|no-resubmit-service
+C2-2.7-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.7-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-after
+C2-2.7-005,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.8-001,PASS,evidence_based_probes,,timeline-service
+C2-2.9-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.9-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.9-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C2-2.10-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C3-3.1-001,FAIL,evidence_based_probes,,keyword-users
+C3-3.1-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-action
+C3-3.1-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-invent
+C3-3.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.2-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-alternative
+C3-3.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.3-002,FAIL,evidence_based_probes,,acc-guard|authorize
+C3-3.4-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.4-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.4-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.4-004,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C3-3.4-005,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-there
+C3-3.6-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C3-3.7-001,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C3-3.7-002,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C3-3.8-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C4-4.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,acc-guard|authorize
+C4-4.1-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C4-4.2-001,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-002,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-003,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-004,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-005,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-006,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-007,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-008,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-009,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-010,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-011,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-012,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-013,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-014,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-015,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-016,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-017,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C4-4.2-018,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C4-4.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,acc-guard|authorize
+C4-4.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-permissions
+C4-4.3-003,FAIL,evidence_based_probes,,acc-guard|authorize
+C4-4.3-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-modules
+C4-4.4-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C5-5.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C5-5.1-002,PASS,evidence_based_probes,,keyword-posting
+C5-5.1-003,FAIL,evidence_based_probes,,posting-service|db-posted-trigger
+C5-5.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-before
+C5-5.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-before
+C5-5.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-before
+C5-5.2-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-before
+C5-5.2-005,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-before
+C5-5.2-006,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-final
+C5-5.2-007,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-transaction
+C5-5.2-008,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-atomicity
+C5-5.2-009,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-posting
+C5-5.2-010,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-posting
+C5-5.2-011,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-final
+C5-5.2-012,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-additional
+C5-5.2-013,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-posting
+C5-5.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C5-5.3-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C5-5.3-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C5-5.4-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C6-6.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.1-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.2-002,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C6-6.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,period-guard
+C6-6.3-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.3-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.3-004,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.3-005,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-posting
+C6-6.4-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.4-002,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C6-6.5-001,PASS,evidence_based_probes,,period-guard
+C6-6.5-002,PASS,evidence_based_probes,,keyword-future
+C6-6.5-003,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C6-6.5-004,UNVERIFIED / BLOCKED,evidence_based_probes,,period-guard
+C6-6.5-005,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.5-006,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-periods
+C6-6.5-007,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.5-008,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-modules
+C6-6.5-009,PARTIAL,evidence_based_probes,,posting-service|db-posted-trigger|period-guard
+C6-6.6-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.6-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.6-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.6-004,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.6-005,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.6-006,UNVERIFIED / BLOCKED,evidence_based_probes,,period-guard
+C6-6.6-007,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.7-001,PASS,evidence_based_probes,,keyword-prevent
+C6-6.8-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C6-6.9-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C7-7.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-these
+C7-7.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-every
+C7-7.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C7-7.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-define
+C7-7.4-002,PASS,evidence_based_probes,,keyword-access
+C7-7.4-003,PASS,evidence_based_probes,,keyword-ownership
+C7-7.4-004,PASS,evidence_based_probes,,keyword-handling
+C7-7.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,concurrency-svc
+C7-7.6-001,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C7-7.6-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C7-7.7-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-occur
+C7-7.7-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C7-7.8-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-recovered
+C7-7.8-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-restored
+C7-7.8-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-recovery
+C7-7.8-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-saved
+C7-7.9-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-draft
+C7-7.9-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-default
+C7-7.9-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-expiration
+C7-7.10-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C7-7.10-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C7-7.11-001,UNVERIFIED / BLOCKED,evidence_based_probes,,doc-numbering
+C7-7.12-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C7-7.13-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C8-8.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C8-8.2-001,PASS,evidence_based_probes,,concurrency-svc
+C8-8.2-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C8-8.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,concurrency-svc
+C8-8.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-except
+C8-8.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-draft
+C8-8.7-001,UNVERIFIED / BLOCKED,evidence_based_probes,,concurrency-svc
+C8-8.8-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-reject
+C8-8.8-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-overwrite
+C8-8.8-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-require
+C8-8.8-004,UNVERIFIED / BLOCKED,evidence_based_probes,,concurrency-svc
+C8-8.9-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C8-8.9-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C8-8.10-001,UNVERIFIED / BLOCKED,evidence_based_probes,,concurrency-svc
+C8-8.11-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C9-9.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C9-9.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C9-9.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-users
+C9-9.2-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C9-9.2-004,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C9-9.2-005,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C9-9.3-001,PASS,evidence_based_probes,,keyword-uniqueness
+C9-9.3-002,PASS,evidence_based_probes,,doc-numbering
+C9-9.3-003,PASS,evidence_based_probes,,draft-governance
+C9-9.3-004,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C9-9.3-005,PASS,evidence_based_probes,,keyword-unified
+C9-9.3-006,PASS,evidence_based_probes,,keyword-prefix
+C9-9.3-007,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C9-9.3-008,PASS,evidence_based_probes,,keyword-immutability
+C9-9.3-009,PASS,evidence_based_probes,,keyword-audit
+C9-9.3-010,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-manual
+C9-9.3-011,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C9-9.4-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C10-10.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-stock
+C10-10.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-negative
+C10-10.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-quantity
+C10-10.2-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-quantity
+C10-10.2-005,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-quantity
+C10-10.2-006,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-validation
+C10-10.2-007,UNVERIFIED / BLOCKED,evidence_based_probes,,stock-validation
+C10-10.2-008,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-calculations
+C10-10.2-009,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C10-10.2-010,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-transaction
+C10-10.2-011,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-inventory
+C10-10.2-012,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-posted
+C10-10.2-013,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-corrections
+C10-10.2-014,UNVERIFIED / BLOCKED,evidence_based_probes,,stock-validation
+C10-10.2-015,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-outbound
+C10-10.3-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C10-10.3-002,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C11-11.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C11-11.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C11-11.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C11-11.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-convert
+C11-11.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C11-11.4-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-reports
+C11-11.5-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C11-11.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-changing
+C11-11.7-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C11-11.8-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C12-12.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C12-12.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C12-12.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C12-12.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-positions
+C12-12.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,doc-numbering
+C12-12.3-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C12-12.3-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C12-12.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-header
+C12-12.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-changes
+C12-12.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,lifecycle-presentation|lifecycle-mapper-fe
+C12-12.7-001,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C13-13.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C13-13.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-maintain
+C13-13.2-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C13-13.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C13-13.4-001,PASS,evidence_based_probes,,keyword-posted
+C13-13.4-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C13-13.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-values
+C13-13.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-lines
+C13-13.7-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C13-13.7-002,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C13-13.8-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-duplicate
+C13-13.9-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-level
+C13-13.10-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-large
+C14-14.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C14-14.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C14-14.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,draft-governance
+C14-14.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-required
+C14-14.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-enforce
+C14-14.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-uploaded
+C14-14.6-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C14-14.7-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C14-14.8-001,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C14-14.8-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-defines
+C14-14.9-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C14-14.10-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C15-15.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C15-15.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-reject
+C15-15.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-workflow
+C15-15.3-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C15-15.4-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C15-15.4-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-users
+C15-15.5-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C15-15.6-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C15-15.6-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C15-15.6-003,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C16-16.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C16-16.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C16-16.2-002,PASS,evidence_based_probes,,keyword-created
+C16-16.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C16-16.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C16-16.3-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C16-16.3-004,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C16-16.3-005,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C16-16.3-006,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C16-16.3-007,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C16-16.3-008,PASS,evidence_based_probes,,keyword-maximum
+C16-16.3-009,PASS,evidence_based_probes,,keyword-supported
+C16-16.3-010,PASS,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C17-17.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.2-001,PARTIAL,evidence_based_probes,,keyboard-directive-exists|keyboard-template-adoption
+C17-17.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.2-004,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.2-005,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.2-006,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.2-007,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.3-001,PARTIAL,evidence_based_probes,,keyboard-directive-exists|keyboard-template-adoption
+C17-17.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.3-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.3-004,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C17-17.3-005,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-global
+C17-17.4-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C18-18.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.1-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.1-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.1-004,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.1-005,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.1-006,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.1-007,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-submit
+C18-18.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.2-003b,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C18-18.2-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-messages
+C18-18.2-005,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-backend
+C18-18.2-005b,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-presents
+C18-18.2-006,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-deterministic
+C18-18.2-007,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-validation
+C18-18.2-008,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-client
+C18-18.2-008b,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-server
+C18-18.2-009,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-messages
+C18-18.2-010,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-warnings
+C18-18.2-010b,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-validation
+C18-18.2-011,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-duplicate
+C18-18.3-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C19-19.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C19-19.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C19-19.2-002,PASS,evidence_based_probes,,keyword-duplicate
+C19-19.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C19-19.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-sensitive
+C19-19.4-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C19-19.4-002,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C19-19.5-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C19-19.5-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C19-19.6-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C19-19.7-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C20-20.1-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C20-20.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C20-20.3-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C20-20.4-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C20-20.4-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C20-20.5-001,PASS,evidence_based_probes,,keyword-notify
+C20-20.6-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C21-21.1-001,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C21-21.2-001,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C21-21.2-002,PASS,evidence_based_probes,,keyword-block
+C21-21.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-loading
+C21-21.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,
+C21-21.4-002,UNVERIFIED / BLOCKED,evidence_based_probes,,
+C21-21.5-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C22-22.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-maintain
+C22-22.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-every
+C22-22.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-single
+C22-22.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-immutable
+C22-22.3-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-display
+C22-22.3-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-timeline
+C22-22.3-005,UNVERIFIED / BLOCKED,evidence_based_probes,,concurrency-svc
+C22-22.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C23-23.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.3-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.3-004,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.4-001,PARTIAL,evidence_based_probes,,keyboard-directive-exists|keyboard-template-adoption
+C23-23.4-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.4-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.4-004,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.6-002,FAIL,evidence_based_probes,,runtime-RS-XT-001|runtime-XT-A-READ-B-getPass|runtime-XT-A-WRONG-TENANT-getPass|runtime-XT-A-MUT-B-getPass|runtime-XT-B-READ-A-getPass
+C23-23.6-003,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.6-004,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C23-23.7-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C24-24.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.1-002,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C24-24.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.3-002,NOT APPLICABLE,category_verification,Descriptive/context row — no product enforcement required,
+C24-24.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.4-002,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.4-003,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.4-004,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.4-005,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.5-002,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.5-003,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.6-002,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C24-24.7-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C25-25.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.1-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-modules
+C25-25.2-004,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-modules
+C25-25.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,
+C25-25.5-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.5-002,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.7-001,UNVERIFIED / BLOCKED,evidence_based_probes,,ux-manual-review-required
+C25-25.8-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C26-26.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-electronic
+C26-26.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C26-26.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C26-26.3-002,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C26-26.4-001,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C26-26.5-001,NOT APPLICABLE,category_verification,Optional capability — not mandatory for compliance,
+C26-26.6-001,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C26-26.7-001,UNVERIFIED / BLOCKED,evidence_based_probes,,
+C27-27.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-large
+C27-27.1-002,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-server
+C27-27.1-003,UNVERIFIED / BLOCKED,evidence_based_probes,,keyword-debounce
+C27-27.1-004,UNVERIFIED / BLOCKED,evidence_based_probes,,grn-print-guard|breakage-print-unconditional
+C27-27.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C27-27.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,
+C28-28.1-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C28-28.1-002,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C28-28.1-003,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C28-28.1-004,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C28-28.2-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C28-28.3-001,UNVERIFIED / BLOCKED,evidence_based_probes,,qa-matrix-not-run
+C28-28.4-001,PARTIAL,evidence_based_probes,,keyboard-directive-exists|keyboard-template-adoption|qa-matrix-not-run
+C28-28.5-001,NOT APPLICABLE,category_verification,Constitution marks out of scope for product layer,
+C29-29.1-001,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.2-001,NOT APPLICABLE,category_verification,"Governance definition — terminology, not product behavior",
+C29-29.2-002,UNVERIFIED / BLOCKED,evidence_based_probes,,
+C29-29.2-003,UNVERIFIED / BLOCKED,evidence_based_probes,,
+C29-29.3-001,PARTIAL,evidence_based_probes,,qa-matrix-not-run|governance-docs-exist
+C29-29.5-001,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.6-001,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.6-002,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.7-001,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.7-002,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.8-001,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.8-002,PARTIAL,evidence_based_probes,,governance-docs-exist
+C29-29.8-003,PARTIAL,evidence_based_probes,,governance-docs-exist
+CA-A-001,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-002,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-003,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-004,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-005,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-006,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-007,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-008,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CA-A-009,NOT APPLICABLE,category_verification,Reference/index row — not an enforceable requirement,
+CB-B-002,NOT APPLICABLE,category_verification,Excluded pending ratification,

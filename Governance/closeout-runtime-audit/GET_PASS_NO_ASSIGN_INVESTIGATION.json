@@ -1,0 +1,597 @@
+{
+  "executedAt": "2026-06-27T00:04:16.357Z",
+  "tag": "CLOSEOUT_RT_AUDIT",
+  "routeUnderTest": "POST /api/get-passes/:id/submit requires GET_PASS_CREATE only (no assignment middleware)",
+  "primaryFinding": "Confirmed Product Runtime Authorization/Scope Defect",
+  "investigations": {
+    "never_assigned": {
+      "userId": "0e78918a-0fae-483c-b38d-30d956c0b4fe",
+      "email": "never-assigned@closeout-audit.local",
+      "isActive": true,
+      "permissionVersion": 0,
+      "tenantMemberForTenant": {
+        "id": "cfdc6434-8d51-46b2-8057-569f6320318f",
+        "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+        "roleCode": "DEPT_MANAGER",
+        "departmentId": null,
+        "isActive": true
+      },
+      "allTenantMembers": [
+        {
+          "tenantSlug": "grand-horizon",
+          "roleCode": "DEPT_MANAGER",
+          "isActive": true,
+          "departmentId": null
+        }
+      ],
+      "urUserAssignments": [],
+      "resolveScopeContext": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No ACC scope assignment",
+        "userId": "0e78918a-0fae-483c-b38d-30d956c0b4fe"
+      },
+      "emptyAssignmentScopeUsed": true
+    },
+    "no_assign_inactive_ur": {
+      "userId": "5df673e6-2ec2-4f9b-ae9f-6e9ba4a5938b",
+      "email": "no-assign@closeout-audit.local",
+      "isActive": true,
+      "permissionVersion": 0,
+      "tenantMemberForTenant": {
+        "id": "fcc57f38-2062-4606-ba20-b195f7714179",
+        "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+        "roleCode": "DEPT_MANAGER",
+        "departmentId": null,
+        "isActive": true
+      },
+      "allTenantMembers": [
+        {
+          "tenantSlug": "grand-horizon",
+          "roleCode": "DEPT_MANAGER",
+          "isActive": true,
+          "departmentId": null
+        }
+      ],
+      "urUserAssignments": [
+        {
+          "id": "08a2371e-b576-46b8-9e76-4734eb4f6125",
+          "isActive": false,
+          "roleCode": "DEPT_MANAGER",
+          "notes": "CLOSEOUT_RT_AUDIT DEPT_MANAGER",
+          "properties": [
+            "grand-horizon"
+          ],
+          "departments": []
+        }
+      ],
+      "resolveScopeContext": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No ACC scope assignment",
+        "userId": "5df673e6-2ec2-4f9b-ae9f-6e9ba4a5938b"
+      },
+      "emptyAssignmentScopeUsed": true
+    },
+    "inactive_assignment": {
+      "userId": "5d44b26d-317d-4b62-bd69-f1fb0f9cd9a9",
+      "email": "inactive-assign@closeout-audit.local",
+      "isActive": true,
+      "permissionVersion": 0,
+      "tenantMemberForTenant": null,
+      "allTenantMembers": [
+        {
+          "tenantSlug": "grand-horizon",
+          "roleCode": "DEPT_MANAGER",
+          "isActive": false,
+          "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb"
+        }
+      ],
+      "urUserAssignments": [
+        {
+          "id": "7dde60ff-601f-45c6-88d0-6bf775a8871b",
+          "isActive": false,
+          "roleCode": "DEPT_MANAGER",
+          "notes": "CLOSEOUT_RT_AUDIT DEPT_MANAGER",
+          "properties": [
+            "grand-horizon"
+          ],
+          "departments": [
+            "FB"
+          ]
+        }
+      ],
+      "resolveScopeContext": null,
+      "emptyAssignmentScopeUsed": false
+    },
+    "deleted_assignment": {
+      "userId": "1aab9f5e-4d58-4bf7-90f0-b2085549f8b9",
+      "email": "deleted-assign@closeout-audit.local",
+      "isActive": true,
+      "permissionVersion": 0,
+      "tenantMemberForTenant": {
+        "id": "8682b9e9-585e-4886-bfee-7242b41fa47a",
+        "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+        "roleCode": "DEPT_MANAGER",
+        "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+        "isActive": true
+      },
+      "allTenantMembers": [
+        {
+          "tenantSlug": "grand-horizon",
+          "roleCode": "DEPT_MANAGER",
+          "isActive": true,
+          "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb"
+        }
+      ],
+      "urUserAssignments": [],
+      "resolveScopeContext": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No ACC scope assignment",
+        "userId": "1aab9f5e-4d58-4bf7-90f0-b2085549f8b9"
+      },
+      "emptyAssignmentScopeUsed": true
+    },
+    "wrong_property": {
+      "userId": "1192952d-f725-4727-bb9b-94f70772d29c",
+      "email": "wrong-property@closeout-audit.local",
+      "isActive": true,
+      "permissionVersion": 0,
+      "tenantMemberForTenant": {
+        "id": "b875f83b-3dd3-4f17-b655-fdd98a2febf1",
+        "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+        "roleCode": "DEPT_MANAGER",
+        "departmentId": null,
+        "isActive": true
+      },
+      "allTenantMembers": [
+        {
+          "tenantSlug": "grand-horizon",
+          "roleCode": "DEPT_MANAGER",
+          "isActive": true,
+          "departmentId": null
+        }
+      ],
+      "urUserAssignments": [
+        {
+          "id": "d1ef5329-c4e3-487d-a12f-490f2c628d7b",
+          "isActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "notes": "CLOSEOUT_RT_AUDIT DEPT_MANAGER",
+          "properties": [
+            "dx-airport-hotel"
+          ],
+          "departments": []
+        }
+      ],
+      "resolveScopeContext": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No assignment for this property",
+        "userId": "1192952d-f725-4727-bb9b-94f70772d29c"
+      },
+      "emptyAssignmentScopeUsed": true
+    },
+    "view_only_auditor": {
+      "userId": "7b0bcb14-8af7-45b4-94dd-1af4cebb1d50",
+      "email": "auditor-a@closeout-audit.local",
+      "isActive": true,
+      "permissionVersion": 0,
+      "tenantMemberForTenant": {
+        "id": "b54beb24-6c8d-4eed-9f50-f032363ed17d",
+        "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+        "roleCode": "AUDITOR",
+        "departmentId": null,
+        "isActive": true
+      },
+      "allTenantMembers": [
+        {
+          "tenantSlug": "grand-horizon",
+          "roleCode": "AUDITOR",
+          "isActive": true,
+          "departmentId": null
+        }
+      ],
+      "urUserAssignments": [
+        {
+          "id": "f1ae5540-6b30-43f9-9da8-2b8564188383",
+          "isActive": true,
+          "roleCode": "AUDITOR",
+          "notes": "CLOSEOUT_RT_AUDIT AUDITOR",
+          "properties": [
+            "grand-horizon"
+          ],
+          "departments": []
+        }
+      ],
+      "resolveScopeContext": {
+        "role": "AUDITOR",
+        "profile": "TENANT_WIDE",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": true,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": true,
+        "canViewAllLocations": true,
+        "scopeLabel": "Tenant-wide",
+        "userId": "7b0bcb14-8af7-45b4-94dd-1af4cebb1d50"
+      },
+      "emptyAssignmentScopeUsed": false
+    }
+  },
+  "matrix": [
+    {
+      "userState": "never_assigned",
+      "userId": "0e78918a-0fae-483c-b38d-30d956c0b4fe",
+      "jwtRole": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "REPORTS_VIEW",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_CREATE",
+        "LOST_FOUND_RETURN",
+        "WORKFLOW_PIPELINE_VIEW",
+        "REQUISITION_VIEW",
+        "REQUISITION_CREATE",
+        "REQUISITION_SUBMIT",
+        "REQUISITION_APPROVE",
+        "GET_PASS_APPROVE"
+      ],
+      "permissionVersion": 0,
+      "scopeResult": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No ACC scope assignment",
+        "userId": "0e78918a-0fae-483c-b38d-30d956c0b4fe"
+      },
+      "emptyAssignmentScopeUsed": true,
+      "documentCreatedBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "actorIsCreator": false,
+      "expected": "HTTP 403 + zero DB mutation for submit on foreign doc",
+      "http": 200,
+      "errorCode": null,
+      "dbBefore": "DRAFT",
+      "dbAfter": "PENDING_COST_CONTROL",
+      "dbMutated": true,
+      "result": "FAIL",
+      "classification": "Confirmed Product Runtime Authorization/Scope Defect"
+    },
+    {
+      "userState": "never_assigned",
+      "module": "breakage_create",
+      "http": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "result": "PASS"
+    },
+    {
+      "userState": "no_assign_inactive_ur",
+      "userId": "5df673e6-2ec2-4f9b-ae9f-6e9ba4a5938b",
+      "jwtRole": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "REPORTS_VIEW",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_CREATE",
+        "LOST_FOUND_RETURN",
+        "WORKFLOW_PIPELINE_VIEW",
+        "REQUISITION_VIEW",
+        "REQUISITION_CREATE",
+        "REQUISITION_SUBMIT",
+        "REQUISITION_APPROVE",
+        "GET_PASS_APPROVE"
+      ],
+      "permissionVersion": 0,
+      "scopeResult": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No ACC scope assignment",
+        "userId": "5df673e6-2ec2-4f9b-ae9f-6e9ba4a5938b"
+      },
+      "emptyAssignmentScopeUsed": true,
+      "documentCreatedBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "actorIsCreator": false,
+      "expected": "HTTP 403 + zero DB mutation for submit on foreign doc",
+      "http": 200,
+      "errorCode": null,
+      "dbBefore": "DRAFT",
+      "dbAfter": "PENDING_COST_CONTROL",
+      "dbMutated": true,
+      "result": "FAIL",
+      "classification": "Confirmed Product Runtime Authorization/Scope Defect"
+    },
+    {
+      "userState": "no_assign_inactive_ur",
+      "module": "breakage_create",
+      "http": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "result": "PASS"
+    },
+    {
+      "userState": "inactive_assignment",
+      "error": "login_failed",
+      "http": 401
+    },
+    {
+      "userState": "deleted_assignment",
+      "userId": "1aab9f5e-4d58-4bf7-90f0-b2085549f8b9",
+      "jwtRole": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "REPORTS_VIEW",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_CREATE",
+        "LOST_FOUND_RETURN",
+        "WORKFLOW_PIPELINE_VIEW",
+        "REQUISITION_VIEW",
+        "REQUISITION_CREATE",
+        "REQUISITION_SUBMIT",
+        "REQUISITION_APPROVE",
+        "GET_PASS_APPROVE"
+      ],
+      "permissionVersion": 0,
+      "scopeResult": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No ACC scope assignment",
+        "userId": "1aab9f5e-4d58-4bf7-90f0-b2085549f8b9"
+      },
+      "emptyAssignmentScopeUsed": true,
+      "documentCreatedBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "actorIsCreator": false,
+      "expected": "HTTP 403 + zero DB mutation for submit on foreign doc",
+      "http": 200,
+      "errorCode": null,
+      "dbBefore": "DRAFT",
+      "dbAfter": "PENDING_COST_CONTROL",
+      "dbMutated": true,
+      "result": "FAIL",
+      "classification": "Confirmed Product Runtime Authorization/Scope Defect"
+    },
+    {
+      "userState": "deleted_assignment",
+      "module": "breakage_create",
+      "http": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "result": "PASS"
+    },
+    {
+      "userState": "wrong_property",
+      "userId": "1192952d-f725-4727-bb9b-94f70772d29c",
+      "jwtRole": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "REPORTS_VIEW",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_CREATE",
+        "LOST_FOUND_RETURN",
+        "WORKFLOW_PIPELINE_VIEW",
+        "REQUISITION_VIEW",
+        "REQUISITION_CREATE",
+        "REQUISITION_SUBMIT",
+        "REQUISITION_APPROVE",
+        "GET_PASS_APPROVE"
+      ],
+      "permissionVersion": 0,
+      "scopeResult": {
+        "role": "DEPT_MANAGER",
+        "profile": "LOCATIONS",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": false,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": false,
+        "canViewAllLocations": false,
+        "scopeLabel": "No assignment for this property",
+        "userId": "1192952d-f725-4727-bb9b-94f70772d29c"
+      },
+      "emptyAssignmentScopeUsed": true,
+      "documentCreatedBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "actorIsCreator": false,
+      "expected": "HTTP 403 + zero DB mutation for submit on foreign doc",
+      "http": 200,
+      "errorCode": null,
+      "dbBefore": "DRAFT",
+      "dbAfter": "PENDING_COST_CONTROL",
+      "dbMutated": true,
+      "result": "FAIL",
+      "classification": null
+    },
+    {
+      "userState": "wrong_property",
+      "module": "breakage_create",
+      "http": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "result": "PASS"
+    },
+    {
+      "userState": "view_only_auditor",
+      "userId": "7b0bcb14-8af7-45b4-94dd-1af4cebb1d50",
+      "jwtRole": "AUDITOR",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "TRANSFER_VIEW",
+        "GRN_VIEW",
+        "STOCK_COUNT_VIEW",
+        "REPORTS_VIEW",
+        "REPORTS_EXPORT",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "AUDIT_LOG_VIEW",
+        "INTEGRITY_VIEW",
+        "WORKFLOW_PIPELINE_VIEW",
+        "PAR_LEVELS_VIEW",
+        "ISSUE_VIEW",
+        "REQUISITION_VIEW",
+        "LOST_FOUND_VIEW",
+        "USER_MANAGE"
+      ],
+      "permissionVersion": 0,
+      "scopeResult": {
+        "role": "AUDITOR",
+        "profile": "TENANT_WIDE",
+        "scopeSource": "UR_ASSIGNMENT",
+        "isTenantWide": true,
+        "departmentId": null,
+        "allowedLocationIds": [],
+        "canViewAllDepartments": true,
+        "canViewAllLocations": true,
+        "scopeLabel": "Tenant-wide",
+        "userId": "7b0bcb14-8af7-45b4-94dd-1af4cebb1d50"
+      },
+      "emptyAssignmentScopeUsed": false,
+      "documentCreatedBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "actorIsCreator": false,
+      "expected": "HTTP 403 + zero DB mutation for submit on foreign doc",
+      "http": 403,
+      "errorCode": null,
+      "dbBefore": "DRAFT",
+      "dbAfter": "DRAFT",
+      "dbMutated": false,
+      "result": "PASS",
+      "classification": null
+    },
+    {
+      "userState": "view_only_auditor",
+      "module": "breakage_create",
+      "http": 403,
+      "errorCode": null,
+      "result": "PASS"
+    },
+    {
+      "userState": "stale_vs_fresh_jwt",
+      "staleTokenAfterDeactivateAssignment": {
+        "http": 200
+      },
+      "freshTokenAfterReLogin": {
+        "http": 200
+      }
+    }
+  ],
+  "staleJwtTest": {
+    "staleTokenAfterDeactivateAssignment": {
+      "http": 200
+    },
+    "freshTokenAfterReLogin": {
+      "http": 200
+    }
+  },
+  "crossModuleSummary": {
+    "getPassSubmitBypassWithInactiveAssignment": true,
+    "breakageCreateAllowedWithoutAssignment": false
+  }
+}

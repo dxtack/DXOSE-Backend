@@ -1,0 +1,578 @@
+{
+  "executedAt": "2026-06-27T18:23:38.057Z",
+  "tag": "HEAD_RT_REVAL",
+  "api": "http://127.0.0.1:4000/api",
+  "disposableTenant": "closeout-audit-hotel-disposable",
+  "readOnlyTenant": "grand-horizon",
+  "summary": {
+    "pass": 19,
+    "fail": 16,
+    "blocked": 2,
+    "na": 6,
+    "total": 43
+  },
+  "scenarios": [
+    {
+      "id": "GP-A-CREATE",
+      "section": "P0-A",
+      "expected": "201 draft GP on disposable",
+      "actual": "HTTP 201",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:27.525Z"
+    },
+    {
+      "id": "GP-A-NEVER-SUBMIT",
+      "section": "P0-A",
+      "expected": "403/401/422 no mutation",
+      "actual": "HTTP 200",
+      "result": "FAIL",
+      "evidence": {
+        "message": null
+      },
+      "at": "2026-06-27T18:23:27.774Z"
+    },
+    {
+      "id": "GP-A-NEVER-READ",
+      "section": "P0-A",
+      "expected": "403/404 no payload",
+      "actual": "HTTP 403",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:27.774Z"
+    },
+    {
+      "id": "GP-A-INACTIVE-SUBMIT",
+      "section": "P0-A",
+      "expected": "403/401/422 no mutation",
+      "actual": "HTTP 500",
+      "result": "FAIL",
+      "evidence": {
+        "message": "Only DRAFT can be submitted"
+      },
+      "at": "2026-06-27T18:23:28.119Z"
+    },
+    {
+      "id": "GP-A-INACTIVE-READ",
+      "section": "P0-A",
+      "expected": "403/404 no payload",
+      "actual": "HTTP 403",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:28.119Z"
+    },
+    {
+      "id": "GP-A-VALID-SUBMIT",
+      "section": "P0-A",
+      "expected": "200 submit allowed",
+      "actual": "HTTP 500",
+      "result": "FAIL",
+      "evidence": {},
+      "at": "2026-06-27T18:23:28.380Z"
+    },
+    {
+      "id": "GP-A-VALID-READ",
+      "section": "P0-A",
+      "expected": "200 read allowed",
+      "actual": "HTTP 200",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:28.380Z"
+    },
+    {
+      "id": "GP-A-XT-READ",
+      "section": "P0-A",
+      "expected": "404 cross-tenant read",
+      "actual": "HTTP 404",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:29.260Z"
+    },
+    {
+      "id": "WP-B-NEVER-list",
+      "section": "P0-B",
+      "expected": "403 or empty pipeline",
+      "actual": "HTTP 200 count=50",
+      "result": "FAIL",
+      "evidence": {
+        "sample": [
+          {
+            "id": "getpass:8c103c11-423b-4cd3-87e1-4459673c4557",
+            "module": "GET_PASS",
+            "documentId": "8c103c11-423b-4cd3-87e1-4459673c4557",
+            "documentNo": "GP-2026-00002",
+            "title": "Get Pass GP-2026-00002",
+            "status": "PENDING_DEPT",
+            "currentStep": "Approval",
+            "waitingForRole": "DEPT_MANAGER",
+            "waitingForPermission": "GET_PASS_APPROVE",
+            "waitingForPermissionsAny": null,
+            "waitingForUser": null,
+            "createdBy": "Khalid Hassan",
+            "createdAt": "2026-05-05T09:26:34.229Z",
+            "pendingSince": "2026-05-05T09:26:34.255Z",
+            "ageHours": 1281,
+            "priority": "critical",
+            "slaStatus": "CRITICAL",
+            "overdue": true,
+            "escalationLevel": 2,
+            "deepLink": "/get-passes/8c103c11-423b-4cd3-87e1-4459673c4557",
+            "meta": {
+              "transferType": "TEMPORARY",
+              "borrowingEntity": "Vendor X",
+              "expectedReturnDate": "2026-05-06T09:26:34.193Z"
+            },
+            "waitingForLabel": "Approve Get Pass"
+          }
+        ]
+      },
+      "at": "2026-06-27T18:23:30.382Z"
+    },
+    {
+      "id": "WP-B-NEVER/summary",
+      "section": "P0-B",
+      "expected": "403 or empty pipeline",
+      "actual": "HTTP 200 count=179",
+      "result": "FAIL",
+      "evidence": {
+        "sample": null
+      },
+      "at": "2026-06-27T18:23:30.493Z"
+    },
+    {
+      "id": "WP-B-NEVER/alerts",
+      "section": "P0-B",
+      "expected": "403 or empty pipeline",
+      "actual": "HTTP 200 count=15",
+      "result": "FAIL",
+      "evidence": {
+        "sample": [
+          {
+            "id": "getpass:8c103c11-423b-4cd3-87e1-4459673c4557",
+            "module": "GET_PASS",
+            "documentId": "8c103c11-423b-4cd3-87e1-4459673c4557",
+            "documentNo": "GP-2026-00002",
+            "title": "Get Pass GP-2026-00002",
+            "status": "PENDING_DEPT",
+            "currentStep": "Approval",
+            "waitingForRole": "DEPT_MANAGER",
+            "waitingForPermission": "GET_PASS_APPROVE",
+            "waitingForPermissionsAny": null,
+            "waitingForUser": null,
+            "createdBy": "Khalid Hassan",
+            "createdAt": "2026-05-05T09:26:34.229Z",
+            "pendingSince": "2026-05-05T09:26:34.255Z",
+            "ageHours": 1281,
+            "priority": "critical",
+            "slaStatus": "CRITICAL",
+            "overdue": true,
+            "escalationLevel": 2,
+            "deepLink": "/get-passes/8c103c11-423b-4cd3-87e1-4459673c4557",
+            "meta": {
+              "transferType": "TEMPORARY",
+              "borrowingEntity": "Vendor X",
+              "expectedReturnDate": "2026-05-06T09:26:34.193Z"
+            },
+            "waitingForLabel": "Approve Get Pass"
+          }
+        ]
+      },
+      "at": "2026-06-27T18:23:30.643Z"
+    },
+    {
+      "id": "WP-B-FIN-POS",
+      "section": "P0-B",
+      "expected": "authorized finance may list",
+      "actual": "HTTP 200 count=0",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:30.749Z"
+    },
+    {
+      "id": "LEG-C-LOST-DEPT",
+      "section": "P0-C",
+      "expected": "legacy blocked or ACC-pinned",
+      "actual": "HTTP 200 DRAFT->DEPT_APPROVED pin=null",
+      "result": "FAIL",
+      "evidence": {
+        "accPin": null
+      },
+      "at": "2026-06-27T18:23:31.219Z"
+    },
+    {
+      "id": "LEG-C-BRK-DEPT",
+      "section": "P0-C",
+      "expected": "breakage legacy route registered + behavior",
+      "actual": "HTTP 409 route=true status=DRAFT",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:31.307Z"
+    },
+    {
+      "id": "GP-D-WF-AUDIT",
+      "section": "P0-D",
+      "expected": "No GM in approved GP chain",
+      "actual": "21/21 tenants with GM step",
+      "result": "FAIL",
+      "evidence": {
+        "chain": [
+          {
+            "tenant": "dx-marina-hotel",
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "platform",
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "closeout-audit-hotel-disposable",
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "dx-hospitality-group",
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "dx-executive-suites",
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "hasGM": true
+          }
+        ],
+        "total": 21
+      },
+      "at": "2026-06-27T18:23:31.418Z"
+    },
+    {
+      "id": "GP-D-FF-FINANCE",
+      "section": "P0-D",
+      "expected": "Finance may skip prior steps on submit",
+      "actual": "HTTP 200 status=PENDING_GM skipped=false",
+      "result": "PASS",
+      "evidence": {
+        "gp": {
+          "status": "PENDING_GM",
+          "deptApprovedBy": null,
+          "costControlApprovedBy": null,
+          "financeApprovedBy": "7af3c4b0-41d3-4049-b406-70ba97e6d3d1",
+          "gmApprovedBy": null
+        }
+      },
+      "at": "2026-06-27T18:23:32.002Z"
+    },
+    {
+      "id": "GP-D-FF-ORG_MANAGER",
+      "section": "P0-D",
+      "expected": "ORG_MANAGER jumps to last step",
+      "actual": "HTTP 200 status=PENDING_SECURITY skipped=true",
+      "result": "FAIL",
+      "evidence": {
+        "gp": {
+          "status": "PENDING_SECURITY",
+          "deptApprovedBy": "c71b5a67-68b9-4086-a266-f0a7122fe4e2",
+          "costControlApprovedBy": "c71b5a67-68b9-4086-a266-f0a7122fe4e2",
+          "financeApprovedBy": "c71b5a67-68b9-4086-a266-f0a7122fe4e2",
+          "gmApprovedBy": "c71b5a67-68b9-4086-a266-f0a7122fe4e2"
+        }
+      },
+      "at": "2026-06-27T18:23:32.133Z"
+    },
+    {
+      "id": "GRN-E-RESUBMIT-DEAD",
+      "section": "P0-E",
+      "expected": "backend /resubmit absent (dead code vs FE)",
+      "actual": "HTTP 401",
+      "result": "FAIL",
+      "evidence": {
+        "feRef": "OSE-Frontend/src/app/features/grn/services/grn.service.ts:137"
+      },
+      "at": "2026-06-27T18:23:32.135Z"
+    },
+    {
+      "id": "GRN-E-SENDBACK-ROUTE",
+      "section": "P0-E",
+      "expected": "send-back route registered",
+      "actual": "HTTP 401 registered=true",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:32.136Z"
+    },
+    {
+      "id": "GRN-E-SB-MUTATE",
+      "section": "P0-E",
+      "expected": "send-back changes status",
+      "actual": "HTTP 200 status=DRAFT",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:33.149Z"
+    },
+    {
+      "id": "GRN-E-RESUBMIT-LIVE",
+      "section": "P0-E",
+      "expected": "/resubmit not live on backend",
+      "actual": "HTTP 404",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:33.149Z"
+    },
+    {
+      "id": "GRN-E-SUBMIT-AFTER-SB",
+      "section": "P0-E",
+      "expected": "submit after send-back works",
+      "actual": "HTTP 422",
+      "result": "FAIL",
+      "evidence": {
+        "ccAp": 200,
+        "submit": 200
+      },
+      "at": "2026-06-27T18:23:33.149Z"
+    },
+    {
+      "id": "BRK-F-CREATE-STATUS",
+      "section": "P0-F",
+      "expected": "create enters workflow (not raw DRAFT only)",
+      "actual": "status=DRAFT",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.236Z"
+    },
+    {
+      "id": "BRK-F-APPROVE-CC",
+      "section": "P0-F",
+      "expected": "CC approve",
+      "actual": "HTTP 409 status=DRAFT",
+      "result": "FAIL",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.304Z"
+    },
+    {
+      "id": "BRK-F-APPROVE-FIN",
+      "section": "P0-F",
+      "expected": "FIN approve",
+      "actual": "HTTP 409 status=DRAFT",
+      "result": "FAIL",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.368Z"
+    },
+    {
+      "id": "BRK-F-APPROVE-GM",
+      "section": "P0-F",
+      "expected": "GM approve",
+      "actual": "HTTP 409 status=DRAFT",
+      "result": "FAIL",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.432Z"
+    },
+    {
+      "id": "BRK-F-FINAL-STATUS",
+      "section": "P0-F",
+      "expected": "final status POSTED after chain",
+      "actual": "status=DRAFT",
+      "result": "FAIL",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.500Z"
+    },
+    {
+      "id": "BRK-F-LEDGER",
+      "section": "P0-F",
+      "expected": "ledger rows on POSTED",
+      "actual": "ledger 0->0",
+      "result": "BLOCKED",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.501Z"
+    },
+    {
+      "id": "BRK-F-STOCK",
+      "section": "P0-F",
+      "expected": "stock reduced on POSTED",
+      "actual": "qty 100->100",
+      "result": "BLOCKED",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.501Z"
+    },
+    {
+      "id": "BRK-F-POST-ROUTE",
+      "section": "P0-F",
+      "expected": "movement post route",
+      "actual": "HTTP 403",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:34.501Z"
+    },
+    {
+      "id": "RPT-G-API",
+      "section": "P0-G",
+      "expected": "breakage-loss-report analytics API",
+      "actual": "HTTP 200",
+      "result": "PASS",
+      "evidence": {
+        "message": "Analytics report generated"
+      },
+      "at": "2026-06-27T18:23:35.037Z"
+    },
+    {
+      "id": "RPT-G-APPROVED-IN",
+      "section": "P0-G",
+      "expected": "APPROVED doc excluded if POSTED-only",
+      "actual": "approvedInReport=false",
+      "result": "PASS",
+      "evidence": {
+        "codeRef": "OSE-backend/src/services/report.service.js:24 BREAKAGE_FINANCIAL_STATUSES"
+      },
+      "at": "2026-06-27T18:23:35.539Z"
+    },
+    {
+      "id": "RPT-G-POSTED-IN",
+      "section": "P0-G",
+      "expected": "POSTED doc included",
+      "actual": "postedInReport=false",
+      "result": "NOT APPLICABLE",
+      "evidence": {
+        "note": "disposable tenant report scope may differ"
+      },
+      "at": "2026-06-27T18:23:35.539Z"
+    },
+    {
+      "id": "MOV-H-LIST",
+      "section": "P0-H",
+      "expected": "list movements (read)",
+      "actual": "HTTP 200",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:36.026Z"
+    },
+    {
+      "id": "MOV-H-NO-ASSIGN",
+      "section": "P0-H",
+      "expected": "no assignment denied create",
+      "actual": "HTTP 403",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:36.612Z"
+    },
+    {
+      "id": "MOV-H-CREATE",
+      "section": "P0-H",
+      "expected": "create adjustment",
+      "actual": "HTTP 403",
+      "result": "FAIL",
+      "evidence": {
+        "message": "Access denied. Insufficient permissions."
+      },
+      "at": "2026-06-27T18:23:36.641Z"
+    },
+    {
+      "id": "SB-I-GRN-ROUTE",
+      "section": "P0-I",
+      "expected": "GRN send-back route exists",
+      "actual": "HTTP 404 registered",
+      "result": "PASS",
+      "evidence": {
+        "exists": true
+      },
+      "at": "2026-06-27T18:23:37.129Z"
+    },
+    {
+      "id": "SB-I-Transfer-ROUTE",
+      "section": "P0-I",
+      "expected": "send-back not required / absent",
+      "actual": "HTTP 404 registered",
+      "result": "NOT APPLICABLE",
+      "evidence": {
+        "exists": true
+      },
+      "at": "2026-06-27T18:23:37.155Z"
+    },
+    {
+      "id": "SB-I-Breakage-ROUTE",
+      "section": "P0-I",
+      "expected": "send-back not required / absent",
+      "actual": "HTTP 404 registered",
+      "result": "NOT APPLICABLE",
+      "evidence": {
+        "exists": true
+      },
+      "at": "2026-06-27T18:23:37.179Z"
+    },
+    {
+      "id": "SB-I-Lost-ROUTE",
+      "section": "P0-I",
+      "expected": "send-back not required / absent",
+      "actual": "HTTP 404 registered",
+      "result": "NOT APPLICABLE",
+      "evidence": {
+        "exists": true
+      },
+      "at": "2026-06-27T18:23:37.203Z"
+    },
+    {
+      "id": "SB-I-GetPass-ROUTE",
+      "section": "P0-I",
+      "expected": "send-back not required / absent",
+      "actual": "HTTP 404 registered",
+      "result": "NOT APPLICABLE",
+      "evidence": {
+        "exists": true
+      },
+      "at": "2026-06-27T18:23:37.226Z"
+    },
+    {
+      "id": "SB-I-InvCount-ROUTE",
+      "section": "P0-I",
+      "expected": "send-back not required / absent",
+      "actual": "HTTP 404 registered",
+      "result": "NOT APPLICABLE",
+      "evidence": {
+        "exists": true
+      },
+      "at": "2026-06-27T18:23:37.255Z"
+    },
+    {
+      "id": "SB-I-GRN-BEHAVIOR",
+      "section": "P0-I",
+      "expected": "GRN send-back mutates status",
+      "actual": "HTTP 200 status=DRAFT",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:23:38.051Z"
+    }
+  ]
+}

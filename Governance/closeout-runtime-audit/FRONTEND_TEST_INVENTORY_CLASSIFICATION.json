@@ -1,0 +1,212 @@
+{
+  "executedAt": "2026-06-27T00:24:45.142Z",
+  "nodeVersion": "v25.6.0",
+  "note": "Playwright scripts require frontend :4200 and backend :4000",
+  "rows": [
+    {
+      "file": "scripts/verify-grn-create-runtime.mjs",
+      "purpose": "GRN create page runtime DOM",
+      "activeModule": "GRN",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/verify-grn-detail-timeline-phase4.mjs",
+      "purpose": "GRN detail timeline vs API",
+      "activeModule": "GRN",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/verify-grn-create-excel-layout.mjs",
+      "purpose": "GRN excel layout",
+      "activeModule": "GRN",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 1,
+      "result": "FAIL",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/verify-phase5-detail-timeline.mjs",
+      "purpose": "Transfer detail timeline",
+      "activeModule": "Transfer",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": false,
+      "exit": null,
+      "result": "NOT_RUN",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/verify-phase6-detail-timeline.mjs",
+      "purpose": "Returns timeline phase6",
+      "activeModule": "Breakage/Lost",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": false,
+      "exit": null,
+      "result": "NOT_RUN",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/verify-phase7-detail-timeline.mjs",
+      "purpose": "Get Pass timeline phase7",
+      "activeModule": "GetPass",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/measure-inventory-count-workspace-spacing.mjs",
+      "purpose": "IC workspace spacing",
+      "activeModule": "InventoryCount",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": false,
+      "exit": null,
+      "result": "NOT_RUN",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/measure-inventory-count-detail-spacing.mjs",
+      "purpose": "IC detail spacing",
+      "activeModule": "InventoryCount",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": false,
+      "exit": null,
+      "result": "NOT_RUN",
+      "obsolete": false
+    },
+    {
+      "file": "scripts/capture-acc-overview-screenshot.mjs",
+      "purpose": "ACC overview screenshot",
+      "activeModule": "ACC",
+      "requiresData": true,
+      "safeToRun": true,
+      "executed": false,
+      "exit": null,
+      "result": "NOT_RUN",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/features/grn/utils/grn-detail-timeline.util.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "GRN",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/shared/utils/timeline-entry-render.util.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "Shared",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-list-display.util.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "GetPass",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-line-outcome.util.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "GetPass",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/core/directives/has-permission.directive.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "Shared",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 1,
+      "result": "FAIL",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/features/get-pass/utils/get-pass-return-validation.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "GetPass",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 0,
+      "result": "PASS",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/app.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "Shared",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 1,
+      "result": "FAIL",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/features/grn/grn-detail/grn-detail.component.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "GRN",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 1,
+      "result": "FAIL",
+      "obsolete": false
+    },
+    {
+      "file": "src/app/shared/components/returns-workflow-timeline/returns-workflow-timeline.component.spec.ts",
+      "purpose": "Unit spec",
+      "activeModule": "Shared",
+      "requiresData": false,
+      "safeToRun": true,
+      "executed": true,
+      "exit": 1,
+      "result": "FAIL",
+      "obsolete": false
+    }
+  ],
+  "summary": {
+    "totalFiles": 18,
+    "executed": 13,
+    "pass": 8,
+    "fail": 5,
+    "notRun": 5
+  }
+}

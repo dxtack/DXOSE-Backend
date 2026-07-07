@@ -1,0 +1,881 @@
+{
+  "executedAt": "2026-06-26T23:59:47.593Z",
+  "approvedConstitutionChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "governanceNote": "STALE/mismatch rows are Active Tenant Constitution Non-Compliance — not Product code defect, not ignorable.",
+  "tenantsAudited": 18,
+  "rows": [
+    {
+      "tenant": "dx-airport-hotel",
+      "tenantId": "bf7638b8-04db-4051-94d1-0cf039827c00",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "dx-executive-suites",
+      "tenantId": "4605fe49-5496-4e9b-8824-2bb3f57ab29f",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "dx-grand-palace",
+      "tenantId": "ec7598b2-95e5-4302-8c07-515addd68613",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "dx-hospitality-group",
+      "tenantId": "3f763a13-177d-44e7-81f5-5640a7e8ead5",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "dx-marina-hotel",
+      "tenantId": "13a21ce5-2c05-4d14-9c2d-6ec796046b81",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "grand-horizon",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "hotel-test",
+      "tenantId": "d8b7455c-1ac2-4b14-959f-f4c4f3331ed8",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "hotel-test1",
+      "tenantId": "fd05d2fc-a32b-4617-8ccb-d08c869a2252",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "roma-1",
+      "tenantId": "90a23ac2-c0cb-4344-89f2-34fddfef021a",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "roma-2",
+      "tenantId": "f3da1cfd-a397-42f5-a470-3e511d56bece",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "rotana",
+      "tenantId": "90d14b98-4404-4127-95bb-ccbf3aa4ef17",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "rotana-1",
+      "tenantId": "9881532d-642f-42c4-9a5a-995d38c81625",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "rotana-2",
+      "tenantId": "676ec92e-91cc-475a-a269-c0d7d3aa7268",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "test-org",
+      "tenantId": "e45aca57-0cef-4c16-8e1b-f98599891652",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "tets-org-1",
+      "tenantId": "f810d3fe-54fa-493c-bbc0-1b1ff65e73a5",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "voco",
+      "tenantId": "5676fa76-bd8d-4e18-820e-a915198d3ec3",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "voco-khobar",
+      "tenantId": "531e7ce8-59e8-4f87-af4b-8b534816bde7",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    },
+    {
+      "tenant": "voco-khobar-hotel",
+      "tenantId": "a039cd6e-efca-4ff2-9915-d83404c83cf2",
+      "publishedDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "drift": [
+        "EXTRA_GM_STEP",
+        "ORDER_OR_STEPS_MISMATCH"
+      ],
+      "classification": "Active Tenant Constitution Non-Compliance"
+    }
+  ],
+  "summary": {
+    "aligned": 0,
+    "nonCompliant": 18
+  }
+}

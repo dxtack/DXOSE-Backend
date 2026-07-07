@@ -1,0 +1,70 @@
+{
+  "executedAt": "2026-06-27T00:37:23.025Z",
+  "script": "09-grn-runtime-v3",
+  "harnessExit": 0,
+  "counts": {
+    "PASS": 10,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 10,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": false,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "GRN-VALIDATE",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "GRN-SUBMIT",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "GRN-APPROVE-CC",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "GRN-APPROVE-FINANCE",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "GRN-POST",
+      "result": "PASS",
+      "http": 422
+    },
+    {
+      "id": "GRN-SEND-BACK",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "GRN-REJECT-CC",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "GRN-NO-ASSIGN",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "GRN-DUPLICATE-SUBMIT",
+      "result": "PASS",
+      "http": 422
+    },
+    {
+      "id": "GRN-WRONG-ROLE",
+      "result": "PASS",
+      "http": 403
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "runAt": "2026-07-03T02:07:07.647Z",
+  "summary": {
+    "passed": 12,
+    "failed": 0,
+    "total": 12
+  },
+  "results": [
+    {
+      "name": "tenant-isolation-runtime",
+      "status": "PASS",
+      "durationMs": 7694,
+      "scenarios": [
+        {
+          "id": "slow-list-then-switch",
+          "status": "PASS",
+          "detail": "switch while GRN pending → HTTP 200"
+        },
+        {
+          "id": "slow-list-final-tenant",
+          "status": "PASS",
+          "detail": "final tenant slug → e2e-perm-b-1783044392543-d949f6"
+        },
+        {
+          "id": "slow-response-no-tenant-revert",
+          "status": "PASS",
+          "detail": "tenant after delayed list landed → e2e-perm-b-1783044392543-d949f6"
+        },
+        {
+          "id": "detail-redirect-on-switch",
+          "status": "PASS",
+          "detail": "URL after switch → http://127.0.0.1:4201/e2e-perm-b-1783044392543-d949f6/dashboard"
+        },
+        {
+          "id": "rapid-switch-sequential",
+          "status": "PASS",
+          "detail": "rapid switch back to A succeeded"
+        },
+        {
+          "id": "rapid-switch-final-tenant",
+          "status": "PASS",
+          "detail": "final slug → e2e-perm-a-1783044392543-d949f6"
+        },
+        {
+          "id": "parallel-switch-last-wins",
+          "status": "PASS",
+          "detail": "parallel A+B → winner slug e2e-perm-b-1783044392543-d949f6"
+        },
+        {
+          "id": "module-open-after-switch",
+          "status": "PASS",
+          "detail": "stored tenant after switch → e2e-perm-b-1783044392543-d949f6"
+        },
+        {
+          "id": "module-api-after-switch",
+          "status": "PASS",
+          "detail": "auth/me under tenant B → HTTP 200 slug=e2e-perm-b-1783044392543-d949f6"
+        },
+        {
+          "id": "report-engine-after-switch",
+          "status": "PASS",
+          "detail": "report engine URL → http://127.0.0.1:4201/reports/engine"
+        },
+        {
+          "id": "failed-switch-preserves-session",
+          "status": "PASS",
+          "detail": "denied switch HTTP 403"
+        },
+        {
+          "id": "failed-switch-token-unchanged",
+          "status": "PASS",
+          "detail": "session tenant still → e2e-denied-1783044392543-d949f6"
+        }
+      ]
+    },
+    {
+      "name": "tenant-isolation-runtime/slow-list-then-switch",
+      "status": "PASS",
+      "detail": "switch while GRN pending → HTTP 200"
+    },
+    {
+      "name": "tenant-isolation-runtime/slow-list-final-tenant",
+      "status": "PASS",
+      "detail": "final tenant slug → e2e-perm-b-1783044392543-d949f6"
+    },
+    {
+      "name": "tenant-isolation-runtime/slow-response-no-tenant-revert",
+      "status": "PASS",
+      "detail": "tenant after delayed list landed → e2e-perm-b-1783044392543-d949f6"
+    },
+    {
+      "name": "tenant-isolation-runtime/detail-redirect-on-switch",
+      "status": "PASS",
+      "detail": "URL after switch → http://127.0.0.1:4201/e2e-perm-b-1783044392543-d949f6/dashboard"
+    },
+    {
+      "name": "tenant-isolation-runtime/rapid-switch-sequential",
+      "status": "PASS",
+      "detail": "rapid switch back to A succeeded"
+    },
+    {
+      "name": "tenant-isolation-runtime/rapid-switch-final-tenant",
+      "status": "PASS",
+      "detail": "final slug → e2e-perm-a-1783044392543-d949f6"
+    },
+    {
+      "name": "tenant-isolation-runtime/parallel-switch-last-wins",
+      "status": "PASS",
+      "detail": "parallel A+B → winner slug e2e-perm-b-1783044392543-d949f6"
+    },
+    {
+      "name": "tenant-isolation-runtime/module-open-after-switch",
+      "status": "PASS",
+      "detail": "stored tenant after switch → e2e-perm-b-1783044392543-d949f6"
+    },
+    {
+      "name": "tenant-isolation-runtime/module-api-after-switch",
+      "status": "PASS",
+      "detail": "auth/me under tenant B → HTTP 200 slug=e2e-perm-b-1783044392543-d949f6"
+    },
+    {
+      "name": "tenant-isolation-runtime/report-engine-after-switch",
+      "status": "PASS",
+      "detail": "report engine URL → http://127.0.0.1:4201/reports/engine"
+    },
+    {
+      "name": "tenant-isolation-runtime/failed-switch-preserves-session",
+      "status": "PASS",
+      "detail": "denied switch HTTP 403"
+    },
+    {
+      "name": "tenant-isolation-runtime/failed-switch-token-unchanged",
+      "status": "PASS",
+      "detail": "session tenant still → e2e-denied-1783044392543-d949f6"
+    }
+  ]
+}

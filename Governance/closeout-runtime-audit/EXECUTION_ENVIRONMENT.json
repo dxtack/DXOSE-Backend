@@ -1,0 +1,434 @@
+{
+  "executedAt": "2026-06-27T16:32:34.460Z",
+  "apiBase": "http://127.0.0.1:4000/api",
+  "frontendBase": "http://127.0.0.1:4200",
+  "database": "postgresql://ose_user:***@127.0.0.1:5433/ose_inventory?schema=public",
+  "hotelA": {
+    "slug": "grand-horizon",
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+  },
+  "hotelB": {
+    "slug": "dx-airport-hotel",
+    "id": "bf7638b8-04db-4051-94d1-0cf039827c00"
+  },
+  "fixtureTag": "CLOSEOUT_RT_AUDIT",
+  "stockFixture": {
+    "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+    "itemName": "Garbage Bag Roll (50pcs)",
+    "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+    "locationName": "Main Store",
+    "departmentId": "dd8e4d25-b467-4b72-ac7c-791a659c07f3",
+    "qtyOnHand": 15,
+    "unitCost": 18
+  },
+  "departments": [
+    {
+      "id": "5e246726-faaf-48e4-a002-80aae4639dce",
+      "code": "HK",
+      "name": "Housekeeping"
+    },
+    {
+      "id": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "code": "FB",
+      "name": "Food & Beverage"
+    },
+    {
+      "id": "873f97b1-d64b-48ac-aea9-e312e5f68851",
+      "code": "ENG",
+      "name": "Engineering"
+    },
+    {
+      "id": "787778f8-0e4e-48e4-b8c1-c238ccc38d8a",
+      "code": "SPA",
+      "name": "Spa & Wellness"
+    },
+    {
+      "id": "dd8e4d25-b467-4b72-ac7c-791a659c07f3",
+      "code": "GEN",
+      "name": "General"
+    }
+  ],
+  "orgManagerMembers": [
+    {
+      "email": "amr.seif_test@dx.com",
+      "tenantSlug": "tets-org-1",
+      "tenantId": "f810d3fe-54fa-493c-bbc0-1b1ff65e73a5"
+    },
+    {
+      "email": "amr.seif_test@dx.com",
+      "tenantSlug": "roma-2",
+      "tenantId": "f3da1cfd-a397-42f5-a470-3e511d56bece"
+    },
+    {
+      "email": "amr.test@dx.com",
+      "tenantSlug": "rotana",
+      "tenantId": "90d14b98-4404-4127-95bb-ccbf3aa4ef17"
+    },
+    {
+      "email": "org-mgr-disposable@closeout-audit.local",
+      "tenantSlug": "closeout-audit-org-disposable",
+      "tenantId": "7c312820-957e-4b08-bcc3-07e8b9fc288f"
+    },
+    {
+      "email": "amr_test@g.com",
+      "tenantSlug": "hotel-test",
+      "tenantId": "d8b7455c-1ac2-4b14-959f-f4c4f3331ed8"
+    },
+    {
+      "email": "daniel.carter@dxuat.com",
+      "tenantSlug": "dx-hospitality-group",
+      "tenantId": "3f763a13-177d-44e7-81f5-5640a7e8ead5"
+    },
+    {
+      "email": "amr.seif_test@dx.com",
+      "tenantSlug": "roma-1",
+      "tenantId": "90a23ac2-c0cb-4344-89f2-34fddfef021a"
+    },
+    {
+      "email": "amr@ga.com",
+      "tenantSlug": "test-org",
+      "tenantId": "e45aca57-0cef-4c16-8e1b-f98599891652"
+    },
+    {
+      "email": "amr_test@dx.com",
+      "tenantSlug": "voco-khobar-hotel",
+      "tenantId": "a039cd6e-efca-4ff2-9915-d83404c83cf2"
+    },
+    {
+      "email": "org-mgr@closeout-audit.local",
+      "tenantSlug": "dx-hospitality-group",
+      "tenantId": "3f763a13-177d-44e7-81f5-5640a7e8ead5"
+    }
+  ],
+  "hotelAdminMembers": [
+    {
+      "email": "admin@grandhorizon.com",
+      "role": "ADMIN"
+    }
+  ],
+  "userSessions": {
+    "DEPT_MANAGER_A": {
+      "email": "fb.manager@grandhorizon.com",
+      "role": "DEPT_MANAGER",
+      "loginOk": true,
+      "httpStatus": 200,
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "REPORTS_VIEW",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW"
+      ],
+      "permissionCount": 28,
+      "tenantSlug": "grand-horizon"
+    },
+    "DEPT_MANAGER_B": {
+      "email": "hk.manager@grandhorizon.com",
+      "role": "DEPT_MANAGER",
+      "loginOk": true,
+      "httpStatus": 200,
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "REPORTS_VIEW",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW"
+      ],
+      "permissionCount": 28,
+      "tenantSlug": "grand-horizon"
+    },
+    "STOREKEEPER": {
+      "email": "store@grandhorizon.com",
+      "role": "STOREKEEPER",
+      "loginOk": true,
+      "httpStatus": 200,
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "TRANSFER_VIEW",
+        "TRANSFER_DISPATCH_RECEIVE",
+        "GRN_VIEW",
+        "GRN_MANAGE",
+        "BREAKAGE_CREATE",
+        "STOCK_COUNT_VIEW",
+        "STOCK_COUNT_MANAGE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_VIEW",
+        "GET_PASS_CREATE",
+        "IMPORT_EXCEL",
+        "IMPORT_CREATE"
+      ],
+      "permissionCount": 39,
+      "tenantSlug": "grand-horizon"
+    },
+    "COST_CONTROL": {
+      "email": "cost@grandhorizon.com",
+      "role": "COST_CONTROL",
+      "loginOk": true,
+      "httpStatus": 200,
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "TRANSFER_VIEW",
+        "GRN_VIEW",
+        "GRN_MANAGE",
+        "BREAKAGE_VIEW",
+        "APPROVE_BREAKAGE",
+        "STOCK_COUNT_VIEW",
+        "STOCK_COUNT_MANAGE",
+        "READ_BREAKAGE",
+        "READ_LOST",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_VIEW",
+        "APPROVE_LOST",
+        "REPORTS_VIEW",
+        "REPORTS_EXPORT"
+      ],
+      "permissionCount": 29,
+      "tenantSlug": "grand-horizon"
+    },
+    "FINANCE": {
+      "email": "finance@grandhorizon.com",
+      "role": "FINANCE_MANAGER",
+      "loginOk": true,
+      "httpStatus": 200,
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "BASIC_DATA_EDIT",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "GRN_VIEW",
+        "GRN_MANAGE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "ADJUSTMENT_CREATE",
+        "STOCK_COUNT_VIEW",
+        "STOCK_COUNT_MANAGE"
+      ],
+      "permissionCount": 57,
+      "tenantSlug": "grand-horizon"
+    },
+    "GM": {
+      "email": "richard.evans@dxuat.com",
+      "role": "GENERAL_MANAGER",
+      "loginOk": false,
+      "httpStatus": 401,
+      "permissions": [],
+      "permissionCount": 0
+    },
+    "ADMIN": {
+      "email": "admin@grandhorizon.com",
+      "role": "ADMIN",
+      "loginOk": true,
+      "httpStatus": 200,
+      "permissions": [
+        "BASIC_DATA_EDIT",
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "TRANSFER_DISPATCH_RECEIVE",
+        "GRN_VIEW",
+        "GRN_MANAGE",
+        "BREAKAGE_CREATE",
+        "ADJUSTMENT_CREATE",
+        "STOCK_COUNT_MANAGE",
+        "STOCK_COUNT_VIEW",
+        "REPORTS_VIEW",
+        "BREAKAGE_VIEW",
+        "LOST_ITEMS_VIEW",
+        "REPORTS_EXPORT",
+        "VIEW_DASHBOARD"
+      ],
+      "permissionCount": 43,
+      "tenantSlug": "grand-horizon"
+    },
+    "AUDITOR": {
+      "email": "auditor@grandhorizon.com",
+      "role": "AUDITOR",
+      "loginOk": false,
+      "httpStatus": 401,
+      "permissions": [],
+      "permissionCount": 0
+    }
+  },
+  "superAdminOperational": {
+    "email": "superadmin@ose.cloud",
+    "loginOk": false,
+    "permissionCount": 0
+  },
+  "accPublishedWorkflow": [
+    {
+      "id": "0758be9e-386d-4d97-9ea8-3592080366d1",
+      "versionNumber": 2,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "STOCK_COUNT"
+        }
+      }
+    },
+    {
+      "id": "1d7cf656-2ef6-4e5b-8131-a054b500adc3",
+      "versionNumber": 2,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "TRANSFER"
+        }
+      }
+    },
+    {
+      "id": "2152cb28-0f6a-4a31-a690-27834ddd6334",
+      "versionNumber": 1,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "STOCK_REPORT"
+        }
+      }
+    },
+    {
+      "id": "477a8a6f-af1c-4b9c-a122-2c1cf5c3102b",
+      "versionNumber": 2,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "REQUISITION"
+        }
+      }
+    },
+    {
+      "id": "4a6d8cc5-20e2-4bee-b18a-fd0a9a3cc23c",
+      "versionNumber": 2,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "GET_PASS"
+        }
+      }
+    },
+    {
+      "id": "6bae338c-5581-4c40-8091-3124096c3678",
+      "versionNumber": 1,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "REQUISITION"
+        }
+      }
+    },
+    {
+      "id": "98df12da-9790-4613-8913-201297daf855",
+      "versionNumber": 1,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "GRN"
+        }
+      }
+    },
+    {
+      "id": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "GET_PASS"
+        }
+      }
+    },
+    {
+      "id": "b842628d-670f-4f9a-bf41-16f070246b95",
+      "versionNumber": 2,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "GRN"
+        }
+      }
+    },
+    {
+      "id": "ef3f8853-e0a6-4b70-ac66-2ff7efa9f74c",
+      "versionNumber": 1,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "STOCK_COUNT"
+        }
+      }
+    },
+    {
+      "id": "f1c40d9e-ce82-4836-ba80-bd58118a962f",
+      "versionNumber": 1,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "BREAKAGE"
+        }
+      }
+    },
+    {
+      "id": "f5c0597e-1a8e-4f62-9a0c-e7e050a33417",
+      "versionNumber": 2,
+      "definition": {
+        "key": "standard",
+        "module": {
+          "key": "STOCK_REPORT"
+        }
+      }
+    }
+  ]
+}

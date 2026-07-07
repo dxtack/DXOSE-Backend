@@ -1,0 +1,334 @@
+{
+  "generatedAt": "2026-06-28T11:06:15.800Z",
+  "passCount": 14,
+  "failCount": 0,
+  "skippedCount": 0,
+  "phaseClosed": true,
+  "scenarios": [
+    {
+      "id": "P4-BR-GRN",
+      "name": "GRN — exact Workflow Timeline title + By actor meta",
+      "pass": true,
+      "skipped": false,
+      "label": "GRN",
+      "route": "/grn/151c6d1b-3d7f-4b1d-8e90-7c56aad5cf70",
+      "cardMissing": false,
+      "titleText": "Workflow Timeline",
+      "titleExact": true,
+      "hasBy": true,
+      "hasActedBy": false,
+      "actorCheck": true,
+      "noUndefined": true,
+      "noRawEnum": true,
+      "noWorkflowHistoryEyebrow": true,
+      "text": "Workflow Timeline\nReceived & validated\nCompleted\nBy Phase4 STOREKEEPER\n•\nJun 28, 2026, 2:02:17 PM\nCost control approved\nApproved\nBy Closeout COST_CONTROL\n•\nJun 28, 2026, 2:02:17 PM\nNote: Cost OK\nFinance approved\nApproved\nBy Closeout FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:17 PM\nNote: Finance OK",
+      "roleLabels": [
+        "Received & validated",
+        "Cost control approved",
+        "Finance approved"
+      ],
+      "badges": [
+        "Completed",
+        "Approved",
+        "Approved"
+      ]
+    },
+    {
+      "id": "P4-BR-GRN-SEM",
+      "name": "Browser: GRN Received & validated milestone renders",
+      "pass": true,
+      "skipped": false,
+      "receivedCompletedOnly": true
+    },
+    {
+      "id": "P4-BR-TR",
+      "name": "Transfer — exact Workflow Timeline title + By actor meta",
+      "pass": true,
+      "skipped": false,
+      "label": "Transfer",
+      "route": "/transfers/99b526da-8f49-4e9a-a449-7e92750121ef",
+      "cardMissing": false,
+      "titleText": "Workflow Timeline",
+      "titleExact": true,
+      "hasBy": true,
+      "hasActedBy": false,
+      "actorCheck": true,
+      "noUndefined": true,
+      "noRawEnum": true,
+      "noWorkflowHistoryEyebrow": true,
+      "text": "Workflow Timeline\nSubmitted\nSubmitted\nBy Phase4 STOREKEEPER\n•\nJun 28, 2026, 2:02:18 PM\nDepartment approved\nApproved\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:18 PM\nFinance approved\nApproved\nBy Phase4 FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:19 PM\nPosted\nPosted\nBy Phase4 FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:19 PM",
+      "roleLabels": [
+        "Submitted",
+        "Department approved",
+        "Finance approved",
+        "Posted"
+      ],
+      "badges": [
+        "Submitted",
+        "Approved",
+        "Approved",
+        "Posted"
+      ]
+    },
+    {
+      "id": "P4-BR-BRK",
+      "name": "Breakage — exact Workflow Timeline title + By actor meta",
+      "pass": true,
+      "skipped": false,
+      "label": "Breakage",
+      "route": "/breakage/e45147f1-dde8-4f44-a535-aaa6d3dcc044",
+      "cardMissing": false,
+      "titleText": "Workflow Timeline",
+      "titleExact": true,
+      "hasBy": true,
+      "hasActedBy": false,
+      "actorCheck": true,
+      "noUndefined": true,
+      "noRawEnum": true,
+      "noWorkflowHistoryEyebrow": true,
+      "text": "Workflow Timeline\nDepartment approved\nApproved\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:19 PM\nNote: Auto-approved by system due to high-level authority.\nCost control approval\nIn progress\nFinance approval\nPending\nGeneral manager approval\nPending",
+      "roleLabels": [
+        "Department approved",
+        "Cost control approval",
+        "Finance approval",
+        "General manager approval"
+      ],
+      "badges": [
+        "Approved",
+        "In progress",
+        "Pending",
+        "Pending"
+      ]
+    },
+    {
+      "id": "P4-BR-GP-V4-SB",
+      "name": "Get Pass v4 Send Back — exact Workflow Timeline title + By actor meta",
+      "pass": true,
+      "skipped": false,
+      "label": "Get Pass v4 Send Back",
+      "route": "/get-passes/5606ee33-dd2e-4161-8c45-e14eeb8d924b",
+      "cardMissing": false,
+      "titleText": "Workflow Timeline",
+      "titleExact": true,
+      "hasBy": true,
+      "hasActedBy": false,
+      "actorCheck": true,
+      "noUndefined": true,
+      "noRawEnum": true,
+      "noWorkflowHistoryEyebrow": true,
+      "text": "Workflow Timeline\n\nIssuing-hotel approval chain for this pass.\n\nSubmitted\nSubmitted\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:19 PM\nSent Back\nSent Back\nBy Phase4 FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:20 PM\nReason: PHASE4_TIMELINE_GATE send back for correction\nResubmitted\nResubmitted\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:20 PM\nDepartment approval\nIn progress\nCost control approval\nPending\nFinance approval\nPending\nSecurity approval\nPending",
+      "roleLabels": [
+        "Submitted",
+        "Sent Back",
+        "Resubmitted",
+        "Department approval",
+        "Cost control approval",
+        "Finance approval",
+        "Security approval"
+      ],
+      "badges": [
+        "Submitted",
+        "Sent Back",
+        "Resubmitted",
+        "In progress",
+        "Pending",
+        "Pending",
+        "Pending"
+      ]
+    },
+    {
+      "id": "P4-BR-GP-SB-EVENT",
+      "name": "Browser: Sent Back exactly once; no Returned lifecycle label",
+      "pass": true,
+      "skipped": false,
+      "sentBackCount": 1,
+      "returnedCount": 0,
+      "resubmittedCount": 1,
+      "submittedCount": 1,
+      "roleLabels": [
+        "Submitted",
+        "Sent Back",
+        "Resubmitted",
+        "Department approval",
+        "Cost control approval",
+        "Finance approval",
+        "Security approval"
+      ]
+    },
+    {
+      "id": "P4-BR-GP-RS-EVENT",
+      "name": "Browser: Resubmitted exactly once; Submitted preserved",
+      "pass": true,
+      "skipped": false,
+      "resubmittedCount": 1,
+      "submittedCount": 1,
+      "roleLabels": [
+        "Submitted",
+        "Sent Back",
+        "Resubmitted",
+        "Department approval",
+        "Cost control approval",
+        "Finance approval",
+        "Security approval"
+      ]
+    },
+    {
+      "id": "P4-BR-GP-SB-REASON",
+      "name": "Browser: Send Back reason visible",
+      "pass": true,
+      "skipped": false,
+      "reasonFragment": "PHASE4_TIMELINE_GATE send back for corre"
+    },
+    {
+      "id": "P4-BR-GP-RET",
+      "name": "Get Pass physical return — exact Workflow Timeline title + By actor meta",
+      "pass": true,
+      "skipped": false,
+      "label": "Get Pass physical return",
+      "route": "/get-passes/1b58d002-468e-4f4c-b8d7-e2683ae2ee29",
+      "cardMissing": false,
+      "titleText": "Workflow Timeline",
+      "titleExact": true,
+      "hasBy": true,
+      "hasActedBy": false,
+      "actorCheck": true,
+      "noUndefined": true,
+      "noRawEnum": true,
+      "noWorkflowHistoryEyebrow": true,
+      "text": "Workflow Timeline\n\nIssuing-hotel approval chain for this pass.\n\nSubmitted\nSubmitted\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:20 PM\nDepartment approved\nApproved\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:20 PM\nCost control approved\nApproved\nBy Phase4 COST_CONTROL\n•\nJun 28, 2026, 2:02:20 PM\nFinance approved\nApproved\nBy Phase4 FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:21 PM\nSecurity approved\nApproved\nBy Phase4 SECURITY\n•\nJun 28, 2026, 2:02:21 PM\nChecked Out\nChecked Out\nBy Phase4 SECURITY\n•\nJun 28, 2026, 2:02:21 PM\nReturned\nReturned\nBy Phase4 FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:21 PM",
+      "roleLabels": [
+        "Submitted",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "Security approved",
+        "Checked Out",
+        "Returned"
+      ],
+      "badges": [
+        "Submitted",
+        "Approved",
+        "Approved",
+        "Approved",
+        "Approved",
+        "Checked Out",
+        "Returned"
+      ]
+    },
+    {
+      "id": "P4-BR-GP-RET-EVENT",
+      "name": "Browser: Checked Out + Returned; no Sent Back/Resubmitted",
+      "pass": true,
+      "skipped": false,
+      "hasCheckedOut": true,
+      "hasReturned": true,
+      "noSentBack": true,
+      "noResubmitted": true
+    },
+    {
+      "id": "P4-BR-IC",
+      "name": "Inventory Count — exact Workflow Timeline title + By actor meta",
+      "pass": true,
+      "skipped": false,
+      "label": "Inventory Count",
+      "route": "/inventory-count/6413e77f-4206-4693-a093-e055a90cc896",
+      "cardMissing": false,
+      "titleText": "Workflow Timeline",
+      "titleExact": true,
+      "hasBy": true,
+      "hasActedBy": false,
+      "actorCheck": true,
+      "noUndefined": true,
+      "noRawEnum": true,
+      "noWorkflowHistoryEyebrow": true,
+      "text": "Workflow Timeline\n\nOperational log of each workflow step, actor, timestamp, and status.\n\nCount submitted\nCompleted\nBy Phase4 STOREKEEPER\n•\nJun 28, 2026, 2:02:22 PM\nSubmitted\nSubmitted\nBy Phase4 STOREKEEPER\n•\nJun 28, 2026, 2:02:22 PM\nFinance approved\nApproved\nBy Phase4 FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:22 PM\nNote: PHASE4_TIMELINE_GATE\nGeneral manager approved\nApproved\nBy Phase4 GENERAL_MANAGER\n•\nJun 28, 2026, 2:02:22 PM\nNote: PHASE4_TIMELINE_GATE\nPosted\nPosted\nBy Phase4 STOREKEEPER\n•\nJun 28, 2026, 2:02:22 PM",
+      "roleLabels": [
+        "Count submitted",
+        "Submitted",
+        "Finance approved",
+        "General manager approved",
+        "Posted"
+      ],
+      "badges": [
+        "Completed",
+        "Submitted",
+        "Approved",
+        "Approved",
+        "Posted"
+      ]
+    },
+    {
+      "id": "P4-BR-IC-SEM",
+      "name": "Browser: Count submitted Completed badge; single Submitted lifecycle row",
+      "pass": true,
+      "skipped": false,
+      "countSubmittedBadge": "Completed",
+      "submittedRoleCount": 1,
+      "roleLabels": [
+        "Count submitted",
+        "Submitted",
+        "Finance approved",
+        "General manager approved",
+        "Posted"
+      ],
+      "badges": [
+        "Completed",
+        "Submitted",
+        "Approved",
+        "Approved",
+        "Posted"
+      ]
+    },
+    {
+      "id": "P4-BR-GP-V3-GM",
+      "name": "Get Pass historical v3 GM — exact Workflow Timeline title + By actor meta",
+      "pass": true,
+      "skipped": false,
+      "label": "Get Pass historical v3 GM",
+      "route": "/get-passes/a3f92237-38df-450a-9fee-7eb67d7e05cc",
+      "cardMissing": false,
+      "titleText": "Workflow Timeline",
+      "titleExact": true,
+      "hasBy": true,
+      "hasActedBy": false,
+      "actorCheck": true,
+      "noUndefined": true,
+      "noRawEnum": true,
+      "noWorkflowHistoryEyebrow": true,
+      "text": "Workflow Timeline\n\nIssuing-hotel approval chain for this pass.\n\nSubmitted\nSubmitted\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:21 PM\nDepartment approved\nApproved\nBy Phase4 DEPT_MANAGER\n•\nJun 28, 2026, 2:02:21 PM\nCost control approved\nApproved\nBy Phase4 COST_CONTROL\n•\nJun 28, 2026, 2:02:21 PM\nFinance approved\nApproved\nBy Phase4 FINANCE_MANAGER\n•\nJun 28, 2026, 2:02:21 PM\nGeneral manager approved\nApproved\nBy Phase4 GENERAL_MANAGER\n•\nJun 28, 2026, 2:02:21 PM\nSecurity approval\nIn progress",
+      "roleLabels": [
+        "Submitted",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approved",
+        "Security approval"
+      ],
+      "badges": [
+        "Submitted",
+        "Approved",
+        "Approved",
+        "Approved",
+        "Approved",
+        "In progress"
+      ]
+    },
+    {
+      "id": "P4-BR-GP-V3-GM-STAGE",
+      "name": "Browser: v3 GM approval stage visible with stamp",
+      "pass": true,
+      "skipped": false,
+      "gmActor": "Phase4 GENERAL_MANAGER",
+      "hasGm": true
+    }
+  ],
+  "fixtures": {
+    "grnId": "151c6d1b-3d7f-4b1d-8e90-7c56aad5cf70",
+    "transferId": "99b526da-8f49-4e9a-a449-7e92750121ef",
+    "breakageId": "e45147f1-dde8-4f44-a535-aaa6d3dcc044",
+    "getPassSendBackResubmitId": "5606ee33-dd2e-4161-8c45-e14eeb8d924b",
+    "getPassPhysicalReturnId": "1b58d002-468e-4f4c-b8d7-e2683ae2ee29",
+    "getPassV3GmId": "a3f92237-38df-450a-9fee-7eb67d7e05cc",
+    "inventoryCountId": "6413e77f-4206-4693-a093-e055a90cc896"
+  }
+}

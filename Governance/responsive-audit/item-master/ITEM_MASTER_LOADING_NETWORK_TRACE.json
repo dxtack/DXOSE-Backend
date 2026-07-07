@@ -1,0 +1,338 @@
+{
+  "runAt": "2026-07-03T12:02:46.379Z",
+  "tenant": {
+    "slug": "dx-airport-hotel",
+    "name": "DX Airport Hotel",
+    "itemCount": 201,
+    "email": "olivia.parker@dxuat.com"
+  },
+  "viewports": [
+    {
+      "viewport": "1366x768",
+      "marks": [
+        {
+          "name": "nav-start",
+          "ms": 1
+        },
+        {
+          "name": "domcontentloaded-fired",
+          "ms": 1
+        },
+        {
+          "name": "app-items-list-mounted",
+          "ms": 1815
+        },
+        {
+          "name": "navigation-settled",
+          "ms": 1815
+        },
+        {
+          "name": "rows-visible-idle",
+          "ms": 2010
+        },
+        {
+          "name": "refresh-idle",
+          "ms": 2478
+        }
+      ],
+      "responses": [
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1246,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1762,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/departments",
+          "status": 200,
+          "ms": 1846,
+          "bytes": 2027
+        },
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1904,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/items",
+          "status": 200,
+          "ms": 2076,
+          "bytes": 29591
+        },
+        {
+          "type": "response",
+          "path": "/api/categories",
+          "status": 200,
+          "ms": 2132,
+          "bytes": 1392
+        },
+        {
+          "type": "response",
+          "path": "/api/locations",
+          "status": 200,
+          "ms": 2132,
+          "bytes": 3746
+        },
+        {
+          "type": "response",
+          "path": "/api/workflow-pipeline/alerts",
+          "status": 200,
+          "ms": 2189,
+          "bytes": 8485
+        }
+      ],
+      "metrics": {
+        "rows": 22,
+        "spinner": false,
+        "initialLoading": false,
+        "totalText": "200 items total",
+        "pagVisible": true
+      },
+      "refreshMs": 174,
+      "duplicatePaths": {
+        "/api/items/check-requirements": 3,
+        "/api/departments": 1,
+        "/api/items": 1,
+        "/api/categories": 1,
+        "/api/locations": 1,
+        "/api/workflow-pipeline/alerts": 1
+      },
+      "itemsApiMs": 2076
+    },
+    {
+      "viewport": "1536x864",
+      "marks": [
+        {
+          "name": "nav-start",
+          "ms": 1
+        },
+        {
+          "name": "domcontentloaded-fired",
+          "ms": 1
+        },
+        {
+          "name": "app-items-list-mounted",
+          "ms": 1794
+        },
+        {
+          "name": "navigation-settled",
+          "ms": 1794
+        },
+        {
+          "name": "rows-visible-idle",
+          "ms": 1974
+        },
+        {
+          "name": "refresh-idle",
+          "ms": 2465
+        }
+      ],
+      "responses": [
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1027,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1763,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/categories",
+          "status": 200,
+          "ms": 1779,
+          "bytes": 1392
+        },
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1779,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/departments",
+          "status": 200,
+          "ms": 1779,
+          "bytes": 2027
+        },
+        {
+          "type": "response",
+          "path": "/api/locations",
+          "status": 200,
+          "ms": 1781,
+          "bytes": 3746
+        },
+        {
+          "type": "response",
+          "path": "/api/items",
+          "status": 200,
+          "ms": 1973,
+          "bytes": 29591
+        },
+        {
+          "type": "response",
+          "path": "/api/workflow-pipeline/alerts",
+          "status": 200,
+          "ms": 2108,
+          "bytes": 8485
+        },
+        {
+          "type": "response",
+          "path": "/api/items",
+          "status": 200,
+          "ms": 2467,
+          "bytes": 29591
+        }
+      ],
+      "metrics": {
+        "rows": 22,
+        "spinner": false,
+        "initialLoading": false,
+        "totalText": "200 items total",
+        "pagVisible": true
+      },
+      "refreshMs": 178,
+      "duplicatePaths": {
+        "/api/items/check-requirements": 3,
+        "/api/categories": 1,
+        "/api/departments": 1,
+        "/api/locations": 1,
+        "/api/items": 2,
+        "/api/workflow-pipeline/alerts": 1
+      },
+      "itemsApiMs": 1973
+    },
+    {
+      "viewport": "1920x1080",
+      "marks": [
+        {
+          "name": "nav-start",
+          "ms": 1
+        },
+        {
+          "name": "domcontentloaded-fired",
+          "ms": 1
+        },
+        {
+          "name": "app-items-list-mounted",
+          "ms": 1562
+        },
+        {
+          "name": "navigation-settled",
+          "ms": 1562
+        },
+        {
+          "name": "rows-visible-idle",
+          "ms": 1603
+        },
+        {
+          "name": "refresh-idle",
+          "ms": 2077
+        }
+      ],
+      "responses": [
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 840,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1508,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/categories",
+          "status": 200,
+          "ms": 1508,
+          "bytes": 1392
+        },
+        {
+          "type": "response",
+          "path": "/api/departments",
+          "status": 200,
+          "ms": 1509,
+          "bytes": 2027
+        },
+        {
+          "type": "response",
+          "path": "/api/locations",
+          "status": 200,
+          "ms": 1510,
+          "bytes": 3746
+        },
+        {
+          "type": "response",
+          "path": "/api/items/check-requirements",
+          "status": 200,
+          "ms": 1511,
+          "bytes": 283
+        },
+        {
+          "type": "response",
+          "path": "/api/items",
+          "status": 200,
+          "ms": 1511,
+          "bytes": 29591
+        },
+        {
+          "type": "response",
+          "path": "/api/workflow-pipeline/alerts",
+          "status": 200,
+          "ms": 1512,
+          "bytes": 8485
+        },
+        {
+          "type": "response",
+          "path": "/api/items",
+          "status": 200,
+          "ms": 2386,
+          "bytes": 29591
+        }
+      ],
+      "metrics": {
+        "rows": 22,
+        "spinner": false,
+        "initialLoading": false,
+        "totalText": "200 items total",
+        "pagVisible": true
+      },
+      "refreshMs": 231,
+      "duplicatePaths": {
+        "/api/items/check-requirements": 3,
+        "/api/categories": 1,
+        "/api/departments": 1,
+        "/api/locations": 1,
+        "/api/items": 2,
+        "/api/workflow-pipeline/alerts": 1
+      },
+      "itemsApiMs": 1511
+    }
+  ],
+  "error": null
+}

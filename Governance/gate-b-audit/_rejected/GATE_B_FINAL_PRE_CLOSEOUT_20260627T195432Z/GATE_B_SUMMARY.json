@@ -1,0 +1,38 @@
+{
+  "audit_complete": true,
+  "audit_timestamp_utc": "2026-06-27T16:47:17Z",
+  "actionable_rows_reviewed": 268,
+  "matrix_rows": 476,
+  "status_counts": {
+    "NOT APPLICABLE": 208,
+    "PASS": 31,
+    "UNVERIFIED / BLOCKED": 215,
+    "FAIL": 7,
+    "PARTIAL": 15
+  },
+  "actionable_status_counts": {
+    "PASS": 31,
+    "UNVERIFIED / BLOCKED": 215,
+    "FAIL": 7,
+    "PARTIAL": 15
+  },
+  "findings_total": 7,
+  "findings_by_severity": {
+    "High": 5,
+    "Low": 1,
+    "Medium": 1
+  },
+  "runtime_scenarios": {
+    "passed": 30,
+    "failed": 7,
+    "blocked": 0
+  },
+  "code_snapshot_hashes": {
+    "OSE-Frontend/src": "BEB44B9E4D69487A599BEEA99A57D3D24A8BC18EF6EF0A0635D941B359A63F9B",
+    "OSE-backend/src": "CFE262BF4D82D5BD5C23058FE57EF5B4CDD6C37E9FCA1030F840A3729274DB21",
+    "OSE-backend/prisma": "B26E4594F06FA9CEE7F2FC39FC03438500108C7B5CDE56B882A10CBC4A16BCE9"
+  },
+  "gate_a_unmodified": true,
+  "remediation_started": false,
+  "validation_exit_code": 0
+}

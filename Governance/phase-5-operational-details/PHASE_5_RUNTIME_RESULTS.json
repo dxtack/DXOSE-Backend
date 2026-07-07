@@ -1,0 +1,1238 @@
+{
+  "generatedAt": "2026-06-28T14:40:23.079Z",
+  "phase": "phase-5-operational-details",
+  "runtimePass": 98,
+  "runtimeFail": 0,
+  "regPass": 6,
+  "regFail": 0,
+  "passCount": 98,
+  "failCount": 0,
+  "runtimeFailCount": 0,
+  "browserFailCount": 0,
+  "regressionFailCount": 0,
+  "skippedCount": 0,
+  "vacuousCount": 0,
+  "requestRewriteCount": 0,
+  "missingAllowBindingCount": 0,
+  "missingDenyBindingCount": 0,
+  "unexecutedActionBindingCount": 0,
+  "ledgerFieldMismatchCount": 0,
+  "missingVoidTimelineCount": 0,
+  "unauthorizedVisibleMutationButtonCount": 0,
+  "missingScenarioIdCount": 0,
+  "frontendProductionBuildPass": true,
+  "phaseClosed": true,
+  "scenarios": [
+    {
+      "id": "P5-MATRIX-LOAD",
+      "name": "Action matrix loaded with runtime allow/deny bindings",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "total": 12,
+      "missingAllowBindingCount": 0,
+      "missingDenyBindingCount": 0
+    },
+    {
+      "id": "P5-LC-01",
+      "name": "Transfer POSTED maps to Posted",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false
+    },
+    {
+      "id": "P5-LC-02",
+      "name": "Breakage VOID maps to Void",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false
+    },
+    {
+      "id": "P5-LC-03",
+      "name": "Lost REJECTED maps to Rejected",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false
+    },
+    {
+      "id": "P5-LC-04",
+      "name": "Transfer has no Sent Back state",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false
+    },
+    {
+      "id": "P5-SEED",
+      "name": "Deterministic detail fixtures seeded",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false
+    },
+    {
+      "id": "P5-FIXTURES",
+      "name": "PHASE_5_FIXTURES.json loaded",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "hasBrowserFlows": true,
+      "hasNegativeActors": true
+    },
+    {
+      "id": "P5-API-00",
+      "name": "Backend API reachable",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "status": 200
+    },
+    {
+      "id": "P5-TR-DRAFT-TL-API",
+      "name": "DRAFT transfer timeline API returns 200 with zero entries",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "entryCount": 0,
+      "fixtureId": "904bb61f-1503-47aa-8ae0-12539d48861a"
+    },
+    {
+      "id": "P5-TRANSFER-FULL-draft",
+      "name": "TRANSFER draft full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "904bb61f-1503-47aa-8ae0-12539d48861a",
+      "status": "DRAFT",
+      "userFacingState": "Draft",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0
+    },
+    {
+      "id": "P5-TRANSFER-FULL-pendingDept",
+      "name": "TRANSFER pendingDept full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "26deb92a-b94e-47f8-931c-65f348417a30",
+      "status": "PENDING_DEPT",
+      "userFacingState": "In Review",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0
+    },
+    {
+      "id": "P5-TRANSFER-FULL-pendingFinance",
+      "name": "TRANSFER pendingFinance full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "cde5b4e5-5177-4032-b332-53cb93c72c2b",
+      "status": "PENDING_FINANCE",
+      "userFacingState": "In Review",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0
+    },
+    {
+      "id": "P5-TRANSFER-FULL-posted",
+      "name": "TRANSFER posted full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "b185094b-b5ed-4c16-a054-710dabf7dd58",
+      "status": "POSTED",
+      "userFacingState": "Posted",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-TRANSFER-FULL-rejected",
+      "name": "TRANSFER rejected full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "ce2c608b-82df-4afc-b9d1-19342a3851a9",
+      "status": "REJECTED",
+      "userFacingState": "Rejected",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 0
+    },
+    {
+      "id": "P5-BREAKAGE-FULL-draft",
+      "name": "BREAKAGE draft full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "53a96cbb-84b0-4848-b1a9-d9512174ab7e",
+      "status": "DRAFT",
+      "userFacingState": "Draft",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-BREAKAGE-FULL-pendingCostControl",
+      "name": "BREAKAGE pendingCostControl full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "280c4ada-1187-4ed1-a399-5ed134963bd1",
+      "status": "DEPT_APPROVED",
+      "userFacingState": "In Review",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-BREAKAGE-FULL-pendingFinance",
+      "name": "BREAKAGE pendingFinance full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "259b1380-843a-4f6b-9c77-1147004e5e52",
+      "status": "COST_CONTROL_APPROVED",
+      "userFacingState": "In Review",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-BREAKAGE-FULL-pendingGm",
+      "name": "BREAKAGE pendingGm full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "2de099ad-eaad-4a5c-82bf-a628f7ccfc44",
+      "status": "FINANCE_APPROVED",
+      "userFacingState": "In Review",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-BREAKAGE-FULL-approved",
+      "name": "BREAKAGE approved full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "e54697e3-681b-476c-b1a0-e719eb1243ae",
+      "status": "APPROVED",
+      "userFacingState": "Posted",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-BREAKAGE-FULL-rejected",
+      "name": "BREAKAGE rejected full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "6f3f3d4c-8b7d-46fa-977a-4fc8aebff467",
+      "status": "REJECTED",
+      "userFacingState": "Rejected",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-BREAKAGE-FULL-void",
+      "name": "BREAKAGE void full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "7ff8852d-9398-4d2c-ab5e-a8ad2db3cb22",
+      "status": "VOID",
+      "userFacingState": "Void",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-LOST-FULL-deptApproved",
+      "name": "LOST deptApproved full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "59f0fec8-fcd6-4955-a39b-bd39ae19a1ac",
+      "status": "DEPT_APPROVED",
+      "userFacingState": "In Review",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-LOST-FULL-pendingFinance",
+      "name": "LOST pendingFinance full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "36b06693-1e72-4e9d-96fc-b87f35ac0ab8",
+      "status": "COST_CONTROL_APPROVED",
+      "userFacingState": "In Review",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-LOST-FULL-approvedEmployee",
+      "name": "LOST approvedEmployee full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "f7f25a62-6337-4138-a674-766436fab7f4",
+      "status": "APPROVED",
+      "userFacingState": "Posted",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-LOST-FULL-approvedHotel",
+      "name": "LOST approvedHotel full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "0067a8c2-3b1f-4118-b5c5-881c72706a91",
+      "status": "APPROVED",
+      "userFacingState": "Posted",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-LOST-FULL-rejected",
+      "name": "LOST rejected full list/detail reconcile",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "54a6ee39-8f2e-47ef-ae8e-31a5afc09464",
+      "status": "REJECTED",
+      "userFacingState": "Rejected",
+      "mismatches": [],
+      "leakIssues": [],
+      "lineCount": 1,
+      "totalQty": 1,
+      "totalValue": 5
+    },
+    {
+      "id": "P5-TR-POST-EXACT",
+      "name": "Posted transfer exact TRANSFER_OUT/IN ledger",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "b185094b-b5ed-4c16-a054-710dabf7dd58",
+      "issues": [],
+      "outQty": "1",
+      "inQty": "1"
+    },
+    {
+      "id": "P5-BRK-POST-EXACT",
+      "name": "Approved breakage exact BREAKAGE ledger + postedAt",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "e54697e3-681b-476c-b1a0-e719eb1243ae",
+      "issues": [],
+      "postedAt": "2026-06-28T14:39:22.092Z",
+      "stock": {
+        "qtyOnHand": 496,
+        "totalQtyDamage": 83,
+        "totalQtyLost": 161
+      }
+    },
+    {
+      "id": "P5-LOST-POST-EXACT",
+      "name": "Approved lost exact LOST ledger row",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "fixtureId": "f7f25a62-6337-4138-a674-766436fab7f4",
+      "issues": [],
+      "totalQtyLost": 161
+    },
+    {
+      "id": "P5-NEG-TR-WRONG-ROLE",
+      "name": "Wrong role cannot approve transfer",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "PENDING_DEPT",
+      "statusAfter": "PENDING_DEPT",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 2,
+      "auditAfter": 2,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-TR-STALE",
+      "name": "Stale concurrency on transfer approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 409,
+      "expectedStatus": [
+        409
+      ],
+      "statusBefore": "PENDING_DEPT",
+      "statusAfter": "PENDING_DEPT",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 2,
+      "auditAfter": 2,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-TR-NO-ASSIGN",
+      "name": "Transfer approve denied (noAssign)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "PENDING_DEPT",
+      "statusAfter": "PENDING_DEPT",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 2,
+      "auditAfter": 2,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-TR-INACTIVE",
+      "name": "Transfer approve denied (inactiveAssign)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "PENDING_DEPT",
+      "statusAfter": "PENDING_DEPT",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 2,
+      "auditAfter": 2,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-TR-DELETED",
+      "name": "Transfer approve denied (deletedAssign)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "PENDING_DEPT",
+      "statusAfter": "PENDING_DEPT",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 2,
+      "auditAfter": 2,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-TR-VIEWONLY",
+      "name": "Transfer approve denied (viewOnly)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "PENDING_DEPT",
+      "statusAfter": "PENDING_DEPT",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 2,
+      "auditAfter": 2,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-TR-TERMINAL",
+      "name": "Cannot approve posted transfer",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 422,
+      "expectedStatus": [
+        403,
+        422
+      ],
+      "statusBefore": "POSTED",
+      "statusAfter": "POSTED",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 2,
+      "ledgerAfter": 2,
+      "auditBefore": 5,
+      "auditAfter": 5,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-BRK-NO-ASSIGN",
+      "name": "Breakage approve denied (noAssign)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "DEPT_APPROVED",
+      "statusAfter": "DEPT_APPROVED",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 1,
+      "auditAfter": 1,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-BRK-VIEWONLY",
+      "name": "Breakage approve denied (viewOnly)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "DEPT_APPROVED",
+      "statusAfter": "DEPT_APPROVED",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 1,
+      "auditAfter": 1,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-BRK-WRONG-ROLE",
+      "name": "Breakage approve denied (storekeeper)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "DEPT_APPROVED",
+      "statusAfter": "DEPT_APPROVED",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 1,
+      "auditAfter": 1,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-BRK-VOID-APPROVED",
+      "name": "Cannot void approved breakage",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 400,
+      "expectedStatus": [
+        400,
+        403,
+        422,
+        423
+      ],
+      "statusBefore": "APPROVED",
+      "statusAfter": "APPROVED",
+      "concurrencyBefore": 2,
+      "concurrencyAfter": 2,
+      "ledgerBefore": 1,
+      "ledgerAfter": 1,
+      "auditBefore": 1,
+      "auditAfter": 1,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-BRK-TERMINAL",
+      "name": "Cannot approve void breakage",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 400,
+      "expectedStatus": [
+        403,
+        400,
+        422
+      ],
+      "statusBefore": "VOID",
+      "statusAfter": "VOID",
+      "concurrencyBefore": 1,
+      "concurrencyAfter": 1,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 2,
+      "auditAfter": 2,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-BRK-FOREIGN-EVIDENCE",
+      "name": "View-only cannot access OOS breakage evidence",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "fixtureId": "01d04fdd-9604-488e-a9fa-9e1d8add95ec"
+    },
+    {
+      "id": "P5-NEG-LOST-NO-ASSIGN",
+      "name": "Lost approve denied (noAssign)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "DEPT_APPROVED",
+      "statusAfter": "DEPT_APPROVED",
+      "concurrencyBefore": 0,
+      "concurrencyAfter": 0,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 0,
+      "auditAfter": 0,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-LOST-VIEWONLY",
+      "name": "Lost approve denied (viewOnly)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expectedStatus": [
+        403
+      ],
+      "statusBefore": "DEPT_APPROVED",
+      "statusAfter": "DEPT_APPROVED",
+      "concurrencyBefore": 0,
+      "concurrencyAfter": 0,
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "auditBefore": 0,
+      "auditAfter": 0,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-LOST-DUP-FINAL",
+      "name": "Duplicate final lost approval denied",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 423,
+      "expectedStatus": [
+        403,
+        422,
+        423
+      ],
+      "statusBefore": "APPROVED",
+      "statusAfter": "APPROVED",
+      "concurrencyBefore": 0,
+      "concurrencyAfter": 0,
+      "ledgerBefore": 1,
+      "ledgerAfter": 1,
+      "auditBefore": 0,
+      "auditAfter": 0,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-LOST-TREAT-CHANGE",
+      "name": "Cannot change treatment after APPROVED",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 423,
+      "expectedStatus": [
+        403,
+        422,
+        423
+      ],
+      "statusBefore": "APPROVED",
+      "statusAfter": "APPROVED",
+      "concurrencyBefore": 0,
+      "concurrencyAfter": 0,
+      "ledgerBefore": 1,
+      "ledgerAfter": 1,
+      "auditBefore": 0,
+      "auditAfter": 0,
+      "unchangedIssues": []
+    },
+    {
+      "id": "P5-NEG-STALE-JWT",
+      "name": "Stale JWT rejected",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 401
+    },
+    {
+      "id": "P5-NEG-CROSS-TENANT",
+      "name": "Cross-tenant transfer detail 404",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 404,
+      "fixtureId": "1d61ecaa-e9cc-47d1-a75e-af1101f21069"
+    },
+    {
+      "id": "P5-NEG-OOS-TRANSFER",
+      "name": "TRANSFER OOS detail 403",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "fixtureId": "7afe8e68-d879-4689-9a5d-080f390e383c"
+    },
+    {
+      "id": "P5-NEG-OOS-BREAKAGE",
+      "name": "BREAKAGE OOS detail 403",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "fixtureId": "01d04fdd-9604-488e-a9fa-9e1d8add95ec"
+    },
+    {
+      "id": "P5-NEG-OOS-LOST",
+      "name": "LOST OOS detail 403",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "fixtureId": "695360eb-ea4a-4536-aa72-47f7c122e6b3"
+    },
+    {
+      "id": "P5-FLOW-TR-DEPT",
+      "name": "Transfer dept approve → PENDING_FINANCE",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "PENDING_FINANCE",
+      "fixtureId": "36e4d4c7-8f44-4da2-b25a-0fc5d38215a5"
+    },
+    {
+      "id": "P5-FLOW-TR-POST",
+      "name": "Transfer finance approve & post with exact ledger/stock",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "POSTED",
+      "ledgerIssues": [],
+      "stockIssues": [],
+      "fixtureId": "36e4d4c7-8f44-4da2-b25a-0fc5d38215a5"
+    },
+    {
+      "id": "P5-FLOW-BRK-CC",
+      "name": "Breakage costControl approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "COST_CONTROL_APPROVED",
+      "expected": "COST_CONTROL_APPROVED",
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d"
+    },
+    {
+      "id": "P5-FLOW-BRK-FIN",
+      "name": "Breakage financeManager approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "FINANCE_APPROVED",
+      "expected": "FINANCE_APPROVED",
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d"
+    },
+    {
+      "id": "P5-FLOW-BRK-GM",
+      "name": "Breakage generalManager approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "APPROVED",
+      "expected": "APPROVED",
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d"
+    },
+    {
+      "id": "P5-FLOW-BRK-POST",
+      "name": "Breakage full chain exact ledger/stock",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "ledgerIssues": [],
+      "stockIssues": [],
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d"
+    },
+    {
+      "id": "P5-FLOW-LOST-CC",
+      "name": "Lost chain costControl",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "COST_CONTROL_APPROVED",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673"
+    },
+    {
+      "id": "P5-FLOW-LOST-FIN",
+      "name": "Lost chain financeManager",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "FINANCE_APPROVED",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673"
+    },
+    {
+      "id": "P5-FLOW-LOST-GM-EMP",
+      "name": "Lost chain generalManager",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "APPROVED",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673"
+    },
+    {
+      "id": "P5-FLOW-LOST-POST",
+      "name": "Lost employee deduction exact ledger/stock/treatment",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "ledgerIssues": [],
+      "treatment": "EMPLOYEE",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673"
+    },
+    {
+      "id": "P5-FLOW-LOST-HOTEL",
+      "name": "Lost hotel expenses approved",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "treatment": "HOTEL",
+      "fixtureId": "21eceb3e-8938-44b5-b190-acfd50714109"
+    },
+    {
+      "id": "P5-FLOW-LOST-REJECT",
+      "name": "Lost reject → REJECTED terminal",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "REJECTED",
+      "fixtureId": "8716562f-6c57-4192-a01e-30ee81386bef"
+    },
+    {
+      "id": "P5-FLOW-BRK-VOID-breakageVoidDraft",
+      "name": "Breakage void breakageVoidDraft",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "VOID",
+      "fixtureId": "e878a2f8-b618-45b2-9ff5-3c59e3a83d0e"
+    },
+    {
+      "id": "P5-FLOW-BRK-VOID-breakageVoidRejected",
+      "name": "Breakage void breakageVoidRejected",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "VOID",
+      "fixtureId": "6fb22bbd-66e0-4b44-a31a-6c508b3b00de"
+    },
+    {
+      "id": "P5-MX-TR-SUBMIT-OK",
+      "name": "Matrix allow: POST /api/transfers/:id/submit",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "PENDING_DEPT"
+    },
+    {
+      "id": "P5-MX-TR-SUBMIT-DENY",
+      "name": "Matrix deny: POST /api/transfers/:id/submit",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-TR-APPROVE-OK",
+      "name": "Matrix allow: POST /api/transfers/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-MX-TR-APPROVE-DENY",
+      "name": "Matrix deny: POST /api/transfers/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-TR-REJECT-OK",
+      "name": "Matrix allow: POST /api/transfers/:id/reject",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "REJECTED"
+    },
+    {
+      "id": "P5-MX-TR-REJECT-DENY",
+      "name": "Matrix deny: POST /api/transfers/:id/reject",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-TR-PATCH-OK",
+      "name": "Matrix allow: PATCH /api/transfers/:id",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-MX-TR-PATCH-DENY",
+      "name": "Matrix deny: PATCH /api/transfers/:id",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-TR-DELETE-OK",
+      "name": "Matrix allow: DELETE /api/transfers/:id",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-MX-TR-DELETE-DENY",
+      "name": "Matrix deny: DELETE /api/transfers/:id",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-BRK-SUBMIT-OK",
+      "name": "Matrix allow: POST /api/breakage/:id/submit",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "DEPT_APPROVED"
+    },
+    {
+      "id": "P5-MX-BRK-SUBMIT-DENY",
+      "name": "Matrix deny: POST /api/breakage/:id/submit",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-BRK-APPROVE-OK",
+      "name": "Matrix allow: POST /api/breakage/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-MX-BRK-APPROVE-DENY",
+      "name": "Matrix deny: POST /api/breakage/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-BRK-REJECT-OK",
+      "name": "Matrix allow: POST /api/breakage/:id/reject",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "REJECTED"
+    },
+    {
+      "id": "P5-MX-BRK-REJECT-DENY",
+      "name": "Matrix deny: POST /api/breakage/:id/reject",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-BRK-VOID-OK",
+      "name": "Matrix allow: POST /api/breakage/:id/void",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "VOID"
+    },
+    {
+      "id": "P5-MX-BRK-VOID-DENY",
+      "name": "Matrix deny: POST /api/breakage/:id/void",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-LOST-APPROVE-OK",
+      "name": "Matrix allow: POST /api/lost/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-MX-LOST-APPROVE-DENY",
+      "name": "Matrix deny: POST /api/lost/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-LOST-REJECT-OK",
+      "name": "Matrix allow: POST /api/lost/:id/reject",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200,
+      "status": "REJECTED"
+    },
+    {
+      "id": "P5-MX-LOST-REJECT-DENY",
+      "name": "Matrix deny: POST /api/lost/:id/reject",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-MX-LOST-TREATMENT-OK",
+      "name": "Matrix allow: POST /api/lost/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-MX-LOST-TREATMENT-DENY",
+      "name": "Matrix deny: POST /api/lost/:id/approve",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 403,
+      "expected": 403
+    },
+    {
+      "id": "P5-REG-LIST-TRANSFER",
+      "name": "Transfer list authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-LIST-BREAKAGE",
+      "name": "Breakage list authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-LIST-LOST",
+      "name": "Lost list authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-STOCK",
+      "name": "Stock Balances authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-LEDGER",
+      "name": "Inventory Ledger authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-MVREG",
+      "name": "Movement Register authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-PIPE",
+      "name": "Workflow Pipeline authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-DASH",
+      "name": "Dashboard metrics authorized",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "http": 200
+    },
+    {
+      "id": "P5-REG-TENANT-SWITCH",
+      "name": "Tenant switch session",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "note": "single_tenant_member_skip"
+    }
+  ],
+  "regression": [
+    {
+      "id": "P5-REG-TIMELINE-BUILDER",
+      "pass": true,
+      "command": "node --test src/platform/timeline/approvalTimeline.builder.test.js",
+      "exitCode": 0
+    },
+    {
+      "id": "P5-REG-TIMELINE-ENTRY",
+      "pass": true,
+      "command": "node --test src/platform/timeline/timelineEntry.test.js",
+      "exitCode": 0
+    },
+    {
+      "id": "P5-REG-LOST-WF",
+      "pass": true,
+      "command": "node --test scripts/lost-approval-workflow.test.js",
+      "exitCode": 0
+    },
+    {
+      "id": "P5-REG-POSTING",
+      "pass": true,
+      "command": "node --test src/services/posting.service.test.js",
+      "exitCode": 0
+    },
+    {
+      "id": "P5-REG-MVREG-SMOKE",
+      "pass": true,
+      "command": "node scripts/smoke-movement-register-governed.js",
+      "exitCode": 0
+    },
+    {
+      "id": "P5-REG-FRONTEND-BUILD",
+      "pass": true,
+      "command": "npm run build",
+      "exitCode": 0
+    }
+  ]
+}

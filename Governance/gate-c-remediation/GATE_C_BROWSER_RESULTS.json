@@ -1,0 +1,373 @@
+{
+  "executedAt": "2026-06-27T18:19:01.892Z",
+  "version": "v2",
+  "tool": "playwright/chromium",
+  "baseUrl": "http://127.0.0.1:4200",
+  "shells": [
+    {
+      "shell": "GRN",
+      "url": "/inventory/grn/new",
+      "kind": "page",
+      "checks": [
+        {
+          "id": "appKeyboardNav_present",
+          "status": "Passed"
+        },
+        {
+          "id": "enter_advances_focus",
+          "status": "Passed",
+          "detail": {
+            "before": 0,
+            "after": 1
+          }
+        },
+        {
+          "id": "shift_enter_previous",
+          "status": "Passed",
+          "detail": {
+            "beforeShift": 1,
+            "afterShift": 0
+          }
+        },
+        {
+          "id": "textarea_multiline_enter",
+          "status": "Passed",
+          "detail": {
+            "value": "a\nb"
+          }
+        },
+        {
+          "id": "esc_closes_select",
+          "status": "Passed",
+          "detail": {
+            "openInShell": 0,
+            "openDropdown": 0
+          }
+        },
+        {
+          "id": "enter_on_primary_no_submit",
+          "status": "Passed"
+        },
+        {
+          "id": "tab_navigation",
+          "status": "Passed"
+        },
+        {
+          "id": "focus_visible",
+          "status": "Passed"
+        }
+      ],
+      "status": "Passed"
+    },
+    {
+      "shell": "GET_PASS",
+      "url": "/get-passes/new",
+      "kind": "page",
+      "checks": [
+        {
+          "id": "appKeyboardNav_present",
+          "status": "Passed"
+        },
+        {
+          "id": "enter_advances_focus",
+          "status": "Passed",
+          "detail": {
+            "before": 0,
+            "after": 1
+          }
+        },
+        {
+          "id": "shift_enter_previous",
+          "status": "Passed",
+          "detail": {
+            "beforeShift": 1,
+            "afterShift": 0
+          }
+        },
+        {
+          "id": "textarea_multiline_enter",
+          "status": "Passed",
+          "detail": {
+            "value": "a\nb"
+          }
+        },
+        {
+          "id": "esc_closes_select",
+          "status": "Passed",
+          "detail": {
+            "openInShell": 0,
+            "openDropdown": 0
+          }
+        },
+        {
+          "id": "enter_on_primary_no_submit",
+          "status": "Passed"
+        },
+        {
+          "id": "tab_navigation",
+          "status": "Passed"
+        },
+        {
+          "id": "focus_visible",
+          "status": "Passed"
+        }
+      ],
+      "status": "Passed"
+    },
+    {
+      "shell": "TRANSFER",
+      "url": "/transfers/new",
+      "kind": "page",
+      "checks": [
+        {
+          "id": "appKeyboardNav_present",
+          "status": "Passed"
+        },
+        {
+          "id": "enter_advances_focus",
+          "status": "Passed",
+          "detail": {
+            "before": 0,
+            "after": 1
+          }
+        },
+        {
+          "id": "shift_enter_previous",
+          "status": "Passed",
+          "detail": {
+            "beforeShift": 1,
+            "afterShift": 0
+          }
+        },
+        {
+          "id": "esc_closes_select",
+          "status": "Passed",
+          "detail": {
+            "openInShell": 0,
+            "openDropdown": 0
+          }
+        },
+        {
+          "id": "enter_on_primary_no_submit",
+          "status": "Passed"
+        },
+        {
+          "id": "tab_navigation",
+          "status": "Passed"
+        },
+        {
+          "id": "focus_visible",
+          "status": "Passed"
+        }
+      ],
+      "status": "Passed"
+    },
+    {
+      "shell": "BREAKAGE",
+      "url": "/breakage/new",
+      "kind": "modal",
+      "checks": [
+        {
+          "id": "appKeyboardNav_present",
+          "status": "Passed"
+        },
+        {
+          "id": "enter_advances_focus",
+          "status": "Passed",
+          "detail": {
+            "before": 0,
+            "after": 1
+          }
+        },
+        {
+          "id": "shift_enter_previous",
+          "status": "Passed",
+          "detail": {
+            "beforeShift": 1,
+            "afterShift": 0
+          }
+        },
+        {
+          "id": "textarea_multiline_enter",
+          "status": "Passed",
+          "detail": {
+            "value": "a\nb"
+          }
+        },
+        {
+          "id": "esc_closes_select",
+          "status": "Passed",
+          "detail": {
+            "openInShell": 0,
+            "openDropdown": 0
+          }
+        },
+        {
+          "id": "enter_on_primary_no_submit",
+          "status": "Passed"
+        },
+        {
+          "id": "tab_navigation",
+          "status": "Passed"
+        },
+        {
+          "id": "focus_visible",
+          "status": "Passed"
+        }
+      ],
+      "status": "Passed"
+    },
+    {
+      "shell": "LOST_ITEMS",
+      "url": "/lost-items/new",
+      "kind": "modal",
+      "checks": [
+        {
+          "id": "appKeyboardNav_present",
+          "status": "Passed"
+        },
+        {
+          "id": "enter_advances_focus",
+          "status": "Passed",
+          "detail": {
+            "before": 0,
+            "after": 1
+          }
+        },
+        {
+          "id": "shift_enter_previous",
+          "status": "Passed",
+          "detail": {
+            "beforeShift": 1,
+            "afterShift": 0
+          }
+        },
+        {
+          "id": "textarea_multiline_enter",
+          "status": "Passed",
+          "detail": {
+            "value": "a\nb"
+          }
+        },
+        {
+          "id": "esc_closes_select",
+          "status": "Passed",
+          "detail": {
+            "openInShell": 0,
+            "openDropdown": 0
+          }
+        },
+        {
+          "id": "enter_on_primary_no_submit",
+          "status": "Passed"
+        },
+        {
+          "id": "tab_navigation",
+          "status": "Passed"
+        },
+        {
+          "id": "focus_visible",
+          "status": "Passed"
+        }
+      ],
+      "status": "Passed"
+    },
+    {
+      "shell": "MOVEMENTS",
+      "url": "/movements/new",
+      "kind": "page",
+      "checks": [
+        {
+          "id": "appKeyboardNav_present",
+          "status": "Passed"
+        },
+        {
+          "id": "enter_advances_focus",
+          "status": "Passed",
+          "detail": {
+            "before": 0,
+            "after": 1
+          }
+        },
+        {
+          "id": "shift_enter_previous",
+          "status": "Passed",
+          "detail": {
+            "beforeShift": 1,
+            "afterShift": 0
+          }
+        },
+        {
+          "id": "esc_closes_select",
+          "status": "Passed",
+          "detail": {
+            "openInShell": 0,
+            "openDropdown": 0
+          }
+        },
+        {
+          "id": "tab_navigation",
+          "status": "Passed"
+        },
+        {
+          "id": "focus_visible",
+          "status": "Passed"
+        }
+      ],
+      "status": "Passed"
+    },
+    {
+      "shell": "INVENTORY_COUNT",
+      "url": "/inventory-count/67429273-18d0-4722-96b9-cb52065a2316",
+      "kind": "page",
+      "checks": [
+        {
+          "id": "appKeyboardNav_present",
+          "status": "Passed"
+        },
+        {
+          "id": "enter_advances_focus",
+          "status": "Passed",
+          "detail": {
+            "before": 0,
+            "after": 1
+          }
+        },
+        {
+          "id": "shift_enter_previous",
+          "status": "Passed",
+          "detail": {
+            "beforeShift": 1,
+            "afterShift": 0
+          }
+        },
+        {
+          "id": "esc_closes_select",
+          "status": "Passed",
+          "detail": {
+            "openInShell": 0,
+            "openDropdown": 0
+          }
+        },
+        {
+          "id": "enter_on_primary_no_submit",
+          "status": "Passed"
+        },
+        {
+          "id": "tab_navigation",
+          "status": "Passed"
+        },
+        {
+          "id": "focus_visible",
+          "status": "Passed"
+        }
+      ],
+      "status": "Passed"
+    }
+  ],
+  "summary": {
+    "passed": 7,
+    "failed": 0,
+    "blocked": 0
+  }
+}

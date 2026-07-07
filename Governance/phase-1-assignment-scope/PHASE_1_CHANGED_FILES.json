@@ -1,0 +1,93 @@
+{
+  "phase": "Phase 1 — Assignment & Scope Enforcement",
+  "generatedAt": "2026-06-28T00:07:38.218Z",
+  "gateVersion": "phase1-corrected-v2",
+  "verificationReopen": true,
+  "productFiles": [
+    {
+      "path": "OSE-backend/src/services/scope/assignment-mutation.guard.js",
+      "change": "added",
+      "why": "Shared active urUserAssignment gate for mutations; no role bypass except SUPER_ADMIN"
+    },
+    {
+      "path": "OSE-backend/src/services/scope/scope.service.js",
+      "change": "modified",
+      "why": "assignmentOnly option skips Finance/ORG property-wide scope bypass on mutation scope resolution"
+    },
+    {
+      "path": "OSE-backend/src/services/getPass.service.js",
+      "change": "modified",
+      "why": "create/submit: assignment gate + assignmentOnly scope; assertInScope on submit"
+    },
+    {
+      "path": "OSE-backend/src/controllers/getPass.controller.js",
+      "change": "modified",
+      "why": "Pass full req.user to createGetPass for assignment/scope"
+    },
+    {
+      "path": "OSE-backend/src/services/acc-workflow-get-pass.runtime.js",
+      "change": "modified",
+      "why": "Remove creator/ORG fast-forward on submit — always first pending step"
+    },
+    {
+      "path": "OSE-backend/src/services/workflow-pipeline/workflow-pipeline.service.js",
+      "change": "modified",
+      "why": "Assignment gate + scoped loadAllItems; getScopedPipelineItems for dashboard overdue detail alignment"
+    },
+    {
+      "path": "OSE-backend/src/services/workflow-pipeline/workflow-pipeline.collectors.js",
+      "change": "modified",
+      "why": "Merge buildScopeWhere per module; GRN null-location OR stripped for Prisma"
+    },
+    {
+      "path": "OSE-backend/src/controllers/workflow-pipeline.controller.js",
+      "change": "modified",
+      "why": "Alerts endpoint applies query filters (module=GET_PASS) before limit slice"
+    },
+    {
+      "path": "OSE-backend/src/services/dashboard.service.js",
+      "change": "modified",
+      "why": "Scrub operationalHealth when no assignment; department profile aligns with scoped pipeline; overdue details from full scoped items"
+    },
+    {
+      "path": "OSE-backend/src/services/movement.service.js",
+      "change": "modified",
+      "why": "Assignment gate + assignmentOnly location scope on create"
+    },
+    {
+      "path": "OSE-backend/src/controllers/movement.controller.js",
+      "change": "modified",
+      "why": "Pass req.user to createMovementDraft; assertActiveAssignmentForMutation on post (gate-proven defect)"
+    },
+    {
+      "path": "OSE-backend/scripts/verify-acc-p12-cutover-wave2.js",
+      "change": "modified",
+      "why": "Expect first-step submit (PENDING_DEPT) after fast-forward removal"
+    },
+    {
+      "path": "OSE-backend/src/services/getPass.service.test.js",
+      "change": "modified",
+      "why": "Mock assignment-mutation guard + validatePostingDate; concurrencyVersion on rejectGetPass"
+    }
+  ],
+  "governanceFiles": [
+    "Governance/phase-1-assignment-scope/PHASE_1_ROOT_CAUSE_AUDIT.md",
+    "Governance/phase-1-assignment-scope/PHASE_1_REMEDIATION_REPORT.md",
+    "Governance/phase-1-assignment-scope/PHASE_1_RUNTIME_RESULTS.json",
+    "Governance/phase-1-assignment-scope/phase-1-assignment-scope-gate.cjs",
+    "Governance/phase-1-assignment-scope/PHASE_1_CHANGED_FILES.json"
+  ],
+  "gateTotals": {
+    "runtimePass": 29,
+    "runtimeFail": 0,
+    "regressionPass": 15,
+    "regressionFail": 0,
+    "phaseClosed": true
+  },
+  "explicitlyNotModified": [
+    "role-permission-fallback.ts",
+    "Workflow chains / posting / reports",
+    "HTML / SCSS / layout",
+    "Gate A / B / C artifacts"
+  ]
+}

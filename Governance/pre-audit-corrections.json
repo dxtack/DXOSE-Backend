@@ -1,0 +1,2494 @@
+[
+  {
+    "requirementId": "C02-2.5-001",
+    "failedChecks": [
+      7,
+      8
+    ],
+    "reason": "Constitution requires editability governed by lifecycle state, not a shared editability service. Existing lifecyclePresentation.isEditableUserState() is the minimum hook; gap is applying it in module backend guards and FE action bars not yet mapped.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Lost Items",
+        "Movement",
+        "Inventory Count"
+      ],
+      "remainingWork": "Apply lifecyclePresentation.isEditableUserState() in backend update guards and FE edit/action gating for Lost Items, Movement, and Inventory Count; align Transfer/Breakage/Get Pass returned-state line edit with GRN send-back path",
+      "whereImplemented": "Backend: lifecyclePresentation.isEditableUserState(); FE: per-module status-gated action bars on GRN/Transfer/Get Pass"
+    }
+  },
+  {
+    "requirementId": "C02-2.6-004",
+    "failedChecks": [
+      7,
+      8
+    ],
+    "reason": "remainingWork proposes a platform-wide enforcement layer; constitution only requires draft-only delete with governed termination elsewhere. Concrete gap is Get Pass allowing delete on REJECTED.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Inventory Count",
+        "Lost Items",
+        "Movement"
+      ],
+      "remainingWork": "Restrict deleteGetPass to DRAFT only; audit delete endpoints on Transfer/Breakage/Inventory Count for draft-only enforcement; use Reject/Void/Cancel for post-draft termination",
+      "whereImplemented": "Module-specific termination paths (rejectGrn, voidDocument, cancelDraft) exist; Get Pass deleteGetPass currently allows REJECTED"
+    }
+  },
+  {
+    "requirementId": "C03-3.1-001",
+    "failedChecks": [
+      2,
+      7,
+      8
+    ],
+    "reason": "Movement and Inventory Count detail views are operational document surfaces with action bars but omitted from affectedModules. 'Centralized action-visibility matrix' over-scopes; constitution requires role+state-appropriate actions per screen.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Lost Items",
+        "Get Pass",
+        "Movement",
+        "Inventory Count"
+      ],
+      "remainingWork": "Extend existing permission+userFacingState action gating (as on GRN/Transfer detail) to Movement and Inventory Count detail action bars; hide actions when user role or document state does not permit them",
+      "whereImplemented": "FE detail components gate actions by permission + document status on GRN, Transfer, Breakage, Lost Items, Get Pass"
+    }
+  },
+  {
+    "requirementId": "C04-4.1-003",
+    "failedChecks": [
+      7,
+      8
+    ],
+    "reason": "'Shared lifecycle guard layer across all routes' implies new middleware architecture. Minimum fix is lifecycle status assertions on remaining mutation endpoints using existing assertStatus/LOCKED patterns.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Lost Items",
+        "Movement"
+      ],
+      "remainingWork": "Add lifecycle status guards (assertStatus / LOCKED-status lists) on Breakage, Get Pass, Lost Items, and Movement mutation routes mirroring grn.service.js and transfer.service.js",
+      "whereImplemented": "transfer.service assertStatus(); grn.service validateGrn() LOCKED statuses"
+    }
+  },
+  {
+    "requirementId": "C04-4.3-001",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Automated test suite is verification evidence, not the constitution-required control. Code must enforce lifecycle rules after permission checks on all mutation endpoints.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Lost Items",
+        "Movement"
+      ],
+      "remainingWork": "Add service-layer lifecycle status guards on Breakage/Get Pass/Lost/Movement mutation endpoints so requirePermission alone cannot execute workflow actions",
+      "whereImplemented": "grn.service.js status guards; authorize.js requirePermission middleware"
+    }
+  },
+  {
+    "requirementId": "C04-4.3-002",
+    "failedChecks": [
+      1,
+      2,
+      7,
+      8
+    ],
+    "reason": "Requirement is 'Permissions grant eligibility, not execution authority' (4.3 rule 2), not Action Allowed composition (rule 3). remainingWork references wrong requirement. GRN dual-gate pattern exists but affectedModules omit GRN/Transfer/Get Pass.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Lost Items"
+      ],
+      "remainingWork": "Ensure mutation endpoints require workflow-step eligibility beyond permission alone: extend grn.service _assertGrnDualGate pattern (or returns-workflow.helpers equivalent) to Transfer/Get Pass/Breakage approve/reject/submit handlers",
+      "whereImplemented": "grn.service.js _assertGrnDualGate(); returns-workflow.helpers userCanActOnReturnsWorkflowWithPermission() on Breakage/Lost Items",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "_assertGrnDualGate()",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C04-4.3-003",
+    "failedChecks": [
+      2,
+      7,
+      8
+    ],
+    "reason": "'Requires Mapping' and 'single implementation' over-scope. Constitution defines a formula, not one composer service. Partial implementation exists in returns-workflow.helpers and per-module action bars.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Lost Items"
+      ],
+      "remainingWork": "Wire permission + workflow-step + lifecycle-state + scope checks into each module action bar/API handler (extend returns-workflow.helpers to GRN/Transfer/Get Pass; add lifecycle-state and business-rule guards on backend mutation paths)",
+      "whereImplemented": "Partial: returns-workflow.helpers permission+step checks on Breakage/Lost Items; per-module FE action gating on GRN/Transfer/Get Pass"
+    }
+  },
+  {
+    "requirementId": "C06-6.5-002",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Future-posting-date rule applies to posting entry points on governed document families, not 'Requires Mapping'.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement",
+        "Period Close"
+      ],
+      "remainingWork": "Add future-posting-date validation on postingDate at post handlers in postingGoverned*.service.js and period-close posting-date inputs; allow historical documentDate when posting period is open",
+      "whereImplemented": "periodGuard.service.js enforces closed-period only; no future-posting-date check found"
+    }
+  },
+  {
+    "requirementId": "C06-6.5-006",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Modules calling checkPeriodLock() from periodGuard.service.js satisfies centralized period validation per constitution 6.5. Remaining gap is ad-hoc period logic outside periodGuard, not incomplete centralization.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement",
+        "Period Close"
+      ],
+      "remainingWork": "Grep and remove/replace any period-lock checks outside periodGuard.service.js; ensure all posting and period-sensitive mutations import checkPeriodLock only",
+      "whereImplemented": "periodGuard.service.js checkPeriodLock() used by postingGovernedGrn/Transfer and posting.service"
+    }
+  },
+  {
+    "requirementId": "C07-7.1-001",
+    "failedChecks": [
+      7,
+      8
+    ],
+    "reason": "Separation already exists (draftGovernance.service.js vs document-draft-can-deactivate.guard.ts). Constitution requires policies remain separate, not a new platform policy module.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Keep draft persistence in draftGovernance.service.js and unsaved-change warnings in document-draft-can-deactivate guard; wire canDeactivate guard to Transfer/Get Pass/Breakage create routes without merging draft-save into navigation-warning logic",
+      "whereImplemented": "draftGovernance.service.js (draft save); document-draft-can-deactivate.guard.ts (navigation dirty-state protection) on GRN /new only"
+    }
+  },
+  {
+    "requirementId": "C07-7.4-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Draft ownership applies to operational document families with server drafts, not 'Requires Mapping'.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Add draftOwner (or equivalent createdBy/owner) field and enforcement on governed document models; default owner to creating user at first server draft"
+    }
+  },
+  {
+    "requirementId": "C07-7.4-002",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Draft access rights apply per operational document family with server drafts.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Define and enforce who may open/edit server drafts (owner, delegate, or role per ACC) in draftGovernance save/load paths for each document family"
+    }
+  },
+  {
+    "requirementId": "C07-7.4-003",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Ownership transfer rules apply to operational document families with server drafts.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Implement governed draft-owner transfer (or explicit BDR denial) on DRAFT documents per document family"
+    }
+  },
+  {
+    "requirementId": "C07-7.4-004",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Inactive/departed-user draft handling applies to operational document families with server drafts.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Define handling when draft owner is deactivated (reassign, admin recovery, or block edit) in draftGovernance for each document family"
+    }
+  },
+  {
+    "requirementId": "C07-7.7-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Auto-save on meaningful business events applies to operational document create/edit surfaces; 'Requires Mapping' omits known draft surfaces.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Trigger saveGrnDraft / equivalent server-draft save on meaningful business events (row add/delete, field changes) on GRN create; extend same pattern to Transfer/Get Pass/Breakage create forms"
+    }
+  },
+  {
+    "requirementId": "C07-7.7-002",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Row add/delete auto-save applies to operational document line grids.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Auto-save server draft on line add/delete in GRN create and equivalent line grids on Transfer/Get Pass/Breakage create"
+    }
+  },
+  {
+    "requirementId": "C07-7.7-003",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Quantity/price change auto-save applies to operational document line grids.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Auto-save server draft on quantity/price field change in document create/edit line grids"
+    }
+  },
+  {
+    "requirementId": "C07-7.7-004",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Supplier/warehouse change auto-save applies to operational document headers.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Auto-save server draft on supplier/warehouse (or store/from-to) header field change on create forms"
+    }
+  },
+  {
+    "requirementId": "C07-7.7-005",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Attachment change auto-save applies to operational documents with attachments.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Auto-save server draft when attachments are added or removed on document create/edit forms"
+    }
+  },
+  {
+    "requirementId": "C07-7.7-006",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Notes change auto-save applies to operational document create/edit forms.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Auto-save server draft on notes/comments field change on document create/edit forms"
+    }
+  },
+  {
+    "requirementId": "C07-7.8-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Draft recovery with current validation applies to operational document families with server drafts.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Implement Continue/Discard recovery prompt on reopening server drafts with full current-validation run before continue or submit"
+    }
+  },
+  {
+    "requirementId": "C07-7.8-002",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Restored-document revalidation applies to operational document families with server drafts.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Block continue/submit on recovered drafts until backend validation passes against current rules (prices, periods, stock, required fields)"
+    }
+  },
+  {
+    "requirementId": "C07-7.9-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Draft registry per document family is constitution-literal; affectedModules must name the families.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Add per-family draft registry table or equivalent query surface listing active server drafts with owner, createdAt, and document id"
+    }
+  },
+  {
+    "requirementId": "C07-7.9-002",
+    "failedChecks": [
+      2
+    ],
+    "reason": "30-day retention policy applies per document family draft registry.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Implement 30-day default draft retention job per document family registry"
+    }
+  },
+  {
+    "requirementId": "C07-7.9-003",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Draft expiration policy applies per document family draft registry.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Define and implement expiration action (delete, archive, or expired state) for drafts past retention per document family"
+    }
+  },
+  {
+    "requirementId": "C07-7.10-005",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Session-expiration unsaved-changes handling applies to all document create/edit surfaces, not 'Requires Mapping'.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "On auth session expiry with dirty create form, prompt save-or-discard (or auto-save draft) before redirect to login; wire into auth interceptor for document create routes"
+    }
+  },
+  {
+    "requirementId": "C09-9.2-004",
+    "failedChecks": [
+      2,
+      5
+    ],
+    "reason": "Constitution §9.2/§7.11 requires numbering at first Server Draft Save across governed document families. Evidence omits Movement, which assigns `documentNo` at `createMovementDraft` via legacy `generateDocumentNo` (not `draftGovernance` / `docNumbering.service`). GRN main `createGrn` also assigns at validated create; only `constitution.controller` `createGrnServerDraft` matches the server-draft pattern.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement"
+      ],
+      "remainingWork": "Add server-draft-save numbering endpoints (or align first-persist create) for Transfer, Breakage, Get Pass, Movement; route GRN primary create through server-draft path or document that validated-create is the first server persist.",
+      "whereImplemented": "API: GRN `createGrnServerDraft` only; other families assign at first create via `docNumbering.service` or Movement legacy generator",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/draftGovernance.service.js",
+          "method": "createGrnServerDraft()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "createGrn() generateDocNumber on create",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/movement.service.js",
+          "method": "createMovementDraft() generateDocumentNo()",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C09-9.3-002",
+    "failedChecks": [
+      7
+    ],
+    "reason": "§9.3 rule 7 explicitly accepts gaps from failed/rolled-back allocation. Remaining work treating rollback reservation as unproven over-scopes remediation beyond constitution (gaps are constitutional).",
+    "updates": {
+      "remainingWork": "Verify first-persist draft always retains assigned number after successful server draft save; accept sequence gaps on failed transactions per §9.3.7."
+    }
+  },
+  {
+    "requirementId": "C09-9.3-007",
+    "failedChecks": [
+      2,
+      4,
+      6
+    ],
+    "reason": "Movement bypasses central `DocPrefix` via hardcoded `prefixMap` in `movement.service.js`. Evidence cites only Transfer and does not surface this independent prefix configuration.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement"
+      ],
+      "remainingWork": "Replace `movement.service.js` `generateDocumentNo` local `prefixMap` with `docNumbering.service` `DocPrefix`; grep for other hardcoded document prefixes outside `DocPrefix`.",
+      "whereImplemented": "Shared: `docNumbering.service` for most modules; Movement: local prefix map",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "DocPrefix constants",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/movement.service.js",
+          "method": "generateDocumentNo() prefixMap",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C09-9.3-010",
+    "failedChecks": [
+      2,
+      4
+    ],
+    "reason": "Allocation audit traceability required for all document families. Transfer CREATE logs `transferNo`; GRN/Breakage/Get Pass CREATE lack equivalent allocation audit (Get Pass CREATE logs without `passNo` in note/afterValue).",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "remainingWork": "Add CREATE audit note/afterValue including allocated system number for GRN, Breakage, Get Pass (Transfer already covered).",
+      "whereImplemented": "Workflow: Transfer CREATE audit includes transferNo; other families incomplete",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/transfer.service.js",
+          "method": "logAction CREATE transferNo",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/getPass.service.js",
+          "method": "logAction CREATE without passNo in afterValue",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C10-10.2-003",
+    "failedChecks": [
+      2,
+      3,
+      4
+    ],
+    "reason": "§10.2 prohibits qty <= 0. Movement draft save accepts `parseFloat(qtyInput) || 0`; Get Pass line validation exists but module not listed. Evidence incomplete for Movement draft path.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Movement",
+        "Get Pass"
+      ],
+      "remainingWork": "Reject qty<=0 on Movement draft create/update and verify all line-entry APIs (Transfer/Breakage/GRN/Get Pass) reject non-positive qty before post.",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/movement.service.js",
+          "method": "createMovementDraft/updateMovementDraft qtyReq || 0",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "invalidLines receivedQty <= 0",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/getPass.service.js",
+          "method": "qty <= 0 rejected on line create",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C10-10.2-004",
+    "failedChecks": [
+      2,
+      4
+    ],
+    "reason": "Zero-quantity lines prohibited. Movement draft allows zero qty at save; module omitted from affectedModules.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Movement"
+      ],
+      "remainingWork": "Block zero-qty lines at Movement draft save; align Transfer/Breakage/GRN draft entry to reject zero-qty lines (post-time skip/abort already partial).",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/movement.service.js",
+          "method": "qtyReq = parseFloat(qtyInput) || 0",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C10-10.2-008",
+    "failedChecks": [
+      7,
+      8
+    ],
+    "reason": "Remaining work 'Full constitutional stock-integrity matrix not audited' is open-ended audit scope, not a minimum constitution-required code change.",
+    "updates": {
+      "remainingWork": "Confirm outbound post stock guards on Get Pass checkout/dispatch and any remaining governed post engines not yet covered by postingGoverned* services."
+    }
+  },
+  {
+    "requirementId": "C10-10.2-011",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Constitution requires corrections via new governed transactions, not an exhaustive correction catalog or unified reversal framework.",
+    "updates": {
+      "remainingWork": "Document and verify governed reversal/adjustment entry points for posted movement register rows (beyond `movementRegisterGuard` direct-post block)."
+    }
+  },
+  {
+    "requirementId": "C10-10.2-015",
+    "failedChecks": [
+      2,
+      7
+    ],
+    "reason": "Valuation-at-post applies to all governed posting paths. Evidence centers on GRN/Inventory Count; Transfer/Breakage/Get Pass posting engines not cited.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Inventory Count",
+        "Movement"
+      ],
+      "remainingWork": "Verify `resolveUnitCost`/WAC usage at post for Transfer, Breakage, Get Pass, and movement/OB post paths in `posting.service.js` / postingGoverned* services.",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "WAC on receive",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/posting.service.js",
+          "method": "resolveUnitCost at post",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C11-11.3-001",
+    "failedChecks": [
+      1,
+      7
+    ],
+    "reason": "§11.3 defines display-currency change semantics (symbol/format only, no conversion). Evidence conflates this with §11.4 platform-wide application ('Not applied platform-wide'), which is a different requirement.",
+    "updates": {
+      "affectedModules": [
+        "Platform"
+      ],
+      "remainingWork": "Complete for §11.3 semantics — `formatAmount`/`displayCurrency` pipe already format-only; track SAR hardcoding under C11-11.4-*.",
+      "whereImplemented": "UI/API: `constitution-platform.service.ts` and `displayCurrency.service.js` format-only helpers",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/services/constitution-platform.service.ts",
+          "method": "formatAmount() symbol+decimals only",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "formatAmount(); setDisplayCurrency updates tenant setting only",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C11-11.4-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "§11.4 requires consistent display currency across UIs. Codebase still hardcodes SAR on Dashboard, Stock balances, Stock report, Movement form, Lost Items detail, Breakage detail — not fully listed in affectedModules/remainingWork.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Dashboard",
+        "Reports",
+        "Stock",
+        "Stock Report",
+        "Movement",
+        "Breakage",
+        "Lost Items"
+      ],
+      "remainingWork": "Replace SAR hardcoding with `displayCurrency` pipe/`ConstitutionPlatformService.formatAmount` on dashboard, stock-balances, stock-report-detail, movement-form, breakage-detail, lost-items-detail, and remaining operational detail screens.",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/dashboard/dashboard.component.ts",
+          "method": "fmtSAR()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/stock/stock-balances/stock-balances.component.html",
+          "method": "COMMON.CURRENCY_SAR hardcoded",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/stock-report/stock-report-detail/stock-report-detail.component.ts",
+          "method": "SAR template literal",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/breakage/breakage-detail/breakage-detail.component.ts",
+          "method": "COMMON.CURRENCY_SAR hardcoded",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C11-11.4-005",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Printed outputs are implemented in backend PDF services with hardcoded SAR; 'Requires Mapping' is incorrect — module is Reports.",
+    "updates": {
+      "affectedModules": [
+        "Reports"
+      ],
+      "remainingWork": "Wire `displayCurrency.service` (or tenant display currency) into PDF generators under `OSE-backend/src/services/pdf/` replacing hardcoded SAR labels.",
+      "whereImplemented": "Backend PDF: hardcoded SAR in report-pdf-* and evidence-pack-pdf",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/pdf/report-pdf-components.js",
+          "method": "const currency = 'SAR'",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/reports/report-engine/report-engine.component.ts",
+          "method": "print() official PDF",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C12-12.6-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Breakage enforces line/header location consistency on create but is omitted from affectedModules.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Movement",
+        "Breakage",
+        "Get Pass"
+      ],
+      "remainingWork": "Extend header–line consistency guards to Get Pass and any remaining document families lacking backend assertions on save/update.",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/breakage.service.js",
+          "method": "normalizedLines locationId validation on create",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C13-13.4-002",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Constitution requires posted-line corrections via new governed business transactions, not a single platform reversal UI contract.",
+    "updates": {
+      "remainingWork": "Verify each document family exposes governed correction/reversal transaction entry for posted lines (backend workflow); no unified reversal UI required."
+    }
+  },
+  {
+    "requirementId": "C13-13.6-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Breakage line/header location consistency on create is implemented but not listed.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Movement",
+        "Breakage",
+        "Get Pass"
+      ],
+      "remainingWork": "Add header–line context assertions for Get Pass and remaining line-based documents on save/update."
+    }
+  },
+  {
+    "requirementId": "C14-14.5-001",
+    "failedChecks": [
+      7,
+      9
+    ],
+    "reason": "Constitution references platform security validation policy; implemented extension/mime filters and tenant-scoped keys satisfy baseline policy. Antivirus/content-scan is not constitution-mandated.",
+    "updates": {
+      "remainingWork": "Document platform upload security policy (types/size/tenant isolation); optional hardening beyond constitution is out of scope for this requirement."
+    }
+  },
+  {
+    "requirementId": "C15-15.2-003",
+    "failedChecks": [
+      1,
+      2,
+      7
+    ],
+    "reason": "Requirement is conditional: 'Cancel shall require a reason **where defined**'. No workflow contract in repo defines cancel-reason mandates; treating as blanket No for GRN/Transfer over-applies. Governed cancel paths today: inventory count `cancelSession`, breakage `voidBreakage`, legacy stock count void — none require user reason.",
+    "updates": {
+      "affectedModules": [
+        "Inventory Count",
+        "Breakage",
+        "Stock Count"
+      ],
+      "remainingWork": "Governance: define which cancel/void actions require user reason in workflow contracts; then add reason param + API/UI validation for those paths (e.g. inventoryCount.cancelSession, breakage.voidBreakage).",
+      "whereImplemented": "None where defined — no cancel-reason contract codified",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/inventoryCount.service.js",
+          "method": "cancelSession() no reason parameter",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/breakage.service.js",
+          "method": "voidBreakage() no reason parameter",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C15-15.5-001",
+    "failedChecks": [
+      3
+    ],
+    "reason": "Unified chronological timeline required on detail views. Movement form/detail does not use `returns-workflow-timeline` / `documentTimeline` while GRN, Transfer, Breakage, Get Pass, Inventory Count, Lost Items do.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement",
+        "Inventory Count",
+        "Lost Items"
+      ],
+      "remainingWork": "Add merged audit/workflow timeline to Movement detail (and any remaining governed detail screens without `returns-workflow-timeline`).",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/documentTimeline.service.js",
+          "method": "fetchAuditEvents orderBy changedAt asc",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/movements/movement-form/movement-form.component.html",
+          "method": "no returns-workflow-timeline",
+          "verification": "Verified"
+        }
+      ]
+    }
+  },
+  {
+    "requirementId": "C16-16.3-003",
+    "failedChecks": [],
+    "reason": "Remove incorrect claim that GRN uses larger-than-grid preview; create and detail both use 36px.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Stock Report"
+      ],
+      "remainingWork": "Transfer/Breakage/Get Pass/Stock Report line grids show no item thumbnails; count-sheet export image compatibility not verified",
+      "whereImplemented": "36px thumbnails + placeholder on Items list and GRN create/detail line grids (`items-list.component.scss`, `grn-create/detail`); signed URLs from Item Master",
+      "implemented": "Partial"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component.scss",
+        "method": ".grn-detail__line-thumb 36x36"
+      },
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/transfers/transfer-form/transfer-form.component.html",
+        "method": "no imageUrl/thumb rendering on lines"
+      }
+    ]
+  },
+  {
+    "requirementId": "C16-16.3-005",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "API"
+      ],
+      "remainingWork": "No dimension validation; 5 MB limit on `uploadImage` conflicts with Ch.16.3-004 1 MB rule; no wired media-policy doc",
+      "whereImplemented": "Backend `imageFilter` (jpg/jpeg/png/webp/gif) on `uploadImage`; FE `shared-upload` type check on pick; bulk ZIP via `POST /items/bulk-upload-images`"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "API",
+        "file": "OSE-backend/src/routes/item.routes.js",
+        "method": "POST /items/bulk-upload-images"
+      },
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/items/item-form/item-form.component.html",
+        "method": "app-shared-upload"
+      },
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/shared/components/shared-upload/shared-upload.component.ts",
+        "method": "isAcceptedType()"
+      }
+    ]
+  },
+  {
+    "requirementId": "C16-16.3-006",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Reports",
+        "PDF",
+        "Get Pass"
+      ],
+      "remainingWork": "Absent-image fallback verified in some report/PDF paths only; inventory-count and stock-report exports not verified"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Backend",
+        "file": "OSE-backend/src/services/pdf.service.js",
+        "method": "conditional doc.image when loan.item?.imageUrl"
+      }
+    ]
+  },
+  {
+    "requirementId": "C17-17.2-001",
+    "failedChecks": [],
+    "reason": "Replace GRN-only `affectedModules`; scope is Ch.17.1 platform-wide.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Items",
+        "Reports"
+      ],
+      "remainingWork": "Extend governed keyboard-first line-entry pattern to Transfer, Breakage, Get Pass, Items, and other document workspaces",
+      "whereImplemented": "Alt+B/S via `appKeyboardNav` on GRN create/detail only; no shared Enter/row keyboard contract elsewhere"
+    }
+  },
+  {
+    "requirementId": "C17-17.2-005",
+    "failedChecks": [],
+    "reason": "Native textarea Enter→newline satisfies Ch.17.2; no platform wrapper required.",
+    "updates": {
+      "remainingWork": "Complete",
+      "implemented": "Yes",
+      "verificationStatus": "Verified"
+    }
+  },
+  {
+    "requirementId": "C17-17.2-006",
+    "failedChecks": [],
+    "reason": "Upgrade from No: Ant Design defaults cover modals/dropdowns; gap is unowned lookup overlay.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN"
+      ],
+      "remainingWork": "Document framework Esc behavior; add explicit Esc contract when shared lookup overlay (Ch.23) lands",
+      "whereImplemented": "ng-zorro `nz-modal`/`nz-drawer`/`nz-select` provide default Esc-close; no app-owned lookup overlay component",
+      "implemented": "Partial"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component.html",
+        "method": "nz-modal send-back (default nzKeyboard)"
+      }
+    ]
+  },
+  {
+    "requirementId": "C17-17.2-009",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Items"
+      ],
+      "remainingWork": "After item pick in GRN `addItem()`, focus does not move to quantity field on new line"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.ts",
+        "method": "addItem() ends without focusToQuantity"
+      }
+    ]
+  },
+  {
+    "requirementId": "C17-17.3-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement",
+        "Items"
+      ],
+      "remainingWork": "Wire `appKeyboardNav` beyond GRN to Transfer, Breakage, Get Pass, and other governed document screens"
+    }
+  },
+  {
+    "requirementId": "C17-17.3-002",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "Ant Design focus rings present; audit custom controls (e.g. thumb-button) for WCAG-visible focus on keyboard nav"
+    }
+  },
+  {
+    "requirementId": "C17-17.3-003",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement",
+        "Items"
+      ],
+      "remainingWork": "Not verified as explicit keyboard-skip policy",
+      "whereImplemented": "Disabled buttons/inputs excluded from interaction via [disabled]/nzDisabled"
+    }
+  },
+  {
+    "requirementId": "C17-17.3-004",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement",
+        "Items"
+      ],
+      "remainingWork": "CSS-hidden elements not audited",
+      "whereImplemented": "Hidden conditional blocks remove controls from DOM (@if)"
+    }
+  },
+  {
+    "requirementId": "C17-17.3-005",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "remainingWork": "No explicit primary-element focus contract in app modals",
+      "whereImplemented": "ng-zorro modals default focus behavior"
+    }
+  },
+  {
+    "requirementId": "C17-17.3-006",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN"
+      ],
+      "remainingWork": "Publish shortcut registry and adopt directive on all governed document workspaces",
+      "whereImplemented": "Shared `KeyboardNavigationDirective` (core); only GRN create/detail host `appKeyboardNav`"
+    }
+  },
+  {
+    "requirementId": "C17-17.3-007",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Dashboard",
+        "Items",
+        "Reports"
+      ],
+      "remainingWork": "Audit module-local `keydown.enter` handlers (dashboard KPI rows, etc.) against central shortcut registry rule"
+    }
+  },
+  {
+    "requirementId": "C18-18.1-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "Golden-rule channel map documented in constitution only; no FE registry enforcing field/row/banner/toast routing"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Governance",
+        "file": "docs/governance/scripts/constitution-base.md",
+        "method": "Ch.18.1 channel table"
+      }
+    ]
+  },
+  {
+    "requirementId": "C18-18.2-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass"
+      ],
+      "remainingWork": "Auto-clear validation UI exists on GRN create only; not shared across governed forms"
+    }
+  },
+  {
+    "requirementId": "C18-18.2-004",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Get Pass"
+      ],
+      "remainingWork": "Row/field error highlighting partial on GRN; Get Pass has sparse `role=alert` field errors only"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/get-pass/get-pass-detail/get-pass-detail.component.html",
+        "method": "role=alert field errors"
+      }
+    ]
+  },
+  {
+    "requirementId": "C18-18.2-005",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "i18n covers common codes; `ValidationOrchestratorService` still emits English `${field} is required` literals"
+    }
+  },
+  {
+    "requirementId": "C18-18.2-006",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "Structured `code`/`errorFamily` only when services throw `err.code`; many validation throws use plain message strings"
+    }
+  },
+  {
+    "requirementId": "C18-18.2-007",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "Map backend validation codes to i18n keys beyond `COMMON.CONCURRENCY_CONFLICT`; most 400s show raw server text"
+    }
+  },
+  {
+    "requirementId": "C18-18.2-009",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Items",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "remainingWork": "Client `requireFields`/`shared-upload` checks on subset of screens; Transfer/Breakage/Get Pass lack uniform pre-submit assist"
+    }
+  },
+  {
+    "requirementId": "C18-18.2-015",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Platform"
+      ],
+      "remainingWork": "Ad hoc `nz-alert` warning vs error on GRN detail invoice link; no platform warning taxonomy"
+    }
+  },
+  {
+    "requirementId": "C18-18.2-017",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN"
+      ],
+      "remainingWork": "GRN create duplicates some errors via `error` signal + `message.error()` while interceptor also toasts 400s"
+    }
+  },
+  {
+    "requirementId": "C19-19.2-002",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Platform"
+      ],
+      "remainingWork": "GRN create: dual-channel on invoice/OB errors (`error.set` + `message.error`); audit Transfer/Get Pass submit paths"
+    }
+  },
+  {
+    "requirementId": "C19-19.3-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "Build unified actionable-message dictionary; `formatApiValidationErrors` still surfaces raw field names"
+    }
+  },
+  {
+    "requirementId": "C19-19.3-002",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "404 handler exposes route path; some 422 validation responses include Prisma `field_name` in body"
+    }
+  },
+  {
+    "requirementId": "C19-19.3-004",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "P2003 FK errors may expose `field_name`; dev-mode responses may include stack in logs only (response sanitized for 500)"
+    }
+  },
+  {
+    "requirementId": "C19-19.3-005",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "Super Admin",
+        "Tenants"
+      ],
+      "remainingWork": "Tenant-slug conflict returns `existingTenantId` UUID; validation `errors[].field` may carry internal IDs"
+    }
+  },
+  {
+    "requirementId": "C19-19.5-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "FE/BE `classifyCode` exists; most service throws omit stable VAL-/BUS-/STK- codes; UX not normalized per family"
+    }
+  },
+  {
+    "requirementId": "C19-19.7-002",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Get Pass",
+        "GRN",
+        "Platform"
+      ],
+      "remainingWork": "Sparse `role=alert` on Get Pass and approve modal only; no systematic aria-live announcement on first validation error"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/shared/components/returns-workflow-approve-modal/returns-workflow-approve-modal.component.html",
+        "method": "role=alert field error"
+      }
+    ]
+  },
+  {
+    "requirementId": "C20-20.2-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Workflow Pipeline",
+        "Platform",
+        "GRN",
+        "Transfer"
+      ],
+      "remainingWork": "Fragmented notification sources (bell alerts, NzMessage interceptor, inline nz-alert); no unified event dictionary"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/core/interceptors/api-error.interceptor.ts",
+        "method": "NzMessage toast routing"
+      }
+    ]
+  },
+  {
+    "requirementId": "C20-20.2-003",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "NzMessage types and nz-tag icons cover many surfaces; workflow-bell severity badges and custom status chips not audited"
+    }
+  },
+  {
+    "requirementId": "C21-21.1-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Reports",
+        "Items",
+        "Inventory Count"
+      ],
+      "remainingWork": "Per-component loading signals; no lint/guard that spinner scope matches operation (e.g. full-page vs table-only)"
+    }
+  },
+  {
+    "requirementId": "C21-21.1-002",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Reports",
+        "Items",
+        "Admin"
+      ],
+      "remainingWork": "nzLoading on tables/buttons; bulk image ZIP and long report jobs lack progress % (admin tenants-list has nz-progress exception)"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/admin/tenants-list/tenants-list.component.html",
+        "method": "nz-progress (isolated)"
+      }
+    ]
+  },
+  {
+    "requirementId": "C21-21.1-003",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Items",
+        "Inventory Count"
+      ],
+      "remainingWork": "Verify `[disabled]` on submit/save across Items create, Inventory Count post, Transfer form create"
+    }
+  },
+  {
+    "requirementId": "C21-21.1-004",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Inventory Count"
+      ],
+      "remainingWork": "GRN `submit()` lacks `if (loading()) return`; Alt+S keyboard-save can enqueue duplicate create while in-flight"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/core/directives/keyboard-navigation.directive.ts",
+        "method": "dxose:keyboard-save dispatches to submit()"
+      }
+    ]
+  },
+  {
+    "requirementId": "C21-21.2-001",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "remainingWork": "Shell layout stays interactive during child route loads; no automated test that partial exports/imports never block sidebar navigation"
+    }
+  },
+  {
+    "requirementId": "C22-22.2-001",
+    "failedChecks": [],
+    "reason": "Remove self-referential Governance/evidence.json evidence row.",
+    "updates": {
+      "remainingWork": "Breakage module missing all workflow audit; GRN CREATE/SUBMIT not logged; verify each Ch.22.2 event type per module",
+      "whereImplemented": "auditTrail/auditGoverned on GRN post/send-back, Transfer workflow, Get Pass, Inventory Count; Breakage service has zero audit calls",
+      "implemented": "Partial"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Backend",
+        "file": "OSE-backend/src/services/breakage.service.js",
+        "method": "grep: no logAction/logGovernedEvent"
+      },
+      {
+        "layer": "Backend",
+        "file": "OSE-backend/src/services/grn.service.js",
+        "method": "createGrn() returns without audit"
+      }
+    ]
+  },
+  {
+    "requirementId": "C22-22.2-002",
+    "failedChecks": [],
+    "reason": "Remove Transfer from affectedModules until transfer attachment upload path confirmed.",
+    "updates": {
+      "affectedModules": [
+        "Breakage",
+        "GRN"
+      ],
+      "remainingWork": "Emit governed audit on attachment add/replace/delete for Breakage and GRN invoice attachment",
+      "whereImplemented": "Breakage `addAttachment()` and GRN `createGrn()` (invoice upload at create) persist attachments without audit record"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Backend",
+        "file": "OSE-backend/src/services/grn.service.js",
+        "method": "createGrn() sets pdfAttachmentUrl, no logGovernedEvent"
+      }
+    ]
+  },
+  {
+    "requirementId": "C22-22.2-003",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "remainingWork": "Transfer `updateTransfer()` replaces lines with no logAction; GRN draft line edits unlogged; Breakage line media changes unlogged",
+      "whereImplemented": "Governed audit on some workflow transitions; draft line edits often silent"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Backend",
+        "file": "OSE-backend/src/services/transfer.service.js",
+        "method": "updateTransfer() line deleteMany/createMany, no audit"
+      }
+    ]
+  },
+  {
+    "requirementId": "C22-22.3-001",
+    "failedChecks": [],
+    "reason": "Remove self-referential Governance/evidence.json evidence row.",
+    "updates": {
+      "remainingWork": "GRN FE must merge auditEvents; Transfer/Breakage/Get Pass/Inventory Count never consume constitution timeline API",
+      "whereImplemented": "BE `documentTimeline.service.js` returns workflowSlots+auditEvents; only GRN detail calls API and drops auditEvents; other modules use `returns-workflow-timeline` from document payload only"
+    },
+    "evidenceAdd": [
+      {
+        "layer": "Frontend",
+        "file": "OSE-Frontend/src/app/features/transfers/transfer-detail/transfer-detail.component.ts",
+        "method": "approvalTimelineContext from document, not getTimeline()"
+      },
+      {
+        "layer": "Backend",
+        "file": "OSE-backend/src/platform/documentTimeline.service.js",
+        "method": "getGrnTimeline returns auditEvents"
+      }
+    ]
+  },
+  {
+    "requirementId": "C22-22.3-002",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Audit Log",
+        "Platform"
+      ],
+      "remainingWork": "Insert-only writer confirmed; add DB immutability constraint or governance smoke test"
+    }
+  },
+  {
+    "requirementId": "C22-22.3-003",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Audit Log",
+        "Platform"
+      ],
+      "remainingWork": "UTC via server `now()`/ISO export; document explicit UTC storage policy in Architecture Guide"
+    }
+  },
+  {
+    "requirementId": "C22-22.3-005",
+    "failedChecks": [],
+    "reason": "",
+    "updates": {
+      "affectedModules": [
+        "Audit Log",
+        "Reports",
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "remainingWork": "BE audit log supports filters; timeline UI filtering not unified—workflow timeline component has no user filter controls"
+    }
+  },
+  {
+    "requirementId": "C23-23.1-001",
+    "failedChecks": [
+      2,
+      3,
+      6
+    ],
+    "reason": "Unified lookup applies to parties/locations too; GRN supplier/warehouse are nz-select bulk loads, not SharedLookup. Breakage omitted.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Master Data",
+        "Items",
+        "Inventory Count"
+      ],
+      "whereImplemented": "SharedLookupService for GRN item line only; supplier/warehouse/line-item lookups elsewhere use nz-select or client-preloaded catalogs",
+      "remainingWork": "Extend shared lookup widget to GRN item line; migrate supplier/location/party pickers from bulk client loads to server-assisted lookup per profile"
+    }
+  },
+  {
+    "requirementId": "C23-23.2-001",
+    "failedChecks": [
+      2,
+      3,
+      7,
+      8
+    ],
+    "reason": "Breakage create modal and Master Data party selectors missed. 'Single lookup component' over-scopes; constitution requires same UX, not one new component.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Master Data",
+        "Items"
+      ],
+      "remainingWork": "Adopt shared lookup widget on GRN item line; align profile params (receiving/stock/catalog/issue) on existing nz-select surfaces—no new UX paradigm"
+    }
+  },
+  {
+    "requirementId": "C23-23.3-001",
+    "failedChecks": [
+      2,
+      4
+    ],
+    "reason": "item.service.js OR search omits code field (name/barcode/department only). Transfer/Get Pass/Breakage item pickers use same API or client catalogs.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Add code to item search OR clause; ensure all lookup paths call the same ranked search API"
+    }
+  },
+  {
+    "requirementId": "C23-23.3-003",
+    "failedChecks": [
+      2,
+      3,
+      7
+    ],
+    "reason": "Debounce applies to GRN server search and registry lists, not lookup-typeahead surfaces (Transfer/Get Pass/Breakage nz-select client filter).",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Items",
+        "Master Data"
+      ],
+      "remainingWork": "Apply debounceTime to all server-driven lookup queries (GRN item line + future shared lookup); client-filter nz-select paths exempt only where catalog is already scoped small"
+    }
+  },
+  {
+    "requirementId": "C23-23.3-004",
+    "failedChecks": [
+      2,
+      4
+    ],
+    "reason": "Case-insensitive contains only; no query whitespace collapse. All item lookup paths share backend.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Normalize search input (trim/collapse spaces) in item.service getItems() before Prisma query"
+    }
+  },
+  {
+    "requirementId": "C23-23.4-001",
+    "failedChecks": [
+      1,
+      2,
+      3
+    ],
+    "reason": "Marked No but nz-select (GRN supplier/warehouse, Transfer/Get Pass/Breakage lines) already supports arrow navigation. Gap is GRN custom item dropdown only.",
+    "updates": {
+      "implemented": "Partial",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "whereImplemented": "nz-select surfaces support arrow keys; GRN custom item dropdown is click-only",
+      "remainingWork": "Add arrow-key highlighting to GRN custom item dropdown (or replace with shared lookup widget)"
+    }
+  },
+  {
+    "requirementId": "C23-23.4-002",
+    "failedChecks": [
+      1,
+      2,
+      3
+    ],
+    "reason": "Same as 23.4-001: nz-select provides Enter/Esc/Tab; GRN custom item dropdown lacks handlers.",
+    "updates": {
+      "implemented": "Partial",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Implement Enter/Esc/Tab contract on GRN custom item dropdown (or migrate to shared lookup)"
+    }
+  },
+  {
+    "requirementId": "C23-23.4-004",
+    "failedChecks": [
+      1,
+      2,
+      3
+    ],
+    "reason": "nz-select closes on outside click platform-wide; only GRN custom dropdown lacks document-level dismiss.",
+    "updates": {
+      "implemented": "Partial",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Add click-outside dismiss to GRN custom item dropdown (or migrate to shared lookup)"
+    }
+  },
+  {
+    "requirementId": "C23-23.4-005",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "nz-select closes on blur; GRN custom dropdown only closes on warehouse change, not field exit.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "whereImplemented": "nz-select blur-close on party/location/line pickers; GRN item dropdown lacks blur-close",
+      "remainingWork": "Close GRN custom item dropdown on input blur"
+    }
+  },
+  {
+    "requirementId": "C23-23.4-007",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Focus-to-qty applies to all document line-entry forms, not GRN only.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "After item pick in line entry, focus quantity input on GRN/Transfer/Get Pass/Breakage create forms"
+    }
+  },
+  {
+    "requirementId": "C23-23.5-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Transfer/Get Pass/Breakage nz-select loading states not cited; unified retry still missing platform-wide.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Platform"
+      ],
+      "remainingWork": "Add shared lookup loading/empty/error+retry messaging component; wire on GRN item line first, then profile lookups"
+    }
+  },
+  {
+    "requirementId": "C23-23.6-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Permission-scoped lookup applies to parties/locations/stock profiles beyond item.service tenant filter.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Master Data"
+      ],
+      "remainingWork": "Verify route permission + scope filters on supplier/location/stock lookup APIs per profile"
+    }
+  },
+  {
+    "requirementId": "C23-23.6-002",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Cross-tenant leak tests are governance verification, not code remediation minimum.",
+    "updates": {
+      "remainingWork": "Add lookup cross-tenant negative test to constitution smoke suite (governance verification artifact)"
+    }
+  },
+  {
+    "requirementId": "C23-23.6-003",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Get Pass loads up to 5000 stock rows per location client-side; Transfer preloads stockItems signal.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Apply consistent paging/limit policy to all large lookup result sets (SharedLookup limit=20 baseline)"
+    }
+  },
+  {
+    "requirementId": "C23-23.6-004",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Transfer inventoryApi stock preload and Get Pass/Breakage client catalogs are not server-assisted search.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "remainingWork": "Replace client-preloaded item catalogs with server-assisted search on Transfer/Get Pass/Breakage line pickers"
+    }
+  },
+  {
+    "requirementId": "C23-23.6-005",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Evidence cites GRN take:10000 only; Get Pass gpStockTakePerLocation=5000, Transfer stock preload, Breakage take:100 also violate prohibition.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Master Data"
+      ],
+      "whereImplemented": "GRN create suppliersApi/locationsApi list({take:10000}); Get Pass stock take:5000/location; Transfer stockItems preload; Breakage items take:100",
+      "remainingWork": "Replace bulk client catalog loads with server-assisted lookup on all party/location/item pickers"
+    }
+  },
+  {
+    "requirementId": "C24-24.2-001",
+    "failedChecks": [
+      1,
+      7
+    ],
+    "reason": "Min resolution is layout support at 1366×768, not automated CI. UX Constitution tokens exist; gap is DoD sign-off.",
+    "updates": {
+      "whereImplemented": "UX Constitution GHSL/VSL golden geometry + responsive SCSS tokens at 1366×768 baseline",
+      "remainingWork": "Record ch24.6 matrix sign-off at 1366×768 @100% (governance QA artifact); fix layout only where matrix finds violations"
+    }
+  },
+  {
+    "requirementId": "C24-24.3-001",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Zoom 80–125% is release-acceptance QA per §24.3/§24.6, not a code deliverable.",
+    "updates": {
+      "remainingWork": "Execute and record ch24.6 zoom matrix (1366×768 @80/90/100/110/125%) per §29.3 DoD"
+    }
+  },
+  {
+    "requirementId": "C24-24.4-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Horizontal-scroll rules exist but operational create/detail routes (Dashboard, Items, Inventory Count, Movements) not in scope.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Reports",
+        "Registry lists",
+        "Items",
+        "Inventory Count",
+        "Movements",
+        "Master Data"
+      ],
+      "remainingWork": "Audit routes in ch24.6 matrix for page-level horizontal scroll; confine overflow-x to table/grid owners where found"
+    }
+  },
+  {
+    "requirementId": "C24-24.4-002",
+    "failedChecks": [
+      1,
+      7
+    ],
+    "reason": "Misclassified No: platform-wide text-overflow:ellipsis patterns exist (main-layout, registry lists, reports). Constitution requires no clipping, not automated regression CI.",
+    "updates": {
+      "implemented": "Partial",
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Reports",
+        "Registry lists",
+        "Dashboard",
+        "Admin"
+      ],
+      "whereImplemented": "text-overflow:ellipsis on mastheads, registry columns, report headers (main-layout.component.scss, registry list SCSS)",
+      "remainingWork": "Execute ch24.6 matrix spot-check for page/masthead titles at 1366×768; fix CSS only where clipping is observed (governance QA first, code second)"
+    }
+  },
+  {
+    "requirementId": "C24-24.4-003",
+    "failedChecks": [
+      1,
+      7
+    ],
+    "reason": "Misclassified No: no overlap regression suite conflates governance QA with code. Action bars use standard flex patterns.",
+    "updates": {
+      "implemented": "Partial",
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Reports",
+        "Document detail",
+        "Workflow Pipeline"
+      ],
+      "remainingWork": "Execute ch24.6 matrix spot-check for action bars at 1366×768; fix flex/wrap/gap only where overlap is observed"
+    }
+  },
+  {
+    "requirementId": "C24-24.4-004",
+    "failedChecks": [
+      1,
+      7
+    ],
+    "reason": "Misclassified No: create forms have footer action areas (grn-create-page__footer-actions, transfer-form__footer, gp-form__footer). Gap is evidenced sign-off, not missing UI.",
+    "updates": {
+      "implemented": "Partial",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "whereImplemented": "Fixed footer primary actions on GRN/Transfer/Get Pass create forms",
+      "remainingWork": "Record ch24.6 matrix sign-off for create-route primary actions at 1366×768 @100%; adjust footer/sticky layout only if actions not visible"
+    }
+  },
+  {
+    "requirementId": "C24-24.4-005",
+    "failedChecks": [
+      3
+    ],
+    "reason": "ACC workflow-builder, Master Data modals, Breakage create modal not in evidence.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "ACC",
+        "Master Data",
+        "Breakage",
+        "GRN",
+        "Admin"
+      ],
+      "remainingWork": "Verify ng-zorro modals fit viewport with nzBodyStyle/maxHeight internal scroll; fix outliers found in ch24.6 matrix"
+    }
+  },
+  {
+    "requirementId": "C24-24.4-006",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Inventory Count detail tables, Items list, Movements, Ledger, Master Data lists omitted.",
+    "updates": {
+      "affectedModules": [
+        "Registry lists",
+        "Reports",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Items",
+        "Inventory Count",
+        "Movements",
+        "Ledger",
+        "Master Data"
+      ],
+      "remainingWork": "Migrate remaining nz-table surfaces without registry-work-card__scroll / overflow-x owner to internal-scroll pattern"
+    }
+  },
+  {
+    "requirementId": "C24-24.5-001",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Browser matrix compliance is release QA checklist per Architecture Guide, not CI enforcement.",
+    "updates": {
+      "remainingWork": "Reference Architecture Guide browser matrix in release QA checklist with recorded sign-off (governance artifact)"
+    }
+  },
+  {
+    "requirementId": "C24-24.5-002",
+    "failedChecks": [
+      7
+    ],
+    "reason": "High-DPI support is standard responsive CSS; no DPI-specific code required unless matrix finds defects.",
+    "updates": {
+      "remainingWork": "Include 2K/4K display spot-check in ch24.6/release QA matrix; fix scaling only where defects observed"
+    }
+  },
+  {
+    "requirementId": "C24-24.5-003",
+    "failedChecks": [
+      1,
+      7
+    ],
+    "reason": "Multi-monitor consistency is QA acceptance, not automated test suite. No code feature implied.",
+    "updates": {
+      "implemented": "Partial",
+      "remainingWork": "Record multi-monitor/DPI spot-check in release QA matrix (governance sign-off); no code change unless inconsistency found"
+    }
+  },
+  {
+    "requirementId": "C25-25.2-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "document-card pattern on Transfer/Get Pass/Breakage detail only; GRN create/detail, Lost Items, Movement, Inventory Count vary.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Lost Items",
+        "Movement",
+        "Inventory Count"
+      ],
+      "remainingWork": "Converge create/edit and detail layouts to declared archetypes (A-DT/A-TX) per UX Constitution; GRN golden reference per §25.7"
+    }
+  },
+  {
+    "requirementId": "C25-25.3-001",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Scroll owner applies to all operational screens, not only registry/document detail.",
+    "updates": {
+      "affectedModules": [
+        "Registry lists",
+        "Document detail",
+        "Reports",
+        "Items",
+        "Inventory Count",
+        "Movements",
+        "Master Data",
+        "Dashboard"
+      ],
+      "remainingWork": "Register primary scroll owner per route in SCREEN-REGISTRY; align implementation to VSL archetype owner"
+    }
+  },
+  {
+    "requirementId": "C25-25.3-002",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "registry-work-card__scroll on list modules only; Items, Inventory Count, Reports workspace, Master Data differ.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Lost Items",
+        "Movements",
+        "Items",
+        "Inventory Count",
+        "Reports",
+        "Master Data"
+      ],
+      "remainingWork": "Apply registry-work-card__scroll (or archetype-equivalent owner) to non-registry screens with divergent scroll behavior"
+    }
+  },
+  {
+    "requirementId": "C26-26.1-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Browser print on detail views (w.print()) and Get Pass/Breakage/Lost Items PDF paths not in evidence.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Lost Items",
+        "Reports",
+        "Inventory Count"
+      ],
+      "remainingWork": "Verify print CSS matches PDF presentation per document family; align detail browser-print with evidence PDF chrome"
+    }
+  },
+  {
+    "requirementId": "C26-26.1-002",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Status pills in enterprise PDF shell; Get Pass/get-pass-pdf.renderer and Breakage/Lost Items evidence exports not verified.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Lost Items",
+        "Reports"
+      ],
+      "remainingWork": "Ensure draft/posted/void status watermark or pill on every evidence PDF export type"
+    }
+  },
+  {
+    "requirementId": "C26-26.1-004",
+    "failedChecks": [
+      2
+    ],
+    "reason": "stampEnterpriseDocumentFooters verified on reports; Get Pass/Inventory Count/stock-count PDF routes not cited.",
+    "updates": {
+      "affectedModules": [
+        "Reports",
+        "Evidence PDFs",
+        "Get Pass",
+        "Inventory Count",
+        "GRN",
+        "Transfer",
+        "Lost Items"
+      ],
+      "remainingWork": "Verify page numbers and print metadata on all export routes (evidence PDF, get-pass pdf, count session pdf)"
+    }
+  },
+  {
+    "requirementId": "C26-26.2-001",
+    "failedChecks": [
+      3,
+      7
+    ],
+    "reason": "Disclaimer needed on user-facing print/export surfaces, not only governance docs.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Reports"
+      ],
+      "remainingWork": "Add authoritative-copy disclaimer string to PDF footers and browser-print shells (electronic record is SSOT)"
+    }
+  },
+  {
+    "requirementId": "C26-26.3-001",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Detail print gated by canDownloadEvidencePack (lifecycle), not separate permission check; route-level view permission already applies.",
+    "updates": {
+      "remainingWork": "Confirm evidence print/download buttons absent when user lacks document-view permission on all detail routes (edge-case audit, not new permission model)"
+    }
+  },
+  {
+    "requirementId": "C26-26.3-002",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Detail evidence print (grn/transfer/breakage/get-pass w.print()) and inventory count CSV paths not cited.",
+    "updates": {
+      "affectedModules": [
+        "Reports",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Lost Items",
+        "Inventory Count"
+      ],
+      "remainingWork": "Audit client-side print/CSV/export entry points for REPORTS_EXPORT or document-family export permission parity"
+    }
+  },
+  {
+    "requirementId": "C26-26.3-003",
+    "failedChecks": [
+      2
+    ],
+    "reason": "Document evidence exports use family permissions (GRN_VIEW, GET_PASS_VIEW), not only REPORTS_EXPORT.",
+    "updates": {
+      "affectedModules": [
+        "Reports",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Lost Items",
+        "Inventory Count",
+        "ACC"
+      ],
+      "remainingWork": "Catalog export authorization per document family in ACC permission matrix (beyond REPORTS_EXPORT)"
+    }
+  },
+  {
+    "requirementId": "C27-27.1-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Get Pass take:5000/location, GRN take:10000, Breakage take:100 bulk loads missed.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Movements",
+        "Lost Items",
+        "Inventory Count",
+        "Admin",
+        "Reports"
+      ],
+      "remainingWork": "Replace bulk client list loads with server paging on remaining selectors (suppliers, stock catalogs)"
+    }
+  },
+  {
+    "requirementId": "C27-27.1-002",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Transfer stockItems preload and Get Pass slim item catalog are not server-assisted search.",
+    "updates": {
+      "affectedModules": [
+        "Items",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Reports",
+        "Master Data",
+        "Movements"
+      ],
+      "remainingWork": "Convert remaining large-list selectors to server-assisted search with q param"
+    }
+  },
+  {
+    "requirementId": "C27-27.1-003",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Get Pass/Breakage/Transfer item loads lack debounce+cancel; registry lists vary.",
+    "updates": {
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Items",
+        "Reports",
+        "Master Data",
+        "Movements"
+      ],
+      "remainingWork": "Apply debounceTime+switchMap cancel pattern to all server-driven search/filter HTTP calls"
+    }
+  },
+  {
+    "requirementId": "C27-27.1-004",
+    "failedChecks": [
+      7,
+      8
+    ],
+    "reason": "'Async job queue' over-scopes; constitution requires user feedback during heavy export, which report viewer already provides.",
+    "updates": {
+      "affectedModules": [
+        "Reports",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Evidence PDFs"
+      ],
+      "remainingWork": "Ensure exporting/disabled loading state on all heavy PDF/Excel triggers (extend report-viewer pattern to evidence-pack downloads)"
+    }
+  },
+  {
+    "requirementId": "C28-28.1-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Icon-only controls pervasive on GRN/Transfer/Reports create-detail toolbars; admin sample insufficient.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Reports",
+        "Admin",
+        "Registry lists"
+      ],
+      "remainingWork": "Add aria-label (or visible text) to icon-only action buttons on operational toolbars"
+    }
+  },
+  {
+    "requirementId": "C28-28.1-002",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Status tags on document detail views (GRN/Transfer/Breakage/Get Pass) not audited.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage",
+        "Workflow Pipeline",
+        "Inventory Count"
+      ],
+      "remainingWork": "Audit status indicators for text/icon cue beyond color; fix tags lacking non-color affordance"
+    }
+  },
+  {
+    "requirementId": "C28-28.1-003",
+    "failedChecks": [
+      1,
+      7
+    ],
+    "reason": "§28.5 excludes full WCAG certification; contrast is QA-gate spot-check, not CI token enforcement.",
+    "updates": {
+      "remainingWork": "Include contrast spot-check on primary controls in release QA gate per agreed targets (governance verification)"
+    }
+  },
+  {
+    "requirementId": "C28-28.2-001",
+    "failedChecks": [
+      7,
+      8
+    ],
+    "reason": "'SR test matrix' over-scopes v2.0; minimum is governed-interaction ARIA (lookup, workflow actions, tables) per §28.1–28.3.",
+    "updates": {
+      "remainingWork": "Add aria labels/roles to lookup widget, workflow action buttons, and data tables per §28.1–28.3 (no full certification program)"
+    }
+  },
+  {
+    "requirementId": "C28-28.3-001",
+    "failedChecks": [
+      2,
+      3
+    ],
+    "reason": "Get Pass role=alert is one screen; GRN create, Transfer form validation not cited.",
+    "updates": {
+      "affectedModules": [
+        "Platform",
+        "Get Pass",
+        "GRN",
+        "Transfer",
+        "Breakage"
+      ],
+      "remainingWork": "Expose inline validation errors with role=alert (or aria-describedby) on document create/edit forms"
+    }
+  },
+  {
+    "requirementId": "C28-28.3-002",
+    "failedChecks": [
+      7
+    ],
+    "reason": "NzMessage toasts may satisfy AT announcement; gap is systematic aria-live for API errors.",
+    "updates": {
+      "remainingWork": "Ensure api-error interceptor and inline validation surfaces use aria-live region for assistive technology"
+    }
+  },
+  {
+    "requirementId": "C29-29.3-001",
+    "failedChecks": [
+      7
+    ],
+    "reason": "'All operational screens all clauses satisfied' over-scopes; compliance is per-capability declaration in register.",
+    "updates": {
+      "remainingWork": "Complete evidence register rows for each operational module release per applicable chapters"
+    }
+  },
+  {
+    "requirementId": "C29-29.4-001",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Register lacks formal approval/expiry columns per §29.4; governance doc update is minimum.",
+    "updates": {
+      "remainingWork": "Add approval date, approver, and expiry fields to EXCEPTION_REGISTER.md entries per §29.4"
+    }
+  },
+  {
+    "requirementId": "C29-29.4-002",
+    "failedChecks": [
+      7
+    ],
+    "reason": "Automated exception-vs-audit check over-scopes; constitutional review gate is minimum.",
+    "updates": {
+      "remainingWork": "Manual constitutional review confirms new exceptions do not weaken audit rules (per §29.4 review gate)"
+    }
+  },
+  {
+    "requirementId": "C29-29.6-001",
+    "failedChecks": [
+      7
+    ],
+    "reason": "'CI job validating all constitution chapters' over-scopes §29.6; QA validates per Architecture Guide methods.",
+    "updates": {
+      "remainingWork": "Wire release QA checklist (UAT-OB + ch24.6 matrix + module evidence) to sign-off gate; extend smoke script incrementally"
+    }
+  }
+]

@@ -1,0 +1,158 @@
+{
+  "runId": "W6-RV-1783240784374",
+  "startedAt": "2026-07-05T08:39:44.377Z",
+  "completedAt": "2026-07-05T08:39:48.059Z",
+  "wave": 6,
+  "title": "Evidence Preview and Official Evidence Final Verification",
+  "summary": {
+    "pass": 25,
+    "fail": 0,
+    "blocked": 0,
+    "gate": "CLOSED"
+  },
+  "transferDispatchReceiveAudit": {
+    "permissionId": null,
+    "rolesWithGrant": 0,
+    "usersAffected": 0,
+    "runtimeRouteUsage": false,
+    "runtimeGuardUsage": false,
+    "recommendation": "Permission row not found — may already be purged from DB."
+  },
+  "results": [
+    {
+      "id": "W6-STATIC-01",
+      "name": "evidenceClassification.service contract present",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-STATIC-02",
+      "name": "breakage.controller.js uses buildEnrichedEvidence",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-STATIC-02",
+      "name": "grn.controller.js uses buildEnrichedEvidence",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-STATIC-02",
+      "name": "transfer.controller.js uses buildEnrichedEvidence",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-STATIC-02",
+      "name": "lostItems.controller.js uses buildEnrichedEvidence",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-STATIC-03",
+      "name": "PDF preview watermark helper present",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-STATIC-04",
+      "name": "GRN evidence no longer blocks pre-posted fetch",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-STATIC-05",
+      "name": "Transfer evidence no longer blocks pre-posted fetch",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-FE-01",
+      "name": "GRN detail preview/official labels",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-FE-02",
+      "name": "Transfer detail preview/official labels",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-FE-03",
+      "name": "Breakage detail official/preview switch",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-UNIT-01",
+      "name": "evidenceClassification unit tests",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-PERM-01",
+      "name": "TRANSFER_DISPATCH_RECEIVE not on transfer routes",
+      "result": "PASS",
+      "permissionId": null,
+      "rolesWithGrant": 0,
+      "usersAffected": 0,
+      "runtimeRouteUsage": false,
+      "runtimeGuardUsage": false,
+      "recommendation": "Permission row not found — may already be purged from DB."
+    },
+    {
+      "id": "W6-CONTRACT-01",
+      "name": "Preview contract fields on draft transfer pack",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-GUARD-01",
+      "name": "Blocks OFFICIAL mode on draft GRN",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-CONTRACT-02",
+      "name": "Official contract on posted GRN pack",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-FILE-01",
+      "name": "Preview filename suffix",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-BRK-01",
+      "name": "Draft breakage → PREVIEW evidence",
+      "result": "PASS",
+      "documentNo": "BRK-2026-00001",
+      "status": "DRAFT"
+    },
+    {
+      "id": "W6-BRK-02",
+      "name": "Breakage preview PDF watermark/metadata present",
+      "result": "PASS",
+      "bytes": 42609
+    },
+    {
+      "id": "W6-BRK-03",
+      "name": "Posted breakage → OFFICIAL evidence (contract + PDF)",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-BRK-04",
+      "name": "Official breakage PDF metadata without preview marker",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-GRN-01",
+      "name": "Posted GRN → OFFICIAL evidence (covered by W6-CONTRACT-02 synthetic)",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-GRN-02",
+      "name": "Non-posted GRN → PREVIEW evidence",
+      "result": "PASS",
+      "status": "DRAFT"
+    },
+    {
+      "id": "W6-ISO-01",
+      "name": "Foreign tenant breakage evidence → 404",
+      "result": "PASS"
+    },
+    {
+      "id": "W6-PERM-NEG-01",
+      "name": "Breakage evidence routes require view permission",
+      "result": "PASS"
+    }
+  ]
+}

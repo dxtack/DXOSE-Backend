@@ -1,0 +1,73 @@
+{
+  "generatedAt": "2026-06-28T14:15:00.000Z",
+  "phase": "phase-5-operational-details",
+  "modules": ["TRANSFER", "BREAKAGE", "LOST"],
+  "surfaces": {
+    "TRANSFER": {
+      "detailRoute": "/transfers/:id",
+      "frontendComponent": "OSE-Frontend/src/app/features/transfers/transfer-detail/transfer-detail.component.ts",
+      "detailApi": "GET /api/transfers/:id",
+      "detailPermission": "INVENTORY_VIEW",
+      "scopeAssert": "assertInScope(SCOPE_MODULE.TRANSFER, read)",
+      "statusSource": "transfer-status-display.util.ts → resolveRowDisplayStatus",
+      "linesSource": "TransferService.getById → trf.lines",
+      "totalsSource": "per-line unitCost/totalValue (no document footer total)",
+      "timelineModuleKey": "TRANSFER",
+      "timelineTitle": "Workflow Timeline",
+      "fields": {
+        "transferNo": { "source": "persisted", "path": "transferNo" },
+        "status": { "source": "persisted", "path": "status" },
+        "userFacingState": { "source": "backend-enriched", "path": "constitutionUserFacingState" },
+        "sourceLocation": { "source": "related-master", "path": "sourceLocation.name" },
+        "destLocation": { "source": "related-master", "path": "destLocation.name" },
+        "creator": { "source": "related-master", "path": "createdByUser" },
+        "documentDate": { "source": "persisted", "path": "documentDate" },
+        "reason": { "source": "persisted", "path": "reason" },
+        "lines": { "source": "persisted", "path": "lines[]" }
+      }
+    },
+    "BREAKAGE": {
+      "detailRoute": "/breakage/:id",
+      "frontendComponent": "OSE-Frontend/src/app/features/breakage/breakage-detail/breakage-detail.component.ts",
+      "detailApi": "GET /api/breakage/:id",
+      "detailPermission": "VIEW_INVENTORY|BREAKAGE_VIEW|READ_BREAKAGE|APPROVE_BREAKAGE",
+      "scopeAssert": "assertInScope(SCOPE_MODULE.BREAKAGE, read)",
+      "statusSource": "BREAKAGE.STATUS.* i18n + constitutionUserFacingState",
+      "linesSource": "doc.lines",
+      "totalsSource": "movementDocumentFinancialTotal(doc.lines)",
+      "evidenceSource": "line.attachments / mediaUrls",
+      "timelineModuleKey": "BREAKAGE",
+      "timelineTitle": "Workflow Timeline",
+      "fields": {
+        "documentNo": { "source": "persisted", "path": "documentNo" },
+        "status": { "source": "persisted", "path": "status" },
+        "department": { "source": "related-master", "path": "department.name" },
+        "location": { "source": "related-master", "path": "sourceLocation.name" },
+        "reason": { "source": "persisted", "path": "reason" },
+        "suggestedAction": { "source": "persisted", "path": "suggestedAction" },
+        "responsibleEmployee": { "source": "persisted", "path": "responsibleEmployeeName" },
+        "financialImpactTotal": { "source": "computed-frontend", "fn": "movementDocumentFinancialTotal" }
+      }
+    },
+    "LOST": {
+      "detailRoute": "/lost-items/:id",
+      "frontendComponent": "OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component.ts",
+      "detailApi": "GET /api/lost/:id",
+      "detailPermission": "LOST_ITEMS_VIEW|VIEW_INVENTORY|READ_LOST|APPROVE_LOST",
+      "scopeAssert": "assertInScope(SCOPE_MODULE.LOST, read)",
+      "statusSource": "lost-items-status-display.util.ts → lostRowStatusLabel",
+      "linesSource": "linesForTable(doc.lines)",
+      "totalsSource": "movementDocumentFinancialTotal(doc.lines)",
+      "photosByDesign": false,
+      "timelineModuleKey": "LOST",
+      "timelineTitle": "Workflow Timeline",
+      "fields": {
+        "documentNo": { "source": "persisted", "path": "documentNo" },
+        "status": { "source": "persisted", "path": "status" },
+        "suggestedAction": { "source": "persisted", "path": "suggestedAction" },
+        "finalLossTreatment": { "source": "persisted", "path": "accountabilityType|finalLossTreatment" },
+        "responsibleEmployee": { "source": "persisted", "path": "responsibleEmployeeName" }
+      }
+    }
+  }
+}

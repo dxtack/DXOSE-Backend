@@ -1,0 +1,16 @@
+finding_id,file_path,change_summary,lines_approx,why_minimal,before,after
+FIND-002,OSE-backend/src/services/getPass.service.js,Add passNotFoundErr() with status 404; replace bare not-found throws,5-6 + ~8 call sites,Single canonical 404 helper; no controller/middleware change,Cross-tenant GET returned HTTP 500,Cross-tenant GET returns HTTP 404 with generic not-found message
+FIND-001,OSE-Frontend/src/app/features/lost-items/utils/lost-items-status-display.util.ts,Use constitutionUserFacingStateLabel; safe UNKNOWN fallback,1-25,Reuses central lifecycle mapper; no DB/workflow change,Templates showed LOST_ITEMS.STATUS.{enum},User sees Posted/Draft/etc. via constitution mapper
+FIND-001,OSE-Frontend/src/app/features/lost-items/lost-items-list/lost-items-list.component.html,statusLabel(row) for badges,2,Template-only presentation fix,Raw i18n enum key in badge,Constitution/business label
+FIND-001,OSE-Frontend/src/app/features/lost-items/lost-items-list/lost-items-list.component.ts,Import and expose statusLabel(),~5,Thin wrapper over util,Direct template enum,statusLabel() helper
+FIND-001,OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component.html,statusLabel(d) for header badge,1,Template-only,Raw enum in header,Constitution label
+FIND-001,OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component.ts,Import and expose statusLabel(),~5,Thin wrapper,Direct enum,statusLabel() helper
+FIND-001,OSE-Frontend/src/app/features/lost-items/models/lost-items.model.ts,Add userFacingState optional field,1,Aligns TS model with API,Missing typed field,userFacingState on row/detail types
+FIND-003,OSE-Frontend/src/app/core/directives/keyboard-navigation.directive.ts,Esc closes open ant-select within shell,~12,Extends existing directive; no new framework,Esc not handled for dropdowns,Esc blurs open select
+FIND-003,OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.ts/html,Import directive; appKeyboardNav on shell,2+1,Standard adoption pattern,No keyboard nav,Enter advances focus; Esc closes dropdown
+FIND-003,OSE-Frontend/src/app/features/get-pass/get-pass-form/get-pass-form.component.ts/html,Import directive; wrap form in appKeyboardNav shell,2+2,Standard adoption,No keyboard nav,Wired
+FIND-003,OSE-Frontend/src/app/features/transfers/transfer-form/transfer-form.component.ts/html,Import directive; wrap form in appKeyboardNav shell,2+2,Standard adoption,No keyboard nav,Wired
+FIND-003,OSE-Frontend/src/app/features/breakage/breakage-create-modal/breakage-create-modal.component.ts/html,Import directive; appKeyboardNav on section,2+1,Standard adoption,No keyboard nav,Wired
+FIND-003,OSE-Frontend/src/app/features/lost-items/lost-create-modal/lost-create-modal.component.ts/html,Import directive; appKeyboardNav on section,2+1,Standard adoption,No keyboard nav,Wired
+FIND-003,OSE-Frontend/src/app/features/inventory-count/inventory-count-detail/inventory-count-detail.component.ts/html,Import directive; appKeyboardNav on detail root,2+1,Editable count lines benefit from Enter nav,No keyboard nav,Wired
+FIND-003,OSE-Frontend/src/app/features/movements/movement-form/movement-form.component.ts/html,Import directive; appKeyboardNav on document page,2+1,Movement register is editable document shell,No keyboard nav,Wired

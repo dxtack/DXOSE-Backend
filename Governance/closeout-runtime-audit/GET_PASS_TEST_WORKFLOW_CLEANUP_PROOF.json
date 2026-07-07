@@ -1,0 +1,68 @@
+{
+  "executedAt": "2026-06-27T00:21:46.046Z",
+  "tag": "CLOSEOUT_RT_AUDIT",
+  "tenant": "grand-horizon",
+  "policy": "Operational hotel must not retain test-only published workflow; Round 5+ uses disposable tenant only",
+  "beforeTest": {
+    "grandHorizon": {
+      "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "slug": "grand-horizon",
+      "parentId": null,
+      "updatedAt": "2026-06-27T00:09:22.178Z"
+    },
+    "activePublishedGetPassVersion": {
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ]
+    },
+    "globalTemplate": {
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3
+    },
+    "testDefinitionsOnTenant": []
+  },
+  "round4TestWorkflow": {
+    "simulatedRound4Pattern": true,
+    "testVersionId": "cd80d20b-dfc7-48a9-8f4f-fd69d57cbf10",
+    "publishedAt": "2026-06-27T00:21:45.968Z",
+    "documentsPinnedDuringTest": [],
+    "cleanupAction": "deleted definition + versions + associated get passes",
+    "cleanupResult": {
+      "deletedDocs": 0
+    }
+  },
+  "afterTest": {
+    "grandHorizon": {
+      "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "slug": "grand-horizon",
+      "parentId": null
+    },
+    "parentIdUnchanged": true,
+    "activePublishedGetPassVersion": {
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "definitionKey": "standard",
+      "sameAsBefore": true
+    },
+    "globalTemplateChanged": false,
+    "testDefinitionsRemaining": 0,
+    "activeDocsPinnedToTestVersion": [],
+    "orphanedVersionPins": []
+  },
+  "dbQueries": {
+    "before": "SELECT id, slug, \"parentId\" FROM tenants WHERE slug='grand-horizon'",
+    "during": "SELECT * FROM acc_workflow_definitions WHERE tenant_id='d7f5e85c-86f9-487d-b17d-708cebcf9ca3' AND key LIKE 'closeout%'",
+    "after": "SELECT id, status, acc_workflow_version_id FROM get_passes WHERE tenant_id='d7f5e85c-86f9-487d-b17d-708cebcf9ca3' AND acc_workflow_version_id IS NOT NULL LIMIT 50"
+  },
+  "cleanupExecuted": true,
+  "cleanupStatus": "RESTORED — no test workflow definitions on grand-horizon",
+  "validityAfterRestore": "grand-horizon must not be used for workflow mutation tests going forward"
+}

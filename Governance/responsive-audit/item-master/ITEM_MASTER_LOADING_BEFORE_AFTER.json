@@ -1,0 +1,89 @@
+{
+  "runAt": "2026-07-03T12:05:00.000Z",
+  "tenant": {
+    "slug": "dx-airport-hotel",
+    "name": "DX Airport Hotel",
+    "itemCount": 201,
+    "totalListed": 200
+  },
+  "environment": "local dev (127.0.0.1:4200 + backend API)",
+  "before": {
+    "label": "Pre-fix (rollback baseline + reported UX)",
+    "reportedTotalInteractiveMs": 20000,
+    "localApiBenchMs": {
+      "GET /items page1": 51,
+      "check-requirements": 98,
+      "categories": 42,
+      "departments": 25,
+      "locations": 50
+    },
+    "localBrowserMs": {
+      "note": "Same script not run pre-fix; API timings stable. Dominant wait was lazy route chunk + full-table nzLoading UX.",
+      "appItemsListMountedEstimate": 1500,
+      "rowsVisibleEstimate": 2000
+    },
+    "loadingUx": "nzLoading dimmed entire empty table; centered spinner in large blank table body (ResizeObserver min-height); empty-state template visible under dim",
+    "duplicateRequests": {
+      "/api/items/check-requirements": 3,
+      "note": "ObThemeService (NavigationEnd) + ItemsListComponent.loadRequirements + tenant reload hook"
+    },
+    "imagesBlockedRows": false,
+    "backendListSigning": "attachDisplayImageUrl awaited per row in getItems (production risk when items carry R2 keys)"
+  },
+  "after": {
+    "label": "Post-fix (this change set)",
+    "localApiBenchMs": {
+      "GET /items page1": 57,
+      "check-requirements": 97,
+      "categories": 55,
+      "departments": 51,
+      "locations": 46
+    },
+    "localBrowserMs": {
+      "1366x768": {
+        "appItemsListMounted": 1815,
+        "rowsVisibleIdle": 2010,
+        "refreshMs": 174,
+        "itemsApiResponseMs": 2076
+      },
+      "1536x864": {
+        "appItemsListMounted": 1794,
+        "rowsVisibleIdle": 1974,
+        "refreshMs": 178,
+        "itemsApiResponseMs": 1973
+      },
+      "1920x1080": {
+        "appItemsListMounted": 1562,
+        "rowsVisibleIdle": 1603,
+        "refreshMs": 231,
+        "itemsApiResponseMs": 1511
+      }
+    },
+    "loadingUx": "initialLoadPending: compact top-aligned spinner overlay; no full-table dim; empty-state suppressed until first load completes; refresh uses nzLoading overlay only when rows exist",
+    "duplicateRequests": {
+      "/api/items/check-requirements": 3,
+      "note": "unchanged — out of items-list scope (ObThemeService)"
+    },
+    "imagesBlockedRows": false,
+    "backendListSigning": "deferred — list returns imageUrl key only; client hydrates per-thumb after rows render"
+  },
+  "comparison": {
+    "GET /items API time": { "beforeMs": 51, "afterMs": 57, "delta": "+6ms (within noise)" },
+    "timeToFirstRows": { "beforeMs": "~2000 (est.)", "afterMs": 1603, "delta": "within 2–3s target" },
+    "timeToSpinnerHidden": { "beforeMs": "~2000", "afterMs": 1603 },
+    "timeToPaginationVisible": { "beforeMs": "~2000", "afterMs": 1603 },
+    "totalInteractiveTime": { "beforeMs": "~20000 reported / ~2000 measured locally", "afterMs": 1603 },
+    "requestsCountFirstLoad": { "before": 8, "after": 8 },
+    "duplicateRequests": { "before": "check-requirements x3", "after": "check-requirements x3" },
+    "imageHydrationTime": { "before": "non-blocking post-render", "after": "non-blocking post-render (deferred from API)" },
+    "backendDbTime": { "beforeMs": "~50", "afterMs": "~57" },
+    "frontendRenderTime": { "beforeMs": "~1500 chunk + dim UX", "afterMs": "~1500 chunk + improved loader" }
+  },
+  "filesChanged": [
+    "OSE-backend/src/services/item.service.js",
+    "OSE-Frontend/src/app/features/items/items-list/items-list.component.ts",
+    "OSE-Frontend/src/app/features/items/items-list/items-list.component.html",
+    "OSE-Frontend/src/app/features/items/items-list/items-list.component.scss",
+    "OSE-backend/Governance/scripts/responsive-item-master-browser-perf.js"
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "executedAt": "2026-06-27T00:34:24.385Z",
+  "script": "11-inventory-count-v3",
+  "harnessExit": 0,
+  "counts": {
+    "PASS": 9,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 9,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": false,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "IC-CREATE",
+      "result": "PASS",
+      "http": 201
+    },
+    {
+      "id": "IC-START",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "IC-SUBMIT-COUNTS",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "IC-VARIANCE",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "IC-SUBMIT-APPROVAL",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "IC-APPROVE-CC",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "IC-APPROVE-FINANCE",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "IC-NO-ASSIGN",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "IC-DUP-APPROVE",
+      "result": "PASS",
+      "http": 403
+    }
+  ]
+}

@@ -1,0 +1,489 @@
+{
+  "executedAt": "2026-06-27T18:18:26.036Z",
+  "gate": "Gate C Final Verification",
+  "counting": {
+    "unique_gate_c_scenarios": 9,
+    "regression_scenarios": 1,
+    "total_executions": 10,
+    "unique_behaviors_verified": 9,
+    "note": "GC-XT-005 is sub-assertion on GC-XT-002 response; RS-XT-001 duplicates GC-XT-002 behavior for Gate B regression trace only"
+  },
+  "counts": {
+    "Passed": 10,
+    "Failed": 0,
+    "Blocked": 0
+  },
+  "scenarios": [
+    {
+      "scenario_id": "GC-XT-001",
+      "finding_id": "FIND-002",
+      "description": "Same-tenant authorized valid ID → 200",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "user": "finance@grandhorizon.com",
+        "role": "FINANCE_MANAGER",
+        "request": {
+          "method": "GET",
+          "path": "/get-passes/8b216f5b-01ea-416a-972a-50539362a89b",
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGci…[REDACTED]"
+          }
+        },
+        "response": {
+          "http": 200,
+          "body": {
+            "success": true,
+            "data": {
+              "id": "8b216f5b-01ea-416a-972a-50539362a89b",
+              "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+              "passNo": "GP-2026-00340",
+              "concurrencyVersion": 1,
+              "postingDate": null,
+              "assignedPostingPeriod": null,
+              "transferType": "PERMANENT",
+              "isInternalTransfer": false,
+              "targetTenantId": null,
+              "returnDate": null,
+              "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+              "borrowingEntity": "CLOSEOUT_RT_AUDIT gate-b",
+              "expectedReturnDate": null,
+              "status": "PENDING_COST_CONTROL",
+              "deptApprovedBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+              "deptApprovedAt": "2026-06-27T17:09:39.945Z",
+              "costControlApprovedBy": null,
+              "costControlApprovedAt": null,
+              "financeApprovedBy": null,
+              "financeApprovedAt": null,
+              "gmApprovedBy": null,
+              "gmApprovedAt": null,
+              "securityApprovedBy": null,
+              "securityApprovedAt": null,
+              "destinationSecurityApprovedBy": null,
+              "destinationSecurityApprovedAt": null,
+              "destinationSecurityExitBy": null,
+              "destinationSecurityExitAt": null,
+              "checkedOutBy": null,
+              "checkedOutAt": null,
+              "closedBy": null,
+              "closedAt": null,
+              "closeReason": null,
+              "closedVia": null,
+              "settlementPayload": null,
+              "settlementSubmittedBy": null,
+              "settlementSubmittedAt": null,
+              "settlementApprovedBy": null,
+              "settlementApprovedAt": null,
+              "settlementPriorStatus": null,
+              "settlementRejectionReason": null,
+              "settlementRejectedBy": null,
+              "settlementRejectedAt": null,
+              "settlementCancelledBy": null,
+              "settlementCancelledAt": null,
+              "receivedById": null,
+              "receivedAt": null,
+              "receivedCondition": null,
+              "receivedNotes": null,
+              "destinationDeptAcceptedAt": null,
+              "destinationDeptAcceptedBy": null,
+              "destinationDepartmentId": null,
+              "destinationLocationId": null,
+              "reason": "CLOSEOUT_RT_AUDIT",
+              "notes": null,
+              "rejectionReason": null,
+              "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+              "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+              "createdAt": "2026-06-27T17:09:39.876Z",
+              "updatedAt": "2026-06-27T17:09:39.950Z",
+              "department": {
+                "id": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+                "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+                "name": "Food & Beverage",
+                "code": "FB",
+                "isActive": true,
+                "createdAt": "2026-04-17T20:43:40.735Z",
+                "updatedAt": "2026-04-17T20:43:40.735Z"
+              },
+              "tenant": {
+                "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+                "name": "Grand Horizon Hotel",
+                "slug": "grand-horizon",
+                "email": "admin@grandhorizon.com",
+                "phone": "+971-4-555-0100",
+                "address": "Sheikh Zayed Road, Dubai, UAE"
+              },
+              "targetTenant": null,
+              "createdByUser": {
+                "id": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+                "email": "dept-mgr-fb@closeout-audit.local",
+                "passwordHash": "$2a$12$1LeulMVZAyVp8zVDHqy4gueoxCmx8.0TtD0pGHvCt0P4PZ8i5iyJO",
+                "firstName": "Closeout",
+                "lastName": "DEPT_MANAGER",
+                "department": null,
+                "phone": null,
+                "isActive": true,
+                "lastLoginAt": "2026-06-27T18:18:26.991Z",
+                "permissionVersion": 2,
+                "createdAt": "2026-06-26T23:45:06.661Z",
+                "updatedAt": "2026-06-27T18:18:26.994Z"
+              },
+              "deptApprover": {
+                "id": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+                "email": "dept-mgr-fb@closeout-audit.local",
+                "passwordHash": "$2a$12$1LeulMVZAyVp8zVDHqy4gueoxCmx8.0TtD0pGHvCt0P4PZ8i5iyJO",
+                "firstName": "Closeout",
+                "lastName": "DEPT_MANAGER",
+                "department": null,
+                "phone": null,
+                "isActive": true,
+                "lastLoginAt": "2026-06-27T18:18:26.991Z",
+                "permissionVersion": 2,
+                "createdAt": "2026-06-26T23:45:06.661Z",
+                "updatedAt": "2026-06-27T18:18:26.994Z"
+              },
+              "costControlApprover": null,
+              "financeApprover": null,
+              "gmApprover": null,
+              "securityApprover": null,
+              "destinationSecurityApprover": null,
+              "destinationSecurityExitUser": null,
+              "checkoutUser": null,
+              "closingUser": null,
+              "receivedBy": null,
+              "destinationDeptAccepter": null,
+              "lines": [
+                {
+                  "id": "ac0e858f-e1eb-48f9-88ed-5314baa327b3",
+                  "getPassId": "8b216f5b-01ea-416a-972a-50539362a89b",
+                  "itemId": "f7e4d2a3-d93c-4850-b306-a11321ff3aa2",
+                  "locationId": "c031c268-194d-4211-beb8-0910da8f131d",
+                  "qty": "1",
+                  "qtyReturned": "0",
+                  "returnedGoodQty": "0",
+                  "returnedDamagedQty": "0",
+                  "returnedLostQty": "0",
+                  "damagePhotos": null,
+                  "qtyReceivedAtDestination": "0",
+                  "qtyDiscrepancyAtDestination": "0",
+                  "unitCost": "0",
+                  "conditionOut": "GOOD",
+                  "receivedCondition": null,
+                  "discrepancyReason": null,
+                  "status": "PENDING",
+                  "notes": null,
+                  "item": {
+                    "id": "f7e4d2a3-d93c-4850-b306-a11321ff3aa2",
+                    "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+                    "name": "Dinner Plate - Porcelain",
+                    "description": null,
+                    "categoryId": "bc29b28c-9f32-4b90-9393-73559d009423",
+                    "subcategoryId": null,
+                    "supplierId": "5db2118c-19b2-437f-9195-0d50f9d8a2cb",
+                    "barcode": "OSE-009",
+                    "unitPrice": "22",
+                    "imageUrl": null,
+                    "isActive": true,
+                    "createdAt": "2026-04-17T20:43:41.603Z",
+                    "updatedAt": "2026-05-09T12:54:10.640Z",
+                    "code": null,
+                    "defaultStoreId": "8f3ae500-48b0-433c-9235-254f69251f8b",
+                    "departmentId": "873f97b1-d64b-48ac-aea9-e312e5f68851",
+                    "reorderPoint": 0,
+                    "reorderQty": 0
+                  },
+                  "location": {
+                    "id": "c031c268-194d-4211-beb8-0910da8f131d",
+                    "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+                    "name": "F&B Store",
+                    "type": "OUTLET_STORE",
+                    "description": "Food & Beverage outlet store",
+                    "isActive": true,
+                    "createdAt": "2026-04-17T20:43:40.820Z",
+                    "updatedAt": "2026-05-09T12:54:09.859Z",
+                    "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb"
+                  },
+                  "returns": []
+                }
+              ],
+              "reverseAuditTrail": {
+                "shipBackAt": null,
+                "shipBackBy": null,
+                "shipBackByUser": null,
+                "confirmReturnExitAt": null,
+                "confirmReturnExitBy": null,
+                "confirmReturnExitByUser": null,
+                "confirmReturnArrivalAt": null,
+                "confirmReturnArrivalBy": null,
+                "confirmReturnArrivalByUser": null,
+                "acceptReturnDeptAt": null,
+                "acceptReturnDeptBy": null,
+                "acceptReturnDeptByUser": null
+              },
+              "userFacingState": "In Review"
+            }
+          }
+        }
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-XT-002",
+      "finding_id": "FIND-002",
+      "description": "Foreign tenant existing ID → safe 404",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "user": "finance@grandhorizon.com",
+        "currentTenant": "grand-horizon",
+        "foreignTenant": "dx-airport-hotel",
+        "targetId": "e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+        "request": {
+          "method": "GET",
+          "path": "/get-passes/e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGci…[REDACTED]"
+          }
+        },
+        "response": {
+          "http": 404,
+          "body": {
+            "success": false,
+            "message": "Get Pass not found."
+          }
+        },
+        "foreignFieldsDisclosed": false
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-XT-003",
+      "finding_id": "FIND-002",
+      "description": "Random nonexistent ID → safe 404",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "targetId": "439fa0ab-2691-41eb-a9c7-7224b0623f1d",
+        "request": {
+          "method": "GET",
+          "path": "/get-passes/439fa0ab-2691-41eb-a9c7-7224b0623f1d",
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGci…[REDACTED]"
+          }
+        },
+        "response": {
+          "http": 404,
+          "body": {
+            "success": false,
+            "message": "Get Pass not found."
+          }
+        }
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-XT-004",
+      "finding_id": "FIND-002",
+      "description": "Unauthenticated → 401",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "user": "unauthenticated",
+        "request": {
+          "method": "GET",
+          "path": "/get-passes/8b216f5b-01ea-416a-972a-50539362a89b",
+          "headers": {
+            "Content-Type": "application/json"
+          }
+        },
+        "response": {
+          "http": 401,
+          "body": {
+            "success": false,
+            "message": "Authentication required. Please provide a valid token."
+          }
+        }
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-XT-006",
+      "finding_id": "FIND-002",
+      "description": "Same-tenant unauthorized scope → safe denial (403/404)",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "user": "fb.manager@grandhorizon.com",
+        "role": "DEPT_MANAGER",
+        "passDepartmentId": "873f97b1-d64b-48ac-aea9-e312e5f68851",
+        "request": {
+          "method": "GET",
+          "path": "/get-passes/457c3102-129e-4fac-b599-ec6a70e51137",
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGci…[REDACTED]"
+          },
+          "note": "DEPT_MANAGER FB token; pass may belong to another department"
+        },
+        "response": {
+          "http": 403,
+          "body": {
+            "success": false,
+            "message": "Get Pass outside your scope.",
+            "code": "SCOPE_VIOLATION",
+            "error": "SCOPE_VIOLATION",
+            "errorFamily": "SYS"
+          }
+        }
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-XT-005",
+      "finding_id": "FIND-002",
+      "description": "Cross-tenant response contains no foreign document fields",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "related": "GC-XT-002",
+        "foreignFieldsDisclosed": false,
+        "response": {
+          "http": 404,
+          "body": {
+            "success": false,
+            "message": "Get Pass not found."
+          }
+        }
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "RS-XT-001",
+      "finding_id": "FIND-002",
+      "description": "Gate B regression: cross-tenant getPass read must not 200/500",
+      "status": "Passed",
+      "category": "regression",
+      "tenant": "grand-horizon",
+      "detail": {
+        "category_note": "Regression re-run; behavior duplicate of GC-XT-002",
+        "request": {
+          "method": "GET",
+          "path": "/get-passes/e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+          "headers": {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer eyJhbGci…[REDACTED]"
+          }
+        },
+        "response": {
+          "http": 404,
+          "body": {
+            "success": false,
+            "message": "Get Pass not found."
+          }
+        }
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-LI-001",
+      "finding_id": "FIND-001",
+      "description": "Lost Items detail API userFacingState across known statuses",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "byStatus": {
+          "APPROVED": {
+            "id": "2c10cc4a-d3e9-4266-a645-38abd5b895d8",
+            "http": 200,
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          }
+        }
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-LI-002",
+      "finding_id": "FIND-001",
+      "description": "Lost Items list API userFacingState",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "http": 200,
+        "samples": [
+          {
+            "id": "fb3cd0b4-7a30-4dfc-9271-5080ec7eb29c",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "4102ba06-b27f-4dd5-94b3-6e3c5008a6d1",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "05c0f38d-bf82-466f-8700-43587348eedf",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "573e0846-0773-45d3-b125-f110ce88a82e",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "a884f37c-64e0-4e6e-9fe3-9bcce31502fc",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "cddebe9a-adbd-4bf9-a51f-fdde70ff2b1c",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "c2112a0e-4f4a-4636-afa4-6d0162c56cb3",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "890396bf-bf97-4acd-b7d7-376b2107f75f",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          },
+          {
+            "id": "2c10cc4a-d3e9-4266-a645-38abd5b895d8",
+            "status": "APPROVED",
+            "userFacingState": "Posted"
+          }
+        ]
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    },
+    {
+      "scenario_id": "GC-LI-003",
+      "finding_id": "FIND-001",
+      "description": "Synthetic unknown userFacingState defensive mapping",
+      "status": "Passed",
+      "category": "gate_c_unique",
+      "tenant": "grand-horizon",
+      "detail": {
+        "method": "static_analysis",
+        "helper": "lostRowStatusLabel",
+        "unknownBehavior": "returns COMMON.UNKNOWN + console.warn; never raw enum",
+        "codeRef": "OSE-Frontend/src/app/features/lost-items/utils/lost-items-status-display.util.ts:21-24"
+      },
+      "executed_at": "2026-06-27T18:18:26.036Z"
+    }
+  ]
+}

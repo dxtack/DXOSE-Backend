@@ -1,0 +1,236 @@
+{
+  "generatedAt": "2026-07-03T16:30:56.911Z",
+  "tenant": "dx-airport-hotel",
+  "user": "daniel.carter@dxuat.com",
+  "visual": [
+    {
+      "viewport": "1366x768",
+      "dom": {
+        "viewport": {
+          "w": 1366,
+          "h": 768
+        },
+        "docScrollH": 1000,
+        "clientH": 768,
+        "horizontalOverflow": false,
+        "descriptionVisible": false,
+        "unitPriceVisible": false,
+        "openingQtyVisible": false,
+        "imageColPresent": true,
+        "legacyUploadBarPresent": false,
+        "imageLabelText": "Item image (Optional)",
+        "defaultStoreCol": {
+          "top": 527,
+          "bottom": 641,
+          "left": 280,
+          "right": 784,
+          "width": 504,
+          "height": 114
+        },
+        "imageCol": {
+          "top": 527,
+          "bottom": 641,
+          "left": 784,
+          "right": 1288,
+          "width": 504,
+          "height": 114
+        },
+        "dropzone": {
+          "top": 557,
+          "bottom": 641,
+          "left": 792,
+          "right": 1280,
+          "width": 488,
+          "height": 84
+        },
+        "footer": {
+          "top": 649,
+          "bottom": 722,
+          "left": 268,
+          "right": 1316,
+          "width": 1048,
+          "height": 73
+        },
+        "footerGapPx": 8,
+        "imageBesideDefaultStore": true
+      },
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "viewport": "1536x864",
+      "dom": {
+        "viewport": {
+          "w": 1536,
+          "h": 864
+        },
+        "docScrollH": 1000,
+        "clientH": 864,
+        "horizontalOverflow": false,
+        "descriptionVisible": false,
+        "unitPriceVisible": false,
+        "openingQtyVisible": false,
+        "imageColPresent": true,
+        "legacyUploadBarPresent": false,
+        "imageLabelText": "Item image (Optional)",
+        "defaultStoreCol": {
+          "top": 527,
+          "bottom": 641,
+          "left": 282,
+          "right": 869,
+          "width": 587,
+          "height": 114
+        },
+        "imageCol": {
+          "top": 527,
+          "bottom": 641,
+          "left": 869,
+          "right": 1456,
+          "width": 587,
+          "height": 114
+        },
+        "dropzone": {
+          "top": 557,
+          "bottom": 641,
+          "left": 877,
+          "right": 1448,
+          "width": 571,
+          "height": 84
+        },
+        "footer": {
+          "top": 649,
+          "bottom": 722,
+          "left": 270,
+          "right": 1484,
+          "width": 1214,
+          "height": 73
+        },
+        "footerGapPx": 8,
+        "imageBesideDefaultStore": true
+      },
+      "consoleErrors": [],
+      "failedRequests": []
+    },
+    {
+      "viewport": "1920x1080",
+      "dom": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080
+        },
+        "docScrollH": 1080,
+        "clientH": 1080,
+        "horizontalOverflow": false,
+        "descriptionVisible": false,
+        "unitPriceVisible": false,
+        "openingQtyVisible": false,
+        "imageColPresent": true,
+        "legacyUploadBarPresent": false,
+        "imageLabelText": "Item image (Optional)",
+        "defaultStoreCol": {
+          "top": 527,
+          "bottom": 641,
+          "left": 311,
+          "right": 1085,
+          "width": 774,
+          "height": 114
+        },
+        "imageCol": {
+          "top": 527,
+          "bottom": 641,
+          "left": 1085,
+          "right": 1859,
+          "width": 774,
+          "height": 114
+        },
+        "dropzone": {
+          "top": 557,
+          "bottom": 641,
+          "left": 1093,
+          "right": 1851,
+          "width": 758,
+          "height": 84
+        },
+        "footer": {
+          "top": 649,
+          "bottom": 722,
+          "left": 299,
+          "right": 1887,
+          "width": 1588,
+          "height": 73
+        },
+        "footerGapPx": 8,
+        "imageBesideDefaultStore": true
+      },
+      "consoleErrors": [],
+      "failedRequests": []
+    }
+  ],
+  "uiCreate": {
+    "uiPostCaptured": true,
+    "uiPostPayload": {
+      "name": "PL-COSMETIC-CARD-1783096251491",
+      "departmentId": "9a689f1b-fc90-4395-88ce-1c2e20af7431",
+      "categoryId": null,
+      "subcategoryId": null,
+      "supplierId": "6ee505d6-0b34-42b0-8478-1ea4d69c30c3",
+      "defaultStoreId": "8c1a06bd-9007-4a4f-a8d2-cd3585ad20ad",
+      "isActive": true,
+      "itemUnits": [
+        {
+          "unitId": "b7213e8c-6df5-40f7-ba4b-52073110723b",
+          "unitType": "BASE",
+          "conversionRate": 1
+        }
+      ]
+    },
+    "uiPayloadHasDescription": false,
+    "uiPayloadHasUnitPrice": false,
+    "uiPayloadHasOpeningQuantity": false,
+    "uiTestName": "PL-COSMETIC-CARD-1783096251491",
+    "uiCleanupDeleted": true
+  },
+  "functional": {
+    "testName": "PL-COSMETIC-FUNC-1783096256553",
+    "createStatus": 201,
+    "payloadKeys": [
+      "name",
+      "barcode",
+      "departmentId",
+      "categoryId",
+      "subcategoryId",
+      "supplierId",
+      "defaultStoreId",
+      "isActive",
+      "itemUnits"
+    ],
+    "payloadHasDescription": false,
+    "payloadHasUnitPrice": false,
+    "payloadHasOpeningQuantity": false,
+    "itemCreated": true,
+    "itemUnitPrice": 0,
+    "itemDescriptionInDb": null,
+    "stockBalanceCount": 0,
+    "ledgerCount": 0,
+    "movementLineCount": 0,
+    "cleanupDeleted": true,
+    "itemIdAfterCleanup": null
+  },
+  "summary": {
+    "descriptionHiddenAllViewports": true,
+    "unitPriceHiddenAllViewports": true,
+    "openingQtyHiddenAllViewports": true,
+    "imageColPresentAllViewports": true,
+    "legacyUploadBarAbsentAllViewports": true,
+    "imageBesideDefaultStoreAllViewports": true,
+    "noHorizontalOverflow": true,
+    "footerGapReasonable": true,
+    "zeroConsoleErrors": true,
+    "zeroFailedRequests": true,
+    "uiPayloadExcludesDescription": true,
+    "uiPayloadExcludesObFields": true,
+    "functionalPayloadExcludesDescription": true,
+    "cardOnlyDbSideEffects": true,
+    "cleanupOk": true
+  }
+}

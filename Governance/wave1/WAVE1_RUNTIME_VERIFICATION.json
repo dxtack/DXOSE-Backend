@@ -1,0 +1,510 @@
+{
+  "title": "Wave 1 Final Runtime Verification",
+  "generatedAt": "2026-07-04T19:41:43.705Z",
+  "runId": "W1-RV-1783194092552",
+  "eb01": "Option A — Reject terminal; no rejected edit; no /resubmit",
+  "accCatalog": {
+    "TRANSFER_VIEW": {
+      "id": "4f8617df-681a-47fb-9df3-a572ae5bb406",
+      "name": "Integration TRANSFER_VIEW W1-RV-1783193682595",
+      "legacyCode": "TRANSFER_VIEW"
+    },
+    "INVENTORY_VIEW": {
+      "id": "e6bccbde-32da-4e37-97b0-dd6581d13386",
+      "name": "Integration INVENTORY_VIEW 1783042000930-831b18",
+      "legacyCode": "INVENTORY_VIEW"
+    },
+    "BREAKAGE_CREATE": {
+      "id": "5e2cf373-0e99-4fd6-8949-322c15498909",
+      "name": "Integration BREAKAGE_CREATE W1-RV-1783193682595",
+      "legacyCode": "BREAKAGE_CREATE"
+    },
+    "APPROVE_BREAKAGE": {
+      "id": "0ba614f6-65a7-4f40-98e0-1f71f40d4d9c",
+      "name": "Integration APPROVE_BREAKAGE W1-RV-1783193682595",
+      "legacyCode": "APPROVE_BREAKAGE"
+    },
+    "MANAGE_INVENTORY": {
+      "id": "3e62f7f4-1e74-430a-9def-8893d94e8585",
+      "name": "Integration MANAGE_INVENTORY W1-RV-1783193682595",
+      "legacyCode": "MANAGE_INVENTORY"
+    }
+  },
+  "tenant": {
+    "id": "a7ee2588-7140-4815-a800-fbb153c5d59a",
+    "slug": "w1-rv-w1-rv-1783194092552"
+  },
+  "existingRejectedSample": null,
+  "summary": {
+    "pass": 33,
+    "fail": 0,
+    "blocked": 1
+  },
+  "scenarios": [
+    {
+      "id": "ACC-01-catalog-TRANSFER_VIEW",
+      "scenario": "ACC catalog contains TRANSFER_VIEW",
+      "user": "N/A (DB catalog)",
+      "request": "urPermission legacyCode=TRANSFER_VIEW",
+      "expectedResult": "Permission row exists",
+      "actualResult": "id=4f8617df-681a-47fb-9df3-a572ae5bb406",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "acc-runtime/resolvePermissions"
+      ]
+    },
+    {
+      "id": "ACC-01-catalog-INVENTORY_VIEW",
+      "scenario": "ACC catalog contains INVENTORY_VIEW",
+      "user": "N/A (DB catalog)",
+      "request": "urPermission legacyCode=INVENTORY_VIEW",
+      "expectedResult": "Permission row exists",
+      "actualResult": "id=e6bccbde-32da-4e37-97b0-dd6581d13386",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "acc-runtime/resolvePermissions"
+      ]
+    },
+    {
+      "id": "ACC-01-catalog-BREAKAGE_CREATE",
+      "scenario": "ACC catalog contains BREAKAGE_CREATE",
+      "user": "N/A (DB catalog)",
+      "request": "urPermission legacyCode=BREAKAGE_CREATE",
+      "expectedResult": "Permission row exists",
+      "actualResult": "id=5e2cf373-0e99-4fd6-8949-322c15498909",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "acc-runtime/resolvePermissions"
+      ]
+    },
+    {
+      "id": "ACC-01-catalog-APPROVE_BREAKAGE",
+      "scenario": "ACC catalog contains APPROVE_BREAKAGE",
+      "user": "N/A (DB catalog)",
+      "request": "urPermission legacyCode=APPROVE_BREAKAGE",
+      "expectedResult": "Permission row exists",
+      "actualResult": "id=0ba614f6-65a7-4f40-98e0-1f71f40d4d9c",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "acc-runtime/resolvePermissions"
+      ]
+    },
+    {
+      "id": "ACC-01-catalog-MANAGE_INVENTORY",
+      "scenario": "ACC catalog contains MANAGE_INVENTORY",
+      "user": "N/A (DB catalog)",
+      "request": "urPermission legacyCode=MANAGE_INVENTORY",
+      "expectedResult": "Permission row exists",
+      "actualResult": "id=3e62f7f4-1e74-430a-9def-8893d94e8585",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "acc-runtime/resolvePermissions"
+      ]
+    },
+    {
+      "id": "GRN-REJ-01-fe-no-resubmit-button",
+      "scenario": "Rejected GRN detail has no Resubmit button",
+      "user": "N/A (static FE)",
+      "request": "grep grn-detail template",
+      "expectedResult": "No resubmitRejected / GRN.DETAIL.RESUBMIT button",
+      "actualResult": "No resubmit UI in template",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component.html"
+      ]
+    },
+    {
+      "id": "GRN-REJ-02-fe-no-rejected-line-edit",
+      "scenario": "Rejected GRN line edit UI removed",
+      "user": "N/A (static FE)",
+      "request": "grep grn-detail for showRejectedLineEdit / updateRejectedItems",
+      "expectedResult": "No rejected line edit surface",
+      "actualResult": "Rejected edit removed",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component.ts"
+      ]
+    },
+    {
+      "id": "GRN-REJ-03-fe-no-resubmit-service",
+      "scenario": "GrnService has no /resubmit client",
+      "user": "N/A (static FE)",
+      "request": "grep grn.service.ts",
+      "expectedResult": "No resubmit() method or /resubmit URL",
+      "actualResult": "No resubmit client",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-Frontend/src/app/features/grn/services/grn.service.ts"
+      ]
+    },
+    {
+      "id": "GRN-REJ-04-api-no-resubmit-route",
+      "scenario": "POST /grn/:id/resubmit unavailable",
+      "user": "grn-manager (w1-grn-mgr-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /grn/03c30569-520c-41a8-a58e-a2f41bd5de64/resubmit",
+      "expectedResult": "404 route not found",
+      "actualResult": "HTTP 404",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/routes/grn.routes.js"
+      ]
+    },
+    {
+      "id": "GRN-REJ-05-api-rejected-readonly",
+      "scenario": "Rejected GRN PATCH blocked",
+      "user": "grn-manager (w1-grn-mgr-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "PATCH /grn/03c30569-520c-41a8-a58e-a2f41bd5de64",
+      "expectedResult": "422/423 read-only",
+      "actualResult": "HTTP 422 — Rejected GRNs are read-only. Create a new GRN to repeat the operation (Ch.2.7).",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/services/grn.service.js updateGrn"
+      ]
+    },
+    {
+      "id": "GRN-REJ-06-api-rejected-readable",
+      "scenario": "Rejected GRN GET succeeds (read-only view)",
+      "user": "grn-manager (w1-grn-mgr-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "GET /grn/03c30569-520c-41a8-a58e-a2f41bd5de64",
+      "expectedResult": "200 REJECTED",
+      "actualResult": "HTTP 200 status=REJECTED",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "GRN-SB-01-sendback-route",
+      "scenario": "GRN send-back API route exists (GRN_MANAGE)",
+      "user": "N/A (route static)",
+      "request": "grep grn.routes.js",
+      "expectedResult": "POST /:id/send-back with GRN_MANAGE",
+      "actualResult": "Route present",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/routes/grn.routes.js"
+      ]
+    },
+    {
+      "id": "GRN-SB-02-prior-sendback-rv",
+      "scenario": "Send Back → Returned → creator resubmit path verified (prior workstream)",
+      "user": "N/A (Governance evidence)",
+      "request": "Governance/send-back/RUNTIME_VERIFICATION.json GRN module",
+      "expectedResult": "GRN status VERIFIED with creatorResubmitStep1",
+      "actualResult": "GRN send-back RV VERIFIED",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/Governance/send-back/RUNTIME_VERIFICATION.json"
+      ]
+    },
+    {
+      "id": "GRN-SB-03-sendback-rejects-terminal-reject",
+      "scenario": "Send Back blocked on terminal REJECTED (does not reopen)",
+      "user": "grn-manager (w1-grn-mgr-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /grn/03c30569-520c-41a8-a58e-a2f41bd5de64/send-back",
+      "expectedResult": "4xx — not allowed from REJECTED",
+      "actualResult": "HTTP 422 — GRN cannot be sent back from its current status.",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/services/grn.service.js sendBackGrn"
+      ]
+    },
+    {
+      "id": "GRN-SB-04-draft-edit-still-works",
+      "scenario": "DRAFT GRN edit path unaffected by EB-01",
+      "user": "grn-manager (w1-grn-mgr-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "PATCH /grn/1dbceff2-90ed-4de2-ac0a-ff24d86e2d5e",
+      "expectedResult": "200 success",
+      "actualResult": "HTTP 200",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "TRF-01-transfer-view-list",
+      "scenario": "TRANSFER_VIEW user can list transfers",
+      "user": "transfer-view (w1-trf-view-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "GET /transfers",
+      "expectedResult": "200",
+      "actualResult": "HTTP 200",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/routes/transfer.routes.js"
+      ]
+    },
+    {
+      "id": "TRF-02-transfer-view-detail",
+      "scenario": "TRANSFER_VIEW user can open transfer detail",
+      "user": "transfer-view (w1-trf-view-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "GET /transfers/bd8a077b-63aa-41f2-ac36-ccd80ac52314",
+      "expectedResult": "200",
+      "actualResult": "HTTP 200",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "TRF-03-transfer-view-evidence",
+      "scenario": "TRANSFER_VIEW user can hit evidence route (may 422 if not posted)",
+      "user": "transfer-view (w1-trf-view-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "GET /transfers/bd8a077b-63aa-41f2-ac36-ccd80ac52314/evidence",
+      "expectedResult": "Not 403 (permission granted)",
+      "actualResult": "HTTP 422",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": {
+        "success": false,
+        "message": "Transfer evidence pack is available only after the transfer is posted to inventory."
+      },
+      "evidencePaths": []
+    },
+    {
+      "id": "TRF-04-inventory-only-denied-list",
+      "scenario": "INVENTORY_VIEW only cannot list transfers",
+      "user": "inventory-only (w1-inv-only-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "GET /transfers",
+      "expectedResult": "403",
+      "actualResult": "HTTP 403",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "TRF-05-inventory-only-denied-detail",
+      "scenario": "INVENTORY_VIEW only cannot open transfer detail",
+      "user": "inventory-only (w1-inv-only-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "GET /transfers/bd8a077b-63aa-41f2-ac36-ccd80ac52314",
+      "expectedResult": "403",
+      "actualResult": "HTTP 403",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "TRF-06-cross-tenant-detail",
+      "scenario": "Transfer detail foreign tenant → 404",
+      "user": "transfer-view (w1-trf-view-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "GET /transfers/718f9ed0-46ed-4cf5-b241-678bcaa5e554 (foreign tenant)",
+      "expectedResult": "404 no leak",
+      "actualResult": "HTTP 404",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "BRK-01-create-can-submit",
+      "scenario": "BREAKAGE_CREATE user can submit",
+      "user": "breakage-create (w1-brk-create-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /breakage/f759ce7f-0bb3-4175-8cf9-9cb561551cf0/submit",
+      "expectedResult": "200/201 success",
+      "actualResult": "HTTP 422",
+      "status": "BLOCKED",
+      "consoleErrors": "ACC published workflow is required for BREAKAGE. Publish in Workflow Builder.",
+      "networkErrors": {
+        "success": false,
+        "message": "ACC published workflow is required for BREAKAGE. Publish in Workflow Builder."
+      },
+      "evidencePaths": [
+        "OSE-backend/src/routes/breakage.routes.js"
+      ]
+    },
+    {
+      "id": "BRK-02-without-create-denied",
+      "scenario": "User without BREAKAGE_CREATE gets 403 on void",
+      "user": "inventory-only (w1-brk-deny-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /breakage/f759ce7f-0bb3-4175-8cf9-9cb561551cf0/void",
+      "expectedResult": "403",
+      "actualResult": "HTTP 403",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "BRK-03-manage-inventory-no-bypass",
+      "scenario": "MANAGE_INVENTORY alone cannot submit breakage",
+      "user": "manage-inventory-only (w1-mgmt-inv-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /breakage/f759ce7f-0bb3-4175-8cf9-9cb561551cf0/submit",
+      "expectedResult": "403",
+      "actualResult": "HTTP 403",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/middleware/authorize.js PERMISSION_ALIASES"
+      ]
+    },
+    {
+      "id": "BRK-04-approve-routes-unchanged",
+      "scenario": "Approve/Reject/SendBack still APPROVE_BREAKAGE",
+      "user": "N/A (route static)",
+      "request": "grep breakage.routes.js",
+      "expectedResult": "approve/reject/send-back → APPROVE_BREAKAGE",
+      "actualResult": "APPROVE_BREAKAGE on workflow routes",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/routes/breakage.routes.js"
+      ]
+    },
+    {
+      "id": "BRK-05-create-can-void-draft",
+      "scenario": "BREAKAGE_CREATE user can void DRAFT/REJECTED document",
+      "user": "breakage-create (w1-brk-create-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /breakage/f759ce7f-0bb3-4175-8cf9-9cb561551cf0/void",
+      "expectedResult": "200 success (or 422 if already submitted)",
+      "actualResult": "HTTP 200",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": []
+    },
+    {
+      "id": "BRK-06-attachment-denied-without-create",
+      "scenario": "User without BREAKAGE_CREATE gets 403 on attachment",
+      "user": "inventory-only (w1-brk-deny-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /breakage/f759ce7f-0bb3-4175-8cf9-9cb561551cf0/attachment",
+      "expectedResult": "403",
+      "actualResult": "HTTP 403",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/routes/breakage.routes.js"
+      ]
+    },
+    {
+      "id": "BRK-07-attachment-route-create-perm",
+      "scenario": "Attachment route gated by BREAKAGE_CREATE",
+      "user": "N/A (route static)",
+      "request": "grep breakage.routes.js /attachment",
+      "expectedResult": "BREAKAGE_CREATE on attachment POST",
+      "actualResult": "BREAKAGE_CREATE on attachment",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/routes/breakage.routes.js"
+      ]
+    },
+    {
+      "id": "GP-SB-01-ui-send-back-button",
+      "scenario": "Get Pass detail exposes Send Back in workflow toolbar",
+      "user": "N/A (static FE)",
+      "request": "grep get-pass-detail template",
+      "expectedResult": "Send Back button + SEND_BACK modal",
+      "actualResult": "Send Back wired in template",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-Frontend/src/app/features/get-pass/get-pass-detail/get-pass-detail.component.html"
+      ]
+    },
+    {
+      "id": "GP-SB-02-ui-no-resubmit-action",
+      "scenario": "Get Pass has no separate Resubmit action",
+      "user": "N/A (static FE)",
+      "request": "grep get-pass-detail for resubmit",
+      "expectedResult": "No resubmit action",
+      "actualResult": "No resubmit references",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-Frontend/src/app/features/get-pass/get-pass-detail/get-pass-detail.component.ts"
+      ]
+    },
+    {
+      "id": "GP-SB-03-backend-send-back-route",
+      "scenario": "Get Pass send-back API route exists",
+      "user": "N/A (route static)",
+      "request": "GET_PASS send-back route",
+      "expectedResult": "POST /get-passes/:id/send-back",
+      "actualResult": "Route present",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/routes/getPass.routes.js",
+        "Governance/send-back/RUNTIME_VERIFICATION.json"
+      ]
+    },
+    {
+      "id": "GP-SB-04-prior-sendback-rv",
+      "scenario": "Get Pass Send Back full workflow verified (prior workstream)",
+      "user": "N/A (Governance evidence)",
+      "request": "Governance/send-back/RUNTIME_VERIFICATION.json GET_PASS module",
+      "expectedResult": "GET_PASS VERIFIED with timelineSendBack + creatorResubmitStep1",
+      "actualResult": "GET_PASS send-back RV VERIFIED",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/Governance/send-back/RUNTIME_VERIFICATION.json"
+      ]
+    },
+    {
+      "id": "GP-SB-05-api-reason-required",
+      "scenario": "Send Back API rejects missing reason/comment",
+      "user": "get-pass-approver (w1-gp-appr-w1-rv-1783194092552@phase1-gate.local)",
+      "request": "POST /get-passes/a65e7dfe-927b-4d7e-b887-4c9cb2c227e5/send-back (no reason)",
+      "expectedResult": "400 reason required",
+      "actualResult": "HTTP 400 — Send Back reason is required.",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-backend/src/controllers/getPass.controller.js sendBackGetPass"
+      ]
+    },
+    {
+      "id": "GP-SB-06-ui-reason-modal",
+      "scenario": "Send Back opens notes modal requiring comment",
+      "user": "N/A (static FE)",
+      "request": "grep get-pass-detail for SEND_BACK modal",
+      "expectedResult": "SEND_BACK action in openNotes flow",
+      "actualResult": "SEND_BACK modal wired",
+      "status": "PASS",
+      "consoleErrors": null,
+      "networkErrors": null,
+      "evidencePaths": [
+        "OSE-Frontend/src/app/features/get-pass/get-pass-detail/get-pass-detail.component.ts"
+      ]
+    }
+  ]
+}

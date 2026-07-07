@@ -1,0 +1,16 @@
+{
+  "rows": [
+    {
+      "module": "Breakage",
+      "action": "create",
+      "http": 403,
+      "result": "FAIL"
+    },
+    {
+      "module": "GetPass",
+      "action": "submit",
+      "http": 200,
+      "status": "PENDING_COST_CONTROL"
+    }
+  ]
+}

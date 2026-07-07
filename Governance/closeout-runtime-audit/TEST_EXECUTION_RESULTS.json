@@ -1,0 +1,119 @@
+{
+  "executedAt": "2026-06-27T00:13:15.528Z",
+  "results": [
+    {
+      "command": "npm install --no-audit --no-fund",
+      "label": "frontend_lockfile_install",
+      "exit": 0,
+      "outputTail": "\nup to date in 2s\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe --test src/**/*.test.js scripts/**/*.test.js",
+      "label": "backend_unit_tests",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 1,
+      "passed": null,
+      "failed": "FAIL",
+      "skipped": 5,
+      "durationMs": 13379,
+      "exactFailure": "✖ postDocument OPENING_BALANCE prefetches stock and skips zero-qty lines (174.7341ms)\n  TypeError: validatePostingDate is not a function\n      at Object.postDocument (C:\\DX OS&E\\OSE-backend\\src\\services\\posting.service.js:100:11)\n      at async TestContext.<anonymous> (C:\\DX OS&E\\OSE-backend\\src\\services\\posting.service.test.js:179:5)\n      at async Test.run (node:internal/test_runner/test:1125:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7)\n\ntest at src\\services\\posting.service.test.js:190:1\n✖ postDocument OPENING_BALANCE writes audit inside parent transaction when tx passed (3.0459ms)\n  TypeError: validatePostingDate is not a function\n      at Object.postDocument (C:\\DX OS&E\\OSE-backend\\src\\services\\posting.service.js:100:11)\n      at async TestContext.<anonymous> (C:\\DX OS&E\\OSE-backend\\src\\services\\posting.service.test.js:205:5)\n      at async Test.run (node:internal/test_runner/test:1125:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7)\n",
+      "outputTail": "test at src\\services\\posting.service.test.js:190:1\n✖ postDocument OPENING_BALANCE writes audit inside parent transaction when tx passed (3.0459ms)\n  TypeError: validatePostingDate is not a function\n      at Object.postDocument (C:\\DX OS&E\\OSE-backend\\src\\services\\posting.service.js:100:11)\n      at async TestContext.<anonymous> (C:\\DX OS&E\\OSE-backend\\src\\services\\posting.service.test.js:205:5)\n      at async Test.run (node:internal/test_runner/test:1125:7)\n      at async Test.processPendingSubtests (node:internal/test_runner/test:787:7)\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe --test src/acc-authority/step-permission-enforcement.test.js",
+      "label": "step_permission_enforcement",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 0,
+      "passed": "PASS",
+      "failed": null,
+      "skipped": 1,
+      "durationMs": 361,
+      "exactFailure": null,
+      "outputTail": "ℹ suites 0\nℹ pass 7\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 286.7935\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe scripts/verify-acc-p30-zero-legacy.js",
+      "label": "verify_acc_p30",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 0,
+      "passed": "PASS",
+      "failed": null,
+      "skipped": 0,
+      "durationMs": 2625,
+      "exactFailure": null,
+      "outputTail": "  ✓ P18 suite PASS\n\n──────────────────────────────────────────────────\nP30 Validation: 20 passed, 0 failed\nACC P30 ZERO LEGACY PASS\n══════════════════════════════════════════════════\n\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe scripts/run-governance-static-smokes.js",
+      "label": "smoke_governance_static",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 0,
+      "passed": "PASS",
+      "failed": null,
+      "skipped": 0,
+      "durationMs": 988,
+      "exactFailure": null,
+      "outputTail": "OK: GRN delegates to postingEngine\nOK: GRN post uses governed audit\nOK: transfer finance post delegates\nOK: getPass has no inline ledger.create\nOK: getPass checkout governed\n\nPosting governance enforcement static checks passed.\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe scripts/run-governance-integration.js",
+      "label": "governance_integration",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 1,
+      "passed": null,
+      "failed": "FAIL",
+      "skipped": 0,
+      "durationMs": 406,
+      "exactFailure": "     ?   totalQtyLost?: SortOrder,\n     ?   totalQtyDamage?: SortOrder,\n     ?   wacUnitCost?: SortOrder,\n     ?   lastUpdated?: SortOrder,\n     ?   maxQty?: SortOrder,\n     ?   minQty?: SortOrder,\n     ?   reorderPoint?: SortOrder,\n     ?   item?: ItemOrderByWithRelationInput,\n     ?   location?: LocationOrderByWithRelationInput,\n     ?   tenant?: TenantOrderByWithRelationInput\n       }\n     })\n\nUnknown argument `updatedAt`. Available options are marked with ?.\n",
+      "outputTail": "     ?   item?: ItemOrderByWithRelationInput,\n     ?   location?: LocationOrderByWithRelationInput,\n     ?   tenant?: TenantOrderByWithRelationInput\n       }\n     })\n\nUnknown argument `updatedAt`. Available options are marked with ?.\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe scripts/smoke-reporting-final-regression.js",
+      "label": "reporting_final_regression",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 1,
+      "passed": null,
+      "failed": "FAIL",
+      "skipped": 0,
+      "durationMs": 1488,
+      "exactFailure": "  PASS  Golden PDF renders (40376 bytes)\n  PASS  Stock balance 26 lines PDF page count 2 (no ghost pages)\n  PASS  Stock PDF raw SAR path preserved (100.00)\n  PASS  Golden blended WAC derived (5)\n  PASS  Summary inventory PDF renders (41129 bytes)\n  PASS  Summary PDF valid vector document header\n  PASS  Grouped export detected for PDF presenter\n  PASS  Golden Excel renders (7793 bytes)\n\nSamples: C:\\DX OS&E\\OSE-backend\\tmp\\reporting-final-regression\n  PASS  Engine OMC grouped export columns resolved\n\n--- Final regression: 23 passed, 1 failed ---\n  FAIL  Golden column width sum 767 expected ~770\n",
+      "outputTail": "  PASS  Golden Excel renders (7793 bytes)\n\nSamples: C:\\DX OS&E\\OSE-backend\\tmp\\reporting-final-regression\n  PASS  Engine OMC grouped export columns resolved\n\n--- Final regression: 23 passed, 1 failed ---\n  FAIL  Golden column width sum 767 expected ~770\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe --test scripts/grn-timeline-db-integration.test.js",
+      "label": "grn_timeline_db_integration",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 0,
+      "passed": "PASS",
+      "failed": null,
+      "skipped": 4,
+      "durationMs": 4884,
+      "exactFailure": null,
+      "outputTail": "ℹ suites 0\nℹ pass 4\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 4822.0315\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe C:\\DX OS&E\\OSE-Frontend\\node_modules\\@angular\\cli\\bin\\ng.js build",
+      "label": "frontend_build",
+      "environment": "C:\\DX OS&E\\OSE-Frontend",
+      "exit": 0,
+      "passed": "PASS",
+      "failed": null,
+      "skipped": 0,
+      "durationMs": 27409,
+      "exactFailure": null,
+      "outputTail": "▲ [WARNING] NG8113: DecimalPipe is not used within the template of TransferDetailComponent [plugin angular-compiler]\n\n    src/app/features/transfers/transfer-detail/transfer-detail.component.ts:55:4:\n      55 │     DecimalPipe,\n         ╵     ~~~~~~~~~~~\n\n\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe C:\\DX OS&E\\OSE-Frontend\\node_modules\\@angular\\cli\\bin\\ng.js test --watch=false --browsers=ChromeHeadless",
+      "label": "frontend_unit_headless",
+      "environment": "C:\\DX OS&E\\OSE-Frontend",
+      "exit": 1,
+      "passed": null,
+      "failed": "FAIL",
+      "skipped": 0,
+      "durationMs": 614,
+      "exactFailure": "Node.js version v25.6.0 detected.\nOdd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.\nThe following packages are required but were not found:\n  - The \"browsers\" option requires either \"@vitest/browser-playwright\", \"@vitest/browser-webdriverio\", or \"@vitest/browser-preview\" to be installed.\nPlease install the missing packages and rerun the test command.\n",
+      "outputTail": "Node.js version v25.6.0 detected.\nOdd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.\nThe following packages are required but were not found:\n  - The \"browsers\" option requires either \"@vitest/browser-playwright\", \"@vitest/browser-webdriverio\", or \"@vitest/browser-preview\" to be installed.\nPlease install the missing packages and rerun the test command.\n"
+    }
+  ]
+}

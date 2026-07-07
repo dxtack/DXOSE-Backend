@@ -1,0 +1,18 @@
+shell_path,module,mode,has_form,has_line_grid,keyboard_wired_before,applicable,remediation_status,reason_if_na
+OSE-Frontend/src/app/features/grn/grn-create/grn-create.component,GRN,create,yes,yes,no,yes,REMEDIATED,
+OSE-Frontend/src/app/features/get-pass/get-pass-form/get-pass-form.component,GET_PASS,create/edit,yes,yes,no,yes,REMEDIATED,
+OSE-Frontend/src/app/features/transfers/transfer-form/transfer-form.component,TRANSFER,create/edit,yes,yes,no,yes,REMEDIATED,
+OSE-Frontend/src/app/features/breakage/breakage-create-modal/breakage-create-modal.component,BREAKAGE,create,yes,yes,no,yes,REMEDIATED,
+OSE-Frontend/src/app/features/lost-items/lost-create-modal/lost-create-modal.component,LOST_ITEMS,create,yes,yes,no,yes,REMEDIATED,
+OSE-Frontend/src/app/features/inventory-count/inventory-count-detail/inventory-count-detail.component,INVENTORY_COUNT,detail/edit,yes,yes,no,yes,REMEDIATED,Editable counted-qty grid when session open
+OSE-Frontend/src/app/features/movements/movement-form/movement-form.component,MOVEMENTS,create/edit,yes,yes,no,yes,REMEDIATED,
+OSE-Frontend/src/app/features/get-pass/get-pass-detail/get-pass-detail.component,GET_PASS,detail,no,no,no,no,N/A,Read-only detail view; no editable header/line controls per Ch.17 scope
+OSE-Frontend/src/app/features/transfers/transfer-detail/transfer-detail.component,TRANSFER,detail,no,no,no,no,N/A,Read-only detail view
+OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component,GRN,detail,no,no,no,no,N/A,Read-only detail view
+OSE-Frontend/src/app/features/breakage/breakage-detail/breakage-detail.component,BREAKAGE,detail,no,no,no,no,N/A,Read-only detail view
+OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component,LOST_ITEMS,detail,no,no,no,no,N/A,Read-only detail with workflow actions only; no line-entry grid
+OSE-Frontend/src/app/features/lost-found/lost-found-form/lost-found-form.component,LOST_FOUND,modal create,yes,no,no,no,N/A,Guest-property modal overlay; not Ch.17 operational document shell
+OSE-Frontend/src/app/features/items/item-form/item-form.component,ITEMS,master data,yes,no,no,no,N/A,Master data maintenance shell; outside operational document scope
+OSE-Frontend/src/app/features/movements/movement-form/movement-form.component (readonly mode),MOVEMENTS,detail readonly,yes,yes,yes,yes,REMEDIATED,Directive skips disabled/read-only controls via focusableIn filter
+OSE-Frontend/src/app/features/master-data/**/**-form.component,MASTER_DATA,master data,yes,no,no,no,N/A,Master data forms; not operational document shells
+OSE-Frontend/src/app/features/admin/tenant-form-modal/tenant-form-modal.component,ADMIN,admin modal,yes,no,no,no,N/A,Platform admin configuration; not operational document shell

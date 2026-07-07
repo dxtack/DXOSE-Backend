@@ -1,0 +1,43 @@
+[
+  {
+    "module": "GRN",
+    "entryType": "LIFECYCLE_EVENT",
+    "lifecycleEventType": "SEND_BACK",
+    "displayTitleKey": "TIMELINE.LIFECYCLE.SEND_BACK",
+    "sourceStepRole": "FINANCE_MANAGER",
+    "targetStepRole": "COST_CONTROL",
+    "targetType": "STEP",
+    "reason": "Incorrect allocation",
+    "cycleNumber": 2,
+    "actor": { "name": "Finance Mgr" }
+  },
+  {
+    "module": "Transfer",
+    "entryType": "APPROVAL_STEP_CURRENT",
+    "stageKey": "CREATOR",
+    "displayTitleKey": "TIMELINE.STAGE.CREATOR_PENDING_CORRECTION",
+    "status": "IN_PROGRESS"
+  },
+  {
+    "module": "Transfer",
+    "entryType": "POSTING",
+    "stageKey": "POSTED",
+    "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+    "actor": { "id": "system:dx-auto-post", "name": "Auto posted by DX" }
+  },
+  {
+    "module": "Get Pass",
+    "entryType": "LIFECYCLE_EVENT",
+    "lifecycleEventType": "SEND_BACK",
+    "targetType": "CREATOR",
+    "sourceStepRole": "FINANCE_MANAGER",
+    "reason": "Fix docs"
+  },
+  {
+    "module": "Inventory Count",
+    "entryType": "MILESTONE_COMPLETED",
+    "stageKey": "COUNT_SUBMITTED",
+    "displayTitleKey": "TIMELINE.STAGE.COUNT_SUBMITTED_COMPLETED",
+    "frontendBadge": "TIMELINE.STATUS.SUBMITTED"
+  }
+]

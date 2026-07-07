@@ -1,0 +1,338 @@
+{
+  "executedAt": "2026-06-27T00:34:27.337Z",
+  "lostProbes": [
+    {
+      "module": "Lost",
+      "route": "/lost-items/:id/approve-dept",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 403,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Lost",
+      "route": "/lost-items/:id/approve-cost",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "COST_CONTROL",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "TRANSFER_VIEW"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 400,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Lost",
+      "route": "/lost-items/:id/approve-finance",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "FINANCE",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "BASIC_DATA_EDIT",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 400,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Lost",
+      "route": "/lost-items/:id/approve-gm",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "GM",
+      "jwtPermissions": [
+        "REPORTS_VIEW",
+        "REPORTS_EXPORT",
+        "APPROVE_BREAKAGE",
+        "APPROVE_INVENTORY_COUNT",
+        "APPROVE_LOST",
+        "VIEW_DASHBOARD"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 400,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Lost",
+      "route": "/lost-items/:id/reject",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 403,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Lost",
+      "route": "/lost-items/:id/void",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 404,
+      "dbMutated": false,
+      "classification": "Dead/unreachable"
+    }
+  ],
+  "breakageProbes": [
+    {
+      "module": "Breakage",
+      "route": "/breakage/:id/approve-dept",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 403,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Breakage",
+      "route": "/breakage/:id/approve-cost",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "COST_CONTROL",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "TRANSFER_VIEW"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 400,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Breakage",
+      "route": "/breakage/:id/approve-finance",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "FINANCE",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "BASIC_DATA_EDIT",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 400,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Breakage",
+      "route": "/breakage/:id/approve-gm",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "GM",
+      "jwtPermissions": [
+        "REPORTS_VIEW",
+        "REPORTS_EXPORT",
+        "APPROVE_BREAKAGE",
+        "APPROVE_INVENTORY_COUNT",
+        "APPROVE_LOST",
+        "VIEW_DASHBOARD"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 400,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Breakage",
+      "route": "/breakage/:id/reject",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 403,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    },
+    {
+      "module": "Breakage",
+      "route": "/breakage/:id/void",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "role": "DEPT_MANAGER",
+      "jwtPermissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE"
+      ],
+      "activeAssignment": true,
+      "approvalRequestExists": false,
+      "accVersionPin": null,
+      "timeline": [],
+      "audit": [],
+      "ledgerMutated": false,
+      "stockMutated": false,
+      "http": 403,
+      "dbMutated": false,
+      "classification": "Safely blocked in valid lifecycle state"
+    }
+  ],
+  "lostSequentialPathOutsideAcc": [
+    {
+      "step": "approve-dept",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "http": 403
+    },
+    {
+      "step": "approve-cost",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "http": 400
+    },
+    {
+      "step": "approve-finance",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "http": 400
+    },
+    {
+      "step": "approve-gm",
+      "statusBefore": "DRAFT",
+      "statusAfter": "DRAFT",
+      "http": 400
+    }
+  ],
+  "validAuthorizedPathCompletesOutsideAcc": false,
+  "summary": {
+    "activeOperationalLegacy": 0,
+    "safelyBlocked": 11
+  }
+}

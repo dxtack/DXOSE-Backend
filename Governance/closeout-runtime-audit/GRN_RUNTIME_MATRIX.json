@@ -1,0 +1,68 @@
+{
+  "executedAt": "2026-06-27T00:37:23.024Z",
+  "round": 6,
+  "matrix": [
+    {
+      "id": "GRN-VALIDATE",
+      "http": 200,
+      "message": null,
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-SUBMIT",
+      "http": 200,
+      "message": null,
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-APPROVE-CC",
+      "http": 200,
+      "message": null,
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-APPROVE-FINANCE",
+      "http": 200,
+      "message": null,
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-POST",
+      "http": 422,
+      "message": "GRN must be awaiting Finance approval. Current status: POSTED",
+      "result": "PASS",
+      "stockDelta": 0
+    },
+    {
+      "id": "GRN-SEND-BACK",
+      "http": 200,
+      "message": null,
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-REJECT-CC",
+      "http": 200,
+      "message": null,
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-NO-ASSIGN",
+      "http": 403,
+      "message": "Access denied. Insufficient permissions.",
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-DUPLICATE-SUBMIT",
+      "http": 422,
+      "message": "GRN must be VALIDATED to submit. Current status: PENDING_APPROVAL",
+      "result": "PASS"
+    },
+    {
+      "id": "GRN-WRONG-ROLE",
+      "http": 403,
+      "message": "Access denied. Insufficient permissions.",
+      "result": "PASS"
+    }
+  ],
+  "fixtureFailCount": 0
+}

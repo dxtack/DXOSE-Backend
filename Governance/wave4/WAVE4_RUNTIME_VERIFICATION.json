@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-07-05T08:39:35.552Z",
+  "classification": "WAVE4_RUNTIME_VERIFICATION",
+  "runId": "W4-RV-1783240772948",
+  "wave": 4,
+  "summary": {
+    "total": 9,
+    "pass": 9,
+    "fail": 0,
+    "gate": "CLOSED"
+  },
+  "scenarios": [
+    {
+      "id": "W3-GATE",
+      "name": "Wave 3 closed prerequisite",
+      "result": "PASS",
+      "gate": "CLOSED"
+    },
+    {
+      "id": "W4-UNIT-01",
+      "name": "concurrency.service unit tests",
+      "result": "PASS"
+    },
+    {
+      "id": "W4-IC-01",
+      "name": "Inventory count cancel atomicity + concurrencyVersion",
+      "result": "PASS"
+    },
+    {
+      "id": "W4-GP-01",
+      "name": "Get Pass mutation concurrency tests",
+      "result": "PASS"
+    },
+    {
+      "id": "W4-BRK-01",
+      "name": "Breakage submit guards concurrencyVersion",
+      "result": "PASS"
+    },
+    {
+      "id": "W4-TRF-01",
+      "name": "Transfer save/update guards concurrencyVersion",
+      "result": "PASS"
+    },
+    {
+      "id": "W4-IC-02",
+      "name": "Inventory count service concurrency guards",
+      "result": "PASS"
+    },
+    {
+      "id": "W4-IC-03",
+      "name": "StockCountSession schema concurrencyVersion",
+      "result": "PASS"
+    },
+    {
+      "id": "W4-IC-04",
+      "name": "Inventory count FE payloads include concurrencyVersion",
+      "result": "PASS"
+    }
+  ]
+}

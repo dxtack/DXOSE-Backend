@@ -1,0 +1,1998 @@
+{
+  "runInfo": {
+    "runAt": "2026-07-03T18:37:07.579Z",
+    "phase": "before",
+    "frontendUrl": "http://127.0.0.1:4200",
+    "apiUrl": "http://127.0.0.1:4000/api",
+    "screen": {
+      "id": "WFP",
+      "name": "Workflow Pipeline",
+      "route": "/workflow-pipeline",
+      "component": "WorkflowPipelineComponent"
+    },
+    "tenant": {
+      "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "slug": "closeout-audit-hotel-disposable",
+      "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+      "parentId": "7c312820-957e-4b08-bcc3-07e8b9fc288f"
+    },
+    "account": {
+      "email": "disp-perm-fin@closeout-audit.local",
+      "role": "FINANCE_MANAGER",
+      "permissionCount": 58
+    },
+    "pipelineProbe": {
+      "status": 200,
+      "total": 588,
+      "limit": 20,
+      "page": 1,
+      "url": "http://127.0.0.1:4000/api/workflow-pipeline?page=1&limit=20",
+      "itemCount": 20
+    },
+    "viewports": [
+      {
+        "label": "1366x768",
+        "width": 1366,
+        "height": 768,
+        "dpr": 1
+      },
+      {
+        "label": "1536x864",
+        "width": 1536,
+        "height": 864,
+        "dpr": 1
+      },
+      {
+        "label": "1920x1080",
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1
+      }
+    ],
+    "zoomDiagnostics": [
+      0.9,
+      1,
+      1.1,
+      1.25
+    ],
+    "scalingNote": "Primary matrix uses browser viewport sizes at deviceScaleFactor=1 (100% browser zoom). This does NOT emulate Windows OS Display Scaling 125%; that would require deviceScaleFactor=1.25 on a fixed logical viewport or running on a 125% scaled display.",
+    "zeroWrites": true
+  },
+  "results": [
+    {
+      "screenId": "WFP",
+      "phase": "before",
+      "viewport": "1366x768",
+      "viewportSize": {
+        "label": "1366x768",
+        "width": 1366,
+        "height": 768,
+        "dpr": 1,
+        "browserZoom": 1
+      },
+      "zoomNote": "Browser zoom 100%; deviceScaleFactor=1 (not Windows OS display scaling 125%).",
+      "landedUrl": "/workflow-pipeline",
+      "measurement": {
+        "url": "/workflow-pipeline",
+        "heading": "Workflow Pipeline",
+        "errorOverlay": false,
+        "viewport": {
+          "width": 1366,
+          "height": 768,
+          "dpr": 1
+        },
+        "document": {
+          "scrollHeight": 1133,
+          "clientHeight": 768,
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "pageVerticalScroll": true,
+          "pageHorizontalScroll": false
+        },
+        "shell": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 1132.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "scrollHeight": 1133,
+          "clientHeight": 1133
+        },
+        "header": {
+          "x": 250,
+          "y": 0,
+          "width": 1116,
+          "height": 65,
+          "right": 1366,
+          "bottom": 65,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 64,
+          "clientHeight": 64
+        },
+        "content": {
+          "x": 250,
+          "y": 65,
+          "width": 1116,
+          "height": 1067.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 1068,
+          "clientHeight": 1068
+        },
+        "canvas": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "opsPage": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "clip",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "pageHeader": {
+          "x": 283.1,
+          "y": 89,
+          "width": 1049.9,
+          "height": 64.2,
+          "right": 1332.9,
+          "bottom": 153.2,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 63,
+          "clientHeight": 63
+        },
+        "kpis": {
+          "x": 283.1,
+          "y": 165.2,
+          "width": 1049.9,
+          "height": 55.5,
+          "right": 1332.9,
+          "bottom": 220.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 55,
+          "clientHeight": 55
+        },
+        "filters": {
+          "x": 283.1,
+          "y": 232.7,
+          "width": 1049.9,
+          "height": 123,
+          "right": 1332.9,
+          "bottom": 355.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 121,
+          "clientHeight": 121
+        },
+        "card": {
+          "x": 283.1,
+          "y": 367.7,
+          "width": 1049.9,
+          "height": 741.1,
+          "right": 1332.9,
+          "bottom": 1108.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 739,
+          "clientHeight": 739
+        },
+        "scrollShell": {
+          "x": 284.1,
+          "y": 368.7,
+          "width": 1047.9,
+          "height": 311,
+          "right": 1331.9,
+          "bottom": 679.7,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 311,
+          "clientHeight": 311
+        },
+        "table": {
+          "container": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 311,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 311,
+            "clientHeight": 311
+          },
+          "header": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 47,
+            "right": 1331.9,
+            "bottom": 415.7,
+            "overflowY": "hidden",
+            "overflowX": "hidden",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 47,
+            "clientHeight": 47
+          },
+          "body": {
+            "x": 284.1,
+            "y": 415.7,
+            "width": 1047.9,
+            "height": 264,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "auto",
+            "overflowX": "auto",
+            "maxHeight": "264px",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 2321,
+            "clientHeight": 264
+          },
+          "columns": [
+            "Priority",
+            "Module",
+            "Document",
+            "Status",
+            "Waiting for",
+            "Age",
+            "SLA",
+            "(blank)"
+          ],
+          "columnCount": 8,
+          "dataRows": 21,
+          "visibleRows": 3,
+          "bodyHorizontalScroll": false,
+          "bodyVerticalScroll": true
+        },
+        "footer": {
+          "x": 284.1,
+          "y": 1058.8,
+          "width": 1047.9,
+          "height": 49,
+          "right": 1331.9,
+          "bottom": 1107.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 48,
+          "clientHeight": 48,
+          "visibleInViewport": false
+        },
+        "pagination": {
+          "x": 967.9,
+          "y": 1067.8,
+          "width": 352,
+          "height": 32,
+          "right": 1319.9,
+          "bottom": 1099.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 352,
+          "clientWidth": 352,
+          "scrollHeight": 33,
+          "clientHeight": 32,
+          "visibleInViewport": false
+        },
+        "scroll": {
+          "verticalOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2321,
+              "clientHeight": 264,
+              "delta": 2057
+            }
+          ],
+          "verticalOwnerCount": 1,
+          "dataScrollOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2321,
+              "clientHeight": 264,
+              "delta": 2057
+            }
+          ],
+          "doubleScroll": true
+        },
+        "blankInsideBody": 0,
+        "blankBelowTable": 1,
+        "blankBelowCard": 0
+      },
+      "apiEvidence": {
+        "pipelineRequest": {
+          "method": "GET",
+          "url": "http://localhost:4000/api/workflow-pipeline?page=1&limit=20"
+        },
+        "hasPage1Limit20": true,
+        "preRunProbe": {
+          "status": 200,
+          "total": 588,
+          "limit": 20,
+          "page": 1,
+          "url": "http://127.0.0.1:4000/api/workflow-pipeline?page=1&limit=20",
+          "itemCount": 20
+        }
+      },
+      "consoleErrors": [],
+      "screenshots": {
+        "viewport": "screenshots/before/WFP__1366x768__viewport.png",
+        "fullPage": "screenshots/before/WFP__1366x768__fullpage.png"
+      }
+    },
+    {
+      "screenId": "WFP",
+      "phase": "before",
+      "viewport": "1536x864",
+      "viewportSize": {
+        "label": "1536x864",
+        "width": 1536,
+        "height": 864,
+        "dpr": 1,
+        "browserZoom": 1
+      },
+      "zoomNote": "Browser zoom 100%; deviceScaleFactor=1 (not Windows OS display scaling 125%).",
+      "landedUrl": "/workflow-pipeline",
+      "measurement": {
+        "url": "/workflow-pipeline",
+        "heading": "Workflow Pipeline",
+        "errorOverlay": false,
+        "viewport": {
+          "width": 1536,
+          "height": 864,
+          "dpr": 1
+        },
+        "document": {
+          "scrollHeight": 1133,
+          "clientHeight": 864,
+          "scrollWidth": 1536,
+          "clientWidth": 1536,
+          "pageVerticalScroll": true,
+          "pageHorizontalScroll": false
+        },
+        "shell": {
+          "x": 0,
+          "y": 0,
+          "width": 1536,
+          "height": 1132.8,
+          "right": 1536,
+          "bottom": 1132.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1536,
+          "clientWidth": 1536,
+          "scrollHeight": 1133,
+          "clientHeight": 1133
+        },
+        "header": {
+          "x": 250,
+          "y": 0,
+          "width": 1286,
+          "height": 65,
+          "right": 1536,
+          "bottom": 65,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1286,
+          "clientWidth": 1286,
+          "scrollHeight": 64,
+          "clientHeight": 64
+        },
+        "content": {
+          "x": 250,
+          "y": 65,
+          "width": 1286,
+          "height": 1067.8,
+          "right": 1536,
+          "bottom": 1132.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1286,
+          "clientWidth": 1286,
+          "scrollHeight": 1068,
+          "clientHeight": 1068
+        },
+        "canvas": {
+          "x": 266,
+          "y": 89,
+          "width": 1254,
+          "height": 1019.8,
+          "right": 1520,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1254,
+          "clientWidth": 1254,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "opsPage": {
+          "x": 266,
+          "y": 89,
+          "width": 1254,
+          "height": 1019.8,
+          "right": 1520,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "clip",
+          "maxHeight": "none",
+          "scrollWidth": 1254,
+          "clientWidth": 1254,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "pageHeader": {
+          "x": 285.2,
+          "y": 89,
+          "width": 1215.6,
+          "height": 64.2,
+          "right": 1500.8,
+          "bottom": 153.2,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1216,
+          "clientWidth": 1216,
+          "scrollHeight": 63,
+          "clientHeight": 63
+        },
+        "kpis": {
+          "x": 285.2,
+          "y": 165.2,
+          "width": 1215.6,
+          "height": 55.5,
+          "right": 1500.8,
+          "bottom": 220.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1216,
+          "clientWidth": 1216,
+          "scrollHeight": 55,
+          "clientHeight": 55
+        },
+        "filters": {
+          "x": 285.2,
+          "y": 232.7,
+          "width": 1215.6,
+          "height": 123,
+          "right": 1500.8,
+          "bottom": 355.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1214,
+          "clientWidth": 1214,
+          "scrollHeight": 121,
+          "clientHeight": 121
+        },
+        "card": {
+          "x": 285.2,
+          "y": 367.7,
+          "width": 1215.6,
+          "height": 741.1,
+          "right": 1500.8,
+          "bottom": 1108.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1214,
+          "clientWidth": 1214,
+          "scrollHeight": 739,
+          "clientHeight": 739
+        },
+        "scrollShell": {
+          "x": 286.2,
+          "y": 368.7,
+          "width": 1213.6,
+          "height": 407,
+          "right": 1499.8,
+          "bottom": 775.7,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1214,
+          "clientWidth": 1214,
+          "scrollHeight": 407,
+          "clientHeight": 407
+        },
+        "table": {
+          "container": {
+            "x": 286.2,
+            "y": 368.7,
+            "width": 1213.6,
+            "height": 407,
+            "right": 1499.8,
+            "bottom": 775.7,
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "maxHeight": "none",
+            "scrollWidth": 1214,
+            "clientWidth": 1214,
+            "scrollHeight": 407,
+            "clientHeight": 407
+          },
+          "header": {
+            "x": 286.2,
+            "y": 368.7,
+            "width": 1213.6,
+            "height": 47,
+            "right": 1499.8,
+            "bottom": 415.7,
+            "overflowY": "hidden",
+            "overflowX": "hidden",
+            "maxHeight": "none",
+            "scrollWidth": 1214,
+            "clientWidth": 1214,
+            "scrollHeight": 47,
+            "clientHeight": 47
+          },
+          "body": {
+            "x": 286.2,
+            "y": 415.7,
+            "width": 1213.6,
+            "height": 360,
+            "right": 1499.8,
+            "bottom": 775.7,
+            "overflowY": "auto",
+            "overflowX": "auto",
+            "maxHeight": "360px",
+            "scrollWidth": 1214,
+            "clientWidth": 1214,
+            "scrollHeight": 1848,
+            "clientHeight": 360
+          },
+          "columns": [
+            "Priority",
+            "Module",
+            "Document",
+            "Status",
+            "Waiting for",
+            "Age",
+            "SLA",
+            "(blank)"
+          ],
+          "columnCount": 8,
+          "dataRows": 21,
+          "visibleRows": 5,
+          "bodyHorizontalScroll": false,
+          "bodyVerticalScroll": true
+        },
+        "footer": {
+          "x": 286.2,
+          "y": 1058.8,
+          "width": 1213.6,
+          "height": 49,
+          "right": 1499.8,
+          "bottom": 1107.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1214,
+          "clientWidth": 1214,
+          "scrollHeight": 48,
+          "clientHeight": 48,
+          "visibleInViewport": false
+        },
+        "pagination": {
+          "x": 1135.8,
+          "y": 1067.8,
+          "width": 352,
+          "height": 32,
+          "right": 1487.8,
+          "bottom": 1099.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 352,
+          "clientWidth": 352,
+          "scrollHeight": 33,
+          "clientHeight": 32,
+          "visibleInViewport": false
+        },
+        "scroll": {
+          "verticalOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 1848,
+              "clientHeight": 360,
+              "delta": 1488
+            }
+          ],
+          "verticalOwnerCount": 1,
+          "dataScrollOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 1848,
+              "clientHeight": 360,
+              "delta": 1488
+            }
+          ],
+          "doubleScroll": true
+        },
+        "blankInsideBody": 0,
+        "blankBelowTable": 1,
+        "blankBelowCard": 0
+      },
+      "apiEvidence": {
+        "pipelineRequest": {
+          "method": "GET",
+          "url": "http://localhost:4000/api/workflow-pipeline?page=1&limit=20"
+        },
+        "hasPage1Limit20": true,
+        "preRunProbe": {
+          "status": 200,
+          "total": 588,
+          "limit": 20,
+          "page": 1,
+          "url": "http://127.0.0.1:4000/api/workflow-pipeline?page=1&limit=20",
+          "itemCount": 20
+        }
+      },
+      "consoleErrors": [],
+      "screenshots": {
+        "viewport": "screenshots/before/WFP__1536x864__viewport.png",
+        "fullPage": "screenshots/before/WFP__1536x864__fullpage.png"
+      }
+    },
+    {
+      "screenId": "WFP",
+      "phase": "before",
+      "viewport": "1920x1080",
+      "viewportSize": {
+        "label": "1920x1080",
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "browserZoom": 1
+      },
+      "zoomNote": "Browser zoom 100%; deviceScaleFactor=1 (not Windows OS display scaling 125%).",
+      "landedUrl": "/workflow-pipeline",
+      "measurement": {
+        "url": "/workflow-pipeline",
+        "heading": "Workflow Pipeline",
+        "errorOverlay": false,
+        "viewport": {
+          "width": 1920,
+          "height": 1080,
+          "dpr": 1
+        },
+        "document": {
+          "scrollHeight": 1133,
+          "clientHeight": 1080,
+          "scrollWidth": 1920,
+          "clientWidth": 1920,
+          "pageVerticalScroll": true,
+          "pageHorizontalScroll": false
+        },
+        "shell": {
+          "x": 0,
+          "y": 0,
+          "width": 1920,
+          "height": 1132.8,
+          "right": 1920,
+          "bottom": 1132.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1920,
+          "clientWidth": 1920,
+          "scrollHeight": 1133,
+          "clientHeight": 1133
+        },
+        "header": {
+          "x": 250,
+          "y": 0,
+          "width": 1670,
+          "height": 65,
+          "right": 1920,
+          "bottom": 65,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1670,
+          "clientWidth": 1670,
+          "scrollHeight": 64,
+          "clientHeight": 64
+        },
+        "content": {
+          "x": 250,
+          "y": 65,
+          "width": 1670,
+          "height": 1067.8,
+          "right": 1920,
+          "bottom": 1132.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1670,
+          "clientWidth": 1670,
+          "scrollHeight": 1068,
+          "clientHeight": 1068
+        },
+        "canvas": {
+          "x": 274,
+          "y": 89,
+          "width": 1638,
+          "height": 1019.8,
+          "right": 1912,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1638,
+          "clientWidth": 1638,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "opsPage": {
+          "x": 274,
+          "y": 89,
+          "width": 1638,
+          "height": 1019.8,
+          "right": 1912,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "clip",
+          "maxHeight": "none",
+          "scrollWidth": 1638,
+          "clientWidth": 1638,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "pageHeader": {
+          "x": 298,
+          "y": 89,
+          "width": 1590,
+          "height": 64.2,
+          "right": 1888,
+          "bottom": 153.2,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1590,
+          "clientWidth": 1590,
+          "scrollHeight": 63,
+          "clientHeight": 63
+        },
+        "kpis": {
+          "x": 298,
+          "y": 165.2,
+          "width": 1590,
+          "height": 55.5,
+          "right": 1888,
+          "bottom": 220.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1590,
+          "clientWidth": 1590,
+          "scrollHeight": 55,
+          "clientHeight": 55
+        },
+        "filters": {
+          "x": 298,
+          "y": 232.7,
+          "width": 1590,
+          "height": 123,
+          "right": 1888,
+          "bottom": 355.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1588,
+          "clientWidth": 1588,
+          "scrollHeight": 121,
+          "clientHeight": 121
+        },
+        "card": {
+          "x": 298,
+          "y": 367.7,
+          "width": 1590,
+          "height": 741.1,
+          "right": 1888,
+          "bottom": 1108.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1588,
+          "clientWidth": 1588,
+          "scrollHeight": 739,
+          "clientHeight": 739
+        },
+        "scrollShell": {
+          "x": 299,
+          "y": 368.7,
+          "width": 1588,
+          "height": 623,
+          "right": 1887,
+          "bottom": 991.7,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1588,
+          "clientWidth": 1588,
+          "scrollHeight": 623,
+          "clientHeight": 623
+        },
+        "table": {
+          "container": {
+            "x": 299,
+            "y": 368.7,
+            "width": 1588,
+            "height": 623,
+            "right": 1887,
+            "bottom": 991.7,
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "maxHeight": "none",
+            "scrollWidth": 1588,
+            "clientWidth": 1588,
+            "scrollHeight": 623,
+            "clientHeight": 623
+          },
+          "header": {
+            "x": 299,
+            "y": 368.7,
+            "width": 1588,
+            "height": 47,
+            "right": 1887,
+            "bottom": 415.7,
+            "overflowY": "hidden",
+            "overflowX": "hidden",
+            "maxHeight": "none",
+            "scrollWidth": 1588,
+            "clientWidth": 1588,
+            "scrollHeight": 47,
+            "clientHeight": 47
+          },
+          "body": {
+            "x": 299,
+            "y": 415.7,
+            "width": 1588,
+            "height": 576,
+            "right": 1887,
+            "bottom": 991.7,
+            "overflowY": "auto",
+            "overflowX": "auto",
+            "maxHeight": "576px",
+            "scrollWidth": 1588,
+            "clientWidth": 1588,
+            "scrollHeight": 1683,
+            "clientHeight": 576
+          },
+          "columns": [
+            "Priority",
+            "Module",
+            "Document",
+            "Status",
+            "Waiting for",
+            "Age",
+            "SLA",
+            "(blank)"
+          ],
+          "columnCount": 8,
+          "dataRows": 21,
+          "visibleRows": 7,
+          "bodyHorizontalScroll": false,
+          "bodyVerticalScroll": true
+        },
+        "footer": {
+          "x": 299,
+          "y": 1058.8,
+          "width": 1588,
+          "height": 49,
+          "right": 1887,
+          "bottom": 1107.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1588,
+          "clientWidth": 1588,
+          "scrollHeight": 48,
+          "clientHeight": 48,
+          "visibleInViewport": false
+        },
+        "pagination": {
+          "x": 1523,
+          "y": 1067.8,
+          "width": 352,
+          "height": 32,
+          "right": 1875,
+          "bottom": 1099.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 352,
+          "clientWidth": 352,
+          "scrollHeight": 33,
+          "clientHeight": 32,
+          "visibleInViewport": false
+        },
+        "scroll": {
+          "verticalOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 1683,
+              "clientHeight": 576,
+              "delta": 1107
+            }
+          ],
+          "verticalOwnerCount": 1,
+          "dataScrollOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 1683,
+              "clientHeight": 576,
+              "delta": 1107
+            }
+          ],
+          "doubleScroll": true
+        },
+        "blankInsideBody": 0,
+        "blankBelowTable": 1,
+        "blankBelowCard": 0
+      },
+      "apiEvidence": {
+        "pipelineRequest": {
+          "method": "GET",
+          "url": "http://localhost:4000/api/workflow-pipeline?page=1&limit=20"
+        },
+        "hasPage1Limit20": true,
+        "preRunProbe": {
+          "status": 200,
+          "total": 588,
+          "limit": 20,
+          "page": 1,
+          "url": "http://127.0.0.1:4000/api/workflow-pipeline?page=1&limit=20",
+          "itemCount": 20
+        }
+      },
+      "consoleErrors": [],
+      "screenshots": {
+        "viewport": "screenshots/before/WFP__1920x1080__viewport.png",
+        "fullPage": "screenshots/before/WFP__1920x1080__fullpage.png"
+      }
+    },
+    {
+      "screenId": "WFP",
+      "phase": "before",
+      "viewport": "1366x768@zoom90",
+      "viewportSize": {
+        "label": "1366x768",
+        "width": 1366,
+        "height": 768,
+        "dpr": 1,
+        "browserZoom": 0.9
+      },
+      "zoomNote": "Diagnostic only: zoom applied via document.documentElement.style.zoom in init script (not OS display scaling).",
+      "landedUrl": "/workflow-pipeline",
+      "measurement": {
+        "url": "/workflow-pipeline",
+        "heading": "Workflow Pipeline",
+        "errorOverlay": false,
+        "viewport": {
+          "width": 1366,
+          "height": 768,
+          "dpr": 1
+        },
+        "document": {
+          "scrollHeight": 1133,
+          "clientHeight": 768,
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "pageVerticalScroll": true,
+          "pageHorizontalScroll": false
+        },
+        "shell": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 1132.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "scrollHeight": 1133,
+          "clientHeight": 1133
+        },
+        "header": {
+          "x": 250,
+          "y": 0,
+          "width": 1116,
+          "height": 65,
+          "right": 1366,
+          "bottom": 65,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 64,
+          "clientHeight": 64
+        },
+        "content": {
+          "x": 250,
+          "y": 65,
+          "width": 1116,
+          "height": 1067.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 1068,
+          "clientHeight": 1068
+        },
+        "canvas": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "opsPage": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "clip",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "pageHeader": {
+          "x": 283.1,
+          "y": 89,
+          "width": 1049.9,
+          "height": 64.2,
+          "right": 1332.9,
+          "bottom": 153.2,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 63,
+          "clientHeight": 63
+        },
+        "kpis": {
+          "x": 283.1,
+          "y": 165.2,
+          "width": 1049.9,
+          "height": 55.5,
+          "right": 1332.9,
+          "bottom": 220.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 55,
+          "clientHeight": 55
+        },
+        "filters": {
+          "x": 283.1,
+          "y": 232.7,
+          "width": 1049.9,
+          "height": 123,
+          "right": 1332.9,
+          "bottom": 355.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 121,
+          "clientHeight": 121
+        },
+        "card": {
+          "x": 283.1,
+          "y": 367.7,
+          "width": 1049.9,
+          "height": 741.1,
+          "right": 1332.9,
+          "bottom": 1108.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 739,
+          "clientHeight": 739
+        },
+        "scrollShell": {
+          "x": 284.1,
+          "y": 368.7,
+          "width": 1047.9,
+          "height": 311,
+          "right": 1331.9,
+          "bottom": 679.7,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 311,
+          "clientHeight": 311
+        },
+        "table": {
+          "container": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 311,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 311,
+            "clientHeight": 311
+          },
+          "header": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 47,
+            "right": 1331.9,
+            "bottom": 415.7,
+            "overflowY": "hidden",
+            "overflowX": "hidden",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 47,
+            "clientHeight": 47
+          },
+          "body": {
+            "x": 284.1,
+            "y": 415.7,
+            "width": 1047.9,
+            "height": 264,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "auto",
+            "overflowX": "auto",
+            "maxHeight": "264px",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 2321,
+            "clientHeight": 264
+          },
+          "columns": [
+            "Priority",
+            "Module",
+            "Document",
+            "Status",
+            "Waiting for",
+            "Age",
+            "SLA",
+            "(blank)"
+          ],
+          "columnCount": 8,
+          "dataRows": 21,
+          "visibleRows": 3,
+          "bodyHorizontalScroll": false,
+          "bodyVerticalScroll": true
+        },
+        "footer": {
+          "x": 284.1,
+          "y": 1058.8,
+          "width": 1047.9,
+          "height": 49,
+          "right": 1331.9,
+          "bottom": 1107.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 48,
+          "clientHeight": 48,
+          "visibleInViewport": false
+        },
+        "pagination": {
+          "x": 967.9,
+          "y": 1067.8,
+          "width": 352,
+          "height": 32,
+          "right": 1319.9,
+          "bottom": 1099.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 352,
+          "clientWidth": 352,
+          "scrollHeight": 33,
+          "clientHeight": 32,
+          "visibleInViewport": false
+        },
+        "scroll": {
+          "verticalOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2321,
+              "clientHeight": 264,
+              "delta": 2057
+            }
+          ],
+          "verticalOwnerCount": 1,
+          "dataScrollOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2321,
+              "clientHeight": 264,
+              "delta": 2057
+            }
+          ],
+          "doubleScroll": true
+        },
+        "blankInsideBody": 0,
+        "blankBelowTable": 1,
+        "blankBelowCard": 0
+      },
+      "apiEvidence": {
+        "pipelineRequest": {
+          "method": "GET",
+          "url": "http://localhost:4000/api/workflow-pipeline?page=1&limit=20"
+        },
+        "hasPage1Limit20": true,
+        "preRunProbe": {
+          "status": 200,
+          "total": 588,
+          "limit": 20,
+          "page": 1,
+          "url": "http://127.0.0.1:4000/api/workflow-pipeline?page=1&limit=20",
+          "itemCount": 20
+        }
+      },
+      "consoleErrors": [
+        "Cannot read properties of null (reading 'style')",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ],
+      "screenshots": {
+        "viewport": "screenshots/before/WFP__1366x768@zoom90__viewport.png",
+        "fullPage": "screenshots/before/WFP__1366x768@zoom90__fullpage.png"
+      }
+    },
+    {
+      "screenId": "WFP",
+      "phase": "before",
+      "viewport": "1366x768@zoom110",
+      "viewportSize": {
+        "label": "1366x768",
+        "width": 1366,
+        "height": 768,
+        "dpr": 1,
+        "browserZoom": 1.1
+      },
+      "zoomNote": "Diagnostic only: zoom applied via document.documentElement.style.zoom in init script (not OS display scaling).",
+      "landedUrl": "/workflow-pipeline",
+      "measurement": {
+        "url": "/workflow-pipeline",
+        "heading": "Workflow Pipeline",
+        "errorOverlay": false,
+        "viewport": {
+          "width": 1366,
+          "height": 768,
+          "dpr": 1
+        },
+        "document": {
+          "scrollHeight": 1133,
+          "clientHeight": 768,
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "pageVerticalScroll": true,
+          "pageHorizontalScroll": false
+        },
+        "shell": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 1132.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "scrollHeight": 1133,
+          "clientHeight": 1133
+        },
+        "header": {
+          "x": 250,
+          "y": 0,
+          "width": 1116,
+          "height": 65,
+          "right": 1366,
+          "bottom": 65,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 64,
+          "clientHeight": 64
+        },
+        "content": {
+          "x": 250,
+          "y": 65,
+          "width": 1116,
+          "height": 1067.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 1068,
+          "clientHeight": 1068
+        },
+        "canvas": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "opsPage": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "clip",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "pageHeader": {
+          "x": 283.1,
+          "y": 89,
+          "width": 1049.9,
+          "height": 64.2,
+          "right": 1332.9,
+          "bottom": 153.2,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 63,
+          "clientHeight": 63
+        },
+        "kpis": {
+          "x": 283.1,
+          "y": 165.2,
+          "width": 1049.9,
+          "height": 55.5,
+          "right": 1332.9,
+          "bottom": 220.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 55,
+          "clientHeight": 55
+        },
+        "filters": {
+          "x": 283.1,
+          "y": 232.7,
+          "width": 1049.9,
+          "height": 123,
+          "right": 1332.9,
+          "bottom": 355.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 121,
+          "clientHeight": 121
+        },
+        "card": {
+          "x": 283.1,
+          "y": 367.7,
+          "width": 1049.9,
+          "height": 741.1,
+          "right": 1332.9,
+          "bottom": 1108.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 739,
+          "clientHeight": 739
+        },
+        "scrollShell": {
+          "x": 284.1,
+          "y": 368.7,
+          "width": 1047.9,
+          "height": 311,
+          "right": 1331.9,
+          "bottom": 679.7,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 311,
+          "clientHeight": 311
+        },
+        "table": {
+          "container": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 311,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 311,
+            "clientHeight": 311
+          },
+          "header": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 47,
+            "right": 1331.9,
+            "bottom": 415.7,
+            "overflowY": "hidden",
+            "overflowX": "hidden",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 47,
+            "clientHeight": 47
+          },
+          "body": {
+            "x": 284.1,
+            "y": 415.7,
+            "width": 1047.9,
+            "height": 264,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "auto",
+            "overflowX": "auto",
+            "maxHeight": "264px",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 2415,
+            "clientHeight": 264
+          },
+          "columns": [
+            "Priority",
+            "Module",
+            "Document",
+            "Status",
+            "Waiting for",
+            "Age",
+            "SLA",
+            "(blank)"
+          ],
+          "columnCount": 8,
+          "dataRows": 21,
+          "visibleRows": 3,
+          "bodyHorizontalScroll": false,
+          "bodyVerticalScroll": true
+        },
+        "footer": {
+          "x": 284.1,
+          "y": 1058.8,
+          "width": 1047.9,
+          "height": 49,
+          "right": 1331.9,
+          "bottom": 1107.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 48,
+          "clientHeight": 48,
+          "visibleInViewport": false
+        },
+        "pagination": {
+          "x": 967.9,
+          "y": 1067.8,
+          "width": 352,
+          "height": 32,
+          "right": 1319.9,
+          "bottom": 1099.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 352,
+          "clientWidth": 352,
+          "scrollHeight": 33,
+          "clientHeight": 32,
+          "visibleInViewport": false
+        },
+        "scroll": {
+          "verticalOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2415,
+              "clientHeight": 264,
+              "delta": 2151
+            }
+          ],
+          "verticalOwnerCount": 1,
+          "dataScrollOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2415,
+              "clientHeight": 264,
+              "delta": 2151
+            }
+          ],
+          "doubleScroll": true
+        },
+        "blankInsideBody": 0,
+        "blankBelowTable": 1,
+        "blankBelowCard": 0
+      },
+      "apiEvidence": {
+        "pipelineRequest": {
+          "method": "GET",
+          "url": "http://localhost:4000/api/workflow-pipeline?page=1&limit=20"
+        },
+        "hasPage1Limit20": true,
+        "preRunProbe": {
+          "status": 200,
+          "total": 588,
+          "limit": 20,
+          "page": 1,
+          "url": "http://127.0.0.1:4000/api/workflow-pipeline?page=1&limit=20",
+          "itemCount": 20
+        }
+      },
+      "consoleErrors": [
+        "Cannot read properties of null (reading 'style')",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ],
+      "screenshots": {
+        "viewport": "screenshots/before/WFP__1366x768@zoom110__viewport.png",
+        "fullPage": "screenshots/before/WFP__1366x768@zoom110__fullpage.png"
+      }
+    },
+    {
+      "screenId": "WFP",
+      "phase": "before",
+      "viewport": "1366x768@zoom125",
+      "viewportSize": {
+        "label": "1366x768",
+        "width": 1366,
+        "height": 768,
+        "dpr": 1,
+        "browserZoom": 1.25
+      },
+      "zoomNote": "Diagnostic only: zoom applied via document.documentElement.style.zoom in init script (not OS display scaling).",
+      "landedUrl": "/workflow-pipeline",
+      "measurement": {
+        "url": "/workflow-pipeline",
+        "heading": "Workflow Pipeline",
+        "errorOverlay": false,
+        "viewport": {
+          "width": 1366,
+          "height": 768,
+          "dpr": 1
+        },
+        "document": {
+          "scrollHeight": 1133,
+          "clientHeight": 768,
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "pageVerticalScroll": true,
+          "pageHorizontalScroll": false
+        },
+        "shell": {
+          "x": 0,
+          "y": 0,
+          "width": 1366,
+          "height": 1132.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1366,
+          "clientWidth": 1366,
+          "scrollHeight": 1133,
+          "clientHeight": 1133
+        },
+        "header": {
+          "x": 250,
+          "y": 0,
+          "width": 1116,
+          "height": 65,
+          "right": 1366,
+          "bottom": 65,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 64,
+          "clientHeight": 64
+        },
+        "content": {
+          "x": 250,
+          "y": 65,
+          "width": 1116,
+          "height": 1067.8,
+          "right": 1366,
+          "bottom": 1132.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1116,
+          "clientWidth": 1116,
+          "scrollHeight": 1068,
+          "clientHeight": 1068
+        },
+        "canvas": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "opsPage": {
+          "x": 266,
+          "y": 89,
+          "width": 1084,
+          "height": 1019.8,
+          "right": 1350,
+          "bottom": 1108.8,
+          "overflowY": "visible",
+          "overflowX": "clip",
+          "maxHeight": "none",
+          "scrollWidth": 1084,
+          "clientWidth": 1084,
+          "scrollHeight": 1020,
+          "clientHeight": 1020
+        },
+        "pageHeader": {
+          "x": 283.1,
+          "y": 89,
+          "width": 1049.9,
+          "height": 64.2,
+          "right": 1332.9,
+          "bottom": 153.2,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 63,
+          "clientHeight": 63
+        },
+        "kpis": {
+          "x": 283.1,
+          "y": 165.2,
+          "width": 1049.9,
+          "height": 55.5,
+          "right": 1332.9,
+          "bottom": 220.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1050,
+          "clientWidth": 1050,
+          "scrollHeight": 55,
+          "clientHeight": 55
+        },
+        "filters": {
+          "x": 283.1,
+          "y": 232.7,
+          "width": 1049.9,
+          "height": 123,
+          "right": 1332.9,
+          "bottom": 355.7,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 121,
+          "clientHeight": 121
+        },
+        "card": {
+          "x": 283.1,
+          "y": 367.7,
+          "width": 1049.9,
+          "height": 741.1,
+          "right": 1332.9,
+          "bottom": 1108.8,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 739,
+          "clientHeight": 739
+        },
+        "scrollShell": {
+          "x": 284.1,
+          "y": 368.7,
+          "width": 1047.9,
+          "height": 311,
+          "right": 1331.9,
+          "bottom": 679.7,
+          "overflowY": "hidden",
+          "overflowX": "hidden",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 311,
+          "clientHeight": 311
+        },
+        "table": {
+          "container": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 311,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "visible",
+            "overflowX": "visible",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 311,
+            "clientHeight": 311
+          },
+          "header": {
+            "x": 284.1,
+            "y": 368.7,
+            "width": 1047.9,
+            "height": 47,
+            "right": 1331.9,
+            "bottom": 415.7,
+            "overflowY": "hidden",
+            "overflowX": "hidden",
+            "maxHeight": "none",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 47,
+            "clientHeight": 47
+          },
+          "body": {
+            "x": 284.1,
+            "y": 415.7,
+            "width": 1047.9,
+            "height": 264,
+            "right": 1331.9,
+            "bottom": 679.7,
+            "overflowY": "auto",
+            "overflowX": "auto",
+            "maxHeight": "264px",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "scrollHeight": 2358,
+            "clientHeight": 264
+          },
+          "columns": [
+            "Priority",
+            "Module",
+            "Document",
+            "Status",
+            "Waiting for",
+            "Age",
+            "SLA",
+            "(blank)"
+          ],
+          "columnCount": 8,
+          "dataRows": 21,
+          "visibleRows": 3,
+          "bodyHorizontalScroll": false,
+          "bodyVerticalScroll": true
+        },
+        "footer": {
+          "x": 284.1,
+          "y": 1058.8,
+          "width": 1047.9,
+          "height": 49,
+          "right": 1331.9,
+          "bottom": 1107.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 1048,
+          "clientWidth": 1048,
+          "scrollHeight": 48,
+          "clientHeight": 48,
+          "visibleInViewport": false
+        },
+        "pagination": {
+          "x": 967.9,
+          "y": 1067.8,
+          "width": 352,
+          "height": 32,
+          "right": 1319.9,
+          "bottom": 1099.8,
+          "overflowY": "visible",
+          "overflowX": "visible",
+          "maxHeight": "none",
+          "scrollWidth": 352,
+          "clientWidth": 352,
+          "scrollHeight": 33,
+          "clientHeight": 32,
+          "visibleInViewport": false
+        },
+        "scroll": {
+          "verticalOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2358,
+              "clientHeight": 264,
+              "delta": 2094
+            }
+          ],
+          "verticalOwnerCount": 1,
+          "dataScrollOwners": [
+            {
+              "selector": "div.ant-table-body",
+              "overflowY": "auto",
+              "scrollHeight": 2358,
+              "clientHeight": 264,
+              "delta": 2094
+            }
+          ],
+          "doubleScroll": true
+        },
+        "blankInsideBody": 0,
+        "blankBelowTable": 1,
+        "blankBelowCard": 0
+      },
+      "apiEvidence": {
+        "pipelineRequest": {
+          "method": "GET",
+          "url": "http://localhost:4000/api/workflow-pipeline?page=1&limit=20"
+        },
+        "hasPage1Limit20": true,
+        "preRunProbe": {
+          "status": 200,
+          "total": 588,
+          "limit": 20,
+          "page": 1,
+          "url": "http://127.0.0.1:4000/api/workflow-pipeline?page=1&limit=20",
+          "itemCount": 20
+        }
+      },
+      "consoleErrors": [
+        "Cannot read properties of null (reading 'style')",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ],
+      "screenshots": {
+        "viewport": "screenshots/before/WFP__1366x768@zoom125__viewport.png",
+        "fullPage": "screenshots/before/WFP__1366x768@zoom125__fullpage.png"
+      }
+    }
+  ]
+}

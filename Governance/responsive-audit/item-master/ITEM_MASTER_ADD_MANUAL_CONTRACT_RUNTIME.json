@@ -1,0 +1,173 @@
+{
+  "generatedAt": "2026-07-03T15:44:36.961Z",
+  "tenant": "dx-airport-hotel",
+  "user": "daniel.carter@dxuat.com",
+  "visual": [
+    {
+      "viewport": "1366x768",
+      "dom": {
+        "viewport": {
+          "w": 1366,
+          "h": 768
+        },
+        "docScrollH": 1000,
+        "clientH": 768,
+        "horizontalOverflow": false,
+        "unitPriceVisible": false,
+        "openingQtyVisible": false,
+        "alertTexts": [],
+        "obBannerVisible": false,
+        "card": {
+          "top": 207,
+          "bottom": 928,
+          "height": 721
+        },
+        "form": {
+          "top": 224,
+          "bottom": 729,
+          "height": 505
+        },
+        "footer": {
+          "top": 854,
+          "bottom": 927,
+          "height": 73
+        },
+        "footerInViewport": false
+      },
+      "consoleErrors": [],
+      "ng01203UnitPrice": false
+    },
+    {
+      "viewport": "1536x864",
+      "dom": {
+        "viewport": {
+          "w": 1536,
+          "h": 864
+        },
+        "docScrollH": 1000,
+        "clientH": 864,
+        "horizontalOverflow": false,
+        "unitPriceVisible": false,
+        "openingQtyVisible": false,
+        "alertTexts": [],
+        "obBannerVisible": false,
+        "card": {
+          "top": 207,
+          "bottom": 928,
+          "height": 721
+        },
+        "form": {
+          "top": 224,
+          "bottom": 729,
+          "height": 505
+        },
+        "footer": {
+          "top": 854,
+          "bottom": 927,
+          "height": 73
+        },
+        "footerInViewport": false
+      },
+      "consoleErrors": [],
+      "ng01203UnitPrice": false
+    },
+    {
+      "viewport": "1920x1080",
+      "dom": {
+        "viewport": {
+          "w": 1920,
+          "h": 1080
+        },
+        "docScrollH": 1080,
+        "clientH": 1080,
+        "horizontalOverflow": false,
+        "unitPriceVisible": false,
+        "openingQtyVisible": false,
+        "alertTexts": [],
+        "obBannerVisible": false,
+        "card": {
+          "top": 207,
+          "bottom": 928,
+          "height": 721
+        },
+        "form": {
+          "top": 224,
+          "bottom": 729,
+          "height": 505
+        },
+        "footer": {
+          "top": 854,
+          "bottom": 927,
+          "height": 73
+        },
+        "footerInViewport": true
+      },
+      "consoleErrors": [],
+      "ng01203UnitPrice": false
+    }
+  ],
+  "uiCreate": {
+    "uiPostCaptured": true,
+    "uiPostPayload": {
+      "name": "PL-UI-CARD-1783093471417",
+      "description": "UI card-only contract verification",
+      "departmentId": "9a689f1b-fc90-4395-88ce-1c2e20af7431",
+      "categoryId": null,
+      "subcategoryId": null,
+      "supplierId": "6ee505d6-0b34-42b0-8478-1ea4d69c30c3",
+      "defaultStoreId": "8c1a06bd-9007-4a4f-a8d2-cd3585ad20ad",
+      "isActive": true,
+      "itemUnits": [
+        {
+          "unitId": "b7213e8c-6df5-40f7-ba4b-52073110723b",
+          "unitType": "BASE",
+          "conversionRate": 1
+        }
+      ]
+    },
+    "uiPayloadHasUnitPrice": false,
+    "uiPayloadHasOpeningQuantity": false,
+    "uiTestName": "PL-UI-CARD-1783093471417",
+    "uiCleanupDeleted": true
+  },
+  "functional": {
+    "testName": "PL-MANUAL-CARD-1783093476572",
+    "createStatus": 201,
+    "payloadKeys": [
+      "name",
+      "barcode",
+      "description",
+      "departmentId",
+      "categoryId",
+      "subcategoryId",
+      "supplierId",
+      "defaultStoreId",
+      "isActive",
+      "itemUnits"
+    ],
+    "payloadHasUnitPrice": false,
+    "payloadHasOpeningQuantity": false,
+    "itemCreated": true,
+    "itemUnitPrice": 0,
+    "stockBalanceCount": 0,
+    "ledgerCount": 0,
+    "movementLineCount": 0,
+    "cleanupDeleted": true,
+    "itemIdAfterCleanup": null
+  },
+  "regression": {
+    "excelImportRouteStatus": 200,
+    "itemsListTake50": 50,
+    "itemsListMetaTotal": 201
+  },
+  "summary": {
+    "unitPriceHiddenAllViewports": true,
+    "openingQtyHiddenAllViewports": true,
+    "noNg01203UnitPrice": true,
+    "zeroConsoleErrorsAdd": true,
+    "uiPayloadExcludesObFields": true,
+    "payloadExcludesObFields": true,
+    "cardOnlyDbSideEffects": true,
+    "cleanupOk": true
+  }
+}

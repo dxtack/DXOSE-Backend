@@ -1,0 +1,360 @@
+{
+  "executedAt": "2026-06-27T00:22:18.592Z",
+  "tokenTenant": "grand-horizon",
+  "targetTenant": "dx-airport-hotel",
+  "allForeign500": false,
+  "enumerationRisk": "Same message for foreign and random when 500",
+  "probes": [
+    {
+      "case": "foreign_valid",
+      "endpoint": "read",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "update",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "submit",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "approve",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "reject",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "confirm_receipt",
+      "http": 400,
+      "message": "receivedCondition is required.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "ship_back",
+      "http": 404,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected isolation"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "confirm_return_exit",
+      "http": 404,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected isolation"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "confirm_return_arrival",
+      "http": 404,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected isolation"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "close",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "settlement_submit",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "pdf",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "foreign_valid",
+      "endpoint": "delete",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "read",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "update",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "submit",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "approve",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "reject",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "confirm_receipt",
+      "http": 400,
+      "message": "receivedCondition is required.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "ship_back",
+      "http": 404,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected isolation"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "confirm_return_exit",
+      "http": 404,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected isolation"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "confirm_return_arrival",
+      "http": 404,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected isolation"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "close",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "settlement_submit",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "pdf",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "delete",
+      "http": 500,
+      "message": "Get Pass not found",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "read",
+      "http": 200,
+      "message": null,
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected same-tenant"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "update",
+      "http": 500,
+      "message": "\nInvalid `prisma.user.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\platform\\draftGovernance.service.js:127:37\n\n  124  * Ch.7.4 — block edits when draft owner is deactivated unless admin override.\n  125  */\n  126 async function assertDraftOwnerActive({ ownerId, tenantId, user, allowAdminOverride = true }) {\n→ 127     const owner = await prisma.user.findFirst({\n            where: {\n              id: \"119786df-ef21-40df-a585-319e6ea474da\",\n              tenantId: \"d7f5e85c-86f9-487d-b17d-708cebcf9ca3\",\n              ~~~~~~~~\n          ?   AND?: UserWhereInput | UserWhereInput[],\n          ?   OR?: UserWhereInput[],\n          ?   NOT?: UserWhereInput | UserWhereInput[],\n          ?   email?: StringFilter | String,\n          ?   passwordHash?: StringFilter | String,\n          ?   firstName?: StringFilter | String,\n          ?   lastName?: StringFilter | String,\n          ?   department?: StringNullableFilter | String | Null,\n          ?   phone?: StringNullableFilter | String | Null,\n          ?   isActive?: BoolFilter | Boolean,\n          ?   lastLoginAt?: DateTimeNullableFilter | DateTime | Null,\n          ?   permissionVersion?: IntFilter | Int,\n          ?   createdAt?: DateTimeFilter | DateTime,\n          ?   updatedAt?: DateTimeFilter | DateTime,\n          ?   approvalStepsActed?: ApprovalStepListRelationFilter,\n          ?   auditLogs?: AuditLogListRelationFilter,\n          ?   generatedReports?: GeneratedReportListRelationFilter,\n          ?   getPassReturnsReg?: GetPassReturnListRelationFilter,\n          ?   getPassReturnsSec?: GetPassReturnListRelationFilter,\n          ?   getPassesCheckout?: GetPassListRelationFilter,\n          ?   getPassesClosed?: GetPassListRelationFilter,\n          ?   getPassesCreated?: GetPassListRelationFilter,\n          ?   getPassesDeptApp?: GetPassListRelationFilter,\n          ?   getPassesFinApp?: GetPassListRelationFilter,\n          ?   getPassesCostCtrlApp?: GetPassListRelationFilter,\n          ?   getPassesGmApp?: GetPassListRelationFilter,\n          ?   getPassesSecApp?: GetPassListRelationFilter,\n          ?   getPassesDestinationSecApp?: GetPassListRelationFilter,\n          ?   getPassesDestinationSecExit?: GetPassListRelationFilter,\n          ?   getPassesReceived?: GetPassListRelationFilter,\n          ?   getPassesDestinationDeptAccepted?: GetPassListRelationFilter,\n          ?   grnApproved?: GrnImportListRelationFilter,\n          ?   grnImported?: GrnImportListRelationFilter,\n          ?   grnLastEdited?: GrnImportListRelationFilter,\n          ?   grnPosted?: GrnImportListRelationFilter,\n          ?   grnRejected?: GrnImportListRelationFilter,\n          ?   importSessions?: ImportSessionListRelationFilter,\n          ?   ledgerEntries?: InventoryLedgerListRelationFilter,\n          ?   locationUsers?: LocationUserListRelationFilter,\n          ?   movementsCreated?: MovementDocumentListRelationFilter,\n          ?   refreshTokens?: RefreshTokenListRelationFilter,\n          ?   stockReports?: SavedStockReportListRelationFilter,\n          ?   countSessions?: StockCountSessionListRelationFilter,\n          ?   stockCountLocationQtyEdits?: StockCountLocationQtyListRelationFilter,\n          ?   storeIssues?: StoreIssueListRelationFilter,\n          ?   reqApproved?: StoreRequisitionListRelationFilter,\n          ?   reqRejected?: StoreRequisitionListRelationFilter,\n          ?   reqRequested?: StoreRequisitionListRelationFilter,\n          ?   trfApproved?: StoreTransferListRelationFilter,\n          ?   trfPosted?: StoreTransferListRelationFilter,\n          ?   trfReceived?: StoreTransferListRelationFilter,\n          ?   trfRejected?: StoreTransferListRelationFilter,\n          ?   trfRequested?: StoreTransferListRelationFilter,\n          ?   adminLogs?: SuperAdminLogListRelationFilter,\n          ?   memberships?: TenantMemberListRelationFilter,\n          ?   systemNotifications?: SystemNotificationListRelationFilter,\n          ?   lostFoundItems?: LostFoundItemListRelationFilter,\n          ?   urUserOverrides?: UrUserPermissionOverrideListRelationFilter,\n          ?   urUserScopes?: UrUserScopeListRelationFilter,\n          ?   urAssignments?: UrUserAssignmentListRelationFilter,\n          ?   urOverrides?: UrUserOverrideListRelationFilter,\n          ?   accFieldSecurityRules?: AccFieldSecurityRuleListRelationFilter,\n          ?   accUserExceptions?: AccUserExceptionListRelationFilter,\n          ?   accScheduledAccess?: AccScheduledAccessListRelationFilter,\n          ?   accRuntimeSettingsUpdated?: AccRuntimeSettingListRelationFilter,\n          ?   urAuditEventsActor?: UrAuditEventListRelationFilter,\n          ?   urAuditEventsTarget?: UrAuditEventListRelationFilter\n            },\n            select: {\n              id: true,\n              isActive: true\n            }\n          })\n\nUnknown argument `tenantId`. Available options are marked with ?.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "submit",
+      "http": 400,
+      "message": "This item does not belong to the selected warehouse. A stock balance record is required at this location.",
+      "errorCode": "ITEM_NOT_AT_LOCATION",
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "approve",
+      "http": 422,
+      "message": "Get Pass has no pinned ACC workflow version.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "reject",
+      "http": 422,
+      "message": "Get Pass has no pinned ACC workflow version.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "confirm_receipt",
+      "http": 400,
+      "message": "receivedCondition is required.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "ship_back",
+      "http": 403,
+      "message": "Only destination hotel can ship this pass back.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "confirm_return_exit",
+      "http": 403,
+      "message": "Only destination hotel can confirm return exit.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "confirm_return_arrival",
+      "http": 400,
+      "message": "Return arrival confirmation is only valid for internal transfers.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "close",
+      "http": 400,
+      "message": "Force close is only available for passes that are out or partially returned.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "settlement_submit",
+      "http": 400,
+      "message": "Force close is only available for passes that are out or partially returned.",
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "pdf",
+      "http": 200,
+      "message": null,
+      "errorCode": null,
+      "dbMutated": false,
+      "classification": "Expected same-tenant"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "delete",
+      "http": 409,
+      "message": "Concurrency version is required for this operation. Reload the document and retry.",
+      "errorCode": "CONCURRENCY_VERSION_REQUIRED",
+      "dbMutated": false,
+      "classification": "Other"
+    }
+  ]
+}

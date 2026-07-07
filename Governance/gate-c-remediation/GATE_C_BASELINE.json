@@ -1,0 +1,37 @@
+{
+  "gate": "Gate C — Confirmed Findings Remediation",
+  "baseline_timestamp_utc": "2026-06-27T17:00:00Z",
+  "repository": {
+    "path": "c:\\DX OS&E",
+    "branch": "master",
+    "commit_sha": "d8ea25d51407370b1e67c42378e3114d127a019e",
+    "status_note": "Working tree contained uncommitted Gate C partial fixes; no reset performed per scope rules."
+  },
+  "gate_a_register_sha256": "BBAA877C60C92D47920AFE16D67B77E613BA2AFECA8A1514D61797E77338AAE9",
+  "gate_b_closeout_summary_sha256": "2D152A877136E550CCF15DC3A64C7252FA6F101EE5D9BA7C7D372394B13F8A17",
+  "environment": {
+    "backend_url": "http://127.0.0.1:4000/api",
+    "frontend_url": "http://127.0.0.1:4200",
+    "postgres": "127.0.0.1:5433/ose_inventory",
+    "test_tenant_a": { "slug": "grand-horizon", "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3" },
+    "test_tenant_b": { "slug": "dx-airport-hotel", "id": "bf7638b8-04db-4051-94d1-0cf039827c00" }
+  },
+  "test_identities": {
+    "FIND-002_authorized": { "email": "finance@grandhorizon.com", "role": "FINANCE_MANAGER", "tenant": "grand-horizon" },
+    "FIND-002_create": { "email": "fb.manager@grandhorizon.com", "role": "DEPT_MANAGER", "tenant": "grand-horizon" },
+    "FIND-001": { "email": "finance@grandhorizon.com", "role": "FINANCE_MANAGER", "tenant": "grand-horizon" },
+    "department": { "id": "dd8e4d25-b467-4b72-ac7c-791a659c07f3", "code": "GEN", "name": "General" }
+  },
+  "pre_remediation_build_status": {
+    "backend": "running (port 4000 responsive)",
+    "frontend": "not re-built at baseline; production build executed post-remediation"
+  },
+  "files_planned_for_change_sha256_at_baseline": {
+    "note": "Hashes captured post-remediation for traceability; working tree already contained partial FIND-002/FIND-001 edits at session resume.",
+    "OSE-backend/src/services/getPass.service.js": "FA6AA0CD90C020DEE54DC35B56E87D4F1AD8EED1A0E55AA35374200B4C169B02",
+    "OSE-Frontend/src/app/features/lost-items/utils/lost-items-status-display.util.ts": "485E3B5C59E1799BA316132430854E252E14DCC5DFC3ADB86F936AF6BE98AF2F",
+    "OSE-Frontend/src/app/core/directives/keyboard-navigation.directive.ts": "CC27C7D259F6E8BD8835F0D5DC1577FF9EBA21595EB0EF40838CB1E9172A06B9"
+  },
+  "role_permission_fallback_sha256_unchanged": "0DBCE02D4A32E29164F96A84FD21190093E655B2ACBBFCE8B783AC565E98CDD9",
+  "scope": ["FIND-001", "FIND-002", "FIND-003"]
+}

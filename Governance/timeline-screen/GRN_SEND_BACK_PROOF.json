@@ -1,0 +1,27 @@
+{
+  "scenario": "Constitutional SEND_BACK on active PENDING ApprovalRequest (same request, not CANCELLED)",
+  "test": "GRN builder: constitutional SEND_BACK on active PENDING ApprovalRequest",
+  "approvalRequest": { "status": "PENDING", "currentStep": 1 },
+  "audit": {
+    "action": "SEND_BACK",
+    "afterValue": {
+      "approvalRequestId": "ar-active-1",
+      "workflowRound": 2,
+      "sourceStepRole": "FINANCE_MANAGER",
+      "targetStepRole": "COST_CONTROL",
+      "targetType": "STEP",
+      "reason": "Incorrect allocation"
+    }
+  },
+  "expectedTimeline": {
+    "lifecycleEventType": "SEND_BACK",
+    "reason": "Incorrect allocation",
+    "sourceStepRole": "FINANCE_MANAGER",
+    "targetStepRole": "COST_CONTROL",
+    "cycleNumber": 2,
+    "hasResubmit": true,
+    "hasCurrentPending": true,
+    "hasFutureWaiting": true
+  },
+  "verified": true
+}

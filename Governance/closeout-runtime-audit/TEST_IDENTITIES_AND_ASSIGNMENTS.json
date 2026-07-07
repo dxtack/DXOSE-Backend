@@ -1,0 +1,155 @@
+{
+  "executedAt": "2026-06-26T23:59:41.919Z",
+  "tag": "CLOSEOUT_RT_AUDIT",
+  "password": "CloseoutAudit@123",
+  "hotelA": {
+    "slug": "grand-horizon",
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+  },
+  "hotelB": {
+    "slug": "dx-airport-hotel",
+    "id": "bf7638b8-04db-4051-94d1-0cf039827c00"
+  },
+  "departments": {
+    "fb": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+    "hk": "5e246726-faaf-48e4-a002-80aae4639dce"
+  },
+  "identities": [
+    {
+      "userId": "3241316c-7013-466f-aa09-e9200038e01d",
+      "email": "gm-a@closeout-audit.local",
+      "roleCode": "GENERAL_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "d01e46f0-67f7-479d-a0fb-820538c4f446",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "07e2198c-0b8c-454a-8961-2e1fe5e6193b",
+      "email": "storekeeper-a@closeout-audit.local",
+      "roleCode": "STOREKEEPER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "f6cb8110-83d0-42d6-bf21-503079b2fd93",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "b4888926-b46e-433e-9ca9-be5c4e4982b5",
+      "email": "finance-a@closeout-audit.local",
+      "roleCode": "FINANCE_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "82bfb6f4-cad3-45b8-afa5-4d23e117a57e",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "18a36658-008c-436f-8339-8657672b95a5",
+      "email": "cost-a@closeout-audit.local",
+      "roleCode": "COST_CONTROL",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "2b9afdb8-f138-4296-bbe9-b7a1e6eb4e99",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "email": "dept-mgr-fb@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "assignmentId": "70ff8c12-9072-465d-ae8a-f2aefa158c03",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "d51de010-246a-4729-9aa0-196986857380",
+      "email": "dept-mgr-hk@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "departmentId": "5e246726-faaf-48e4-a002-80aae4639dce",
+      "assignmentId": "0a8c08c3-b865-424d-aa55-8de70c70a8fc",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "7b0bcb14-8af7-45b4-94dd-1af4cebb1d50",
+      "email": "auditor-a@closeout-audit.local",
+      "roleCode": "AUDITOR",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "f1ae5540-6b30-43f9-9da8-2b8564188383",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "f61d8406-5343-4f67-9f77-84074ab7cdb8",
+      "email": "creator-fb@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "assignmentId": "8a9f4b84-fa3c-4fef-be9d-d18f8e5f48bd",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "8e4ceb28-ef33-41fc-ad20-b3c7b4b7c646",
+      "email": "org-mgr@closeout-audit.local",
+      "roleCode": "ORG_MANAGER",
+      "tenantId": "3f763a13-177d-44e7-81f5-5640a7e8ead5",
+      "assignmentId": "5f2370b0-acdb-4f2c-bcb9-6ecb965fba36",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "73f3a9b4-84cb-499a-add5-5f03de7e86ee",
+      "email": "super-op-a@closeout-audit.local",
+      "roleCode": "SUPER_ADMIN",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "ff1375da-2e7a-40e9-a8d4-c13b70d1466a",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "0e78918a-0fae-483c-b38d-30d956c0b4fe",
+      "email": "never-assigned@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": null,
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "1aab9f5e-4d58-4bf7-90f0-b2085549f8b9",
+      "email": "deleted-assign@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "assignmentId": "01038202-2cd7-4c17-83d0-1f954a452812",
+      "password": "CloseoutAudit@123",
+      "note": "ur assignments deleted"
+    },
+    {
+      "userId": "1192952d-f725-4727-bb9b-94f70772d29c",
+      "email": "wrong-property@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "d1ef5329-c4e3-487d-a12f-490f2c628d7b",
+      "password": "CloseoutAudit@123",
+      "note": "ur assignment property = Hotel B only"
+    },
+    {
+      "userId": "5df673e6-2ec2-4f9b-ae9f-6e9ba4a5938b",
+      "email": "no-assign@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "assignmentId": "08a2371e-b576-46b8-9e76-4734eb4f6125",
+      "password": "CloseoutAudit@123",
+      "note": "ur assignments deactivated"
+    },
+    {
+      "userId": "5d44b26d-317d-4b62-bd69-f1fb0f9cd9a9",
+      "email": "inactive-assign@closeout-audit.local",
+      "roleCode": "DEPT_MANAGER",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "assignmentId": "7dde60ff-601f-45c6-88d0-6bf775a8871b",
+      "password": "CloseoutAudit@123"
+    },
+    {
+      "userId": "3b4ae5f4-c0d5-4e74-9299-df8ac2e7d9c8",
+      "email": "finance-b@closeout-audit.local",
+      "roleCode": "FINANCE_MANAGER",
+      "tenantId": "bf7638b8-04db-4051-94d1-0cf039827c00",
+      "assignmentId": "9c6f6176-31b5-4eaf-bb6d-e12d8ec18079",
+      "password": "CloseoutAudit@123"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "validator": "validate_source_fidelity.py",
+  "validator_version": "gate-a.3",
+  "pdf_path": "c:\\Users\\amrsa\\Downloads\\New folder\\DX_OSE_CONSTITUTION_v2.0_FINAL.pdf",
+  "total_constitutional_rows_checked": 476,
+  "matched_within_section_span": 476,
+  "unmatched_rows": 0,
+  "unmatched_details": [],
+  "body_sourced_from_toc": [],
+  "reference_index_matched": 9,
+  "reference_index_total": 9,
+  "match_percentage": 100.0,
+  "all_matched": true
+}

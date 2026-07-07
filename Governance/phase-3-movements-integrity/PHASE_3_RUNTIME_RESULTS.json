@@ -1,0 +1,488 @@
+{
+  "executedAt": "2026-06-28T02:17:46.049Z",
+  "gateVersion": "phase3-movements-integrity-v2-reopen",
+  "browserVerification": {
+    "strictGate": "phase3-browser-strict-v1",
+    "pass": true,
+    "executedAt": "2026-06-28T02:17:46.049Z",
+    "evidenceFile": "PHASE_3_BROWSER_RESULTS.json",
+    "docId": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+    "documentNo": "ADJ-2026-00108",
+    "ledgerReferenceId": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+    "movementType": "ADJUSTMENT",
+    "qtyIn": 3,
+    "unitCost": 5,
+    "totalValue": 15
+  },
+  "tenant": {
+    "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+    "slug": "closeout-audit-hotel-disposable"
+  },
+  "apiBase": "http://127.0.0.1:4000/api",
+  "httpActiveTypes": [
+    "ADJUSTMENT",
+    "BREAKAGE",
+    "LOST"
+  ],
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "ADJUSTMENT create (authorized)",
+      "pass": true,
+      "http": 201,
+      "docId": "094d717d-b569-48cf-90c3-19d8dafa1e15",
+      "statusAfter": "DRAFT"
+    },
+    {
+      "id": 2,
+      "name": "ADJUSTMENT draft — no ledger/stock effects",
+      "pass": true,
+      "statusAfter": "DRAFT",
+      "ledgerDelta": 0,
+      "stockBefore": 100,
+      "stockAfterCreate": 100
+    },
+    {
+      "id": 3,
+      "name": "ADJUSTMENT post — POSTED, ledger + stock exact once",
+      "pass": true,
+      "http": 200,
+      "statusAfter": "POSTED",
+      "ledgerRows": 1,
+      "stockBefore": 100,
+      "stockAfterPost": 104,
+      "expectedStock": 104,
+      "auditPostCount": 1
+    },
+    {
+      "id": 4,
+      "name": "ADJUSTMENT create denied — no active assignment",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "id": 5,
+      "name": "ADJUSTMENT duplicate post denied",
+      "pass": true,
+      "http": 400,
+      "statusAfter": "POSTED"
+    },
+    {
+      "id": 6,
+      "name": "ADJUSTMENT stale concurrency denied",
+      "pass": true,
+      "http": 400
+    },
+    {
+      "id": 20,
+      "name": "ADJUSTMENT create denied — inactive assignment",
+      "pass": true,
+      "http": 403,
+      "unchanged": true
+    },
+    {
+      "id": 21,
+      "name": "ADJUSTMENT create denied — deleted assignment",
+      "pass": true,
+      "http": 403,
+      "unchanged": true
+    },
+    {
+      "id": 22,
+      "name": "ADJUSTMENT create denied — wrong-property assignment",
+      "pass": true,
+      "http": 403,
+      "unchanged": true
+    },
+    {
+      "id": 23,
+      "name": "ADJUSTMENT create denied — out-of-scope location",
+      "pass": true,
+      "http": 403,
+      "unchanged": true
+    },
+    {
+      "id": 24,
+      "name": "ADJUSTMENT create denied — cross-tenant item",
+      "pass": true,
+      "http": 404,
+      "unchanged": true
+    },
+    {
+      "id": 25,
+      "name": "ADJUSTMENT create denied — stale JWT",
+      "pass": true,
+      "http": 401,
+      "unchanged": true
+    },
+    {
+      "id": 26,
+      "name": "ADJUSTMENT create denied — missing permission",
+      "pass": true,
+      "http": 403,
+      "unchanged": true
+    },
+    {
+      "id": 27,
+      "name": "ADJUSTMENT post denied — foreign document",
+      "pass": true,
+      "http": 404,
+      "unchanged": true
+    },
+    {
+      "id": 28,
+      "name": "ADJUSTMENT update denied — POSTED document",
+      "pass": true,
+      "http": 423,
+      "unchanged": true
+    },
+    {
+      "id": 29,
+      "name": "ADJUSTMENT create denied — invalid movement type",
+      "pass": true,
+      "http": 422,
+      "unchanged": true
+    },
+    {
+      "id": 30,
+      "name": "ADJUSTMENT create denied — zero quantity",
+      "pass": true,
+      "http": 422,
+      "unchanged": true
+    },
+    {
+      "id": 31,
+      "name": "ADJUSTMENT create denied — inactive item",
+      "pass": true,
+      "http": 422,
+      "unchanged": true
+    },
+    {
+      "id": 32,
+      "name": "ADJUSTMENT create denied — inactive location",
+      "pass": true,
+      "http": 422,
+      "unchanged": true
+    },
+    {
+      "id": 33,
+      "name": "ADJUSTMENT update denied — stale concurrency",
+      "pass": true,
+      "http": 409,
+      "unchanged": true
+    },
+    {
+      "id": 7,
+      "name": "Governed BREAKAGE register post blocked",
+      "pass": true,
+      "http": 403,
+      "statusAfter": "DRAFT",
+      "ledgerDelta": 0
+    },
+    {
+      "id": 8,
+      "name": "BREAKAGE draft create — no ledger/stock",
+      "pass": true,
+      "http": 201,
+      "docId": "7b339a55-ed3b-45e9-bb94-0a37a154d828",
+      "statusAfter": "DRAFT"
+    },
+    {
+      "id": 9,
+      "name": "BREAKAGE workflow post — APPROVED + effects",
+      "pass": true,
+      "chainOk": true,
+      "statusAfter": "APPROVED",
+      "ledgerRows": 1,
+      "stockBefore": 104,
+      "stockAfter": 103,
+      "expectedStock": 103,
+      "chainDetail": null
+    },
+    {
+      "id": 11,
+      "name": "LOST create starts DEPT_APPROVED — no post effects yet",
+      "pass": true,
+      "http": 201,
+      "statusAfter": "DEPT_APPROVED"
+    },
+    {
+      "id": 10,
+      "name": "LOST workflow post — APPROVED + effects",
+      "pass": true,
+      "chainOk": true,
+      "statusAfter": "APPROVED",
+      "stockBefore": 103,
+      "stockAfter": 102,
+      "chainDetail": null
+    },
+    {
+      "id": 40,
+      "name": "BREAKAGE create denied — no assignment",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "id": 41,
+      "name": "BREAKAGE submit denied — no assignment",
+      "pass": true,
+      "http": 403,
+      "statusAfter": "DRAFT"
+    },
+    {
+      "id": 42,
+      "name": "LOST create denied — no assignment",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "id": 12,
+      "name": "Register list — assignment scope exact IDs/total",
+      "pass": true,
+      "http": 200,
+      "total": 1,
+      "visibleIds": [
+        "282b93b1-fe12-4158-afaa-6aa3a1f986a4"
+      ],
+      "expectedIds": [
+        "282b93b1-fe12-4158-afaa-6aa3a1f986a4"
+      ],
+      "outDeptId": "04669935-91c7-4265-9e23-d9fb09cc4813",
+      "wrongPropertyId": "cdf4a41d-92cb-4246-8dfc-692d20f366ee"
+    },
+    {
+      "id": 13,
+      "name": "Register detail — cross-tenant seeded 404",
+      "pass": true,
+      "http": 404,
+      "foreignDocId": "cdf4a41d-92cb-4246-8dfc-692d20f366ee"
+    },
+    {
+      "id": 14,
+      "name": "Register detail — out-of-dept 403",
+      "pass": true,
+      "http": 403,
+      "outDeptDocId": "04669935-91c7-4265-9e23-d9fb09cc4813"
+    },
+    {
+      "id": 15,
+      "name": "Register detail — in-scope 200",
+      "pass": true,
+      "http": 200,
+      "inScopeDocId": "282b93b1-fe12-4158-afaa-6aa3a1f986a4"
+    },
+    {
+      "id": 16,
+      "name": "Concurrent duplicate post — one success only",
+      "pass": true,
+      "successCount": 1,
+      "http1": 200,
+      "http2": 409,
+      "ledgerRows": 1,
+      "stockBefore": 102,
+      "stockAfter": 104
+    },
+    {
+      "id": 50,
+      "name": "Internal types blocked from /api/movements create",
+      "pass": true,
+      "results": [
+        {
+          "movementType": "BREAKAGE",
+          "http": 422,
+          "blocked": true
+        },
+        {
+          "movementType": "LOST",
+          "http": 422,
+          "blocked": true
+        },
+        {
+          "movementType": "RECEIVE",
+          "http": 422,
+          "blocked": true
+        },
+        {
+          "movementType": "ISSUE",
+          "http": 422,
+          "blocked": true
+        },
+        {
+          "movementType": "TRANSFER_OUT",
+          "http": 422,
+          "blocked": true
+        },
+        {
+          "movementType": "COUNT_ADJUSTMENT",
+          "http": 422,
+          "blocked": true
+        },
+        {
+          "movementType": "OPENING_BALANCE",
+          "http": 422,
+          "blocked": true
+        }
+      ]
+    },
+    {
+      "id": 51,
+      "name": "Internal movement types — owning gate files documented",
+      "pass": true,
+      "internalGateMap": [
+        {
+          "type": "OPENING_BALANCE",
+          "gate": "src/services/posting.service.test.js"
+        },
+        {
+          "type": "RECEIVE",
+          "gate": "scripts/movement-direct-adjustment.guard.test.js"
+        },
+        {
+          "type": "ISSUE",
+          "gate": "scripts/movement-direct-adjustment.guard.test.js"
+        },
+        {
+          "type": "TRANSFER_OUT",
+          "gate": "scripts/movement-direct-adjustment.guard.test.js"
+        },
+        {
+          "type": "COUNT_ADJUSTMENT",
+          "gate": "scripts/smoke-movement-register-governed.js"
+        },
+        {
+          "type": "BREAKAGE",
+          "gate": "scripts/lost-approval-workflow.test.js"
+        },
+        {
+          "type": "LOST",
+          "gate": "scripts/lost-approval-workflow.test.js"
+        }
+      ]
+    }
+  ],
+  "regression": [
+    {
+      "name": "Stock Balances authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Inventory History/Ledger authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "GRN authorized list + detail",
+      "pass": true,
+      "listHttp": 200,
+      "detailHttp": 200,
+      "grnId": "51e9616e-4109-4261-a0d1-80d396406ca2"
+    },
+    {
+      "name": "Transfer authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Breakage authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Lost Items authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Inventory Count authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Get Pass authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Tenant switch permission refresh",
+      "pass": true,
+      "http": 200,
+      "hasNewToken": true
+    },
+    {
+      "name": "Movement register authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Backend movement-direct-adjustment.guard.test.js",
+      "pass": true
+    },
+    {
+      "name": "Backend movement-direct-adjustment-origin.test.js",
+      "pass": true
+    },
+    {
+      "name": "Backend movement-adjustment-rbac.test.js",
+      "pass": true
+    },
+    {
+      "name": "Backend movementApprovalAction.guard.test.js",
+      "pass": true
+    },
+    {
+      "name": "Backend movement-submit-current-step.test.js",
+      "pass": true
+    },
+    {
+      "name": "Backend lost-approval-workflow.test.js",
+      "pass": true
+    },
+    {
+      "name": "Backend posting.service.test.js",
+      "pass": true
+    },
+    {
+      "name": "Backend smoke-movement-register-governed.js",
+      "pass": true
+    },
+    {
+      "name": "Frontend Movement Register browser path",
+      "pass": true,
+      "gateVersion": "phase3-browser-strict-v1",
+      "executedAt": "2026-06-28T02:17:46.049Z",
+      "docId": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+      "documentNo": "ADJ-2026-00108",
+      "postHttp": 200,
+      "draftAndPosted": true,
+      "ledgerExactMatch": true,
+      "evidenceFile": "PHASE_3_BROWSER_RESULTS.json"
+    },
+    {
+      "name": "Frontend development build",
+      "pass": true
+    }
+  ],
+  "totals": {
+    "runtimePass": 35,
+    "runtimeFail": 0,
+    "regressionPass": 20,
+    "regressionFail": 0
+  },
+  "gateChecklist": {
+    "ADJUSTMENT authorized create/post": true,
+    "ADJUSTMENT assignment/scope negatives": true,
+    "Governed register post blocked": true,
+    "BREAKAGE lifecycle + posting": true,
+    "LOST lifecycle + posting": true,
+    "Register read scope exact IDs": true,
+    "Concurrent post safety": true,
+    "Breakage/Lost assignment enforcement": true,
+    "Internal types register blocked": true,
+    "Atomicity rollback tests": true,
+    "Backend relevant tests": true,
+    "Frontend build + browser": true,
+    "Focused module regression": true
+  },
+  "phaseClosed": true
+}

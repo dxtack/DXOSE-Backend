@@ -1,0 +1,31 @@
+{
+  "executedAt": "2026-06-27T00:13:53.000Z",
+  "specFiles": [
+    "OSE-Frontend/src/app/app.spec.ts",
+    "OSE-Frontend/src/app/core/directives/has-permission.directive.spec.ts",
+    "OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component.spec.ts",
+    "OSE-Frontend/src/app/features/grn/utils/grn-detail-timeline.util.spec.ts",
+    "OSE-Frontend/src/app/features/get-pass/utils/get-pass-return-validation.spec.ts",
+    "OSE-Frontend/src/app/features/get-pass/utils/get-pass-list-display.util.spec.ts",
+    "OSE-Frontend/src/app/features/get-pass/utils/get-pass-line-outcome.util.spec.ts",
+    "OSE-Frontend/src/app/shared/components/returns-workflow-timeline/returns-workflow-timeline.component.spec.ts",
+    "OSE-Frontend/src/app/shared/utils/timeline-entry-render.util.spec.ts"
+  ],
+  "playwrightConfig": "none in repo",
+  "vitestConfig": "none explicit — vitest via Angular 21",
+  "karmaConfig": "none",
+  "packageTestScripts": {
+    "test": "ng test (requires @vitest/browser-playwright — missing)",
+    "build": "ng build"
+  },
+  "vitestDirectRun": {
+    "command": "node node_modules/vitest/vitest.mjs run (4 util spec files)",
+    "exit": 0,
+    "filesPassed": 4,
+    "testsPassed": 24
+  },
+  "ngTestHeadless": {
+    "exit": 1,
+    "reason": "Node v25 + missing @vitest/browser-playwright for --browsers=ChromeHeadless"
+  }
+}

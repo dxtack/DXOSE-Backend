@@ -1,0 +1,818 @@
+{
+  "executedAt": "2026-06-27T00:54:31.817Z",
+  "count": 6,
+  "ids": [
+    {
+      "requirementId": "C02-2.7-003",
+      "requirement": "Submit shall always represent entering the workflow, whether for the first time or after Return.",
+      "reason": "Runtime probe FAIL linked heuristically",
+      "evidence": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-CC",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-FIN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-FINANCE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-POST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SEND-BACK",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-REJECT-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-DUPLICATE-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-WRONG-ROLE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C04-4.2-001",
+      "requirement": "Evidence Package does not require a separate permission in the current DX OSE release.",
+      "reason": "Runtime probe FAIL linked heuristically",
+      "evidence": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-CC",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-FIN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-FINANCE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-POST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SEND-BACK",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-REJECT-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-DUPLICATE-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-WRONG-ROLE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-APPROVE-CC",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-APPROVE-FINANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-DUP-APPROVE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.8-002",
+      "requirement": "Restored documents must be revalidated before continue or submit.",
+      "reason": "Runtime probe FAIL linked heuristically",
+      "evidence": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-CC",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-FIN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-FINANCE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-POST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SEND-BACK",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-REJECT-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-DUPLICATE-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-WRONG-ROLE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.10-006",
+      "requirement": "Successful Save Draft or Submit shall return the document to a clean state.",
+      "reason": "Runtime probe FAIL linked heuristically",
+      "evidence": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-CC",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-FIN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-FINANCE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-POST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SEND-BACK",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-REJECT-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-DUPLICATE-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-WRONG-ROLE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.5-001",
+      "requirement": "After Submit, the document shall be read-only except via Return workflow.",
+      "reason": "Runtime probe FAIL linked heuristically",
+      "evidence": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-CC",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-FIN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-FINANCE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-POST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SEND-BACK",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-REJECT-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-DUPLICATE-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-WRONG-ROLE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-002",
+      "requirement": "Submit must not execute twice on the same version without detection.",
+      "reason": "Runtime probe FAIL linked heuristically",
+      "evidence": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-create-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_dept_cc_step-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-CC",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-DEPT",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-FIN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-APPROVE-FINANCE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-POST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-SEND-BACK",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-REJECT-CC",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-DUPLICATE-SUBMIT",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-WRONG-ROLE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    }
+  ],
+  "scenarioAnchors": [
+    {
+      "scenarioId": "GP-submit-NO_ASSIGN-disposable",
+      "evidence": "GET_PASS_PERMISSION_MATRIX.json — HTTP 200 submit without assignment"
+    },
+    {
+      "scenarioId": "CROSS_TENANT_GP_500",
+      "evidence": "GET_PASS_CROSS_TENANT_ACTION_MATRIX.json — HTTP 500 on foreign ID"
+    },
+    {
+      "scenarioId": "NO_ASSIGN_SUBMIT",
+      "evidence": "NO_ASSIGN_CROSS_MODULE_MATRIX.json — cross-module mutations without assignment"
+    }
+  ]
+}

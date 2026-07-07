@@ -1,0 +1,3044 @@
+{
+  "generatedAt": "2026-07-02T20:41:05.579Z",
+  "script": "classify-get-pass-approval-backfill.js",
+  "readOnly": true,
+  "database": {
+    "present": true,
+    "host": "127.0.0.1",
+    "port": "5433",
+    "database": "ose_inventory",
+    "credentialsMasked": true,
+    "environment": "dev/test"
+  },
+  "countsBefore": {
+    "openWithoutApprovalRequest": 73,
+    "openWithApprovalRequest": 0,
+    "openBlocked": 0
+  },
+  "summary": {
+    "totalOpen": 73,
+    "alreadyLinked": 0,
+    "deterministic": 73,
+    "blocked": 0,
+    "byClassification": {
+      "DETERMINISTIC_BACKFILL": 73
+    }
+  },
+  "records": [
+    {
+      "id": "2439c89f-e1f7-4fc4-baff-713dcffa4fd8",
+      "passNo": "GP-2026-00001",
+      "tenantId": "fd05d2fc-a32b-4617-8ccb-d08c869a2252",
+      "tenantSlug": "hotel-test1",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": null,
+      "createdBy": "5790cb72-817b-4e66-a977-7db6bded0b07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 4,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "97d54af8-94b7-489e-9dcf-91008ec8f11a",
+      "passNo": "GP-2026-00001",
+      "tenantId": "5676fa76-bd8d-4e18-820e-a915198d3ec3",
+      "tenantSlug": "voco",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": null,
+      "createdBy": "b07b379b-18ba-4a20-bb12-aa592c5de0d9",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "56b203ea-b7be-42c5-84d0-fe611def7db8",
+      "passNo": "GP-2026-00001",
+      "tenantId": "13a21ce5-2c05-4d14-9c2d-6ec796046b81",
+      "tenantSlug": "dx-marina-hotel",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "92720689-a90f-46f8-b21e-ee80072f66a1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "ef232e58-e294-4f25-ba84-52dcec8d5faa",
+      "passNo": "GP-2026-00002",
+      "tenantId": "13a21ce5-2c05-4d14-9c2d-6ec796046b81",
+      "tenantSlug": "dx-marina-hotel",
+      "status": "PENDING_GM",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "92720689-a90f-46f8-b21e-ee80072f66a1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 4,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "8c103c11-423b-4cd3-87e1-4459673c4557",
+      "passNo": "GP-2026-00002",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": null,
+      "createdBy": "119786df-ef21-40df-a585-319e6ea474da",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "457c3102-129e-4fac-b599-ec6a70e51137",
+      "passNo": "GP-2026-00024",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "119786df-ef21-40df-a585-319e6ea474da",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "8f0191d2-92ac-4438-b4ac-91d91c2ec2c6",
+      "passNo": "GP-2026-00025",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "119786df-ef21-40df-a585-319e6ea474da",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "2e5ce871-9bd0-41c1-817b-d2e529185772",
+      "passNo": "GP-2026-00107",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "0dd749af-f0b7-437e-9e85-1cdc85edd941",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "965c337c-397a-40f7-bd7d-3223c6d39e81",
+      "passNo": "GP-2026-00108",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "24187620-15b8-46d3-88a7-c2bdeab15f8a",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "3834132b-1963-45f5-90d3-4123de70cacb",
+      "passNo": "GP-2026-00109",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "d9db9775-3247-4287-b501-a82d0e60508f",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "058476bd-d125-4754-84aa-36758af4fd72",
+      "passNo": "GP-2026-00111",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "6a542170-1b24-4264-b467-3bdbf7e50b3a",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "251e54c1-8148-4cbd-a408-1f70bdde1aee",
+      "passNo": "GP-2026-00112",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "c2419b5b-2baa-488c-a846-d9c9f817a5e1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "8eea5da9-3b2b-44be-9c4e-ce3564229e8b",
+      "passNo": "GP-2026-00113",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "43d91811-9cf7-4fc4-9918-2e0a04e33e8d",
+      "passNo": "GP-2026-00114",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "6a542170-1b24-4264-b467-3bdbf7e50b3a",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "6cd9a8cb-6e17-4daf-a138-05aecd643821",
+      "passNo": "GP-2026-00115",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "6a542170-1b24-4264-b467-3bdbf7e50b3a",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "0a6c28f7-9a08-4c71-a17c-b05b1cbd281d",
+      "passNo": "GP-2026-00118",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "dd3a8e23-c883-4489-84c6-b488d6d0e2f8",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "9c970ee3-ed89-425a-bdaa-e7d27698a726",
+      "passNo": "GP-2026-00119",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "978c9855-af5f-4da7-b5ab-40b1217674df",
+      "passNo": "GP-2026-00124",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "dd3a8e23-c883-4489-84c6-b488d6d0e2f8",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "727207d6-89f0-49c5-8cc5-71e7e4b9a068",
+      "passNo": "GP-2026-00125",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "6c62c726-d5cf-436f-a001-ae8327ff1fc5",
+      "passNo": "GP-2026-00130",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "dd3a8e23-c883-4489-84c6-b488d6d0e2f8",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "0bc67742-2a09-451d-8552-e52335df0129",
+      "passNo": "GP-2026-00131",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "4a47709f-5282-476e-ae00-77ef2d23e969",
+      "passNo": "GP-2026-00133",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "dd3a8e23-c883-4489-84c6-b488d6d0e2f8",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "c5e2e624-ed4b-4020-a4a4-63d72ba67b07",
+      "passNo": "GP-2026-00134",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "12e91c8f-4a75-4ba4-a50a-2ad45c3a83e2",
+      "passNo": "GP-2026-00135",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "c231bd87-a32f-49af-889a-2c3a75460278",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "0b9bc161-d6a1-4e5b-9408-7c407b69b894",
+      "passNo": "GP-2026-00136",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_FINANCE",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b76c8d80-0b2f-4e3e-9f9e-962e738e1ad3",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 3,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "fca2d51e-a082-498f-b833-84db3fb1195e",
+      "passNo": "GP-2026-00141",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "dd3a8e23-c883-4489-84c6-b488d6d0e2f8",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "65c5e122-33d1-4331-bebb-ebdbe0cde012",
+      "passNo": "GP-2026-00142",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "08deeb63-51ec-45b7-be7a-34eb60b38052",
+      "passNo": "GP-2026-00145",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "95d586c7-6063-44da-8b40-370ce64a8ca1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "0f2208ab-4b42-454b-940d-f6c1ff19ef93",
+      "passNo": "GP-2026-00146",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "14893994-e977-4fb8-8c34-7adf473ea828",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "f2cc9a89-93d5-4848-b794-6bb7d28ac1ef",
+      "passNo": "GP-2026-00147",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "d235fe47-3652-47c8-ad31-b47ba8558b28",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "d2a91fc1-7823-4274-a1e6-064fedb88ea9",
+      "passNo": "GP-2026-00152",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "dd3a8e23-c883-4489-84c6-b488d6d0e2f8",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "824e9dc1-28cb-4dbd-875d-3d4bca7edc98",
+      "passNo": "GP-2026-00153",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "8c05f0c4-fefd-4c94-9e49-3a654b15f399",
+      "passNo": "GP-2026-00156",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "95d586c7-6063-44da-8b40-370ce64a8ca1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "09f424e7-fc6a-48ac-a439-4eb7cf811883",
+      "passNo": "GP-2026-00157",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "14893994-e977-4fb8-8c34-7adf473ea828",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "ceee0e8a-705f-4e28-b909-d2741947158b",
+      "passNo": "GP-2026-00163",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "dd3a8e23-c883-4489-84c6-b488d6d0e2f8",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "74a56e19-ad7f-4c3a-9a19-cb2ff1e3588c",
+      "passNo": "GP-2026-00164",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "b7c842bc-ecc1-48e3-a52d-94dec3f83f82",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "2f795570-e1a2-4268-a510-54a13794bfa3",
+      "passNo": "GP-2026-00165",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "c231bd87-a32f-49af-889a-2c3a75460278",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "c0e58134-405b-42ee-8337-1d029ee2d353",
+      "passNo": "GP-2026-00167",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "95d586c7-6063-44da-8b40-370ce64a8ca1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "c5807868-5086-4ca0-8d66-15052f306e0f",
+      "passNo": "GP-2026-00168",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "14893994-e977-4fb8-8c34-7adf473ea828",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "cf4a52c2-9602-47c7-9ddf-667f7852e0bc",
+      "passNo": "GP-2026-00173",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "4c6b84ab-0f83-481d-9397-d9985a70f241",
+      "passNo": "GP-2026-00175",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "b36590aa-7ab3-4a2f-b52d-7d090f20d048",
+      "passNo": "GP-2026-00177",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "db62c579-4cb5-4e77-9744-13fa52f9bb30",
+      "passNo": "GP-2026-00178",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "29f6f11c-4816-4aa3-bac4-9b8272ce2b1e",
+      "passNo": "GP-2026-00180",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "cdf1085d-f1fb-42de-a96e-e24d40ea59fe",
+      "passNo": "GP-2026-00181",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "446b0245-0c5a-46a2-85c7-961ea4412ac9",
+      "passNo": "GP-2026-00183",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "b27f0f90-0429-49e9-8beb-e9486097b0a5",
+      "passNo": "GP-2026-00184",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "a99c76b5-f52e-44f4-9bae-aa5f0956706a",
+      "passNo": "GP-2026-00186",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "4d16b86b-1f34-49b2-a87b-e5e54627c4e4",
+      "passNo": "GP-2026-00187",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "e44d870a-86ae-4cf4-aec8-0becf84d7606",
+      "passNo": "GP-2026-00189",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "219c2d3a-10fb-4674-a5fe-f296ed7a6276",
+      "passNo": "GP-2026-00190",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "dd79ace4-a928-42d9-83db-5b96a7e63e10",
+      "passNo": "GP-2026-00192",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "6e25449a-0b41-4e72-aa15-4437acfd6ebd",
+      "passNo": "GP-2026-00193",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "341407d4-294a-449b-aa25-ea53c56a6fe1",
+      "passNo": "GP-2026-00195",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "acedb7a5-7d81-46c8-b437-4fdcdf46c4fc",
+      "passNo": "GP-2026-00196",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "e67e264a-0b71-49a4-b390-1700e1544b00",
+      "passNo": "GP-2026-00198",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "34677821-a9c0-41fe-b3e5-ab5f489d0437",
+      "passNo": "GP-2026-00199",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "01c48848-2a85-4ef1-8229-188885d1193c",
+      "passNo": "GP-2026-00201",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "5606ee33-dd2e-4161-8c45-e14eeb8d924b",
+      "passNo": "GP-2026-00202",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "a3f92237-38df-450a-9fee-7eb67d7e05cc",
+      "passNo": "GP-2026-00204",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_SECURITY",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "f256dd77-b9cc-4efd-84df-f7ba9503c530",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 5,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "74576c39-1fc6-4fe3-ab3c-d1e16780fffc",
+      "passNo": "GP-2026-00330",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "1c884e1f-07a8-4a68-a9be-b304075f9433",
+      "passNo": "GP-2026-00331",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "bf6f695d-6c85-4757-b16a-cc6bdf8483e5",
+      "passNo": "GP-2026-00332",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "9cbf5e01-aa30-4649-8f06-4dc8187b10e5",
+      "passNo": "GP-2026-00333",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "afa88263-75e4-4c6e-80a8-5a4e8074724d",
+      "passNo": "GP-2026-00334",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "93ad08e5-c544-4d44-9ea6-9d0c0d1891f3",
+      "passNo": "GP-2026-00335",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "2ef2d802-d05d-4691-83f0-1424621f8b40",
+      "passNo": "GP-2026-00336",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "2a8158b1-4825-489f-9297-86752c519a62",
+      "passNo": "GP-2026-00337",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "79ef20db-4b72-4eac-9451-158083fdb703",
+      "passNo": "GP-2026-00338",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "b97380fd-5323-44a5-8388-fcf209e46d20",
+      "passNo": "GP-2026-00339",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "8b216f5b-01ea-416a-972a-50539362a89b",
+      "passNo": "GP-2026-00340",
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "status": "PENDING_COST_CONTROL",
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 2,
+      "projectedTotalSteps": 5,
+      "projectedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "APPROVED",
+          "hasStamp": true
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 5,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "af94b17b-acf6-4c79-a867-5be887b6dc04",
+      "passNo": "P1G-PIPE-IN-1782605213999",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": null,
+      "createdBy": "ea9d4ea2-b4e9-4c89-be5e-36591a0b09c1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    },
+    {
+      "id": "25d538e6-c287-4d78-af5a-4119d65b88f0",
+      "passNo": "P1G-PIPE-OUT-1782605213999",
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "status": "PENDING_DEPT",
+      "accWorkflowVersionId": null,
+      "createdBy": "ea9d4ea2-b4e9-4c89-be5e-36591a0b09c1",
+      "classification": "DETERMINISTIC_BACKFILL",
+      "projectedCurrentStep": 1,
+      "projectedTotalSteps": 4,
+      "projectedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "projectedSteps": [
+        {
+          "stepNumber": 1,
+          "roleCode": "DEPT_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 2,
+          "roleCode": "COST_CONTROL",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "status": "PENDING",
+          "hasStamp": false
+        },
+        {
+          "stepNumber": 4,
+          "roleCode": "SECURITY",
+          "status": "PENDING",
+          "hasStamp": false
+        }
+      ]
+    }
+  ]
+}

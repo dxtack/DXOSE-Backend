@@ -1,0 +1,24 @@
+{
+  "phase": "after",
+  "executedAt": "2026-06-27T01:41:11.366Z",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "apiRows": 11,
+  "apiTotal": 11,
+  "domRows": 11,
+  "footerText": "1-11 of 11 items",
+  "bodyHeight": 604,
+  "bodyClientHeight": 604,
+  "tbodyHeight": 636,
+  "bodyScrollHeight": 636,
+  "deadSpaceInBodyPx": 0,
+  "gapLastRowToFooterPx": -32,
+  "scrollY": "auto",
+  "bodyFlex": "0 1 auto",
+  "bodyInlineMaxHeight": "min(638px, var(--registry-table-body-scroll-h))",
+  "outerCardHeight": 698,
+  "outerScrollHeight": 647,
+  "screenshot": "C:\\DX OS&E\\Governance\\closeout-runtime-audit\\items-table-fix\\item-master-after.png"
+}

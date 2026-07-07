@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-06-28T11:07:00.000Z",
+  "phase": 4,
+  "verificationReopen": true,
+  "files": [
+    { "path": "OSE-backend/src/platform/lifecyclePresentation.service.js", "change": "Send Back user-facing state; editability guard (Phase 4 baseline)" },
+    { "path": "OSE-backend/src/platform/timeline/getPassTimeline.builder.js", "change": "Pinned ACC workflow steps; Send Back / Resubmit / RETURN_PROCESSED lifecycle" },
+    { "path": "OSE-backend/src/platform/documentTimeline.service.js", "change": "Constitution timeline per module; accWorkflowVersionId for Get Pass" },
+    { "path": "OSE-Frontend/src/app/shared/utils/timeline-entry-i18n.util.ts", "change": "COUNT_SUBMITTED/RETURN_PROCESSED/SECURITY_OUT badge keys; lifecycle badges" },
+    { "path": "OSE-Frontend/src/app/features/inventory-count/inventory-count-detail/inventory-count-detail.component.html", "change": "Workflow Timeline h2 only; remove WORKFLOW HISTORY eyebrow" },
+    { "path": "OSE-Frontend/public/i18n/en.json", "change": "Workflow Timeline IC title; TIMELINE.STATUS RETURNED/CHECKED_OUT" },
+    { "path": "Governance/phase-4-workflow-timeline/phase-4-timeline-fixture-seed.cjs", "change": "Deterministic fixtures for all mandatory lifecycle cases" },
+    { "path": "Governance/phase-4-workflow-timeline/phase-4-timeline-assertions.lib.cjs", "change": "Normalized timeline assertions; no skipped-pass helpers" },
+    { "path": "Governance/phase-4-workflow-timeline/phase-4-workflow-timeline-gate.cjs", "change": "Strict runtime gate — zero skipped passes; exact normalized order" },
+    { "path": "Governance/phase-4-workflow-timeline/phase-4-workflow-timeline-browser.cjs", "change": "Strict browser gate — exact title, hasBy&&!hasActedBy, DOM role counts" },
+    { "path": "Governance/phase-4-workflow-timeline/PHASE_4_TIMELINE_FIXTURES.json", "change": "Seeded fixture IDs + normalized expected timelines" }
+  ]
+}

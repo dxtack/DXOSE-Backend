@@ -1,0 +1,295 @@
+{
+  "generatedAt": "2026-06-28T11:02:59.104Z",
+  "phase": "phase-4-workflow-timeline",
+  "runtimePass": 36,
+  "runtimeFail": 0,
+  "regPass": 5,
+  "regFail": 0,
+  "skippedCount": 0,
+  "phaseClosed": true,
+  "scenarios": [
+    {
+      "id": "P4-LC-01",
+      "name": "Send Back GRN maps to Sent Back not Returned",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-LC-02",
+      "name": "Send Back Get Pass maps to Sent Back not Returned",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-LC-03",
+      "name": "Get Pass physical RETURNED maps to Closed not Sent Back",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-LC-04",
+      "name": "Sent Back is editable user state",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-LC-05",
+      "name": "Posted GRN remains Posted",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-01",
+      "name": "Get Pass v4 ACC chain excludes GM step",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-02",
+      "name": "Get Pass v4 timeline has no GM approval step",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-03",
+      "name": "Historical Get Pass v3 timeline retains GM step",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-04",
+      "name": "Get Pass Send Back lifecycle distinct from RETURN_PROCESSED",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-05",
+      "name": "Resubmitted lifecycle event present",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-06",
+      "name": "Original submit preserved with resubmit",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-07",
+      "name": "Reject terminal — no pending future steps",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-GP-08",
+      "name": "Reject has exactly one REJECT lifecycle",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-01",
+      "name": "Missing actor does not yield undefined in builder",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-02",
+      "name": "Lifecycle SEND_BACK displayTitleKey is i18n not raw",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-03",
+      "name": "Posted GRN not Sent Back",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-04",
+      "name": "Breakage void maps to Void",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-05",
+      "name": "Transfer posted label",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-06",
+      "name": "IC cancelled maps Void",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-07",
+      "name": "Editable Returned physical state not conflated",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-NEG-08",
+      "name": "Timeline entries sortable by globalOrder",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-SEED",
+      "name": "Deterministic timeline fixtures seeded",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-FIXTURES",
+      "name": "PHASE_4_TIMELINE_FIXTURES.json loaded",
+      "pass": true,
+      "skipped": false,
+      "modules": [
+        "grn",
+        "transfer",
+        "breakage",
+        "getPassSendBackResubmit",
+        "getPassPhysicalReturn",
+        "getPassV3Gm",
+        "inventoryCount"
+      ]
+    },
+    {
+      "id": "P4-API-00",
+      "name": "Backend API reachable",
+      "pass": true,
+      "skipped": false,
+      "status": 200
+    },
+    {
+      "id": "P4-API-GRN",
+      "name": "GRN timeline exact normalized entries",
+      "pass": true,
+      "skipped": false,
+      "count": 3,
+      "issues": []
+    },
+    {
+      "id": "P4-API-TR",
+      "name": "Transfer timeline exact normalized entries",
+      "pass": true,
+      "skipped": false,
+      "count": 4,
+      "issues": []
+    },
+    {
+      "id": "P4-API-BRK",
+      "name": "Breakage timeline exact normalized entries",
+      "pass": true,
+      "skipped": false,
+      "count": 4,
+      "issues": []
+    },
+    {
+      "id": "P4-API-IC",
+      "name": "Inventory Count timeline exact normalized entries",
+      "pass": true,
+      "skipped": false,
+      "count": 5,
+      "issues": []
+    },
+    {
+      "id": "P4-API-IC-SEM",
+      "name": "Inventory Count no duplicate Submitted lifecycle",
+      "pass": true,
+      "skipped": false,
+      "submitCount": 1
+    },
+    {
+      "id": "P4-API-GP-SB",
+      "name": "Get Pass Sent Back exactly once with actor stage reason timestamp",
+      "pass": true,
+      "skipped": false,
+      "sendBack": {
+        "stageKey": "LIFECYCLE",
+        "reason": "PHASE4_TIMELINE_GATE send back for correction",
+        "actor": "Phase4 FINANCE_MANAGER",
+        "actedAt": "2026-06-28T11:02:20.259Z"
+      }
+    },
+    {
+      "id": "P4-API-GP-RS",
+      "name": "Get Pass Resubmitted once; original Submitted preserved; no Returned lifecycle",
+      "pass": true,
+      "skipped": false,
+      "resubmit": {
+        "lifecycleEventType": "RESUBMIT",
+        "actedAt": "2026-06-28T11:02:20.571Z"
+      }
+    },
+    {
+      "id": "P4-API-GP-SB-ORDER",
+      "name": "Get Pass send-back/resubmit normalized order",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-API-GP-RET",
+      "name": "Get Pass physical return SECURITY_OUT + Returned; no Sent Back/Resubmitted",
+      "pass": true,
+      "skipped": false,
+      "status": "RETURNED",
+      "issues": []
+    },
+    {
+      "id": "P4-API-GP-V3-GM",
+      "name": "Historical v3 GM Approved with actor timestamp; Security follows GM",
+      "pass": true,
+      "skipped": false,
+      "gmActor": "Phase4 GENERAL_MANAGER",
+      "gmAt": "2026-06-28T11:02:21.960Z",
+      "versionNumber": 3,
+      "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7"
+    },
+    {
+      "id": "P4-API-GP-V3-ORDER",
+      "name": "Historical v3 normalized timeline order",
+      "pass": true,
+      "skipped": false
+    },
+    {
+      "id": "P4-API-NEG-01",
+      "name": "Cross-tenant timeline inaccessible",
+      "pass": true,
+      "skipped": false
+    }
+  ],
+  "regression": [
+    {
+      "name": "grnTimeline.builder.test.js",
+      "pass": true
+    },
+    {
+      "name": "getPassTimeline.builder.test.js",
+      "pass": true
+    },
+    {
+      "name": "approvalTimeline.builder.test.js",
+      "pass": true
+    },
+    {
+      "name": "timelineEntry.test.js",
+      "pass": true
+    },
+    {
+      "name": "frontend-build",
+      "pass": true
+    }
+  ],
+  "fixtures": {
+    "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+    "grnId": "151c6d1b-3d7f-4b1d-8e90-7c56aad5cf70",
+    "transferId": "99b526da-8f49-4e9a-a449-7e92750121ef",
+    "breakageId": "e45147f1-dde8-4f44-a535-aaa6d3dcc044",
+    "getPassSendBackResubmitId": "5606ee33-dd2e-4161-8c45-e14eeb8d924b",
+    "getPassPhysicalReturnId": "1b58d002-468e-4f4c-b8d7-e2683ae2ee29",
+    "getPassV3GmId": "a3f92237-38df-450a-9fee-7eb67d7e05cc",
+    "inventoryCountId": "6413e77f-4206-4693-a093-e055a90cc896"
+  }
+}

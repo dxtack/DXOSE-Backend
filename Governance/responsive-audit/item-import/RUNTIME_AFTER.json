@@ -1,0 +1,1128 @@
+{
+  "phase": "after",
+  "generatedAt": "2026-07-03T17:17:56.276Z",
+  "viewports": [
+    {
+      "viewport": "1366x768",
+      "files": [
+        {
+          "rows": 50,
+          "renderMs": 332,
+          "filterErrorsMs": 199,
+          "errorRowsDom": 23,
+          "measure": {
+            "document": {
+              "clientWidth": 1366,
+              "scrollWidth": 1366,
+              "clientHeight": 768,
+              "scrollHeight": 768,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 274,
+                "y": 89,
+                "w": 1068,
+                "h": 647,
+                "top": 89,
+                "bottom": 736
+              },
+              "panel": {
+                "x": 274,
+                "y": 249,
+                "w": 1068,
+                "h": 475,
+                "top": 249,
+                "bottom": 724
+              },
+              "header": {
+                "x": 274,
+                "y": 89,
+                "w": 1068,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 274,
+                "y": 209,
+                "w": 1068,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 274,
+                "y": 253,
+                "w": 1068,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 275,
+                "y": 356,
+                "w": 1066,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 274,
+                "y": 622,
+                "w": 1068,
+                "h": 37,
+                "top": 622,
+                "bottom": 659
+              },
+              "tablePanel": {
+                "x": 274,
+                "y": 355,
+                "w": 1068,
+                "h": 255,
+                "top": 355,
+                "bottom": 610
+              },
+              "tableOuter": {
+                "x": 275,
+                "y": 413,
+                "w": 1066,
+                "h": 196,
+                "top": 413,
+                "bottom": 609
+              },
+              "tableHeader": {
+                "x": 275,
+                "y": 413,
+                "w": 1066,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 671,
+                "bottom": 724,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 157,
+              "scrollHeight": 3816,
+              "clientWidth": 1066,
+              "scrollWidth": 1066,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 4268,
+            "footerOverlapsTable": false
+          }
+        },
+        {
+          "rows": 200,
+          "renderMs": 252,
+          "filterErrorsMs": 168,
+          "errorRowsDom": 50,
+          "measure": {
+            "document": {
+              "clientWidth": 1366,
+              "scrollWidth": 1366,
+              "clientHeight": 768,
+              "scrollHeight": 768,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 274,
+                "y": 89,
+                "w": 1068,
+                "h": 647,
+                "top": 89,
+                "bottom": 736
+              },
+              "panel": {
+                "x": 274,
+                "y": 249,
+                "w": 1068,
+                "h": 475,
+                "top": 249,
+                "bottom": 724
+              },
+              "header": {
+                "x": 274,
+                "y": 89,
+                "w": 1068,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 274,
+                "y": 209,
+                "w": 1068,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 274,
+                "y": 253,
+                "w": 1068,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 275,
+                "y": 356,
+                "w": 1066,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 274,
+                "y": 623,
+                "w": 1068,
+                "h": 37,
+                "top": 623,
+                "bottom": 659
+              },
+              "tablePanel": {
+                "x": 274,
+                "y": 355,
+                "w": 1068,
+                "h": 256,
+                "top": 355,
+                "bottom": 611
+              },
+              "tableOuter": {
+                "x": 275,
+                "y": 413,
+                "w": 1066,
+                "h": 197,
+                "top": 413,
+                "bottom": 610
+              },
+              "tableHeader": {
+                "x": 275,
+                "y": 413,
+                "w": 1066,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 671,
+                "bottom": 724,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 101,
+              "scrollHeight": 3816,
+              "clientWidth": 1066,
+              "scrollWidth": 1066,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 4268,
+            "footerOverlapsTable": false
+          }
+        },
+        {
+          "rows": 500,
+          "renderMs": 283,
+          "filterErrorsMs": 296,
+          "errorRowsDom": 50,
+          "measure": {
+            "document": {
+              "clientWidth": 1366,
+              "scrollWidth": 1366,
+              "clientHeight": 768,
+              "scrollHeight": 768,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 274,
+                "y": 89,
+                "w": 1068,
+                "h": 647,
+                "top": 89,
+                "bottom": 736
+              },
+              "panel": {
+                "x": 274,
+                "y": 249,
+                "w": 1068,
+                "h": 475,
+                "top": 249,
+                "bottom": 724
+              },
+              "header": {
+                "x": 274,
+                "y": 89,
+                "w": 1068,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 274,
+                "y": 209,
+                "w": 1068,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 274,
+                "y": 253,
+                "w": 1068,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 275,
+                "y": 356,
+                "w": 1066,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 274,
+                "y": 623,
+                "w": 1068,
+                "h": 37,
+                "top": 623,
+                "bottom": 659
+              },
+              "tablePanel": {
+                "x": 274,
+                "y": 355,
+                "w": 1068,
+                "h": 256,
+                "top": 355,
+                "bottom": 611
+              },
+              "tableOuter": {
+                "x": 275,
+                "y": 413,
+                "w": 1066,
+                "h": 197,
+                "top": 413,
+                "bottom": 610
+              },
+              "tableHeader": {
+                "x": 275,
+                "y": 413,
+                "w": 1066,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 671,
+                "bottom": 724,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 101,
+              "scrollHeight": 3816,
+              "clientWidth": 1066,
+              "scrollWidth": 1066,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 4268,
+            "footerOverlapsTable": false
+          }
+        }
+      ],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "screenshots": [
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1366x768__before-upload.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1366x768__top-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1366x768__mid-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1366x768__bottom-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1366x768__hscroll-500.png"
+      ]
+    },
+    {
+      "viewport": "1536x864",
+      "files": [
+        {
+          "rows": 50,
+          "renderMs": 376,
+          "filterErrorsMs": 198,
+          "errorRowsDom": 23,
+          "measure": {
+            "document": {
+              "clientWidth": 1536,
+              "scrollWidth": 1536,
+              "clientHeight": 864,
+              "scrollHeight": 864,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 274,
+                "y": 89,
+                "w": 1238,
+                "h": 743,
+                "top": 89,
+                "bottom": 832
+              },
+              "panel": {
+                "x": 274,
+                "y": 249,
+                "w": 1238,
+                "h": 571,
+                "top": 249,
+                "bottom": 820
+              },
+              "header": {
+                "x": 274,
+                "y": 89,
+                "w": 1238,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 274,
+                "y": 209,
+                "w": 1238,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 274,
+                "y": 253,
+                "w": 1238,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 275,
+                "y": 356,
+                "w": 1236,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 274,
+                "y": 718,
+                "w": 1238,
+                "h": 37,
+                "top": 718,
+                "bottom": 755
+              },
+              "tablePanel": {
+                "x": 274,
+                "y": 355,
+                "w": 1238,
+                "h": 351,
+                "top": 355,
+                "bottom": 706
+              },
+              "tableOuter": {
+                "x": 275,
+                "y": 413,
+                "w": 1236,
+                "h": 292,
+                "top": 413,
+                "bottom": 705
+              },
+              "tableHeader": {
+                "x": 275,
+                "y": 413,
+                "w": 1236,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 767,
+                "bottom": 820,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 253,
+              "scrollHeight": 2789,
+              "clientWidth": 1236,
+              "scrollWidth": 1236,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 3241,
+            "footerOverlapsTable": false
+          }
+        },
+        {
+          "rows": 200,
+          "renderMs": 304,
+          "filterErrorsMs": 276,
+          "errorRowsDom": 50,
+          "measure": {
+            "document": {
+              "clientWidth": 1536,
+              "scrollWidth": 1536,
+              "clientHeight": 864,
+              "scrollHeight": 864,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 274,
+                "y": 89,
+                "w": 1238,
+                "h": 743,
+                "top": 89,
+                "bottom": 832
+              },
+              "panel": {
+                "x": 274,
+                "y": 249,
+                "w": 1238,
+                "h": 571,
+                "top": 249,
+                "bottom": 820
+              },
+              "header": {
+                "x": 274,
+                "y": 89,
+                "w": 1238,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 274,
+                "y": 209,
+                "w": 1238,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 274,
+                "y": 253,
+                "w": 1238,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 275,
+                "y": 356,
+                "w": 1236,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 274,
+                "y": 719,
+                "w": 1238,
+                "h": 37,
+                "top": 719,
+                "bottom": 755
+              },
+              "tablePanel": {
+                "x": 274,
+                "y": 355,
+                "w": 1238,
+                "h": 352,
+                "top": 355,
+                "bottom": 707
+              },
+              "tableOuter": {
+                "x": 275,
+                "y": 413,
+                "w": 1236,
+                "h": 293,
+                "top": 413,
+                "bottom": 706
+              },
+              "tableHeader": {
+                "x": 275,
+                "y": 413,
+                "w": 1236,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 767,
+                "bottom": 820,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 197,
+              "scrollHeight": 2789,
+              "clientWidth": 1236,
+              "scrollWidth": 1236,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 3241,
+            "footerOverlapsTable": false
+          }
+        },
+        {
+          "rows": 500,
+          "renderMs": 311,
+          "filterErrorsMs": 271,
+          "errorRowsDom": 50,
+          "measure": {
+            "document": {
+              "clientWidth": 1536,
+              "scrollWidth": 1536,
+              "clientHeight": 864,
+              "scrollHeight": 864,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 274,
+                "y": 89,
+                "w": 1238,
+                "h": 743,
+                "top": 89,
+                "bottom": 832
+              },
+              "panel": {
+                "x": 274,
+                "y": 249,
+                "w": 1238,
+                "h": 571,
+                "top": 249,
+                "bottom": 820
+              },
+              "header": {
+                "x": 274,
+                "y": 89,
+                "w": 1238,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 274,
+                "y": 209,
+                "w": 1238,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 274,
+                "y": 253,
+                "w": 1238,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 275,
+                "y": 356,
+                "w": 1236,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 274,
+                "y": 719,
+                "w": 1238,
+                "h": 37,
+                "top": 719,
+                "bottom": 755
+              },
+              "tablePanel": {
+                "x": 274,
+                "y": 355,
+                "w": 1238,
+                "h": 352,
+                "top": 355,
+                "bottom": 707
+              },
+              "tableOuter": {
+                "x": 275,
+                "y": 413,
+                "w": 1236,
+                "h": 293,
+                "top": 413,
+                "bottom": 706
+              },
+              "tableHeader": {
+                "x": 275,
+                "y": 413,
+                "w": 1236,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 767,
+                "bottom": 820,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 197,
+              "scrollHeight": 2789,
+              "clientWidth": 1236,
+              "scrollWidth": 1236,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 3241,
+            "footerOverlapsTable": false
+          }
+        }
+      ],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "screenshots": [
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1536x864__before-upload.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1536x864__top-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1536x864__mid-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1536x864__bottom-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1536x864__hscroll-500.png"
+      ]
+    },
+    {
+      "viewport": "1920x1080",
+      "files": [
+        {
+          "rows": 50,
+          "renderMs": 297,
+          "filterErrorsMs": 221,
+          "errorRowsDom": 23,
+          "measure": {
+            "document": {
+              "clientWidth": 1920,
+              "scrollWidth": 1920,
+              "clientHeight": 1080,
+              "scrollHeight": 1080,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 409,
+                "y": 89,
+                "w": 1352,
+                "h": 959,
+                "top": 89,
+                "bottom": 1048
+              },
+              "panel": {
+                "x": 409,
+                "y": 249,
+                "w": 1352,
+                "h": 787,
+                "top": 249,
+                "bottom": 1036
+              },
+              "header": {
+                "x": 409,
+                "y": 89,
+                "w": 1352,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 409,
+                "y": 209,
+                "w": 1352,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 409,
+                "y": 253,
+                "w": 1352,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 410,
+                "y": 356,
+                "w": 1350,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 409,
+                "y": 934,
+                "w": 1352,
+                "h": 37,
+                "top": 934,
+                "bottom": 971
+              },
+              "tablePanel": {
+                "x": 409,
+                "y": 355,
+                "w": 1352,
+                "h": 567,
+                "top": 355,
+                "bottom": 922
+              },
+              "tableOuter": {
+                "x": 410,
+                "y": 413,
+                "w": 1350,
+                "h": 508,
+                "top": 413,
+                "bottom": 921
+              },
+              "tableHeader": {
+                "x": 410,
+                "y": 413,
+                "w": 1350,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 983,
+                "bottom": 1036,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 469,
+              "scrollHeight": 2789,
+              "clientWidth": 1350,
+              "scrollWidth": 1350,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 3241,
+            "footerOverlapsTable": false
+          }
+        },
+        {
+          "rows": 200,
+          "renderMs": 246,
+          "filterErrorsMs": 178,
+          "errorRowsDom": 50,
+          "measure": {
+            "document": {
+              "clientWidth": 1920,
+              "scrollWidth": 1920,
+              "clientHeight": 1080,
+              "scrollHeight": 1080,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 409,
+                "y": 89,
+                "w": 1352,
+                "h": 959,
+                "top": 89,
+                "bottom": 1048
+              },
+              "panel": {
+                "x": 409,
+                "y": 249,
+                "w": 1352,
+                "h": 787,
+                "top": 249,
+                "bottom": 1036
+              },
+              "header": {
+                "x": 409,
+                "y": 89,
+                "w": 1352,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 409,
+                "y": 209,
+                "w": 1352,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 409,
+                "y": 253,
+                "w": 1352,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 410,
+                "y": 356,
+                "w": 1350,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 409,
+                "y": 935,
+                "w": 1352,
+                "h": 37,
+                "top": 935,
+                "bottom": 971
+              },
+              "tablePanel": {
+                "x": 409,
+                "y": 355,
+                "w": 1352,
+                "h": 568,
+                "top": 355,
+                "bottom": 923
+              },
+              "tableOuter": {
+                "x": 410,
+                "y": 413,
+                "w": 1350,
+                "h": 509,
+                "top": 413,
+                "bottom": 922
+              },
+              "tableHeader": {
+                "x": 410,
+                "y": 413,
+                "w": 1350,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 983,
+                "bottom": 1036,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 413,
+              "scrollHeight": 2789,
+              "clientWidth": 1350,
+              "scrollWidth": 1350,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 3241,
+            "footerOverlapsTable": false
+          }
+        },
+        {
+          "rows": 500,
+          "renderMs": 302,
+          "filterErrorsMs": 288,
+          "errorRowsDom": 50,
+          "measure": {
+            "document": {
+              "clientWidth": 1920,
+              "scrollWidth": 1920,
+              "clientHeight": 1080,
+              "scrollHeight": 1080,
+              "pageScroll": false,
+              "pageScrollAmount": 0,
+              "hPageOverflow": false
+            },
+            "rects": {
+              "page": {
+                "x": 409,
+                "y": 89,
+                "w": 1352,
+                "h": 959,
+                "top": 89,
+                "bottom": 1048
+              },
+              "panel": {
+                "x": 409,
+                "y": 249,
+                "w": 1352,
+                "h": 787,
+                "top": 249,
+                "bottom": 1036
+              },
+              "header": {
+                "x": 409,
+                "y": 89,
+                "w": 1352,
+                "h": 106,
+                "top": 89,
+                "bottom": 195
+              },
+              "steps": {
+                "x": 409,
+                "y": 209,
+                "w": 1352,
+                "h": 24,
+                "top": 209,
+                "bottom": 233
+              },
+              "summary": {
+                "x": 409,
+                "y": 253,
+                "w": 1352,
+                "h": 65,
+                "top": 253,
+                "bottom": 318
+              },
+              "filters": {
+                "x": 410,
+                "y": 356,
+                "w": 1350,
+                "h": 57,
+                "top": 356,
+                "bottom": 413
+              },
+              "warning": {
+                "x": 409,
+                "y": 935,
+                "w": 1352,
+                "h": 37,
+                "top": 935,
+                "bottom": 971
+              },
+              "tablePanel": {
+                "x": 409,
+                "y": 355,
+                "w": 1352,
+                "h": 568,
+                "top": 355,
+                "bottom": 923
+              },
+              "tableOuter": {
+                "x": 410,
+                "y": 413,
+                "w": 1350,
+                "h": 509,
+                "top": 413,
+                "bottom": 922
+              },
+              "tableHeader": {
+                "x": 410,
+                "y": 413,
+                "w": 1350,
+                "h": 39,
+                "top": 413,
+                "bottom": 452
+              },
+              "footer": {
+                "top": 983,
+                "bottom": 1036,
+                "h": 53
+              }
+            },
+            "footer": {
+              "position": "sticky",
+              "visibleInViewport": true,
+              "height": 53
+            },
+            "tableBody": {
+              "clientHeight": 413,
+              "scrollHeight": 2789,
+              "clientWidth": 1350,
+              "scrollWidth": 1350,
+              "vScroll": true,
+              "hScroll": false
+            },
+            "domRows": 50,
+            "lastRowBottom": 3241,
+            "footerOverlapsTable": false
+          }
+        }
+      ],
+      "consoleErrors": [],
+      "failedRequests": [],
+      "screenshots": [
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1920x1080__before-upload.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1920x1080__top-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1920x1080__mid-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1920x1080__bottom-500.png",
+        "OSE-backend/Governance/responsive-audit/item-import//screenshots//after//IM-IMPORT-VALIDATION__1920x1080__hscroll-500.png"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,435 @@
+{
+  "executedAt": "2026-06-28T01:26:58.975Z",
+  "gateVersion": "phase2-gp-workflow-v2-addendum",
+  "tenant": {
+    "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+    "slug": "closeout-audit-hotel-disposable"
+  },
+  "apiBase": "http://127.0.0.1:4000/api",
+  "inventorySummary": {
+    "definitionCount": 1,
+    "globalDefinitions": 1,
+    "tenantScopedDefinitions": 0,
+    "publishedVersions": 1,
+    "archivedVersions": 3,
+    "draftVersions": 0,
+    "versionsWithGmStep": 1,
+    "tenantsConstitutionAligned": 20,
+    "tenantsWithDrift": 0,
+    "totalPinnedDocuments": 69,
+    "documentsOnGmVersions": 24
+  },
+  "publishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+  "approvedChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "scenarios": [
+    {
+      "id": 1,
+      "name": "Create Get Pass draft",
+      "pass": true,
+      "http": 201,
+      "gpId": "9eacbf3d-f275-4e23-b61d-2ecc971eed4a"
+    },
+    {
+      "id": 2,
+      "name": "Submit starts at Department (PENDING_DEPT)",
+      "pass": true,
+      "http": 200,
+      "statusAfter": "PENDING_DEPT",
+      "pinnedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "expectedPinnedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "pinnedCorrectVersion": true
+    },
+    {
+      "id": 3,
+      "name": "Department approval → Cost Control",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "statusAfter": "PENDING_COST_CONTROL",
+      "matchesExpected": true,
+      "row": {
+        "id": "9eacbf3d-f275-4e23-b61d-2ecc971eed4a",
+        "status": "PENDING_COST_CONTROL",
+        "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+        "concurrencyVersion": 1,
+        "deptApprovedBy": "6a278d25-8aa2-421f-80a0-9b6085d88235",
+        "costControlApprovedBy": null,
+        "financeApprovedBy": null,
+        "gmApprovedBy": null,
+        "securityApprovedBy": null
+      }
+    },
+    {
+      "id": 4,
+      "name": "Cost Control approval → Finance",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "statusAfter": "PENDING_FINANCE",
+      "matchesExpected": true,
+      "row": {
+        "id": "9eacbf3d-f275-4e23-b61d-2ecc971eed4a",
+        "status": "PENDING_FINANCE",
+        "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+        "concurrencyVersion": 1,
+        "deptApprovedBy": "6a278d25-8aa2-421f-80a0-9b6085d88235",
+        "costControlApprovedBy": "61aeacca-de87-41f2-b9da-6b64b68b793f",
+        "financeApprovedBy": null,
+        "gmApprovedBy": null,
+        "securityApprovedBy": null
+      }
+    },
+    {
+      "id": 5,
+      "name": "Finance approval → Security (not GM)",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "statusAfter": "PENDING_SECURITY",
+      "matchesExpected": true,
+      "row": {
+        "id": "9eacbf3d-f275-4e23-b61d-2ecc971eed4a",
+        "status": "PENDING_SECURITY",
+        "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+        "concurrencyVersion": 1,
+        "deptApprovedBy": "6a278d25-8aa2-421f-80a0-9b6085d88235",
+        "costControlApprovedBy": "61aeacca-de87-41f2-b9da-6b64b68b793f",
+        "financeApprovedBy": "7ed23255-8013-49f1-8726-0e0ff52afe3d",
+        "gmApprovedBy": null,
+        "securityApprovedBy": null
+      },
+      "rejectedGm": true
+    },
+    {
+      "id": 6,
+      "name": "Security OUT closes PERMANENT pass",
+      "pass": true,
+      "http": 200,
+      "ok": true,
+      "statusAfter": "CLOSED",
+      "matchesExpected": true,
+      "row": {
+        "id": "9eacbf3d-f275-4e23-b61d-2ecc971eed4a",
+        "status": "CLOSED",
+        "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+        "concurrencyVersion": 1,
+        "deptApprovedBy": "6a278d25-8aa2-421f-80a0-9b6085d88235",
+        "costControlApprovedBy": "61aeacca-de87-41f2-b9da-6b64b68b793f",
+        "financeApprovedBy": "7ed23255-8013-49f1-8726-0e0ff52afe3d",
+        "gmApprovedBy": null,
+        "securityApprovedBy": "2ea3699c-2b22-4561-b2e5-653a12a61865"
+      },
+      "ledgerBefore": 0,
+      "ledgerAfter": 1
+    },
+    {
+      "id": 7,
+      "name": "Published chain has no GM step",
+      "pass": true,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approvedChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ]
+    },
+    {
+      "id": 8,
+      "name": "Finance creator cannot skip Department/Cost Control",
+      "pass": true,
+      "statusAfter": "PENDING_DEPT",
+      "http": 201
+    },
+    {
+      "id": 9,
+      "name": "ORG_MANAGER creator cannot self-stamp or fast-forward",
+      "pass": true,
+      "statusAfter": "PENDING_DEPT",
+      "stampedCount": 0
+    },
+    {
+      "id": 15,
+      "name": "Send Back from Cost Control",
+      "pass": true,
+      "http": 200,
+      "statusBefore": "PENDING_COST_CONTROL",
+      "statusAfter": "DRAFT",
+      "pinnedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "expectedPinnedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "deptStampRetained": false,
+      "costControlStampRetained": false,
+      "financeStampRetained": false,
+      "approvalStampsCleared": true,
+      "ledgerDelta": 0,
+      "stockBefore": {
+        "qtyOnHand": 99,
+        "qtyBlocked": 0
+      },
+      "stockAfter": {
+        "qtyOnHand": 99,
+        "qtyBlocked": 0
+      },
+      "endpoint": "/get-passes/2f795570-e1a2-4268-a510-54a13794bfa3/send-back"
+    },
+    {
+      "id": 16,
+      "name": "Send Back from Finance",
+      "pass": true,
+      "http": 200,
+      "statusBefore": "PENDING_FINANCE",
+      "statusAfter": "DRAFT",
+      "pinnedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "expectedPinnedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "deptStampRetained": false,
+      "costControlStampRetained": false,
+      "financeStampRetained": false,
+      "approvalStampsCleared": true,
+      "ledgerDelta": 0,
+      "stockBefore": {
+        "qtyOnHand": 99,
+        "qtyBlocked": 0
+      },
+      "stockAfter": {
+        "qtyOnHand": 99,
+        "qtyBlocked": 0
+      },
+      "endpoint": "/get-passes/fde920e4-cb45-4712-a298-37a64594aec7/send-back"
+    },
+    {
+      "id": 17,
+      "name": "Resubmit after Send Back",
+      "pass": true,
+      "editHttp": 200,
+      "submitHttp": 200,
+      "statusAfterResubmit": "PENDING_DEPT",
+      "pinnedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "financeCreatorStatus": "PENDING_DEPT",
+      "orgCreatorStatus": "PENDING_DEPT",
+      "orgStampedCount": 0
+    },
+    {
+      "id": 19,
+      "name": "Send Back negative — wrong role blocked",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "id": 20,
+      "name": "Send Back negative — creator blocked",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "id": 21,
+      "name": "Send Back negative — missing reason blocked",
+      "pass": true,
+      "http": 400
+    },
+    {
+      "id": 22,
+      "name": "Send Back negative — stale concurrency blocked",
+      "pass": true,
+      "http": 409
+    },
+    {
+      "id": 23,
+      "name": "Send Back negative — no active assignment blocked",
+      "pass": true,
+      "http": 403
+    },
+    {
+      "id": 24,
+      "name": "Send Back negative — wrong-property user blocked",
+      "pass": true,
+      "http": 404
+    },
+    {
+      "id": 25,
+      "name": "Send Back negative — terminal DRAFT state blocked",
+      "pass": true,
+      "http": 422,
+      "statusAfterSendBack": "DRAFT",
+      "priorSendBackHttp": 200
+    },
+    {
+      "id": 26,
+      "name": "Resubmit negative — unauthorized edit/submit blocked",
+      "pass": true,
+      "editHttp": 403,
+      "submitHttp": 403,
+      "statusAfter": "DRAFT"
+    },
+    {
+      "id": 18,
+      "name": "Complete TEMPORARY return lifecycle",
+      "pass": true,
+      "outHttp": 200,
+      "outStatus": "OUT",
+      "returnHttp": 200,
+      "terminalStatus": "RETURNED",
+      "qtyReturned": "1",
+      "returnRecordQtyGood": "1",
+      "stockBaseline": {
+        "qtyOnHand": 99,
+        "qtyBlocked": 0
+      },
+      "stockAfterOut": {
+        "qtyOnHand": 99,
+        "qtyBlocked": 1
+      },
+      "stockAfterReturn": {
+        "qtyOnHand": 99,
+        "qtyBlocked": 0
+      },
+      "ledgerAfterOut": 1,
+      "ledgerAfterReturn": 2,
+      "ledgerDeltaDuringReturn": 1
+    },
+    {
+      "id": 11,
+      "name": "Property resolves tenant published workflow version",
+      "pass": true,
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "resolvedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Historical documents remain pinned to archived v3 GM version",
+      "pass": true,
+      "archivedGmVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "archivedVersionNumber": 3,
+      "documentsOnGmVersions": 24,
+      "legacyDocumentCount": 10,
+      "legacyDocumentIds": [
+        "175c8a53-12f1-43a0-baf5-b74d7ad5a73e",
+        "1c884e1f-07a8-4a68-a9be-b304075f9433",
+        "247ea548-9352-4907-892e-76eaf48d8918",
+        "2a8158b1-4825-489f-9297-86752c519a62",
+        "2e5ce871-9bd0-41c1-817b-d2e529185772",
+        "2ef2d802-d05d-4691-83f0-1424621f8b40",
+        "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+        "353e71f3-a268-467e-ba28-c657895f0891",
+        "3834132b-1963-45f5-90d3-4123de70cacb",
+        "457c3102-129e-4fac-b599-ec6a70e51137"
+      ],
+      "sampleDocumentId": "2e5ce871-9bd0-41c1-817b-d2e529185772",
+      "sampleDocumentStatus": "PENDING_DEPT",
+      "legacyChainKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "currentPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485"
+    },
+    {
+      "id": 13,
+      "name": "Cross-property workflow resolution is tenant-scoped",
+      "pass": true,
+      "childVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "foreignVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "childTenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "foreignTenantId": "bf7638b8-04db-4051-94d1-0cf039827c00"
+    },
+    {
+      "id": 14,
+      "name": "Reject from Finance — no posting/ledger/stock side effects",
+      "pass": true,
+      "http": 200,
+      "statusAfter": "REJECTED",
+      "ledgerDelta": 0
+    }
+  ],
+  "regression": [
+    {
+      "name": "Get Pass authorized create",
+      "pass": true,
+      "http": 201,
+      "id": "d23edcef-2cae-4830-8f6d-e10126405a5f"
+    },
+    {
+      "name": "Get Pass authorized list",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Get Pass authorized detail",
+      "pass": true,
+      "http": 200,
+      "id": "d23edcef-2cae-4830-8f6d-e10126405a5f"
+    },
+    {
+      "name": "Tenant switch permission refresh",
+      "pass": true,
+      "http": 200,
+      "hasNewToken": true
+    },
+    {
+      "name": "Workflow Pipeline Get Pass summary",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "Dashboard operational metrics",
+      "pass": true,
+      "http": 200
+    },
+    {
+      "name": "getPass.service.test.js",
+      "pass": true
+    },
+    {
+      "name": "acc-workflow-runtime.service.test.js",
+      "pass": true
+    },
+    {
+      "name": "Frontend development build",
+      "pass": true
+    }
+  ],
+  "totals": {
+    "runtimePass": 25,
+    "runtimeFail": 0,
+    "regressionPass": 9,
+    "regressionFail": 0
+  },
+  "gateChecklist": {
+    "All active tenants inventoried": true,
+    "Configuration drift corrected or documented": true,
+    "Standard chain Dept→CC→Finance→Security": true,
+    "No GM step in published chain": true,
+    "Security OUT behavior correct": true,
+    "Send Back from Cost Control or Finance": true,
+    "Resubmit after Send Back": true,
+    "Send Back negative scenarios": true,
+    "Complete TEMPORARY return lifecycle": true,
+    "Finance fast-forward blocked": true,
+    "ORG_MANAGER fast-forward blocked": true,
+    "Property workflow version resolution": true,
+    "Historical document version pinning intact": true,
+    "Cross-property resolution scoped": true,
+    "Reject without side effects": true,
+    "Full regression suite": true,
+    "Frontend build": true,
+    "Backend relevant tests": true
+  },
+  "phaseClosed": true
+}

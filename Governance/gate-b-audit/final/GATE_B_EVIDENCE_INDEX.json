@@ -1,0 +1,213 @@
+{
+  "generated_at": "2026-06-27T16:57:03Z",
+  "evidence_items": [
+    {
+      "evidence_id": "EV-0001",
+      "type": "Runtime",
+      "requirement_ids": [
+        "C5-5.1-003",
+        "C13-13.4-001"
+      ],
+      "scenario_id": "RS-POST-001",
+      "file_path": "GATE_B_CURRENT_SESSION_RUNTIME.json",
+      "json_path": "$.scenarios[?(@.scenario_id=='RS-POST-001')]",
+      "file_sha256": "090A47E5B132E33B7799463F867685ACEDBF9653AB70310321DBBB6FCDB2B206",
+      "command": "node OSE-backend/scripts/gate-b-final-runtime.js",
+      "timestamp": "2026-06-27T16:46:20.900Z",
+      "tenant": "grand-horizon",
+      "user_role": "see TEST_IDENTITIES_AND_ASSIGNMENTS.json (closeout-audit)",
+      "result": "Passed",
+      "limitations": ""
+    },
+    {
+      "evidence_id": "EV-0002",
+      "type": "Runtime",
+      "requirement_ids": [
+        "C3-3.3-002",
+        "C4-4.3-003"
+      ],
+      "scenario_id": "RS-WF-001",
+      "file_path": "GATE_B_CURRENT_SESSION_RUNTIME.json",
+      "json_path": "$.scenarios[?(@.scenario_id=='RS-WF-001')]",
+      "file_sha256": "090A47E5B132E33B7799463F867685ACEDBF9653AB70310321DBBB6FCDB2B206",
+      "command": "node OSE-backend/scripts/gate-b-final-runtime.js",
+      "timestamp": "2026-06-27T16:46:20.900Z",
+      "tenant": "grand-horizon",
+      "user_role": "see TEST_IDENTITIES_AND_ASSIGNMENTS.json (closeout-audit)",
+      "result": "Failed",
+      "limitations": "See response.http in current session artifact"
+    },
+    {
+      "evidence_id": "EV-0003",
+      "type": "Runtime",
+      "requirement_ids": [
+        "C3-3.1-001",
+        "C2-2.8-001"
+      ],
+      "scenario_id": "RS-GP-001",
+      "file_path": "GATE_B_CURRENT_SESSION_RUNTIME.json",
+      "json_path": "$.scenarios[?(@.scenario_id=='RS-GP-001')]",
+      "file_sha256": "090A47E5B132E33B7799463F867685ACEDBF9653AB70310321DBBB6FCDB2B206",
+      "command": "node OSE-backend/scripts/gate-b-final-runtime.js",
+      "timestamp": "2026-06-27T16:46:20.900Z",
+      "tenant": "grand-horizon",
+      "user_role": "see TEST_IDENTITIES_AND_ASSIGNMENTS.json (closeout-audit)",
+      "result": "Passed",
+      "limitations": ""
+    },
+    {
+      "evidence_id": "EV-0004",
+      "type": "Runtime",
+      "requirement_ids": [
+        "C3-3.1-001"
+      ],
+      "scenario_id": "RS-GP-002",
+      "file_path": "GATE_B_CURRENT_SESSION_RUNTIME.json",
+      "json_path": "$.scenarios[?(@.scenario_id=='RS-GP-002')]",
+      "file_sha256": "090A47E5B132E33B7799463F867685ACEDBF9653AB70310321DBBB6FCDB2B206",
+      "command": "node OSE-backend/scripts/gate-b-final-runtime.js",
+      "timestamp": "2026-06-27T16:46:20.900Z",
+      "tenant": "grand-horizon",
+      "user_role": "see TEST_IDENTITIES_AND_ASSIGNMENTS.json (closeout-audit)",
+      "result": "Passed",
+      "limitations": ""
+    },
+    {
+      "evidence_id": "EV-0005",
+      "type": "Runtime",
+      "requirement_ids": [
+        "C23-23.6-002"
+      ],
+      "scenario_id": "RS-XT-001",
+      "file_path": "GATE_B_CURRENT_SESSION_RUNTIME.json",
+      "json_path": "$.scenarios[?(@.scenario_id=='RS-XT-001')]",
+      "file_sha256": "090A47E5B132E33B7799463F867685ACEDBF9653AB70310321DBBB6FCDB2B206",
+      "command": "node OSE-backend/scripts/gate-b-final-runtime.js",
+      "timestamp": "2026-06-27T16:46:20.900Z",
+      "tenant": "grand-horizon",
+      "user_role": "see TEST_IDENTITIES_AND_ASSIGNMENTS.json (closeout-audit)",
+      "result": "Failed",
+      "limitations": "See response.http in current session artifact"
+    },
+    {
+      "evidence_id": "EV-0006",
+      "type": "Runtime",
+      "requirement_ids": [
+        "C8-8.1-001",
+        "C8-8.2-001"
+      ],
+      "scenario_id": "RS-CONC-001",
+      "file_path": "GATE_B_CURRENT_SESSION_RUNTIME.json",
+      "json_path": "$.scenarios[?(@.scenario_id=='RS-CONC-001')]",
+      "file_sha256": "090A47E5B132E33B7799463F867685ACEDBF9653AB70310321DBBB6FCDB2B206",
+      "command": "node OSE-backend/scripts/gate-b-final-runtime.js",
+      "timestamp": "2026-06-27T16:46:20.900Z",
+      "tenant": "grand-horizon",
+      "user_role": "see TEST_IDENTITIES_AND_ASSIGNMENTS.json (closeout-audit)",
+      "result": "Passed",
+      "limitations": ""
+    },
+    {
+      "evidence_id": "EV-0007",
+      "type": "UI",
+      "requirement_ids": [
+        "C2-2.1-005"
+      ],
+      "scenario_id": "",
+      "file_path": "OSE-Frontend (see matrix frontend_evidence)",
+      "line_range": "see matrix",
+      "file_sha256": "see GATE_B_CODE_SNAPSHOT.json",
+      "command": "static review gate_b_closeout_correction.py",
+      "timestamp": "2026-06-27T16:57:03Z",
+      "tenant": "n/a",
+      "user_role": "n/a",
+      "result": "FAIL",
+      "limitations": "Lost Items render LOST_ITEMS.STATUS.{enum} instead of constitution lifecycle mapper"
+    },
+    {
+      "evidence_id": "EV-0008",
+      "type": "UI",
+      "requirement_ids": [
+        "C2-2.3-002"
+      ],
+      "scenario_id": "",
+      "file_path": "OSE-Frontend (see matrix frontend_evidence)",
+      "line_range": "see matrix",
+      "file_sha256": "see GATE_B_CODE_SNAPSHOT.json",
+      "command": "static review gate_b_closeout_correction.py",
+      "timestamp": "2026-06-27T16:57:03Z",
+      "tenant": "n/a",
+      "user_role": "n/a",
+      "result": "FAIL",
+      "limitations": "Lost Items render LOST_ITEMS.STATUS.{enum} instead of constitution lifecycle mapper"
+    },
+    {
+      "evidence_id": "EV-0009",
+      "type": "UI",
+      "requirement_ids": [
+        "C17-17.2-001"
+      ],
+      "scenario_id": "",
+      "file_path": "OSE-Frontend (see matrix frontend_evidence)",
+      "line_range": "see matrix",
+      "file_sha256": "see GATE_B_CODE_SNAPSHOT.json",
+      "command": "static review gate_b_closeout_correction.py",
+      "timestamp": "2026-06-27T16:57:03Z",
+      "tenant": "n/a",
+      "user_role": "n/a",
+      "result": "PARTIAL",
+      "limitations": "Passing: directive/infrastructure exists; Failing: not wired on required document shells"
+    },
+    {
+      "evidence_id": "EV-0010",
+      "type": "UI",
+      "requirement_ids": [
+        "C17-17.3-001"
+      ],
+      "scenario_id": "",
+      "file_path": "OSE-Frontend (see matrix frontend_evidence)",
+      "line_range": "see matrix",
+      "file_sha256": "see GATE_B_CODE_SNAPSHOT.json",
+      "command": "static review gate_b_closeout_correction.py",
+      "timestamp": "2026-06-27T16:57:03Z",
+      "tenant": "n/a",
+      "user_role": "n/a",
+      "result": "PARTIAL",
+      "limitations": "Passing: directive/infrastructure exists; Failing: not wired on required document shells"
+    },
+    {
+      "evidence_id": "EV-0011",
+      "type": "UI",
+      "requirement_ids": [
+        "C23-23.4-001"
+      ],
+      "scenario_id": "",
+      "file_path": "OSE-Frontend (see matrix frontend_evidence)",
+      "line_range": "see matrix",
+      "file_sha256": "see GATE_B_CODE_SNAPSHOT.json",
+      "command": "static review gate_b_closeout_correction.py",
+      "timestamp": "2026-06-27T16:57:03Z",
+      "tenant": "n/a",
+      "user_role": "n/a",
+      "result": "PARTIAL",
+      "limitations": "Passing: directive/infrastructure exists; Failing: not wired on required document shells"
+    },
+    {
+      "evidence_id": "EV-0012",
+      "type": "UI",
+      "requirement_ids": [
+        "C28-28.4-001"
+      ],
+      "scenario_id": "",
+      "file_path": "OSE-Frontend (see matrix frontend_evidence)",
+      "line_range": "see matrix",
+      "file_sha256": "see GATE_B_CODE_SNAPSHOT.json",
+      "command": "static review gate_b_closeout_correction.py",
+      "timestamp": "2026-06-27T16:57:03Z",
+      "tenant": "n/a",
+      "user_role": "n/a",
+      "result": "PARTIAL",
+      "limitations": "Passing: directive/infrastructure exists; Failing: not wired on required document shells"
+    }
+  ]
+}

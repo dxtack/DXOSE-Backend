@@ -1,0 +1,179 @@
+{
+  "executedAt": "2026-06-27T16:33:01.601Z",
+  "script": "05-cross-tenant",
+  "harnessExit": 1,
+  "counts": {
+    "PASS": 24,
+    "FAIL": 4,
+    "BLOCKED": 0,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 1
+  },
+  "total": 29,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": true,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "XT-A-LIST-items",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "XT-A-READ-B-items",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-WRONG-TENANT-items",
+      "result": "PASS",
+      "http": 404
+    },
+    {
+      "id": "XT-B-READ-A-items",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-LIST-breakage",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "XT-A-READ-B-breakage",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-WRONG-TENANT-breakage",
+      "result": "PASS",
+      "http": 404
+    },
+    {
+      "id": "XT-A-MUT-B-breakage",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-B-READ-A-breakage",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-LIST-getPass",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "XT-A-READ-B-getPass",
+      "result": "FAIL",
+      "http": 500,
+      "leak": "UNEXPECTED_500"
+    },
+    {
+      "id": "XT-A-WRONG-TENANT-getPass",
+      "result": "FAIL",
+      "http": 500
+    },
+    {
+      "id": "XT-A-MUT-B-getPass",
+      "result": "FAIL",
+      "http": 500,
+      "leak": "UNEXPECTED_500"
+    },
+    {
+      "id": "XT-B-READ-A-getPass",
+      "result": "FAIL",
+      "http": 500,
+      "leak": "UNEXPECTED_500"
+    },
+    {
+      "id": "XT-A-LIST-grn",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "XT-A-READ-B-grn",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-WRONG-TENANT-grn",
+      "result": "PASS",
+      "http": 404
+    },
+    {
+      "id": "XT-B-READ-A-grn",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-LIST-transfers",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "XT-A-READ-B-transfers",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-WRONG-TENANT-transfers",
+      "result": "PASS",
+      "http": 404
+    },
+    {
+      "id": "XT-B-READ-A-transfers",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-LIST-inventoryCount",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "XT-A-READ-B-inventoryCount",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-WRONG-TENANT-inventoryCount",
+      "result": "PASS",
+      "http": 404
+    },
+    {
+      "id": "XT-B-READ-A-inventoryCount",
+      "result": "PASS",
+      "http": 404,
+      "leak": null
+    },
+    {
+      "id": "XT-A-LIST-audit",
+      "result": "PASS",
+      "http": 200
+    },
+    {
+      "id": "XT-A-LIST-reports",
+      "result": "NOT_APPLICABLE",
+      "http": 404
+    },
+    {
+      "id": "XT-A-LIST-dashboard",
+      "result": "PASS",
+      "http": 200
+    }
+  ]
+}

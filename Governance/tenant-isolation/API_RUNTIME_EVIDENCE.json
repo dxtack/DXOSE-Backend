@@ -1,0 +1,113 @@
+{
+  "runAt": "2026-07-03T02:07:23.212Z",
+  "runId": "1783044438041-779f6b",
+  "apiBase": "http://127.0.0.1:56223/api",
+  "summary": {
+    "passed": 20,
+    "failed": 0,
+    "total": 20
+  },
+  "results": [
+    {
+      "id": "foreign-grn-detail",
+      "status": "PASS",
+      "detail": "GET tenant-A token + tenant-B GRN → 404",
+      "expected": 404
+    },
+    {
+      "id": "random-grn-id",
+      "status": "PASS",
+      "detail": "random GRN id → 404"
+    },
+    {
+      "id": "foreign-grn-relation",
+      "status": "PASS",
+      "detail": "PATCH GRN with foreign location → 400"
+    },
+    {
+      "id": "foreign-grn-timeline",
+      "status": "PASS",
+      "detail": "timeline foreign GRN → 404"
+    },
+    {
+      "id": "foreign-grn-delete",
+      "status": "PASS",
+      "detail": "DELETE foreign GRN → 404"
+    },
+    {
+      "id": "foreign-grn-approve",
+      "status": "PASS",
+      "detail": "POST approve foreign GRN → 404"
+    },
+    {
+      "id": "foreign-grn-reject",
+      "status": "PASS",
+      "detail": "POST reject foreign GRN → 404"
+    },
+    {
+      "id": "foreign-grn-send-back",
+      "status": "PASS",
+      "detail": "POST send-back foreign GRN → 404"
+    },
+    {
+      "id": "foreign-grn-attachment",
+      "status": "PASS",
+      "detail": "GET foreign GRN evidence → 404"
+    },
+    {
+      "id": "x-tenant-id-valid-child",
+      "status": "PASS",
+      "detail": "x-tenant-id child B list → 200 foreign=false"
+    },
+    {
+      "id": "x-tenant-id-outside-org",
+      "status": "PASS",
+      "detail": "x-tenant-id outsider → 403"
+    },
+    {
+      "id": "org-manager-getpass-operational-list",
+      "status": "PASS",
+      "detail": "ORG_MANAGER on child A list count=1 foreign=false"
+    },
+    {
+      "id": "getpass-internal-target-detail",
+      "status": "PASS",
+      "detail": "internal transfer detail on target tenant → 200"
+    },
+    {
+      "id": "getpass-internal-target-timeline",
+      "status": "PASS",
+      "detail": "internal transfer timeline on target tenant → 200"
+    },
+    {
+      "id": "switch-valid-child",
+      "status": "PASS",
+      "detail": "switch tenant A → child B → 200"
+    },
+    {
+      "id": "switch-outside-org",
+      "status": "PASS",
+      "detail": "switch to outsider tenant → 403"
+    },
+    {
+      "id": "rapid-switch-parallel",
+      "status": "PASS",
+      "detail": "parallel switch B=200 A=200 (A must win scope)"
+    },
+    {
+      "id": "rapid-switch-final-token-scope",
+      "status": "PASS",
+      "detail": "token after parallel switches reads child A GRN → 200"
+    },
+    {
+      "id": "no-foreign-data-in-404",
+      "status": "PASS",
+      "detail": "foreign GRN 404 body does not expose tenant B id"
+    },
+    {
+      "id": "no-http-500",
+      "status": "PASS",
+      "detail": "no scenario returned HTTP 500"
+    }
+  ]
+}

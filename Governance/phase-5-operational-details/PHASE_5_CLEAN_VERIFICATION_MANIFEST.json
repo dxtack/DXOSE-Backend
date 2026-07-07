@@ -1,0 +1,1358 @@
+{
+  "generatedAt": "2026-06-28T14:40:23.082Z",
+  "phaseClosed": true,
+  "entries": [
+    {
+      "scenarioId": "P5-MATRIX-LOAD",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LC-01",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LC-02",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LC-03",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LC-04",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-SEED",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FIXTURES",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-API-00",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": 200,
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-TR-DRAFT-TL-API",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "904bb61f-1503-47aa-8ae0-12539d48861a",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-TRANSFER-FULL-draft",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "904bb61f-1503-47aa-8ae0-12539d48861a",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "DRAFT",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-TRANSFER-FULL-pendingDept",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "26deb92a-b94e-47f8-931c-65f348417a30",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PENDING_DEPT",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-TRANSFER-FULL-pendingFinance",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "cde5b4e5-5177-4032-b332-53cb93c72c2b",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PENDING_FINANCE",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-TRANSFER-FULL-posted",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "b185094b-b5ed-4c16-a054-710dabf7dd58",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "POSTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-TRANSFER-FULL-rejected",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "ce2c608b-82df-4afc-b9d1-19342a3851a9",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BREAKAGE-FULL-draft",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "53a96cbb-84b0-4848-b1a9-d9512174ab7e",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "DRAFT",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BREAKAGE-FULL-pendingCostControl",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "280c4ada-1187-4ed1-a399-5ed134963bd1",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "DEPT_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BREAKAGE-FULL-pendingFinance",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "259b1380-843a-4f6b-9c77-1147004e5e52",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "COST_CONTROL_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BREAKAGE-FULL-pendingGm",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "2de099ad-eaad-4a5c-82bf-a628f7ccfc44",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "FINANCE_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BREAKAGE-FULL-approved",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "e54697e3-681b-476c-b1a0-e719eb1243ae",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BREAKAGE-FULL-rejected",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "6f3f3d4c-8b7d-46fa-977a-4fc8aebff467",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BREAKAGE-FULL-void",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "7ff8852d-9398-4d2c-ab5e-a8ad2db3cb22",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "VOID",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LOST-FULL-deptApproved",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "59f0fec8-fcd6-4955-a39b-bd39ae19a1ac",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "DEPT_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LOST-FULL-pendingFinance",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "36b06693-1e72-4e9d-96fc-b87f35ac0ab8",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "COST_CONTROL_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LOST-FULL-approvedEmployee",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "f7f25a62-6337-4138-a674-766436fab7f4",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LOST-FULL-approvedHotel",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "0067a8c2-3b1f-4118-b5c5-881c72706a91",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LOST-FULL-rejected",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "54a6ee39-8f2e-47ef-ae8e-31a5afc09464",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-TR-POST-EXACT",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "b185094b-b5ed-4c16-a054-710dabf7dd58",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-BRK-POST-EXACT",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "e54697e3-681b-476c-b1a0-e719eb1243ae",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-LOST-POST-EXACT",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "f7f25a62-6337-4138-a674-766436fab7f4",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-TR-WRONG-ROLE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-TR-STALE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        409
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-TR-NO-ASSIGN",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-TR-INACTIVE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-TR-DELETED",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-TR-VIEWONLY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-TR-TERMINAL",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403,
+        422
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-BRK-NO-ASSIGN",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-BRK-VIEWONLY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-BRK-WRONG-ROLE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-BRK-VOID-APPROVED",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        400,
+        403,
+        422,
+        423
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-BRK-TERMINAL",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403,
+        400,
+        422
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-BRK-FOREIGN-EVIDENCE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "01d04fdd-9604-488e-a9fa-9e1d8add95ec",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-LOST-NO-ASSIGN",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-LOST-VIEWONLY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-LOST-DUP-FINAL",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403,
+        422,
+        423
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-LOST-TREAT-CHANGE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": [
+        403,
+        422,
+        423
+      ],
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-STALE-JWT",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-CROSS-TENANT",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "1d61ecaa-e9cc-47d1-a75e-af1101f21069",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-OOS-TRANSFER",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "7afe8e68-d879-4689-9a5d-080f390e383c",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-OOS-BREAKAGE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "01d04fdd-9604-488e-a9fa-9e1d8add95ec",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-NEG-OOS-LOST",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "695360eb-ea4a-4536-aa72-47f7c122e6b3",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-TR-DEPT",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "36e4d4c7-8f44-4da2-b25a-0fc5d38215a5",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PENDING_FINANCE",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-TR-POST",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "36e4d4c7-8f44-4da2-b25a-0fc5d38215a5",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "POSTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-BRK-CC",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d",
+      "actor": null,
+      "route": null,
+      "expectedResult": "COST_CONTROL_APPROVED",
+      "actualResult": "COST_CONTROL_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-BRK-FIN",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d",
+      "actor": null,
+      "route": null,
+      "expectedResult": "FINANCE_APPROVED",
+      "actualResult": "FINANCE_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-BRK-GM",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d",
+      "actor": null,
+      "route": null,
+      "expectedResult": "APPROVED",
+      "actualResult": "APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-BRK-POST",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "64bc445d-43df-4e0d-adba-04de7358620d",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-LOST-CC",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "COST_CONTROL_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-LOST-FIN",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "FINANCE_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-LOST-GM-EMP",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-LOST-POST",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "a3234e48-aa01-45cc-810a-2fb37a814673",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-LOST-HOTEL",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "21eceb3e-8938-44b5-b190-acfd50714109",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-LOST-REJECT",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "8716562f-6c57-4192-a01e-30ee81386bef",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-BRK-VOID-breakageVoidDraft",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "e878a2f8-b618-45b2-9ff5-3c59e3a83d0e",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "VOID",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-FLOW-BRK-VOID-breakageVoidRejected",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": "6fb22bbd-66e0-4b44-a31a-6c508b3b00de",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "VOID",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-SUBMIT-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PENDING_DEPT",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-SUBMIT-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-APPROVE-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-APPROVE-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-REJECT-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-REJECT-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-PATCH-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-PATCH-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-DELETE-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-TR-DELETE-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-SUBMIT-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "DEPT_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-SUBMIT-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-APPROVE-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-APPROVE-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-REJECT-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-REJECT-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-VOID-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "VOID",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-BRK-VOID-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-LOST-APPROVE-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-LOST-APPROVE-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-LOST-REJECT-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-LOST-REJECT-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-LOST-TREATMENT-OK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-MX-LOST-TREATMENT-DENY",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": 403,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-LIST-TRANSFER",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-LIST-BREAKAGE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-LIST-LOST",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-STOCK",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-LEDGER",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-MVREG",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-PIPE",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-DASH",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-REG-TENANT-SWITCH",
+      "resultFile": "PHASE_5_RUNTIME_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-TR-DEPT-APPROVE",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "9056d30e-7079-4a9b-b383-2f926ec267a0",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PENDING_FINANCE",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-TR-FINANCE-POST",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "9056d30e-7079-4a9b-b383-2f926ec267a0",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "POSTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-TR-REJECT",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "e44c33cb-16f6-443c-9a9f-98c38c3060bf",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-BRK-CC-APPROVE",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "a931da5f-c6ba-4956-9b58-dfb773af0782",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "COST_CONTROL_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-BRK-FIN-APPROVE",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "a931da5f-c6ba-4956-9b58-dfb773af0782",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "FINANCE_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-BRK-GM-APPROVE",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "a931da5f-c6ba-4956-9b58-dfb773af0782",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-BRK-LEDGER-EXACT",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "a931da5f-c6ba-4956-9b58-dfb773af0782",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-BRK-VOID-DRAFT",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "38144678-4ac6-4a63-99c9-0d67ee608935",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "VOID",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-BRK-VOID-REJECTED",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "a6f189c9-e397-483d-8fb2-66c4fbcb98c2",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "VOID",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-BRK-REJECT",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "6ab0d139-8945-41b0-9d47-edcd48bfbd5c",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-LOST-EMPLOYEE-CC",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "66c61221-1ec2-466e-b82d-87542b9380a6",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "COST_CONTROL_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-LOST-EMPLOYEE-FIN",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "66c61221-1ec2-466e-b82d-87542b9380a6",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "FINANCE_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-LOST-EMPLOYEE",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "66c61221-1ec2-466e-b82d-87542b9380a6",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-LOST-HOTEL-CC",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "e16b99e6-4c6b-412a-ae7b-bbe046741cef",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "COST_CONTROL_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-LOST-HOTEL-FIN",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "e16b99e6-4c6b-412a-ae7b-bbe046741cef",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "FINANCE_APPROVED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-LOST-HOTEL",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "e16b99e6-4c6b-412a-ae7b-bbe046741cef",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-LOST-REJECT",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "1580732c-1e13-430a-b75b-fb2d5f30f876",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "REJECTED",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-TR-DRAFT-TL-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "1c15e003-5700-49ac-8afa-7a0a250e27a1",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-TR-PEN-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/transfers/2eff4fed-ad53-48a1-8c9a-1c911ec03e11",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-BRK-PEN-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/breakage/56a20a33-e207-40ef-bdef-acdfce95b431",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-LOST-PEN-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/lost-items/c0319de3-f197-4fe0-a034-e99f015bc71a",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-TR-POST-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/transfers/f56ef8b4-3c0b-4b23-b474-1fa73eec16da",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-BRK-APP-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/breakage/2d8e4cf0-1b30-49d5-b07e-8ff84423721c",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-LOST-APP-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/lost-items/250fe2c4-29f0-4745-82cf-7db5b6326fc8",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-LOST-REJ-1920",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/lost-items/88c9ef9d-0d27-4193-8641-54933f828fc4",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-TR-DRAFT-TL-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": "1c15e003-5700-49ac-8afa-7a0a250e27a1",
+      "actor": null,
+      "route": null,
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-TR-PEN-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/transfers/2eff4fed-ad53-48a1-8c9a-1c911ec03e11",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-BRK-PEN-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/breakage/56a20a33-e207-40ef-bdef-acdfce95b431",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-LOST-PEN-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/lost-items/c0319de3-f197-4fe0-a034-e99f015bc71a",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-TR-POST-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/transfers/f56ef8b4-3c0b-4b23-b474-1fa73eec16da",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-BRK-APP-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/breakage/2d8e4cf0-1b30-49d5-b07e-8ff84423721c",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-LOST-APP-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/lost-items/250fe2c4-29f0-4745-82cf-7db5b6326fc8",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    },
+    {
+      "scenarioId": "P5-CLEAN-BR-NEG-LOST-REJ-768",
+      "resultFile": "PHASE_5_BROWSER_RESULTS.json",
+      "fixtureId": null,
+      "actor": null,
+      "route": "/lost-items/88c9ef9d-0d27-4193-8641-54933f828fc4",
+      "expectedResult": null,
+      "actualResult": "PASS",
+      "evidenceStatus": "PASS"
+    }
+  ]
+}

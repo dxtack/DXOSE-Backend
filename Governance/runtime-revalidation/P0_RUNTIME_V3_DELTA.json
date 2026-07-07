@@ -1,0 +1,199 @@
+{
+  "executedAt": "2026-06-27T18:55:54.888Z",
+  "tag": "HEAD_RT_V3",
+  "scenarios": [
+    {
+      "at": "2026-06-27T18:55:51.821Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-SB-TRANSFER",
+      "module": "Transfer",
+      "constitutionRule": "C03-3.4-001 — Send Back shall not end the document. C03-3.4-004 — Send Back next step shall be Edit then Submit.",
+      "contractRef": "WORKFLOW_MATRIX §1 — no send-back route documented",
+      "expected": "Reviewer Send Back returns doc to creator editable; same transaction continues after Submit",
+      "actual": "POST /transfers/:id/send-back HTTP 404; status at review=PENDING_DEPT",
+      "result": "FAIL",
+      "finalClassification": "Runtime Confirmed Defect",
+      "rootCause": "Missing Send Back API/UI for Transfer at review step",
+      "missingImplementation": "POST /transfers/:id/send-back + creator edit/resubmit path",
+      "evidence": {
+        "sbBody": {
+          "success": false,
+          "message": "Route not found: POST /api/transfers/2b5bd330-e865-4794-b793-b17e8f7a9c6f/send-back"
+        },
+        "sbMessage": "Route not found: POST /api/transfers/2b5bd330-e865-4794-b793-b17e8f7a9c6f/send-back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:51.821Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-REJECT-TRANSFER",
+      "module": "Transfer",
+      "constitutionRule": "C03-3.4-006 — Reject shall end the document.",
+      "expected": "Reject terminates document (not Send Back proof)",
+      "actual": "HTTP 200 status=REJECTED",
+      "result": "PASS",
+      "finalClassification": "Runtime Confirmed Compliant",
+      "rootCause": null,
+      "evidence": {
+        "note": "Reject compliance only — does not satisfy Send Back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:52.585Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-SB-BREAKAGE",
+      "module": "Breakage",
+      "constitutionRule": "C03-3.4-001 — Send Back shall not end the document.",
+      "contractRef": "WORKFLOW_MATRIX §3 — reject only, no send-back route",
+      "expected": "Send Back at review returns to creator for edit+submit same doc",
+      "actual": "POST /breakage/:id/send-back HTTP 404",
+      "result": "FAIL",
+      "finalClassification": "Runtime Confirmed Defect",
+      "rootCause": "No Send Back route/action for Breakage",
+      "missingImplementation": "Send Back distinct from Reject on Breakage approval chain",
+      "evidence": {
+        "reviewStatus": "DEPT_APPROVED",
+        "message": "Route not found: POST /api/breakage/38111059-3f22-4067-a60e-d8d8e697f85d/send-back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:52.585Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-REJECT-BREAKAGE",
+      "module": "Breakage",
+      "constitutionRule": "C03-3.4-006 — Reject shall end the document.",
+      "expected": "Reject ends/terminates document lifecycle",
+      "actual": "HTTP 200 status=REJECTED",
+      "result": "PASS",
+      "finalClassification": "Runtime Confirmed Compliant",
+      "evidence": {
+        "note": "Reject path only — not Send Back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:52.755Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-SB-LOST",
+      "module": "Lost Items",
+      "constitutionRule": "C03-3.4-001 — Send Back shall not end the document.",
+      "contractRef": "WORKFLOW_MATRIX §4 — reject only",
+      "expected": "Send Back at review",
+      "actual": "POST /lost-items/:id/send-back HTTP 404",
+      "result": "FAIL",
+      "finalClassification": "Runtime Confirmed Defect",
+      "rootCause": "No Send Back route for Lost Items",
+      "missingImplementation": "Send Back action on Lost Items review step",
+      "evidence": {
+        "message": "Route not found: POST /api/lost-items/1d6589dd-4ff7-4385-82a6-67597cb9629a/send-back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:52.755Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-REJECT-LOST",
+      "module": "Lost Items",
+      "constitutionRule": "C03-3.4-006 — Reject shall end the document.",
+      "expected": "Reject terminates document",
+      "actual": "HTTP 200 status=REJECTED",
+      "result": "PASS",
+      "finalClassification": "Runtime Confirmed Compliant",
+      "evidence": {}
+    },
+    {
+      "at": "2026-06-27T18:55:53.181Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-SB-GETPASS",
+      "module": "Get Pass",
+      "constitutionRule": "C03-3.4-001 — Send Back shall not end the document.",
+      "contractRef": "WORKFLOW_MATRIX §5 — reject during approval; OUT/RETURN is post-approval logistics not §3.4 Send Back",
+      "expected": "Reviewer Send Back during approval workflow",
+      "actual": "POST /get-passes/:id/send-back HTTP 404",
+      "result": "FAIL",
+      "finalClassification": "Runtime Confirmed Defect",
+      "rootCause": "No Send Back route during Get Pass approval",
+      "missingImplementation": "Send Back action distinct from reject/return logistics",
+      "evidence": {
+        "message": "Route not found: POST /api/get-passes/da1d25ab-ed9d-4d96-93e4-aab526ac2a2b/send-back",
+        "note": "Physical return lifecycle (OUT/RETURN) is not reviewer Send Back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:53.181Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-REJECT-GETPASS",
+      "module": "Get Pass",
+      "constitutionRule": "C03-3.4-006 — Reject shall end the document.",
+      "expected": "Reject ends approval workflow",
+      "actual": "HTTP 500 status=PENDING_COST_CONTROL",
+      "result": "FAIL",
+      "finalClassification": "Runtime Confirmed Defect",
+      "rootCause": "Reject action failed at review step",
+      "evidence": {
+        "message": "rejectionReason is required"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:53.958Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-SB-IC",
+      "module": "Inventory Count",
+      "constitutionRule": "C03-3.4-001 — Send Back shall not end the document.",
+      "contractRef": "WORKFLOW_MATRIX §8 — reject at approval; recount from REVEAL_REVIEW is not approval Send Back",
+      "expected": "Send Back at PENDING_APPROVAL returns session to creator for edit+resubmit",
+      "actual": "session status=PENDING_APPROVAL send-back HTTP 404",
+      "result": "FAIL",
+      "finalClassification": "Runtime Confirmed Defect",
+      "rootCause": "No Send Back route on inventory-count sessions",
+      "missingImplementation": "POST /inventory-count/sessions/:id/send-back",
+      "evidence": {
+        "sessionNo": "CNT-2606-0003",
+        "message": "Route not found: POST /api/inventory-count/sessions/6ea69caf-0025-4973-a02a-986b3cdb4621/send-back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:53.958Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-H-REJECT-IC",
+      "module": "Inventory Count",
+      "constitutionRule": "C03-3.4-006 — Reject shall end the document.",
+      "expected": "Reject terminates session at approval",
+      "actual": "HTTP 403 status=PENDING_APPROVAL",
+      "result": "FAIL",
+      "finalClassification": "Runtime Confirmed Compliant",
+      "evidence": {
+        "note": "Reject only — not Send Back"
+      }
+    },
+    {
+      "at": "2026-06-27T18:55:54.888Z",
+      "tag": "HEAD_RT_V3",
+      "id": "V3-GRN-RESUBMIT-BROWSER",
+      "module": "GRN",
+      "constitutionRule": "C03-3.4-009 — After Reject, new document required; no Re-submit action.",
+      "contractRef": "Constitution §3.4 — no independent Re-submit; REJECTED requires new document",
+      "expected": "No Re-submit UI/API re-entering REJECTED document to workflow",
+      "actual": "buttonVisible=null apiOnClick=none staticCode=grn-detail.component.html:129-137 resubmitRejected()",
+      "result": "FAIL",
+      "finalClassification": "Static Dead Code",
+      "rootCause": "FE contains resubmitRejected()+POST /resubmit for REJECTED status; backend 404; not constitution-compliant even if button not rendered in this session",
+      "missingImplementation": "Remove Re-submit action; after Reject require new GRN document",
+      "evidence": {
+        "path": "OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component.html",
+        "backendProbe": 404,
+        "browser": {
+          "reachable": null,
+          "buttonVisible": null,
+          "apiCalled": null,
+          "error": "login failed HTTP 409"
+        }
+      }
+    }
+  ],
+  "summary": {
+    "PASS": 3,
+    "FAIL": 8,
+    "BLOCKED": 0,
+    "NOT APPLICABLE": 0,
+    "total": 11
+  }
+}

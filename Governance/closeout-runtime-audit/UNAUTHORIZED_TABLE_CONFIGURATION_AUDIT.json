@@ -1,0 +1,123 @@
+{
+  "executedAt": "2026-06-27T01:12:09.217Z",
+  "rows": [
+    {
+      "screen": "Item Master",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Stock Balances",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Movements",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Par Levels",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Ledger",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "GRN",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Transfers",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Breakage",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Lost Items",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Get Pass",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Inventory Count",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Workflow Pipeline",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    },
+    {
+      "screen": "Reports",
+      "previousApprovedPageSize": 20,
+      "currentPageSize": 20,
+      "changedFile": "None identified by closeout harness",
+      "changedByRoundScript": "No closeout script modifies OSE-Frontend source",
+      "restored": "N/A — already 20 in source",
+      "runtimeVerification": "Source audit only — REGISTRY_LIST_PAGE_SIZE=20"
+    }
+  ],
+  "conclusion": "No closeout-driven pagination change found; default remains 20"
+}

@@ -1,0 +1,1253 @@
+{
+  "executedAt": "2026-06-28T01:26:07.899Z",
+  "approvedConstitutionChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "module": {
+    "id": "ec7f0825-35dc-4c36-9776-bdae18985094",
+    "key": "GET_PASS",
+    "name": "Get Pass"
+  },
+  "activeTenantCount": 20,
+  "definitions": [
+    {
+      "id": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "key": "standard",
+      "name": "Standard Get Pass",
+      "tenantId": null,
+      "tenantSlug": null,
+      "scope": "global",
+      "isActive": true,
+      "versions": [
+        {
+          "versionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 4,
+          "status": "PUBLISHED",
+          "publishedAt": "2026-06-28T00:58:52.504Z",
+          "publishedById": null,
+          "notes": "Phase 2 constitution alignment — Dept → Cost Control → Finance → Security (no GM)",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_DEPT",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": "PENDING_COST_CONTROL",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_FINANCE",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "Security clearance",
+              "roleCode": "SECURITY",
+              "permissionCode": null,
+              "statusKey": "PENDING_SECURITY",
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [
+            "PENDING_DEPT",
+            "PENDING_COST_CONTROL",
+            "PENDING_FINANCE",
+            "PENDING_SECURITY"
+          ],
+          "hasGmStep": false,
+          "matchesConstitution": true
+        },
+        {
+          "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 3,
+          "status": "ARCHIVED",
+          "publishedAt": "2026-06-22T19:07:57.678Z",
+          "publishedById": null,
+          "notes": "ACC default chain sync republish",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_DEPT",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": "PENDING_COST_CONTROL",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_FINANCE",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "GM authorization",
+              "roleCode": "GENERAL_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_GM",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 5,
+              "label": "Security clearance",
+              "roleCode": "SECURITY",
+              "permissionCode": null,
+              "statusKey": "PENDING_SECURITY",
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [
+            "PENDING_DEPT",
+            "PENDING_COST_CONTROL",
+            "PENDING_FINANCE",
+            "PENDING_GM",
+            "PENDING_SECURITY"
+          ],
+          "hasGmStep": true,
+          "matchesConstitution": false
+        },
+        {
+          "versionId": "4a6d8cc5-20e2-4bee-b18a-fd0a9a3cc23c",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 2,
+          "status": "ARCHIVED",
+          "publishedAt": "2026-06-22T18:34:19.296Z",
+          "publishedById": null,
+          "notes": "ACC legacy chain sync republish",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "GM authorization",
+              "roleCode": "GENERAL_MANAGER",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 5,
+              "label": "Security clearance",
+              "roleCode": "SECURITY",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [],
+          "hasGmStep": false,
+          "matchesConstitution": false
+        },
+        {
+          "versionId": "7c9726ae-ad7f-450b-9f39-c657792123a8",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 1,
+          "status": "ARCHIVED",
+          "publishedAt": "2026-06-22T16:22:37.387Z",
+          "publishedById": null,
+          "notes": "P9 default seed",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "GM authorization",
+              "roleCode": "GENERAL_MANAGER",
+              "permissionCode": null,
+              "statusKey": null,
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [],
+          "hasGmStep": false,
+          "matchesConstitution": false
+        }
+      ]
+    }
+  ],
+  "versionIndex": [
+    {
+      "versionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantId": null,
+      "definitionTenantSlug": null,
+      "versionNumber": 4,
+      "status": "PUBLISHED",
+      "publishedAt": "2026-06-28T00:58:52.504Z",
+      "publishedById": null,
+      "notes": "Phase 2 constitution alignment — Dept → Cost Control → Finance → Security (no GM)",
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "label": "Department approval",
+          "roleCode": "DEPT_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_DEPT",
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 2,
+          "label": "Cost Control verification",
+          "roleCode": "COST_CONTROL",
+          "permissionCode": null,
+          "statusKey": "PENDING_COST_CONTROL",
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 3,
+          "label": "Finance sign-off",
+          "roleCode": "FINANCE_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_FINANCE",
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 4,
+          "label": "Security clearance",
+          "roleCode": "SECURITY",
+          "permissionCode": null,
+          "statusKey": "PENDING_SECURITY",
+          "capabilityCode": null,
+          "autoApprove": false
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "hasGmStep": false,
+      "matchesConstitution": true
+    },
+    {
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantId": null,
+      "definitionTenantSlug": null,
+      "versionNumber": 3,
+      "status": "ARCHIVED",
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "notes": "ACC default chain sync republish",
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "label": "Department approval",
+          "roleCode": "DEPT_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_DEPT",
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 2,
+          "label": "Cost Control verification",
+          "roleCode": "COST_CONTROL",
+          "permissionCode": null,
+          "statusKey": "PENDING_COST_CONTROL",
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 3,
+          "label": "Finance sign-off",
+          "roleCode": "FINANCE_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_FINANCE",
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 4,
+          "label": "GM authorization",
+          "roleCode": "GENERAL_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_GM",
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 5,
+          "label": "Security clearance",
+          "roleCode": "SECURITY",
+          "permissionCode": null,
+          "statusKey": "PENDING_SECURITY",
+          "capabilityCode": null,
+          "autoApprove": false
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGmStep": true,
+      "matchesConstitution": false
+    },
+    {
+      "versionId": "4a6d8cc5-20e2-4bee-b18a-fd0a9a3cc23c",
+      "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantId": null,
+      "definitionTenantSlug": null,
+      "versionNumber": 2,
+      "status": "ARCHIVED",
+      "publishedAt": "2026-06-22T18:34:19.296Z",
+      "publishedById": null,
+      "notes": "ACC legacy chain sync republish",
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "label": "Department approval",
+          "roleCode": "DEPT_MANAGER",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 2,
+          "label": "Cost Control verification",
+          "roleCode": "COST_CONTROL",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 3,
+          "label": "Finance sign-off",
+          "roleCode": "FINANCE_MANAGER",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 4,
+          "label": "GM authorization",
+          "roleCode": "GENERAL_MANAGER",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 5,
+          "label": "Security clearance",
+          "roleCode": "SECURITY",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        }
+      ],
+      "orderedStatusKeys": [],
+      "hasGmStep": false,
+      "matchesConstitution": false
+    },
+    {
+      "versionId": "7c9726ae-ad7f-450b-9f39-c657792123a8",
+      "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantId": null,
+      "definitionTenantSlug": null,
+      "versionNumber": 1,
+      "status": "ARCHIVED",
+      "publishedAt": "2026-06-22T16:22:37.387Z",
+      "publishedById": null,
+      "notes": "P9 default seed",
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "label": "Department approval",
+          "roleCode": "DEPT_MANAGER",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 2,
+          "label": "Cost Control verification",
+          "roleCode": "COST_CONTROL",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 3,
+          "label": "Finance sign-off",
+          "roleCode": "FINANCE_MANAGER",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 4,
+          "label": "GM authorization",
+          "roleCode": "GENERAL_MANAGER",
+          "permissionCode": null,
+          "statusKey": null,
+          "capabilityCode": null,
+          "autoApprove": false
+        }
+      ],
+      "orderedStatusKeys": [],
+      "hasGmStep": false,
+      "matchesConstitution": false
+    }
+  ],
+  "tenantResolution": [
+    {
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "tenantName": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [
+        {
+          "accWorkflowVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+          "versionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 4,
+          "status": "PUBLISHED",
+          "publishedAt": "2026-06-28T00:58:52.504Z",
+          "publishedById": null,
+          "notes": "Phase 2 constitution alignment — Dept → Cost Control → Finance → Security (no GM)",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_DEPT",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": "PENDING_COST_CONTROL",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_FINANCE",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "Security clearance",
+              "roleCode": "SECURITY",
+              "permissionCode": null,
+              "statusKey": "PENDING_SECURITY",
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [
+            "PENDING_DEPT",
+            "PENDING_COST_CONTROL",
+            "PENDING_FINANCE",
+            "PENDING_SECURITY"
+          ],
+          "hasGmStep": false,
+          "matchesConstitution": true,
+          "documents": [
+            {
+              "status": "DRAFT",
+              "count": 5
+            },
+            {
+              "status": "PENDING_FINANCE",
+              "count": 1
+            },
+            {
+              "status": "PENDING_DEPT",
+              "count": 22
+            },
+            {
+              "status": "CLOSED",
+              "count": 6
+            },
+            {
+              "status": "REJECTED",
+              "count": 5
+            },
+            {
+              "status": "RETURNED",
+              "count": 5
+            },
+            {
+              "status": "PENDING_COST_CONTROL",
+              "count": 1
+            }
+          ],
+          "totalDocuments": 45
+        },
+        {
+          "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+          "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 3,
+          "status": "ARCHIVED",
+          "publishedAt": "2026-06-22T19:07:57.678Z",
+          "publishedById": null,
+          "notes": "ACC default chain sync republish",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_DEPT",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": "PENDING_COST_CONTROL",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_FINANCE",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "GM authorization",
+              "roleCode": "GENERAL_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_GM",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 5,
+              "label": "Security clearance",
+              "roleCode": "SECURITY",
+              "permissionCode": null,
+              "statusKey": "PENDING_SECURITY",
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [
+            "PENDING_DEPT",
+            "PENDING_COST_CONTROL",
+            "PENDING_FINANCE",
+            "PENDING_GM",
+            "PENDING_SECURITY"
+          ],
+          "hasGmStep": true,
+          "matchesConstitution": false,
+          "documents": [
+            {
+              "status": "PENDING_DEPT",
+              "count": 3
+            }
+          ],
+          "totalDocuments": 3
+        }
+      ],
+      "totalPinnedDocuments": 48
+    },
+    {
+      "tenantId": "7c312820-957e-4b08-bcc3-07e8b9fc288f",
+      "tenantSlug": "closeout-audit-org-disposable",
+      "tenantName": "CLOSEOUT_RT_AUDIT Disposable Org",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "bf7638b8-04db-4051-94d1-0cf039827c00",
+      "tenantSlug": "dx-airport-hotel",
+      "tenantName": "DX Airport Hotel",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "4605fe49-5496-4e9b-8824-2bb3f57ab29f",
+      "tenantSlug": "dx-executive-suites",
+      "tenantName": "DX Executive Suites",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "ec7598b2-95e5-4302-8c07-515addd68613",
+      "tenantSlug": "dx-grand-palace",
+      "tenantName": "DX Grand Palace",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "3f763a13-177d-44e7-81f5-5640a7e8ead5",
+      "tenantSlug": "dx-hospitality-group",
+      "tenantName": "DX Hospitality Group",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "13a21ce5-2c05-4d14-9c2d-6ec796046b81",
+      "tenantSlug": "dx-marina-hotel",
+      "tenantName": "DX Marina Hotel",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [
+        {
+          "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+          "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 3,
+          "status": "ARCHIVED",
+          "publishedAt": "2026-06-22T19:07:57.678Z",
+          "publishedById": null,
+          "notes": "ACC default chain sync republish",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_DEPT",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": "PENDING_COST_CONTROL",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_FINANCE",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "GM authorization",
+              "roleCode": "GENERAL_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_GM",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 5,
+              "label": "Security clearance",
+              "roleCode": "SECURITY",
+              "permissionCode": null,
+              "statusKey": "PENDING_SECURITY",
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [
+            "PENDING_DEPT",
+            "PENDING_COST_CONTROL",
+            "PENDING_FINANCE",
+            "PENDING_GM",
+            "PENDING_SECURITY"
+          ],
+          "hasGmStep": true,
+          "matchesConstitution": false,
+          "documents": [
+            {
+              "status": "OUT",
+              "count": 1
+            },
+            {
+              "status": "PENDING_GM",
+              "count": 1
+            },
+            {
+              "status": "PENDING_DEPT",
+              "count": 1
+            }
+          ],
+          "totalDocuments": 3
+        }
+      ],
+      "totalPinnedDocuments": 3
+    },
+    {
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "tenantName": "Grand Horizon Hotel",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [
+        {
+          "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+          "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+          "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+          "definitionKey": "standard",
+          "definitionTenantId": null,
+          "definitionTenantSlug": null,
+          "versionNumber": 3,
+          "status": "ARCHIVED",
+          "publishedAt": "2026-06-22T19:07:57.678Z",
+          "publishedById": null,
+          "notes": "ACC default chain sync republish",
+          "orderedSteps": [
+            {
+              "stepOrder": 1,
+              "label": "Department approval",
+              "roleCode": "DEPT_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_DEPT",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 2,
+              "label": "Cost Control verification",
+              "roleCode": "COST_CONTROL",
+              "permissionCode": null,
+              "statusKey": "PENDING_COST_CONTROL",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 3,
+              "label": "Finance sign-off",
+              "roleCode": "FINANCE_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_FINANCE",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 4,
+              "label": "GM authorization",
+              "roleCode": "GENERAL_MANAGER",
+              "permissionCode": null,
+              "statusKey": "PENDING_GM",
+              "capabilityCode": null,
+              "autoApprove": false
+            },
+            {
+              "stepOrder": 5,
+              "label": "Security clearance",
+              "roleCode": "SECURITY",
+              "permissionCode": null,
+              "statusKey": "PENDING_SECURITY",
+              "capabilityCode": null,
+              "autoApprove": false
+            }
+          ],
+          "orderedStatusKeys": [
+            "PENDING_DEPT",
+            "PENDING_COST_CONTROL",
+            "PENDING_FINANCE",
+            "PENDING_GM",
+            "PENDING_SECURITY"
+          ],
+          "hasGmStep": true,
+          "matchesConstitution": false,
+          "documents": [
+            {
+              "status": "RETURNED",
+              "count": 2
+            },
+            {
+              "status": "OUT",
+              "count": 2
+            },
+            {
+              "status": "PENDING_SECURITY",
+              "count": 1
+            },
+            {
+              "status": "REJECTED",
+              "count": 1
+            },
+            {
+              "status": "PENDING_COST_CONTROL",
+              "count": 12
+            }
+          ],
+          "totalDocuments": 18
+        }
+      ],
+      "totalPinnedDocuments": 18
+    },
+    {
+      "tenantId": "d8b7455c-1ac2-4b14-959f-f4c4f3331ed8",
+      "tenantSlug": "hotel-test",
+      "tenantName": "Hotel Test",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "fd05d2fc-a32b-4617-8ccb-d08c869a2252",
+      "tenantSlug": "hotel-test1",
+      "tenantName": "Hotel test1",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "90a23ac2-c0cb-4344-89f2-34fddfef021a",
+      "tenantSlug": "roma-1",
+      "tenantName": "Roma_1",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "f3da1cfd-a397-42f5-a470-3e511d56bece",
+      "tenantSlug": "roma-2",
+      "tenantName": "Roma_2",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "90d14b98-4404-4127-95bb-ccbf3aa4ef17",
+      "tenantSlug": "rotana",
+      "tenantName": "Rotana",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "9881532d-642f-42c4-9a5a-995d38c81625",
+      "tenantSlug": "rotana-1",
+      "tenantName": "Rotana_1",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "676ec92e-91cc-475a-a269-c0d7d3aa7268",
+      "tenantSlug": "rotana-2",
+      "tenantName": "Rotana_2",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "e45aca57-0cef-4c16-8e1b-f98599891652",
+      "tenantSlug": "test-org",
+      "tenantName": "Test ORG",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "f810d3fe-54fa-493c-bbc0-1b1ff65e73a5",
+      "tenantSlug": "tets-org-1",
+      "tenantName": "Tets Org 1",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "5676fa76-bd8d-4e18-820e-a915198d3ec3",
+      "tenantSlug": "voco",
+      "tenantName": "Voco",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "531e7ce8-59e8-4f87-af4b-8b534816bde7",
+      "tenantSlug": "voco-khobar",
+      "tenantName": "Voco Khobar",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    },
+    {
+      "tenantId": "a039cd6e-efca-4ff2-9915-d83404c83cf2",
+      "tenantSlug": "voco-khobar-hotel",
+      "tenantName": "Voco Khobar Hotel",
+      "resolvedPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "resolvedDefinitionKey": "standard",
+      "resolvedDefinitionScope": "global",
+      "resolvedDefinitionTenantSlug": null,
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": true,
+      "hasGmStep": false,
+      "documentCountByPinnedVersion": [],
+      "totalPinnedDocuments": 0
+    }
+  ],
+  "summary": {
+    "definitionCount": 1,
+    "globalDefinitions": 1,
+    "tenantScopedDefinitions": 0,
+    "publishedVersions": 1,
+    "archivedVersions": 3,
+    "draftVersions": 0,
+    "versionsWithGmStep": 1,
+    "tenantsConstitutionAligned": 20,
+    "tenantsWithDrift": 0,
+    "totalPinnedDocuments": 69,
+    "documentsOnGmVersions": 24
+  },
+  "driftTenants": []
+}

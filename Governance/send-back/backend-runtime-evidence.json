@@ -1,0 +1,118 @@
+{
+  "generatedAt": "2026-07-02T20:45:00.000Z",
+  "workstream": "Constitutional Send Back — Runtime Verification Closure",
+  "finalClassification": "CLOSED — RUNTIME VERIFIED",
+  "migration": {
+    "environment": "dev/test only (127.0.0.1:5433/ose_inventory)",
+    "productionForbidden": true,
+    "statusBefore": {
+      "pendingMigration": "20260702232000_get_pass_approval_request_link",
+      "lastCommonMigration": "20260702143000_audit_action_cancel",
+      "databaseState": "out of sync — migration not applied"
+    },
+    "deploy": {
+      "command": "npx prisma migrate deploy",
+      "applied": "20260702232000_get_pass_approval_request_link",
+      "result": "success"
+    },
+    "statusAfter": {
+      "databaseState": "Database schema is up to date!",
+      "migrationsOnDisk": 75
+    }
+  },
+  "getPassBackfill": {
+    "classificationScript": "Governance/scripts/classify-get-pass-approval-backfill.js",
+    "executionScript": "Governance/scripts/execute-get-pass-approval-backfill.js",
+    "classificationArtifact": "Governance/send-back/GET_PASS_BACKFILL_CLASSIFICATION.json",
+    "executionArtifact": "Governance/send-back/GET_PASS_BACKFILL_EXECUTION.json",
+    "countsBefore": {
+      "openPending": 73,
+      "withApprovalRequest": 0,
+      "withoutApprovalRequest": 73,
+      "deterministic": 73,
+      "blocked": 0
+    },
+    "countsAfter": {
+      "openPending": 73,
+      "withApprovalRequest": 73,
+      "withoutApprovalRequest": 0
+    },
+    "processed": 73,
+    "stoppedOnNonDeterministic": false,
+    "fabricatedHistory": false
+  },
+  "runtimeVerification": {
+    "script": "Governance/scripts/integration-constitutional-send-back-runtime.js",
+    "artifact": "Governance/send-back/RUNTIME_VERIFICATION.json",
+    "guardedConcurrency": "approvalRequest.updateMany with status=PENDING and currentStep=sourceStepNumber; count=0 → CONCURRENCY_CONFLICT (409)",
+    "modules": {
+      "INVENTORY_COUNT": { "status": "VERIFIED", "entityType": "STOCK_COUNT" },
+      "TRANSFER": { "status": "VERIFIED", "entityType": "TRANSFER" },
+      "BREAKAGE": { "status": "VERIFIED", "entityType": "BREAKAGE" },
+      "LOST_ITEMS": { "status": "VERIFIED", "entityType": "LOST" },
+      "GRN": { "status": "VERIFIED", "entityType": "GRN" },
+      "GET_PASS": { "status": "VERIFIED", "entityType": "GET_PASS" }
+    },
+    "proofsPerModule": [
+      "sameApprovalRequestId",
+      "sameAccWorkflowVersionId",
+      "oneStepRewind",
+      "previousStepPending",
+      "laterStepsWaiting",
+      "reasonPreserved",
+      "workflowRound",
+      "timelineSendBack",
+      "timelineHasSourceTarget",
+      "creatorResubmitStep1",
+      "noNewApprovalRequest",
+      "concurrentSendBackOneWinner",
+      "concurrentSendBackGuardedUpdateMany"
+    ]
+  },
+  "newTests": {
+    "files": [
+      {
+        "path": "src/platform/workflowSendBack.service.test.js",
+        "caseCount": 11,
+        "coverage": "normalizeReason; one-step rewind; Creator path (currentStep=0); guarded updateMany concurrency; audit failure rollback; non-pending step rejection; creator resubmit; resolveWorkflowRound; audit payload metadata"
+      },
+      {
+        "path": "src/platform/timeline/constitutional-sendBack-timeline.test.js",
+        "caseCount": 4,
+        "coverage": "SEND_BACK lifecycle source/target/reason/round; RESUBMIT round; timeline interleaving with approval steps; CREATOR targetType"
+      },
+      {
+        "path": "src/services/constitutional-sendBack-modules.runtime.test.js",
+        "caseCount": 13,
+        "coverage": "Per-module guarded updateMany + same AR ID (Transfer, Inventory Count, GRN, Breakage, Lost, Get Pass); terminal state guards; concurrent resubmit conflict"
+      }
+    ],
+    "totalNewCases": 28,
+    "arithmetic": "282 (prior) + 28 (new) = 310 (current)",
+    "note": "Distinct from expectation-only updates in getPass.service.test.js, grn.service.test.js, inventory-count-lifecycle.behavior.test.js"
+  },
+  "testTotals": {
+    "backendUnit": { "total": 310, "pass": 310, "fail": 0, "command": "npm run test:unit" },
+    "frontendBuild": { "result": "success", "command": "npm run build", "output": "OSE-Frontend/dist/OSE" },
+    "integrationHarness": {
+      "command": "npm run test:integration",
+      "status": "NOT_RUN",
+      "reason": ".env.test.local missing — integration harness requires ose_inventory_test; runtime proofs executed on dev DB via Governance scripts instead"
+    }
+  },
+  "zeroRegressionProof": {
+    "priorUnitTotal": 282,
+    "newCasesAdded": 28,
+    "currentUnitTotal": 310,
+    "delta": 28,
+    "formula": "282 + 28 = 310",
+    "allPriorTestsPass": true,
+    "frontendBuildPass": true
+  },
+  "artifacts": [
+    "Governance/send-back/GET_PASS_BACKFILL_CLASSIFICATION.json",
+    "Governance/send-back/GET_PASS_BACKFILL_EXECUTION.json",
+    "Governance/send-back/RUNTIME_VERIFICATION.json",
+    "Governance/send-back/backend-runtime-evidence.json"
+  ]
+}

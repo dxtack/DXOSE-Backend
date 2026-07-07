@@ -1,0 +1,253 @@
+# Gate B Blocked Items (251)
+
+- **C2-2.1-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.2-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.2-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.3-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.4.1-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.4.2-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.5-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.6-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.6-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.6-005** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.7-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.7-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C2-2.8-001** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C3-3.1-001** (Product Enforceable Requirement): HTTP 403 alone does not prove defect; response body not captured; effective assignment not proven; department scope not proven; workflow assignment/state not proven; rejection reason unknown
+- **C3-3.1-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C3-3.1-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C3-3.2-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C3-3.3-002** (Product Enforceable Requirement): HTTP 403 alone does not prove defect; response body not captured; effective assignment not proven; department scope not proven; workflow assignment/state not proven; rejection reason unknown
+- **C3-3.5-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C4-4.1-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C4-4.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C4-4.3-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C4-4.3-003** (Product Enforceable Requirement): HTTP 403 alone does not prove defect; response body not captured; effective assignment not proven; department scope not proven; workflow assignment/state not proven; rejection reason unknown
+- **C4-4.3-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.1-002** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C5-5.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-005** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-006** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-007** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-008** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-009** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-010** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-011** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-012** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C5-5.2-013** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C6-6.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C6-6.3-005** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C6-6.5-001** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C6-6.5-002** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C6-6.5-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C6-6.5-006** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C6-6.5-008** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C6-6.5-009** (Product Enforceable Requirement): Architecture hardening opportunity (DB trigger) — not constitutional FAIL; no DB-level requirement text
+- **C6-6.6-006** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C6-6.7-001** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C7-7.1-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.4-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.4-002** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C7-7.4-003** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C7-7.4-004** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C7-7.5-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.7-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.8-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.8-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.8-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.8-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.9-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.9-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.9-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C7-7.11-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.5-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.6-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.7-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.8-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.8-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.8-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.8-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C8-8.10-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C9-9.2-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C9-9.3-001** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C9-9.3-002** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C9-9.3-003** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C9-9.3-005** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C9-9.3-006** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C9-9.3-008** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C9-9.3-009** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C9-9.3-010** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-005** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-006** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-007** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-008** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-010** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-011** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-012** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-013** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-014** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C10-10.2-015** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C11-11.3-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C11-11.4-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C11-11.4-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C11-11.6-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C12-12.2-002** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C12-12.2-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C12-12.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C12-12.4-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C12-12.5-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C12-12.6-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C13-13.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C13-13.5-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C13-13.6-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C13-13.8-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C13-13.9-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C13-13.10-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C14-14.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C14-14.3-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C14-14.4-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C14-14.5-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C14-14.8-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C15-15.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C15-15.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C15-15.4-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C16-16.2-002** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C16-16.3-002** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C16-16.3-003** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C16-16.3-006** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C16-16.3-007** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C16-16.3-008** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C16-16.3-009** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C16-16.3-010** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C17-17.1-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.2-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.2-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.2-004** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.2-005** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.2-006** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.2-007** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.3-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.3-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.3-004** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C17-17.3-005** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.1-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.1-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.1-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.1-004** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.1-005** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.1-006** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.1-007** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.2-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.2-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.2-003b** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C18-18.2-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-005** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-005b** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-006** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-007** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-008** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-008b** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-009** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-010** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-010b** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C18-18.2-011** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C19-19.2-002** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C19-19.3-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C19-19.7-001** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C20-20.5-001** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C21-21.2-002** (Product Enforceable Requirement): Closeout: unsupported PASS removed — not in closeout-verified PASS allowlist
+- **C21-21.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C21-21.4-001** (Strong Recommendation): No probes matched
+- **C21-21.4-002** (Strong Recommendation): No probes matched
+- **C22-22.1-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C22-22.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C22-22.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C22-22.3-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C22-22.3-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C22-22.3-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C22-22.3-005** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C22-22.4-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C23-23.1-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.2-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.3-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.3-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.3-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.3-004** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.4-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.4-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.4-004** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.5-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.6-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.6-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C23-23.6-004** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.1-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.2-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.2-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.2-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.3-001** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C24-24.4-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.4-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.4-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.4-004** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.4-005** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.5-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.5-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.5-003** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C24-24.6-001** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C24-24.6-002** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C24-24.7-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.1-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.1-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.2-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.2-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.2-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C25-25.2-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C25-25.3-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.4-001** (Strong Recommendation): No probes matched
+- **C25-25.5-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.5-002** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.6-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C25-25.7-001** (UX / Presentation Requirement): Behavioral requirement without runtime scenario evidence
+- **C26-26.2-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C26-26.2-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C26-26.3-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C26-26.3-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C26-26.4-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C26-26.6-001** (Strong Recommendation): Static code evidence only; runtime not executed for this requirement
+- **C26-26.7-001** (Strong Recommendation): No probes matched
+- **C27-27.1-001** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C27-27.1-002** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C27-27.1-003** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C27-27.1-004** (Product Enforceable Requirement): Static code evidence only; runtime not executed for this requirement
+- **C27-27.2-001** (Product Enforceable Requirement): Behavioral requirement without runtime scenario evidence
+- **C27-27.2-002** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C28-28.1-001** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C28-28.1-002** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C28-28.1-003** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C28-28.1-004** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C28-28.2-001** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C28-28.3-001** (UX / Presentation Requirement): Insufficient evidence to determine compliance
+- **C29-29.1-001** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.2-002** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C29-29.2-003** (QA / Release Requirement): QA viewport/accessibility/release matrix not executed in Gate B session
+- **C29-29.3-001** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.5-001** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.6-001** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.6-002** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.7-001** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.7-002** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.8-001** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.8-002** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout
+- **C29-29.8-003** (Governance Process Requirement): No automated CI gate proven; requirement text does not mandate automated CI enforcement in this closeout

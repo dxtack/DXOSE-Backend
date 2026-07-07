@@ -1,0 +1,6 @@
+"scenario_id","requirement_ids","description","status","evidence"
+"RS-001","Ch4 ACC","npm run smoke:governance-static","Passed","GATE_B_COMMAND_LOG.md"
+"RS-002","Ch22 audit","npm run smoke:audit-facade","Passed","GATE_B_COMMAND_LOG.md"
+"RS-003","Ch5 posting lifecycle","Live posting transition API test","Blocked","Skipped — mutating runtime test prohibited without isolated test tenant protocol"
+"RS-004","Ch24/Ch28 QA","Responsive/accessibility release matrix","Blocked","QA viewport matrix not executed in audit session"
+"RS-005","Ch6 period close","Period close resolution workspace runtime","Blocked","Requires controlled test tenant + period fixtures — not executed"

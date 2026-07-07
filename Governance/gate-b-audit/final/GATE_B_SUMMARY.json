@@ -1,0 +1,49 @@
+{
+  "closeout_corrected": true,
+  "audit_timestamp_utc": "2026-06-27T16:57:03Z",
+  "actionable_rows_reviewed": 268,
+  "matrix_rows": 476,
+  "status_counts": {
+    "NOT APPLICABLE": 208,
+    "PASS": 10,
+    "UNVERIFIED / BLOCKED": 251,
+    "FAIL": 3,
+    "PARTIAL": 4
+  },
+  "actionable_status_counts": {
+    "PASS": 10,
+    "UNVERIFIED / BLOCKED": 251,
+    "FAIL": 3,
+    "PARTIAL": 4
+  },
+  "findings_total": 3,
+  "findings_by_severity": {
+    "High": 2,
+    "Medium": 1
+  },
+  "current_session_runtime": {
+    "Passed": 4,
+    "Failed": 2,
+    "Blocked": 0
+  },
+  "historical_evidence": {
+    "items": 2,
+    "note": "Not included in current_session_runtime counts"
+  },
+  "closeout_stats": {
+    "keyword_pass_to_blocked": 22,
+    "findings_removed": 4,
+    "findings_downgraded": 1,
+    "status_changes": {
+      "PASS->UNVERIFIED / BLOCKED": 22
+    }
+  },
+  "code_snapshot_hashes": {
+    "OSE-Frontend/src": "BEB44B9E4D69487A599BEEA99A57D3D24A8BC18EF6EF0A0635D941B359A63F9B",
+    "OSE-backend/src": "CFE262BF4D82D5BD5C23058FE57EF5B4CDD6C37E9FCA1030F840A3729274DB21",
+    "OSE-backend/prisma": "B26E4594F06FA9CEE7F2FC39FC03438500108C7B5CDE56B882A10CBC4A16BCE9"
+  },
+  "gate_a_unmodified": true,
+  "remediation_started": false,
+  "validation_exit_code": 0
+}

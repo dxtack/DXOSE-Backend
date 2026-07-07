@@ -1,0 +1,2520 @@
+{
+  "_historicalNotice": "SUPERSEDED BY CHAPTER 6 D1–D12 AMENDMENT",
+  "_notice": "This batch verified pre-amendment Chapter 6 only. Do not use for compliance of D1–D12 amended text.",
+  "_supersededAt": "2026-07-05",
+  "entries": [
+    {
+      "requirementId": "C06-6.3-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "DB: document date columns on governed models",
+      "remainingWork": "Not verified on all document families (Lost Items, Inventory Count, Issue)",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "GrnImport.receivingDate",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "MovementDocument.documentDate",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "StoreTransfer.transferDate",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.3-002",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: Posting; API: post handlers set postingDate",
+      "remainingWork": "Movement, Lost Items, Inventory Count — not verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "postGrnInTransaction() sets postingDate",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "postTransferInTransaction() sets postingDate",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "postingDate columns on grn_imports/store_transfers/movement_documents/get_passes",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.3-003",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: posting period helper at post",
+      "remainingWork": "Same module coverage gap as C06-6.3-002",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/postingPeriod.util.js",
+          "method": "resolvePostingPeriod()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "postGrnInTransaction() sets assignedPostingPeriod",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.3-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: separate receivingDate vs postingDate fields",
+      "remainingWork": "GRN post derives postingDate from receivingDate; cross-module consistency not verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "GrnImport.receivingDate + postingDate",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "postingDate = grn.receivingDate || postedAt",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/periodGuard.service.js",
+          "method": "checkPeriodLock(tenantId, grn.receivingDate)",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: periodGuard before posting",
+      "remainingWork": "Not exhaustively verified on every post path",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/periodGuard.service.js",
+          "method": "checkPeriodLock()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "checkPeriodLock before post",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No future-posting-date restriction logic found in backend or frontend",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C06-6.5-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: centralized period lock guard",
+      "remainingWork": "Verify all posting entry points invoke checkPeriodLock",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/periodGuard.service.js",
+          "method": "checkPeriodLock() throws PERIOD_LOCKED_MONTHLY",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/posting.service.js",
+          "method": "checkPeriodLock on postDocument",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-004",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Period Close"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No sequential-close enforcement found in periodClose.service.js",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/periodClose.service.js",
+          "method": "closePeriod() — no prior-period gate",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-005",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Period Close"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "DB: unique period key per tenant/year/month",
+      "remainingWork": "Runtime overlap validation beyond DB uniqueness not verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "PeriodClose @@unique([tenantId, year, month])",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-006",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: periodGuard.service.js",
+      "remainingWork": "Some modules call checkPeriodLock directly — centralization incomplete audit",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/periodGuard.service.js",
+          "method": "checkPeriodLock()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-007",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass",
+        "Movement"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: modules delegate to periodGuard",
+      "remainingWork": "Independent period logic may exist outside periodGuard — not exhaustively ruled out",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/breakage.service.js",
+          "method": "checkPeriodLock import",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/transfer.service.js",
+          "method": "checkPeriodLock import",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-008",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: assignedPostingPeriod set only at post",
+      "remainingWork": "No explicit immutability guard on PATCH/update paths verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "assignedPostingPeriod set on POSTED update only",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "assignedPostingPeriod set on POSTED update only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.6-001",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Period Close"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: month-end checklist backend; UI: closing spinner",
+      "remainingWork": "No centralized validation progress UI/checklist display on period-close page",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/periodCloseGovernance.service.js",
+          "method": "runMonthEndCloseChecklist()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/periodClose.service.js",
+          "method": "assertMonthEndCloseAllowed() before close",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/period-close/period-close-page/period-close-page.component.ts",
+          "method": "closing signal during doClose()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.6-002",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Period Close"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: period-close resolution tables; API: period resolution workspace",
+      "remainingWork": "Revalidate & Close not wired; per-document resolution actions not implemented",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/periodResolution.service.js",
+          "method": "getPeriodResolutionWorkspace()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/period-close/period-close-page/period-close-page.component.ts",
+          "method": "refreshPeriodResolution()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/period-close/period-close-page/period-close-page.component.html",
+          "method": "resolution workspace tables",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.1-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: separate draftGovernance vs route guard files",
+      "remainingWork": "No explicit platform policy module separating Document State Protection from Draft Recovery",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/draftGovernance.service.js",
+          "method": "createGrnServerDraft/saveGrnDraft",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/guards/document-draft-can-deactivate.guard.ts",
+          "method": "canDeactivate()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.2-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: document create paths; Workflow: server draft/default DRAFT",
+      "remainingWork": "GRN create enters VALIDATED not DRAFT; Breakage create enters DEPT_APPROVED",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/transfer.service.js",
+          "method": "createTransfer() default TransferStatus.DRAFT",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/getPass.service.js",
+          "method": "createGetPass() status DRAFT",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "create path status VALIDATED",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/breakage.service.js",
+          "method": "createBreakage() status DEPT_APPROVED",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.4-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No platform draft-owner model or field found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.4-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No platform draft access-rights policy found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.4-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No draft ownership transfer rules found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.4-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No inactive/departed-user draft handling found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.5-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: concurrency version backend",
+      "remainingWork": "Multi-session draft open rules not documented; FE concurrencyVersion gaps on some modules",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "assertConcurrencyVersion()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.7-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No governed auto-save on business events found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.7-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No auto-save on add/delete row found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.7-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No auto-save on quantity/price change found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.7-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No auto-save on supplier/warehouse change found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.7-005",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No auto-save on attachment change found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.7-006",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No auto-save on notes change found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.7-007",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "Route guard prompts on leave but does not auto-save before navigation",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.ts",
+          "method": "confirmDeactivate() prompts only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.8-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No draft recovery flow with current validation enforcement found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.8-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No restored-document revalidation gate found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.9-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No per-family draft registry service/table found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.9-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No 30-day draft retention policy implementation found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.9-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No draft expiration policy implementation found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.10-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: route guard on GRN create",
+      "remainingWork": "Transfer, Get Pass, Breakage create forms — not verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/app.routes.ts",
+          "method": "grn/new canDeactivate guard",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/guards/document-draft-can-deactivate.guard.ts",
+          "method": "canDeactivate()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.10-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No beforeunload handler on GRN create for browser refresh",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.ts",
+          "method": "no window:beforeunload HostListener",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.10-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No tab-close protection beyond route guard",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.10-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: canDeactivate on route leave/back",
+      "remainingWork": "Only GRN /new route wired",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.ts",
+          "method": "confirmDeactivate()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.10-005",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No session-expiration unsaved-changes handling found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C07-7.10-006",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: isDirty() cleared after successful create",
+      "remainingWork": "Save Draft / Submit clean-state pattern not verified platform-wide",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.ts",
+          "method": "skipDeactivate + navigate on create success",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.11-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: numbering at first server persist",
+      "remainingWork": "GRN standard create assigns number at create (VALIDATED), not separate draft-save endpoint",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/draftGovernance.service.js",
+          "method": "createGrnServerDraft() generateDocNumber",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "create assigns systemGrnNumber",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/transfer.service.js",
+          "method": "createTransfer() generateTransferNo",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.2-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: concurrencyVersion on mutations; DB: schema column",
+      "remainingWork": "FE does not consistently send concurrencyVersion on Transfer/Get Pass/Breakage mutations",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "assertConcurrencyVersion()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "concurrencyVersion on governed tables",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.3-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: document-level concurrencyVersion",
+      "remainingWork": "Field-level-only concurrency not ruled out on all screens",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "document-level version compare",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.4-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: draft-stage conflict detection when version sent",
+      "remainingWork": "Optional version (null skips check) weakens draft detection",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "assertConcurrencyVersion() returns early if expectedVersion null",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/transfer.service.js",
+          "method": "updateTransfer() assertConcurrencyVersion",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.4-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: conflict throws 409 when version mismatches",
+      "remainingWork": "Last-write-wins still possible when client omits version",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "concurrencyConflictError() 409",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.4-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: reject on version mismatch",
+      "remainingWork": "Coverage incomplete when version omitted",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "assertConcurrencyVersion()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.4-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: concurrency conflict message",
+      "remainingWork": "Reload workflow not verified on all modules",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/interceptors/api-error.interceptor.ts",
+          "method": "CONCURRENCY_CONFLICT handling",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/public/i18n/en.json",
+          "method": "COMMON.CONCURRENCY_CONFLICT",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.5-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: status guards on update/submit",
+      "remainingWork": "Not verified on all operational modules",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/draftGovernance.service.js",
+          "method": "EDITABLE_GRN DRAFT only",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/getPass.service.js",
+          "method": "Only DRAFT can be submitted",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "sendBackGrn sets status DRAFT",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: saveGrnDraft concurrency check",
+      "remainingWork": "Save-draft idempotency not verified all modules",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/draftGovernance.service.js",
+          "method": "saveGrnDraft() assertConcurrencyVersion + bump",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: submit paths with version checks where implemented",
+      "remainingWork": "Not all submit endpoints require concurrencyVersion",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/getPass.service.js",
+          "method": "submit assertConcurrencyVersion",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: approve mutations",
+      "remainingWork": "Approve double-execution guards not exhaustively verified",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/breakage.service.js",
+          "method": "assertConcurrencyVersion on workflow actions",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: reject terminal state",
+      "remainingWork": "Reject double-execution via version not verified",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "rejectGrn() terminal REJECTED",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-005",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: sendBackGrn version check",
+      "remainingWork": "Other modules send-back not verified",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "sendBackGrn() assertConcurrencyVersion",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-006",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "Not Verified",
+      "whereImplemented": "None",
+      "remainingWork": "Cancel double-execution detection not verified",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C08-8.6-007",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: duplicate-post guards",
+      "remainingWork": "Post-on-same-version concurrency check not uniform",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "assertNoDuplicateGrnPost()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "assertNoDuplicateTransferPost()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.7-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "Not Verified",
+      "whereImplemented": "None",
+      "remainingWork": "Posting + concurrencyVersion coupling not verified on all post paths",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C08-8.8-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: reject conflicting updates (when version provided)",
+      "remainingWork": "Optional version weakens guarantee",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "assertConcurrencyVersion()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.8-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Get Pass",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: 409 on mismatch prevents silent overwrite",
+      "remainingWork": "Overwrite possible when version omitted",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/concurrency.service.js",
+          "method": "concurrencyConflictError()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.8-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: reload message on CONCURRENCY_CONFLICT",
+      "remainingWork": "Automatic reload not implemented; user must manually reload",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/public/i18n/en.json",
+          "method": "COMMON.CONCURRENCY_CONFLICT reload instruction",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.10-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "No audit record on concurrency conflict found",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/errorRegistry.js",
+          "method": "CONCURRENCY_CONFLICT code mapping only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.2-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: document numbering service",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "generateDocNumber()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.2-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "UI: GRN create has no system number input",
+      "remainingWork": "Other create screens not exhaustively verified",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.html",
+          "method": "supplier invoice field + SYSTEM_GRN_HINT only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.2-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "UI: system document number not editable on create",
+      "remainingWork": "Detail/edit screens not exhaustively verified",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.html",
+          "method": "no grnNumber form control",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.2-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: number assigned at first server create/save",
+      "remainingWork": "Constitution server-draft-save endpoint exists for GRN only; GRN main create assigns at VALIDATED create",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/draftGovernance.service.js",
+          "method": "createGrnServerDraft()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/controllers/constitution.controller.js",
+          "method": "createGrnDraft route",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/grn.service.js",
+          "method": "generateDocNumber on create",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.2-005",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: PREFIX-YEAR-SEQUENCE format",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "return `${prefix}-${year}-${padded}`",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.2-006",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "UI: supplier invoice separate; DB: supplierInvoiceNumber",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "GrnImport.supplierInvoiceNumber",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.html",
+          "method": "SUPPLIER_INVOICE_NO field",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "DB: unique constraints + doc_sequence",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "GrnImport @@unique([tenantId, grnNumber])",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "DocSequence @@unique([tenantId, prefix, year])",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: atomic sequence increment on allocation",
+      "remainingWork": "Permanent reservation on failed create rollback not proven",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "INSERT ON CONFLICT increment lastSeq",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: monotonic sequence only",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "lastSeq + 1 only; no recycle",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: gap-tolerant increment design",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "monotonic lastSeq increment",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-005",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: unified docNumbering.service",
+      "remainingWork": "Import/integration channels not exhaustively verified",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "generateDocNumber()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/breakage.service.js",
+          "method": "generateDocNumber(DocPrefix.BREAKAGE)",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-006",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: DocPrefix constants",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "DocPrefix object",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-007",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: modules import DocPrefix",
+      "remainingWork": "Hardcoded prefix strings outside DocPrefix not ruled out",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/transfer.service.js",
+          "method": "generateTransferNo uses docNumbering",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-008",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: sequence design accepts gaps",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "atomic increment may leave gaps on rollback",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-009",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: no update path for documentNo/grnNumber found",
+      "remainingWork": "Explicit immutability enforcement not verified all models",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "grnNumber/transferNo/documentNo/passNo fields",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-010",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Transfer"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: audit on create includes document number",
+      "remainingWork": "Number allocation audit not verified all document families",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/transfer.service.js",
+          "method": "logAction CREATE transferNo",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-011",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: generateDocNumber only allocation path",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "generateDocNumber()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-012",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Shared: year dimension in doc_sequence",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/docNumbering.service.js",
+          "method": "year from date in sequence key",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "DocSequence @@unique([tenantId, prefix, year])",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.1-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: inbound GRN post",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "postGrnInTransaction() no outbound stock check",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.1-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: outbound post stock checks",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "Insufficient source stock check",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedMovement.service.js",
+          "method": "qtyBefore < qty guard",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-001",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Transfer",
+        "Breakage"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: stock read inside post transaction",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "findUnique stockBalance at post time",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-002",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: posting stock validation",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedMovement.service.js",
+          "method": "Insufficient stock throws on post",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "qtyOnHand < receivedQty throws",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-003",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Breakage",
+        "Transfer"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: qty <= 0 rejected at post/create",
+      "remainingWork": "Not verified on all line-entry paths",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "qtyToPost <= 0 abort",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedMovement.service.js",
+          "method": "qty <= 0 continue/skip or throw",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-004",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: zero-qty line handling at post",
+      "remainingWork": "Zero-line prohibition at draft entry not uniform",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "receivedQty <= 0 continue",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "zero/negative qty abort",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-005",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "DB: Decimal(15,4) precision",
+      "remainingWork": "Platform settings-driven precision validation not verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/prisma/schema.prisma",
+          "method": "qtyOnHand Decimal(15,4)",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-006",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Transfer",
+        "Breakage"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: source location stock validation",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "srcBalance at sourceLocationId",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedMovement.service.js",
+          "method": "stock at line.locationId",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-007",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Breakage"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "API: qtyInBaseUnit used in posting",
+      "remainingWork": "All inventory calculations base-unit-only not exhaustively verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "line.qtyInBaseUnit",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/breakage.service.js",
+          "method": "qtyInBaseUnit on line create",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-008",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: composite posting guards",
+      "remainingWork": "Full constitutional stock-integrity matrix not audited",
+      "verificationStatus": "Needs Audit",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedMovement.service.js",
+          "method": "stock integrity on breakage post",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "stock integrity on transfer post",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-009",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Transfer",
+        "Breakage",
+        "Movement"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: ledger/balance updates inside post transactions",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "inventoryLedger.create in post",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/posting.service.js",
+          "method": "postDocument transactional ledger",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-010",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Movement"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Shared: movement register guard",
+      "remainingWork": "Posted ledger row edit prevention not fully verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/movementRegisterGuard.service.js",
+          "method": "assertMovementRegisterMutable()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/movement.service.js",
+          "method": "assertMovementRegisterMutable on update",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-011",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Movement",
+        "GRN"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: corrections via new governed transactions",
+      "remainingWork": "Correction transaction catalog not exhaustively verified",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/movementRegisterGuard.service.js",
+          "method": "GOVERNED_POST_FORBIDDEN direct register post",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-012",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: inbound GRN post",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "no outbound stock availability check",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-013",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Transfer",
+        "Breakage",
+        "Get Pass"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "API: authoritative backend stock checks at post",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "Insufficient source stock throws",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGetPass.service.js",
+          "method": "availableQty check at checkout",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-014",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "Breakage",
+        "Lost Items"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: client qty clamp/warn; API: authoritative post check",
+      "remainingWork": "Client may block UI but backend remains authoritative — pattern not uniform",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/breakage/breakage-create-modal/breakage-create-modal.component.ts",
+          "method": "clamp qty to availableQty",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedMovement.service.js",
+          "method": "authoritative insufficient stock at post",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-015",
+      "primaryScope": "Operational",
+      "affectedModules": [
+        "GRN",
+        "Inventory Count"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Workflow: valuation at post via WAC/resolveUnitCost",
+      "remainingWork": "All posting paths Chapter-5 valuation alignment not audited",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "WAC recalculation on receive",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/posting.service.js",
+          "method": "resolveUnitCost at post",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/valuationGovernance.service.js",
+          "method": "resolveUnitCost export",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-001",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI/API: format-only display currency",
+      "remainingWork": "Not applied platform-wide",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/services/constitution-platform.service.ts",
+          "method": "formatAmount() symbol+decimals only",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "formatAmount()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-002",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "UI/API: no FX conversion in formatters",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/services/constitution-platform.service.ts",
+          "method": "formatAmount uses raw number",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-003",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "API: display currency stored separately in tenant_setting",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "setDisplayCurrency updates setting only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-004",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "API: ledger writes independent of display currency",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "inventoryLedger uses numeric values not display currency",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-005",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: valuation uses WAC not display currency",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedTransfer.service.js",
+          "method": "wac from stockBalance",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-006",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "UI: display formatting only",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/pipes/display-currency.pipe.ts",
+          "method": "transform() format only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-007",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "API: calculations use stored numerics",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "no calculation helpers",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-008",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: inventory valuation independent of display currency",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/inventoryValuation.service.js",
+          "method": "valuation basis logic",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-009",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Workflow: posting logic does not read display currency",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/services/postingGovernedGrn.service.js",
+          "method": "post path no displayCurrency import",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-010",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Platform: no taxation module coupled to display currency",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "display-only service surface",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.3-011",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "Platform: no accounting txn coupling to display currency",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "tenant setting key displayCurrency only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.4-001",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "GRN",
+        "Transfer"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "UI: displayCurrency pipe on detail; API: tenant display currency",
+      "remainingWork": "Dashboard, reports, breakage/lost detail, stock reports still hardcoded SAR",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/core/pipes/display-currency.pipe.ts",
+          "method": "transform()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "getDisplayCurrency()",
+          "verification": "Verified"
+        },
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/dashboard/dashboard.component.ts",
+          "method": "fmtSAR hardcoded",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.4-002",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Reports"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "Report engine still uses hardcoded SAR headers/presentation",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/reports/report-engine/report-views/detail-report-table.component.ts",
+          "method": "SAR in column headers comment",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.4-003",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Dashboard"
+      ],
+      "implemented": "No",
+      "whereImplemented": "None",
+      "remainingWork": "Dashboard fmtSAR hardcoded",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Frontend",
+          "file": "OSE-Frontend/src/app/features/dashboard/dashboard.component.ts",
+          "method": "fmtSAR()",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.4-004",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Reports"
+      ],
+      "implemented": "Not Verified",
+      "whereImplemented": "None",
+      "remainingWork": "Exported document currency consistency not verified",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C11-11.4-005",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Requires Mapping"
+      ],
+      "implemented": "Not Verified",
+      "whereImplemented": "None",
+      "remainingWork": "Printed output currency consistency not verified",
+      "verificationStatus": "Pending Governance",
+      "bdr": "None",
+      "evidence": []
+    },
+    {
+      "requirementId": "C11-11.4-006",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Reports"
+      ],
+      "implemented": "Partial",
+      "whereImplemented": "Platform: display currency service exists",
+      "remainingWork": "Reports/PDF channels not yet on property display currency standard",
+      "verificationStatus": "Needs Code Review",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/controllers/constitution.controller.js",
+          "method": "getCurrency/putCurrency",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.6-001",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "API: display currency change does not touch posted docs",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "setDisplayCurrency tenant_setting only",
+          "verification": "Verified"
+        }
+      ]
+    },
+    {
+      "requirementId": "C11-11.6-002",
+      "primaryScope": "Financial",
+      "affectedModules": [
+        "Platform"
+      ],
+      "implemented": "Yes",
+      "whereImplemented": "API: no business-data mutation on currency change",
+      "remainingWork": "Complete",
+      "verificationStatus": "Verified",
+      "bdr": "None",
+      "evidence": [
+        {
+          "layer": "Backend",
+          "file": "OSE-backend/src/platform/displayCurrency.service.js",
+          "method": "upsert tenantSetting displayCurrency",
+          "verification": "Verified"
+        }
+      ]
+    }
+  ]
+}

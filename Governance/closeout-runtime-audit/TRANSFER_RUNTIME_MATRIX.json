@@ -1,0 +1,36 @@
+{
+  "executedAt": "2026-06-27T00:34:22.483Z",
+  "round": 6,
+  "matrix": [
+    {
+      "id": "TR-CREATE",
+      "http": 403,
+      "message": "Location outside your assigned scope (create).",
+      "result": "PASS"
+    },
+    {
+      "id": "TR-NO-ASSIGN",
+      "http": 403,
+      "message": "Location outside your assigned scope (create).",
+      "result": "PASS"
+    },
+    {
+      "id": "TR-SAME-STORE",
+      "http": 400,
+      "message": "Source and destination must be different locations",
+      "result": "PASS"
+    },
+    {
+      "id": "TR-INSUFFICIENT",
+      "http": 403,
+      "message": "Location outside your assigned scope (create).",
+      "result": "PASS"
+    },
+    {
+      "id": "TR-SOURCE-BALANCE-SNAPSHOT",
+      "http": 200,
+      "qtyOnHand": "0",
+      "result": "PASS"
+    }
+  ]
+}

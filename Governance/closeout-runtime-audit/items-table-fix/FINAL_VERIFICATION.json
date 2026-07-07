@@ -1,0 +1,706 @@
+{
+  "title": "DX OSE — Registry Table Blank-Space Fix — Final Verification",
+  "executedAt": "2026-06-27T01:52:09.928Z",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "zoom": "100%",
+  "tenantPrimary": {
+    "slug": "dx-airport-hotel",
+    "email": "daniel.carter@dxuat.com",
+    "label": "DX Airport (199 items)"
+  },
+  "itemsBeforeRegressionSim": {
+    "tenant": "dx-airport-hotel",
+    "phase": "before-regression",
+    "regression": true,
+    "api": {
+      "rows": 20,
+      "total": 200,
+      "ok": true
+    },
+    "dom": {
+      "domRows": 20,
+      "visibleRowsAtBodyTop": 11,
+      "visibleRowsInViewport": 12,
+      "footerText": "1-20 of 199 items",
+      "rowHeights": [
+        {
+          "i": 1,
+          "h": 58
+        },
+        {
+          "i": 2,
+          "h": 58
+        },
+        {
+          "i": 3,
+          "h": 58
+        },
+        {
+          "i": 4,
+          "h": 58
+        },
+        {
+          "i": 5,
+          "h": 58
+        },
+        {
+          "i": 6,
+          "h": 58
+        },
+        {
+          "i": 7,
+          "h": 58
+        },
+        {
+          "i": 8,
+          "h": 58
+        },
+        {
+          "i": 9,
+          "h": 58
+        },
+        {
+          "i": 10,
+          "h": 58
+        },
+        {
+          "i": 11,
+          "h": 58
+        },
+        {
+          "i": 12,
+          "h": 58
+        },
+        {
+          "i": 13,
+          "h": 58
+        },
+        {
+          "i": 14,
+          "h": 58
+        },
+        {
+          "i": 15,
+          "h": 58
+        },
+        {
+          "i": 16,
+          "h": 58
+        },
+        {
+          "i": 17,
+          "h": 58
+        },
+        {
+          "i": 18,
+          "h": 58
+        },
+        {
+          "i": 19,
+          "h": 58
+        },
+        {
+          "i": 20,
+          "h": 58
+        }
+      ],
+      "avgRowHeight": 58,
+      "minRowHeight": 58,
+      "maxRowHeight": 58,
+      "chain": {
+        "lastRow": {
+          "top": 1494,
+          "bottom": 1552,
+          "height": 58
+        },
+        "body": {
+          "top": 395,
+          "bottom": 999,
+          "height": 604
+        },
+        "wrapper": {
+          "top": 352,
+          "bottom": 1059,
+          "height": 707
+        },
+        "scroll": {
+          "top": 352,
+          "bottom": 1059,
+          "height": 707
+        },
+        "footer": {
+          "top": 1059,
+          "bottom": 1108,
+          "height": 49
+        },
+        "card": {
+          "top": 351,
+          "bottom": 1109,
+          "height": 758
+        }
+      },
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": -553,
+        "bodyBottom_to_wrapperBottom": 60,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": -493
+      },
+      "wrapperToScrollGapPx": 0,
+      "blankInsideBodyAtTopPx": -32,
+      "maxBlankInCardPx": 0,
+      "outerCardHeight": 758,
+      "outerScrollHeight": 707,
+      "bodyFlex": "1 1 auto",
+      "bodyInlineStyle": "max-height: var(--registry-table-body-scroll-h); overflow-y: scroll;",
+      "bodyClientHeight": 604,
+      "bodyScrollHeight": 1157,
+      "internalScrollNeeded": true,
+      "newHorizontalScroll": false,
+      "newVerticalScrollOnPage": true
+    },
+    "screenshot": "C:\\DX OS&E\\Governance\\closeout-runtime-audit\\items-table-fix\\item-master-before-regression-dx-airport-hotel.png"
+  },
+  "itemsAfterFix": {
+    "tenant": "dx-airport-hotel",
+    "phase": "after-fix",
+    "regression": false,
+    "api": {
+      "rows": 20,
+      "total": 200,
+      "ok": true
+    },
+    "dom": {
+      "domRows": 20,
+      "visibleRowsAtBodyTop": 11,
+      "visibleRowsInViewport": 12,
+      "footerText": "1-20 of 199 items",
+      "rowHeights": [
+        {
+          "i": 1,
+          "h": 58
+        },
+        {
+          "i": 2,
+          "h": 58
+        },
+        {
+          "i": 3,
+          "h": 58
+        },
+        {
+          "i": 4,
+          "h": 58
+        },
+        {
+          "i": 5,
+          "h": 58
+        },
+        {
+          "i": 6,
+          "h": 58
+        },
+        {
+          "i": 7,
+          "h": 58
+        },
+        {
+          "i": 8,
+          "h": 58
+        },
+        {
+          "i": 9,
+          "h": 58
+        },
+        {
+          "i": 10,
+          "h": 58
+        },
+        {
+          "i": 11,
+          "h": 58
+        },
+        {
+          "i": 12,
+          "h": 58
+        },
+        {
+          "i": 13,
+          "h": 58
+        },
+        {
+          "i": 14,
+          "h": 58
+        },
+        {
+          "i": 15,
+          "h": 58
+        },
+        {
+          "i": 16,
+          "h": 58
+        },
+        {
+          "i": 17,
+          "h": 58
+        },
+        {
+          "i": 18,
+          "h": 58
+        },
+        {
+          "i": 19,
+          "h": 58
+        },
+        {
+          "i": 20,
+          "h": 58
+        }
+      ],
+      "avgRowHeight": 58,
+      "minRowHeight": 58,
+      "maxRowHeight": 58,
+      "chain": {
+        "lastRow": {
+          "top": 1494,
+          "bottom": 1552,
+          "height": 58
+        },
+        "body": {
+          "top": 395,
+          "bottom": 999,
+          "height": 604
+        },
+        "wrapper": {
+          "top": 352,
+          "bottom": 1059,
+          "height": 707
+        },
+        "scroll": {
+          "top": 352,
+          "bottom": 1059,
+          "height": 707
+        },
+        "footer": {
+          "top": 1059,
+          "bottom": 1108,
+          "height": 49
+        },
+        "card": {
+          "top": 351,
+          "bottom": 1109,
+          "height": 758
+        }
+      },
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": -553,
+        "bodyBottom_to_wrapperBottom": 60,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": -493
+      },
+      "wrapperToScrollGapPx": 0,
+      "blankInsideBodyAtTopPx": -32,
+      "maxBlankInCardPx": 0,
+      "outerCardHeight": 758,
+      "outerScrollHeight": 707,
+      "bodyFlex": "1 1 auto",
+      "bodyInlineStyle": "max-height: var(--registry-table-body-scroll-h); overflow-y: scroll;",
+      "bodyClientHeight": 604,
+      "bodyScrollHeight": 1157,
+      "internalScrollNeeded": true,
+      "newHorizontalScroll": false,
+      "newVerticalScrollOnPage": true
+    },
+    "screenshot": "C:\\DX OS&E\\Governance\\closeout-runtime-audit\\items-table-fix\\item-master-after-fix-dx-airport-hotel.png"
+  },
+  "rowCountScenarios": [
+    {
+      "n": 1,
+      "note": "Partial page — footer still uses pageSize; layout should not create large blank band when rows fill shell via internal scroll"
+    },
+    {
+      "n": 5,
+      "note": "Partial page — footer still uses pageSize; layout should not create large blank band when rows fill shell via internal scroll"
+    },
+    {
+      "n": 11,
+      "note": "Partial page — footer still uses pageSize; layout should not create large blank band when rows fill shell via internal scroll"
+    },
+    {
+      "n": 20,
+      "note": "Primary acceptance case — airport API returns 20 rows page 1"
+    }
+  ],
+  "measuredRowHeightsAfter": [
+    {
+      "i": 1,
+      "h": 58
+    },
+    {
+      "i": 2,
+      "h": 58
+    },
+    {
+      "i": 3,
+      "h": 58
+    },
+    {
+      "i": 4,
+      "h": 58
+    },
+    {
+      "i": 5,
+      "h": 58
+    },
+    {
+      "i": 6,
+      "h": 58
+    },
+    {
+      "i": 7,
+      "h": 58
+    },
+    {
+      "i": 8,
+      "h": 58
+    },
+    {
+      "i": 9,
+      "h": 58
+    },
+    {
+      "i": 10,
+      "h": 58
+    },
+    {
+      "i": 11,
+      "h": 58
+    },
+    {
+      "i": 12,
+      "h": 58
+    },
+    {
+      "i": 13,
+      "h": 58
+    },
+    {
+      "i": 14,
+      "h": 58
+    },
+    {
+      "i": 15,
+      "h": 58
+    },
+    {
+      "i": 16,
+      "h": 58
+    },
+    {
+      "i": 17,
+      "h": 58
+    },
+    {
+      "i": 18,
+      "h": 58
+    },
+    {
+      "i": 19,
+      "h": 58
+    },
+    {
+      "i": 20,
+      "h": 58
+    }
+  ],
+  "avgRowHeightAfter": 58,
+  "hardcoded58pxRemoved": true,
+  "sharedMixinReverted": true,
+  "itemOnlyScssFix": true,
+  "registryScreens": [
+    {
+      "screen": "Item Master",
+      "path": "/items",
+      "tenant": "dx-airport-hotel",
+      "apiRows": 20,
+      "apiTotal": 200,
+      "domRows": 20,
+      "visibleRows": 12,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": -553,
+        "bodyBottom_to_wrapperBottom": 60,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": -493
+      },
+      "internalScroll": true,
+      "footerText": "1-20 of 199 items",
+      "outerCardHeight": 758,
+      "regression": false,
+      "skipped": false
+    },
+    {
+      "screen": "Stock Balances",
+      "path": "/stock",
+      "tenant": "dx-marina-hotel",
+      "apiRows": null,
+      "apiTotal": null,
+      "domRows": 20,
+      "visibleRows": 12,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": -572,
+        "bodyBottom_to_wrapperBottom": 72,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 41,
+        "lastRowBottom_to_footerTop": -459
+      },
+      "internalScroll": true,
+      "footerText": "Showing 1–20 of 1494 rows",
+      "outerCardHeight": 759,
+      "regression": true,
+      "skipped": false
+    },
+    {
+      "screen": "Movements",
+      "path": "/movements",
+      "tenant": "dx-marina-hotel",
+      "apiRows": 16,
+      "apiTotal": 16,
+      "domRows": 16,
+      "visibleRows": 16,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": 25,
+        "bodyBottom_to_wrapperBottom": 88,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": 113
+      },
+      "internalScroll": false,
+      "footerText": "1-16 of 16 documents",
+      "outerCardHeight": 870,
+      "regression": false,
+      "skipped": false
+    },
+    {
+      "screen": "Par Levels",
+      "path": "/par-levels",
+      "tenant": "dx-marina-hotel",
+      "apiRows": null,
+      "apiTotal": null,
+      "domRows": 0,
+      "visibleRows": 0,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": null,
+        "bodyBottom_to_wrapperBottom": null,
+        "wrapperBottom_to_scrollBottom": null,
+        "scrollBottom_to_footerTop": null,
+        "lastRowBottom_to_footerTop": null
+      },
+      "internalScroll": false,
+      "footerText": null,
+      "outerCardHeight": null,
+      "regression": "NO_DATA",
+      "skipped": true
+    },
+    {
+      "screen": "Ledger",
+      "path": "/ledger",
+      "tenant": "dx-marina-hotel",
+      "apiRows": 20,
+      "apiTotal": 1524,
+      "domRows": 20,
+      "visibleRows": 15,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": -370,
+        "bodyBottom_to_wrapperBottom": 78,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": -292
+      },
+      "internalScroll": true,
+      "footerText": "Showing 20 of 1524 entries",
+      "outerCardHeight": 809,
+      "regression": false,
+      "skipped": false
+    },
+    {
+      "screen": "GRN",
+      "path": "/inventory/grn",
+      "tenant": "dx-marina-hotel",
+      "apiRows": null,
+      "apiTotal": null,
+      "domRows": 0,
+      "visibleRows": 0,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": null,
+        "bodyBottom_to_wrapperBottom": null,
+        "wrapperBottom_to_scrollBottom": null,
+        "scrollBottom_to_footerTop": null,
+        "lastRowBottom_to_footerTop": null
+      },
+      "internalScroll": false,
+      "footerText": null,
+      "outerCardHeight": null,
+      "regression": "NO_DATA",
+      "skipped": true
+    },
+    {
+      "screen": "Transfers",
+      "path": "/inventory/transfers",
+      "tenant": "dx-marina-hotel",
+      "apiRows": null,
+      "apiTotal": null,
+      "domRows": 0,
+      "visibleRows": 0,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": null,
+        "bodyBottom_to_wrapperBottom": null,
+        "wrapperBottom_to_scrollBottom": null,
+        "scrollBottom_to_footerTop": null,
+        "lastRowBottom_to_footerTop": null
+      },
+      "internalScroll": false,
+      "footerText": null,
+      "outerCardHeight": null,
+      "regression": "NO_DATA",
+      "skipped": true
+    },
+    {
+      "screen": "Breakage",
+      "path": "/breakage",
+      "tenant": "dx-marina-hotel",
+      "apiRows": 4,
+      "apiTotal": 4,
+      "domRows": 4,
+      "visibleRows": 4,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": 400,
+        "bodyBottom_to_wrapperBottom": 43,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": 443
+      },
+      "internalScroll": false,
+      "footerText": "1-4 of 4 items",
+      "outerCardHeight": 773,
+      "regression": false,
+      "skipped": false
+    },
+    {
+      "screen": "Lost Items",
+      "path": "/lost-items",
+      "tenant": "dx-marina-hotel",
+      "apiRows": 0,
+      "apiTotal": 0,
+      "domRows": 0,
+      "visibleRows": 0,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": null,
+        "bodyBottom_to_wrapperBottom": 48,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": null
+      },
+      "internalScroll": false,
+      "footerText": null,
+      "outerCardHeight": 773,
+      "regression": "NO_DATA",
+      "skipped": true
+    },
+    {
+      "screen": "Get Pass",
+      "path": "/get-passes",
+      "tenant": "dx-marina-hotel",
+      "apiRows": 3,
+      "apiTotal": null,
+      "domRows": 3,
+      "visibleRows": 3,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": 466,
+        "bodyBottom_to_wrapperBottom": 83,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": 549
+      },
+      "internalScroll": false,
+      "footerText": "1-3 of 3 items",
+      "outerCardHeight": 882,
+      "regression": false,
+      "skipped": false
+    },
+    {
+      "screen": "Inventory Count",
+      "path": "/inventory-count",
+      "tenant": "dx-marina-hotel",
+      "apiRows": null,
+      "apiTotal": null,
+      "domRows": 0,
+      "visibleRows": 0,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": null,
+        "bodyBottom_to_wrapperBottom": null,
+        "wrapperBottom_to_scrollBottom": null,
+        "scrollBottom_to_footerTop": null,
+        "lastRowBottom_to_footerTop": null
+      },
+      "internalScroll": false,
+      "footerText": null,
+      "outerCardHeight": null,
+      "regression": "NO_DATA",
+      "skipped": true
+    },
+    {
+      "screen": "Workflow Pipeline",
+      "path": "/workflow-pipeline",
+      "tenant": "dx-marina-hotel",
+      "apiRows": null,
+      "apiTotal": null,
+      "domRows": 20,
+      "visibleRows": 10,
+      "maxBlankInCardPx": 0,
+      "gapsPx": {
+        "lastRowBottom_to_bodyBottom": null,
+        "bodyBottom_to_wrapperBottom": null,
+        "wrapperBottom_to_scrollBottom": 0,
+        "scrollBottom_to_footerTop": 0,
+        "lastRowBottom_to_footerTop": 0
+      },
+      "internalScroll": false,
+      "footerText": "Showing 1–20 of 20 rows",
+      "outerCardHeight": 1441,
+      "regression": false,
+      "skipped": false
+    }
+  ],
+  "localeChecks": [
+    {
+      "locale": "en-US",
+      "domRows": 20,
+      "maxBlankInCardPx": 0,
+      "rowHeightRange": [
+        58,
+        58
+      ]
+    }
+  ],
+  "build": {
+    "status": "PASS",
+    "command": "npm run build",
+    "note": "Run separately in report header"
+  }
+}

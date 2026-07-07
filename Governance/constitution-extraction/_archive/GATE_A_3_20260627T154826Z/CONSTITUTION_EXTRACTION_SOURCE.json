@@ -1,0 +1,14 @@
+{
+  "source_pdf_path": "c:\\Users\\amrsa\\Downloads\\New folder\\DX_OSE_CONSTITUTION_v2.0_FINAL.pdf",
+  "source_file_name": "DX_OSE_CONSTITUTION_v2.0_FINAL.pdf",
+  "source_file_size_bytes": 564842,
+  "page_count": 47,
+  "sha256": "979F6C94ADAE6D1EEEA6A578E10FC50CE1836CB330873922179C5A028C37DED1",
+  "document_title": "DX OSE Document Constitution",
+  "version": "2.0 Final",
+  "status": "Ratified \u2014 Chapters 1\u201329",
+  "extraction_timestamp": "2026-06-27T13:15:19Z",
+  "extraction_tool": "pdfplumber (Python 3.12)",
+  "pipeline_version": "gate-a.3",
+  "total_register_rows": 485
+}

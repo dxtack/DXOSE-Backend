@@ -1,0 +1,190 @@
+{
+  "executedAt": "2026-06-27T00:11:25.802Z",
+  "tokenTenant": "grand-horizon",
+  "targetTenant": "dx-airport-hotel",
+  "allCrossTenant500": 5,
+  "enumerationRisk": "Same message for valid foreign ID and random UUID — low enumeration via message",
+  "classification": "Product Runtime Error Handling Defect (500 instead of 404/403; no data leak)",
+  "probes": [
+    {
+      "case": "valid_other_tenant",
+      "endpoint": "read",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "valid_other_tenant",
+      "endpoint": "update",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "valid_other_tenant",
+      "endpoint": "submit",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "valid_other_tenant",
+      "endpoint": "approve",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "valid_other_tenant",
+      "endpoint": "pdf",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "read",
+      "http": 200,
+      "errorCode": null,
+      "message": null,
+      "bodySnippet": "{\"success\":true,\"data\":{\"id\":\"f76ed7c1-375e-43b2-ae69-1e5a11c929a3\",\"tenantId\":\"d7f5e85c-86f9-487d-b17d-708cebcf9ca3\",\"passNo\":\"GP-2026-00001\",\"concurrencyVersion\":0,\"postingDate\":null,\"assignedPostin",
+      "classification": "Expected same-tenant success"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "update",
+      "http": 423,
+      "errorCode": "DOCUMENT_NOT_EDITABLE",
+      "message": "Document is In Review and cannot be edited (Ch.2.5).",
+      "bodySnippet": "{\"success\":false,\"message\":\"Document is In Review and cannot be edited (Ch.2.5).\",\"code\":\"DOCUMENT_NOT_EDITABLE\",\"error\":\"DOCUMENT_NOT_EDITABLE\",\"errorFamily\":\"SYS\"}",
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "submit",
+      "http": 500,
+      "errorCode": null,
+      "message": "Only DRAFT can be submitted",
+      "bodySnippet": "{\"success\":false,\"message\":\"Only DRAFT can be submitted\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "approve",
+      "http": 422,
+      "errorCode": null,
+      "message": "Get Pass has no pinned ACC workflow version.",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass has no pinned ACC workflow version.\"}",
+      "classification": "Other"
+    },
+    {
+      "case": "same_tenant_valid",
+      "endpoint": "pdf",
+      "http": 200,
+      "errorCode": null,
+      "message": null,
+      "bodySnippet": "%PDF-1.3\n%����\n7 0 obj\n<<\n/Type /Page\n/Parent 1 0 R\n/MediaBox [0 0 595.28 841.89]\n/Contents 5 0 R\n/Resources 6 0 R\n>>\nendobj\n6 0 obj\n<<\n/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]\n/Font <<\n/F3 8 0 R",
+      "classification": "Expected same-tenant success"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "read",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "update",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "submit",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "approve",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "pdf",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "deleted_or_closed",
+      "endpoint": "read",
+      "http": 200,
+      "errorCode": null,
+      "message": null,
+      "bodySnippet": "{\"success\":true,\"data\":{\"id\":\"b063ba0b-9d1e-4d8c-bce3-6979262d2b1a\",\"tenantId\":\"d7f5e85c-86f9-487d-b17d-708cebcf9ca3\",\"passNo\":\"GP-2026-00005\",\"concurrencyVersion\":0,\"postingDate\":null,\"assignedPostin",
+      "classification": "Unexpected success"
+    },
+    {
+      "case": "deleted_or_closed",
+      "endpoint": "update",
+      "http": 423,
+      "errorCode": "DOCUMENT_NOT_EDITABLE",
+      "message": "Document is Closed and cannot be edited (Ch.2.5).",
+      "bodySnippet": "{\"success\":false,\"message\":\"Document is Closed and cannot be edited (Ch.2.5).\",\"code\":\"DOCUMENT_NOT_EDITABLE\",\"error\":\"DOCUMENT_NOT_EDITABLE\",\"errorFamily\":\"SYS\"}",
+      "classification": "Other"
+    },
+    {
+      "case": "deleted_or_closed",
+      "endpoint": "submit",
+      "http": 500,
+      "errorCode": null,
+      "message": "Only DRAFT can be submitted",
+      "bodySnippet": "{\"success\":false,\"message\":\"Only DRAFT can be submitted\"}",
+      "classification": "Product Runtime Error Handling Defect"
+    },
+    {
+      "case": "deleted_or_closed",
+      "endpoint": "approve",
+      "http": 422,
+      "errorCode": null,
+      "message": "Get Pass has no pinned ACC workflow version.",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass has no pinned ACC workflow version.\"}",
+      "classification": "Other"
+    },
+    {
+      "case": "deleted_or_closed",
+      "endpoint": "pdf",
+      "http": 200,
+      "errorCode": null,
+      "message": null,
+      "bodySnippet": "%PDF-1.3\n%����\n7 0 obj\n<<\n/Type /Page\n/Parent 1 0 R\n/MediaBox [0 0 595.28 841.89]\n/Contents 5 0 R\n/Resources 6 0 R\n>>\nendobj\n6 0 obj\n<<\n/ProcSet [/PDF /Text /ImageB /ImageC /ImageI]\n/Font <<\n/F3 8 0 R",
+      "classification": "Unexpected success"
+    }
+  ]
+}

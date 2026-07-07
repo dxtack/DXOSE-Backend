@@ -1,0 +1,862 @@
+{
+  "at": "2026-06-27T00:51:25.139Z",
+  "pass": true,
+  "results": [
+    {
+      "viewport": "1920",
+      "fixture": "transfer_posted",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 4,
+        "domEntryCount": 4,
+        "rejectDom": 0,
+        "rejectApi": 0,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Finance approved",
+        "Admin approved",
+        "Posted to inventory"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+            "name": "Omar Al-Said"
+          },
+          "actedAt": "2026-05-13T13:41:22.649Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "62549d8f-857a-4ae3-8241-f3a5fc7335a5",
+            "approvalStepId": "d7b61e50-76dc-4d03-99e3-64173216f4a5"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-05-13T13:41:22.744Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "62549d8f-857a-4ae3-8241-f3a5fc7335a5",
+            "approvalStepId": "23f6a823-98a3-419c-8a05-1cdebae0fba6"
+          },
+          "globalOrder": 2,
+          "durationMs": 95
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "ADMIN",
+          "displayTitleKey": "TIMELINE.STAGE.ADMIN_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "f542ddf7-8c50-456e-9e37-6ac701e53c28",
+            "name": "Sarah Ahmed"
+          },
+          "actedAt": "2026-05-13T13:41:22.839Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 3,
+          "sourceRef": {
+            "approvalRequestId": "62549d8f-857a-4ae3-8241-f3a5fc7335a5",
+            "approvalStepId": "28351c0e-ab8b-49f6-9c7a-8116bad3171f"
+          },
+          "globalOrder": 3,
+          "durationMs": 95
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "POSTING",
+          "stageKey": "POSTED",
+          "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+          "status": "POSTED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-05-13T13:41:23.018Z",
+          "stepNumber": 99,
+          "globalOrder": 4,
+          "durationMs": 179
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\transfer-posted-1920.png"
+    },
+    {
+      "viewport": "1366",
+      "fixture": "transfer_posted",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 4,
+        "domEntryCount": 4,
+        "rejectDom": 0,
+        "rejectApi": 0,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Finance approved",
+        "Admin approved",
+        "Posted to inventory"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+            "name": "Omar Al-Said"
+          },
+          "actedAt": "2026-05-13T13:41:22.649Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "62549d8f-857a-4ae3-8241-f3a5fc7335a5",
+            "approvalStepId": "d7b61e50-76dc-4d03-99e3-64173216f4a5"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-05-13T13:41:22.744Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "62549d8f-857a-4ae3-8241-f3a5fc7335a5",
+            "approvalStepId": "23f6a823-98a3-419c-8a05-1cdebae0fba6"
+          },
+          "globalOrder": 2,
+          "durationMs": 95
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "ADMIN",
+          "displayTitleKey": "TIMELINE.STAGE.ADMIN_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "f542ddf7-8c50-456e-9e37-6ac701e53c28",
+            "name": "Sarah Ahmed"
+          },
+          "actedAt": "2026-05-13T13:41:22.839Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 3,
+          "sourceRef": {
+            "approvalRequestId": "62549d8f-857a-4ae3-8241-f3a5fc7335a5",
+            "approvalStepId": "28351c0e-ab8b-49f6-9c7a-8116bad3171f"
+          },
+          "globalOrder": 3,
+          "durationMs": 95
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "POSTING",
+          "stageKey": "POSTED",
+          "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+          "status": "POSTED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-05-13T13:41:23.018Z",
+          "stepNumber": 99,
+          "globalOrder": 4,
+          "durationMs": 179
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\transfer-posted-1366.png"
+    },
+    {
+      "viewport": "1920",
+      "fixture": "breakage_happy",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 4,
+        "domEntryCount": 4,
+        "rejectDom": 0,
+        "rejectApi": 0,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approval"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:34.369Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "74acb071-f039-4bb2-a85c-6661757d0aab"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:34.707Z",
+          "reason": null,
+          "note": "Phase5 cost approval OK",
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "bcfacc7a-d325-43b5-91b1-9d426de08d3f"
+          },
+          "globalOrder": 2,
+          "durationMs": 338
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T19:56:34.763Z",
+          "reason": null,
+          "note": "Phase5 finance approval OK",
+          "stepNumber": 3,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "8ecac087-6056-4be8-ae39-c895adc08a76"
+          },
+          "globalOrder": 3,
+          "durationMs": 56
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 4,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "a1699d2c-1075-4f89-8c04-5b0b614340d6"
+          },
+          "globalOrder": 4
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\breakage-happy-1920.png"
+    },
+    {
+      "viewport": "1366",
+      "fixture": "breakage_happy",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 4,
+        "domEntryCount": 4,
+        "rejectDom": 0,
+        "rejectApi": 0,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approval"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:34.369Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "74acb071-f039-4bb2-a85c-6661757d0aab"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:34.707Z",
+          "reason": null,
+          "note": "Phase5 cost approval OK",
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "bcfacc7a-d325-43b5-91b1-9d426de08d3f"
+          },
+          "globalOrder": 2,
+          "durationMs": 338
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T19:56:34.763Z",
+          "reason": null,
+          "note": "Phase5 finance approval OK",
+          "stepNumber": 3,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "8ecac087-6056-4be8-ae39-c895adc08a76"
+          },
+          "globalOrder": 3,
+          "durationMs": 56
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 4,
+          "sourceRef": {
+            "approvalRequestId": "357572ef-0eb8-4dd5-9f3b-393d6add25f9",
+            "approvalStepId": "a1699d2c-1075-4f89-8c04-5b0b614340d6"
+          },
+          "globalOrder": 4
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\breakage-happy-1366.png"
+    },
+    {
+      "viewport": "1920",
+      "fixture": "breakage_rejected",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 2,
+        "domEntryCount": 2,
+        "rejectDom": 4,
+        "rejectApi": 1,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "noPendingAfterReject": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Rejected"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:34.841Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "9ebedc50-ec6b-4b33-9631-52cb5a37f426",
+            "approvalStepId": "e751e7ca-9c6a-4704-aacd-e4c30e180c30"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:35.023Z",
+          "reason": "Phase5 reject note",
+          "note": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "9ebedc50-ec6b-4b33-9631-52cb5a37f426",
+            "approvalStepId": "2b364d84-f0ff-4902-9984-78e7062d9356"
+          },
+          "globalOrder": 2,
+          "durationMs": 182
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\breakage-rejected-1920.png"
+    },
+    {
+      "viewport": "1366",
+      "fixture": "breakage_rejected",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 2,
+        "domEntryCount": 2,
+        "rejectDom": 4,
+        "rejectApi": 1,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "noPendingAfterReject": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Rejected"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:34.841Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "9ebedc50-ec6b-4b33-9631-52cb5a37f426",
+            "approvalStepId": "e751e7ca-9c6a-4704-aacd-e4c30e180c30"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:35.023Z",
+          "reason": "Phase5 reject note",
+          "note": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "9ebedc50-ec6b-4b33-9631-52cb5a37f426",
+            "approvalStepId": "2b364d84-f0ff-4902-9984-78e7062d9356"
+          },
+          "globalOrder": 2,
+          "durationMs": 182
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\breakage-rejected-1366.png"
+    },
+    {
+      "viewport": "1920",
+      "fixture": "lost_happy",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 4,
+        "domEntryCount": 4,
+        "rejectDom": 0,
+        "rejectApi": 0,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approval"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:55.938Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "0d7f835e-f472-4b78-8f8a-7b176815235b"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:56.129Z",
+          "reason": null,
+          "note": "Phase5 cost approval OK",
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "ee91c835-b55d-436d-b0e1-d0e11692621f"
+          },
+          "globalOrder": 2,
+          "durationMs": 191
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T19:56:56.192Z",
+          "reason": null,
+          "note": "Phase5 finance approval OK",
+          "stepNumber": 3,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "429e8f56-0e28-4c31-985b-23251d8f6ef2"
+          },
+          "globalOrder": 3,
+          "durationMs": 63
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 4,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "52735135-b63e-4812-a276-a53483fb8f5c"
+          },
+          "globalOrder": 4
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\lost-happy-1920.png"
+    },
+    {
+      "viewport": "1366",
+      "fixture": "lost_happy",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 4,
+        "domEntryCount": 4,
+        "rejectDom": 0,
+        "rejectApi": 0,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approval"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:55.938Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "0d7f835e-f472-4b78-8f8a-7b176815235b"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:56.129Z",
+          "reason": null,
+          "note": "Phase5 cost approval OK",
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "ee91c835-b55d-436d-b0e1-d0e11692621f"
+          },
+          "globalOrder": 2,
+          "durationMs": 191
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T19:56:56.192Z",
+          "reason": null,
+          "note": "Phase5 finance approval OK",
+          "stepNumber": 3,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "429e8f56-0e28-4c31-985b-23251d8f6ef2"
+          },
+          "globalOrder": 3,
+          "durationMs": 63
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 4,
+          "sourceRef": {
+            "approvalRequestId": "03616418-4a99-4b6a-96ff-777c024bd1a3",
+            "approvalStepId": "52735135-b63e-4812-a276-a53483fb8f5c"
+          },
+          "globalOrder": 4
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\lost-happy-1366.png"
+    },
+    {
+      "viewport": "1920",
+      "fixture": "lost_rejected",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 2,
+        "domEntryCount": 2,
+        "rejectDom": 4,
+        "rejectApi": 1,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "noPendingAfterReject": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Rejected"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:56.260Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "c368b5bc-d4ff-4946-99b5-d7c6e8b45ec7",
+            "approvalStepId": "2cd218a6-5eff-4a25-aaae-d471695801b1"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:56.366Z",
+          "reason": "Phase5 reject note",
+          "note": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "c368b5bc-d4ff-4946-99b5-d7c6e8b45ec7",
+            "approvalStepId": "ad6a9761-a592-4b37-b40d-aa5c390b13a4"
+          },
+          "globalOrder": 2,
+          "durationMs": 106
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\lost-rejected-1920.png"
+    },
+    {
+      "viewport": "1366",
+      "fixture": "lost_rejected",
+      "checks": {
+        "domCountMatchesApi": true,
+        "apiEntryCount": 2,
+        "domEntryCount": 2,
+        "rejectDom": 4,
+        "rejectApi": 1,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "noPendingAfterReject": true
+      },
+      "domTitles": [
+        "Department approved",
+        "Rejected"
+      ],
+      "apiEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T19:56:56.260Z",
+          "reason": null,
+          "note": "Auto-approved by system due to high-level authority.",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "c368b5bc-d4ff-4946-99b5-d7c6e8b45ec7",
+            "approvalStepId": "2cd218a6-5eff-4a25-aaae-d471695801b1"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:56:56.366Z",
+          "reason": "Phase5 reject note",
+          "note": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "c368b5bc-d4ff-4946-99b5-d7c6e8b45ec7",
+            "approvalStepId": "ad6a9761-a592-4b37-b40d-aa5c390b13a4"
+          },
+          "globalOrder": 2,
+          "durationMs": 106
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase5\\lost-rejected-1366.png"
+    }
+  ]
+}

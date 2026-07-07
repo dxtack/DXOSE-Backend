@@ -1,0 +1,147 @@
+{
+  "generatedAt": "2026-06-28T02:08:14.178Z",
+  "phase": "Phase 3 — Movements Full Integrity & Posting Revalidation",
+  "dataModel": {
+    "table": "MovementDocument",
+    "lines": "MovementLine",
+    "ledger": "InventoryLedger",
+    "stock": "StockBalance"
+  },
+  "httpSurfaces": [
+    {
+      "module": "Movement Register",
+      "basePath": "/api/movements",
+      "routes": [
+        { "method": "POST", "path": "/", "action": "create", "permission": "ADJUSTMENT_CREATE", "service": "movement.service.createMovementDraft", "origin": "DIRECT_API", "movementTypeForced": "ADJUSTMENT" },
+        { "method": "GET", "path": "/", "action": "list", "permission": "MOVEMENTS_VIEW", "service": "movement.service.getMovements", "scopeFilter": "scopeWhereFor(MOVEMENT, assignmentOnly)", "assignmentRequired": "hasActiveAssignmentForProperty" },
+        { "method": "GET", "path": "/:id", "action": "detail", "permission": "MOVEMENTS_VIEW", "service": "movement.service.getMovementById", "scopeAssert": "assertInScope(MOVEMENT, assignmentOnly)", "assignmentRequired": "hasActiveAssignmentForProperty" },
+        { "method": "PUT", "path": "/:id", "action": "update", "permission": "ADJUSTMENT_CREATE|MOVEMENT_CREATE", "middleware": "requireMovementDocumentMutationPermission", "service": "movement.service.updateMovementDraft", "mutableStatuses": ["DRAFT", "REJECTED"] },
+        { "method": "POST", "path": "/:id/post", "action": "post", "permission": "ADJUSTMENT_CREATE|MOVEMENT_CREATE", "service": "posting.service.postDocument", "assignmentGuard": "assertActiveAssignmentForMutation(post)", "finalStatus": "POSTED" }
+      ]
+    },
+    {
+      "module": "Breakage",
+      "basePath": "/api/breakage",
+      "routes": [
+        { "method": "POST", "path": "/", "action": "create", "permission": "BREAKAGE_CREATE", "service": "breakage.service.createBreakage", "movementType": "BREAKAGE", "initialStatus": "DRAFT", "assignmentGuard": "assertActiveAssignmentForMutation(create)" },
+        { "method": "GET", "path": "/", "action": "list", "permission": "BREAKAGE_VIEW|VIEW_INVENTORY|READ_BREAKAGE|APPROVE_BREAKAGE", "scopeFilter": "scopeWhereFor(BREAKAGE)" },
+        { "method": "GET", "path": "/:id", "action": "detail", "permission": "view", "scopeAssert": "assertInScope(BREAKAGE)" },
+        { "method": "POST", "path": "/:id/submit", "action": "submit", "permission": "MANAGE_INVENTORY", "transition": "DRAFT→DEPT_APPROVED", "assignmentGuard": "assertActiveAssignmentForMutation(submit)" },
+        { "method": "POST", "path": "/:id/approve", "action": "approve", "permission": "APPROVE_BREAKAGE", "dualGate": "role+permission per ACC step", "assignmentGuard": "assertActiveAssignmentForMutation(approve)" },
+        { "method": "POST", "path": "/:id/reject", "action": "reject", "permission": "APPROVE_BREAKAGE", "assignmentGuard": "assertActiveAssignmentForMutation(reject)" },
+        { "method": "POST", "path": "/:id/void", "action": "void", "permission": "MANAGE_INVENTORY", "fromStatuses": ["DRAFT", "REJECTED"], "toStatus": "VOID", "assignmentGuard": "assertActiveAssignmentForMutation(void)" }
+      ],
+      "postingPath": "postingGovernedMovement.postBreakageMovementInTransaction",
+      "finalStatus": "APPROVED",
+      "postedAtSet": true
+    },
+    {
+      "module": "Lost Items",
+      "basePath": "/api/lost",
+      "routes": [
+        { "method": "POST", "path": "/", "action": "create", "permission": "BREAKAGE_CREATE", "service": "lostItems.service.createLost", "movementType": "LOST", "initialStatus": "DEPT_APPROVED", "assignmentGuard": "assertActiveAssignmentForMutation(create)" },
+        { "method": "GET", "path": "/", "action": "list", "permission": "LOST_ITEMS_VIEW|VIEW_INVENTORY|READ_LOST|APPROVE_LOST", "scopeFilter": "scopeWhereFor(LOST)" },
+        { "method": "GET", "path": "/:id", "action": "detail", "scopeAssert": "assertInScope(LOST)" },
+        { "method": "POST", "path": "/:id/approve", "action": "approve", "permission": "APPROVE_LOST", "assignmentGuard": "assertActiveAssignmentForMutation(approve)" },
+        { "method": "POST", "path": "/:id/reject", "action": "reject", "permission": "APPROVE_LOST", "assignmentGuard": "assertActiveAssignmentForMutation(reject)" }
+      ],
+      "postingPath": "postingGovernedMovement.postLostMovementInTransaction",
+      "finalStatus": "APPROVED"
+    }
+  ],
+  "movementTypes": {
+    "httpActive": [
+      {
+        "type": "ADJUSTMENT",
+        "httpCreate": "POST /api/movements",
+        "httpPost": "POST /api/movements/:id/post",
+        "sourceLocation": "header or line",
+        "destLocation": "optional",
+        "qtySign": "signed (+ increase / − decrease)",
+        "stockEffect": "posting.service adjustment block",
+        "ledgerEffect": "movementType ADJUSTMENT qtyIn/qtyOut",
+        "costSource": "line unitCost or location WAC",
+        "creator": "FINANCE_MANAGER (ADJUSTMENT_CREATE)",
+        "initialStatus": "DRAFT",
+        "finalStatus": "POSTED",
+        "edit": "PUT while DRAFT/REJECTED",
+        "cancel": "none",
+        "inventoryHistory": true
+      },
+      {
+        "type": "BREAKAGE",
+        "httpCreate": "POST /api/breakage",
+        "httpPost": "workflow final GM approve",
+        "sourceLocation": "line location",
+        "qtySign": "positive decrease",
+        "stockEffect": "qtyOnHand decrement + totalQtyDamage increment",
+        "ledgerEffect": "movementType BREAKAGE qtyOut",
+        "costSource": "line unitCost / WAC at post",
+        "creator": "BREAKAGE_CREATE roles",
+        "initialStatus": "DRAFT",
+        "finalStatus": "APPROVED",
+        "edit": "attachments only while mutable",
+        "cancel": "POST /void from DRAFT/REJECTED",
+        "registerPostBlocked": true,
+        "inventoryHistory": true
+      },
+      {
+        "type": "LOST",
+        "httpCreate": "POST /api/lost",
+        "httpPost": "workflow final GM approve",
+        "sourceLocation": "line location",
+        "qtySign": "positive decrease",
+        "stockEffect": "qtyOnHand decrement + totalQtyLost increment",
+        "ledgerEffect": "movementType LOST qtyOut",
+        "costSource": "line unitCost / WAC",
+        "creator": "BREAKAGE_CREATE (route alias)",
+        "initialStatus": "DEPT_APPROVED",
+        "finalStatus": "APPROVED",
+        "edit": "none",
+        "cancel": "none",
+        "registerPostBlocked": true,
+        "inventoryHistory": true
+      }
+    ],
+    "internalOnly": [
+      { "type": "OPENING_BALANCE", "createPath": "movement.service.createMovementDraft(origin:INTERNAL)", "postPath": "posting.service.postDocument", "notes": "Settings OB finalize; not HTTP /movements create" },
+      { "type": "RECEIVE", "createPath": "GRN post", "guard": "requires approved GRN" },
+      { "type": "ISSUE", "createPath": "requisition issue", "guard": "requires approved requisition" },
+      { "type": "TRANSFER_OUT", "createPath": "transfer approve", "guard": "blocked direct create" },
+      { "type": "TRANSFER_IN", "createPath": "transfer approve", "guard": "blocked direct create" },
+      { "type": "COUNT_ADJUSTMENT", "createPath": "inventory count post", "registerPostBlocked": true },
+      { "type": "GET_PASS_OUT", "createPath": "get pass checkout", "module": "GET_PASS" },
+      { "type": "GET_PASS_RETURN", "createPath": "get pass return disposition", "module": "GET_PASS" },
+      { "type": "TEMP_RECEIVE", "createPath": "get pass posting engine" },
+      { "type": "TEMP_RELEASE", "createPath": "get pass posting engine" },
+      { "type": "RETURN", "createPath": "get pass returns" },
+      { "type": "LOAN_WRITE_OFF", "createPath": "legacy/internal" },
+      { "type": "TRANSFER", "createPath": "legacy combined transfer type" }
+    ],
+    "governedRegisterBlocked": ["BREAKAGE", "LOST", "COUNT_ADJUSTMENT"]
+  },
+  "assignmentGuards": {
+    "movementRegisterCreate": "assertActiveAssignmentForMutation(create)",
+    "movementRegisterPost": "assertActiveAssignmentForMutation(post)",
+    "movementRegisterRead": "hasActiveAssignmentForProperty + scopeWhereFor(MOVEMENT, assignmentOnly)",
+    "breakageLostWorkflow": "assertActiveAssignmentForMutation on create/submit/approve/reject/void"
+  },
+  "concurrency": {
+    "field": "MovementDocument.concurrencyVersion",
+    "registerUpdate": "required",
+    "registerPost": "required when client sends version",
+    "postOptimisticLock": "where id + concurrencyVersion on update to POSTED",
+    "governedDuplicatePost": "assertNoDuplicateLedgerPost → 409"
+  },
+  "existingTests": [
+    "OSE-backend/scripts/movement-direct-adjustment.guard.test.js",
+    "OSE-backend/scripts/movement-direct-adjustment-origin.test.js",
+    "OSE-backend/scripts/movement-adjustment-rbac.test.js",
+    "OSE-backend/scripts/movementApprovalAction.guard.test.js",
+    "OSE-backend/scripts/movement-submit-current-step.test.js",
+    "OSE-backend/scripts/lost-approval-workflow.test.js",
+    "OSE-backend/scripts/breakage-get-by-id.test.js",
+    "OSE-backend/src/services/posting.service.test.js",
+    "OSE-backend/scripts/smoke-movement-register-governed.js"
+  ]
+}

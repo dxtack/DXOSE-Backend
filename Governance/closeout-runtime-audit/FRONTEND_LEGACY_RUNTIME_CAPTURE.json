@@ -1,0 +1,12 @@
+{
+  "executedAt": "2026-06-27T00:50:06.485Z",
+  "feBase": "http://127.0.0.1:4200",
+  "feReachable": true,
+  "networkCaptureAttempt": true,
+  "capturedRequests": [],
+  "staticCorroboration": [],
+  "runtimeNote": "Static code paths call approveAtCurrentStep → /approve-dept; runtime HTTP requires logged-in INTERNAL doc Approve — FE login page reachable: true",
+  "classification": "Frontend-Dependent Operational Legacy",
+  "table": [],
+  "probeNote": ""
+}

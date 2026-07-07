@@ -1,0 +1,40 @@
+{
+  "classification": "Historical / Imported Evidence",
+  "items": [
+    {
+      "path": "Governance\\closeout-runtime-audit\\CROSS_TENANT_HARNESS.json",
+      "sha256": "8BD7059BACBDFFE5A7247F7AAFB11798BCA16C7E940AC937ED3E449E99E882C7",
+      "executedAt": "2026-06-27T16:33:01.601Z",
+      "script": "05-cross-tenant",
+      "counts": {
+        "PASS": 24,
+        "FAIL": 4,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 1
+      },
+      "classification": "Historical / Imported Evidence",
+      "usable_for_pass": false,
+      "usable_for_fail": false,
+      "note": "Historical lead only \u2014 not included in current-session counts or PASS decisions after closeout"
+    },
+    {
+      "path": "Governance\\closeout-runtime-audit\\WORKFLOW_RUNTIME_HARNESS.json",
+      "sha256": "9CFF853D89C13931052B3DF28ECBFB3A57D5A89A5E9D2B4A815A56E01D64C6BE",
+      "executedAt": "2026-06-27T16:33:02.837Z",
+      "script": "06-workflow-runtime",
+      "counts": {
+        "PASS": 2,
+        "FAIL": 1,
+        "BLOCKED": 0,
+        "NOT_EXECUTED": 0,
+        "NOT_APPLICABLE": 0
+      },
+      "classification": "Historical / Imported Evidence",
+      "usable_for_pass": false,
+      "usable_for_fail": false,
+      "note": "Historical lead only \u2014 not included in current-session counts or PASS decisions after closeout"
+    }
+  ],
+  "total_historical_scenarios": 31
+}

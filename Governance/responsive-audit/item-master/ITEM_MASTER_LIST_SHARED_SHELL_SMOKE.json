@@ -1,0 +1,65 @@
+{
+  "runAt": "2026-07-03T11:33:44.398Z",
+  "viewport": {
+    "width": 1920,
+    "height": 1080,
+    "dpr": 1
+  },
+  "note": "Other routes must not be viewport-capped by the /items-gated shell rules.",
+  "results": [
+    {
+      "route": "TR-LIST",
+      "landedUrl": "/transfers",
+      "probe": {
+        "url": "/transfers",
+        "errorOverlay": false,
+        "hasItemsList": false,
+        "shell": {
+          "height": 1133,
+          "overflowY": "visible",
+          "maxHeight": "none",
+          "clientHeight": 1133,
+          "scrollHeight": 1133
+        },
+        "sider": {
+          "clientHeight": 1133,
+          "scrollHeight": 1133,
+          "overflowY": "hidden"
+        },
+        "document": {
+          "scrollHeight": 1133,
+          "clientHeight": 1080,
+          "pageVerticalScroll": true
+        }
+      },
+      "screenshot": "screenshots/SMOKE-TR-LIST__1920x1080__after.png"
+    },
+    {
+      "route": "DASHBOARD",
+      "landedUrl": "/dashboard",
+      "probe": {
+        "url": "/dashboard",
+        "errorOverlay": false,
+        "hasItemsList": false,
+        "shell": {
+          "height": 1314,
+          "overflowY": "visible",
+          "maxHeight": "none",
+          "clientHeight": 1314,
+          "scrollHeight": 1314
+        },
+        "sider": {
+          "clientHeight": 1314,
+          "scrollHeight": 1314,
+          "overflowY": "hidden"
+        },
+        "document": {
+          "scrollHeight": 1314,
+          "clientHeight": 1080,
+          "pageVerticalScroll": true
+        }
+      },
+      "screenshot": "screenshots/SMOKE-DASHBOARD__1920x1080__after.png"
+    }
+  ]
+}

@@ -1,0 +1,100 @@
+{
+  "phase": "Phase 2 — Get Pass Workflow Configuration Drift",
+  "generatedAt": "2026-06-28T01:27:00.000Z",
+  "gateVersion": "phase2-gp-workflow-v2-addendum",
+  "verificationAddendum": true,
+  "sendBackResubmitCompletion": true,
+  "productFiles": [
+    {
+      "path": "OSE-backend/src/services/acc-workflow-default-chains.js",
+      "change": "modified",
+      "why": "Remove GM step from GET_PASS default seed chain — Dept → CC → Finance → Security only"
+    },
+    {
+      "path": "OSE-backend/src/services/getPass.service.js",
+      "change": "modified",
+      "why": "sendBackGetPass; resubmit preserves pinned workflow; creator-only edit/resubmit after Send Back"
+    },
+    {
+      "path": "OSE-backend/src/controllers/getPass.controller.js",
+      "change": "modified",
+      "why": "POST send-back controller"
+    },
+    {
+      "path": "OSE-backend/src/routes/getPass.routes.js",
+      "change": "modified",
+      "why": "POST /:id/send-back route"
+    },
+    {
+      "path": "OSE-backend/src/platform/lifecyclePresentation.service.js",
+      "change": "modified",
+      "why": "GET_PASS Returned user-facing state after Send Back"
+    },
+    {
+      "path": "OSE-backend/src/platform/timeline/getPassTimeline.builder.js",
+      "change": "modified",
+      "why": "Sent Back and Resubmitted timeline lifecycle events"
+    },
+    {
+      "path": "OSE-backend/src/services/getPass.service.test.js",
+      "change": "modified",
+      "why": "Unit tests for send back, resubmit, creator guard"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/get-pass/services/get-pass.service.ts",
+      "change": "modified",
+      "why": "sendBack API client"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/get-pass/get-pass-detail/get-pass-detail.component.ts",
+      "change": "modified",
+      "why": "Send Back dialog and action wiring"
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/get-pass/get-pass-detail/get-pass-detail.component.html",
+      "change": "modified",
+      "why": "Send Back button and modal"
+    },
+    {
+      "path": "OSE-Frontend/public/i18n/en.json",
+      "change": "modified",
+      "why": "Send Back / resubmit labels"
+    }
+  ],
+  "governanceFiles": [
+    "Governance/phase-2-get-pass-workflow-drift/PHASE_2_ROOT_CAUSE_AUDIT.md",
+    "Governance/phase-2-get-pass-workflow-drift/PHASE_2_CONFIGURATION_INVENTORY.json",
+    "Governance/phase-2-get-pass-workflow-drift/PHASE_2_REMEDIATION_REPORT.md",
+    "Governance/phase-2-get-pass-workflow-drift/PHASE_2_RUNTIME_RESULTS.json",
+    "Governance/phase-2-get-pass-workflow-drift/PHASE_2_REMEDIATION_ACTIONS.json",
+    "Governance/phase-2-get-pass-workflow-drift/PHASE_2_PRE_REMEDIATION_INVENTORY.json",
+    "Governance/phase-2-get-pass-workflow-drift/phase-2-get-pass-workflow-gate.cjs",
+    "Governance/phase-2-get-pass-workflow-drift/phase-2-remediate-get-pass-workflow.cjs",
+    "Governance/phase-2-get-pass-workflow-drift/phase-2-inventory.lib.cjs",
+    "Governance/phase-2-get-pass-workflow-drift/PHASE_2_CHANGED_FILES.json"
+  ],
+  "databaseRemediation": {
+    "script": "phase-2-remediate-get-pass-workflow.cjs",
+    "archivedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+    "newPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+    "newVersionNumber": 4,
+    "documentsMigrated": 0,
+    "documentsPreservedOnArchivedVersion": 24
+  },
+  "gateTotals": {
+    "runtimePass": 25,
+    "runtimeFail": 0,
+    "regressionPass": 9,
+    "regressionFail": 0,
+    "phaseClosed": true
+  },
+  "explicitlyNotModified": [
+    "Governance/phase-1-assignment-scope/*",
+    "Gate A / B / C artifacts",
+    "acc-workflow-default-chains.js GET_PASS chain (after v4 remediation — frozen)",
+    "24 historical v3 document pins",
+    "GRN / Transfer / Breakage / Lost / IC / Movement workflows",
+    "role-permission-fallback.ts",
+    "Phase 3+ scope"
+  ]
+}

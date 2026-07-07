@@ -1,0 +1,32 @@
+{
+  "executedAt": "2026-06-27T00:04:18.523Z",
+  "classification": "Isolation Pass + Error Handling Defect",
+  "expectedCrossTenant": "404 or 403 — no data — no stack in response",
+  "probes": [
+    {
+      "probe": "A_token_read_B_getpass",
+      "tokenTenant": "grand-horizon",
+      "targetTenant": "dx-airport-hotel",
+      "targetId": "e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+      "http": 500,
+      "errorCode": null,
+      "message": "Get Pass not found",
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}",
+      "leakedData": false
+    },
+    {
+      "probe": "A_token_wrong_header_read_B",
+      "http": 500,
+      "errorCode": null,
+      "bodySnippet": "{\"success\":false,\"message\":\"Get Pass not found\"}"
+    },
+    {
+      "probe": "B_token_read_A_getpass",
+      "targetId": "f76ed7c1-375e-43b2-ae69-1e5a11c929a3",
+      "http": 500,
+      "errorCode": null
+    }
+  ],
+  "auditEventsChecked": false,
+  "note": "HTTP 500 on cross-tenant read — no data returned but error handling defect"
+}

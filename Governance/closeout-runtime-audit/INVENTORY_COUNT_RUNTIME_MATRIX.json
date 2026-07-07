@@ -1,0 +1,52 @@
+{
+  "executedAt": "2026-06-27T00:34:24.384Z",
+  "round": 6,
+  "sessionId": "340a0062-939e-4e32-94dc-84d7ddccf2b8",
+  "matrix": [
+    {
+      "id": "IC-CREATE",
+      "http": 201,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-START",
+      "http": 200,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-SUBMIT-COUNTS",
+      "http": 200,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-VARIANCE",
+      "http": 200,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-SUBMIT-APPROVAL",
+      "http": 200,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-APPROVE-CC",
+      "http": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-APPROVE-FINANCE",
+      "http": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-NO-ASSIGN",
+      "http": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "IC-DUP-APPROVE",
+      "http": 403,
+      "result": "PASS"
+    }
+  ]
+}

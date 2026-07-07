@@ -1,0 +1,834 @@
+{
+  "executedAt": "2026-06-27T00:11:51.966Z",
+  "script": "02-acc-operational-legacy",
+  "harnessExit": 1,
+  "counts": {
+    "PASS": 98,
+    "FAIL": 0,
+    "BLOCKED": 19,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 117,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": false,
+  "missingFixtures": [],
+  "missingIdentities": [
+    "ORG_MANAGER"
+  ],
+  "meta": {
+    "fixtureTag": "CLOSEOUT_RT_AUDIT",
+    "tenant": {
+      "slug": "grand-horizon",
+      "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+    }
+  },
+  "scenarios": [
+    {
+      "id": "BL-CREATE-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 201,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+    },
+    {
+      "id": "BL-CREATE-DEPT_MANAGER_HK",
+      "result": "PASS",
+      "http": 201,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+    },
+    {
+      "id": "BL-CREATE-DEPT_CREATOR_FB",
+      "result": "PASS",
+      "http": 201,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+    },
+    {
+      "id": "BL-CREATE-STOREKEEPER",
+      "result": "PASS",
+      "http": 201,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+    },
+    {
+      "id": "BL-CREATE-FINANCE",
+      "result": "PASS",
+      "http": 201,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE"
+    },
+    {
+      "id": "BL-CREATE-COST_CONTROL",
+      "result": "PASS",
+      "http": 403,
+      "interpretation": "PERMISSION_OR_SCOPE_DENIED"
+    },
+    {
+      "id": "BL-CREATE-GM",
+      "result": "PASS",
+      "http": 403,
+      "interpretation": "PERMISSION_OR_SCOPE_DENIED"
+    },
+    {
+      "id": "BL-CREATE-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "org_switch_failed"
+      }
+    },
+    {
+      "id": "BL-CREATE-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "interpretation": "PERMISSION_OR_SCOPE_DENIED"
+    },
+    {
+      "id": "LOST-CREATE-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 201
+    },
+    {
+      "id": "LOST-CREATE-STOREKEEPER",
+      "result": "PASS",
+      "http": 201
+    },
+    {
+      "id": "LOST-CREATE-FINANCE",
+      "result": "PASS",
+      "http": 201
+    },
+    {
+      "id": "LOST-CREATE-GM",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-dept-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-dept-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-dept-COST_CONTROL",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-dept-FINANCE",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-dept-GM",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-dept-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-dept-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-cost-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-cost-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-cost-COST_CONTROL",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-cost-FINANCE",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-cost-GM",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-cost-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-cost-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-finance-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-finance-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-finance-COST_CONTROL",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-finance-FINANCE",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-finance-GM",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-finance-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-finance-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-gm-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-gm-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-gm-COST_CONTROL",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-gm-FINANCE",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-gm-GM",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-gm-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-INTERNAL_BREAKAGE-approve-gm-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-dept-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 200,
+      "note": "PASS because route redirected internally to ACC",
+      "classification": "Active Operational Legacy"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-dept-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-dept-COST_CONTROL",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-dept-FINANCE",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-dept-GM",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-dept-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-dept-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-finance-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-finance-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-finance-COST_CONTROL",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-finance-FINANCE",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-finance-GM",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-finance-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-finance-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-gm-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-gm-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-gm-COST_CONTROL",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-gm-FINANCE",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-gm-GM",
+      "result": "PASS",
+      "http": 400,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-gm-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-INTERNAL_LOST-approve-gm-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-dept-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-dept-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-dept-COST_CONTROL",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-dept-FINANCE",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-dept-GM",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-dept-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-dept-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-cost-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-cost-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-cost-COST_CONTROL",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-cost-FINANCE",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-cost-GM",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-cost-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-cost-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-finance-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-finance-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-finance-COST_CONTROL",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-finance-FINANCE",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-finance-GM",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-finance-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-finance-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-gm-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-gm-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-gm-COST_CONTROL",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-gm-FINANCE",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-gm-GM",
+      "result": "PASS",
+      "http": 409,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-gm-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-ACC_BREAKAGE-approve-gm-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-dept-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-dept-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-dept-COST_CONTROL",
+      "result": "PASS",
+      "http": 200,
+      "note": "PASS because correct authorized action succeeded through ACC",
+      "classification": "ACC-compatible alias"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-dept-FINANCE",
+      "result": "PASS",
+      "http": 200,
+      "note": "PASS because correct authorized action succeeded through ACC",
+      "classification": "ACC-compatible alias"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-dept-GM",
+      "result": "PASS",
+      "http": 200,
+      "note": "PASS because correct authorized action succeeded through ACC",
+      "classification": "ACC-compatible alias"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-dept-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-dept-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-finance-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-finance-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-finance-COST_CONTROL",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-finance-FINANCE",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-finance-GM",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-finance-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-finance-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-gm-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-gm-STOREKEEPER",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-gm-COST_CONTROL",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-gm-FINANCE",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-gm-GM",
+      "result": "PASS",
+      "http": 423,
+      "note": "PASS because lifecycle blocked it",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-gm-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "login_failed"
+      }
+    },
+    {
+      "id": "LEG-ACC_LOST-approve-gm-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "http": 403,
+      "note": "PASS because unauthorized action was denied",
+      "classification": "Safely blocked legacy endpoint"
+    },
+    {
+      "id": "GP-FF-DEPT_MANAGER_FB",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "STALE_WORKFLOW_CONFIGURATION — BLOCKED for product verification",
+        "http": 200
+      }
+    },
+    {
+      "id": "GP-FF-FINANCE",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "STALE_WORKFLOW_CONFIGURATION — BLOCKED for product verification",
+        "http": 200
+      }
+    },
+    {
+      "id": "GP-FF-GM",
+      "result": "PASS",
+      "phase": "create_denied_negative_test",
+      "http": 403,
+      "authority": "Role not permitted to create Get Pass"
+    },
+    {
+      "id": "GP-FF-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "org_switch_failed"
+      }
+    },
+    {
+      "id": "GP-FF-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "phase": "create_denied_negative_test",
+      "http": 403,
+      "authority": "Role not permitted to create Get Pass"
+    },
+    {
+      "id": "GP-FF-COST_CONTROL",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "STALE_WORKFLOW_CONFIGURATION — BLOCKED for product verification",
+        "http": 200
+      }
+    }
+  ]
+}

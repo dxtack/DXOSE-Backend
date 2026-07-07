@@ -1,0 +1,38 @@
+{
+  "at": "2026-06-26T18:54:44.060Z",
+  "method": "CREATE DATABASE TEMPLATE clone (source untouched)",
+  "sourceDatabase": "ose_inventory",
+  "testDatabase": "ose_inventory_p2_gate_test",
+  "steps": [
+    {
+      "step": "clone_template_db",
+      "status": "PASS"
+    },
+    {
+      "step": "verify_columns_before_rollback",
+      "status": "PASS",
+      "grnImportCount": "60",
+      "approvalHistoryColumns": "2"
+    },
+    {
+      "step": "rollback_grn_history_sql",
+      "status": "PASS"
+    },
+    {
+      "step": "verify_columns_removed",
+      "status": "PASS",
+      "grnImportIdPresent": "0"
+    },
+    {
+      "step": "reapply_grn_history_sql",
+      "status": "PASS"
+    },
+    {
+      "step": "data_intact_after_reapply",
+      "status": "PASS",
+      "grnImportCountBefore": "60",
+      "grnImportCountAfter": "60",
+      "columnsRestored": "2"
+    }
+  ]
+}

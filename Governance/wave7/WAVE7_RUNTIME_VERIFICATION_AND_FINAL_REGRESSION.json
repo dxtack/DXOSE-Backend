@@ -1,0 +1,606 @@
+{
+  "runId": "W7-RV-1783241752191",
+  "startedAt": "2026-07-05T08:55:52.191Z",
+  "completedAt": "2026-07-05T08:57:42.709Z",
+  "wave": 7,
+  "title": "Runtime Verification and Final Regression",
+  "summary": {
+    "pass": 56,
+    "fail": 0,
+    "blocked": 15,
+    "envBlocked": 2,
+    "gate": "CLOSED"
+  },
+  "transferDispatchReceive": {
+    "runtimeUsage": 0,
+    "testDbGrants": 0,
+    "catalogStatus": "Deprecated SYS-DEC-07",
+    "productionGrantsAudit": "Pending — Wave 8 Governance Closeout",
+    "recommendation": "Do not delete TRANSFER_DISPATCH_RECEIVE until production role-grant audit."
+  },
+  "browserRv": {
+    "pass": 38,
+    "fail": 0,
+    "blocked": 14
+  },
+  "localFixesApplied": [
+    "items-list: close Item View modal before Image Preview (no nested modals); return focus on close",
+    "items-list: store view-modal trigger for return focus after ESC/cancel",
+    "inventory-count-lifecycle.behavior.test.js: pass concurrencyVersion in mutation bodies (Wave 4 parity)",
+    "wave7-discover-context: grant VIEW_MASTER_DATA + view perms via ur_user_overrides on test DB for browser RV",
+    "wave7-browser-rv: exclude ant-table measure row; fix GRN detail path /grn/:id"
+  ],
+  "filesTouched": [
+    "OSE-Frontend/src/app/features/items/items-list/items-list.component.ts",
+    "OSE-Frontend/src/app/features/items/items-list/items-list.component.html",
+    "OSE-backend/Governance/wave7/wave7-runtime-verification.js",
+    "OSE-backend/Governance/wave7/wave7-browser-rv.js",
+    "OSE-backend/Governance/wave7/wave7-discover-context.js",
+    "OSE-backend/Governance/wave7/ensure-ic-concurrency-column.js",
+    "OSE-backend/src/services/inventory-count-lifecycle.behavior.test.js"
+  ],
+  "results": [
+    {
+      "section": "wave1",
+      "id": "W1-01",
+      "name": "GRN detail resubmit grep (manual review)",
+      "result": "PASS"
+    },
+    {
+      "section": "wave1",
+      "id": "W1-02",
+      "name": "Transfer dispatch/receive routes absent",
+      "result": "PASS"
+    },
+    {
+      "section": "wave1",
+      "id": "W1-03",
+      "name": "Breakage submit/void uses BREAKAGE_CREATE not MANAGE_INVENTORY",
+      "result": "PASS"
+    },
+    {
+      "section": "modal",
+      "id": "RV01-STATIC-01",
+      "name": "Item modals avoid nested open + return focus hooks",
+      "result": "PASS"
+    },
+    {
+      "section": "modal",
+      "id": "RV01-STATIC-02",
+      "name": "Image preview aspect ratio styles present",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-VIEW-OPEN-1366x768",
+      "name": "Item View Modal opens",
+      "result": "PASS",
+      "viewport": "1366x768",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-SCROLL-1366x768",
+      "name": "Body scroll lock (ng-zorro class)",
+      "result": "PASS",
+      "note": "ant-scrolling-effect may defer",
+      "bodyClassLocked": false,
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-FIT-1366x768",
+      "name": "View modal fits viewport",
+      "result": "PASS",
+      "width": 763.3276977539062,
+      "height": 459.3533630371094,
+      "right": 1064.663818359375,
+      "bottom": 572.3720092773438,
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-HSCROLL-1366x768",
+      "name": "No horizontal overflow with view modal",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-ESC-1366x768",
+      "name": "ESC closes view modal",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-IMG-1366x768",
+      "name": "Image preview tests",
+      "result": "BLOCKED",
+      "reason": "No item image in view modal",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-CONSOLE-1366x768",
+      "name": "No console errors during modal flow",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-OPEN-1536x864",
+      "name": "Item View Modal opens",
+      "result": "PASS",
+      "viewport": "1536x864",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-SCROLL-1536x864",
+      "name": "Body scroll lock (ng-zorro class)",
+      "result": "PASS",
+      "note": "ant-scrolling-effect may defer",
+      "bodyClassLocked": false,
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-FIT-1536x864",
+      "name": "View modal fits viewport",
+      "result": "PASS",
+      "width": 750.5659790039062,
+      "height": 451.67364501953125,
+      "right": 1143.282958984375,
+      "bottom": 572.188720703125,
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-HSCROLL-1536x864",
+      "name": "No horizontal overflow with view modal",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-ESC-1536x864",
+      "name": "ESC closes view modal",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-IMG-1536x864",
+      "name": "Image preview tests",
+      "result": "BLOCKED",
+      "reason": "No item image in view modal",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-CONSOLE-1536x864",
+      "name": "No console errors during modal flow",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-OPEN-1920x1080",
+      "name": "Item View Modal opens",
+      "result": "PASS",
+      "viewport": "1920x1080",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-SCROLL-1920x1080",
+      "name": "Body scroll lock (ng-zorro class)",
+      "result": "PASS",
+      "note": "ant-scrolling-effect may defer",
+      "bodyClassLocked": false,
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-FIT-1920x1080",
+      "name": "View modal fits viewport",
+      "result": "PASS",
+      "width": 733.5980224609375,
+      "height": 441.462646484375,
+      "right": 1326.799072265625,
+      "bottom": 577.9837646484375,
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-HSCROLL-1920x1080",
+      "name": "No horizontal overflow with view modal",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-VIEW-ESC-1920x1080",
+      "name": "ESC closes view modal",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-IMG-1920x1080",
+      "name": "Image preview tests",
+      "result": "BLOCKED",
+      "reason": "No item image in view modal",
+      "section": "modal"
+    },
+    {
+      "id": "RV01-CONSOLE-1920x1080",
+      "name": "No console errors during modal flow",
+      "result": "PASS",
+      "section": "modal"
+    },
+    {
+      "id": "RV03-IM-LIST-Z80",
+      "name": "IM-LIST OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": null,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-LIST-Z80",
+      "name": "TR-LIST OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z80",
+      "name": "GRN-DETAIL OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z80",
+      "name": "TR-DETAIL at 80%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z80",
+      "name": "BRK-DETAIL OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z80",
+      "name": "IC-DETAIL at 80%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IM-LIST-Z90",
+      "name": "IM-LIST OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-LIST-Z90",
+      "name": "TR-LIST OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z90",
+      "name": "GRN-DETAIL OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z90",
+      "name": "TR-DETAIL at 90%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z90",
+      "name": "BRK-DETAIL OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z90",
+      "name": "IC-DETAIL at 90%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IM-LIST-Z100",
+      "name": "IM-LIST OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-LIST-Z100",
+      "name": "TR-LIST OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z100",
+      "name": "GRN-DETAIL OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z100",
+      "name": "TR-DETAIL at 100%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z100",
+      "name": "BRK-DETAIL OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z100",
+      "name": "IC-DETAIL at 100%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IM-LIST-Z110",
+      "name": "IM-LIST OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-LIST-Z110",
+      "name": "TR-LIST OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z110",
+      "name": "GRN-DETAIL OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z110",
+      "name": "TR-DETAIL at 110%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z110",
+      "name": "BRK-DETAIL OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z110",
+      "name": "IC-DETAIL at 110%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IM-LIST-Z125",
+      "name": "IM-LIST OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-LIST-Z125",
+      "name": "TR-LIST OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z125",
+      "name": "GRN-DETAIL OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z125",
+      "name": "TR-DETAIL at 125%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z125",
+      "name": "BRK-DETAIL OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true,
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z125",
+      "name": "IC-DETAIL at 125%",
+      "result": "BLOCKED",
+      "reason": "No sample document id",
+      "section": "zoom"
+    },
+    {
+      "id": "RV03-WIN-SCALE",
+      "name": "Windows Scaling 125% separate pass",
+      "result": "BLOCKED",
+      "reason": "BLOCKED — Environment (document separately from browser zoom)",
+      "section": "zoom"
+    },
+    {
+      "section": "regression",
+      "id": "W7-REG-WAVE2",
+      "name": "Cached wave2 harness",
+      "result": "PASS",
+      "summary": {
+        "total": 24,
+        "pass": 23,
+        "fail": 0,
+        "blocked": 1,
+        "gate": "FINAL_CLOSED"
+      },
+      "cached": true
+    },
+    {
+      "section": "regression",
+      "id": "W7-REG-WAVE3",
+      "name": "Cached wave3 harness",
+      "result": "PASS",
+      "summary": {
+        "total": 16,
+        "pass": 16,
+        "fail": 0,
+        "blocked": 0,
+        "gate": "CLOSED",
+        "dbAvailable": true
+      },
+      "cached": true
+    },
+    {
+      "section": "regression",
+      "id": "W7-REG-WAVE4",
+      "name": "Cached wave4 harness",
+      "result": "PASS",
+      "summary": {
+        "total": 9,
+        "pass": 9,
+        "fail": 0,
+        "gate": "CLOSED"
+      },
+      "cached": true
+    },
+    {
+      "section": "regression",
+      "id": "W7-REG-WAVE5",
+      "name": "Cached wave5 harness",
+      "result": "PASS",
+      "summary": {
+        "total": 21,
+        "pass": 21,
+        "fail": 0,
+        "blocked": 0,
+        "gate": "PASS"
+      },
+      "cached": true
+    },
+    {
+      "section": "regression",
+      "id": "W7-REG-WAVE6",
+      "name": "Cached wave6 harness",
+      "result": "PASS",
+      "summary": {
+        "pass": 25,
+        "fail": 0,
+        "blocked": 0,
+        "gate": "CLOSED"
+      },
+      "cached": true
+    },
+    {
+      "section": "build",
+      "id": "W7-TEST-UNIT",
+      "name": "npm run test:unit",
+      "result": "PASS"
+    },
+    {
+      "section": "build",
+      "id": "W7-TEST-W1-ROUTE",
+      "name": "node --test src/routes/wave1-route-permissions.test.js",
+      "result": "PASS"
+    },
+    {
+      "section": "build",
+      "id": "W7-TEST-EVIDENCE",
+      "name": "node --test src/platform/evidenceClassification.service.test.js",
+      "result": "PASS"
+    },
+    {
+      "section": "build",
+      "id": "W7-TEST-LIFECYCLE",
+      "name": "npx jest src/platform/lifecyclePresentation.service.test.js --no-cache",
+      "result": "PASS"
+    },
+    {
+      "section": "build",
+      "id": "W7-TEST-CONCURRENCY",
+      "name": "node --test src/platform/concurrency.service.test.js",
+      "result": "PASS"
+    },
+    {
+      "section": "build",
+      "id": "W7-PRISMA-VALIDATE",
+      "name": "prisma validate",
+      "result": "PASS"
+    },
+    {
+      "section": "build",
+      "id": "W7-PRISMA-GENERATE",
+      "name": "prisma generate",
+      "result": "BLOCKED",
+      "detail": "\\client\\query_engine-windows.dll.node.tmp23868' -> 'C:\\DX OS&E\\OSE-backend\\node_modules\\.prisma\\client\\query_engine-windows.dll.node'\n\n\n\nCommand failed: npx prisma generate\nError: \nEPERM: operation not permitted, rename 'C:\\DX OS&E\\OSE-backend\\node_modules\\.prisma\\client\\query_engine-windows.dll.node.tmp23868' -> 'C:\\DX OS&E\\OSE-backend\\node_modules\\.prisma\\client\\query_engine-windows.dll.node'\n\n\n",
+      "reason": "BLOCKED — Environment (query engine locked by running dev server)"
+    },
+    {
+      "section": "build",
+      "id": "W7-PRISMA-IC-MIG",
+      "name": "Inventory Count concurrencyVersion column present",
+      "result": "PASS"
+    },
+    {
+      "section": "build",
+      "id": "W7-FE-BUILD",
+      "name": "Angular production build",
+      "result": "PASS"
+    }
+  ]
+}

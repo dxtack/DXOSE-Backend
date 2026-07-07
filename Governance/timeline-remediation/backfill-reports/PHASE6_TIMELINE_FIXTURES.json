@@ -1,0 +1,628 @@
+{
+  "at": "2026-06-26T20:39:59.777Z",
+  "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+  "tenantSlug": "grand-horizon",
+  "fixtureTag": "PHASE6_TIMELINE_FIXTURE",
+  "actors": {
+    "creator": "store@grandhorizon.com",
+    "dept": "hk.manager@grandhorizon.com",
+    "cost": "cost@grandhorizon.com",
+    "finance": "finance@grandhorizon.com",
+    "gm": "richard.evans@dxuat.com",
+    "security": "steven.clark@dxuat.com"
+  },
+  "rejectApproveBlocked": true,
+  "fixtures": [
+    {
+      "scenario": "active_workflow",
+      "moduleKey": "GET_PASS",
+      "documentId": "457c3102-129e-4fac-b599-ec6a70e51137",
+      "passNo": "GP-2026-00024",
+      "status": "PENDING_COST_CONTROL",
+      "timelineEntryCount": 6,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T20:39:15.059Z",
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "8d82cf59-7aa9-4a9e-8eda-a209fbe956f0"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+            "name": "Omar Al-Said"
+          },
+          "actedAt": "2026-06-26T20:39:15.164Z",
+          "stepNumber": 1,
+          "sourceRef": {
+            "getPassId": "457c3102-129e-4fac-b599-ec6a70e51137",
+            "approvalStepKey": "DEPT"
+          },
+          "globalOrder": 2,
+          "durationMs": 105
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "getPassId": null,
+            "approvalStepKey": "COST_CONTROL"
+          },
+          "globalOrder": 3
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_APPROVAL",
+          "status": "PENDING",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 3,
+          "sourceRef": {
+            "getPassId": null,
+            "approvalStepKey": "FINANCE"
+          },
+          "globalOrder": 4
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "PENDING",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 4,
+          "sourceRef": {
+            "getPassId": null,
+            "approvalStepKey": "GENERAL_MANAGER"
+          },
+          "globalOrder": 5
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+          "status": "PENDING",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 5,
+          "sourceRef": {
+            "getPassId": null,
+            "approvalStepKey": "SECURITY"
+          },
+          "globalOrder": 6
+        }
+      ],
+      "workflowSlotsCount": 6,
+      "auditEventsCount": 3
+    },
+    {
+      "scenario": "pending_security",
+      "moduleKey": "GET_PASS",
+      "documentId": "8f0191d2-92ac-4438-b4ac-91d91c2ec2c6",
+      "passNo": "GP-2026-00025",
+      "status": "PENDING_SECURITY",
+      "timelineEntryCount": 6,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T20:39:15.346Z",
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "803cc9d6-c946-4c45-8ef3-fb72947211e2"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+            "name": "Omar Al-Said"
+          },
+          "actedAt": "2026-06-26T20:39:15.437Z",
+          "stepNumber": 1,
+          "sourceRef": {
+            "getPassId": "8f0191d2-92ac-4438-b4ac-91d91c2ec2c6",
+            "approvalStepKey": "DEPT"
+          },
+          "globalOrder": 2,
+          "durationMs": 91
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T20:39:15.518Z",
+          "stepNumber": 2,
+          "sourceRef": {
+            "getPassId": "8f0191d2-92ac-4438-b4ac-91d91c2ec2c6",
+            "approvalStepKey": "COST_CONTROL"
+          },
+          "globalOrder": 3,
+          "durationMs": 81
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T20:39:15.602Z",
+          "stepNumber": 3,
+          "sourceRef": {
+            "getPassId": "8f0191d2-92ac-4438-b4ac-91d91c2ec2c6",
+            "approvalStepKey": "FINANCE"
+          },
+          "globalOrder": 4,
+          "durationMs": 84
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "7109404a-5724-484c-953f-42a7fc24c3b8",
+            "name": "Richard Evans"
+          },
+          "actedAt": "2026-06-26T20:39:15.696Z",
+          "stepNumber": 4,
+          "sourceRef": {
+            "getPassId": "8f0191d2-92ac-4438-b4ac-91d91c2ec2c6",
+            "approvalStepKey": "GENERAL_MANAGER"
+          },
+          "globalOrder": 5,
+          "durationMs": 94
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 5,
+          "sourceRef": {
+            "getPassId": null,
+            "approvalStepKey": "SECURITY"
+          },
+          "globalOrder": 6
+        }
+      ],
+      "workflowSlotsCount": 6,
+      "auditEventsCount": 6
+    },
+    {
+      "scenario": "security_out",
+      "moduleKey": "GET_PASS",
+      "documentId": "d0a1569c-83bf-4a9d-baf5-4fa891ccaaff",
+      "passNo": "GP-2026-00028",
+      "status": "OUT",
+      "timelineEntryCount": 7,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T20:39:57.743Z",
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "5e059f3a-041f-4bfa-92c0-b6d0746230e9"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+            "name": "Omar Al-Said"
+          },
+          "actedAt": "2026-06-26T20:39:57.917Z",
+          "stepNumber": 1,
+          "sourceRef": {
+            "getPassId": "d0a1569c-83bf-4a9d-baf5-4fa891ccaaff",
+            "approvalStepKey": "DEPT"
+          },
+          "globalOrder": 2,
+          "durationMs": 174
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T20:39:58.034Z",
+          "stepNumber": 2,
+          "sourceRef": {
+            "getPassId": "d0a1569c-83bf-4a9d-baf5-4fa891ccaaff",
+            "approvalStepKey": "COST_CONTROL"
+          },
+          "globalOrder": 3,
+          "durationMs": 117
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T20:39:58.137Z",
+          "stepNumber": 3,
+          "sourceRef": {
+            "getPassId": "d0a1569c-83bf-4a9d-baf5-4fa891ccaaff",
+            "approvalStepKey": "FINANCE"
+          },
+          "globalOrder": 4,
+          "durationMs": 103
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "7109404a-5724-484c-953f-42a7fc24c3b8",
+            "name": "Richard Evans"
+          },
+          "actedAt": "2026-06-26T20:39:58.240Z",
+          "stepNumber": 4,
+          "sourceRef": {
+            "getPassId": "d0a1569c-83bf-4a9d-baf5-4fa891ccaaff",
+            "approvalStepKey": "GENERAL_MANAGER"
+          },
+          "globalOrder": 5,
+          "durationMs": 103
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "cf55b9c4-1b79-46f7-827e-eb1e63ed3163",
+            "name": "Steven Clark"
+          },
+          "actedAt": "2026-06-26T20:39:58.394Z",
+          "stepNumber": 5,
+          "sourceRef": {
+            "getPassId": "d0a1569c-83bf-4a9d-baf5-4fa891ccaaff",
+            "approvalStepKey": "SECURITY"
+          },
+          "globalOrder": 6,
+          "durationMs": 154
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "SECURITY_OUT",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "cf55b9c4-1b79-46f7-827e-eb1e63ed3163",
+            "name": "Steven Clark"
+          },
+          "actedAt": "2026-06-26T20:39:58.394Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 6,
+          "sourceRef": {
+            "getPassId": "d0a1569c-83bf-4a9d-baf5-4fa891ccaaff",
+            "milestone": "SECURITY_OUT"
+          },
+          "globalOrder": 7,
+          "durationMs": 0
+        }
+      ],
+      "workflowSlotsCount": 6,
+      "auditEventsCount": 7
+    },
+    {
+      "scenario": "returned",
+      "moduleKey": "GET_PASS",
+      "documentId": "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+      "passNo": "GP-2026-00029",
+      "status": "RETURNED",
+      "timelineEntryCount": 8,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T20:39:58.601Z",
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "a4d3ba45-28ea-461f-9ecd-f97a6bfcd3c8"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+            "name": "Omar Al-Said"
+          },
+          "actedAt": "2026-06-26T20:39:58.697Z",
+          "stepNumber": 1,
+          "sourceRef": {
+            "getPassId": "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+            "approvalStepKey": "DEPT"
+          },
+          "globalOrder": 2,
+          "durationMs": 96
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T20:39:58.775Z",
+          "stepNumber": 2,
+          "sourceRef": {
+            "getPassId": "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+            "approvalStepKey": "COST_CONTROL"
+          },
+          "globalOrder": 3,
+          "durationMs": 78
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T20:39:58.857Z",
+          "stepNumber": 3,
+          "sourceRef": {
+            "getPassId": "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+            "approvalStepKey": "FINANCE"
+          },
+          "globalOrder": 4,
+          "durationMs": 82
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "7109404a-5724-484c-953f-42a7fc24c3b8",
+            "name": "Richard Evans"
+          },
+          "actedAt": "2026-06-26T20:39:58.944Z",
+          "stepNumber": 4,
+          "sourceRef": {
+            "getPassId": "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+            "approvalStepKey": "GENERAL_MANAGER"
+          },
+          "globalOrder": 5,
+          "durationMs": 87
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "cf55b9c4-1b79-46f7-827e-eb1e63ed3163",
+            "name": "Steven Clark"
+          },
+          "actedAt": "2026-06-26T20:39:59.066Z",
+          "stepNumber": 5,
+          "sourceRef": {
+            "getPassId": "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+            "approvalStepKey": "SECURITY"
+          },
+          "globalOrder": 6,
+          "durationMs": 122
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "SECURITY_OUT",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "cf55b9c4-1b79-46f7-827e-eb1e63ed3163",
+            "name": "Steven Clark"
+          },
+          "actedAt": "2026-06-26T20:39:59.066Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 6,
+          "sourceRef": {
+            "getPassId": "34bca186-eda2-4348-aa3f-f9ddf9bfdc8e",
+            "milestone": "SECURITY_OUT"
+          },
+          "globalOrder": 7,
+          "durationMs": 0
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "RETURN_PROCESSED",
+          "displayTitleKey": "TIMELINE.STAGE.RETURN_PROCESSED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T20:39:59.322Z",
+          "reason": null,
+          "note": null,
+          "stepNumber": 13,
+          "sourceRef": {
+            "auditLogId": "97f62489-13e8-4338-ae5a-1143546a0cc1"
+          },
+          "globalOrder": 8,
+          "durationMs": 256
+        }
+      ],
+      "workflowSlotsCount": 6,
+      "auditEventsCount": 8
+    },
+    {
+      "scenario": "rejected",
+      "moduleKey": "GET_PASS",
+      "documentId": "247ea548-9352-4907-892e-76eaf48d8918",
+      "passNo": "GP-2026-00030",
+      "status": "REJECTED",
+      "timelineEntryCount": 3,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T20:39:59.497Z",
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "dd643205-6161-41d4-ad49-eb8535d938c5"
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+            "name": "Omar Al-Said"
+          },
+          "actedAt": "2026-06-26T20:39:59.584Z",
+          "stepNumber": 1,
+          "sourceRef": {
+            "getPassId": "247ea548-9352-4907-892e-76eaf48d8918",
+            "approvalStepKey": "DEPT"
+          },
+          "globalOrder": 2,
+          "durationMs": 87
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T20:39:59.678Z",
+          "reason": "PHASE6_TIMELINE_FIXTURE budget not approved for timeline test",
+          "stepNumber": 2,
+          "sourceRef": {
+            "auditLogId": "a7c9b37d-9f91-4c24-aeb2-d30a6d58953c"
+          },
+          "globalOrder": 3,
+          "durationMs": 94
+        }
+      ],
+      "workflowSlotsCount": 6,
+      "auditEventsCount": 4
+    }
+  ]
+}

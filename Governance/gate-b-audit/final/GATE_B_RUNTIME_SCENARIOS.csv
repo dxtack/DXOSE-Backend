@@ -1,0 +1,7 @@
+scenario_id,requirement_ids,description,status,evidence,session
+RS-POST-001,C5-5.1-003|C13-13.4-001,"{'method': 'PATCH', 'path': '/grn/72542334-42d3-4fd7-b3b7-4c4de04eb0c8', 'tenant': 'grand-horizon'}",Passed,GATE_B_CURRENT_SESSION_RUNTIME.json,current
+RS-WF-001,C3-3.3-002|C4-4.3-003,"{'method': 'POST', 'path': '/breakage', 'tenant': 'grand-horizon'}",Failed,GATE_B_CURRENT_SESSION_RUNTIME.json,current
+RS-GP-001,C3-3.1-001|C2-2.8-001,"{'method': 'POST', 'path': '/get-passes', 'tenant': 'grand-horizon'}",Passed,GATE_B_CURRENT_SESSION_RUNTIME.json,current
+RS-GP-002,C3-3.1-001,"{'method': 'POST', 'path': '/get-passes/b97380fd-5323-44a5-8388-fcf209e46d20/submit', 'tenant': 'grand-horizon'}",Passed,GATE_B_CURRENT_SESSION_RUNTIME.json,current
+RS-XT-001,C23-23.6-002,"{'method': 'GET', 'path': '/get-passes/e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9', 'tenant': 'grand-horizon', 'note': 'Hotel A token, Hotel B document'}",Failed,GATE_B_CURRENT_SESSION_RUNTIME.json,current
+RS-CONC-001,C8-8.1-001|C8-8.2-001,"{'method': 'POST', 'path': '/get-passes/d184f983-2d78-428e-ab84-83b37491536e/submit', 'tenant': 'grand-horizon', 'body': {'concurrencyVersion': 'stale'}}",Passed,GATE_B_CURRENT_SESSION_RUNTIME.json,current

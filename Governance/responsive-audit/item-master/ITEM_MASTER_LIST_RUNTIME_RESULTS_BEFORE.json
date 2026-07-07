@@ -1,0 +1,132 @@
+{
+  "source": "pilot ITEM_MASTER_TRANSFER_RUNTIME_RESULTS.json",
+  "extractedAt": "2026-07-03T11:30:59.600Z",
+  "results": [
+    {
+      "viewport": "1366x768",
+      "result": "PASS",
+      "flags": [],
+      "pageVerticalScroll": true,
+      "pageHorizontalScroll": false,
+      "verticalScrollOwners": 0,
+      "siderHeight": 1132.8,
+      "headerHeight": 65,
+      "contentHeight": 1132.8,
+      "contentWidth": 1366,
+      "outerCard": {
+        "width": 1049.9,
+        "height": 644.5,
+        "y": 464.3,
+        "bottom": 1108.8
+      },
+      "tableContainerH": 625.5,
+      "tableBodyHeight": 583,
+      "tableBodyScrollHeight": 583,
+      "tableBodyMaxHeight": "583px",
+      "columns": [
+        "Item name",
+        "Category",
+        "Supplier",
+        "Base unit",
+        "Unit price",
+        "Total qty",
+        "Status",
+        "Actions"
+      ],
+      "columnCount": 8,
+      "pagination": null,
+      "footer": {
+        "y": 1057.3,
+        "bottom": 1132.8,
+        "visibleInViewport": false
+      },
+      "blankBelowTable": 42
+    },
+    {
+      "viewport": "1536x864",
+      "result": "PASS",
+      "flags": [],
+      "pageVerticalScroll": true,
+      "pageHorizontalScroll": false,
+      "verticalScrollOwners": 0,
+      "siderHeight": 1132.8,
+      "headerHeight": 65,
+      "contentHeight": 1132.8,
+      "contentWidth": 1536,
+      "outerCard": {
+        "width": 1215.6,
+        "height": 644.5,
+        "y": 464.3,
+        "bottom": 1108.8
+      },
+      "tableContainerH": 625.5,
+      "tableBodyHeight": 583,
+      "tableBodyScrollHeight": 583,
+      "tableBodyMaxHeight": "583px",
+      "columns": [
+        "Item name",
+        "Category",
+        "Supplier",
+        "Base unit",
+        "Unit price",
+        "Total qty",
+        "Status",
+        "Actions"
+      ],
+      "columnCount": 8,
+      "pagination": null,
+      "footer": {
+        "y": 1057.3,
+        "bottom": 1132.8,
+        "visibleInViewport": false
+      },
+      "blankBelowTable": 42
+    },
+    {
+      "viewport": "1920x1080",
+      "result": "PARTIAL",
+      "flags": [
+        "pagination-below-fold"
+      ],
+      "pageVerticalScroll": true,
+      "pageHorizontalScroll": false,
+      "verticalScrollOwners": 0,
+      "siderHeight": 1132.8,
+      "headerHeight": 65,
+      "contentHeight": 1132.8,
+      "contentWidth": 1920,
+      "outerCard": {
+        "width": 1590,
+        "height": 644.5,
+        "y": 464.3,
+        "bottom": 1108.8
+      },
+      "tableContainerH": 593.5,
+      "tableBodyHeight": 551,
+      "tableBodyScrollHeight": 551,
+      "tableBodyMaxHeight": "551px",
+      "columns": [
+        "Item name",
+        "Category",
+        "Supplier",
+        "Base unit",
+        "Unit price",
+        "Total qty",
+        "Status",
+        "Actions"
+      ],
+      "columnCount": 8,
+      "pagination": {
+        "y": 1067.8,
+        "bottom": 1099.8,
+        "visibleInViewport": false
+      },
+      "footer": {
+        "y": 1057.3,
+        "bottom": 1132.8,
+        "visibleInViewport": false
+      },
+      "blankBelowTable": 33
+    }
+  ]
+}

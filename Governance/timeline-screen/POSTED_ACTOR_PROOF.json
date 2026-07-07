@@ -1,0 +1,15 @@
+{
+  "scenario": "Auto posting modules show Auto posted by DX on screen timeline",
+  "modules": ["GRN", "Transfer", "Breakage", "Lost Items", "Inventory Count"],
+  "actor": {
+    "id": "system:dx-auto-post",
+    "name": "Auto posted by DX"
+  },
+  "frontendByLine": "TIMELINE.AUTO_POSTED_BY_DX",
+  "tests": [
+    "GRN builder: POSTED actor is Auto posted by DX",
+    "Posting defaults to Auto posted by DX when autoPosted not false"
+  ],
+  "excluded": "Get Pass (no Posted lifecycle)",
+  "verified": true
+}

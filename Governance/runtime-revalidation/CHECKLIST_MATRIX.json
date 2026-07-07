@@ -1,0 +1,277 @@
+{
+  "generatedAt": "2026-06-27T18:24:42.190Z",
+  "checklist": [
+    {
+      "item": "Product tree identity provable vs Gate C closure",
+      "scenarioId": "MANIFEST",
+      "expected": "Byte-identical or full manifest match",
+      "actual": "Only 3 Gate C file SHA256 captured at closure; keyboard-navigation.directive.ts modified post–Gate C browser remediation; full product tree untracked in git — byte-exact tree match not provable.",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/PRODUCT_MANIFEST.json"
+    },
+    {
+      "item": "Gate C API/Status regression (10/10)",
+      "scenarioId": "GC-API",
+      "expected": "10 Passed",
+      "actual": "10/10 Passed",
+      "result": "PASS",
+      "evidence": "Governance/gate-c-remediation/GATE_C_FINAL_RUNTIME_RESULTS.json"
+    },
+    {
+      "item": "Gate C Keyboard Browser (7/7)",
+      "scenarioId": "GC-KB",
+      "expected": "7 Passed",
+      "actual": "7/7 shells",
+      "result": "PASS",
+      "evidence": "Governance/gate-c-remediation/GATE_C_BROWSER_RESULTS.json"
+    },
+    {
+      "item": "Gate C Lost Items vitest (6/6)",
+      "scenarioId": "GC-LOST-UT",
+      "expected": "6/6 pass",
+      "actual": "Re-run 2026-06-27 — 6/6 pass (per session transcript)",
+      "result": "PASS",
+      "evidence": "OSE-Frontend/src/app/features/lost-items/utils/lost-items-status-display.util.spec.ts"
+    },
+    {
+      "item": "Gate C Frontend build",
+      "scenarioId": "GC-BUILD",
+      "expected": "ng build PASS",
+      "actual": "development build PASS 2026-06-27",
+      "result": "PASS",
+      "evidence": "Governance/gate-c-remediation/ (build log in session)"
+    },
+    {
+      "item": "P0-A Get Pass assignment scope — never-assigned submit denied",
+      "scenarioId": "GP-A-NEVER-SUBMIT",
+      "expected": "403/401/422",
+      "actual": "HTTP 200",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GP-A-NEVER-SUBMIT"
+    },
+    {
+      "item": "P0-A Get Pass assignment scope — inactive submit denied",
+      "scenarioId": "GP-A-INACTIVE-SUBMIT",
+      "expected": "403/401/422",
+      "actual": "HTTP 500",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GP-A-INACTIVE-SUBMIT"
+    },
+    {
+      "item": "P0-A Get Pass assignment scope — valid DM submit",
+      "scenarioId": "GP-A-VALID-SUBMIT",
+      "expected": "200",
+      "actual": "HTTP 500",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GP-A-VALID-SUBMIT"
+    },
+    {
+      "item": "P0-A Cross-tenant Get Pass read isolation",
+      "scenarioId": "GP-A-XT-READ",
+      "expected": "404",
+      "actual": "HTTP 404",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GP-A-XT-READ"
+    },
+    {
+      "item": "P0-B Workflow Pipeline — never-assigned list empty/deny",
+      "scenarioId": "WP-B-NEVER-list",
+      "expected": "403 or count=0",
+      "actual": "HTTP 200 count=50",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#WP-B-NEVER-list"
+    },
+    {
+      "item": "P0-B Workflow Pipeline — never-assigned summary",
+      "scenarioId": "WP-B-NEVER/summary",
+      "expected": "403 or count=0",
+      "actual": "HTTP 200 count=179",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#WP-B-NEVER/summary"
+    },
+    {
+      "item": "P0-B Workflow Pipeline — never-assigned alerts",
+      "scenarioId": "WP-B-NEVER/alerts",
+      "expected": "403 or count=0",
+      "actual": "HTTP 200 count=15",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#WP-B-NEVER/alerts"
+    },
+    {
+      "item": "P0-C Lost Items /approve-dept legacy route operational",
+      "scenarioId": "LEG-C-LOST-DEPT",
+      "expected": "403 or no ACC bypass",
+      "actual": "HTTP 200 DRAFT->DEPT_APPROVED pin=null",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#LEG-C-LOST-DEPT"
+    },
+    {
+      "item": "P0-C Breakage /approve-dept legacy route",
+      "scenarioId": "LEG-C-BRK-DEPT",
+      "expected": "blocked or ACC-pinned",
+      "actual": "HTTP 409 route=true status=DRAFT",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#LEG-C-BRK-DEPT"
+    },
+    {
+      "item": "P0-D Get Pass published workflow — no GM step",
+      "scenarioId": "GP-D-WF-AUDIT",
+      "expected": "0 tenants with PENDING_GM",
+      "actual": "21/21 tenants with GM step",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/GP_WORKFLOW_DRIFT_SNAPSHOT.json"
+    },
+    {
+      "item": "P0-D Finance creator fast-forward on GP submit",
+      "scenarioId": "GP-D-FF-FINANCE",
+      "expected": "No skip of Dept/CC steps",
+      "actual": "status=PENDING_GM financeApprovedBy set; dept/cc null",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GP-D-FF-FINANCE"
+    },
+    {
+      "item": "P0-D ORG_MANAGER creator fast-forward on GP submit",
+      "scenarioId": "GP-D-FF-ORG_MANAGER",
+      "expected": "No auto-complete all steps",
+      "actual": "HTTP 200 status=PENDING_SECURITY skipped=true",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GP-D-FF-ORG_MANAGER"
+    },
+    {
+      "item": "P0-E GRN /resubmit backend dead code vs FE",
+      "scenarioId": "GRN-E-RESUBMIT-LIVE",
+      "expected": "404/405",
+      "actual": "HTTP 404",
+      "result": "PASS",
+      "evidence": "OSE-Frontend/src/app/features/grn/services/grn.service.ts + Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GRN-E-RESUBMIT-LIVE"
+    },
+    {
+      "item": "P0-E GRN Send Back mutates status",
+      "scenarioId": "GRN-E-SB-MUTATE",
+      "expected": "200 + status change",
+      "actual": "HTTP 200 status=DRAFT",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GRN-E-SB-MUTATE"
+    },
+    {
+      "item": "P0-E GRN Submit after Send Back",
+      "scenarioId": "GRN-E-SUBMIT-AFTER-SB",
+      "expected": "200",
+      "actual": "HTTP 422",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#GRN-E-SUBMIT-AFTER-SB"
+    },
+    {
+      "item": "P0-F Breakage approval chain → POSTED",
+      "scenarioId": "BRK-F-FINAL-STATUS",
+      "expected": "POSTED",
+      "actual": "status=DRAFT",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#BRK-F-FINAL-STATUS"
+    },
+    {
+      "item": "P0-F Breakage POSTED → ledger rows",
+      "scenarioId": "BRK-F-LEDGER",
+      "expected": "ledger count increases",
+      "actual": "ledger 0->0",
+      "result": "BLOCKED",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#BRK-F-LEDGER"
+    },
+    {
+      "item": "P0-F Breakage POSTED → stock delta",
+      "scenarioId": "BRK-F-STOCK",
+      "expected": "qty reduced",
+      "actual": "qty 100->100",
+      "result": "BLOCKED",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#BRK-F-STOCK"
+    },
+    {
+      "item": "P0-G Reports breakage-loss-report API",
+      "scenarioId": "RPT-G-API",
+      "expected": "HTTP 200",
+      "actual": "HTTP 200",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#RPT-G-API"
+    },
+    {
+      "item": "P0-G Reports POSTED-only (APPROVED excluded)",
+      "scenarioId": "RPT-G-APPROVED-IN",
+      "expected": "APPROVED not in report rows",
+      "actual": "approvedInReport=false",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#RPT-G-APPROVED-IN"
+    },
+    {
+      "item": "P0-H Movements no-assignment create denied",
+      "scenarioId": "MOV-H-NO-ASSIGN",
+      "expected": "403",
+      "actual": "HTTP 403",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#MOV-H-NO-ASSIGN"
+    },
+    {
+      "item": "P0-H Movements create/post/idempotency",
+      "scenarioId": "MOV-H-CREATE",
+      "expected": "create 201 + post + idempotent reject",
+      "actual": "HTTP 403",
+      "result": "FAIL",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#MOV-H-CREATE"
+    },
+    {
+      "item": "P0-I GRN send-back route + behavior",
+      "scenarioId": "SB-I-GRN-BEHAVIOR",
+      "expected": "200 status change",
+      "actual": "HTTP 200 status=DRAFT",
+      "result": "PASS",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#SB-I-GRN-BEHAVIOR"
+    },
+    {
+      "item": "P0-I Send-back routes other modules",
+      "scenarioId": "SB-I-*",
+      "expected": "N/A unless constitution requires",
+      "actual": "Only GRN has send-back route",
+      "result": "NOT APPLICABLE",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_RESULTS.json#SB-I-Transfer-ROUTE"
+    },
+    {
+      "item": "Prior finding: Get Pass cross-tenant HTTP 500",
+      "scenarioId": "GC-XT-002",
+      "expected": "404 not 500",
+      "actual": "Gate C Passed 404",
+      "result": "PASS",
+      "evidence": "Governance/gate-c-remediation/GATE_C_FINAL_RUNTIME_RESULTS.json#GC-XT-002"
+    },
+    {
+      "item": "Prior finding: Lost Items STATUS presentation",
+      "scenarioId": "GC-LOST-UI",
+      "expected": "Human-readable status",
+      "actual": "vitest 6/6 + Gate C",
+      "result": "PASS",
+      "evidence": "lost-items-status-display.util.spec.ts"
+    },
+    {
+      "item": "Prior finding: Keyboard nav document shells",
+      "scenarioId": "GC-KB",
+      "expected": "7/7 E2E",
+      "actual": "7/7 Passed",
+      "result": "PASS",
+      "evidence": "Governance/gate-c-remediation/GATE_C_BROWSER_RESULTS.json"
+    },
+    {
+      "item": "Prior finding: Requisition in Workflow Pipeline",
+      "scenarioId": "WP-REQ",
+      "expected": "Not shown if out of scope",
+      "actual": "Not tested in P0 — static: requisition not in collectors",
+      "result": "NOT APPLICABLE",
+      "evidence": "OSE-backend/src/services/workflow-pipeline/workflow-pipeline.collectors.js"
+    },
+    {
+      "item": "393-requirement full matrix closure",
+      "scenarioId": "REQ-393",
+      "expected": "393 rows classified",
+      "actual": "148 Not Run in STATUS_COUNTS SSOT — full per-requirement runtime not executed this session",
+      "result": "BLOCKED",
+      "evidence": "Governance/requirements.json + CONSTITUTION_TRACEABILITY_MATRIX.md"
+    }
+  ]
+}

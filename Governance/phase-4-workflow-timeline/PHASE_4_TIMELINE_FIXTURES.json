@@ -1,0 +1,389 @@
+{
+  "generatedAt": "2026-06-28T11:02:17.138Z",
+  "fixtureTag": "PHASE4_TIMELINE_GATE",
+  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+  "tenantSlug": "closeout-audit-hotel-disposable",
+  "grn": {
+    "module": "GRN",
+    "id": "151c6d1b-3d7f-4b1d-8e90-7c56aad5cf70",
+    "documentNo": "GRN-2026-00013",
+    "status": "PENDING_FINANCE",
+    "normalizedTimeline": [
+      {
+        "entryType": "MILESTONE_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "RECEIVED_VALIDATED",
+        "displayTitleKey": "TIMELINE.STAGE.RECEIVED_VALIDATED_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "COST_CONTROL",
+        "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "FINANCE",
+        "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+        "status": "COMPLETED"
+      }
+    ],
+    "lifecycleCounts": {
+      "SUBMIT_FOR_APPROVAL": 0,
+      "SEND_BACK": 0
+    }
+  },
+  "transfer": {
+    "module": "TRANSFER",
+    "id": "99b526da-8f49-4e9a-a449-7e92750121ef",
+    "documentNo": "99b526da-8f49-4e9a-a449-7e92750121ef",
+    "status": "POSTED",
+    "normalizedTimeline": [
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "DEPT",
+        "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "FINANCE",
+        "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "POSTING",
+        "lifecycleEventType": null,
+        "stageKey": "POSTED",
+        "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+        "status": "POSTED"
+      }
+    ]
+  },
+  "breakage": {
+    "module": "BREAKAGE",
+    "id": "e45147f1-dde8-4f44-a535-aaa6d3dcc044",
+    "documentNo": "BRK-2026-00049",
+    "status": "DRAFT",
+    "normalizedTimeline": [
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "DEPT",
+        "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_CURRENT",
+        "lifecycleEventType": null,
+        "stageKey": "COST_CONTROL",
+        "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_APPROVAL",
+        "status": "IN_PROGRESS"
+      },
+      {
+        "entryType": "APPROVAL_STEP_FUTURE",
+        "lifecycleEventType": null,
+        "stageKey": "FINANCE",
+        "displayTitleKey": "TIMELINE.STAGE.FINANCE_APPROVAL",
+        "status": "PENDING"
+      },
+      {
+        "entryType": "APPROVAL_STEP_FUTURE",
+        "lifecycleEventType": null,
+        "stageKey": "GENERAL_MANAGER",
+        "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+        "status": "PENDING"
+      }
+    ]
+  },
+  "getPassSendBackResubmit": {
+    "module": "GET_PASS",
+    "scenario": "send_back_resubmit",
+    "id": "5606ee33-dd2e-4161-8c45-e14eeb8d924b",
+    "documentNo": "GP-2026-00202",
+    "status": "PENDING_DEPT",
+    "sendBackReason": "PHASE4_TIMELINE_GATE send back for correction",
+    "normalizedTimeline": [
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SEND_BACK",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SEND_BACK",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "RESUBMIT",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.RESUBMIT",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_CURRENT",
+        "lifecycleEventType": null,
+        "stageKey": "DEPT",
+        "displayTitleKey": "TIMELINE.STAGE.DEPT_APPROVAL",
+        "status": "IN_PROGRESS"
+      },
+      {
+        "entryType": "APPROVAL_STEP_FUTURE",
+        "lifecycleEventType": null,
+        "stageKey": "COST_CONTROL",
+        "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_APPROVAL",
+        "status": "PENDING"
+      },
+      {
+        "entryType": "APPROVAL_STEP_FUTURE",
+        "lifecycleEventType": null,
+        "stageKey": "FINANCE",
+        "displayTitleKey": "TIMELINE.STAGE.FINANCE_APPROVAL",
+        "status": "PENDING"
+      },
+      {
+        "entryType": "APPROVAL_STEP_FUTURE",
+        "lifecycleEventType": null,
+        "stageKey": "SECURITY",
+        "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+        "status": "PENDING"
+      }
+    ],
+    "afterSendBackNormalized": [
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SEND_BACK",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SEND_BACK",
+        "status": "COMPLETED"
+      }
+    ],
+    "expectations": {
+      "lifecycleCounts": {
+        "SEND_BACK": 1,
+        "RESUBMIT": 1,
+        "SUBMIT_FOR_APPROVAL": 1
+      },
+      "mustExcludeLifecycle": [
+        "RETURN_PROCESSED"
+      ]
+    }
+  },
+  "getPassPhysicalReturn": {
+    "module": "GET_PASS",
+    "scenario": "physical_return",
+    "id": "1b58d002-468e-4f4c-b8d7-e2683ae2ee29",
+    "documentNo": "GP-2026-00203",
+    "status": "RETURNED",
+    "normalizedTimeline": [
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "DEPT",
+        "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "COST_CONTROL",
+        "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "FINANCE",
+        "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "SECURITY",
+        "displayTitleKey": "TIMELINE.STAGE.SECURITY_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "MILESTONE_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "SECURITY_OUT",
+        "displayTitleKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "MILESTONE_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "RETURN_PROCESSED",
+        "displayTitleKey": "TIMELINE.STAGE.RETURN_PROCESSED_COMPLETED",
+        "status": "COMPLETED"
+      }
+    ],
+    "expectations": {
+      "mustIncludeStageKeys": [
+        "SECURITY_OUT",
+        "RETURN_PROCESSED"
+      ],
+      "mustExcludeLifecycle": [
+        "SEND_BACK",
+        "RESUBMIT"
+      ],
+      "finalEvent": {
+        "stageKey": "RETURN_PROCESSED",
+        "displayTitleKey": "TIMELINE.STAGE.RETURN_PROCESSED_COMPLETED"
+      }
+    }
+  },
+  "getPassV3Gm": {
+    "module": "GET_PASS",
+    "scenario": "historical_v3_gm",
+    "id": "a3f92237-38df-450a-9fee-7eb67d7e05cc",
+    "documentNo": "GP-2026-00204",
+    "status": "PENDING_SECURITY",
+    "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+    "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+    "versionNumber": 3,
+    "gmApprovedAt": "2026-06-28T11:02:21.960Z",
+    "gmActor": "Phase4 GENERAL_MANAGER",
+    "normalizedTimeline": [
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "DEPT",
+        "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "COST_CONTROL",
+        "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "FINANCE",
+        "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "GENERAL_MANAGER",
+        "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_CURRENT",
+        "lifecycleEventType": null,
+        "stageKey": "SECURITY",
+        "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+        "status": "IN_PROGRESS"
+      }
+    ],
+    "expectations": {
+      "mustIncludeStageKeys": [
+        "GENERAL_MANAGER",
+        "SECURITY"
+      ],
+      "stageCounts": {
+        "GENERAL_MANAGER": 1
+      }
+    }
+  },
+  "inventoryCount": {
+    "module": "INVENTORY_COUNT",
+    "id": "6413e77f-4206-4693-a093-e055a90cc896",
+    "documentNo": "CNT-2606-0013",
+    "status": "POSTED",
+    "normalizedTimeline": [
+      {
+        "entryType": "MILESTONE_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "COUNT_SUBMITTED",
+        "displayTitleKey": "TIMELINE.STAGE.COUNT_SUBMITTED_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "LIFECYCLE_EVENT",
+        "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+        "stageKey": "LIFECYCLE",
+        "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "FINANCE",
+        "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "APPROVAL_STEP_COMPLETED",
+        "lifecycleEventType": null,
+        "stageKey": "GENERAL_MANAGER",
+        "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+        "status": "COMPLETED"
+      },
+      {
+        "entryType": "POSTING",
+        "lifecycleEventType": null,
+        "stageKey": "POSTED",
+        "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+        "status": "POSTED"
+      }
+    ],
+    "expectations": {
+      "lifecycleCounts": {
+        "SUBMIT_FOR_APPROVAL": 1
+      },
+      "mustIncludeStageKeys": [
+        "COUNT_SUBMITTED",
+        "POSTED"
+      ],
+      "finalEvent": {
+        "entryType": "POSTING",
+        "stageKey": "POSTED"
+      }
+    }
+  }
+}

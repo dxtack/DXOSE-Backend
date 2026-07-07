@@ -1,0 +1,273 @@
+{
+  "executedAt": "2026-06-27T00:54:31.478Z",
+  "method": "Static search OSE-Frontend breakage/lost-items + returns-workflow-approve-modal",
+  "activeScreensCallingLegacy": [
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/breakage-detail/breakage-detail.component.ts",
+      "function": "workflow, ngOnInit, if",
+      "activeScreen": "Breakage detail",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/breakage-list/breakage-list.component.ts",
+      "function": "if, ngOnInit, applyRouteFilters",
+      "activeScreen": "Breakage list",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component.ts",
+      "function": "ngOnInit, if, back",
+      "activeScreen": "Lost items detail",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/lost-items-list/lost-items-list.component.ts",
+      "function": "if, ngOnInit, applyRouteFilters",
+      "activeScreen": "Lost items list",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    }
+  ],
+  "allRows": [
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/breakage-detail/breakage-detail.component.ts",
+      "function": "workflow, ngOnInit, if",
+      "activeScreen": "Breakage detail",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/breakage-list/breakage-list.component.ts",
+      "function": "if, ngOnInit, applyRouteFilters",
+      "activeScreen": "Breakage list",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-dept",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-cost",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-finance",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-gm",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveDept",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveCost",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveFinance",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/breakage/services/breakage.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Breakage module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveGm",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component.ts",
+      "function": "ngOnInit, if, back",
+      "activeScreen": "Lost items detail",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/lost-items-list/lost-items-list.component.ts",
+      "function": "if, ngOnInit, applyRouteFilters",
+      "activeScreen": "Lost items list",
+      "userAction": "Approve / workflow action from list or detail",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Yes when user clicks Approve on INTERNAL doc without ApprovalRequest",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Frontend-Dependent Operational Legacy"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-dept",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-cost",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-finance",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "/approve-gm",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "approveAtCurrentStep (routes to legacy ladder)",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveDept",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveCost",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveFinance",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    },
+    {
+      "frontendFile": "OSE-Frontend/src/app/features/lost-items/services/lost-items.service.ts",
+      "function": "service methods + approveAtCurrentStep ladder",
+      "activeScreen": "Lost items module",
+      "userAction": "HTTP wrapper",
+      "endpoint": "service.approveGm",
+      "runtimeCalled": "Indirect via component",
+      "modernAlternative": "POST /breakage/:id/approve or /lost-items/:id/approve (ACC ApprovalRequest chain)",
+      "classification": "Legacy service surface"
+    }
+  ],
+  "summary": {
+    "totalRows": 22,
+    "frontendDependentOperationalLegacy": 4,
+    "keyFinding": "breakage-list, breakage-detail, lost-items-list, lost-items-detail call approveAtCurrentStep which routes INTERNAL DRAFT→approve-dept ladder without ACC pin"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "validator": "validate_workspace.py",
+  "validator_version": "gate-a.final",
+  "active_directory": "C:\\DX OS&E\\Governance\\constitution-extraction",
+  "violations": [],
+  "stale_metadata": [],
+  "checks": {
+    "no_stale_active_artifacts": true,
+    "no_duplicate_active_versions": true,
+    "no_archived_file_used_as_runtime_input": true,
+    "canonical_version_matches_outputs": true,
+    "all_output_metadata_is_gate_a_final": true,
+    "no_gate_a_1_or_gate_a_2_metadata_in_active_outputs": true,
+    "active_directory_matches_allowlist": true
+  },
+  "all_checks_passed": true
+}

@@ -1,0 +1,291 @@
+{
+  "runAt": "2026-07-03T16:57:39.006Z",
+  "frontendUrl": "http://127.0.0.1:4200",
+  "tenant": {
+    "id": "bf7638b8-04db-4051-94d1-0cf039827c00",
+    "slug": "dx-airport-hotel",
+    "name": "DX Airport Hotel",
+    "parentId": "3f763a13-177d-44e7-81f5-5640a7e8ead5"
+  },
+  "user": {
+    "id": "aab76de8-f56a-4f42-a7d5-17d207dc248c",
+    "email": "daniel.carter@dxuat.com",
+    "role": "ORG_MANAGER"
+  },
+  "itemsUsed": {
+    "matched": {
+      "id": "a2df226a-2bc4-498c-bc26-5de1c0002ec3",
+      "code": "P1G-FB-1782604688975",
+      "name": "PHASE1_SCOPE_GATE Item FB",
+      "imageBefore": null,
+      "resetFrom": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097821265.webp",
+      "imageAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp"
+    },
+    "duplicate": {
+      "code": "DUP-CODE-777",
+      "note": "dummy code, repeated in ZIP"
+    },
+    "existing": {
+      "id": "a2df226a-2bc4-498c-bc26-5de1c0002ec3",
+      "code": "P1G-FB-1782604688975",
+      "imageAfterReplace": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097975792.webp"
+    }
+  },
+  "steps": [
+    {
+      "name": "mint_token",
+      "status": "PASS",
+      "note": "daniel.carter@dxuat.com perms=43"
+    },
+    {
+      "name": "pick_items",
+      "status": "PASS",
+      "note": "matched/existing=P1G-FB-1782604688975 dup=DUP-CODE-777 (imageUrl reset from /uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097821265.webp)"
+    },
+    {
+      "name": "button_visible",
+      "status": "PASS",
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "name": "modal_layout",
+      "status": "PASS",
+      "metrics": {
+        "modalWidth": 920,
+        "modalRight": 1420,
+        "viewportWidth": 1920,
+        "bodyOverflowX": 0,
+        "wrapOverflowX": 0,
+        "dropzone": true
+      }
+    },
+    {
+      "name": "preview_categories",
+      "status": "PASS",
+      "summary": [
+        "Matched: 1",
+        "Existing image: 0",
+        "Unmatched: 1",
+        "Invalid: 1",
+        "Duplicate: 2"
+      ],
+      "rows": [
+        {
+          "file": "BAD-FILE.png",
+          "code": "BAD-FILE",
+          "name": "—",
+          "status": "Invalid",
+          "reason": "Input buffer contains unsupported image format"
+        },
+        {
+          "file": "DUP-CODE-777.jpg",
+          "code": "DUP-CODE-777",
+          "name": "—",
+          "status": "Duplicate",
+          "reason": "Duplicate item code or filename in ZIP"
+        },
+        {
+          "file": "DUP-CODE-777.png",
+          "code": "DUP-CODE-777",
+          "name": "—",
+          "status": "Duplicate",
+          "reason": "Duplicate item code or filename in ZIP"
+        },
+        {
+          "file": "P1G-FB-1782604688975.png",
+          "code": "P1G-FB-1782604688975",
+          "name": "PHASE1_SCOPE_GATE Item FB",
+          "status": "Matched",
+          "reason": "—"
+        },
+        {
+          "file": "ZZZ-NO-SUCH-CODE-999.png",
+          "code": "ZZZ-NO-SUCH-CODE-999",
+          "name": "—",
+          "status": "Unmatched",
+          "reason": "No item with code \"ZZZ-NO-SUCH-CODE-999\""
+        }
+      ],
+      "note": "matched=true unmatched=true invalid=true duplicate=true"
+    },
+    {
+      "name": "confirm_enabled_with_valid",
+      "status": "PASS",
+      "enabled": true
+    },
+    {
+      "name": "confirm_result_summary",
+      "status": "PASS",
+      "summary": "1 uploaded, 4 skipped, 0 failed",
+      "rows": [
+        {
+          "file": "BAD-FILE.png",
+          "code": "BAD-FILE",
+          "status": "skipped",
+          "reason": "Input buffer contains unsupported image format"
+        },
+        {
+          "file": "DUP-CODE-777.jpg",
+          "code": "DUP-CODE-777",
+          "status": "skipped",
+          "reason": "Duplicate item code or filename in ZIP"
+        },
+        {
+          "file": "DUP-CODE-777.png",
+          "code": "DUP-CODE-777",
+          "status": "skipped",
+          "reason": "Duplicate item code or filename in ZIP"
+        },
+        {
+          "file": "P1G-FB-1782604688975.png",
+          "code": "P1G-FB-1782604688975",
+          "status": "uploaded",
+          "reason": "—"
+        },
+        {
+          "file": "ZZZ-NO-SUCH-CODE-999.png",
+          "code": "ZZZ-NO-SUCH-CODE-999",
+          "status": "skipped",
+          "reason": "No item with code \"ZZZ-NO-SUCH-CODE-999\""
+        }
+      ]
+    },
+    {
+      "name": "image_in_item_master",
+      "status": "PASS",
+      "imageBefore": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097821265.webp",
+      "imageAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp",
+      "list": {
+        "thumbCount": 1,
+        "anyUploads": true,
+        "matchThisItem": [
+          "http://localhost:4000/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp"
+        ],
+        "sampleSrc": "http://localhost:4000/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp",
+        "rowCount": 2,
+        "rowDump": [
+          {
+            "text": "",
+            "hasImg": false,
+            "hasPlaceholder": false,
+            "imgSrc": null
+          },
+          {
+            "text": "PHASE1_SCOPE_GATE Item FB",
+            "hasImg": true,
+            "hasPlaceholder": false,
+            "imgSrc": "http://localhost:4000/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp"
+          }
+        ]
+      }
+    },
+    {
+      "name": "confirm_disabled_no_valid",
+      "status": "PASS",
+      "disabled": true
+    },
+    {
+      "name": "skip_existing_unchanged",
+      "status": "PASS",
+      "previewRows": [
+        "Existing image"
+      ],
+      "confirmDisabled": true,
+      "imageBefore": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp",
+      "imageAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp"
+    },
+    {
+      "name": "replace_existing_new_image",
+      "status": "PASS",
+      "imageBefore": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097868894.webp",
+      "imageAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783097975792.webp"
+    },
+    {
+      "name": "network_endpoints",
+      "status": "PASS",
+      "requests": [
+        {
+          "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:4000/api/items/bulk-upload-images/confirm",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+          "method": "POST",
+          "status": 200
+        },
+        {
+          "url": "http://localhost:4000/api/items/bulk-upload-images/confirm",
+          "method": "POST",
+          "status": 200
+        }
+      ],
+      "failures": 0
+    },
+    {
+      "name": "console_clean",
+      "status": "PASS",
+      "errorCount": 0,
+      "errors": []
+    }
+  ],
+  "consoleErrors": [],
+  "networkFailures": [],
+  "bulkImageRequests": [
+    {
+      "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:4000/api/items/bulk-upload-images/confirm",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:4000/api/items/bulk-upload-images/preview",
+      "method": "POST",
+      "status": 200
+    },
+    {
+      "url": "http://localhost:4000/api/items/bulk-upload-images/confirm",
+      "method": "POST",
+      "status": 200
+    }
+  ],
+  "defects": [],
+  "result": "PASS",
+  "summary": {
+    "passCount": 13,
+    "failCount": 0,
+    "warnCount": 0,
+    "consoleErrors": 0,
+    "networkFailures": 0
+  }
+}

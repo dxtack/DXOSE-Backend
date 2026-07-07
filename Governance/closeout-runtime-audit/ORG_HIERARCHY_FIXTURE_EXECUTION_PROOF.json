@@ -1,0 +1,44 @@
+{
+  "executedAt": "2026-06-27T00:11:16.859Z",
+  "tag": "CLOSEOUT_RT_AUDIT",
+  "tenant": "grand-horizon",
+  "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+  "beforeTestRound4": {
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+    "slug": "grand-horizon",
+    "parentId": null,
+    "updatedAt": "2026-06-27T00:09:22.178Z"
+  },
+  "rollbackRecordOnDisk": {
+    "tag": "CLOSEOUT_RT_AUDIT",
+    "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+    "previousParentId": null,
+    "appliedAt": "2026-06-26T23:59:42.512Z",
+    "action": "set_parentId_to_org",
+    "newParentId": "3f763a13-177d-44e7-81f5-5640a7e8ead5"
+  },
+  "rollbackExecuted": false,
+  "rollbackAction": "no_change_needed",
+  "afterRollback": {
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+    "slug": "grand-horizon",
+    "parentId": null,
+    "updatedAt": "2026-06-27T00:09:22.178Z"
+  },
+  "dbQueryAfterRollback": {
+    "sql": "SELECT id, slug, \"parentId\" FROM tenants WHERE slug = 'grand-horizon'",
+    "result": {
+      "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "slug": "grand-horizon",
+      "parentId": null,
+      "updatedAt": "2026-06-27T00:09:22.178Z"
+    }
+  },
+  "contaminationStatus": "RESTORED — grand-horizon parentId no longer artificially linked",
+  "resultsRunDuringHierarchyChange": [
+    "02-acc-operational-legacy.js (Round 3) — ORG legacy routes used org switch",
+    "06-workflow-runtime.js partial"
+  ],
+  "validityAfterRestore": "ACC legacy ORG scenarios require disposable test org hierarchy; results from Round 3 ORG paths under modified hierarchy are INVALID for production claims",
+  "policyGoingForward": "Do not modify grand-horizon.parentId. Use test-only org/child tenants in 00e-disposable-org-fixture.js"
+}

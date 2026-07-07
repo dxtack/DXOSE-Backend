@@ -1,0 +1,654 @@
+{
+  "workstream": "Inventory Count v3 — Runtime Closure Verification",
+  "status": "CLOSED — RUNTIME VERIFIED",
+  "encoding": "UTF-8",
+  "generatedAt": "2026-07-02T17:27:30.986Z",
+  "scope": {
+    "included": [
+      "Concurrent cancel safety (guarded conditional update inside transaction)",
+      "Prisma runtime readiness (migrate deploy + client enum acceptance)",
+      "Real API + DB integration re-run against live server",
+      "Cancel → VOID, audit CANCEL, approval closure, double/concurrent cancel",
+      "Timeline runtime proof: Posted Auto posted by DX, VOID Cancelled — By [Actor]"
+    ],
+    "excluded": [
+      "Transfer Legacy",
+      "GRN",
+      "Breakage/Lost",
+      "Reports",
+      "Tenant Switching",
+      "Safety Suite",
+      "Playwright"
+    ]
+  },
+  "concurrentCancelSafety": {
+    "wasSafeBeforeReview": false,
+    "reason": "cancelSession validated status outside the transaction and updated the session with update({ where: { id } }) with no state guard, so two concurrent cancels could both pass validation and both write a CANCEL audit.",
+    "fixApplied": "Replaced the unconditional update with a guarded updateMany inside the transaction: WHERE id + tenantId + status IN (DRAFT, COUNTING). If count === 0 the transaction re-reads status and throws 409 (COUNT_SESSION_ALREADY_VOID when VOID, otherwise COUNT_SESSION_CANCEL_CONFLICT), rolling back. Under READ COMMITTED the second cancel blocks on the row lock, then re-evaluates the WHERE against the committed VOID row and matches 0 rows.",
+    "guarantees": [
+      "Only the first cancel succeeds",
+      "Second concurrent/sequential cancel returns 409 conflict",
+      "Exactly one CANCEL audit event recorded",
+      "Guard is enforced inside the transaction, not only by pre-validation"
+    ],
+    "unitTest": "src/services/inventory-count-cancel-atomicity.test.js → \"Concurrent cancel — only first succeeds, second returns 409, single CANCEL audit\"",
+    "integrationProof": {
+      "sequential": {
+        "scenario": "cancel-double-concurrent",
+        "step": "SEQUENTIAL",
+        "at": "2026-07-02T17:25:54.492Z",
+        "first": "VOID",
+        "secondStatus": 409,
+        "secondErr": "COUNT_SESSION_ALREADY_VOID"
+      },
+      "concurrent": {
+        "scenario": "cancel-double-concurrent",
+        "step": "CONCURRENT",
+        "at": "2026-07-02T17:25:54.897Z",
+        "okCount": 1,
+        "conflictCount": 1,
+        "finalStatus": "VOID",
+        "cancelAuditCount": 1,
+        "statuses": [
+          409,
+          200
+        ]
+      }
+    }
+  },
+  "prisma": {
+    "generate": {
+      "result": "BLOCKED_LOCAL_ONLY",
+      "detail": "prisma generate failed with EPERM (rename query_engine-windows.dll.node) because running dev servers hold the DLL. NOT a runtime blocker: the on-disk generated client already includes AuditAction.CANCEL (node_modules/.prisma/client/schema.prisma + index.d.ts) and was verified to accept CANCEL via both raw SQL and the Prisma model API (auditLog.create)."
+    },
+    "migrationStatus": {
+      "migration": "20260702143000_audit_action_cancel",
+      "before": "NOT_APPLIED (last common: 20260702120000_inventory_count_v3_workflow_statuses)",
+      "command": "npx prisma migrate deploy",
+      "after": "APPLIED — \"Database schema is up to date!\"",
+      "note": "Applied to dev/test DB ose_inventory@127.0.0.1:5433 only. Production untouched. History shows 8 unrelated DB-only migrations (asset/get_pass) from another branch; not in scope."
+    },
+    "enumRuntimeAcceptance": {
+      "auditActionValues": [
+        "CREATE",
+        "UPDATE",
+        "DELETE",
+        "POST",
+        "VOID",
+        "APPROVE",
+        "REJECT",
+        "IMPORT",
+        "LOGIN",
+        "LOGOUT",
+        "SUBMIT",
+        "CLOSE_PERIOD",
+        "REOPEN_PERIOD",
+        "LOCK_OB",
+        "COUNT_APPROVE",
+        "COUNT_REJECT",
+        "FINALIZE_OB",
+        "SEND_BACK",
+        "CANCEL"
+      ],
+      "cancelPresent": true,
+      "rawInsertAccepted": true,
+      "modelApiAccepted": true,
+      "probeRolledBack": true
+    }
+  },
+  "integration": {
+    "script": "OSE-backend/scripts/integration-inventory-count-v3.js",
+    "apiBase": "http://127.0.0.1:4100/api (fresh server, same DB, current client with CANCEL)",
+    "tenantSlug": "grand-horizon",
+    "startedAt": "2026-07-02T17:25:45.002Z",
+    "finishedAt": "2026-07-02T17:25:58.048Z",
+    "ok": true,
+    "errors": [],
+    "totals": {
+      "scenarios": 8,
+      "steps": 48,
+      "failures": 0
+    },
+    "fixturesRecreated": false,
+    "fixturesNote": "Existing grand-horizon fixtures reused; DB was not reset."
+  },
+  "dbProof": {
+    "cancel": {
+      "beforeStatus": "COUNTING",
+      "afterStatus": "VOID",
+      "auditActions": [
+        "CREATE",
+        "CANCEL"
+      ],
+      "cancelAuditCount": 1,
+      "draftCancelAudit": [
+        "CREATE",
+        "CANCEL"
+      ]
+    },
+    "approvalClosure": {
+      "scenario": "cancel-counting",
+      "step": "APPROVAL_CLOSED",
+      "at": "2026-07-02T17:25:54.050Z",
+      "note": "No approvalRequest in DRAFT/COUNTING (expected by contract)"
+    },
+    "doubleCancel": {
+      "scenario": "cancel-double-concurrent",
+      "step": "SEQUENTIAL",
+      "at": "2026-07-02T17:25:54.492Z",
+      "first": "VOID",
+      "secondStatus": 409,
+      "secondErr": "COUNT_SESSION_ALREADY_VOID"
+    },
+    "concurrentCancel": {
+      "scenario": "cancel-double-concurrent",
+      "step": "CONCURRENT",
+      "at": "2026-07-02T17:25:54.897Z",
+      "okCount": 1,
+      "conflictCount": 1,
+      "finalStatus": "VOID",
+      "cancelAuditCount": 1,
+      "statuses": [
+        409,
+        200
+      ]
+    },
+    "cancelBlockedAfterSubmit": {
+      "scenario": "cancel-blocked-after-submit",
+      "step": "BLOCKED",
+      "at": "2026-07-02T17:25:55.658Z",
+      "status": 400,
+      "errCode": "COUNT_SESSION_INVALID_STATE"
+    }
+  },
+  "timelineProof": {
+    "posted": {
+      "postingActor": "Auto posted by DX",
+      "gmActorName": "Grand Manager",
+      "futurePlaceholders": 0,
+      "assertion": "POSTING actor = \"Auto posted by DX\", not the GM user; no pending/future placeholders after POSTED."
+    },
+    "void": {
+      "cancelActor": "Khalid Hassan",
+      "displayTitleKey": "TIMELINE.LIFECYCLE.CANCEL",
+      "futurePlaceholders": 0,
+      "assertion": "CANCEL lifecycle entry maps to TIMELINE.LIFECYCLE.CANCEL (\"Cancelled\") with real actor; no pending/future placeholders after VOID."
+    }
+  },
+  "auditFailureRollback": {
+    "provenIn": "unit",
+    "detail": "Audit-failure → full rollback is proven by unit test src/services/inventory-count-cancel-atomicity.test.js → \"Audit failure causes full rollback — session stays DRAFT\". Not fault-injected in the live integration run to avoid unsafe write manipulation on the shared test DB."
+  },
+  "unitTests": {
+    "command": "node scripts/run-unit-tests.js",
+    "result": "282 pass / 0 fail"
+  },
+  "filesModifiedThisPass": [
+    "OSE-backend/src/services/inventoryCount.service.js (guarded conditional cancel update inside transaction)",
+    "OSE-backend/src/services/inventory-count-cancel-atomicity.test.js (updateMany mock + concurrent cancel test)",
+    "OSE-backend/src/services/inventory-count-lifecycle.behavior.test.js (updateMany mock support)",
+    "OSE-backend/scripts/integration-inventory-count-v3.js (approval closure, double/concurrent cancel, posted + void timeline assertions)",
+    "OSE-backend/Governance/inventory-count-v3/backend-runtime-evidence.json (runtime evidence regenerated)"
+  ],
+  "rawScenarios": [
+    {
+      "name": "bootstrap",
+      "steps": [
+        {
+          "scenario": "bootstrap",
+          "step": "SCOPE",
+          "at": "2026-07-02T17:25:45.086Z",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+          "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+          "departmentName": "Food & Beverage",
+          "locationIds": [
+            "c031c268-194d-4211-beb8-0910da8f131d"
+          ],
+          "locationId": "c031c268-194d-4211-beb8-0910da8f131d",
+          "locationName": "F&B Store"
+        },
+        {
+          "scenario": "bootstrap",
+          "step": "LOGIN_STOREKEEPER",
+          "at": "2026-07-02T17:25:46.578Z",
+          "email": "store@grandhorizon.com",
+          "role": "STOREKEEPER",
+          "userId": "119786df-ef21-40df-a585-319e6ea474da",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        },
+        {
+          "scenario": "bootstrap",
+          "step": "LOGIN_RECEIVING",
+          "at": "2026-07-02T17:25:46.960Z",
+          "email": "receiving@grandhorizon.com",
+          "role": "RECEIVER",
+          "userId": "3283be5f-90a7-4947-a321-2bbee6561791",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        },
+        {
+          "scenario": "bootstrap",
+          "step": "LOGIN_COSTCONTROL",
+          "at": "2026-07-02T17:25:48.035Z",
+          "email": "cost@grandhorizon.com",
+          "role": "COST_CONTROL",
+          "userId": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        },
+        {
+          "scenario": "bootstrap",
+          "step": "LOGIN_DEPTMANAGER",
+          "at": "2026-07-02T17:25:49.127Z",
+          "email": "fb.manager@grandhorizon.com",
+          "role": "DEPT_MANAGER",
+          "userId": "326c29fa-8969-4dab-b8db-9e5dabf142ea",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        },
+        {
+          "scenario": "bootstrap",
+          "step": "LOGIN_WRONGDEPTMANAGER",
+          "at": "2026-07-02T17:25:50.055Z",
+          "email": "hk.manager@grandhorizon.com",
+          "role": "DEPT_MANAGER",
+          "userId": "d88b22c3-7715-4e54-8e27-e5c6356f819b",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        },
+        {
+          "scenario": "bootstrap",
+          "step": "LOGIN_FINANCE",
+          "at": "2026-07-02T17:25:51.084Z",
+          "email": "finance@grandhorizon.com",
+          "role": "FINANCE_MANAGER",
+          "userId": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        },
+        {
+          "scenario": "bootstrap",
+          "step": "LOGIN_GM",
+          "at": "2026-07-02T17:25:51.353Z",
+          "email": "gm@grandhorizon.com",
+          "role": "GENERAL_MANAGER",
+          "userId": "23a8b966-2736-44fb-97de-2efe4100e98f",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+        }
+      ]
+    },
+    {
+      "name": "posting-gm-api",
+      "steps": [
+        {
+          "scenario": "posting-gm-api",
+          "step": "ANCHOR",
+          "at": "2026-07-02T17:25:51.382Z",
+          "itemId": "f7e4d2a3-d93c-4850-b306-a11321ff3aa2",
+          "itemName": "Dinner Plate - Porcelain",
+          "locationId": "c031c268-194d-4211-beb8-0910da8f131d",
+          "bookQty": 10
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "SESSION_CREATED",
+          "at": "2026-07-02T17:25:51.799Z",
+          "sessionId": "fc239db9-da5b-4356-970f-cfec5fdf561f"
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "VARIANCE_ENTERED",
+          "at": "2026-07-02T17:25:52.009Z",
+          "bookQty": 10,
+          "countedQty": 8,
+          "varianceQty": -2,
+          "cellId": "f96daf9d-b317-477b-8d0b-2a2e8f54076a"
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "BEFORE_GM",
+          "at": "2026-07-02T17:25:52.337Z",
+          "ledgerCount": 0,
+          "stockBalance": 10
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "GM_LOGIN",
+          "at": "2026-07-02T17:25:52.616Z",
+          "email": "gm@grandhorizon.com",
+          "role": "GENERAL_MANAGER",
+          "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+          "hasApprovePerm": true,
+          "userId": "23a8b966-2736-44fb-97de-2efe4100e98f"
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "GM_APPROVE_API",
+          "at": "2026-07-02T17:25:52.941Z",
+          "status": "POSTED",
+          "postedAt": "2026-07-02T17:25:52.908Z"
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "AFTER_GM",
+          "at": "2026-07-02T17:25:52.955Z",
+          "ledgerRows": [
+            {
+              "id": "ee9e4071-91b9-43f7-b09b-759c3c22e92e",
+              "qtyIn": "0",
+              "qtyOut": "2",
+              "balanceAfter": "8",
+              "movementType": "COUNT_ADJUSTMENT",
+              "createdAt": "2026-07-02T17:25:52.873Z"
+            }
+          ],
+          "stockBalance": 8
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "DUPLICATE_GM_BLOCKED",
+          "at": "2026-07-02T17:25:53.059Z",
+          "status": 400,
+          "errCode": "COUNT_SESSION_INVALID_STATE"
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "POSTED_TIMELINE",
+          "at": "2026-07-02T17:25:53.362Z",
+          "postingActor": "Auto posted by DX",
+          "gmActorName": "Grand Manager",
+          "futurePlaceholders": 0,
+          "entryTypes": [
+            "MILESTONE_COMPLETED",
+            "APPROVAL_STEP_COMPLETED",
+            "LIFECYCLE_EVENT",
+            "APPROVAL_STEP_COMPLETED",
+            "APPROVAL_STEP_COMPLETED",
+            "APPROVAL_STEP_COMPLETED",
+            "POSTING"
+          ]
+        },
+        {
+          "scenario": "posting-gm-api",
+          "step": "PASS",
+          "at": "2026-07-02T17:25:53.362Z",
+          "sessionId": "fc239db9-da5b-4356-970f-cfec5fdf561f",
+          "anchor": {
+            "itemId": "f7e4d2a3-d93c-4850-b306-a11321ff3aa2",
+            "itemName": "Dinner Plate - Porcelain",
+            "locationId": "c031c268-194d-4211-beb8-0910da8f131d",
+            "bookQty": 10
+          }
+        }
+      ]
+    },
+    {
+      "name": "cancel-draft",
+      "steps": [
+        {
+          "scenario": "cancel-draft",
+          "step": "REASON_REQUIRED",
+          "at": "2026-07-02T17:25:53.548Z",
+          "status": 400,
+          "errCode": "COUNT_SESSION_CANCEL_REASON_REQUIRED"
+        },
+        {
+          "scenario": "cancel-draft",
+          "step": "VOID",
+          "at": "2026-07-02T17:25:53.657Z",
+          "status": "VOID"
+        },
+        {
+          "scenario": "cancel-draft",
+          "step": "AUDIT",
+          "at": "2026-07-02T17:25:53.671Z",
+          "actions": [
+            "CREATE",
+            "CANCEL"
+          ],
+          "notes": [
+            "INVENTORY_COUNT_CREATED_BY sessionNo=CNT-2607-0117",
+            "INVENTORY_COUNT_CANCELLED sessionNo=CNT-2607-0117 reason=Wrong department selected"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cancel-counting",
+      "steps": [
+        {
+          "scenario": "cancel-counting",
+          "step": "BEFORE",
+          "at": "2026-07-02T17:25:53.924Z",
+          "status": "COUNTING"
+        },
+        {
+          "scenario": "cancel-counting",
+          "step": "VOID",
+          "at": "2026-07-02T17:25:54.028Z",
+          "status": "VOID",
+          "sessionId": "54ab544e-d493-4c10-b46e-1a361c94f0ea"
+        },
+        {
+          "scenario": "cancel-counting",
+          "step": "AUDIT_ACTION",
+          "at": "2026-07-02T17:25:54.042Z",
+          "beforeStatus": "COUNTING",
+          "afterStatus": "VOID",
+          "cancelAuditCount": 1,
+          "actions": [
+            "CREATE",
+            "CANCEL"
+          ]
+        },
+        {
+          "scenario": "cancel-counting",
+          "step": "APPROVAL_CLOSED",
+          "at": "2026-07-02T17:25:54.050Z",
+          "note": "No approvalRequest in DRAFT/COUNTING (expected by contract)"
+        },
+        {
+          "scenario": "cancel-counting",
+          "step": "VOID_TIMELINE",
+          "at": "2026-07-02T17:25:54.099Z",
+          "cancelActor": "Khalid Hassan",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.CANCEL",
+          "futurePlaceholders": 0,
+          "entryTypes": [
+            "LIFECYCLE_EVENT",
+            "MILESTONE_COMPLETED",
+            "MILESTONE_COMPLETED"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cancel-double-concurrent",
+      "steps": [
+        {
+          "scenario": "cancel-double-concurrent",
+          "step": "SEQUENTIAL",
+          "at": "2026-07-02T17:25:54.492Z",
+          "first": "VOID",
+          "secondStatus": 409,
+          "secondErr": "COUNT_SESSION_ALREADY_VOID"
+        },
+        {
+          "scenario": "cancel-double-concurrent",
+          "step": "CONCURRENT",
+          "at": "2026-07-02T17:25:54.897Z",
+          "okCount": 1,
+          "conflictCount": 1,
+          "finalStatus": "VOID",
+          "cancelAuditCount": 1,
+          "statuses": [
+            409,
+            200
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cancel-blocked-after-submit",
+      "steps": [
+        {
+          "scenario": "cancel-blocked-after-submit",
+          "step": "BLOCKED",
+          "at": "2026-07-02T17:25:55.658Z",
+          "status": 400,
+          "errCode": "COUNT_SESSION_INVALID_STATE"
+        },
+        {
+          "scenario": "cancel-blocked-after-submit",
+          "step": "STATUS",
+          "at": "2026-07-02T17:25:55.672Z",
+          "status": "PENDING_DEPT"
+        }
+      ]
+    },
+    {
+      "name": "send-back-resubmit",
+      "steps": [
+        {
+          "scenario": "send-back-resubmit",
+          "step": "INITIAL_SUBMIT",
+          "at": "2026-07-02T17:25:56.385Z",
+          "status": "PENDING_DEPT",
+          "pinnedVersion": "8e849a39-fab9-4e4a-85e7-64eeb5e245c8"
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "DEPT_BACK_REASON_REQUIRED",
+          "at": "2026-07-02T17:25:56.464Z",
+          "status": 400
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "DEPT_SEND_BACK",
+          "at": "2026-07-02T17:25:56.699Z",
+          "status": "REVEAL_REVIEW"
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "RESUBMIT",
+          "at": "2026-07-02T17:25:56.897Z",
+          "status": "PENDING_DEPT",
+          "accWorkflowVersionId": "8e849a39-fab9-4e4a-85e7-64eeb5e245c8"
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "AT_PENDING_FINANCE",
+          "at": "2026-07-02T17:25:57.041Z",
+          "status": "PENDING_FINANCE"
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "FINANCE_SEND_BACK",
+          "at": "2026-07-02T17:25:57.213Z",
+          "status": "PENDING_DEPT"
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "AT_PENDING_GM",
+          "at": "2026-07-02T17:25:57.482Z",
+          "status": "PENDING_GM"
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "GM_SEND_BACK",
+          "at": "2026-07-02T17:25:57.642Z",
+          "status": "PENDING_FINANCE"
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "AUDIT_TRAIL",
+          "at": "2026-07-02T17:25:57.650Z",
+          "actions": [
+            "CREATE",
+            "SUBMIT",
+            "SUBMIT",
+            "SEND_BACK",
+            "SUBMIT",
+            "COUNT_APPROVE",
+            "SEND_BACK",
+            "COUNT_APPROVE",
+            "COUNT_APPROVE",
+            "SEND_BACK"
+          ]
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "AUDIT_NOTES_OK",
+          "at": "2026-07-02T17:25:57.651Z",
+          "sample": [
+            "INVENTORY_COUNT_APPROVE_STEP sessionNo=CNT-2607-0122 step=2 approvedBy=326c29fa-8969-4dab-b8db-9e5dabf142ea role=DEPT_MANAGER",
+            "INVENTORY_COUNT_APPROVE_STEP sessionNo=CNT-2607-0122 step=3 approvedBy=e553ca9c-d315-4f28-99ad-1574d1fd49da role=FINANCE_MANAGER",
+            "INVENTORY_COUNT_SEND_BACK sessionNo=CNT-2607-0122 fromStep=4 reason=Finance review incomplete"
+          ]
+        },
+        {
+          "scenario": "send-back-resubmit",
+          "step": "FINAL_STATE",
+          "at": "2026-07-02T17:25:57.658Z",
+          "status": "PENDING_FINANCE",
+          "versionPin": "8e849a39-fab9-4e4a-85e7-64eeb5e245c8"
+        }
+      ]
+    },
+    {
+      "name": "receiving-create",
+      "steps": [
+        {
+          "scenario": "receiving-create",
+          "step": "LOGIN",
+          "at": "2026-07-02T17:25:57.658Z",
+          "email": "receiving@grandhorizon.com",
+          "role": "RECEIVER",
+          "permissions": [
+            "BASIC_DATA_VIEW",
+            "INVENTORY_VIEW",
+            "STOCK_COUNT_VIEW",
+            "STOCK_COUNT_MANAGE",
+            "VIEW_DASHBOARD",
+            "DASHBOARD_VIEW"
+          ]
+        },
+        {
+          "scenario": "receiving-create",
+          "step": "CREATE_OK",
+          "at": "2026-07-02T17:25:57.745Z",
+          "sessionId": "b26c31e5-d812-4be5-aa45-61037e74a878",
+          "status": "DRAFT"
+        },
+        {
+          "scenario": "receiving-create",
+          "step": "START_OK",
+          "at": "2026-07-02T17:25:57.841Z",
+          "status": "COUNTING"
+        },
+        {
+          "scenario": "receiving-create",
+          "step": "SUBMIT_APPROVAL_BLOCKED",
+          "at": "2026-07-02T17:25:57.894Z",
+          "status": 403,
+          "errCode": "COUNT_EXECUTE_ROLE_REQUIRED"
+        },
+        {
+          "scenario": "receiving-create",
+          "step": "APPROVE_BLOCKED",
+          "at": "2026-07-02T17:25:57.947Z",
+          "status": 403
+        },
+        {
+          "scenario": "receiving-create",
+          "step": "STOREKEEPER_SUBMIT_BLOCKED",
+          "at": "2026-07-02T17:25:57.996Z",
+          "status": 403,
+          "errCode": "COUNT_EXECUTE_ROLE_REQUIRED"
+        },
+        {
+          "scenario": "receiving-create",
+          "step": "STOREKEEPER_APPROVE_BLOCKED",
+          "at": "2026-07-02T17:25:58.048Z",
+          "status": 403
+        }
+      ]
+    }
+  ],
+  "verdict": "CLOSED — RUNTIME VERIFIED"
+}

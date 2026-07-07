@@ -1,0 +1,387 @@
+{
+  "executedAt": "2026-06-27T00:34:06.251Z",
+  "tokenTenant": "grand-horizon",
+  "probes": [
+    {
+      "case": "cross_tenant_valid_id",
+      "endpoint": "read",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "foreign tenant row exists",
+      "auditEvent": null,
+      "mutation": false,
+      "responseMs": 26,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "cross_tenant_valid_id",
+      "endpoint": "update",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "foreign tenant row exists",
+      "auditEvent": null,
+      "mutation": false,
+      "responseMs": 23,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "cross_tenant_valid_id",
+      "endpoint": "submit",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "foreign tenant row exists",
+      "auditEvent": null,
+      "mutation": false,
+      "responseMs": 20,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "cross_tenant_valid_id",
+      "endpoint": "approve",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "foreign tenant row exists",
+      "auditEvent": null,
+      "mutation": false,
+      "responseMs": 19,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "cross_tenant_valid_id",
+      "endpoint": "delete",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "foreign tenant row exists",
+      "auditEvent": null,
+      "mutation": false,
+      "responseMs": 19,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "read",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "no row",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 21,
+      "defectClass": "Product Runtime Defect — error handling + information disclosure (same message as foreign valid)"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "update",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "no row",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Product Runtime Defect — error handling + information disclosure (same message as foreign valid)"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "submit",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "no row",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 21,
+      "defectClass": "Product Runtime Defect — error handling + information disclosure (same message as foreign valid)"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "approve",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "no row",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Product Runtime Defect — error handling + information disclosure (same message as foreign valid)"
+    },
+    {
+      "case": "random_uuid",
+      "endpoint": "delete",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "no row",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 18,
+      "defectClass": "Product Runtime Defect — error handling + information disclosure (same message as foreign valid)"
+    },
+    {
+      "case": "deleted_id",
+      "endpoint": "read",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "deleted",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 21,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "deleted_id",
+      "endpoint": "update",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "deleted",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 21,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "deleted_id",
+      "endpoint": "submit",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "deleted",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "deleted_id",
+      "endpoint": "approve",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "deleted",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "deleted_id",
+      "endpoint": "delete",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "deleted",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 19,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "malformed_id",
+      "endpoint": "read",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "\nInvalid `tx.getPass.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\services\\getPass.service.js:108:16\n\n  105     });\n  106 \n  107 const findReadablePass = (tx, id, viewerTenantId) =>\n→ 108     tx.getPass.findFirst(\nInconsistent column data: Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `n` at 1",
+        "errorCode": "P2023"
+      },
+      "stackExposure": false,
+      "dbLookupResult": "invalid",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "malformed_id",
+      "endpoint": "update",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "\nInvalid `tx.getPass.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\services\\getPass.service.js:102:16\n\n   99 };\n  100 \n  101 const findIssuerPass = (tx, id, issuerTenantId) =>\n→ 102     tx.getPass.findFirst(\nInconsistent column data: Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `n` at 1",
+        "errorCode": "P2023"
+      },
+      "stackExposure": false,
+      "dbLookupResult": "invalid",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 23,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "malformed_id",
+      "endpoint": "submit",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "\nInvalid `prisma.getPass.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\services\\getPass.service.js:1644:42\n\n  1641 \n  1642 const submitGetPass = async (id, tenantId, user, expectedVersion = null) => {\n  1643     const userId = user.id;\n→ 1644     const getPass = await prisma.getPass.findFirst(\nInconsistent column data: Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `n` at 1",
+        "errorCode": "P2023"
+      },
+      "stackExposure": false,
+      "dbLookupResult": "invalid",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 19,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "malformed_id",
+      "endpoint": "approve",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "\nInvalid `prisma.getPass.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\services\\getPass.service.js:1711:46\n\n  1708 let step = 'LOAD';\n  1709 let status;\n  1710 try {\n→ 1711     const getPass = await prisma.getPass.findFirst(\nInconsistent column data: Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `n` at 1",
+        "errorCode": "P2023"
+      },
+      "stackExposure": false,
+      "dbLookupResult": "invalid",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "malformed_id",
+      "endpoint": "delete",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "\nInvalid `prisma.getPass.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\services\\getPass.service.js:1627:43\n\n  1624 };\n  1625 \n  1626 const deleteGetPass = async (id, tenantId, userId, expectedVersion = null) => {\n→ 1627     const existing = await prisma.getPass.findFirst(\nInconsistent column data: Error creating UUID, invalid character: expected an optional prefix of `urn:uuid:` followed by [0-9a-fA-F-], found `n` at 1",
+        "errorCode": "P2023"
+      },
+      "stackExposure": false,
+      "dbLookupResult": "invalid",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 18,
+      "defectClass": "Product Runtime Defect — error handling"
+    },
+    {
+      "case": "same_tenant_unauthorized",
+      "endpoint": "read",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "same tenant — finance may have access",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Same-tenant authorized or lifecycle block"
+    },
+    {
+      "case": "same_tenant_unauthorized",
+      "endpoint": "update",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "same tenant — finance may have access",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 23,
+      "defectClass": "Same-tenant authorized or lifecycle block"
+    },
+    {
+      "case": "same_tenant_unauthorized",
+      "endpoint": "submit",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "same tenant — finance may have access",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 20,
+      "defectClass": "Same-tenant authorized or lifecycle block"
+    },
+    {
+      "case": "same_tenant_unauthorized",
+      "endpoint": "approve",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "same tenant — finance may have access",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 21,
+      "defectClass": "Same-tenant authorized or lifecycle block"
+    },
+    {
+      "case": "same_tenant_unauthorized",
+      "endpoint": "delete",
+      "errorStatus": 500,
+      "responseEnvelope": {
+        "message": "Get Pass not found",
+        "errorCode": null
+      },
+      "stackExposure": false,
+      "dbLookupResult": "same tenant — finance may have access",
+      "auditEvent": null,
+      "mutation": null,
+      "responseMs": 19,
+      "defectClass": "Same-tenant authorized or lifecycle block"
+    }
+  ],
+  "summary": {
+    "unexpected500": 20,
+    "informationDisclosure": 5,
+    "mutationRisk": 0
+  },
+  "confirmedDefect": "Get Pass foreign/random/not-found requests return HTTP 500 — unchanged from Round 5"
+}

@@ -1,0 +1,82 @@
+{
+  "executedAt": "2026-06-27T00:04:16.359Z",
+  "script": "12-no-assign-investigation",
+  "harnessExit": 1,
+  "counts": {
+    "PASS": 6,
+    "FAIL": 4,
+    "BLOCKED": 1,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 11,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": false,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "NA-GP-SUBMIT-never_assigned",
+      "result": "FAIL",
+      "http": 200,
+      "classification": "Confirmed Product Runtime Authorization/Scope Defect"
+    },
+    {
+      "id": "NA-BRK-CREATE-never_assigned",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "NA-GP-SUBMIT-no_assign_inactive_ur",
+      "result": "FAIL",
+      "http": 200,
+      "classification": "Confirmed Product Runtime Authorization/Scope Defect"
+    },
+    {
+      "id": "NA-BRK-CREATE-no_assign_inactive_ur",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "NA-inactive_assignment-LOGIN",
+      "result": "BLOCKED",
+      "reason": {
+        "http": 401
+      }
+    },
+    {
+      "id": "NA-GP-SUBMIT-deleted_assignment",
+      "result": "FAIL",
+      "http": 200,
+      "classification": "Confirmed Product Runtime Authorization/Scope Defect"
+    },
+    {
+      "id": "NA-BRK-CREATE-deleted_assignment",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "NA-GP-SUBMIT-wrong_property",
+      "result": "FAIL",
+      "http": 200,
+      "classification": null
+    },
+    {
+      "id": "NA-BRK-CREATE-wrong_property",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "NA-GP-SUBMIT-view_only_auditor",
+      "result": "PASS",
+      "http": 403,
+      "classification": null
+    },
+    {
+      "id": "NA-BRK-CREATE-view_only_auditor",
+      "result": "PASS",
+      "http": 403
+    }
+  ]
+}

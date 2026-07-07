@@ -1,0 +1,43 @@
+{
+  "executedAt": "2026-06-27T00:11:35.289Z",
+  "script": "14-constitution-aligned-gp",
+  "harnessExit": 1,
+  "counts": {
+    "PASS": 3,
+    "FAIL": 0,
+    "BLOCKED": 1,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 4,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": false,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "CA-GP-FF-DEPT_MANAGER_FB",
+      "result": "PASS",
+      "statusAfter": "PENDING_COST_CONTROL"
+    },
+    {
+      "id": "CA-GP-FF-FINANCE",
+      "result": "PASS",
+      "statusAfter": "PENDING_SECURITY"
+    },
+    {
+      "id": "CA-GP-FF-ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": {
+        "reason": "org_switch_failed"
+      }
+    },
+    {
+      "id": "CA-GP-FF-SUPER_ADMIN_OP",
+      "result": "PASS",
+      "phase": "create_denied",
+      "http": 403
+    }
+  ]
+}

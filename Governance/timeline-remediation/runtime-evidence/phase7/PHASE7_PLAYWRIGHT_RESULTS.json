@@ -1,0 +1,226 @@
+{
+  "at": "2026-06-27T00:52:17.414Z",
+  "passed": 8,
+  "failed": 0,
+  "skipped": 0,
+  "total": 8,
+  "runtimeRequiredSkipped": 0,
+  "allRuntimePass": true,
+  "seedReportAt": "2026-06-26T21:19:27.736Z",
+  "results": [
+    {
+      "viewport": "1920x1080",
+      "fixture": "active_approval",
+      "sessionNo": "CNT-2606-0059",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 4,
+        "domEntryCount": 4
+      },
+      "domTitles": [
+        "Count submitted",
+        "Submitted for approval",
+        "Finance approval",
+        "General manager approval"
+      ]
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "active_approval",
+      "sessionNo": "CNT-2606-0059",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 4,
+        "domEntryCount": 4
+      },
+      "domTitles": [
+        "Count submitted",
+        "Submitted for approval",
+        "Finance approval",
+        "General manager approval"
+      ]
+    },
+    {
+      "viewport": "1920x1080",
+      "fixture": "posted",
+      "sessionNo": "CNT-2606-0060",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 5,
+        "domEntryCount": 5
+      },
+      "domTitles": [
+        "Count submitted",
+        "Submitted for approval",
+        "Finance approved",
+        "General manager approved",
+        "Posted to inventory"
+      ]
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "posted",
+      "sessionNo": "CNT-2606-0060",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 5,
+        "domEntryCount": 5
+      },
+      "domTitles": [
+        "Count submitted",
+        "Submitted for approval",
+        "Finance approved",
+        "General manager approved",
+        "Posted to inventory"
+      ]
+    },
+    {
+      "viewport": "1920x1080",
+      "fixture": "rejected",
+      "sessionNo": "CNT-2606-0061",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 3,
+        "domEntryCount": 3
+      },
+      "domTitles": [
+        "Count submitted",
+        "Submitted for approval",
+        "Rejected"
+      ]
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "rejected",
+      "sessionNo": "CNT-2606-0061",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 3,
+        "domEntryCount": 3
+      },
+      "domTitles": [
+        "Count submitted",
+        "Submitted for approval",
+        "Rejected"
+      ]
+    },
+    {
+      "viewport": "1920x1080",
+      "fixture": "recount_round2",
+      "sessionNo": "CNT-2606-0062",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 7,
+        "domEntryCount": 7
+      },
+      "domTitles": [
+        "Count submitted",
+        "Recount requested",
+        "Count submitted",
+        "Submitted for approval",
+        "Finance approved",
+        "General manager approved",
+        "Posted to inventory"
+      ]
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "recount_round2",
+      "sessionNo": "CNT-2606-0062",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "singleReject": true,
+        "hasPosting": true,
+        "recountRound2": true
+      },
+      "metrics": {
+        "apiEntryCount": 7,
+        "domEntryCount": 7
+      },
+      "domTitles": [
+        "Count submitted",
+        "Recount requested",
+        "Count submitted",
+        "Submitted for approval",
+        "Finance approved",
+        "General manager approved",
+        "Posted to inventory"
+      ]
+    }
+  ]
+}

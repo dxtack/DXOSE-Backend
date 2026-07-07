@@ -1,0 +1,83 @@
+{
+  "gate": "Gate C Final Verification v2",
+  "verified_at_utc": "2026-06-27T17:45:00Z",
+  "runtime_counting": {
+    "api_status": {
+      "unique_gate_c_scenario_ids": [
+        "GC-XT-001",
+        "GC-XT-002",
+        "GC-XT-003",
+        "GC-XT-004",
+        "GC-XT-005",
+        "GC-XT-006",
+        "GC-LI-001",
+        "GC-LI-002",
+        "GC-LI-003"
+      ],
+      "unique_gate_c_count": 9,
+      "regression_scenario_ids": ["RS-XT-001"],
+      "regression_count": 1,
+      "total_executions": 10,
+      "passed": 10,
+      "failed": 0,
+      "blocked": 0,
+      "evidence": "GATE_C_FINAL_RUNTIME_RESULTS.json"
+    },
+    "keyboard_browser_e2e": {
+      "shells": ["GRN", "GET_PASS", "TRANSFER", "BREAKAGE", "LOST_ITEMS", "MOVEMENTS", "INVENTORY_COUNT"],
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "blocked": 0,
+      "evidence": "GATE_C_BROWSER_RESULTS.json"
+    },
+    "unit_tests": {
+      "lost_items_status_spec": { "passed": 6, "failed": 0, "evidence": "lost-items-status-display.util.spec.ts" },
+      "get_pass_service_test": {
+        "passed": 12,
+        "failed": 4,
+        "gate_c_regression": false,
+        "diagnosis": "GATE_C_GETPASS_UNIT_TEST_DIAGNOSIS.md"
+      }
+    }
+  },
+  "findings": {
+    "FIND-001": {
+      "status": "REMEDIATED",
+      "runtime": "Passed",
+      "unit_tests": "6/6 Passed",
+      "surface_inventory": "GATE_C_LOST_STATUS_SURFACE_INVENTORY.csv"
+    },
+    "FIND-002": {
+      "status": "REMEDIATED",
+      "runtime": "10/10 API executions Passed"
+    },
+    "FIND-003": {
+      "status": "REMEDIATED",
+      "browser_e2e": "7/7 shells Passed (all assertions)",
+      "wiring": "Complete on 7 applicable shells"
+    }
+  },
+  "build_test": {
+    "frontend_development_build": "PASS",
+    "gate_c_final_runtime": "10/10 Passed",
+    "keyboard_browser_e2e": "7/7 Passed",
+    "lost_items_vitest": "6/6 Passed"
+  },
+  "gate_b_restoration": {
+    "file": "Governance/gate-b-audit/final/GATE_B_RUNTIME_RESULTS.json",
+    "closeout_target_sha256": "C8F624E730DB1C0B9CA5BF3F455BDC42323C078EB6C8D9B1A0441D0BB8AED038",
+    "current_sha256": "43640F0C459626FCD0BAD2E57980A4424F960F00FAF40D82AF07C926F5D625EB",
+    "byte_exact_restore": false,
+    "incident": "GATE_C_GATE_B_RUNTIME_INCIDENT.md",
+    "gate_b_summary_findings_matrix_modified": false
+  },
+  "gate_artifacts_unchanged": {
+    "gate_a_register_sha256": "BBAA877C60C92D47920AFE16D67B77E613BA2AFECA8A1514D61797E77338AAE9",
+    "gate_b_summary_sha256": "2D152A877136E550CCF15DC3A64C7252FA6F101EE5D9BA7C7D372394B13F8A17",
+    "gate_b_findings_sha256": "7B76D95EBE6C2224A392A415945558B5C7E9796DF6ED25A9D154B538726C813A",
+    "gate_b_matrix_sha256": "59E3EAD6260905902D7E595E99D3E0FBFBA91D32413682D47B731CCF33B1E838",
+    "role_permission_fallback_sha256": "0DBCE02D4A32E29164F96A84FD21190093E655B2ACBBFCE8B783AC565E98CDD9"
+  },
+  "exit_decision": "GATE C FINAL VERIFICATION v2 — CLOSED"
+}

@@ -1,0 +1,26 @@
+{
+  "remediatedAt": "2026-06-26T22:07:53.091Z",
+  "permission": "ADJUSTMENT_CREATE",
+  "fmOnlyRole": "FINANCE_MANAGER",
+  "beforeGrantCount": 3,
+  "afterGrantCount": 1,
+  "removedFromRoles": [
+    {
+      "roleCode": "ORG_MANAGER",
+      "roleId": "bd15133c-6285-4581-bf1e-37dae5ad6644",
+      "usersPermissionVersionBumped": 6
+    },
+    {
+      "roleCode": "STOREKEEPER",
+      "roleId": "57c2d962-d3db-493d-8a6a-c9c390a2f1b0",
+      "usersPermissionVersionBumped": 5
+    }
+  ],
+  "nonFmGrantCountAfter": 0,
+  "nonFmRolesAfter": [],
+  "legacyAdjustmentDraftCount": 0,
+  "legacyAdjustmentDrafts": [],
+  "acceptance": {
+    "nonFmAdjustmentCreateZero": true
+  }
+}

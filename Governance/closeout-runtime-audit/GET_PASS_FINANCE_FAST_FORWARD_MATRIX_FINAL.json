@@ -1,0 +1,273 @@
+{
+  "executedAt": "2026-06-27T00:34:19.636Z",
+  "tenant": "closeout-audit-hotel-disposable",
+  "workflowChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "constitutionExpectedFlow": "Department → Cost Control → Finance → Security OUT → Return",
+  "governanceAuthority": "No approved BDR — see GET_PASS_CREATOR_FAST_FORWARD_AUTHORITY_AUDIT.json",
+  "rows": [
+    {
+      "actor": "finance_creator",
+      "role": "FINANCE_MANAGER",
+      "createPermission": true,
+      "submitPermission": true,
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "submitHttp": 200,
+      "expectedFirstStep": "PENDING_DEPT (constitution chain — no approved skip authority)",
+      "actualStatus": "PENDING_SECURITY",
+      "deptStep": "skipped",
+      "ccStep": "skipped",
+      "financeStep": "stamped",
+      "auditActor": [
+        {
+          "action": "SUBMIT",
+          "changedBy": "160c4b38-8292-4d12-a1fc-8b3b635c6ba9"
+        },
+        {
+          "action": "CREATE",
+          "changedBy": "160c4b38-8292-4d12-a1fc-8b3b635c6ba9"
+        }
+      ],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": false,
+      "result": "Runtime-Confirmed Governance / Constitution Defect",
+      "resultNote": "Finance creator skipped Dept+CC without approved BDR — see GET_PASS_CREATOR_FAST_FORWARD_AUTHORITY_AUDIT.json"
+    },
+    {
+      "actor": "finance_non_creator",
+      "role": "FINANCE_MANAGER",
+      "createPermission": true,
+      "submitPermission": true,
+      "createAllowed": false,
+      "createHttp": 403,
+      "submitAllowed": null,
+      "submitHttp": null,
+      "expectedFirstStep": "PENDING_DEPT (constitution chain — no approved skip authority)",
+      "actualStatus": null,
+      "deptStep": "pending",
+      "ccStep": "pending",
+      "financeStep": "not_stamped",
+      "auditActor": [],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": true,
+      "result": "PASS",
+      "resultNote": "Approve-only actor cannot create"
+    },
+    {
+      "actor": "cost_control_creator",
+      "role": "COST_CONTROL",
+      "createPermission": false,
+      "submitPermission": false,
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "submitHttp": 200,
+      "expectedFirstStep": "PENDING_COST_CONTROL (creator at CC step → next PENDING_FINANCE)",
+      "actualStatus": "PENDING_FINANCE",
+      "deptStep": "skipped",
+      "ccStep": "stamped",
+      "financeStep": "not_stamped",
+      "auditActor": [
+        {
+          "action": "SUBMIT",
+          "changedBy": "113f99f5-c1f6-46e1-ac89-a5c98d45589a"
+        },
+        {
+          "action": "CREATE",
+          "changedBy": "113f99f5-c1f6-46e1-ac89-a5c98d45589a"
+        }
+      ],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": false,
+      "result": "PASS",
+      "resultNote": "CC creator advances to Finance step"
+    },
+    {
+      "actor": "storekeeper_creator",
+      "role": "STOREKEEPER",
+      "createPermission": true,
+      "submitPermission": true,
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "submitHttp": 200,
+      "expectedFirstStep": "PENDING_DEPT",
+      "actualStatus": "PENDING_DEPT",
+      "deptStep": "pending",
+      "ccStep": "pending",
+      "financeStep": "not_stamped",
+      "auditActor": [
+        {
+          "action": "SUBMIT",
+          "changedBy": "a9f4897c-b18b-4bbd-a0e2-b44933fcd89f"
+        },
+        {
+          "action": "CREATE",
+          "changedBy": "a9f4897c-b18b-4bbd-a0e2-b44933fcd89f"
+        }
+      ],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": false,
+      "result": "PASS",
+      "resultNote": "Observed runtime behavior documented"
+    },
+    {
+      "actor": "department_creator",
+      "role": "DEPT_MANAGER",
+      "createPermission": true,
+      "submitPermission": true,
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "submitHttp": 200,
+      "expectedFirstStep": "PENDING_DEPT",
+      "actualStatus": "PENDING_COST_CONTROL",
+      "deptStep": "stamped",
+      "ccStep": "pending",
+      "financeStep": "not_stamped",
+      "auditActor": [
+        {
+          "action": "SUBMIT",
+          "changedBy": "96a98922-dc43-4318-a5e5-9601b38b0d40"
+        },
+        {
+          "action": "CREATE",
+          "changedBy": "96a98922-dc43-4318-a5e5-9601b38b0d40"
+        }
+      ],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": false,
+      "result": "PASS",
+      "resultNote": "Dept creator queued at CC after self-stamp"
+    },
+    {
+      "actor": "org_manager_creator",
+      "role": "ORG_MANAGER",
+      "createPermission": false,
+      "submitPermission": false,
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": true,
+      "submitHttp": 200,
+      "expectedFirstStep": "PENDING_SECURITY (runtime fast-forward to last step)",
+      "actualStatus": "PENDING_SECURITY",
+      "deptStep": "stamped",
+      "ccStep": "stamped",
+      "financeStep": "stamped",
+      "auditActor": [
+        {
+          "action": "SUBMIT",
+          "changedBy": "b2ccdf43-a982-4310-84b3-4f59fa7dfb3d"
+        },
+        {
+          "action": "CREATE",
+          "changedBy": "b2ccdf43-a982-4310-84b3-4f59fa7dfb3d"
+        }
+      ],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": false,
+      "result": "Runtime-Confirmed Governance / Constitution Defect",
+      "resultNote": "ORG_MANAGER submit stamps all prior steps without executing them"
+    },
+    {
+      "actor": "create_only",
+      "role": "DEPT_MANAGER",
+      "createPermission": true,
+      "submitPermission": true,
+      "createAllowed": true,
+      "createHttp": 201,
+      "submitAllowed": null,
+      "submitHttp": null,
+      "expectedFirstStep": "PENDING_DEPT",
+      "actualStatus": null,
+      "deptStep": "pending",
+      "ccStep": "pending",
+      "financeStep": "not_stamped",
+      "auditActor": [
+        {
+          "action": "CREATE",
+          "changedBy": "7595c9d6-24b5-457d-b4be-41d5d626ffbf"
+        }
+      ],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": false,
+      "result": "PASS",
+      "resultNote": "Observed runtime behavior documented"
+    },
+    {
+      "actor": "approve_only",
+      "role": "COST_CONTROL",
+      "createPermission": false,
+      "submitPermission": false,
+      "createAllowed": false,
+      "createHttp": 403,
+      "submitAllowed": null,
+      "submitHttp": null,
+      "expectedFirstStep": "PENDING_COST_CONTROL (creator at CC step → next PENDING_FINANCE)",
+      "actualStatus": null,
+      "deptStep": "pending",
+      "ccStep": "pending",
+      "financeStep": "not_stamped",
+      "auditActor": [],
+      "timelineActor": [],
+      "constitutionChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "approverOnly": true,
+      "result": "PASS",
+      "resultNote": "Approve-only actor cannot create"
+    }
+  ],
+  "financeCreatorVerdict": "Runtime-Confirmed Governance / Constitution Defect"
+}

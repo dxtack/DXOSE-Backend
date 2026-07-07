@@ -1,0 +1,246 @@
+{
+  "workstream": "Transfer Legacy — Explicit Close Execution",
+  "classification": "CLOSED — EXPLICITLY RESOLVED",
+  "executionTimestamp": "2026-07-02T17:53:32.991Z",
+  "finishedAt": "2026-07-02T17:53:33.069Z",
+  "scope": {
+    "targetTransferNo": "TRF-202605-0001",
+    "replacementTransferNo": "TRF-202605-0002",
+    "tenantSlug": "roma-1"
+  },
+  "terminalMapping": {
+    "transferStatusUsed": "REJECTED",
+    "auditActionUsed": "CANCEL",
+    "rationale": "TransferStatus enum has no VOID/CANCELLED. REJECTED is the supported terminal negative-close state (TERMINAL_STATUSES). Audit CANCEL records explicit legacy supersede void/cancel semantics.",
+    "closeMethodLabel": "Void/Cancel — Legacy Superseded"
+  },
+  "transactionImplementation": {
+    "pattern": "prisma.$transaction with guarded storeTransfer.updateMany WHERE id + tenantId + status=PENDING_FINAL",
+    "approvalCleanup": "Pending approval steps → CANCELLED; ApprovalRequest → CANCELLED",
+    "audit": "writeAuditLogTransactional action CANCEL inside same transaction (rollback on audit failure)",
+    "noStockOrLedgerWrites": true,
+    "noRecordDelete": true
+  },
+  "preValidation": {
+    "targetStatus": "REJECTED",
+    "replacementStatus": "POSTED",
+    "targetLedgerCount": 0,
+    "replacementLedgerCount": 2,
+    "postingState": "NOT_STARTED",
+    "passed": true
+  },
+  "statusCounts": {
+    "before": {
+      "DRAFT": 137,
+      "SUBMITTED": 0,
+      "PENDING_DEPT": 94,
+      "PENDING_FINANCE": 97,
+      "PENDING_FINAL": 0,
+      "APPROVED": 0,
+      "IN_TRANSIT": 0,
+      "RECEIVED": 0,
+      "CLOSED": 0,
+      "POSTED": 108,
+      "REJECTED": 83
+    },
+    "after": {
+      "DRAFT": 137,
+      "SUBMITTED": 0,
+      "PENDING_DEPT": 94,
+      "PENDING_FINANCE": 97,
+      "PENDING_FINAL": 0,
+      "APPROVED": 0,
+      "IN_TRANSIT": 0,
+      "RECEIVED": 0,
+      "CLOSED": 0,
+      "POSTED": 108,
+      "REJECTED": 83
+    }
+  },
+  "execution": {
+    "firstRun": {
+      "outcome": "IDEMPOTENT_NOOP",
+      "transfer": {
+        "id": "6fdf53fb-c1ca-4e4c-8c02-568b7fbfd9b1",
+        "tenantId": "90a23ac2-c0cb-4344-89f2-34fddfef021a",
+        "transferNo": "TRF-202605-0001",
+        "concurrencyVersion": 0,
+        "postingDate": null,
+        "assignedPostingPeriod": null,
+        "sourceLocationId": "a96285bf-7766-405b-a12b-0a2acf8c3284",
+        "destLocationId": "06119664-edfc-40fb-b715-692d52e5ee1e",
+        "requestedBy": "b4191e46-4d91-4aa0-b2a6-24e01c069558",
+        "approvedBy": null,
+        "postedBy": null,
+        "rejectedBy": "b4191e46-4d91-4aa0-b2a6-24e01c069558",
+        "receivedBy": null,
+        "transferDate": "2026-05-18T14:00:19.687Z",
+        "requiredBy": "2026-05-18T00:00:00.000Z",
+        "status": "REJECTED",
+        "reason": "Test",
+        "rejectionReason": "Legacy transfer explicitly closed because it was abandoned and superseded by posted transfer TRF-202605-0002. No stock or ledger impact existed on this record.",
+        "notes": "test",
+        "approvedAt": null,
+        "postedAt": null,
+        "dispatchedAt": null,
+        "receivedAt": null,
+        "closedAt": null,
+        "createdAt": "2026-05-18T14:00:19.691Z",
+        "updatedAt": "2026-07-02T17:53:27.617Z",
+        "lines": [
+          {
+            "id": "61b14066-a679-4a1f-9d63-4106254428e1",
+            "itemId": "575826b3-9cab-4408-89ad-79da4ef5a04f",
+            "requestedQty": "3",
+            "receivedQty": null
+          }
+        ],
+        "approvalRequest": {
+          "id": "72a61102-83ab-42d7-8994-b900e1025959",
+          "status": "CANCELLED",
+          "currentStep": 3
+        }
+      },
+      "auditCreated": false
+    },
+    "secondRunIdempotency": {
+      "outcome": "IDEMPOTENT_NOOP",
+      "transfer": {
+        "id": "6fdf53fb-c1ca-4e4c-8c02-568b7fbfd9b1",
+        "tenantId": "90a23ac2-c0cb-4344-89f2-34fddfef021a",
+        "transferNo": "TRF-202605-0001",
+        "concurrencyVersion": 0,
+        "postingDate": null,
+        "assignedPostingPeriod": null,
+        "sourceLocationId": "a96285bf-7766-405b-a12b-0a2acf8c3284",
+        "destLocationId": "06119664-edfc-40fb-b715-692d52e5ee1e",
+        "requestedBy": "b4191e46-4d91-4aa0-b2a6-24e01c069558",
+        "approvedBy": null,
+        "postedBy": null,
+        "rejectedBy": "b4191e46-4d91-4aa0-b2a6-24e01c069558",
+        "receivedBy": null,
+        "transferDate": "2026-05-18T14:00:19.687Z",
+        "requiredBy": "2026-05-18T00:00:00.000Z",
+        "status": "REJECTED",
+        "reason": "Test",
+        "rejectionReason": "Legacy transfer explicitly closed because it was abandoned and superseded by posted transfer TRF-202605-0002. No stock or ledger impact existed on this record.",
+        "notes": "test",
+        "approvedAt": null,
+        "postedAt": null,
+        "dispatchedAt": null,
+        "receivedAt": null,
+        "closedAt": null,
+        "createdAt": "2026-05-18T14:00:19.691Z",
+        "updatedAt": "2026-07-02T17:53:27.617Z",
+        "lines": [
+          {
+            "id": "61b14066-a679-4a1f-9d63-4106254428e1",
+            "itemId": "575826b3-9cab-4408-89ad-79da4ef5a04f",
+            "requestedQty": "3",
+            "receivedQty": null
+          }
+        ],
+        "approvalRequest": {
+          "id": "72a61102-83ab-42d7-8994-b900e1025959",
+          "status": "CANCELLED",
+          "currentStep": 3
+        }
+      },
+      "auditCreated": false
+    },
+    "idempotent": true
+  },
+  "dbProof": {
+    "target": {
+      "id": "6fdf53fb-c1ca-4e4c-8c02-568b7fbfd9b1",
+      "transferNo": "TRF-202605-0001",
+      "statusAfter": "REJECTED",
+      "rejectionReason": "Legacy transfer explicitly closed because it was abandoned and superseded by posted transfer TRF-202605-0002. No stock or ledger impact existed on this record.",
+      "approvalRequestStatus": "CANCELLED"
+    },
+    "replacement": {
+      "before": {
+        "status": "POSTED",
+        "updatedAt": "2026-05-18T18:37:41.882Z",
+        "lineCount": 1
+      },
+      "after": {
+        "status": "POSTED",
+        "updatedAt": "2026-05-18T18:37:41.882Z",
+        "lineCount": 1,
+        "unchanged": true
+      }
+    },
+    "explicitCloseAuditCount": 1,
+    "targetAuditTrail": [
+      {
+        "action": "CREATE",
+        "note": "STORE_TRANSFER_CREATE transferNo=TRF-202605-0001",
+        "changedAt": "2026-05-18T14:00:19.731Z",
+        "afterValue": {
+          "status": "DRAFT",
+          "transferNo": "TRF-202605-0001"
+        }
+      },
+      {
+        "action": "SUBMIT",
+        "note": "STORE_TRANSFER_SUBMIT transferNo=TRF-202605-0001",
+        "changedAt": "2026-05-18T14:00:19.889Z",
+        "afterValue": {
+          "status": "SUBMITTED",
+          "transferNo": "TRF-202605-0001"
+        }
+      },
+      {
+        "action": "APPROVE",
+        "note": "STORE_TRANSFER_APPROVE_STEP transferNo=TRF-202605-0001 status=PENDING_FINANCE",
+        "changedAt": "2026-05-18T14:00:56.962Z",
+        "afterValue": {
+          "status": "PENDING_FINANCE",
+          "transferNo": "TRF-202605-0001"
+        }
+      },
+      {
+        "action": "APPROVE",
+        "note": "STORE_TRANSFER_APPROVE_STEP transferNo=TRF-202605-0001 status=PENDING_FINAL",
+        "changedAt": "2026-05-18T14:01:24.127Z",
+        "afterValue": {
+          "status": "PENDING_FINAL",
+          "transferNo": "TRF-202605-0001"
+        }
+      },
+      {
+        "action": "CANCEL",
+        "note": "STORE_TRANSFER_LEGACY_EXPLICIT_CLOSE transferNo=TRF-202605-0001 supersededBy=TRF-202605-0002 reason=Legacy transfer explicitly closed because it was abandoned and superseded by posted transfer TRF-202605-0002. No stock or ledger impact existed on this record.",
+        "changedAt": "2026-07-02T17:53:27.671Z",
+        "afterValue": {
+          "status": "REJECTED",
+          "transferNo": "TRF-202605-0001",
+          "stockImpact": "NONE",
+          "ledgerImpact": "NONE",
+          "rejectionReason": "Legacy transfer explicitly closed because it was abandoned and superseded by posted transfer TRF-202605-0002. No stock or ledger impact existed on this record.",
+          "terminalCloseMethod": "VOID_CANCEL_LEGACY_SUPERSEDED",
+          "supersededByTransferId": "0065060c-b003-4126-8988-2a4db266609f",
+          "supersededByTransferNo": "TRF-202605-0002"
+        }
+      }
+    ]
+  },
+  "zeroImpactProof": {
+    "targetLedgerBefore": 0,
+    "targetLedgerAfter": 0,
+    "replacementLedgerBefore": 2,
+    "replacementLedgerAfter": 2,
+    "targetStockImpact": "NONE"
+  },
+  "otherRecordsModified": {
+    "transfersUpdatedInTenantExcludingTarget": 0,
+    "pipelineDashboardReportsChanged": false
+  },
+  "filesModified": [
+    "OSE-backend/Governance/scripts/execute-transfer-legacy-explicit-close.js",
+    "OSE-backend/Governance/transfer-legacy/TRANSFER_LEGACY_READ_ONLY_CLASSIFICATION.json",
+    "OSE-backend/Governance/transfer-legacy/TRANSFER_LEGACY_EXPLICIT_CLOSE_EVIDENCE.json"
+  ],
+  "verdict": "CLOSED — EXPLICITLY RESOLVED"
+}

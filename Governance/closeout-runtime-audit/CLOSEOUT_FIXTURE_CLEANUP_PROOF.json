@@ -1,0 +1,1193 @@
+{
+  "executedAt": "2026-06-27T01:12:09.020Z",
+  "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+  "policy": "Delete only harness-tagged unposted fixtures; never delete posted operational documents",
+  "deletedCounts": {
+    "movementDocuments": 147,
+    "getPasses": 0,
+    "grns": 0
+  },
+  "deleted": {
+    "movementDocuments": [
+      {
+        "id": "c30ba74d-17f5-4a0f-b1fc-8e7b611636d7",
+        "documentNo": "LST-2026-00052",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "d92ad476-08b6-42e7-a151-ca9dc33b0f48",
+        "documentNo": "BRK-2026-00004",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE happy path",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "a65d1ee9-0562-401e-bda2-7de822d47356",
+        "documentNo": "BRK-2026-00005",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE happy path",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c7f0dbb3-ff1c-43ec-a68b-c3eaec0fb737",
+        "documentNo": "LST-2026-00053",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "12409106-957e-48ec-aa2a-94f05d14254f",
+        "documentNo": "BRK-2026-00001",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE happy path",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "cf074907-5e46-4496-b50d-6c736fb7efb6",
+        "documentNo": "BRK-2026-00006",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE happy path",
+        "status": "FINANCE_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c53ec3f2-8106-4252-a3fb-f79f24a0aa3f",
+        "documentNo": "BRK-2026-00007",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE reject",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "9485d513-c0b9-457d-9283-9bba15e4531e",
+        "documentNo": "LST-2026-00001",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE happy path",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "88d7ef32-92a8-413a-900b-cb00b3b8e3fa",
+        "documentNo": "LST-2026-00002",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE happy path",
+        "status": "FINANCE_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "6c2828e0-d94b-4a41-964c-fe43ef0451ab",
+        "documentNo": "LST-2026-00003",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE reject",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "3d3c86c1-5e98-4b89-a1c3-03c3fe9771b0",
+        "documentNo": "LST-2026-00004",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "733ee74d-7b0c-4224-8ef4-c5c4b3cac1c6",
+        "documentNo": "LST-2026-00005",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "68882478-6905-467c-be11-b4013d7ca939",
+        "documentNo": "LST-2026-00006",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "179257f9-b429-407d-a864-d9e14d6b7124",
+        "documentNo": "LST-2026-00007",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "8472b7d5-c3fc-4447-b5a8-7d54c05a6fed",
+        "documentNo": "LST-2026-00008",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "5ca05ada-8d69-4f9e-8e8d-f8ec4de7b5dc",
+        "documentNo": "LST-2026-00009",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "705cdfde-525a-4c75-bac9-ba6c463efbc9",
+        "documentNo": "LST-2026-00010",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c3b221b3-632a-4805-a9f0-e6ba38647830",
+        "documentNo": "LST-2026-00011",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "7ff0ca36-4c80-4345-9401-0ff942fcc9bb",
+        "documentNo": "LST-2026-00012",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "865b4691-d068-4162-9980-950c027bda77",
+        "documentNo": "LST-2026-00013",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "ddfd1ee4-b60a-4997-bdb9-ae97336ed365",
+        "documentNo": "LST-2026-00014",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "2c272c71-1d23-4185-aeef-95e7a4874222",
+        "documentNo": "LST-2026-00015",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "281f4be4-847b-4023-97a1-cbe369ce2004",
+        "documentNo": "BRK-2026-00008",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "4f91f4ee-d30b-4175-b052-ba6ef63503e6",
+        "documentNo": "BRK-2026-00009",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "cddbced6-8615-463f-8399-aee79e600f56",
+        "documentNo": "BRK-2026-00010",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "002fcafe-36cc-4d0f-ab88-482ece192d57",
+        "documentNo": "BRK-2026-00011",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit no reapprove step1",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "b76e1ec9-215c-4fea-b458-d1c6f2bd67d2",
+        "documentNo": "LST-2026-00016",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "f0de9508-12a9-479f-9d54-b03cffec7ef5",
+        "documentNo": "LST-2026-00017",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "ebae63b8-ef5e-433a-8194-bdfe88ed5335",
+        "documentNo": "LST-2026-00018",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "551c5cd6-ba95-4efb-873b-5138cacaab15",
+        "documentNo": "LST-2026-00019",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "bf3d4b6c-c3f1-4626-beea-83cc3d5fd06a",
+        "documentNo": "LST-2026-00020",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "2614d01b-f372-45ba-a558-2091276a9992",
+        "documentNo": "LST-2026-00021",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "b7db8595-5849-42bc-bf16-b1b1b67fd20f",
+        "documentNo": "BRK-2026-00012",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "55320467-8db7-4c2f-9a9c-61553fa69bca",
+        "documentNo": "BRK-2026-00013",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c8347969-944c-4881-951f-30e8511dc09e",
+        "documentNo": "BRK-2026-00014",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "82fe6adc-43f3-4e67-ad2a-3d930b6aeeb2",
+        "documentNo": "BRK-2026-00015",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "f4016bf2-52a2-43f4-8019-8cc02c875d39",
+        "documentNo": "LST-2026-00022",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "a3de2d5e-32f2-4446-992c-bdd59e842837",
+        "documentNo": "LST-2026-00023",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c0fe4908-f5bd-44e3-b331-d66e1867e88f",
+        "documentNo": "BRK-2026-00039",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "40193805-65a6-46b3-813f-afd13e7b41fd",
+        "documentNo": "LST-2026-00024",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "ba404b5c-3876-4fd8-b172-81df5ace4175",
+        "documentNo": "LST-2026-00029",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "068e0cd7-7dee-45a5-87c3-f3257add5e9c",
+        "documentNo": "BRK-2026-00016",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "61449548-5c5b-4226-8097-c7a338be1c86",
+        "documentNo": "LST-2026-00025",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "83f859fe-7cd0-4ff5-9c44-ea663ffd7b85",
+        "documentNo": "LST-2026-00026",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "e9bec140-c9ed-4eab-bf0f-d8c377e0e2b3",
+        "documentNo": "BRK-2026-00017",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "4dec1355-a6c0-424f-8c57-f618ed4c0e30",
+        "documentNo": "LST-2026-00027",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "6b5a758c-6bfe-4537-ad80-4866e3c101ab",
+        "documentNo": "BRK-2026-00018",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "a19c25ed-2b5e-4856-9ecb-3be613794008",
+        "documentNo": "BRK-2026-00019",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "44b34a0d-7b43-4790-b20f-a1cba2dbc889",
+        "documentNo": "LST-2026-00028",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "7594fdc2-f6d7-470d-b753-1785039dfc90",
+        "documentNo": "LST-2026-00030",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "078595f4-23ab-4510-b844-ccead25c496a",
+        "documentNo": "BRK-2026-00021",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "c4cd5567-908c-46b3-9479-0c3776888a45",
+        "documentNo": "LST-2026-00031",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "5a5b7c99-8b08-4547-be49-4ab0b0395b71",
+        "documentNo": "LST-2026-00032",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "b75648bd-14d6-4989-b241-0551229016a6",
+        "documentNo": "BRK-2026-00022",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "382a5c02-c7ba-49ba-8b5d-b49f8ef73f0e",
+        "documentNo": "LST-2026-00033",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "f6240ab4-23fb-4ebd-bcb6-097ff27b9763",
+        "documentNo": "BRK-2026-00023",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "5195d60d-83de-40f3-9d72-b5e14ac52505",
+        "documentNo": "BRK-2026-00024",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "cb694b6a-a777-42c7-8c96-fd4c26f69fb1",
+        "documentNo": "LST-2026-00034",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "8ff4632b-8ba7-484f-99a2-30d7226b9273",
+        "documentNo": "LST-2026-00035",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "989e81ae-46c6-4f13-9934-191e19198370",
+        "documentNo": "LST-2026-00036",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "279228b9-67ef-4361-97c7-228fd5d3014b",
+        "documentNo": "BRK-2026-00027",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "9562e4d4-4fb8-42ac-afde-ae61e8b04d24",
+        "documentNo": "LST-2026-00049",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "66d44429-668f-48b1-aeb2-f5900a2abde3",
+        "documentNo": "BRK-2026-00028",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "1d6905bb-84fe-489d-8016-11567059d6cf",
+        "documentNo": "LST-2026-00050",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "264f8a96-4900-40c1-a4a8-d1ea8574e66c",
+        "documentNo": "BRK-2026-00029",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "b8051b79-0d97-4b37-9d08-813a5b129863",
+        "documentNo": "LST-2026-00051",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "edea1d27-2faf-44eb-ba2a-709979acdc66",
+        "documentNo": "BRK-2026-00030",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "dd14217c-2d7e-417b-92e5-26e3c061cbfe",
+        "documentNo": "LST-2026-00054",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "35b59c52-30f8-4cc8-9f6f-db3278588a24",
+        "documentNo": "LST-2026-00055",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "6ab3f2b2-dfd8-432c-9c9d-c0c1db5a8a2a",
+        "documentNo": "LST-2026-00056",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "bc490ccf-a6d7-4003-9ecf-43b7b139fc89",
+        "documentNo": "LST-2026-00057",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c2740a4d-286e-49c0-8bc2-131ed6aa7dea",
+        "documentNo": "LST-2026-00058",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "a9c41f2c-ae39-403c-b159-60d7300b0e33",
+        "documentNo": "LST-2026-00059",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "f9a76b82-18c1-4ad9-a646-450a99a9f95d",
+        "documentNo": "LST-2026-00060",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "fd813ee4-0e4c-48c8-92a6-d8987719bec9",
+        "documentNo": "LST-2026-00061",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "629d4ea6-7e6a-46f5-a00b-aae6f8c961b5",
+        "documentNo": "BRK-2026-00054",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "e5b91fb9-61b4-48da-a46e-e3f3604556e0",
+        "documentNo": "LST-2026-00062",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "37abe0b7-c088-4f1e-8de0-de748d1b1301",
+        "documentNo": "LST-2026-00063",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "7fbe2385-66ba-418d-b5b7-8f289b7617ad",
+        "documentNo": "BRK-2026-00055",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "4e365515-c2f5-4bec-82da-5710ad131e9e",
+        "documentNo": "BRK-2026-00056",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "455f370b-8bb2-4bd8-ac04-50a87c4ae177",
+        "documentNo": "LST-2026-00064",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "0489a24a-3e03-404b-97a0-9b895bb90158",
+        "documentNo": "LST-2026-00065",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "74fa2cbf-9477-427a-8e70-983485d36edc",
+        "documentNo": "LST-2026-00066",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "d8fda221-91d3-4a91-9f03-29afec05bd4f",
+        "documentNo": "LST-2026-00037",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "14a03b6e-e209-4456-b3fe-f0f92747a202",
+        "documentNo": "LST-2026-00038",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "3e89670f-4fad-4104-adc6-0b00fac78ae0",
+        "documentNo": "LST-2026-00039",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "68264d18-2ea6-4c69-91c7-91b61292210e",
+        "documentNo": "LST-2026-00040",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "cbf4506c-1758-4b55-a273-68e8103877e4",
+        "documentNo": "BRK-2026-00040",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "5cb20df8-e38c-4ce0-9153-8e240e0baf52",
+        "documentNo": "LST-2026-00041",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "83ca83b8-11f2-4fe1-99ac-511cd4a9712e",
+        "documentNo": "LST-2026-00042",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "58ff3779-0eba-466f-803d-5a4580852382",
+        "documentNo": "BRK-2026-00033",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "0309bb63-dc89-47ce-8888-9145d7f5e6ed",
+        "documentNo": "LST-2026-00043",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "2a8696f9-47b6-462f-8332-3723f716ca70",
+        "documentNo": "BRK-2026-00041",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "efabada2-62e7-4ac1-9965-e95babdb0b85",
+        "documentNo": "BRK-2026-00034",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "ddef9bfd-175e-4eaa-a405-bc1a4499d52d",
+        "documentNo": "LST-2026-00044",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "bb225e48-da36-4b01-8157-f63431ae81d0",
+        "documentNo": "BRK-2026-00042",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "8a85edcf-5753-4f65-a3bb-17b000e2ed8c",
+        "documentNo": "LST-2026-00045",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "dfe48cd7-d27f-4fd1-be60-31ef3f5cb201",
+        "documentNo": "BRK-2026-00035",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "4135f96b-82cc-4379-bc45-759fe4ca21bc",
+        "documentNo": "BRK-2026-00036",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "21beebf9-d336-42f0-bde4-41366fd41d6e",
+        "documentNo": "LST-2026-00046",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "24c25a0a-4a0f-448b-a0c6-cb2b4c4b7046",
+        "documentNo": "LST-2026-00047",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "84f637cc-534b-4f02-9ca5-39d1385c4ccc",
+        "documentNo": "BRK-2026-00045",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "e3b93882-e5a9-4430-b722-187fe95c658a",
+        "documentNo": "LST-2026-00048",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "23761729-318e-473c-a63f-880eb079ca3c",
+        "documentNo": "BRK-2026-00046",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "255b2424-a19d-4936-9bb9-0686da7ac53b",
+        "documentNo": "BRK-2026-00047",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "a8507047-8525-49be-933e-a7a91f06a75b",
+        "documentNo": "BRK-2026-00048",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "9b40efff-53b6-4c46-a3c1-4e94335ef9aa",
+        "documentNo": "BRK-2026-00053",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "c8257d21-f1e5-48b2-9ed6-536daa032825",
+        "documentNo": "BRK-2026-00077",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "9c7a2ed3-5cab-4508-b4da-fa84d69a84d8",
+        "documentNo": "LST-2026-00079",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "211f2db8-82dd-47cd-b815-aa2a18273f4c",
+        "documentNo": "BRK-2026-00078",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "a011bd6c-e0bc-4a57-81e9-be5d8cc92444",
+        "documentNo": "LST-2026-00080",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "c5622a36-0428-4443-ba0f-c91761ee76b8",
+        "documentNo": "LST-2026-00081",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "487f54a3-ce85-4434-bb81-8b3afa8095a6",
+        "documentNo": "BRK-2026-00079",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "02f0d0c3-f6e5-4fea-92f3-a0ad617c52f6",
+        "documentNo": "BRK-2026-00080",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "5af91dff-283b-4123-8575-a6e851dde46d",
+        "documentNo": "LST-2026-00082",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "1e554428-447f-4d5d-aac3-8119a6011c3b",
+        "documentNo": "LST-2026-00083",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "16d70076-8fe8-4d1c-9a07-19b63b4ee3ad",
+        "documentNo": "LST-2026-00084",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "5e7c8661-3abd-4e0c-9a1c-fdff20a1b3e8",
+        "documentNo": "BRK-2026-00100",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "b4bafc77-afb9-4676-8125-c88b5e084b02",
+        "documentNo": "LST-2026-00095",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "254da981-e4c5-4abb-a0c3-e1c61d5b95e5",
+        "documentNo": "BRK-2026-00101",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "3908e606-4884-49cb-a150-d5329b185042",
+        "documentNo": "LST-2026-00096",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "66f56b43-3c68-45e5-905d-1024aae415fa",
+        "documentNo": "LST-2026-00097",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "28582edd-a9d4-4f1f-9960-e235ecb03f3b",
+        "documentNo": "BRK-2026-00102",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "55ba1453-5bd2-4703-9a99-68dedee6db07",
+        "documentNo": "BRK-2026-00103",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "ed32593c-ab4b-4038-8c21-86309564cedd",
+        "documentNo": "LST-2026-00098",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "67dd1c18-1c9e-40b8-a1fd-c52818c40546",
+        "documentNo": "LST-2026-00099",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c23c6966-9cd6-4c27-8261-75abbd9154a8",
+        "documentNo": "LST-2026-00100",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "19870589-caae-4c70-bbde-4a106526a792",
+        "documentNo": "BRK-2026-00112",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "36685087-5ab8-4182-adeb-dfc265258424",
+        "documentNo": "LST-2026-00105",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "76213806-a2a4-416d-8ac7-7f0a9377deef",
+        "documentNo": "BRK-2026-00113",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "b360e876-ea8e-45db-bf9c-547362eac329",
+        "documentNo": "LST-2026-00106",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "7bfa2e74-afbc-4738-9195-6bf8ae23243c",
+        "documentNo": "BRK-2026-00114",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "3811508f-a9b7-41e4-a892-f1b862b93359",
+        "documentNo": "BRK-2026-00115",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "e453710a-565f-4543-80c5-8a7b2f59f54d",
+        "documentNo": "LST-2026-00107",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "d76b13df-3426-410d-a182-21d29f214cd2",
+        "documentNo": "LST-2026-00108",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "7cf2638a-1805-4ef5-9263-4e91d65d3d60",
+        "documentNo": "LST-2026-00109",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "39acb007-6ac1-43e8-93f8-ad89728d3f3c",
+        "documentNo": "LST-2026-00110",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "b15ba126-526d-4caf-afc0-70faf55e78cf",
+        "documentNo": "BRK-2026-00123",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant create",
+        "status": "DRAFT",
+        "postedAt": null
+      },
+      {
+        "id": "783a4d09-b32a-4ed4-8404-80d59b0b2a81",
+        "documentNo": "LST-2026-00115",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard approve test",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "b990171b-e778-4186-9197-0d4f27b6ab86",
+        "documentNo": "BRK-2026-00124",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "7195df50-d943-452f-9e12-d8ca032f01eb",
+        "documentNo": "LST-2026-00116",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE guard reject test",
+        "status": "REJECTED",
+        "postedAt": null
+      },
+      {
+        "id": "a732b79b-c163-499f-8206-fc424ef45562",
+        "documentNo": "LST-2026-00117",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE perm test",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "c6f0ea3c-8796-4816-ae16-b2fbf2f8edf6",
+        "documentNo": "BRK-2026-00125",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "5ac76ea9-1477-4e92-9cd2-efd1e20836a1",
+        "documentNo": "BRK-2026-00126",
+        "movementType": "BREAKAGE",
+        "reason": "PHASE5_TIMELINE_FIXTURE submit step1 locked",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "d5871753-b9f2-4b01-827b-e1edb3742482",
+        "documentNo": "LST-2026-00118",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost create invariant",
+        "status": "DEPT_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "2a404126-50ef-4257-b62d-96a318ea8c97",
+        "documentNo": "LST-2026-00119",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost cost approve",
+        "status": "COST_CONTROL_APPROVED",
+        "postedAt": null
+      },
+      {
+        "id": "221c7f35-4ea2-43ff-9777-86f4b5f974f8",
+        "documentNo": "LST-2026-00120",
+        "movementType": "LOST",
+        "reason": "PHASE5_TIMELINE_FIXTURE lost reject invariant",
+        "status": "REJECTED",
+        "postedAt": null
+      }
+    ],
+    "getPasses": [],
+    "grns": []
+  },
+  "skippedOperational": "Documents without CLOSEOUT tag or with postedAt set were not touched"
+}

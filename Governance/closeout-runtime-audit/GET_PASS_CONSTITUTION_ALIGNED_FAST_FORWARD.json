@@ -1,0 +1,36 @@
+{
+  "executedAt": "2026-06-27T00:11:35.288Z",
+  "tenant": "grand-horizon",
+  "fixtureWorkflow": {
+    "definitionId": "b00ffb8b-ad7e-400a-a654-c578b3e5a1bf",
+    "versionId": "b417c4b0-8807-4bff-b8e4-22f1ac4406d7",
+    "versionNumber": 9927
+  },
+  "cleanup": "definition and versions deleted after run",
+  "rows": [
+    {
+      "userKey": "DEPT_MANAGER_FB",
+      "workflowFixtureVersionId": "b417c4b0-8807-4bff-b8e4-22f1ac4406d7",
+      "pinnedVersionId": "b417c4b0-8807-4bff-b8e4-22f1ac4406d7",
+      "usesConstitutionFixture": true,
+      "submitHttp": 200,
+      "statusAfter": "PENDING_COST_CONTROL",
+      "gmStamp": null,
+      "financeStamp": null,
+      "securityStamp": null,
+      "injectedPendingGm": false
+    },
+    {
+      "userKey": "FINANCE",
+      "workflowFixtureVersionId": "b417c4b0-8807-4bff-b8e4-22f1ac4406d7",
+      "pinnedVersionId": "b417c4b0-8807-4bff-b8e4-22f1ac4406d7",
+      "usesConstitutionFixture": true,
+      "submitHttp": 200,
+      "statusAfter": "PENDING_SECURITY",
+      "gmStamp": null,
+      "financeStamp": "b4888926-b46e-433e-9ca9-be5c4e4982b5",
+      "securityStamp": null,
+      "injectedPendingGm": false
+    }
+  ]
+}

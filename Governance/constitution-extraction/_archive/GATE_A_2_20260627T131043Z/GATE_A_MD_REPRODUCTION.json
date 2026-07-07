@@ -1,0 +1,15 @@
+{
+  "generated_by": "gate_a_review_pack.py",
+  "generation_timestamp": "2026-06-27T13:00:37Z",
+  "existing_md_path": "C:\\DX OS&E\\Governance\\constitution-extraction\\CONSTITUTION_FRESH_REGISTER.md",
+  "raw_file_sha256": "E208F2C5F0111C3DE1755D19B5EFFF4590C996D4F5A7461E1AE322EFB44D2AA0",
+  "regenerated_raw_file_sha256": "CC2812D5F1BC60889BC5E76E1E51E596ED4C2393953E954F4A6F39B1374D955B",
+  "normalized_text_sha256": "CC2812D5F1BC60889BC5E76E1E51E596ED4C2393953E954F4A6F39B1374D955B",
+  "regenerated_normalized_text_sha256": "CC2812D5F1BC60889BC5E76E1E51E596ED4C2393953E954F4A6F39B1374D955B",
+  "match_raw_bytes": false,
+  "match_normalized_text": true,
+  "match": true,
+  "diff_line_count": 0,
+  "diff_lines": [],
+  "diff_lines_truncated": false
+}

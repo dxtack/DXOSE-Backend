@@ -1,0 +1,22 @@
+{
+  "executedAt": "2026-06-27T00:49:46.089Z",
+  "summaryTable": {
+    "evidenceType": [
+      "HTTP_RUNTIME",
+      "SERVICE_RUNTIME",
+      "STATIC_ONLY"
+    ],
+    "readRoutes": [
+      3,
+      13,
+      29
+    ],
+    "mutationRoutes": [
+      4,
+      44,
+      10
+    ]
+  },
+  "staticOnlyActiveMutations": 10,
+  "note": "Routes marked HTTP_RUNTIME when probed in Round 7 module matrices; SERVICE_RUNTIME when scope resolver+enforce in service source"
+}

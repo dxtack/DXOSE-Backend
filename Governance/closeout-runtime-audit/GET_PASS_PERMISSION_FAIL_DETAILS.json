@@ -1,0 +1,79 @@
+{
+  "executedAt": "2026-06-27T00:12:05.591Z",
+  "rows": [
+    {
+      "scenarioId": "GP-PERM-submit-NO_ASSIGN",
+      "endpoint": "POST /get-passes/:id/submit",
+      "expected": "403, no DB mutation",
+      "actual": "200, status DRAFT→PENDING_COST_CONTROL",
+      "http": 200,
+      "error": null,
+      "dbMutation": true,
+      "rootCause": "Product — route uses requirePermission(GET_PASS_CREATE) only; empty Ur assignment scope not enforced on submit"
+    },
+    {
+      "scenarioId": "GP-PERM-submit-GM",
+      "endpoint": "POST /get-passes/:id/submit",
+      "expected": "Harness labeled 2xx if lifecycle permits",
+      "actual": "403, DRAFT unchanged",
+      "http": 403,
+      "error": null,
+      "dbMutation": false,
+      "rootCause": "Harness mis-expectation — GM lacks GET_PASS_CREATE; correct negative test, not product defect"
+    },
+    {
+      "scenarioId": "GP-PERM-approve-DEPT_MANAGER_FB",
+      "endpoint": "POST /get-passes/:id/approve",
+      "expected": "2xx at PENDING_COST_CONTROL",
+      "actual": "403",
+      "http": 403,
+      "error": null,
+      "dbMutation": false,
+      "rootCause": "Harness fixture — document staged at PENDING_COST_CONTROL requires COST_CONTROL actor, not DEPT_MANAGER"
+    },
+    {
+      "scenarioId": "GP-PERM-approve-FINANCE",
+      "endpoint": "POST /get-passes/:id/approve",
+      "expected": "2xx at PENDING_COST_CONTROL",
+      "actual": "403",
+      "http": 403,
+      "dbMutation": false,
+      "rootCause": "Harness fixture — wrong actor for cost-control step"
+    },
+    {
+      "scenarioId": "GP-PERM-approve-GM",
+      "endpoint": "POST /get-passes/:id/approve",
+      "expected": "2xx",
+      "actual": "403",
+      "http": 403,
+      "rootCause": "PASS negative — GM permissions lack GET_PASS_APPROVE at this step"
+    },
+    {
+      "scenarioId": "GP-PERM-reject-DEPT_MANAGER_FB",
+      "endpoint": "POST /get-passes/:id/reject",
+      "expected": "2xx",
+      "actual": "403",
+      "http": 403,
+      "rootCause": "Harness fixture — wrong actor for PENDING_COST_CONTROL reject"
+    },
+    {
+      "scenarioId": "GP-PERM-reject-FINANCE",
+      "endpoint": "POST /get-passes/:id/reject",
+      "expected": "2xx",
+      "actual": "403",
+      "http": 403,
+      "rootCause": "Harness fixture — wrong actor for cost-control step"
+    },
+    {
+      "scenarioId": "GP-PERM-reject-GM",
+      "endpoint": "POST /get-passes/:id/reject",
+      "expected": "2xx",
+      "actual": "403",
+      "http": 403,
+      "rootCause": "PASS negative — GM lacks reject permission at this step"
+    }
+  ],
+  "productDefectsConfirmed": 1,
+  "harnessMisExpectations": 5,
+  "negativeTestsMislabeledFail": 2
+}

@@ -1,0 +1,127 @@
+{
+  "generatedAt": "2026-07-05T08:39:32.785Z",
+  "classification": "WAVE3_RUNTIME_VERIFICATION",
+  "runId": "W3-RV-1783240761754",
+  "wave": 3,
+  "requirements": [
+    "BUS-DEC-02",
+    "BUS-DEC-03",
+    "SYS-DEC-02"
+  ],
+  "summary": {
+    "total": 16,
+    "pass": 16,
+    "fail": 0,
+    "blocked": 0,
+    "gate": "CLOSED",
+    "dbAvailable": true
+  },
+  "scenarios": [
+    {
+      "id": "W2-GATE",
+      "name": "Wave 2 Final Closed prerequisite",
+      "result": "PASS",
+      "gate": "FINAL_CLOSED"
+    },
+    {
+      "id": "W3A-01",
+      "name": "GRN create persists DRAFT status",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02"
+    },
+    {
+      "id": "W3A-02",
+      "name": "Approve blocked until Submit (no lazy workflow start)",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02"
+    },
+    {
+      "id": "W3A-03",
+      "name": "FE create navigates to draft detail",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02"
+    },
+    {
+      "id": "W3B-01",
+      "name": "Breakage create removes autoApproveOnCreate",
+      "result": "PASS",
+      "requirement": "BUS-DEC-03"
+    },
+    {
+      "id": "W3B-02",
+      "name": "Lost Items create removes autoApproveOnCreate",
+      "result": "PASS",
+      "requirement": "BUS-DEC-03"
+    },
+    {
+      "id": "W3A-04",
+      "name": "GRN create → Draft runtime",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02",
+      "grnNumber": "GRN-2026-00001",
+      "status": "DRAFT"
+    },
+    {
+      "id": "W3A-05",
+      "name": "Draft GRN user-facing state = Draft",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02"
+    },
+    {
+      "id": "W3A-08",
+      "name": "Edit Draft GRN header and lines",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02"
+    },
+    {
+      "id": "W3A-06",
+      "name": "Delete Draft GRN",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02"
+    },
+    {
+      "id": "W3A-07",
+      "name": "Submit Draft starts workflow (approvalRequest created)",
+      "result": "PASS",
+      "requirement": "BUS-DEC-02",
+      "status": "PENDING_APPROVAL"
+    },
+    {
+      "id": "W3B-03",
+      "name": "GM Breakage create stays Draft (not Approved)",
+      "result": "PASS",
+      "requirement": "BUS-DEC-03",
+      "status": "DRAFT"
+    },
+    {
+      "id": "W3B-05",
+      "name": "No posting / full auto-approve on Breakage create",
+      "result": "PASS",
+      "requirement": "BUS-DEC-03",
+      "approvalStatus": "PENDING",
+      "docStatus": "DRAFT",
+      "postedAt": null
+    },
+    {
+      "id": "W3B-04",
+      "name": "GM Lost create stays Draft (not Approved)",
+      "result": "PASS",
+      "requirement": "BUS-DEC-03",
+      "status": "DRAFT"
+    },
+    {
+      "id": "BRK-01",
+      "name": "Breakage ACC workflow environment proof",
+      "result": "PASS",
+      "requirement": "Wave 1 carry-forward",
+      "note": "Published BREAKAGE workflow + GM create runtime proof",
+      "documentNo": "BRK-2026-00001"
+    },
+    {
+      "id": "W3-UNIT-01",
+      "name": "lifecyclePresentation unit tests",
+      "result": "PASS",
+      "requirement": "SYS-DEC-02"
+    }
+  ]
+}

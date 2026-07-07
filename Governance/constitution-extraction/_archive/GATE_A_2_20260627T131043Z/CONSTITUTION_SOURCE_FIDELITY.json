@@ -1,0 +1,21 @@
+{
+  "validator": "validate_source_fidelity.py",
+  "validator_version": "gate-a.2",
+  "pdf_path": "c:\\Users\\amrsa\\Downloads\\New folder\\DX_OSE_CONSTITUTION_v2.0_FINAL.pdf",
+  "csv_path": "C:\\DX OS&E\\Governance\\constitution-extraction\\CONSTITUTION_FRESH_REGISTER.csv",
+  "total_constitutional_rows_checked": 411,
+  "matched_within_section_span": 411,
+  "unmatched_rows": 0,
+  "unmatched_details": [],
+  "page_outside_section_span_rows": 0,
+  "page_outside_section_span_details": [],
+  "body_sourced_from_toc_or_doc_control": 0,
+  "body_sourced_from_toc_details": [],
+  "reference_index_rows_checked": 9,
+  "reference_index_matched": 9,
+  "reference_index_unmatched": [],
+  "match_percentage": 100.0,
+  "source_within_assigned_section_span": true,
+  "no_body_clause_sourced_from_toc_or_document_control_pages": true,
+  "all_matched": true
+}

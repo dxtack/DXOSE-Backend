@@ -1,0 +1,13 @@
+{
+  "executedAt": "2026-06-27T00:12:00.000Z",
+  "rows": [
+    {
+      "scenario": "IC-FINANCE-APPROVE",
+      "prior": "NOT_APPLICABLE",
+      "newClassification": "PASS negative test",
+      "http": 403,
+      "why": "Finance is not the approved actor for Inventory Count approve at this workflow step; denial is expected",
+      "authority": "Inventory Count workflow actor matrix — Finance not approver on submit-approval path probed"
+    }
+  ]
+}

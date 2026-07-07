@@ -1,0 +1,40 @@
+{
+  "executedAt": "2026-06-27T23:36:13.315Z",
+  "tag": "CLOSEOUT_RT_AUDIT",
+  "policy": "Test-only org hierarchy — never modify grand-horizon.parentId",
+  "grandHorizonUnchanged": true,
+  "grandHorizon": {
+    "before": {
+      "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "slug": "grand-horizon",
+      "parentId": null
+    },
+    "after": {
+      "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "slug": "grand-horizon",
+      "parentId": null
+    }
+  },
+  "disposableOrg": {
+    "id": "7c312820-957e-4b08-bcc3-07e8b9fc288f",
+    "slug": "closeout-audit-org-disposable",
+    "parentId": null
+  },
+  "disposableChild": {
+    "before": {
+      "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "slug": "closeout-audit-hotel-disposable",
+      "parentId": "7c312820-957e-4b08-bcc3-07e8b9fc288f"
+    },
+    "after": {
+      "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "slug": "closeout-audit-hotel-disposable",
+      "parentId": "7c312820-957e-4b08-bcc3-07e8b9fc288f"
+    }
+  },
+  "dbQuery": {
+    "sql": "SELECT slug, \"parentId\" FROM tenants WHERE slug IN ('closeout-audit-org-disposable','closeout-audit-hotel-disposable','grand-horizon')",
+    "note": "Verify grand-horizon.parentId unchanged; child linked to disposable org only"
+  },
+  "cleanupPolicy": "Tenants retained for ORG switch tests; tagged by slug prefix closeout-audit-"
+}

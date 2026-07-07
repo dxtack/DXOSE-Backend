@@ -1,0 +1,392 @@
+{
+  "executedAt": "2026-06-27T00:11:51.965Z",
+  "rows": [
+    {
+      "userKey": "DEPT_MANAGER_FB",
+      "email": "dept-mgr-fb@closeout-audit.local",
+      "role": "DEPT_MANAGER",
+      "permissionsUsed": [
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "GET_PASS_APPROVE"
+      ],
+      "accWorkflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "publishedSteps": [
+        {
+          "stepOrder": 1,
+          "label": "Department approval",
+          "roleCode": "DEPT_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_DEPT",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 2,
+          "label": "Cost Control verification",
+          "roleCode": "COST_CONTROL",
+          "permissionCode": null,
+          "statusKey": "PENDING_COST_CONTROL",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 3,
+          "label": "Finance sign-off",
+          "roleCode": "FINANCE_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_FINANCE",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 4,
+          "label": "GM authorization",
+          "roleCode": "GENERAL_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_GM",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 5,
+          "label": "Security clearance",
+          "roleCode": "SECURITY",
+          "permissionCode": null,
+          "statusKey": "PENDING_SECURITY",
+          "autoApprove": false
+        }
+      ],
+      "environmentStaleWorkflow": true,
+      "financeIsCreator": false,
+      "createHttp": 201,
+      "submitHttp": 200,
+      "submitErrorCode": null,
+      "statusAfterSubmit": "PENDING_COST_CONTROL",
+      "expectedApprovedChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "stamps": {
+        "dept": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+        "costControl": null,
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "actorIsSubmitterForStamp": true,
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "classification": "STALE_WORKFLOW_CONFIGURATION — do not use alone for product proof"
+    },
+    {
+      "userKey": "FINANCE",
+      "email": "finance-a@closeout-audit.local",
+      "role": "FINANCE_MANAGER",
+      "permissionsUsed": [
+        "GET_PASS_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_APPROVE",
+        "GET_PASS_APPROVE_EXIT",
+        "GET_PASS_APPROVE_RETURN",
+        "GET_PASS_FORCE_CLOSE_INITIATE",
+        "GET_PASS_CONFIRM_DESTINATION"
+      ],
+      "accWorkflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "publishedSteps": [
+        {
+          "stepOrder": 1,
+          "label": "Department approval",
+          "roleCode": "DEPT_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_DEPT",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 2,
+          "label": "Cost Control verification",
+          "roleCode": "COST_CONTROL",
+          "permissionCode": null,
+          "statusKey": "PENDING_COST_CONTROL",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 3,
+          "label": "Finance sign-off",
+          "roleCode": "FINANCE_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_FINANCE",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 4,
+          "label": "GM authorization",
+          "roleCode": "GENERAL_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_GM",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 5,
+          "label": "Security clearance",
+          "roleCode": "SECURITY",
+          "permissionCode": null,
+          "statusKey": "PENDING_SECURITY",
+          "autoApprove": false
+        }
+      ],
+      "environmentStaleWorkflow": true,
+      "financeIsCreator": true,
+      "createHttp": 201,
+      "submitHttp": 200,
+      "submitErrorCode": null,
+      "statusAfterSubmit": "PENDING_GM",
+      "expectedApprovedChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "stamps": {
+        "dept": null,
+        "costControl": null,
+        "finance": "b4888926-b46e-433e-9ca9-be5c4e4982b5",
+        "gm": null,
+        "security": null
+      },
+      "actorIsSubmitterForStamp": true,
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "classification": "STALE_WORKFLOW_CONFIGURATION — do not use alone for product proof"
+    },
+    {
+      "userKey": "GM",
+      "createHttp": 403,
+      "note": "create_failed",
+      "reclassified": "PASS negative test"
+    },
+    {
+      "userKey": "SUPER_ADMIN_OP",
+      "createHttp": 403,
+      "note": "create_failed",
+      "reclassified": "PASS negative test"
+    },
+    {
+      "userKey": "COST_CONTROL",
+      "email": "cost-a@closeout-audit.local",
+      "role": "COST_CONTROL",
+      "permissionsUsed": [
+        "GET_PASS_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_APPROVE",
+        "GET_PASS_APPROVE_RETURN",
+        "GET_PASS_CONFIRM_DESTINATION"
+      ],
+      "accWorkflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "publishedSteps": [
+        {
+          "stepOrder": 1,
+          "label": "Department approval",
+          "roleCode": "DEPT_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_DEPT",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 2,
+          "label": "Cost Control verification",
+          "roleCode": "COST_CONTROL",
+          "permissionCode": null,
+          "statusKey": "PENDING_COST_CONTROL",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 3,
+          "label": "Finance sign-off",
+          "roleCode": "FINANCE_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_FINANCE",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 4,
+          "label": "GM authorization",
+          "roleCode": "GENERAL_MANAGER",
+          "permissionCode": null,
+          "statusKey": "PENDING_GM",
+          "autoApprove": false
+        },
+        {
+          "stepOrder": 5,
+          "label": "Security clearance",
+          "roleCode": "SECURITY",
+          "permissionCode": null,
+          "statusKey": "PENDING_SECURITY",
+          "autoApprove": false
+        }
+      ],
+      "environmentStaleWorkflow": true,
+      "financeIsCreator": false,
+      "createHttp": 201,
+      "submitHttp": 200,
+      "submitErrorCode": null,
+      "statusAfterSubmit": "PENDING_FINANCE",
+      "expectedApprovedChain": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_SECURITY"
+      ],
+      "stamps": {
+        "dept": null,
+        "costControl": "18a36658-008c-436f-8339-8657672b95a5",
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "actorIsSubmitterForStamp": false,
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "classification": "STALE_WORKFLOW_CONFIGURATION — do not use alone for product proof"
+    }
+  ],
+  "workflowReference": {
+    "moduleKey": "GET_PASS",
+    "moduleId": "ec7f0825-35dc-4c36-9776-bdae18985094",
+    "publishedVersions": [
+      {
+        "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+        "definitionKey": "standard",
+        "definitionName": "Standard Get Pass",
+        "tenantScoped": null,
+        "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+        "versionNumber": 3,
+        "publishedAt": "2026-06-22T19:07:57.678Z",
+        "steps": [
+          {
+            "stepOrder": 1,
+            "label": "Department approval",
+            "roleCode": "DEPT_MANAGER",
+            "permissionCode": null,
+            "statusKey": "PENDING_DEPT",
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 2,
+            "label": "Cost Control verification",
+            "roleCode": "COST_CONTROL",
+            "permissionCode": null,
+            "statusKey": "PENDING_COST_CONTROL",
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 3,
+            "label": "Finance sign-off",
+            "roleCode": "FINANCE_MANAGER",
+            "permissionCode": null,
+            "statusKey": "PENDING_FINANCE",
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 4,
+            "label": "GM authorization",
+            "roleCode": "GENERAL_MANAGER",
+            "permissionCode": null,
+            "statusKey": "PENDING_GM",
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 5,
+            "label": "Security clearance",
+            "roleCode": "SECURITY",
+            "permissionCode": null,
+            "statusKey": "PENDING_SECURITY",
+            "autoApprove": false
+          }
+        ],
+        "orderedStatusKeys": [
+          "PENDING_DEPT",
+          "PENDING_COST_CONTROL",
+          "PENDING_FINANCE",
+          "PENDING_GM",
+          "PENDING_SECURITY"
+        ],
+        "orderedRoles": [
+          "DEPT_MANAGER",
+          "COST_CONTROL",
+          "FINANCE_MANAGER",
+          "GENERAL_MANAGER",
+          "SECURITY"
+        ],
+        "staleVsApprovedGetPass": true
+      },
+      {
+        "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+        "definitionKey": "standard",
+        "definitionName": "Standard Get Pass",
+        "tenantScoped": null,
+        "versionId": "4a6d8cc5-20e2-4bee-b18a-fd0a9a3cc23c",
+        "versionNumber": 2,
+        "publishedAt": "2026-06-22T18:34:19.296Z",
+        "steps": [
+          {
+            "stepOrder": 1,
+            "label": "Department approval",
+            "roleCode": "DEPT_MANAGER",
+            "permissionCode": null,
+            "statusKey": null,
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 2,
+            "label": "Cost Control verification",
+            "roleCode": "COST_CONTROL",
+            "permissionCode": null,
+            "statusKey": null,
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 3,
+            "label": "Finance sign-off",
+            "roleCode": "FINANCE_MANAGER",
+            "permissionCode": null,
+            "statusKey": null,
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 4,
+            "label": "GM authorization",
+            "roleCode": "GENERAL_MANAGER",
+            "permissionCode": null,
+            "statusKey": null,
+            "autoApprove": false
+          },
+          {
+            "stepOrder": 5,
+            "label": "Security clearance",
+            "roleCode": "SECURITY",
+            "permissionCode": null,
+            "statusKey": null,
+            "autoApprove": false
+          }
+        ],
+        "orderedStatusKeys": [],
+        "orderedRoles": [
+          "DEPT_MANAGER",
+          "COST_CONTROL",
+          "FINANCE_MANAGER",
+          "GENERAL_MANAGER",
+          "SECURITY"
+        ],
+        "staleVsApprovedGetPass": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,80 @@
+{
+  "generatedAt": "2026-07-05T07:17:05.217Z",
+  "database": "test",
+  "totals": {
+    "transfers": 6,
+    "ledgerTransferEntries": 0
+  },
+  "byStatus": [
+    {
+      "status": "DRAFT",
+      "count": 6
+    }
+  ],
+  "legacyStatusCounts": {
+    "IN_TRANSIT": 0,
+    "RECEIVED": 0,
+    "CLOSED": 0,
+    "SUBMITTED": 0,
+    "APPROVED": 0,
+    "PENDING_FINAL": 0
+  },
+  "legacyFieldCounts": {
+    "dispatchedAtPopulated": 0,
+    "receivedAtPopulated": 0,
+    "postedAtPopulated": 0,
+    "statusPosted": 0
+  },
+  "tenantStatusMatrix": [
+    {
+      "tenantId": "9970297d-a9fe-4438-b5c0-e8a424b4e9e6",
+      "status": "DRAFT",
+      "count": 1
+    },
+    {
+      "tenantId": "0f3dd078-abd7-45ea-9641-11b6d8bbf3c6",
+      "status": "DRAFT",
+      "count": 1
+    },
+    {
+      "tenantId": "9a7719a6-b3c5-4bed-acac-0b904294870a",
+      "status": "DRAFT",
+      "count": 1
+    },
+    {
+      "tenantId": "bf0db9f8-d59c-4cea-bad2-eb3dc4482c12",
+      "status": "DRAFT",
+      "count": 1
+    },
+    {
+      "tenantId": "f017b7ca-85a4-4d89-a9e4-7ca24790354c",
+      "status": "DRAFT",
+      "count": 1
+    },
+    {
+      "tenantId": "224b990b-91de-4ba9-8e27-83a63c899eff",
+      "status": "DRAFT",
+      "count": 1
+    }
+  ],
+  "legacySamples": [],
+  "v2PostedSample": [],
+  "classification": {
+    "activeOperational": [
+      "DRAFT",
+      "PENDING_DEPT",
+      "PENDING_FINANCE",
+      "POSTED",
+      "REJECTED"
+    ],
+    "historicalReadOnly": [],
+    "deadStatuses": [
+      "IN_TRANSIT",
+      "RECEIVED",
+      "CLOSED",
+      "SUBMITTED",
+      "APPROVED",
+      "PENDING_FINAL"
+    ]
+  }
+}

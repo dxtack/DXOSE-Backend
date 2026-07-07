@@ -1,0 +1,91 @@
+{
+  "generatedAt": "2026-06-28T15:32:21.933Z",
+  "phase": "phase-5-void-timeline-fix",
+  "passCount": 2,
+  "failCount": 0,
+  "requestRewriteCount": 0,
+  "skippedCount": 0,
+  "vacuousCount": 0,
+  "focusedRegressionFailCount": 0,
+  "phase5VoidTimelineFixClosed": true,
+  "scenarios": [
+    {
+      "id": "P5-VOID-TL-DRAFT",
+      "name": "Breakage DRAFT → VOID terminal void timeline",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "DRAFT",
+      "afterStatus": "VOID",
+      "originalRequestBody": {
+        "reason": "Void this document? This cannot be undone.",
+        "concurrencyVersion": 0
+      },
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "fixtureId": "b85dbb38-ef8a-45a3-8fd7-7062a285de0d",
+      "viewports": [
+        {
+          "viewport": "1920",
+          "uiOk": true,
+          "timelineFragment": "Workflow Timeline\nDepartment approved\nApproved\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:31:46 PM\nNote: Auto-approved by system due to high-level authority.\nVoided\nCompleted\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:32:01 PM\nReason: Void this document? This cannot be undone.",
+          "hasMutationButtons": false
+        },
+        {
+          "viewport": "768",
+          "uiOk": true,
+          "timelineFragment": "Workflow Timeline\nDepartment approved\nApproved\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:31:46 PM\nNote: Auto-approved by system due to high-level authority.\nVoided\nCompleted\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:32:01 PM\nReason: Void this document? This cannot be undone.",
+          "hasMutationButtons": false
+        }
+      ],
+      "voidEventCount": 1,
+      "voidLabel": "Voided",
+      "voidActorPresent": true,
+      "voidTimestampPresent": true,
+      "voidReasonPresent": true,
+      "activeStageCount": 0,
+      "futurePendingStageCount": 0
+    },
+    {
+      "id": "P5-VOID-TL-REJECTED",
+      "name": "Breakage REJECTED → VOID terminal void timeline",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "REJECTED",
+      "afterStatus": "VOID",
+      "originalRequestBody": {
+        "reason": "Void this document? This cannot be undone.",
+        "concurrencyVersion": 1
+      },
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "fixtureId": "255c6242-819d-4630-839a-8091df69e046",
+      "viewports": [
+        {
+          "viewport": "1920",
+          "uiOk": true,
+          "timelineFragment": "Workflow Timeline\nDepartment approved\nApproved\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:31:46 PM\nNote: Auto-approved by system due to high-level authority.\nRejected\nRejected\nBy Phase5 COST_CONTROL\n•\nJun 28, 2026, 6:31:47 PM\nReason: PHASE5_DETAIL_GATE\nVoided\nCompleted\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:32:14 PM\nReason: Void this document? This cannot be undone.",
+          "hasMutationButtons": false
+        },
+        {
+          "viewport": "768",
+          "uiOk": true,
+          "timelineFragment": "Workflow Timeline\nDepartment approved\nApproved\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:31:46 PM\nNote: Auto-approved by system due to high-level authority.\nRejected\nRejected\nBy Phase5 COST_CONTROL\n•\nJun 28, 2026, 6:31:47 PM\nReason: PHASE5_DETAIL_GATE\nVoided\nCompleted\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:32:14 PM\nReason: Void this document? This cannot be undone.",
+          "hasMutationButtons": false
+        }
+      ],
+      "voidEventCount": 1,
+      "voidLabel": "Voided",
+      "voidActorPresent": true,
+      "voidTimestampPresent": true,
+      "voidReasonPresent": true,
+      "activeStageCount": 0,
+      "futurePendingStageCount": 0
+    }
+  ]
+}

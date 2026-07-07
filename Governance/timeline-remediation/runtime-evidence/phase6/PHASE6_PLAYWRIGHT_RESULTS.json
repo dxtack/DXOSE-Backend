@@ -1,0 +1,1113 @@
+{
+  "at": "2026-06-27T00:51:53.075Z",
+  "passed": 10,
+  "failed": 0,
+  "skipped": 0,
+  "total": 10,
+  "runtimeRequiredSkipped": 0,
+  "runtimeRequiredScenarios": 5,
+  "allRuntimePass": true,
+  "seedReportAt": "2026-06-26T20:39:59.777Z",
+  "results": [
+    {
+      "viewport": "1920x1080",
+      "fixture": "active_workflow",
+      "passNo": "GP-2026-00024",
+      "status": "PENDING_COST_CONTROL",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 6,
+        "domEntryCount": 6,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approval",
+        "Finance approval",
+        "General manager approval",
+        "Security approval"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:15.059Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:15.164Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_APPROVAL",
+          "status": "IN_PROGRESS",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_APPROVAL",
+          "status": "PENDING",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "PENDING",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+          "status": "PENDING",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\active_workflow-1920.png"
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "active_workflow",
+      "passNo": "GP-2026-00024",
+      "status": "PENDING_COST_CONTROL",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 6,
+        "domEntryCount": 6,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approval",
+        "Finance approval",
+        "General manager approval",
+        "Security approval"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:15.059Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:15.164Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_APPROVAL",
+          "status": "IN_PROGRESS",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_APPROVAL",
+          "status": "PENDING",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "PENDING",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+          "status": "PENDING",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\active_workflow-1366.png"
+    },
+    {
+      "viewport": "1920x1080",
+      "fixture": "pending_security",
+      "passNo": "GP-2026-00025",
+      "status": "PENDING_SECURITY",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 6,
+        "domEntryCount": 6,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approved",
+        "Security approval"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:15.346Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:15.437Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:15.518Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Youssef Karimi",
+          "actedAt": "2026-06-26T20:39:15.602Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Richard Evans",
+          "actedAt": "2026-06-26T20:39:15.696Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+          "status": "IN_PROGRESS",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\pending_security-1920.png"
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "pending_security",
+      "passNo": "GP-2026-00025",
+      "status": "PENDING_SECURITY",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 6,
+        "domEntryCount": 6,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approved",
+        "Security approval"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:15.346Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:15.437Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:15.518Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Youssef Karimi",
+          "actedAt": "2026-06-26T20:39:15.602Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Richard Evans",
+          "actedAt": "2026-06-26T20:39:15.696Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_APPROVAL",
+          "status": "IN_PROGRESS",
+          "lifecycleEventType": null,
+          "actor": null,
+          "actedAt": null,
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\pending_security-1366.png"
+    },
+    {
+      "viewport": "1920x1080",
+      "fixture": "security_out",
+      "passNo": "GP-2026-00028",
+      "status": "OUT",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 7,
+        "domEntryCount": 7,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approved",
+        "Security approved",
+        "Security released"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:57.743Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:57.917Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:58.034Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Youssef Karimi",
+          "actedAt": "2026-06-26T20:39:58.137Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Richard Evans",
+          "actedAt": "2026-06-26T20:39:58.240Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:58.394Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 7,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "SECURITY_OUT",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:58.394Z",
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\security_out-1920.png"
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "security_out",
+      "passNo": "GP-2026-00028",
+      "status": "OUT",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 7,
+        "domEntryCount": 7,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approved",
+        "Security approved",
+        "Security released"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:57.743Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:57.917Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:58.034Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Youssef Karimi",
+          "actedAt": "2026-06-26T20:39:58.137Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Richard Evans",
+          "actedAt": "2026-06-26T20:39:58.240Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:58.394Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 7,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "SECURITY_OUT",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:58.394Z",
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\security_out-1366.png"
+    },
+    {
+      "viewport": "1920x1080",
+      "fixture": "returned",
+      "passNo": "GP-2026-00029",
+      "status": "RETURNED",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 8,
+        "domEntryCount": 8,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approved",
+        "Security approved",
+        "Security released",
+        "Return processed"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:58.601Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:58.697Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:58.775Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Youssef Karimi",
+          "actedAt": "2026-06-26T20:39:58.857Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Richard Evans",
+          "actedAt": "2026-06-26T20:39:58.944Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:59.066Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 7,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "SECURITY_OUT",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:59.066Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 8,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "RETURN_PROCESSED",
+          "displayTitleKey": "TIMELINE.STAGE.RETURN_PROCESSED_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:59.322Z",
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\returned-1920.png"
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "returned",
+      "passNo": "GP-2026-00029",
+      "status": "RETURNED",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 8,
+        "domEntryCount": 8,
+        "rejectDom": 0,
+        "rejectApi": 0
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Cost control approved",
+        "Finance approved",
+        "General manager approved",
+        "Security approved",
+        "Security released",
+        "Return processed"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:58.601Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:58.697Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:58.775Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 4,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Youssef Karimi",
+          "actedAt": "2026-06-26T20:39:58.857Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 5,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Richard Evans",
+          "actedAt": "2026-06-26T20:39:58.944Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 6,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "SECURITY",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:59.066Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 7,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "SECURITY_OUT",
+          "displayTitleKey": "TIMELINE.STAGE.SECURITY_OUT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Steven Clark",
+          "actedAt": "2026-06-26T20:39:59.066Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 8,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "RETURN_PROCESSED",
+          "displayTitleKey": "TIMELINE.STAGE.RETURN_PROCESSED_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:59.322Z",
+          "reason": null,
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\returned-1366.png"
+    },
+    {
+      "viewport": "1920x1080",
+      "fixture": "rejected",
+      "passNo": "GP-2026-00030",
+      "status": "REJECTED",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 3,
+        "domEntryCount": 3,
+        "rejectDom": 1,
+        "rejectApi": 1
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Rejected"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:59.497Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:59.584Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:59.678Z",
+          "reason": "PHASE6_TIMELINE_FIXTURE budget not approved for timeline test",
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\rejected-1920.png"
+    },
+    {
+      "viewport": "1366x768",
+      "fixture": "rejected",
+      "passNo": "GP-2026-00030",
+      "status": "REJECTED",
+      "passed": true,
+      "skipped": false,
+      "checks": {
+        "domCountMatchesApi": true,
+        "noRawKeys": true,
+        "noActedBy": true,
+        "noHorizontalOverflow": true,
+        "workflowTimelineTitle": true,
+        "noPendingAfterReject": true,
+        "noOutBeforeRelease": true,
+        "noReturnBeforeOut": true,
+        "outIsMilestone": true,
+        "singleReject": true
+      },
+      "metrics": {
+        "apiEntryCount": 3,
+        "domEntryCount": 3,
+        "rejectDom": 1,
+        "rejectApi": 1
+      },
+      "domTitles": [
+        "Submitted for approval",
+        "Department approved",
+        "Rejected"
+      ],
+      "domBadges": [],
+      "parityApi": [
+        {
+          "globalOrder": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": "Khalid Hassan",
+          "actedAt": "2026-06-26T20:39:59.497Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "DEPT",
+          "displayTitleKey": "TIMELINE.STAGE.DEPT_COMPLETED",
+          "status": "COMPLETED",
+          "lifecycleEventType": null,
+          "actor": "Omar Al-Said",
+          "actedAt": "2026-06-26T20:39:59.584Z",
+          "reason": null,
+          "note": null
+        },
+        {
+          "globalOrder": 3,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": "Nadia Ibrahim",
+          "actedAt": "2026-06-26T20:39:59.678Z",
+          "reason": "PHASE6_TIMELINE_FIXTURE budget not approved for timeline test",
+          "note": null
+        }
+      ],
+      "screenshot": "C:\\DX OS&E\\Governance\\timeline-remediation\\runtime-evidence\\phase6\\rejected-1366.png"
+    }
+  ]
+}

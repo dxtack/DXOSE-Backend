@@ -1,0 +1,75 @@
+{
+  "at": "2026-06-26T18:55:04.715Z",
+  "gate": "Phase 1 Final",
+  "note": "4/10 cycle tests in timelineEntry.test.js exercise shared sort/merge utilities only — not GRN multi-cycle proof (Phase 2 builder).",
+  "legacyWording": "Legacy arrays structurally and semantically unchanged",
+  "results": [
+    {
+      "module": "GRN",
+      "layer": "service",
+      "status": "PASS",
+      "documentId": "05a7920f-9e03-4efc-b575-eebbfd6ce89b",
+      "workflowSlotsCount": 3,
+      "auditEventsCount": 7,
+      "timelineEntriesCount": 12,
+      "legacyArraysUnchanged": true,
+      "legacyFingerprintPrefix": "{\"workflowSlots\":[{\"order\":1,\"kind\":\"MILESTONE\",\"stageTitle\":\"RECEIVED & VALIDAT"
+    },
+    {
+      "module": "TRANSFER",
+      "layer": "service",
+      "status": "PASS",
+      "documentId": "4c9541f0-ebdc-4ccd-a993-e4cfe26fe982",
+      "workflowSlotsCount": 3,
+      "auditEventsCount": 0,
+      "timelineEntriesCount": 0,
+      "legacyArraysUnchanged": true,
+      "legacyFingerprintPrefix": "{\"workflowSlots\":[{\"order\":1,\"kind\":\"APPROVAL\",\"stageTitle\":\"Department Manager "
+    },
+    {
+      "module": "BREAKAGE",
+      "layer": "service",
+      "status": "SKIP",
+      "reason": "no document"
+    },
+    {
+      "module": "LOST",
+      "layer": "service",
+      "status": "SKIP",
+      "reason": "no document"
+    },
+    {
+      "module": "GET_PASS",
+      "layer": "service",
+      "status": "PASS",
+      "documentId": "f76ed7c1-375e-43b2-ae69-1e5a11c929a3",
+      "workflowSlotsCount": 6,
+      "auditEventsCount": 1,
+      "timelineEntriesCount": 0,
+      "legacyArraysUnchanged": true,
+      "legacyFingerprintPrefix": "{\"workflowSlots\":[{\"order\":1,\"kind\":\"APPROVAL\",\"stageTitle\":\"Department Review\","
+    },
+    {
+      "module": "INVENTORY_COUNT",
+      "layer": "service",
+      "status": "PASS",
+      "documentId": "a47396bb-bb9d-496b-b702-8bb01d6795a5",
+      "workflowSlotsCount": 1,
+      "auditEventsCount": 0,
+      "timelineEntriesCount": 0,
+      "legacyArraysUnchanged": true,
+      "legacyFingerprintPrefix": "{\"workflowSlots\":[{\"order\":1,\"kind\":\"MILESTONE\",\"stageTitle\":\"VARIANCE REVIEW\",\""
+    },
+    {
+      "module": "MOVEMENT",
+      "layer": "service",
+      "status": "PASS",
+      "documentId": "fdebe7da-c0d7-440f-b3f5-a436f4d4e406",
+      "workflowSlotsCount": 0,
+      "auditEventsCount": 0,
+      "timelineEntriesCount": 0,
+      "legacyArraysUnchanged": true,
+      "legacyFingerprintPrefix": "{\"workflowSlots\":[],\"auditEvents\":[]}"
+    }
+  ]
+}

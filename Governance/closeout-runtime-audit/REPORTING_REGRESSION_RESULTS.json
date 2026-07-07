@@ -1,0 +1,16 @@
+{
+  "results": [
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe scripts/smoke-reporting-final-regression.js",
+      "label": "reporting_final_regression",
+      "environment": "C:\\DX OS&E\\OSE-backend",
+      "exit": 1,
+      "passed": null,
+      "failed": "FAIL",
+      "skipped": 0,
+      "durationMs": 1488,
+      "exactFailure": "  PASS  Golden PDF renders (40376 bytes)\n  PASS  Stock balance 26 lines PDF page count 2 (no ghost pages)\n  PASS  Stock PDF raw SAR path preserved (100.00)\n  PASS  Golden blended WAC derived (5)\n  PASS  Summary inventory PDF renders (41129 bytes)\n  PASS  Summary PDF valid vector document header\n  PASS  Grouped export detected for PDF presenter\n  PASS  Golden Excel renders (7793 bytes)\n\nSamples: C:\\DX OS&E\\OSE-backend\\tmp\\reporting-final-regression\n  PASS  Engine OMC grouped export columns resolved\n\n--- Final regression: 23 passed, 1 failed ---\n  FAIL  Golden column width sum 767 expected ~770\n",
+      "outputTail": "  PASS  Golden Excel renders (7793 bytes)\n\nSamples: C:\\DX OS&E\\OSE-backend\\tmp\\reporting-final-regression\n  PASS  Engine OMC grouped export columns resolved\n\n--- Final regression: 23 passed, 1 failed ---\n  FAIL  Golden column width sum 767 expected ~770\n"
+    }
+  ]
+}

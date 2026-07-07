@@ -1,0 +1,27 @@
+{
+  "executedAt": "2026-06-27T16:32:57.148Z",
+  "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+  "tag": "CLOSEOUT_RT_AUDIT",
+  "departmentA": {
+    "deptCode": "FB",
+    "departmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+    "locationId": "c031c268-194d-4211-beb8-0910da8f131d",
+    "locationName": "F&B Store",
+    "itemId": "f7e4d2a3-d93c-4850-b306-a11321ff3aa2",
+    "itemName": "Dinner Plate - Porcelain",
+    "qtyOnHand": 15,
+    "unitCost": 22,
+    "tag": "CLOSEOUT_RT_AUDIT"
+  },
+  "departmentB": {
+    "deptCode": "HK",
+    "departmentId": "5e246726-faaf-48e4-a002-80aae4639dce",
+    "locationId": "8f3ae500-48b0-433c-9235-254f69251f8b",
+    "locationName": "Housekeeping Store",
+    "itemId": "f7e4d2a3-d93c-4850-b306-a11321ff3aa2",
+    "itemName": "Dinner Plate - Porcelain",
+    "qtyOnHand": 20,
+    "unitCost": 22,
+    "tag": "CLOSEOUT_RT_AUDIT"
+  }
+}

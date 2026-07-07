@@ -1,0 +1,475 @@
+{
+  "at": "2026-06-26T21:19:27.736Z",
+  "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+  "tenantSlug": "grand-horizon",
+  "fixtureTag": "PHASE7_TIMELINE_FIXTURE",
+  "fixtures": [
+    {
+      "scenario": "active_approval",
+      "moduleKey": "INVENTORY_COUNT",
+      "documentId": "44402db6-fa68-43e3-b074-6129b5ec6174",
+      "sessionNo": "CNT-2606-0059",
+      "status": "PENDING_APPROVAL",
+      "timelineEntryCount": 4,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "COUNT_SUBMITTED",
+          "displayTitleKey": "TIMELINE.STAGE.COUNT_SUBMITTED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:26.065Z",
+          "note": null,
+          "stepNumber": 1,
+          "sourceRef": {
+            "auditLogId": "711cfa4a-a293-4a02-a7cb-0a4f449c9fa1",
+            "roundNo": 1
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:26.186Z",
+          "stepNumber": 3,
+          "sourceRef": {
+            "auditLogId": "8433d95d-b13c-4c68-b532-ce44564331b4"
+          },
+          "globalOrder": 2,
+          "durationMs": 121
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 4,
+          "sourceRef": {
+            "approvalRequestId": "078d5035-15f2-4a3d-8379-764da2b51d37",
+            "approvalStepId": "1cb1925c-6015-4330-9814-496b92eeddce"
+          },
+          "globalOrder": 3
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_APPROVAL",
+          "status": "PENDING",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 5,
+          "sourceRef": {
+            "approvalRequestId": "078d5035-15f2-4a3d-8379-764da2b51d37",
+            "approvalStepId": "debb5eae-dddf-475e-88d3-bac026a23790"
+          },
+          "globalOrder": 4
+        }
+      ],
+      "workflowSlotsCount": 3,
+      "auditEventsCount": 2
+    },
+    {
+      "scenario": "posted",
+      "moduleKey": "INVENTORY_COUNT",
+      "documentId": "2844bbd4-18e7-4772-83a3-bd72c2f0726b",
+      "sessionNo": "CNT-2606-0060",
+      "status": "POSTED",
+      "timelineEntryCount": 5,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "COUNT_SUBMITTED",
+          "displayTitleKey": "TIMELINE.STAGE.COUNT_SUBMITTED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:26.427Z",
+          "note": null,
+          "stepNumber": 1,
+          "sourceRef": {
+            "auditLogId": "5f133e8f-8802-4c68-9512-da45964cffc1",
+            "roundNo": 1
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:26.487Z",
+          "stepNumber": 3,
+          "sourceRef": {
+            "auditLogId": "1adb5eb3-660a-4dc8-9c5a-e893c82c4a3b"
+          },
+          "globalOrder": 2,
+          "durationMs": 60
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T21:19:26.517Z",
+          "reason": null,
+          "note": "Phase7 finance OK",
+          "stepNumber": 4,
+          "sourceRef": {
+            "approvalRequestId": "1e6af9ed-358c-42bd-8eb4-05bd89ce0eeb",
+            "approvalStepId": "2bfa21d6-da79-43c9-a1a2-227276a7deb2"
+          },
+          "globalOrder": 3,
+          "durationMs": 30
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "7109404a-5724-484c-953f-42a7fc24c3b8",
+            "name": "Richard Evans"
+          },
+          "actedAt": "2026-06-26T21:19:26.574Z",
+          "reason": null,
+          "note": "Phase7 GM post",
+          "stepNumber": 5,
+          "sourceRef": {
+            "approvalRequestId": "1e6af9ed-358c-42bd-8eb4-05bd89ce0eeb",
+            "approvalStepId": "36175613-9fc7-4785-8f73-5491050061da"
+          },
+          "globalOrder": 4,
+          "durationMs": 57
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "POSTING",
+          "stageKey": "POSTED",
+          "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+          "status": "POSTED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:26.789Z",
+          "stepNumber": 99,
+          "sourceRef": {
+            "auditLogId": "627c0330-6456-4fb5-bbc6-b898b5eda643",
+            "sessionId": "2844bbd4-18e7-4772-83a3-bd72c2f0726b"
+          },
+          "globalOrder": 5,
+          "durationMs": 215
+        }
+      ],
+      "workflowSlotsCount": 4,
+      "auditEventsCount": 5,
+      "postingReconciliation": {
+        "ledgerCount": 1,
+        "mismatches": [],
+        "ledgerRows": [
+          {
+            "id": "ed94bb2d-38e5-4ba8-b678-c0d481df4ca6",
+            "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+            "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+            "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+            "movementType": "COUNT_ADJUSTMENT",
+            "affectsValuation": true,
+            "qtyIn": "3",
+            "qtyOut": "0",
+            "unitCost": "50",
+            "totalValue": "150",
+            "balanceAfter": "10",
+            "referenceType": "COUNT_SESSION",
+            "referenceId": "2844bbd4-18e7-4772-83a3-bd72c2f0726b",
+            "referenceNo": "CNT-2606-0060",
+            "requiresApproval": false,
+            "approvalId": "1e6af9ed-358c-42bd-8eb4-05bd89ce0eeb",
+            "notes": "postingPolicy=POLICY_B;snapshotVariance=3;postingAdjustment=3;valuationBasis=WAC",
+            "createdBy": "7109404a-5724-484c-953f-42a7fc24c3b8",
+            "createdAt": "2026-06-26T21:19:26.750Z"
+          }
+        ]
+      }
+    },
+    {
+      "scenario": "rejected",
+      "moduleKey": "INVENTORY_COUNT",
+      "documentId": "dd8d6c7a-8ee2-450b-9d76-41e3a05899d9",
+      "sessionNo": "CNT-2606-0061",
+      "status": "REJECTED",
+      "timelineEntryCount": 3,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "COUNT_SUBMITTED",
+          "displayTitleKey": "TIMELINE.STAGE.COUNT_SUBMITTED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:27.033Z",
+          "note": null,
+          "stepNumber": 1,
+          "sourceRef": {
+            "auditLogId": "71764033-e56a-45a1-8d59-3dc6fe1479b4",
+            "roundNo": 1
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:27.095Z",
+          "stepNumber": 3,
+          "sourceRef": {
+            "auditLogId": "4d95b22b-3401-4990-a0e7-945c7896ef48"
+          },
+          "globalOrder": 2,
+          "durationMs": 62
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.REJECT",
+          "status": "REJECTED",
+          "lifecycleEventType": "REJECT",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T21:19:27.118Z",
+          "reason": "PHASE7_TIMELINE_FIXTURE variance exceeds tolerance",
+          "note": null,
+          "stepNumber": 4,
+          "sourceRef": {
+            "approvalRequestId": "82bf4e36-2c69-4e82-94ce-2bdebe01d5d0",
+            "approvalStepId": "4635b55a-2159-478a-94ac-bb266ea048dc"
+          },
+          "globalOrder": 3,
+          "durationMs": 23
+        }
+      ],
+      "workflowSlotsCount": 3,
+      "auditEventsCount": 3
+    },
+    {
+      "scenario": "recount_round2",
+      "moduleKey": "INVENTORY_COUNT",
+      "documentId": "ad46a308-eebf-477c-9624-e5350e0cf01e",
+      "sessionNo": "CNT-2606-0062",
+      "status": "POSTED",
+      "timelineEntryCount": 7,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "COUNT_SUBMITTED",
+          "displayTitleKey": "TIMELINE.STAGE.COUNT_SUBMITTED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:27.339Z",
+          "note": null,
+          "stepNumber": 1,
+          "sourceRef": {
+            "auditLogId": "7dc834b0-fdcb-47ee-a6c1-53f6ddaa3839",
+            "roundNo": 1
+          },
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.RECOUNT",
+          "status": "COMPLETED",
+          "lifecycleEventType": "RECOUNT",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:27.392Z",
+          "stepNumber": 2,
+          "sourceRef": {
+            "auditLogId": "90d19c7d-416d-4e29-96b6-472642e28daa"
+          },
+          "globalOrder": 2,
+          "durationMs": 53
+        },
+        {
+          "cycleNumber": 2,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "COUNT_SUBMITTED",
+          "displayTitleKey": "TIMELINE.STAGE.COUNT_SUBMITTED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:27.433Z",
+          "note": "Round 2",
+          "stepNumber": 4,
+          "sourceRef": {
+            "auditLogId": "ee9ed4ad-e473-402a-a440-6980199b91de",
+            "roundNo": 2
+          },
+          "globalOrder": 3,
+          "durationMs": 41
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SUBMIT_FOR_APPROVAL",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SUBMIT_FOR_APPROVAL",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:27.504Z",
+          "stepNumber": 5,
+          "sourceRef": {
+            "auditLogId": "69541591-aa24-4188-a4ec-32e87e5b30b4"
+          },
+          "globalOrder": 4,
+          "durationMs": 71
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T21:19:27.529Z",
+          "reason": null,
+          "note": "Phase7 finance after recount",
+          "stepNumber": 6,
+          "sourceRef": {
+            "approvalRequestId": "e4a1c4b8-d7aa-4754-b718-96be97e21a1a",
+            "approvalStepId": "41bdf17a-c4a1-45f1-9349-c2ec2fdc687a"
+          },
+          "globalOrder": 5,
+          "durationMs": 25
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "GENERAL_MANAGER",
+          "displayTitleKey": "TIMELINE.STAGE.GENERAL_MANAGER_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "7109404a-5724-484c-953f-42a7fc24c3b8",
+            "name": "Richard Evans"
+          },
+          "actedAt": "2026-06-26T21:19:27.578Z",
+          "reason": null,
+          "note": "Phase7 GM post after recount",
+          "stepNumber": 7,
+          "sourceRef": {
+            "approvalRequestId": "e4a1c4b8-d7aa-4754-b718-96be97e21a1a",
+            "approvalStepId": "17248fd6-0276-4aa5-a0cd-66279458d95e"
+          },
+          "globalOrder": 6,
+          "durationMs": 49
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "POSTING",
+          "stageKey": "POSTED",
+          "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+          "status": "POSTED",
+          "actor": {
+            "id": "119786df-ef21-40df-a585-319e6ea474da",
+            "name": "Khalid Hassan"
+          },
+          "actedAt": "2026-06-26T21:19:27.655Z",
+          "stepNumber": 99,
+          "sourceRef": {
+            "auditLogId": "e06e91a6-e530-4fd2-9a05-d494ee707429",
+            "sessionId": "ad46a308-eebf-477c-9624-e5350e0cf01e"
+          },
+          "globalOrder": 7,
+          "durationMs": 77
+        }
+      ],
+      "workflowSlotsCount": 4,
+      "auditEventsCount": 7,
+      "postingReconciliation": {
+        "ledgerCount": 1,
+        "mismatches": [],
+        "ledgerRows": [
+          {
+            "id": "dfeb08de-044d-4c0c-9c59-9732ccddf285",
+            "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+            "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+            "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+            "movementType": "COUNT_ADJUSTMENT",
+            "affectsValuation": true,
+            "qtyIn": "5",
+            "qtyOut": "0",
+            "unitCost": "50",
+            "totalValue": "250",
+            "balanceAfter": "15",
+            "referenceType": "COUNT_SESSION",
+            "referenceId": "ad46a308-eebf-477c-9624-e5350e0cf01e",
+            "referenceNo": "CNT-2606-0062",
+            "requiresApproval": false,
+            "approvalId": "e4a1c4b8-d7aa-4754-b718-96be97e21a1a",
+            "notes": "postingPolicy=POLICY_B;snapshotVariance=5;postingAdjustment=5;valuationBasis=WAC",
+            "createdBy": "7109404a-5724-484c-953f-42a7fc24c3b8",
+            "createdAt": "2026-06-26T21:19:27.643Z"
+          }
+        ]
+      }
+    }
+  ]
+}

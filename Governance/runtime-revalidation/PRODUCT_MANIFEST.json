@@ -1,0 +1,215 @@
+{
+  "generatedAt": "2026-06-27T18:17:49.151Z",
+  "gitHead": "d8ea25d51407370b1e67c42378e3114d127a019e",
+  "productRoots": {
+    "OSE-Frontend/src": {
+      "fileCount": 577,
+      "aggregateSha256": "786a39301686f67c6ba21d6bd9cbfb730435f4712d7de2d54913bbda3fdd6407"
+    },
+    "OSE-backend/src": {
+      "fileCount": 389,
+      "aggregateSha256": "1370852377d537f0e56e624687cf0352c6feb06010301a41a95a18179c8639be"
+    },
+    "combinedAggregateSha256": "9097c90c3e04f7a8dfae5c1d04e2be1cb35ac09bc0496f0a56718c20a515c130"
+  },
+  "gateCComparison": {
+    "OSE-backend/src/services/getPass.service.js": {
+      "gate_c_sha256": "FA6AA0CD90C020DEE54DC35B56E87D4F1AD8EED1A0E55AA35374200B4C169B02",
+      "current_sha256": "fa6aa0cd90c020dee54dc35b56e87d4f1ad8eed1a0e55aa35374200b4c169b02",
+      "match": true
+    },
+    "OSE-Frontend/src/app/features/lost-items/utils/lost-items-status-display.util.ts": {
+      "gate_c_sha256": "485E3B5C59E1799BA316132430854E252E14DCC5DFC3ADB86F936AF6BE98AF2F",
+      "current_sha256": "485e3b5c59e1799ba316132430854e252e14dcc5dfc3adb86f936af6be98af2f",
+      "match": true
+    },
+    "OSE-Frontend/src/app/core/directives/keyboard-navigation.directive.ts": {
+      "gate_c_sha256": "CC27C7D259F6E8BD8835F0D5DC1577FF9EBA21595EB0EF40838CB1E9172A06B9",
+      "current_sha256": "a88e9de7a9250a95e7b7dc834962610b907d6f9387bce3b41d1e7bc42cd08711",
+      "match": false
+    }
+  },
+  "gateCThreeFileAllMatch": false,
+  "gateCFullChangeSetManifestAvailable": false,
+  "gateCProvableIdenticalToClosure": false,
+  "gateCProvableReason": "Only 3 Gate C file SHA256 captured at closure; keyboard-navigation.directive.ts modified post–Gate C browser remediation; full product tree untracked in git — byte-exact tree match not provable.",
+  "gateCRegressionRequired": true,
+  "gateCChangedFilesPresent": [
+    {
+      "path": "OSE-backend/src/services/getPass.service.js",
+      "sha256": "fa6aa0cd90c020dee54dc35b56e87d4f1ad8eed1a0e55aa35374200b4c169b02",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/utils/lost-items-status-display.util.ts",
+      "sha256": "485e3b5c59e1799ba316132430854e252e14dcc5dfc3adb86f936af6be98af2f",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/lost-items-list/lost-items-list.component.html",
+      "sha256": "7e706ab86b85897c0b6928b94eb2884c9adfe90ecef221197443294626621e6c",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/lost-items-list/lost-items-list.component.ts",
+      "sha256": "1159bf93ac9bef0be8f41da604b8184a5f59d65426355cf1483847e62460db3c",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component.html",
+      "sha256": "ad892de9e33d6a7b141ec5a39c33c6fcf5f1b3a306737226f38aabbd544c2861",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/lost-items-detail/lost-items-detail.component.ts",
+      "sha256": "8892d2ea9663573ee8ca061df64a73069cef8808efc65147addcbca290d7abee",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/models/lost-items.model.ts",
+      "sha256": "9773e846ea0fcc397ca372eb72b1bfff2573c8501cf97354bf09395557f8f5d1",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/core/directives/keyboard-navigation.directive.ts",
+      "sha256": "a88e9de7a9250a95e7b7dc834962610b907d6f9387bce3b41d1e7bc42cd08711",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.ts",
+      "sha256": "d853f55bfac22cf89b317b50ed7b2211808506db97c167f8af3a8e7cc7febc84",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/grn/grn-create/grn-create.component.html",
+      "sha256": "b61f2b4dee222a56c4e9fedb8e474ff09a772cd54b837281d7f2317242b7293c",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/get-pass/get-pass-form/get-pass-form.component.ts",
+      "sha256": "bdd49931ad29ea344a9938a26d74b1e7e88b9a68e06c2cc0cd30bf63ff8e1d9f",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/get-pass/get-pass-form/get-pass-form.component.html",
+      "sha256": "e8308cec0a17d9d54cfef72e612737afed2e3f7f6e98221c16172ba21195cc01",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/transfers/transfer-form/transfer-form.component.ts",
+      "sha256": "941cffe257645b6ea9949408f5a8f1f3338844fd2091254e02f45c5bb7b5c74b",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/transfers/transfer-form/transfer-form.component.html",
+      "sha256": "ef877426e7d1963de8188c52b92accc99a55d8668925736d00af975b055339fb",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/breakage/breakage-create-modal/breakage-create-modal.component.ts",
+      "sha256": "fdf6d802dce9bfee33ee0b24c05887f20c4654b77e58fc51ff9dc4f55e5c5132",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/breakage/breakage-create-modal/breakage-create-modal.component.html",
+      "sha256": "a729797c618a08b4ebfa4474c159c1f8c3bdb7094e2a91a0835be359da6a742a",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/lost-create-modal/lost-create-modal.component.ts",
+      "sha256": "27d2fa76419d3a4fcd4c24b1f22d2292d27ad44d7b8d7dc2c80941fc9011fd76",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/lost-items/lost-create-modal/lost-create-modal.component.html",
+      "sha256": "7e25b4bcbb015ff92dd137f6d0e397ba91e26eecbc5384585a29b2b460478909",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/inventory-count/inventory-count-detail/inventory-count-detail.component.ts",
+      "sha256": "880fdb557ab5212891948558de74febca8b1ad0652f945b4528f20e6845e2cb6",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/inventory-count/inventory-count-detail/inventory-count-detail.component.html",
+      "sha256": "3db993c114ce2ceaa1564e7f25086161842a3e5c02efa0a16164af736dfa0f71",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/movements/movement-form/movement-form.component.ts",
+      "sha256": "6f27bac3d151a45bf3b066d373fefe19497fad866477d0c008494e61816c8e52",
+      "exists": true
+    },
+    {
+      "path": "OSE-Frontend/src/app/features/movements/movement-form/movement-form.component.html",
+      "sha256": "ebf7ea90ab8708d2256e0d647b1c95f4dbcad273cbfdeba4aac2cab198d445a9",
+      "exists": true
+    }
+  ],
+  "gitStatusShort": [
+    "M Governance/CONSTITUTION_TRACEABILITY_MATRIX.md",
+    " M Governance/build-register.mjs",
+    " M Governance/evidence.json",
+    " M Governance/requirements.json",
+    "?? .github/",
+    "?? Governance/apply-batch-ch19-28.mjs",
+    "?? Governance/apply-batch-no-closure.mjs",
+    "?? Governance/apply-ch12-18-remediation.mjs",
+    "?? Governance/apply-ch3-5-remediation.mjs",
+    "?? Governance/apply-pre-audit.mjs",
+    "?? Governance/apply-remediation-ch19-28.mjs",
+    "?? Governance/apply-verification.mjs",
+    "?? Governance/assign-requirement-ids.mjs",
+    "?? Governance/audit-evidence-paths.mjs",
+    "?? Governance/batch-no-closure-summary.json",
+    "?? Governance/ch19-28-remediation-summary.json",
+    "?? Governance/ch6-11-verification-batch.json",
+    "?? Governance/closeout-runtime-audit/",
+    "?? Governance/constitution-extraction/",
+    "?? Governance/extract-requirements.mjs",
+    "?? Governance/final-package/",
+    "?? Governance/gate-b-audit/",
+    "?? Governance/gate-c-remediation/",
+    "?? Governance/generate-final-report.mjs",
+    "?? Governance/import-requirements.mjs",
+    "?? Governance/normalize-evidence-paths.mjs",
+    "?? Governance/patch-ch7-evidence.mjs",
+    "?? Governance/patch-empty-evidence.mjs",
+    "?? Governance/pre-audit-corrections.json",
+    "?? Governance/remediate-ch6-11.mjs",
+    "?? Governance/remediate-ch8.mjs",
+    "?? Governance/remediation-queue.json",
+    "?? Governance/report-batches.mjs",
+    "?? Governance/runtime-revalidation/",
+    "?? Governance/timeline-remediation/FINAL_PHASE2_GATE_EVIDENCE.md",
+    "?? Governance/timeline-remediation/FINAL_TIMELINE_VERIFICATION_MATRIX.md",
+    "?? Governance/timeline-remediation/PHASE0_REOPEN_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE10_GOVERNANCE_CLOSURE.md",
+    "?? Governance/timeline-remediation/PHASE1_CONTRACT_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE2_GRN_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE3_SHARED_RENDERER_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE4_GRN_DETAIL_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE5_TRANSFER_BREAKAGE_LOST_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE6_GET_PASS_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE7_INVENTORY_COUNT_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE8_MOVEMENT_WORKFLOW_EVIDENCE.md",
+    "?? Governance/timeline-remediation/PHASE9_CROSS_MODULE_REGRESSION.md",
+    "?? Governance/timeline-remediation/apply-phase0-reopen.mjs",
+    "?? Governance/timeline-remediation/backfill-reports/",
+    "?? Governance/timeline-remediation/runtime-evidence/",
+    "?? OSE-Frontend/",
+    "?? OSE-backend/",
+    "?? _docx_extract.txt",
+    "?? _preserve/",
+    "?? build-errors.txt",
+    "?? build-full.txt",
+    "?? build-out.txt",
+    "?? docs/",
+    "?? logs/",
+    "?? node_modules/",
+    "?? package-lock.json",
+    "?? package.json",
+    "?? scripts/",
+    "?? test-results/"
+  ]
+}

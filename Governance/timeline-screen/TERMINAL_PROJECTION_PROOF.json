@@ -1,0 +1,15 @@
+{
+  "rules": {
+    "REJECTED": "no APPROVAL_STEP_CURRENT or FUTURE after reject lifecycle",
+    "VOID_CANCELLED": "no pending/future after terminal lifecycle",
+    "POSTED": "POSTING entry last with Auto posted by DX; no future steps after",
+    "OUT_RETURNED_CLOSED": "operational milestones only; no approval placeholders after gate",
+    "SEND_BACK": "prior history preserved; target becomes current pending; later steps waiting"
+  },
+  "tests": [
+    "GRN builder: no future steps after POSTED terminal",
+    "Rejected: single REJECT lifecycle, no pending after reject (Get Pass)",
+    "Breakage void after reject preserves reject history without pending steps"
+  ],
+  "verified": true
+}

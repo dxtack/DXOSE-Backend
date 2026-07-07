@@ -1,0 +1,482 @@
+{
+  "generatedAt": "2026-06-28T15:24:53.717Z",
+  "phase": "phase-5-operational-details-browser-clean",
+  "passCount": 33,
+  "failCount": 0,
+  "skippedCount": 0,
+  "vacuousCount": 0,
+  "requestRewriteCount": 0,
+  "missingAllowBindingCount": 0,
+  "missingDenyBindingCount": 0,
+  "unexecutedActionBindingCount": 0,
+  "ledgerFieldMismatchCount": 0,
+  "missingVoidTimelineCount": 0,
+  "missingScenarioIdCount": 0,
+  "unauthorizedVisibleMutationButtonCount": 0,
+  "phaseClosed": true,
+  "scenarios": [
+    {
+      "id": "P5-CLEAN-BR-TR-DEPT-APPROVE",
+      "name": "Transfer UI dept approve (clean payload)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "PENDING_DEPT",
+      "afterStatus": "PENDING_FINANCE",
+      "originalRequestBody": {
+        "concurrencyVersion": 1
+      },
+      "requiredPayloadFields": [
+        "concurrencyVersion"
+      ],
+      "missingPayloadFields": [],
+      "fixtureId": "5e601345-121a-484b-9f6b-b831dfb74246",
+      "ledgerCount": 0
+    },
+    {
+      "id": "P5-CLEAN-BR-TR-FINANCE-POST",
+      "name": "Transfer finance post (clean payload + exact ledger)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "PENDING_FINANCE",
+      "afterStatus": "POSTED",
+      "originalRequestBody": {
+        "concurrencyVersion": 1
+      },
+      "requiredPayloadFields": [
+        "concurrencyVersion"
+      ],
+      "missingPayloadFields": [],
+      "ledgerIssues": [],
+      "fixtureId": "5e601345-121a-484b-9f6b-b831dfb74246"
+    },
+    {
+      "id": "P5-CLEAN-BR-TR-REJECT",
+      "name": "Transfer UI reject (clean payload)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "PENDING_FINANCE",
+      "afterStatus": "REJECTED",
+      "originalRequestBody": {
+        "reason": "Phase5 clean browser reject",
+        "concurrencyVersion": 1
+      },
+      "fixtureId": "6a79a62a-a740-42e2-80a6-295304d75870"
+    },
+    {
+      "id": "P5-CLEAN-BR-BRK-CC-APPROVE",
+      "name": "Breakage UI CC approve (clean)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "DEPT_APPROVED",
+      "afterStatus": "COST_CONTROL_APPROVED",
+      "originalRequestBody": {
+        "accountability": "COMPANY_LOSS",
+        "concurrencyVersion": 1
+      },
+      "requiredPayloadFields": [
+        "concurrencyVersion"
+      ],
+      "missingPayloadFields": [],
+      "fixtureId": "8c926180-455e-4208-a572-49558a58073d"
+    },
+    {
+      "id": "P5-CLEAN-BR-BRK-FIN-APPROVE",
+      "name": "Breakage UI FIN approve (clean)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "COST_CONTROL_APPROVED",
+      "afterStatus": "FINANCE_APPROVED",
+      "originalRequestBody": {
+        "accountability": "COMPANY_LOSS",
+        "concurrencyVersion": 1
+      },
+      "requiredPayloadFields": [
+        "concurrencyVersion"
+      ],
+      "missingPayloadFields": [],
+      "fixtureId": "8c926180-455e-4208-a572-49558a58073d"
+    },
+    {
+      "id": "P5-CLEAN-BR-BRK-GM-APPROVE",
+      "name": "Breakage UI GM approve (clean)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "FINANCE_APPROVED",
+      "afterStatus": "APPROVED",
+      "originalRequestBody": {
+        "accountability": "COMPANY_LOSS",
+        "concurrencyVersion": 1
+      },
+      "requiredPayloadFields": [
+        "concurrencyVersion"
+      ],
+      "missingPayloadFields": [],
+      "fixtureId": "8c926180-455e-4208-a572-49558a58073d"
+    },
+    {
+      "id": "P5-CLEAN-BR-BRK-LEDGER-EXACT",
+      "name": "Breakage chain exact ledger/stock/no mutations",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "ledgerIssues": [],
+      "postedAt": "2026-06-28T15:22:36.033Z",
+      "fixtureId": "8c926180-455e-4208-a572-49558a58073d",
+      "actionText": "Download PDF\nPrint"
+    },
+    {
+      "id": "P5-CLEAN-BR-BRK-VOID-DRAFT",
+      "name": "Breakage void DRAFT (clean + Voided timeline)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "DRAFT",
+      "afterStatus": "VOID",
+      "originalRequestBody": {
+        "reason": "Void this document? This cannot be undone.",
+        "concurrencyVersion": 0
+      },
+      "requiredPayloadFields": [
+        "reason",
+        "concurrencyVersion"
+      ],
+      "missingPayloadFields": [],
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "fixtureId": "5bda3537-90b7-41cb-b2e3-a62a65c56713",
+      "voidEventCount": 1,
+      "voidLabel": "Voided",
+      "voidActorPresent": true,
+      "voidTimestampPresent": true,
+      "voidReasonPresent": true,
+      "activeStageCount": 0,
+      "futurePendingStageCount": 0,
+      "timelineFragment": "Workflow Timeline\nDepartment approved\nApproved\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:21:31 PM\nNote: Auto-approved by system due to high-level authority.\nVoided\nCompleted\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:22:46 PM\nReason: Void this document? This cannot be undone."
+    },
+    {
+      "id": "P5-CLEAN-BR-BRK-VOID-REJECTED",
+      "name": "Breakage void REJECTED (clean + Voided timeline)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "REJECTED",
+      "afterStatus": "VOID",
+      "originalRequestBody": {
+        "reason": "Void this document? This cannot be undone.",
+        "concurrencyVersion": 1
+      },
+      "requiredPayloadFields": [
+        "reason",
+        "concurrencyVersion"
+      ],
+      "missingPayloadFields": [],
+      "ledgerBefore": 0,
+      "ledgerAfter": 0,
+      "fixtureId": "f6163769-cac0-4418-b80a-c4762a6c0637",
+      "voidEventCount": 1,
+      "voidLabel": "Voided",
+      "voidActorPresent": true,
+      "voidTimestampPresent": true,
+      "voidReasonPresent": true,
+      "activeStageCount": 0,
+      "futurePendingStageCount": 0,
+      "timelineFragment": "Workflow Timeline\nDepartment approved\nApproved\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:21:32 PM\nNote: Auto-approved by system due to high-level authority.\nRejected\nRejected\nBy Phase5 COST_CONTROL\n•\nJun 28, 2026, 6:21:34 PM\nReason: PHASE5_DETAIL_GATE\nVoided\nCompleted\nBy Phase5 STOREKEEPER\n•\nJun 28, 2026, 6:22:57 PM\nReason: Void this document? This cannot be undone."
+    },
+    {
+      "id": "P5-CLEAN-BR-BRK-REJECT",
+      "name": "Breakage UI reject terminal",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "DEPT_APPROVED",
+      "afterStatus": "REJECTED",
+      "originalRequestBody": {
+        "comment": "Phase5 clean breakage reject",
+        "concurrencyVersion": 1
+      },
+      "fixtureId": "71d29b5f-2776-4162-9340-9cac1aa6a152"
+    },
+    {
+      "id": "P5-CLEAN-BR-LOST-EMPLOYEE-CC",
+      "name": "Lost CC (clean payload)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "DEPT_APPROVED",
+      "afterStatus": "COST_CONTROL_APPROVED",
+      "originalRequestBody": {
+        "accountability": "COMPANY_LOSS"
+      },
+      "fixtureId": "2251ae3b-2f85-4679-a177-e6b1b8d3c7d8"
+    },
+    {
+      "id": "P5-CLEAN-BR-LOST-EMPLOYEE-FIN",
+      "name": "Lost FIN (clean payload)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "COST_CONTROL_APPROVED",
+      "afterStatus": "FINANCE_APPROVED",
+      "originalRequestBody": {
+        "accountability": "COMPANY_LOSS"
+      },
+      "fixtureId": "2251ae3b-2f85-4679-a177-e6b1b8d3c7d8"
+    },
+    {
+      "id": "P5-CLEAN-BR-LOST-EMPLOYEE",
+      "name": "Lost EMPLOYEE final (clean ledger/stock/treatment)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "treatment": "EMPLOYEE",
+      "ledgerIssues": [],
+      "fixtureId": "2251ae3b-2f85-4679-a177-e6b1b8d3c7d8"
+    },
+    {
+      "id": "P5-CLEAN-BR-LOST-HOTEL-CC",
+      "name": "Lost CC (clean payload)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "DEPT_APPROVED",
+      "afterStatus": "COST_CONTROL_APPROVED",
+      "originalRequestBody": {
+        "accountability": "COMPANY_LOSS"
+      },
+      "fixtureId": "bdd87bc3-565e-438d-8bb3-1edc17c39a12"
+    },
+    {
+      "id": "P5-CLEAN-BR-LOST-HOTEL-FIN",
+      "name": "Lost FIN (clean payload)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "COST_CONTROL_APPROVED",
+      "afterStatus": "FINANCE_APPROVED",
+      "originalRequestBody": {
+        "accountability": "COMPANY_LOSS"
+      },
+      "fixtureId": "bdd87bc3-565e-438d-8bb3-1edc17c39a12"
+    },
+    {
+      "id": "P5-CLEAN-BR-LOST-HOTEL",
+      "name": "Lost HOTEL final (clean ledger/stock/treatment)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "treatment": "HOTEL",
+      "ledgerIssues": [],
+      "fixtureId": "bdd87bc3-565e-438d-8bb3-1edc17c39a12"
+    },
+    {
+      "id": "P5-CLEAN-BR-LOST-REJECT",
+      "name": "Lost UI reject (clean payload)",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "http": 200,
+      "beforeStatus": "DEPT_APPROVED",
+      "afterStatus": "REJECTED",
+      "originalRequestBody": {
+        "comment": "Phase5 clean lost reject"
+      },
+      "fixtureId": "658bc074-99cf-4eaf-9b0b-02b08b2b7baa"
+    },
+    {
+      "id": "P5-CLEAN-BR-TR-DRAFT-TL-1920",
+      "name": "DRAFT transfer neutral timeline @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "timelineFragment": "Workflow Timeline\n\nNo workflow activity yet.",
+      "fixtureId": "bbcd857a-62d6-4d60-aa6b-2b26ff47c9f4"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-TR-PEN-1920",
+      "name": "Transfer pending no mutation buttons @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/transfers/dd7e0eeb-d021-4fea-90fb-73887f6fb04b"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-BRK-PEN-1920",
+      "name": "Breakage pending no mutation buttons @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/breakage/c1ed2547-ffb5-42fe-9394-90adda7a8bb5"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-LOST-PEN-1920",
+      "name": "Lost pending no mutation buttons @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/lost-items/4a8cea92-3f1c-457c-a392-88392fb6f310"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-TR-POST-1920",
+      "name": "Transfer posted no mutation buttons @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/transfers/29e19c1e-34b6-47b8-a7a8-72a23f45d4ba"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-BRK-APP-1920",
+      "name": "Breakage approved no mutation buttons @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/breakage/e3193edc-e2b1-4130-b70b-469d2d617999"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-LOST-APP-1920",
+      "name": "Lost approved no mutation buttons @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/lost-items/9962d18f-9fe0-454f-a43b-71e1f25b6c1e"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-LOST-REJ-1920",
+      "name": "Lost rejected no mutation buttons @ 1920",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/lost-items/e29f7af9-f65b-408c-a45a-67039d7e5cad"
+    },
+    {
+      "id": "P5-CLEAN-BR-TR-DRAFT-TL-768",
+      "name": "DRAFT transfer neutral timeline @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "timelineFragment": "Workflow Timeline\n\nNo workflow activity yet.",
+      "fixtureId": "bbcd857a-62d6-4d60-aa6b-2b26ff47c9f4"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-TR-PEN-768",
+      "name": "Transfer pending no mutation buttons @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/transfers/dd7e0eeb-d021-4fea-90fb-73887f6fb04b"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-BRK-PEN-768",
+      "name": "Breakage pending no mutation buttons @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/breakage/c1ed2547-ffb5-42fe-9394-90adda7a8bb5"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-LOST-PEN-768",
+      "name": "Lost pending no mutation buttons @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/lost-items/4a8cea92-3f1c-457c-a392-88392fb6f310"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-TR-POST-768",
+      "name": "Transfer posted no mutation buttons @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/transfers/29e19c1e-34b6-47b8-a7a8-72a23f45d4ba"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-BRK-APP-768",
+      "name": "Breakage approved no mutation buttons @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/breakage/e3193edc-e2b1-4130-b70b-469d2d617999"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-LOST-APP-768",
+      "name": "Lost approved no mutation buttons @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/lost-items/9962d18f-9fe0-454f-a43b-71e1f25b6c1e"
+    },
+    {
+      "id": "P5-CLEAN-BR-NEG-LOST-REJ-768",
+      "name": "Lost rejected no mutation buttons @ 768",
+      "pass": true,
+      "skipped": false,
+      "vacuous": false,
+      "requestRewriteUsed": false,
+      "actionText": "Download PDF\nPrint",
+      "route": "/lost-items/e29f7af9-f65b-408c-a45a-67039d7e5cad"
+    }
+  ]
+}

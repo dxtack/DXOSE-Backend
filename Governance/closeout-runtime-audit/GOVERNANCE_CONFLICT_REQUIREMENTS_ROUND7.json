@@ -1,0 +1,66 @@
+{
+  "executedAt": "2026-06-27T00:50:01.152Z",
+  "count": 10,
+  "rows": [
+    {
+      "requirementId": "C02-2.1-002",
+      "rule": "Internal workflow implementation must never be exposed to end users.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C02-2.1-003",
+      "rule": "Internal workflow step names must never be exposed to end users.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C02-2.3-001",
+      "rule": "Each module shall provide a consistent mapping between internal workflow states and standardized user-facing lifecycle states.",
+      "conflict": "Active documents pinned to workflow versions with GM step",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C02-2.3-002",
+      "rule": "Internal workflow identifiers must never be exposed to end users.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C05-5.2-002",
+      "rule": "Before Posting, the platform shall verify valid workflow state.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C05-5.2-011",
+      "rule": "Posting shall be automatically triggered upon successful final workflow approval unless a document-specific governance policy defines otherwise.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C07-7.2-001",
+      "rule": "Every operational document shall begin as a server-recognized draft unless Workflow Contracts define otherwise.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C08-8.6-003",
+      "rule": "Approve must not execute twice on the same version without detection.",
+      "conflict": "Active documents pinned to workflow versions with GM step",
+      "evidence": "CONSTITUTION_REQUIREMENT_TEST_LINKS.json heuristic"
+    },
+    {
+      "requirementId": "C15-15.3-001",
+      "rule": "Workflow comments shall become immutable once recorded.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    },
+    {
+      "requirementId": "C22-22.2-001",
+      "rule": "Every workflow action must generate an audit record.",
+      "conflict": "Runtime configuration conflicts with constitution requirement text",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json, PUBLISHED_WORKFLOW_VERSIONS.json"
+    }
+  ]
+}

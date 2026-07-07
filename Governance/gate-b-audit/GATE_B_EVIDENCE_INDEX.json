@@ -1,0 +1,74 @@
+{
+  "generated_at": "2026-06-27T16:23:37Z",
+  "evidence_items": [
+    {
+      "id": "EV-001",
+      "type": "code",
+      "path": "OSE-backend/src/services/posting.service.js",
+      "topics": [
+        "Ch5",
+        "Ch10"
+      ]
+    },
+    {
+      "id": "EV-002",
+      "type": "code",
+      "path": "OSE-backend/src/middleware/authorize.js",
+      "topics": [
+        "Ch4"
+      ]
+    },
+    {
+      "id": "EV-003",
+      "type": "code",
+      "path": "OSE-backend/src/engines/workflow-resolution.engine.js",
+      "topics": [
+        "Ch3",
+        "Ch4"
+      ]
+    },
+    {
+      "id": "EV-004",
+      "type": "code",
+      "path": "OSE-Frontend/src/app/core/guards/permission.guard.ts",
+      "topics": [
+        "Ch4"
+      ]
+    },
+    {
+      "id": "EV-005",
+      "type": "code",
+      "path": "OSE-Frontend/src/app/core/directives/keyboard-navigation.directive.ts",
+      "topics": [
+        "Ch17"
+      ]
+    },
+    {
+      "id": "EV-006",
+      "type": "schema",
+      "path": "OSE-backend/prisma/schema.prisma",
+      "topics": [
+        "Ch6",
+        "Ch8",
+        "Ch9",
+        "Ch22"
+      ]
+    },
+    {
+      "id": "EV-007",
+      "type": "governance",
+      "path": "docs/governance/CONSTITUTION_v2_CONFORMANCE_MATRIX.md",
+      "topics": [
+        "Ch29"
+      ]
+    },
+    {
+      "id": "EV-008",
+      "type": "gate_a",
+      "path": "Governance/constitution-extraction/CONSTITUTION_FRESH_REGISTER.csv",
+      "topics": [
+        "baseline"
+      ]
+    }
+  ]
+}

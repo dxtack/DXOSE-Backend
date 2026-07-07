@@ -1,0 +1,17 @@
+{
+  "scenario": "Get Pass timeline uses ApprovalRequest for current state; audit for Send Back",
+  "documentTimeline": {
+    "include": "approvalRequest.steps with actedByUser + requiredRole"
+  },
+  "builder": {
+    "primary": "buildApprovalChainFromRequest(approvalRequest)",
+    "fallback": "buildApprovalChainEntries(gp) — legacy stamp compatibility",
+    "sendBack": "sendBackLifecycleFromAudit / resubmitLifecycleFromAudit"
+  },
+  "tests": [
+    "Get Pass: approval chain from ApprovalRequest.currentStep",
+    "Get Pass: SEND_BACK audit emits constitutional metadata"
+  ],
+  "operationalMilestonesPreserved": ["SECURITY_OUT", "RETURN_PROCESSED", "CLOSED"],
+  "verified": true
+}

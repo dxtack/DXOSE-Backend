@@ -1,0 +1,366 @@
+{
+  "runAt": "2026-07-05T08:55:37.153Z",
+  "gate": "CLOSED_WITH_BLOCKED",
+  "summary": {
+    "pass": 38,
+    "fail": 0,
+    "blocked": 14
+  },
+  "results": [
+    {
+      "id": "RV01-VIEW-OPEN-1366x768",
+      "name": "Item View Modal opens",
+      "result": "PASS",
+      "viewport": "1366x768"
+    },
+    {
+      "id": "RV01-VIEW-SCROLL-1366x768",
+      "name": "Body scroll lock (ng-zorro class)",
+      "result": "PASS",
+      "note": "ant-scrolling-effect may defer",
+      "bodyClassLocked": false
+    },
+    {
+      "id": "RV01-VIEW-FIT-1366x768",
+      "name": "View modal fits viewport",
+      "result": "PASS",
+      "width": 763.3276977539062,
+      "height": 459.3533630371094,
+      "right": 1064.663818359375,
+      "bottom": 572.3720092773438
+    },
+    {
+      "id": "RV01-VIEW-HSCROLL-1366x768",
+      "name": "No horizontal overflow with view modal",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-VIEW-ESC-1366x768",
+      "name": "ESC closes view modal",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-IMG-1366x768",
+      "name": "Image preview tests",
+      "result": "BLOCKED",
+      "reason": "No item image in view modal"
+    },
+    {
+      "id": "RV01-CONSOLE-1366x768",
+      "name": "No console errors during modal flow",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-VIEW-OPEN-1536x864",
+      "name": "Item View Modal opens",
+      "result": "PASS",
+      "viewport": "1536x864"
+    },
+    {
+      "id": "RV01-VIEW-SCROLL-1536x864",
+      "name": "Body scroll lock (ng-zorro class)",
+      "result": "PASS",
+      "note": "ant-scrolling-effect may defer",
+      "bodyClassLocked": false
+    },
+    {
+      "id": "RV01-VIEW-FIT-1536x864",
+      "name": "View modal fits viewport",
+      "result": "PASS",
+      "width": 750.5659790039062,
+      "height": 451.67364501953125,
+      "right": 1143.282958984375,
+      "bottom": 572.188720703125
+    },
+    {
+      "id": "RV01-VIEW-HSCROLL-1536x864",
+      "name": "No horizontal overflow with view modal",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-VIEW-ESC-1536x864",
+      "name": "ESC closes view modal",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-IMG-1536x864",
+      "name": "Image preview tests",
+      "result": "BLOCKED",
+      "reason": "No item image in view modal"
+    },
+    {
+      "id": "RV01-CONSOLE-1536x864",
+      "name": "No console errors during modal flow",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-VIEW-OPEN-1920x1080",
+      "name": "Item View Modal opens",
+      "result": "PASS",
+      "viewport": "1920x1080"
+    },
+    {
+      "id": "RV01-VIEW-SCROLL-1920x1080",
+      "name": "Body scroll lock (ng-zorro class)",
+      "result": "PASS",
+      "note": "ant-scrolling-effect may defer",
+      "bodyClassLocked": false
+    },
+    {
+      "id": "RV01-VIEW-FIT-1920x1080",
+      "name": "View modal fits viewport",
+      "result": "PASS",
+      "width": 733.5980224609375,
+      "height": 441.462646484375,
+      "right": 1326.799072265625,
+      "bottom": 577.9837646484375
+    },
+    {
+      "id": "RV01-VIEW-HSCROLL-1920x1080",
+      "name": "No horizontal overflow with view modal",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-VIEW-ESC-1920x1080",
+      "name": "ESC closes view modal",
+      "result": "PASS"
+    },
+    {
+      "id": "RV01-IMG-1920x1080",
+      "name": "Image preview tests",
+      "result": "BLOCKED",
+      "reason": "No item image in view modal"
+    },
+    {
+      "id": "RV01-CONSOLE-1920x1080",
+      "name": "No console errors during modal flow",
+      "result": "PASS"
+    },
+    {
+      "id": "RV03-IM-LIST-Z80",
+      "name": "IM-LIST OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": null
+    },
+    {
+      "id": "RV03-TR-LIST-Z80",
+      "name": "TR-LIST OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z80",
+      "name": "GRN-DETAIL OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z80",
+      "name": "TR-DETAIL at 80%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z80",
+      "name": "BRK-DETAIL OK at 80% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z80",
+      "name": "IC-DETAIL at 80%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-IM-LIST-Z90",
+      "name": "IM-LIST OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-LIST-Z90",
+      "name": "TR-LIST OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z90",
+      "name": "GRN-DETAIL OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z90",
+      "name": "TR-DETAIL at 90%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z90",
+      "name": "BRK-DETAIL OK at 90% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z90",
+      "name": "IC-DETAIL at 90%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-IM-LIST-Z100",
+      "name": "IM-LIST OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-LIST-Z100",
+      "name": "TR-LIST OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z100",
+      "name": "GRN-DETAIL OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z100",
+      "name": "TR-DETAIL at 100%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z100",
+      "name": "BRK-DETAIL OK at 100% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z100",
+      "name": "IC-DETAIL at 100%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-IM-LIST-Z110",
+      "name": "IM-LIST OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-LIST-Z110",
+      "name": "TR-LIST OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z110",
+      "name": "GRN-DETAIL OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z110",
+      "name": "TR-DETAIL at 110%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z110",
+      "name": "BRK-DETAIL OK at 110% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z110",
+      "name": "IC-DETAIL at 110%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-IM-LIST-Z125",
+      "name": "IM-LIST OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-LIST-Z125",
+      "name": "TR-LIST OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-GRN-DETAIL-Z125",
+      "name": "GRN-DETAIL OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-TR-DETAIL-Z125",
+      "name": "TR-DETAIL at 125%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-BRK-DETAIL-Z125",
+      "name": "BRK-DETAIL OK at 125% zoom",
+      "result": "PASS",
+      "hScroll": false,
+      "rawStatus": false,
+      "actionsVisible": true
+    },
+    {
+      "id": "RV03-IC-DETAIL-Z125",
+      "name": "IC-DETAIL at 125%",
+      "result": "BLOCKED",
+      "reason": "No sample document id"
+    },
+    {
+      "id": "RV03-WIN-SCALE",
+      "name": "Windows Scaling 125% separate pass",
+      "result": "BLOCKED",
+      "reason": "BLOCKED — Environment (document separately from browser zoom)"
+    }
+  ]
+}

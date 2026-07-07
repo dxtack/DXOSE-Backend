@@ -1,0 +1,56 @@
+{
+  "generated_at": "2026-06-27T16:23:37Z",
+  "directory": "c:\\DX OS&E\\Governance\\gate-b-audit",
+  "files": [
+    {
+      "file_name": "GATE_B_BLOCKED_ITEMS.md",
+      "sha256": "30ED4C95DBE8A7196DC5F097400C572710DDD663F541B629551F72F61EE6E6CC",
+      "size_bytes": 3093
+    },
+    {
+      "file_name": "gate_b_build_audit.py",
+      "sha256": "86F4D751400F182FC36FD26115ED80C0C89955309F33D393353A6EDBFA03E6F9",
+      "size_bytes": 38374
+    },
+    {
+      "file_name": "GATE_B_COMMAND_LOG.md",
+      "sha256": "67D5DA345BDDD439D97977F197DB7597DAAC6CC4AE16A2F6AAD9EFAD84A9A573",
+      "size_bytes": 2599
+    },
+    {
+      "file_name": "GATE_B_ENVIRONMENT_BASELINE.json",
+      "sha256": "3F5ADEF91809212B65968E23EE96EE409517CE4EEDB60363F32303FD66D1042A",
+      "size_bytes": 4928
+    },
+    {
+      "file_name": "GATE_B_EVIDENCE_INDEX.json",
+      "sha256": "D32AE8A5DD65484740AEE7867E92EEAF7A07F2442A166CDBE47E6A375D533A46",
+      "size_bytes": 1564
+    },
+    {
+      "file_name": "GATE_B_FILE_INTEGRITY.json",
+      "sha256": "65B43B79D40A4617213BE2E61102DFBC7B50BCFB76491701663D6B6F0C9C0271",
+      "size_bytes": 1866
+    },
+    {
+      "file_name": "GATE_B_FINDINGS.md",
+      "sha256": "179F5F10E4E2204D30346EC2CBD8A3E0CE40C4EBCE8AB2ECFB4FBA6AE180CD47",
+      "size_bytes": 8721
+    },
+    {
+      "file_name": "GATE_B_REQUIREMENT_MATRIX.csv",
+      "sha256": "182A8B4A4DE4C480D1B6D40BD01B44024BB3EB3061AAA9861F85602A3815E782",
+      "size_bytes": 190366
+    },
+    {
+      "file_name": "GATE_B_RUNTIME_SCENARIOS.csv",
+      "sha256": "7CBD8A6CFC43323E596B5A7354A0EE40A8F9FA41F4D43D6653463AD3537755D5",
+      "size_bytes": 683
+    },
+    {
+      "file_name": "GATE_B_SUMMARY.json",
+      "sha256": "3B273FE6E562B0EF3126E6E01C3FEBAFBCE71E032955724CB95CDD8645173D74",
+      "size_bytes": 527
+    }
+  ]
+}

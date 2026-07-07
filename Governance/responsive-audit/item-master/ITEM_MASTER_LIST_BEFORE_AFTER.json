@@ -1,0 +1,136 @@
+{
+  "screen": { "id": "IM-LIST", "name": "Item Master List", "route": "/items", "component": "ItemsListComponent" },
+  "generatedAt": "2026-07-03T11:35:00.000Z",
+  "method": "Playwright chromium, browser runtime getBoundingClientRect(), 100% browser zoom, read-only minted session (ZERO DB writes).",
+  "sources": {
+    "before": "Governance/responsive-audit/pilot/ITEM_MASTER_TRANSFER_RUNTIME_RESULTS.json (IM-LIST, primary matrix) -> extracted to ITEM_MASTER_LIST_RUNTIME_RESULTS_BEFORE.json",
+    "after": "Governance/responsive-audit/item-master/ITEM_MASTER_LIST_RUNTIME_RESULTS.json"
+  },
+  "note_column_count": "BEFORE extractor dropped the empty-header image column (counted 8); AFTER extractor keeps it as '(blank)' (counts 9). The rendered columns are identical in both phases; only the counting rule differs.",
+  "viewports": {
+    "1366x768": {
+      "before": {
+        "pageVerticalScroll": true,
+        "shellHeight": 1132.8,
+        "siderHeight": 1132.8,
+        "contentHeight": 1132.8,
+        "cardBottom": 1108.8,
+        "tableBodyClientHeight": 583,
+        "tableBodyMaxHeight": "583px",
+        "paginationVisibleInViewport": false,
+        "footerVisibleInViewport": false,
+        "blankBelowTablePx": 42,
+        "verticalScrollOwners": 0,
+        "result": "PASS (document-scroll masked defects)"
+      },
+      "after": {
+        "pageVerticalScroll": false,
+        "shellHeight": 768,
+        "siderHeight": 768,
+        "siderMenuInternalScroll": true,
+        "siderFooterReachable": true,
+        "contentHeight": 703,
+        "cardBottom": 744,
+        "tableBodyClientHeight": 218,
+        "tableBodyScrollHeight": 461,
+        "tableBodyMaxHeight": "218px",
+        "paginationBottom": 735,
+        "paginationVisibleInViewport": true,
+        "footerBottom": 743,
+        "footerVisibleInViewport": true,
+        "blankBelowTablePx": 1,
+        "verticalScrollOwners": 2,
+        "verticalScrollOwnerList": ["sidebar .main-shell__menu", "table .ant-table-body"],
+        "actionsReachable": true,
+        "columnCount": 9,
+        "bodyHorizontalScroll": false
+      }
+    },
+    "1536x864": {
+      "before": {
+        "pageVerticalScroll": true,
+        "shellHeight": 1132.8,
+        "siderHeight": 1132.8,
+        "contentHeight": 1132.8,
+        "cardBottom": 1108.8,
+        "tableBodyClientHeight": 583,
+        "tableBodyMaxHeight": "583px",
+        "paginationVisibleInViewport": false,
+        "footerVisibleInViewport": false,
+        "blankBelowTablePx": 42,
+        "verticalScrollOwners": 0,
+        "result": "PASS (document-scroll masked defects)"
+      },
+      "after": {
+        "pageVerticalScroll": false,
+        "shellHeight": 864,
+        "siderHeight": 864,
+        "siderMenuInternalScroll": true,
+        "siderFooterReachable": true,
+        "contentHeight": 799,
+        "cardBottom": 840,
+        "tableBodyClientHeight": 314,
+        "tableBodyScrollHeight": 471,
+        "tableBodyMaxHeight": "314px",
+        "paginationBottom": 831,
+        "paginationVisibleInViewport": true,
+        "footerBottom": 839,
+        "footerVisibleInViewport": true,
+        "blankBelowTablePx": 1,
+        "verticalScrollOwners": 2,
+        "verticalScrollOwnerList": ["sidebar .main-shell__menu", "table .ant-table-body"],
+        "actionsReachable": true,
+        "columnCount": 9,
+        "bodyHorizontalScroll": false
+      }
+    },
+    "1920x1080": {
+      "before": {
+        "pageVerticalScroll": true,
+        "shellHeight": 1132.8,
+        "siderHeight": 1132.8,
+        "contentHeight": 1132.8,
+        "cardBottom": 1108.8,
+        "cardWidth": 1590,
+        "tableBodyClientHeight": 551,
+        "tableBodyMaxHeight": "551px",
+        "paginationY": 1067.8,
+        "paginationBottom": 1099.8,
+        "paginationVisibleInViewport": false,
+        "footerBottom": 1132.8,
+        "footerVisibleInViewport": false,
+        "blankBelowTablePx": 33,
+        "verticalScrollOwners": 0,
+        "result": "PARTIAL (flag: pagination-below-fold)"
+      },
+      "after": {
+        "pageVerticalScroll": false,
+        "shellHeight": 1080,
+        "siderHeight": 1080,
+        "siderMenuInternalScroll": true,
+        "siderFooterReachable": true,
+        "contentHeight": 1015,
+        "cardBottom": 1056,
+        "cardWidth": 1590,
+        "tableBodyClientHeight": 530,
+        "tableBodyScrollHeight": 530,
+        "tableBodyMaxHeight": "530px",
+        "paginationBottom": 1047,
+        "paginationVisibleInViewport": true,
+        "footerBottom": 1055,
+        "footerVisibleInViewport": true,
+        "blankBelowTablePx": 1,
+        "verticalScrollOwners": 1,
+        "verticalScrollOwnerList": ["sidebar .main-shell__menu"],
+        "actionsReachable": true,
+        "columnCount": 9,
+        "bodyHorizontalScroll": false,
+        "note": "Registry canvas remains full-bleed (card width 1590 > 1400 inner cap) per its existing contract; NOT capped to 1400 in this range."
+      }
+    }
+  },
+  "tableBodyHeightMonotonicity": {
+    "before": { "1366": 583, "1536": 583, "1920": 551, "monotonicIncreasing": false, "note": "DROPS at 1920 (sider-pinned, viewport-independent)." },
+    "after": { "1366": 218, "1536": 314, "1920": 530, "monotonicIncreasing": true }
+  }
+}

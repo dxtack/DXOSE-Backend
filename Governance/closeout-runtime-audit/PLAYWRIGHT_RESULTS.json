@@ -1,0 +1,38 @@
+{
+  "executedAt": "2026-06-27T00:14:01.536Z",
+  "note": "Manual Playwright scripts from OSE-Frontend/scripts — not ng e2e runner",
+  "frontendBase": "http://127.0.0.1:4200",
+  "apiBase": "http://127.0.0.1:4000/api",
+  "scriptsDiscovered": [
+    "OSE-Frontend/scripts/verify-grn-create-runtime.mjs",
+    "OSE-Frontend/scripts/verify-grn-detail-timeline-phase4.mjs",
+    "OSE-Frontend/scripts/verify-grn-create-excel-layout.mjs",
+    "OSE-Frontend/scripts/verify-phase5-detail-timeline.mjs",
+    "OSE-Frontend/scripts/verify-phase6-detail-timeline.mjs",
+    "OSE-Frontend/scripts/verify-phase7-detail-timeline.mjs",
+    "OSE-Frontend/scripts/measure-*.mjs",
+    "OSE-Frontend/scripts/capture-acc-overview-screenshot.mjs"
+  ],
+  "noPlaywrightConfigInRepo": true,
+  "noNgE2eSpecs": true,
+  "results": [
+    {
+      "script": "verify-grn-create-runtime.mjs",
+      "exit": 0,
+      "pass": true,
+      "url": "http://127.0.0.1:4200/inventory/grn/new",
+      "layoutOk": true,
+      "consoleErrors": 0,
+      "pageErrors": 0,
+      "screenshot": "Governance/final-package/runtime-evidence/grn-create-runtime.png"
+    },
+    {
+      "script": "verify-grn-detail-timeline-phase4.mjs",
+      "exit": 0,
+      "pass": true,
+      "fixtureGrn": "GRN-2026-00019",
+      "domCountMatchesApi": true,
+      "expectedEntryCount": 15
+    }
+  ]
+}

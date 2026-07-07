@@ -1,0 +1,98 @@
+{
+  "manifest_version": "gate-a-review-1.0",
+  "generated_by": "gate_a_review_pack.py",
+  "generation_timestamp": "2026-06-27T13:00:37Z",
+  "directory": "Governance/constitution-extraction",
+  "files": [
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_FRESH_REGISTER.csv",
+      "file_name": "CONSTITUTION_FRESH_REGISTER.csv",
+      "file_size_bytes": 208186,
+      "line_count": 421,
+      "sha256": "B508A8481AAD244CE216512A731C6C2EA749B4A9837C7666E5BA908385EEC703",
+      "generated_by": "extract_constitution_from_pdf.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:22Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_FRESH_REGISTER.md",
+      "file_name": "CONSTITUTION_FRESH_REGISTER.md",
+      "file_size_bytes": 71296,
+      "line_count": 589,
+      "sha256": "E208F2C5F0111C3DE1755D19B5EFFF4590C996D4F5A7461E1AE322EFB44D2AA0",
+      "generated_by": "extract_constitution_from_pdf.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:22Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_EXTRACTION_VALIDATION.json",
+      "file_name": "CONSTITUTION_EXTRACTION_VALIDATION.json",
+      "file_size_bytes": 3359,
+      "line_count": 92,
+      "sha256": "968728F335B7603C14F8278DFCA5C9A206EF0D82E4E072EB02ED4C5AD9E51370",
+      "generated_by": "validate_constitution_extraction.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:37Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_SOURCE_FIDELITY.json",
+      "file_name": "CONSTITUTION_SOURCE_FIDELITY.json",
+      "file_size_bytes": 865,
+      "line_count": 21,
+      "sha256": "B2397045C37BC264D8D2A3C53CB53C1C22A320C9D8DBD1F388631BABCC98C261",
+      "generated_by": "validate_constitution_extraction.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:37Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/validate_constitution_extraction.py",
+      "file_name": "validate_constitution_extraction.py",
+      "file_size_bytes": 16712,
+      "line_count": 398,
+      "sha256": "94F5F5C0E1343A378091D3BF619ABE28E5E13C85D6560823A4696DA3574BF04A",
+      "generated_by": "validate_constitution_extraction.py",
+      "generation_timestamp": "2026-06-27T13:00:37Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/validate_source_fidelity.py",
+      "file_name": "validate_source_fidelity.py",
+      "file_size_bytes": 6867,
+      "line_count": 185,
+      "sha256": "9260CE238CB1585F85BE2DBD866DFA83C0830152570ADDAD5ABFF696BE52000B",
+      "generated_by": "validate_constitution_extraction.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:37Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/constitution_semantic.py",
+      "file_name": "constitution_semantic.py",
+      "file_size_bytes": 12976,
+      "line_count": 232,
+      "sha256": "7188CEA4573918287BCE8A3771CA2E4A4BCAC34D74A238387DEF4B7054BF2641",
+      "generated_by": "validate_constitution_extraction.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:37Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_EXTRACTION_SOURCE.json",
+      "file_name": "CONSTITUTION_EXTRACTION_SOURCE.json",
+      "file_size_bytes": 602,
+      "line_count": 14,
+      "sha256": "BDE73864BC65D09B52069851B538973CFFBE8CFCD8541924529468D3827DCB12",
+      "generated_by": "extract_constitution_from_pdf.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:22Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/extract_constitution_from_pdf.py",
+      "file_name": "extract_constitution_from_pdf.py",
+      "file_size_bytes": 7064,
+      "line_count": 192,
+      "sha256": "115AAE5287324B77336566F74F294469F5E68FD2D655103E5529BE62DC58A1BF",
+      "generated_by": "extract_constitution_from_pdf.py",
+      "generation_timestamp": "2026-06-27T13:00:37Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/GATE_A_SEMANTIC_REVIEW.md",
+      "file_name": "GATE_A_SEMANTIC_REVIEW.md",
+      "file_size_bytes": 28463,
+      "line_count": 580,
+      "sha256": "F5D338A97C1B7A15282B75609081AB0FA845EF3DE610A0511510A0AD83BB9A97",
+      "generated_by": "validate_constitution_extraction.py (pipeline output)",
+      "generation_timestamp": "2026-06-27T13:00:37Z"
+    }
+  ]
+}

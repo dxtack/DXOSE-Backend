@@ -1,0 +1,213 @@
+{
+  "executedAt": "2026-06-27T00:55:31.153Z",
+  "totals": {
+    "total": 226,
+    "PASS": 212,
+    "FAIL": 14,
+    "BLOCKED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "summaryTable": [
+    {
+      "resource": "breakage",
+      "policy": "Document-owner-scoped",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "categories",
+      "policy": "Property reference",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "dashboard",
+      "policy": "Property-wide summary",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "departments",
+      "policy": "Property reference",
+      "total": 27,
+      "PASS": 26,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "getPass",
+      "policy": "Document-owner-scoped",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "grn",
+      "policy": "Document/location scoped",
+      "total": 9,
+      "PASS": 9,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "inventoryCount",
+      "policy": "Store/location-scoped",
+      "total": 9,
+      "PASS": 9,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "inventoryHistory",
+      "policy": "Derived from movement scope",
+      "total": 9,
+      "PASS": 9,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "items",
+      "policy": "Property-shared reference data",
+      "total": 27,
+      "PASS": 24,
+      "FAIL": 3,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "ledger",
+      "policy": "Location scope for dept roles; property-wide for control roles",
+      "total": 9,
+      "PASS": 9,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "locations",
+      "policy": "Store/location-scoped",
+      "total": 27,
+      "PASS": 26,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "lost",
+      "policy": "Document-owner-scoped",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "movements",
+      "policy": "Department-scoped operational",
+      "total": 9,
+      "PASS": 9,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "reports",
+      "policy": "Derived scope — property-wide for control roles",
+      "total": 9,
+      "PASS": 9,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "stock",
+      "policy": "Location scope for dept; property-wide for control",
+      "total": 9,
+      "PASS": 9,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "suppliers",
+      "policy": "Property reference",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "transfer",
+      "policy": "Document/location scoped",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "units",
+      "policy": "Property reference",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "unknown",
+      "policy": "Unknown",
+      "total": 1,
+      "PASS": 1,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    },
+    {
+      "resource": "workflowPipeline",
+      "policy": "Property-wide pipeline view",
+      "total": 9,
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "OBSERVE": 0,
+      "NOT_APPLICABLE": 0
+    }
+  ],
+  "observeCount": 0
+}

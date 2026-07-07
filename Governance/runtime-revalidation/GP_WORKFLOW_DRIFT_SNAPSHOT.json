@@ -1,0 +1,257 @@
+{
+  "executedAt": "2026-06-27T18:23:31.419Z",
+  "chain": [
+    {
+      "tenant": "dx-marina-hotel",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "platform",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "closeout-audit-hotel-disposable",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "dx-hospitality-group",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "dx-executive-suites",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "voco-khobar",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "voco",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "rotana-2",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "closeout-audit-org-disposable",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "roma-1",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "rotana",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "rotana-1",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "voco-khobar-hotel",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "dx-airport-hotel",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "grand-horizon",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "hotel-test",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "test-org",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "dx-grand-palace",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "roma-2",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "tets-org-1",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    },
+    {
+      "tenant": "hotel-test1",
+      "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "steps": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "hasGM": true
+    }
+  ]
+}

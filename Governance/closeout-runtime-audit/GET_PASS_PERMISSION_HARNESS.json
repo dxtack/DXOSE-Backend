@@ -1,0 +1,195 @@
+{
+  "executedAt": "2026-06-27T00:34:34.616Z",
+  "script": "35-gp-permission-grid-round6",
+  "harnessExit": 1,
+  "counts": {
+    "PASS": 14,
+    "FAIL": 16,
+    "BLOCKED": 0,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 30,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": true,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "GP-create-NO_ASSIGN",
+      "result": "FAIL",
+      "http": 201
+    },
+    {
+      "id": "GP-create-AUDITOR",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "GP-create-DEPT",
+      "result": "PASS",
+      "http": 201
+    },
+    {
+      "id": "GP-create-STOREKEEPER",
+      "result": "FAIL",
+      "http": 201
+    },
+    {
+      "id": "GP-update-NO_ASSIGN",
+      "result": "FAIL",
+      "http": 500,
+      "note": "UNEXPECTED_500"
+    },
+    {
+      "id": "GP-update-AUDITOR",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-update-CC",
+      "result": "FAIL",
+      "http": 500,
+      "note": "\nInvalid `prisma.user.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\platform\\draftGovernance.service.js:127:37\n\n  124  * Ch.7.4 — block edits when draft owner is deactivated unless admin override.\n  125  */\n  126 async function assertDraftOwnerActive({ ownerId, tenantId, user, allowAdminOverride = true }) {\n→ 127     const owner = await prisma.user.findFirst({\n            where: {\n              id: \"98cc9b62-6cfd-4746-9df5-878d9be82cd9\",\n              tenantId: \"1e7c184a-bd45-448a-ad75-27a512f124d4\",\n              ~~~~~~~~\n          ?   AND?: UserWhereInput | UserWhereInput[],\n          ?   OR?: UserWhereInput[],\n          ?   NOT?: UserWhereInput | UserWhereInput[],\n          ?   email?: StringFilter | String,\n          ?   passwordHash?: StringFilter | String,\n          ?   firstName?: StringFilter | String,\n          ?   lastName?: StringFilter | String,\n          ?   department?: StringNullableFilter | String | Null,\n          ?   phone?: StringNullableFilter | String | Null,\n          ?   isActive?: BoolFilter | Boolean,\n          ?   lastLoginAt?: DateTimeNullableFilter | DateTime | Null,\n          ?   permissionVersion?: IntFilter | Int,\n          ?   createdAt?: DateTimeFilter | DateTime,\n          ?   updatedAt?: DateTimeFilter | DateTime,\n          ?   approvalStepsActed?: ApprovalStepListRelationFilter,\n          ?   auditLogs?: AuditLogListRelationFilter,\n          ?   generatedReports?: GeneratedReportListRelationFilter,\n          ?   getPassReturnsReg?: GetPassReturnListRelationFilter,\n          ?   getPassReturnsSec?: GetPassReturnListRelationFilter,\n          ?   getPassesCheckout?: GetPassListRelationFilter,\n          ?   getPassesClosed?: GetPassListRelationFilter,\n          ?   getPassesCreated?: GetPassListRelationFilter,\n          ?   getPassesDeptApp?: GetPassListRelationFilter,\n          ?   getPassesFinApp?: GetPassListRelationFilter,\n          ?   getPassesCostCtrlApp?: GetPassListRelationFilter,\n          ?   getPassesGmApp?: GetPassListRelationFilter,\n          ?   getPassesSecApp?: GetPassListRelationFilter,\n          ?   getPassesDestinationSecApp?: GetPassListRelationFilter,\n          ?   getPassesDestinationSecExit?: GetPassListRelationFilter,\n          ?   getPassesReceived?: GetPassListRelationFilter,\n          ?   getPassesDestinationDeptAccepted?: GetPassListRelationFilter,\n          ?   grnApproved?: GrnImportListRelationFilter,\n          ?   grnImported?: GrnImportListRelationFilter,\n          ?   grnLastEdited?: GrnImportListRelationFilter,\n          ?   grnPosted?: GrnImportListRelationFilter,\n          ?   grnRejected?: GrnImportListRelationFilter,\n          ?   importSessions?: ImportSessionListRelationFilter,\n          ?   ledgerEntries?: InventoryLedgerListRelationFilter,\n          ?   locationUsers?: LocationUserListRelationFilter,\n          ?   movementsCreated?: MovementDocumentListRelationFilter,\n          ?   refreshTokens?: RefreshTokenListRelationFilter,\n          ?   stockReports?: SavedStockReportListRelationFilter,\n          ?   countSessions?: StockCountSessionListRelationFilter,\n          ?   stockCountLocationQtyEdits?: StockCountLocationQtyListRelationFilter,\n          ?   storeIssues?: StoreIssueListRelationFilter,\n          ?   reqApproved?: StoreRequisitionListRelationFilter,\n          ?   reqRejected?: StoreRequisitionListRelationFilter,\n          ?   reqRequested?: StoreRequisitionListRelationFilter,\n          ?   trfApproved?: StoreTransferListRelationFilter,\n          ?   trfPosted?: StoreTransferListRelationFilter,\n          ?   trfReceived?: StoreTransferListRelationFilter,\n          ?   trfRejected?: StoreTransferListRelationFilter,\n          ?   trfRequested?: StoreTransferListRelationFilter,\n          ?   adminLogs?: SuperAdminLogListRelationFilter,\n          ?   memberships?: TenantMemberListRelationFilter,\n          ?   systemNotifications?: SystemNotificationListRelationFilter,\n          ?   lostFoundItems?: LostFoundItemListRelationFilter,\n          ?   urUserOverrides?: UrUserPermissionOverrideListRelationFilter,\n          ?   urUserScopes?: UrUserScopeListRelationFilter,\n          ?   urAssignments?: UrUserAssignmentListRelationFilter,\n          ?   urOverrides?: UrUserOverrideListRelationFilter,\n          ?   accFieldSecurityRules?: AccFieldSecurityRuleListRelationFilter,\n          ?   accUserExceptions?: AccUserExceptionListRelationFilter,\n          ?   accScheduledAccess?: AccScheduledAccessListRelationFilter,\n          ?   accRuntimeSettingsUpdated?: AccRuntimeSettingListRelationFilter,\n          ?   urAuditEventsActor?: UrAuditEventListRelationFilter,\n          ?   urAuditEventsTarget?: UrAuditEventListRelationFilter\n            },\n            select: {\n              id: true,\n              isActive: true\n            }\n          })\n\nUnknown argument `tenantId`. Available options are marked with ?."
+    },
+    {
+      "id": "GP-update-DEPT",
+      "result": "FAIL",
+      "http": 500,
+      "note": "\nInvalid `prisma.user.findFirst()` invocation in\nC:\\DX OS&E\\OSE-backend\\src\\platform\\draftGovernance.service.js:127:37\n\n  124  * Ch.7.4 — block edits when draft owner is deactivated unless admin override.\n  125  */\n  126 async function assertDraftOwnerActive({ ownerId, tenantId, user, allowAdminOverride = true }) {\n→ 127     const owner = await prisma.user.findFirst({\n            where: {\n              id: \"98cc9b62-6cfd-4746-9df5-878d9be82cd9\",\n              tenantId: \"1e7c184a-bd45-448a-ad75-27a512f124d4\",\n              ~~~~~~~~\n          ?   AND?: UserWhereInput | UserWhereInput[],\n          ?   OR?: UserWhereInput[],\n          ?   NOT?: UserWhereInput | UserWhereInput[],\n          ?   email?: StringFilter | String,\n          ?   passwordHash?: StringFilter | String,\n          ?   firstName?: StringFilter | String,\n          ?   lastName?: StringFilter | String,\n          ?   department?: StringNullableFilter | String | Null,\n          ?   phone?: StringNullableFilter | String | Null,\n          ?   isActive?: BoolFilter | Boolean,\n          ?   lastLoginAt?: DateTimeNullableFilter | DateTime | Null,\n          ?   permissionVersion?: IntFilter | Int,\n          ?   createdAt?: DateTimeFilter | DateTime,\n          ?   updatedAt?: DateTimeFilter | DateTime,\n          ?   approvalStepsActed?: ApprovalStepListRelationFilter,\n          ?   auditLogs?: AuditLogListRelationFilter,\n          ?   generatedReports?: GeneratedReportListRelationFilter,\n          ?   getPassReturnsReg?: GetPassReturnListRelationFilter,\n          ?   getPassReturnsSec?: GetPassReturnListRelationFilter,\n          ?   getPassesCheckout?: GetPassListRelationFilter,\n          ?   getPassesClosed?: GetPassListRelationFilter,\n          ?   getPassesCreated?: GetPassListRelationFilter,\n          ?   getPassesDeptApp?: GetPassListRelationFilter,\n          ?   getPassesFinApp?: GetPassListRelationFilter,\n          ?   getPassesCostCtrlApp?: GetPassListRelationFilter,\n          ?   getPassesGmApp?: GetPassListRelationFilter,\n          ?   getPassesSecApp?: GetPassListRelationFilter,\n          ?   getPassesDestinationSecApp?: GetPassListRelationFilter,\n          ?   getPassesDestinationSecExit?: GetPassListRelationFilter,\n          ?   getPassesReceived?: GetPassListRelationFilter,\n          ?   getPassesDestinationDeptAccepted?: GetPassListRelationFilter,\n          ?   grnApproved?: GrnImportListRelationFilter,\n          ?   grnImported?: GrnImportListRelationFilter,\n          ?   grnLastEdited?: GrnImportListRelationFilter,\n          ?   grnPosted?: GrnImportListRelationFilter,\n          ?   grnRejected?: GrnImportListRelationFilter,\n          ?   importSessions?: ImportSessionListRelationFilter,\n          ?   ledgerEntries?: InventoryLedgerListRelationFilter,\n          ?   locationUsers?: LocationUserListRelationFilter,\n          ?   movementsCreated?: MovementDocumentListRelationFilter,\n          ?   refreshTokens?: RefreshTokenListRelationFilter,\n          ?   stockReports?: SavedStockReportListRelationFilter,\n          ?   countSessions?: StockCountSessionListRelationFilter,\n          ?   stockCountLocationQtyEdits?: StockCountLocationQtyListRelationFilter,\n          ?   storeIssues?: StoreIssueListRelationFilter,\n          ?   reqApproved?: StoreRequisitionListRelationFilter,\n          ?   reqRejected?: StoreRequisitionListRelationFilter,\n          ?   reqRequested?: StoreRequisitionListRelationFilter,\n          ?   trfApproved?: StoreTransferListRelationFilter,\n          ?   trfPosted?: StoreTransferListRelationFilter,\n          ?   trfReceived?: StoreTransferListRelationFilter,\n          ?   trfRejected?: StoreTransferListRelationFilter,\n          ?   trfRequested?: StoreTransferListRelationFilter,\n          ?   adminLogs?: SuperAdminLogListRelationFilter,\n          ?   memberships?: TenantMemberListRelationFilter,\n          ?   systemNotifications?: SystemNotificationListRelationFilter,\n          ?   lostFoundItems?: LostFoundItemListRelationFilter,\n          ?   urUserOverrides?: UrUserPermissionOverrideListRelationFilter,\n          ?   urUserScopes?: UrUserScopeListRelationFilter,\n          ?   urAssignments?: UrUserAssignmentListRelationFilter,\n          ?   urOverrides?: UrUserOverrideListRelationFilter,\n          ?   accFieldSecurityRules?: AccFieldSecurityRuleListRelationFilter,\n          ?   accUserExceptions?: AccUserExceptionListRelationFilter,\n          ?   accScheduledAccess?: AccScheduledAccessListRelationFilter,\n          ?   accRuntimeSettingsUpdated?: AccRuntimeSettingListRelationFilter,\n          ?   urAuditEventsActor?: UrAuditEventListRelationFilter,\n          ?   urAuditEventsTarget?: UrAuditEventListRelationFilter\n            },\n            select: {\n              id: true,\n              isActive: true\n            }\n          })\n\nUnknown argument `tenantId`. Available options are marked with ?."
+    },
+    {
+      "id": "GP-update-FIN",
+      "result": "FAIL",
+      "http": 500,
+      "note": "UNEXPECTED_500"
+    },
+    {
+      "id": "GP-submit-NO_ASSIGN",
+      "result": "FAIL",
+      "http": 200,
+      "note": "AUTHORIZATION_BYPASS"
+    },
+    {
+      "id": "GP-submit-AUDITOR",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-submit-CC",
+      "result": "FAIL",
+      "http": 500,
+      "note": "Only DRAFT can be submitted"
+    },
+    {
+      "id": "GP-submit-DEPT",
+      "result": "FAIL",
+      "http": 500,
+      "note": "Only DRAFT can be submitted"
+    },
+    {
+      "id": "GP-submit-FIN",
+      "result": "FAIL",
+      "http": 500,
+      "note": "UNEXPECTED_500"
+    },
+    {
+      "id": "GP-approve_dept_cc_step-NO_ASSIGN",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-approve_dept_cc_step-AUDITOR",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-approve_dept_cc_step-CC",
+      "result": "FAIL",
+      "http": 200,
+      "note": "AUTHORIZATION_BYPASS"
+    },
+    {
+      "id": "GP-approve_dept_cc_step-DEPT",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-approve_dept_cc_step-FIN",
+      "result": "FAIL",
+      "http": 200,
+      "note": "AUTHORIZATION_BYPASS"
+    },
+    {
+      "id": "GP-reject_cc-NO_ASSIGN",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-reject_cc-AUDITOR",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-reject_cc-CC",
+      "result": "FAIL",
+      "http": 200,
+      "note": "AUTHORIZATION_BYPASS"
+    },
+    {
+      "id": "GP-reject_cc-DEPT",
+      "result": "FAIL",
+      "http": 500,
+      "note": "UNEXPECTED_500"
+    },
+    {
+      "id": "GP-reject_cc-FIN",
+      "result": "FAIL",
+      "http": 500,
+      "note": "UNEXPECTED_500"
+    },
+    {
+      "id": "GP-delete-NO_ASSIGN",
+      "result": "PASS",
+      "http": 409,
+      "note": "LIFECYCLE_BLOCK_NOT_AUTHZ_BYPASS"
+    },
+    {
+      "id": "GP-delete-AUDITOR",
+      "result": "PASS",
+      "http": 403,
+      "note": "PERMISSION_DENIED"
+    },
+    {
+      "id": "GP-delete-CC",
+      "result": "PASS",
+      "http": 409,
+      "note": "Lifecycle guard"
+    },
+    {
+      "id": "GP-delete-DEPT",
+      "result": "PASS",
+      "http": 409,
+      "note": "LIFECYCLE_BLOCK_NOT_AUTHZ_BYPASS"
+    },
+    {
+      "id": "GP-delete-FIN",
+      "result": "PASS",
+      "http": 409,
+      "note": "LIFECYCLE_BLOCK_NOT_AUTHZ_BYPASS"
+    },
+    {
+      "id": "GP-submit-NO_ASSIGN-disposable",
+      "result": "FAIL",
+      "http": 200
+    }
+  ]
+}

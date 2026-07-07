@@ -1,0 +1,92 @@
+{
+  "executedAt": "2026-06-27T00:45:31.425Z",
+  "round5ReferenceUnchanged": {
+    "route": "/lost-items/:id/approve-dept",
+    "fixtureType": "INTERNAL_LOST_CHAIN",
+    "role": "DEPT_MANAGER_FB",
+    "initialStatus": "DRAFT",
+    "http": 200,
+    "statusAfter": "DEPT_APPROVED",
+    "accVersionPin": null,
+    "evidence": "LEGACY_ROUTE_CLASSIFICATION.json lostDeepDive[0]"
+  },
+  "round6RegressionExplanation": {
+    "note": "Round 6 used per-route fresh INTERNAL doc with generic DEPT actor — got 403 on approve-dept",
+    "explanation": "Round 5/7 use DEPT_MANAGER_FB with ISSUE_APPROVE/APPROVE_LOST, doc createdBy=dept user, same department/location as assignment. Round 6 script did not guarantee APPROVE_LOST actor match on first step."
+  },
+  "round7ReproductionAttempt": {
+    "http": 403,
+    "message": "Action \"read\" denied: document outside your department/location scope.",
+    "cause": "getLostById now calls assertInScope(SCOPE_MODULE.LOST) before approve-dept; Round 7 probe blocked on read gate despite identical fixture fields as Round 5 script (INTERNAL, DRAFT, no ApprovalRequest, DEPT_MANAGER_FB, sourceLocationId=FB store).",
+    "round5EvidencePreserved": "LEGACY_ROUTE_CLASSIFICATION.json lostDeepDive[0] — HTTP 200, DEPT_APPROVED, no ACC pin (2026-06-26 runtime). Defect #10 not downgraded."
+  },
+  "reproduceConditions": [
+    {
+      "step": "fixture_created",
+      "sourceType": "INTERNAL",
+      "status": "DRAFT",
+      "approvalRequest": false,
+      "createdBy": "165a9355-19d6-49b9-87b0-1180c8d23d07",
+      "role": "DEPT_MANAGER_FB",
+      "permissions": [
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_APPROVE",
+        "APPROVE_BREAKAGE",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_CREATE",
+        "LOST_FOUND_RETURN",
+        "REQUISITION_APPROVE",
+        "GET_PASS_APPROVE"
+      ],
+      "assignment": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "locationId": "c031c268-194d-4211-beb8-0910da8f131d"
+    }
+  ],
+  "sequentialChainOnSameDocument": [
+    {
+      "step": "approve-dept",
+      "role": "DEPT_MANAGER_FB",
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW"
+      ],
+      "http": 403,
+      "message": "Action \"read\" denied: document outside your department/location scope.",
+      "before": {
+        "status": "DRAFT",
+        "sourceType": "INTERNAL",
+        "approvalRequestId": null,
+        "accVersionPin": null,
+        "timeline": [],
+        "audit": [],
+        "ledgerCount": 0,
+        "stockPosted": false
+      },
+      "after": {
+        "status": "DRAFT",
+        "sourceType": "INTERNAL",
+        "approvalRequestId": null,
+        "accVersionPin": null,
+        "timeline": [],
+        "audit": [],
+        "ledgerCount": 0,
+        "stockPosted": false
+      },
+      "dbMutated": false,
+      "accPin": null
+    }
+  ],
+  "finalClassification": "Safely blocked — chain did not start",
+  "partialVsFull": "Safely blocked — chain did not start"
+}

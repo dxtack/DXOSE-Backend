@@ -1,0 +1,879 @@
+{
+  "runAt": "2026-07-03T19:57:55.122Z",
+  "tenant": {
+    "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+    "slug": "closeout-audit-hotel-disposable",
+    "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+    "parentId": "7c312820-957e-4b08-bcc3-07e8b9fc288f"
+  },
+  "account": {
+    "id": "2712b4e1-7fa4-49e7-b06e-d4e21ce3645d",
+    "email": "disp-perm-fin@closeout-audit.local",
+    "role": "FINANCE_MANAGER"
+  },
+  "viewports": [
+    "1366x768",
+    "1536x864",
+    "1920x1080"
+  ],
+  "results": [
+    {
+      "viewport": "1366x768",
+      "im": {
+        "screenId": "IM-LIST",
+        "viewport": "1366x768",
+        "measurement": {
+          "document": {
+            "scrollHeight": 1133,
+            "clientHeight": 768,
+            "pageVerticalScroll": true
+          },
+          "chrome": {
+            "contentTop": 89,
+            "distanceToTable": 375.3,
+            "pageHeader": {
+              "top": 89,
+              "bottom": 153.2,
+              "height": 64.2,
+              "width": 1049.9,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 63,
+              "scrollHeight": 63
+            },
+            "kpis": null,
+            "filters": {
+              "top": 390.3,
+              "bottom": 452.3,
+              "height": 62,
+              "width": 1049.9,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 60,
+              "scrollHeight": 60
+            },
+            "gaps": {
+              "headerToKpis": null,
+              "kpisToFilters": null,
+              "filtersToCard": 12
+            }
+          },
+          "table": {
+            "card": {
+              "top": 464.3,
+              "bottom": 1108.8,
+              "height": 644.5,
+              "width": 1049.9,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 643,
+              "scrollHeight": 643
+            },
+            "scrollShell": {
+              "top": 465.3,
+              "bottom": 1058.8,
+              "height": 593.5,
+              "width": 1047.9,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 594,
+              "scrollHeight": 594
+            },
+            "header": {
+              "top": 465.3,
+              "bottom": 508.3,
+              "height": 43,
+              "width": 1047.9,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 43,
+              "scrollHeight": 43
+            },
+            "body": {
+              "top": 508.3,
+              "bottom": 1058.8,
+              "height": 550.5,
+              "width": 1047.9,
+              "overflowY": "auto",
+              "maxHeight": "551px",
+              "clientHeight": 551,
+              "scrollHeight": 551
+            },
+            "footer": {
+              "top": 1058.8,
+              "bottom": 1107.8,
+              "height": 49,
+              "width": 1047.9,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 48,
+              "scrollHeight": 48,
+              "visibleInViewport": false
+            },
+            "rowHeights": [
+              0,
+              59,
+              59,
+              59,
+              59
+            ],
+            "avgRowHeight": 47.2,
+            "dataRowCount": 5,
+            "fullyVisibleRows": 4,
+            "bodyVerticalScroll": false
+          },
+          "sidebar": {
+            "menu": {
+              "top": 64,
+              "bottom": 1057.3,
+              "height": 993.3,
+              "width": 250,
+              "overflowY": "auto",
+              "maxHeight": "none",
+              "clientHeight": 993,
+              "scrollHeight": 993
+            },
+            "menuInternalScroll": false,
+            "menuScrollbarVisible": false
+          },
+          "scroll": {
+            "verticalOwners": [],
+            "doubleScroll": false
+          },
+          "blankBelowCard": 0
+        },
+        "screenshot": "screenshots/compare/IM-LIST__1366x768__viewport.png"
+      },
+      "wfp": {
+        "screenId": "WFP",
+        "viewport": "1366x768",
+        "measurement": {
+          "document": {
+            "scrollHeight": 1133,
+            "clientHeight": 768,
+            "pageVerticalScroll": true
+          },
+          "chrome": {
+            "contentTop": 89,
+            "distanceToTable": 229.4,
+            "pageHeader": {
+              "top": 89,
+              "bottom": 149,
+              "height": 60,
+              "width": 1049.9,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 59,
+              "scrollHeight": 59
+            },
+            "kpis": {
+              "top": 155,
+              "bottom": 199.4,
+              "height": 44.4,
+              "width": 1049.9,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 44,
+              "scrollHeight": 44
+            },
+            "filters": {
+              "top": 205.4,
+              "bottom": 312.4,
+              "height": 107,
+              "width": 1049.9,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 105,
+              "scrollHeight": 105
+            },
+            "gaps": {
+              "headerToKpis": 6,
+              "kpisToFilters": 6,
+              "filtersToCard": 6
+            }
+          },
+          "table": {
+            "card": {
+              "top": 318.4,
+              "bottom": 962.4,
+              "height": 644,
+              "width": 1049.9,
+              "overflowY": "hidden",
+              "maxHeight": "644px",
+              "clientHeight": 642,
+              "scrollHeight": 642
+            },
+            "scrollShell": {
+              "top": 319.4,
+              "bottom": 912.4,
+              "height": 593,
+              "width": 1047.9,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 593,
+              "scrollHeight": 593
+            },
+            "header": {
+              "top": 319.4,
+              "bottom": 353.9,
+              "height": 34.5,
+              "width": 1047.9,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 35,
+              "scrollHeight": 35
+            },
+            "body": {
+              "top": 353.9,
+              "bottom": 911.9,
+              "height": 558,
+              "width": 1047.9,
+              "overflowY": "auto",
+              "maxHeight": "558px",
+              "clientHeight": 558,
+              "scrollHeight": 1678
+            },
+            "footer": {
+              "top": 912.4,
+              "bottom": 961.4,
+              "height": 49,
+              "width": 1047.9,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 48,
+              "scrollHeight": 48,
+              "visibleInViewport": false
+            },
+            "rowHeights": [
+              0,
+              82.4,
+              97.4,
+              97.4,
+              97.4,
+              95.6,
+              95.6,
+              95.6,
+              95.6,
+              95.6,
+              95.6,
+              67.3,
+              67.3,
+              65,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              67.4,
+              67.4,
+              66.4
+            ],
+            "avgRowHeight": 79.9,
+            "dataRowCount": 21,
+            "fullyVisibleRows": 5,
+            "bodyVerticalScroll": true
+          },
+          "sidebar": {
+            "menu": {
+              "top": 64,
+              "bottom": 1057.3,
+              "height": 993.3,
+              "width": 250,
+              "overflowY": "auto",
+              "maxHeight": "none",
+              "clientHeight": 993,
+              "scrollHeight": 993
+            },
+            "menuInternalScroll": false,
+            "menuScrollbarVisible": false
+          },
+          "scroll": {
+            "verticalOwners": [
+              {
+                "selector": "div.ant-table-body",
+                "overflowY": "auto",
+                "scrollHeight": 1678,
+                "clientHeight": 558,
+                "delta": 1120
+              }
+            ],
+            "doubleScroll": true
+          },
+          "blankBelowCard": 146.5
+        },
+        "screenshot": "screenshots/compare/WFP__1366x768__viewport.png"
+      }
+    },
+    {
+      "viewport": "1536x864",
+      "im": {
+        "screenId": "IM-LIST",
+        "viewport": "1536x864",
+        "measurement": {
+          "document": {
+            "scrollHeight": 1133,
+            "clientHeight": 864,
+            "pageVerticalScroll": true
+          },
+          "chrome": {
+            "contentTop": 89,
+            "distanceToTable": 375.3,
+            "pageHeader": {
+              "top": 89,
+              "bottom": 153.2,
+              "height": 64.2,
+              "width": 1215.6,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 63,
+              "scrollHeight": 63
+            },
+            "kpis": null,
+            "filters": {
+              "top": 390.3,
+              "bottom": 452.3,
+              "height": 62,
+              "width": 1215.6,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 60,
+              "scrollHeight": 60
+            },
+            "gaps": {
+              "headerToKpis": null,
+              "kpisToFilters": null,
+              "filtersToCard": 12
+            }
+          },
+          "table": {
+            "card": {
+              "top": 464.3,
+              "bottom": 1108.8,
+              "height": 644.5,
+              "width": 1215.6,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 643,
+              "scrollHeight": 643
+            },
+            "scrollShell": {
+              "top": 465.3,
+              "bottom": 1058.8,
+              "height": 593.5,
+              "width": 1213.6,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 594,
+              "scrollHeight": 594
+            },
+            "header": {
+              "top": 465.3,
+              "bottom": 508.3,
+              "height": 43,
+              "width": 1213.6,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 43,
+              "scrollHeight": 43
+            },
+            "body": {
+              "top": 508.3,
+              "bottom": 1058.8,
+              "height": 550.5,
+              "width": 1213.6,
+              "overflowY": "auto",
+              "maxHeight": "551px",
+              "clientHeight": 551,
+              "scrollHeight": 551
+            },
+            "footer": {
+              "top": 1058.8,
+              "bottom": 1107.8,
+              "height": 49,
+              "width": 1213.6,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 48,
+              "scrollHeight": 48,
+              "visibleInViewport": false
+            },
+            "rowHeights": [
+              0,
+              59,
+              59,
+              59,
+              59
+            ],
+            "avgRowHeight": 47.2,
+            "dataRowCount": 5,
+            "fullyVisibleRows": 4,
+            "bodyVerticalScroll": false
+          },
+          "sidebar": {
+            "menu": {
+              "top": 64,
+              "bottom": 1057.3,
+              "height": 993.3,
+              "width": 250,
+              "overflowY": "auto",
+              "maxHeight": "none",
+              "clientHeight": 993,
+              "scrollHeight": 993
+            },
+            "menuInternalScroll": false,
+            "menuScrollbarVisible": false
+          },
+          "scroll": {
+            "verticalOwners": [],
+            "doubleScroll": false
+          },
+          "blankBelowCard": 0
+        },
+        "screenshot": "screenshots/compare/IM-LIST__1536x864__viewport.png"
+      },
+      "wfp": {
+        "screenId": "WFP",
+        "viewport": "1536x864",
+        "measurement": {
+          "document": {
+            "scrollHeight": 1133,
+            "clientHeight": 864,
+            "pageVerticalScroll": true
+          },
+          "chrome": {
+            "contentTop": 89,
+            "distanceToTable": 229.4,
+            "pageHeader": {
+              "top": 89,
+              "bottom": 149,
+              "height": 60,
+              "width": 1215.6,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 59,
+              "scrollHeight": 59
+            },
+            "kpis": {
+              "top": 155,
+              "bottom": 199.4,
+              "height": 44.4,
+              "width": 1215.6,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 44,
+              "scrollHeight": 44
+            },
+            "filters": {
+              "top": 205.4,
+              "bottom": 312.4,
+              "height": 107,
+              "width": 1215.6,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 105,
+              "scrollHeight": 105
+            },
+            "gaps": {
+              "headerToKpis": 6,
+              "kpisToFilters": 6,
+              "filtersToCard": 6
+            }
+          },
+          "table": {
+            "card": {
+              "top": 318.4,
+              "bottom": 962.4,
+              "height": 644,
+              "width": 1215.6,
+              "overflowY": "hidden",
+              "maxHeight": "644px",
+              "clientHeight": 642,
+              "scrollHeight": 642
+            },
+            "scrollShell": {
+              "top": 319.4,
+              "bottom": 912.4,
+              "height": 593,
+              "width": 1213.6,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 593,
+              "scrollHeight": 593
+            },
+            "header": {
+              "top": 319.4,
+              "bottom": 353.9,
+              "height": 34.5,
+              "width": 1213.6,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 35,
+              "scrollHeight": 35
+            },
+            "body": {
+              "top": 353.9,
+              "bottom": 911.9,
+              "height": 558,
+              "width": 1213.6,
+              "overflowY": "auto",
+              "maxHeight": "558px",
+              "clientHeight": 558,
+              "scrollHeight": 1542
+            },
+            "footer": {
+              "top": 912.4,
+              "bottom": 961.4,
+              "height": 49,
+              "width": 1213.6,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 48,
+              "scrollHeight": 48,
+              "visibleInViewport": false
+            },
+            "rowHeights": [
+              0,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              65,
+              65,
+              65,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              65,
+              65,
+              64
+            ],
+            "avgRowHeight": 73.5,
+            "dataRowCount": 21,
+            "fullyVisibleRows": 6,
+            "bodyVerticalScroll": true
+          },
+          "sidebar": {
+            "menu": {
+              "top": 64,
+              "bottom": 1057.3,
+              "height": 993.3,
+              "width": 250,
+              "overflowY": "auto",
+              "maxHeight": "none",
+              "clientHeight": 993,
+              "scrollHeight": 993
+            },
+            "menuInternalScroll": false,
+            "menuScrollbarVisible": false
+          },
+          "scroll": {
+            "verticalOwners": [
+              {
+                "selector": "div.ant-table-body",
+                "overflowY": "auto",
+                "scrollHeight": 1542,
+                "clientHeight": 558,
+                "delta": 984
+              }
+            ],
+            "doubleScroll": true
+          },
+          "blankBelowCard": 146.5
+        },
+        "screenshot": "screenshots/compare/WFP__1536x864__viewport.png"
+      }
+    },
+    {
+      "viewport": "1920x1080",
+      "im": {
+        "screenId": "IM-LIST",
+        "viewport": "1920x1080",
+        "measurement": {
+          "document": {
+            "scrollHeight": 1133,
+            "clientHeight": 1080,
+            "pageVerticalScroll": true
+          },
+          "chrome": {
+            "contentTop": 89,
+            "distanceToTable": 375.3,
+            "pageHeader": {
+              "top": 89,
+              "bottom": 153.2,
+              "height": 64.2,
+              "width": 1590,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 63,
+              "scrollHeight": 63
+            },
+            "kpis": null,
+            "filters": {
+              "top": 390.3,
+              "bottom": 452.3,
+              "height": 62,
+              "width": 1590,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 60,
+              "scrollHeight": 60
+            },
+            "gaps": {
+              "headerToKpis": null,
+              "kpisToFilters": null,
+              "filtersToCard": 12
+            }
+          },
+          "table": {
+            "card": {
+              "top": 464.3,
+              "bottom": 1108.8,
+              "height": 644.5,
+              "width": 1590,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 643,
+              "scrollHeight": 643
+            },
+            "scrollShell": {
+              "top": 465.3,
+              "bottom": 1058.8,
+              "height": 593.5,
+              "width": 1588,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 594,
+              "scrollHeight": 594
+            },
+            "header": {
+              "top": 465.3,
+              "bottom": 508.3,
+              "height": 43,
+              "width": 1588,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 43,
+              "scrollHeight": 43
+            },
+            "body": {
+              "top": 508.3,
+              "bottom": 1058.8,
+              "height": 550.5,
+              "width": 1588,
+              "overflowY": "auto",
+              "maxHeight": "551px",
+              "clientHeight": 551,
+              "scrollHeight": 551
+            },
+            "footer": {
+              "top": 1058.8,
+              "bottom": 1107.8,
+              "height": 49,
+              "width": 1588,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 48,
+              "scrollHeight": 48,
+              "visibleInViewport": false
+            },
+            "rowHeights": [
+              0,
+              59,
+              59,
+              59,
+              59
+            ],
+            "avgRowHeight": 47.2,
+            "dataRowCount": 5,
+            "fullyVisibleRows": 4,
+            "bodyVerticalScroll": false
+          },
+          "sidebar": {
+            "menu": {
+              "top": 64,
+              "bottom": 1057.3,
+              "height": 993.3,
+              "width": 250,
+              "overflowY": "auto",
+              "maxHeight": "none",
+              "clientHeight": 993,
+              "scrollHeight": 993
+            },
+            "menuInternalScroll": false,
+            "menuScrollbarVisible": false
+          },
+          "scroll": {
+            "verticalOwners": [],
+            "doubleScroll": false
+          },
+          "blankBelowCard": 0
+        },
+        "screenshot": "screenshots/compare/IM-LIST__1920x1080__viewport.png"
+      },
+      "wfp": {
+        "screenId": "WFP",
+        "viewport": "1920x1080",
+        "measurement": {
+          "document": {
+            "scrollHeight": 1133,
+            "clientHeight": 1080,
+            "pageVerticalScroll": true
+          },
+          "chrome": {
+            "contentTop": 89,
+            "distanceToTable": 229.4,
+            "pageHeader": {
+              "top": 89,
+              "bottom": 149,
+              "height": 60,
+              "width": 1590,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 59,
+              "scrollHeight": 59
+            },
+            "kpis": {
+              "top": 155,
+              "bottom": 199.4,
+              "height": 44.4,
+              "width": 1590,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 44,
+              "scrollHeight": 44
+            },
+            "filters": {
+              "top": 205.4,
+              "bottom": 312.4,
+              "height": 107,
+              "width": 1590,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 105,
+              "scrollHeight": 105
+            },
+            "gaps": {
+              "headerToKpis": 6,
+              "kpisToFilters": 6,
+              "filtersToCard": 6
+            }
+          },
+          "table": {
+            "card": {
+              "top": 318.4,
+              "bottom": 962.4,
+              "height": 644,
+              "width": 1590,
+              "overflowY": "hidden",
+              "maxHeight": "644px",
+              "clientHeight": 642,
+              "scrollHeight": 642
+            },
+            "scrollShell": {
+              "top": 319.4,
+              "bottom": 912.4,
+              "height": 593,
+              "width": 1588,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 593,
+              "scrollHeight": 593
+            },
+            "header": {
+              "top": 319.4,
+              "bottom": 353.9,
+              "height": 34.5,
+              "width": 1588,
+              "overflowY": "hidden",
+              "maxHeight": "none",
+              "clientHeight": 35,
+              "scrollHeight": 35
+            },
+            "body": {
+              "top": 353.9,
+              "bottom": 911.9,
+              "height": 558,
+              "width": 1588,
+              "overflowY": "auto",
+              "maxHeight": "558px",
+              "clientHeight": 558,
+              "scrollHeight": 1473
+            },
+            "footer": {
+              "top": 912.4,
+              "bottom": 961.4,
+              "height": 49,
+              "width": 1588,
+              "overflowY": "visible",
+              "maxHeight": "none",
+              "clientHeight": 48,
+              "scrollHeight": 48,
+              "visibleInViewport": true
+            },
+            "rowHeights": [
+              0,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              82.4,
+              65,
+              65,
+              65,
+              65,
+              65,
+              65,
+              65,
+              65,
+              65,
+              64
+            ],
+            "avgRowHeight": 70.1,
+            "dataRowCount": 21,
+            "fullyVisibleRows": 6,
+            "bodyVerticalScroll": true
+          },
+          "sidebar": {
+            "menu": {
+              "top": 64,
+              "bottom": 1057.3,
+              "height": 993.3,
+              "width": 250,
+              "overflowY": "auto",
+              "maxHeight": "none",
+              "clientHeight": 993,
+              "scrollHeight": 993
+            },
+            "menuInternalScroll": false,
+            "menuScrollbarVisible": false
+          },
+          "scroll": {
+            "verticalOwners": [
+              {
+                "selector": "div.ant-table-body",
+                "overflowY": "auto",
+                "scrollHeight": 1473,
+                "clientHeight": 558,
+                "delta": 915
+              }
+            ],
+            "doubleScroll": true
+          },
+          "blankBelowCard": 146.5
+        },
+        "screenshot": "screenshots/compare/WFP__1920x1080__viewport.png"
+      }
+    }
+  ]
+}

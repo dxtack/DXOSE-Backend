@@ -1,0 +1,222 @@
+{
+  "executedAt": "2026-06-27T16:33:01.600Z",
+  "operationCount": 29,
+  "p0Leaks": 8,
+  "results": [
+    {
+      "direction": "A_token_A_list",
+      "resource": "items",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    },
+    {
+      "direction": "A_token_B_read",
+      "resource": "items",
+      "targetId": "3de57214-9e28-4b44-ae23-8f77c1194efb",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_wrong_X-Tenant-Id",
+      "resource": "items",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "B_token_A_read",
+      "resource": "items",
+      "targetId": "f7e4d2a3-d93c-4850-b306-a11321ff3aa2",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "breakage",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    },
+    {
+      "direction": "A_token_B_read",
+      "resource": "breakage",
+      "targetId": "56f4e937-9054-4d54-a6e0-e9478e3d79e6",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_wrong_X-Tenant-Id",
+      "resource": "breakage",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_B_mutate",
+      "resource": "breakage",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "B_token_A_read",
+      "resource": "breakage",
+      "targetId": "2fc66a8e-4ab6-4d33-875a-6d5ef43617e1",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "getPass",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    },
+    {
+      "direction": "A_token_B_read",
+      "resource": "getPass",
+      "targetId": "e6eb9ddf-bd9d-431e-9a6b-5d876e93e7f9",
+      "http": 500,
+      "result": "FAIL",
+      "leak": "UNEXPECTED_500"
+    },
+    {
+      "direction": "A_token_wrong_X-Tenant-Id",
+      "resource": "getPass",
+      "http": 500,
+      "result": "FAIL",
+      "leak": "UNEXPECTED_500"
+    },
+    {
+      "direction": "A_token_B_mutate",
+      "resource": "getPass",
+      "http": 500,
+      "result": "FAIL",
+      "leak": "UNEXPECTED_500"
+    },
+    {
+      "direction": "B_token_A_read",
+      "resource": "getPass",
+      "targetId": "8c103c11-423b-4cd3-87e1-4459673c4557",
+      "http": 500,
+      "result": "FAIL",
+      "leak": "UNEXPECTED_500"
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "grn",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    },
+    {
+      "direction": "A_token_B_read",
+      "resource": "grn",
+      "targetId": "3accf6f6-fcd0-45c1-b95a-abd5fba06a95",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_wrong_X-Tenant-Id",
+      "resource": "grn",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "B_token_A_read",
+      "resource": "grn",
+      "targetId": "49b74879-a65c-482a-be30-238b9b0ff934",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "transfers",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    },
+    {
+      "direction": "A_token_B_read",
+      "resource": "transfers",
+      "targetId": "1d61ecaa-e9cc-47d1-a75e-af1101f21069",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_wrong_X-Tenant-Id",
+      "resource": "transfers",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "B_token_A_read",
+      "resource": "transfers",
+      "targetId": "3b7caedb-d605-40d5-a517-b4ee2f18dc8f",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "inventoryCount",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    },
+    {
+      "direction": "A_token_B_read",
+      "resource": "inventoryCount",
+      "targetId": "64fc4e7e-adbb-4481-8f83-2f16cd4ba643",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_wrong_X-Tenant-Id",
+      "resource": "inventoryCount",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "B_token_A_read",
+      "resource": "inventoryCount",
+      "targetId": "a47396bb-bb9d-496b-b702-8bb01d6795a5",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "audit",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "reports",
+      "http": 404,
+      "result": "PASS",
+      "leak": null
+    },
+    {
+      "direction": "A_token_A_list",
+      "resource": "dashboard",
+      "http": 200,
+      "result": "FAIL",
+      "leak": "P0_CROSS_TENANT_LIST"
+    }
+  ]
+}

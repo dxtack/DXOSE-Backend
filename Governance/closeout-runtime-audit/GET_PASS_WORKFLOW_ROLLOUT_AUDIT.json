@@ -1,0 +1,1065 @@
+{
+  "executedAt": "2026-06-28T00:57:11.477Z",
+  "approvedConstitutionChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "classification": "System-wide Active Governance Configuration Drift",
+  "answers": {
+    "allFromSameTemplate": true,
+    "globalTemplateVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+    "globalTemplateHasGm": true,
+    "constitutionChangedAfterPublish": "Published v3 includes GM; constitution omits GM before Security",
+    "migrationRequired": "Yes — rollout/migration to remove GM step was required and not applied to active tenants",
+    "newTenantTodayGetsOldWorkflow": "Yes — resolves global published standard v3 with GM unless tenant-scoped override exists",
+    "anyPinnedWithGm": true,
+    "backendHasPendingGm": true,
+    "frontendHasPendingGm": "Check GET_PASS status enum and timeline builder",
+    "securityAfterGmInAll": true
+  },
+  "tenantsAudited": 20,
+  "rows": [
+    {
+      "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "tenantSlug": "closeout-audit-hotel-disposable",
+      "tenantCreatedAt": "2026-06-27T00:11:17.048Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 3,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "7c312820-957e-4b08-bcc3-07e8b9fc288f",
+      "tenantSlug": "closeout-audit-org-disposable",
+      "tenantCreatedAt": "2026-06-27T00:11:17.040Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "bf7638b8-04db-4051-94d1-0cf039827c00",
+      "tenantSlug": "dx-airport-hotel",
+      "tenantCreatedAt": "2026-06-11T10:30:29.591Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "4605fe49-5496-4e9b-8824-2bb3f57ab29f",
+      "tenantSlug": "dx-executive-suites",
+      "tenantCreatedAt": "2026-06-11T10:30:15.498Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "ec7598b2-95e5-4302-8c07-515addd68613",
+      "tenantSlug": "dx-grand-palace",
+      "tenantCreatedAt": "2026-06-11T10:29:24.594Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "3f763a13-177d-44e7-81f5-5640a7e8ead5",
+      "tenantSlug": "dx-hospitality-group",
+      "tenantCreatedAt": "2026-06-11T10:29:23.394Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "13a21ce5-2c05-4d14-9c2d-6ec796046b81",
+      "tenantSlug": "dx-marina-hotel",
+      "tenantCreatedAt": "2026-06-11T10:29:58.762Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 3,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+      "tenantSlug": "grand-horizon",
+      "tenantCreatedAt": "2026-04-17T20:43:11.155Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 18,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "d8b7455c-1ac2-4b14-959f-f4c4f3331ed8",
+      "tenantSlug": "hotel-test",
+      "tenantCreatedAt": "2026-05-10T06:14:14.100Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "fd05d2fc-a32b-4617-8ccb-d08c869a2252",
+      "tenantSlug": "hotel-test1",
+      "tenantCreatedAt": "2026-05-10T06:14:14.643Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "90a23ac2-c0cb-4344-89f2-34fddfef021a",
+      "tenantSlug": "roma-1",
+      "tenantCreatedAt": "2026-05-17T13:34:13.348Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "f3da1cfd-a397-42f5-a470-3e511d56bece",
+      "tenantSlug": "roma-2",
+      "tenantCreatedAt": "2026-05-17T13:34:25.510Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "90d14b98-4404-4127-95bb-ccbf3aa4ef17",
+      "tenantSlug": "rotana",
+      "tenantCreatedAt": "2026-05-17T11:25:24.258Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "9881532d-642f-42c4-9a5a-995d38c81625",
+      "tenantSlug": "rotana-1",
+      "tenantCreatedAt": "2026-05-17T11:25:24.853Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "676ec92e-91cc-475a-a269-c0d7d3aa7268",
+      "tenantSlug": "rotana-2",
+      "tenantCreatedAt": "2026-05-17T11:27:05.449Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "e45aca57-0cef-4c16-8e1b-f98599891652",
+      "tenantSlug": "test-org",
+      "tenantCreatedAt": "2026-04-17T20:45:59.841Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "f810d3fe-54fa-493c-bbc0-1b1ff65e73a5",
+      "tenantSlug": "tets-org-1",
+      "tenantCreatedAt": "2026-05-17T13:34:12.017Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "5676fa76-bd8d-4e18-820e-a915198d3ec3",
+      "tenantSlug": "voco",
+      "tenantCreatedAt": "2026-04-17T20:46:00.319Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "531e7ce8-59e8-4f87-af4b-8b534816bde7",
+      "tenantSlug": "voco-khobar",
+      "tenantCreatedAt": "2026-05-15T17:12:22.818Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    },
+    {
+      "tenantId": "a039cd6e-efca-4ff2-9915-d83404c83cf2",
+      "tenantSlug": "voco-khobar-hotel",
+      "tenantCreatedAt": "2026-05-15T17:12:21.500Z",
+      "workflowDefinitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "definitionTenantScoped": null,
+      "publishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "versionNumber": 3,
+      "publishedAt": "2026-06-22T19:07:57.678Z",
+      "publishedById": null,
+      "orderedSteps": [
+        {
+          "stepOrder": 1,
+          "roleCode": "DEPT_MANAGER",
+          "statusKey": "PENDING_DEPT"
+        },
+        {
+          "stepOrder": 2,
+          "roleCode": "COST_CONTROL",
+          "statusKey": "PENDING_COST_CONTROL"
+        },
+        {
+          "stepOrder": 3,
+          "roleCode": "FINANCE_MANAGER",
+          "statusKey": "PENDING_FINANCE"
+        },
+        {
+          "stepOrder": 4,
+          "roleCode": "GENERAL_MANAGER",
+          "statusKey": "PENDING_GM"
+        },
+        {
+          "stepOrder": 5,
+          "roleCode": "SECURITY",
+          "statusKey": "PENDING_SECURITY"
+        }
+      ],
+      "orderedStatusKeys": [
+        "PENDING_DEPT",
+        "PENDING_COST_CONTROL",
+        "PENDING_FINANCE",
+        "PENDING_GM",
+        "PENDING_SECURITY"
+      ],
+      "matchesConstitution": false,
+      "classification": "System-wide Active Governance Configuration Drift",
+      "runtimeUsesThisVersion": true,
+      "activeGetPassPinnedToThisVersion": 0,
+      "activeGetPassPinnedToOtherVersions": 0,
+      "securityAfterGm": true
+    }
+  ]
+}

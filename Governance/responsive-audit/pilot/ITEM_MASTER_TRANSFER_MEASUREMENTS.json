@@ -1,0 +1,2871 @@
+{
+  "generatedAt": "2026-07-03T11:07:24.560Z",
+  "runInfo": {
+    "runAt": "2026-07-03T11:02:29.483Z",
+    "frontendUrl": "http://127.0.0.1:4200",
+    "api": "http://127.0.0.1:4000/api",
+    "tenant": {
+      "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+      "slug": "closeout-audit-hotel-disposable",
+      "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+      "parentId": "7c312820-957e-4b08-bcc3-07e8b9fc288f"
+    },
+    "account": {
+      "email": "disp-perm-fin@closeout-audit.local",
+      "role": "FINANCE_MANAGER",
+      "permissionCount": 58
+    },
+    "permissionFlags": {
+      "INVENTORY_VIEW": true,
+      "TRANSFER_VIEW": true,
+      "BASIC_DATA_EDIT": true,
+      "TRANSFER_CREATE": true,
+      "TRANSFER_APPROVE": true,
+      "IMPORT_EXCEL": true
+    },
+    "transferStatusCounts": {
+      "POSTED": 94,
+      "PENDING_FINANCE": 97,
+      "DRAFT": 136,
+      "PENDING_DEPT": 94,
+      "REJECTED": 81
+    },
+    "sample": {
+      "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+      "itemName": "Dinner Plate - Porcelain",
+      "draftItemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+      "transfersByStatus": {
+        "POSTED": "42d4e3e5-58bd-4674-90ba-46d990017fb6",
+        "PENDING_FINANCE": "e1016e41-6d2b-42ba-8243-59ff709715c0",
+        "DRAFT": "01475038-c70f-4fda-90ab-1f31143fa0eb",
+        "PENDING_DEPT": "095f501c-26f9-4ca0-9525-8f1b3085f3d7",
+        "REJECTED": "432e7afb-70c1-4a08-9b6e-b0b0cba505ac"
+      }
+    },
+    "viewportsPrimary": [
+      {
+        "label": "1366x768",
+        "width": 1366,
+        "height": 768,
+        "dpr": 1,
+        "scaling": "OS100%"
+      },
+      {
+        "label": "1536x864",
+        "width": 1536,
+        "height": 864,
+        "dpr": 1,
+        "scaling": "OS100%"
+      },
+      {
+        "label": "1920x1080",
+        "width": 1920,
+        "height": 1080,
+        "dpr": 1,
+        "scaling": "OS100%"
+      }
+    ],
+    "viewportsScaling125": [
+      {
+        "label": "1366x768@win125",
+        "width": 1093,
+        "height": 614,
+        "dpr": 1.25,
+        "scaling": "OS125%"
+      },
+      {
+        "label": "1536x864@win125",
+        "width": 1229,
+        "height": 691,
+        "dpr": 1.25,
+        "scaling": "OS125%"
+      },
+      {
+        "label": "1920x1080@win125",
+        "width": 1536,
+        "height": 864,
+        "dpr": 1.25,
+        "scaling": "OS125%"
+      }
+    ],
+    "scalingMethodology": "Windows 125% is represented by shrinking the CSS viewport to physical/1.25 with deviceScaleFactor=1.25 at 100% browser zoom. Primary matrix uses OS=100% (CSS px == physical).",
+    "screensPlanned": [
+      {
+        "id": "IM-LIST",
+        "name": "Item Master List",
+        "family": "REGISTRY_LIST",
+        "url": "/items"
+      },
+      {
+        "id": "IM-ADD",
+        "name": "Add Item",
+        "family": "CREATE_FORM",
+        "url": "/items/new"
+      },
+      {
+        "id": "IM-EDIT",
+        "name": "Edit Item",
+        "family": "EDIT_FORM",
+        "url": "/items/2b2d7770-0517-4d3d-b7ab-ea3a6d099c88/edit"
+      },
+      {
+        "id": "IM-IMPORT",
+        "name": "Item Import Upload",
+        "family": "IMPORT_WIZARD",
+        "url": "/inventory/items/import"
+      },
+      {
+        "id": "IM-LIST-MODAL",
+        "name": "Item Master List (row modal attempt)",
+        "family": "MODAL",
+        "url": "/items"
+      },
+      {
+        "id": "TR-LIST",
+        "name": "Transfer List",
+        "family": "REGISTRY_LIST",
+        "url": "/transfers"
+      },
+      {
+        "id": "TR-NEW",
+        "name": "Create Transfer",
+        "family": "CREATE_FORM",
+        "url": "/transfers/new"
+      },
+      {
+        "id": "TR-EDIT",
+        "name": "Edit Draft Transfer",
+        "family": "EDIT_FORM",
+        "url": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb/edit"
+      },
+      {
+        "id": "TR-DETAIL-POSTED",
+        "name": "Transfer Detail (POSTED)",
+        "family": "DETAIL_PAGE",
+        "url": "/transfers/42d4e3e5-58bd-4674-90ba-46d990017fb6"
+      },
+      {
+        "id": "TR-DETAIL-PENDING_FINANCE",
+        "name": "Transfer Detail (PENDING_FINANCE)",
+        "family": "DETAIL_PAGE",
+        "url": "/transfers/e1016e41-6d2b-42ba-8243-59ff709715c0"
+      },
+      {
+        "id": "TR-DETAIL-DRAFT",
+        "name": "Transfer Detail (DRAFT)",
+        "family": "DETAIL_PAGE",
+        "url": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb"
+      },
+      {
+        "id": "TR-DETAIL-PENDING_DEPT",
+        "name": "Transfer Detail (PENDING_DEPT)",
+        "family": "DETAIL_PAGE",
+        "url": "/transfers/095f501c-26f9-4ca0-9525-8f1b3085f3d7"
+      },
+      {
+        "id": "TR-DETAIL-REJECTED",
+        "name": "Transfer Detail (REJECTED)",
+        "family": "DETAIL_PAGE",
+        "url": "/transfers/432e7afb-70c1-4a08-9b6e-b0b0cba505ac"
+      }
+    ],
+    "zeroWrites": true,
+    "notes": [
+      "Session token minted in-memory (read-only navigation); no login/refresh row persisted.",
+      "Item import Preview/Validation/Failed-Rows/Confirm require an upload+parse round-trip and were NOT exercised to honor ZERO DATABASE WRITES; only the Import Upload screen was measured."
+    ]
+  },
+  "screens": [
+    {
+      "screenId": "IM-LIST",
+      "module": "ItemMaster",
+      "name": "Item Master List",
+      "family": "REGISTRY_LIST",
+      "type": "List",
+      "status": null,
+      "route": "/items",
+      "measurements": {
+        "1366x768": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 1049.9,
+            "height": 644.5,
+            "x": 283.1,
+            "y": 464.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1047.9,
+            "bodyWidth": 1047.9,
+            "bodyHeight": 582.5,
+            "bodyMaxHeight": "583px",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "columnCount": 8,
+            "columns": [
+              "Item name",
+              "Category",
+              "Supplier",
+              "Base unit",
+              "Unit price",
+              "Total qty",
+              "Status",
+              "Actions"
+            ],
+            "visibleRows": 6,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 42
+        },
+        "1536x864": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 1215.6,
+            "height": 644.5,
+            "x": 285.2,
+            "y": 464.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1213.6,
+            "bodyWidth": 1213.6,
+            "bodyHeight": 582.5,
+            "bodyMaxHeight": "583px",
+            "scrollWidth": 1214,
+            "clientWidth": 1214,
+            "columnCount": 8,
+            "columns": [
+              "Item name",
+              "Category",
+              "Supplier",
+              "Base unit",
+              "Unit price",
+              "Total qty",
+              "Status",
+              "Actions"
+            ],
+            "visibleRows": 6,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 42
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "pagination-below-fold"
+          ],
+          "landedUrl": "/items",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1590,
+            "height": 644.5,
+            "x": 298,
+            "y": 464.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1588,
+            "bodyWidth": 1588,
+            "bodyHeight": 550.5,
+            "bodyMaxHeight": "551px",
+            "scrollWidth": 1588,
+            "clientWidth": 1588,
+            "columnCount": 8,
+            "columns": [
+              "Item name",
+              "Category",
+              "Supplier",
+              "Base unit",
+              "Unit price",
+              "Total qty",
+              "Status",
+              "Actions"
+            ],
+            "visibleRows": 5,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": {
+            "width": 112,
+            "height": 32,
+            "y": 1067.8,
+            "bottom": 1099.8,
+            "visibleInViewport": false
+          },
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 33
+        }
+      }
+    },
+    {
+      "screenId": "IM-ADD",
+      "module": "ItemMaster",
+      "name": "Add Item",
+      "family": "CREATE_FORM",
+      "type": "Create",
+      "status": null,
+      "route": "/items/new",
+      "measurements": {
+        "1366x768": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items/new",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 1049.9,
+            "height": 729,
+            "x": 267.1,
+            "y": 271.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1536x864": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items/new",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 1215.6,
+            "height": 729,
+            "x": 269.2,
+            "y": 271.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1920x1080": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items/new",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1590,
+            "height": 729,
+            "x": 298,
+            "y": 271.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        }
+      }
+    },
+    {
+      "screenId": "IM-EDIT",
+      "module": "ItemMaster",
+      "name": "Edit Item",
+      "family": "EDIT_FORM",
+      "type": "Edit",
+      "status": null,
+      "route": "/items/2b2d7770-0517-4d3d-b7ab-ea3a6d099c88/edit",
+      "measurements": {
+        "1366x768": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items/2b2d7770-0517-4d3d-b7ab-ea3a6d099c88/edit",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1175.2,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1175.2
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -407.2
+            }
+          },
+          "outerCard": {
+            "width": 1049.9,
+            "height": 871.8,
+            "x": 267.1,
+            "y": 271.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1536x864": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items/2b2d7770-0517-4d3d-b7ab-ea3a6d099c88/edit",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1175.2,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1175.2
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -311.2
+            }
+          },
+          "outerCard": {
+            "width": 1215.6,
+            "height": 871.8,
+            "x": 269.2,
+            "y": 271.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1920x1080": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items/2b2d7770-0517-4d3d-b7ab-ea3a6d099c88/edit",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1175.2,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1175.2
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -95.2
+            }
+          },
+          "outerCard": {
+            "width": 1590,
+            "height": 871.8,
+            "x": 298,
+            "y": 271.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        }
+      }
+    },
+    {
+      "screenId": "IM-IMPORT",
+      "module": "ItemMaster",
+      "name": "Item Import Upload",
+      "family": "IMPORT_WIZARD",
+      "type": "Import",
+      "status": null,
+      "route": "/inventory/items/import",
+      "measurements": {
+        "1366x768": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/inventory/items/import",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 1068,
+            "height": 63.3,
+            "x": 274,
+            "y": 370.5,
+            "maxWidth": "none",
+            "padding": {
+              "top": 10,
+              "right": 12,
+              "bottom": 10,
+              "left": 12
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1536x864": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/inventory/items/import",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 1238,
+            "height": 63.3,
+            "x": 274,
+            "y": 370.5,
+            "maxWidth": "none",
+            "padding": {
+              "top": 10,
+              "right": 12,
+              "bottom": 10,
+              "left": 12
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1920x1080": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/inventory/items/import",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1352,
+            "height": 63.3,
+            "x": 409,
+            "y": 370.5,
+            "maxWidth": "none",
+            "padding": {
+              "top": 10,
+              "right": 12,
+              "bottom": 10,
+              "left": 12
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        }
+      }
+    },
+    {
+      "screenId": "IM-LIST-MODAL",
+      "module": "ItemMaster",
+      "name": "Item Master List (row modal attempt)",
+      "family": "MODAL",
+      "type": "Modal",
+      "status": null,
+      "route": "/items",
+      "measurements": {
+        "1366x768": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 1049.9,
+            "height": 644.5,
+            "x": 283.1,
+            "y": 464.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1047.9,
+            "bodyWidth": 1047.9,
+            "bodyHeight": 582.5,
+            "bodyMaxHeight": "583px",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "columnCount": 8,
+            "columns": [
+              "Item name",
+              "Category",
+              "Supplier",
+              "Base unit",
+              "Unit price",
+              "Total qty",
+              "Status",
+              "Actions"
+            ],
+            "visibleRows": 6,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 42
+        },
+        "1536x864": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 1215.6,
+            "height": 644.5,
+            "x": 285.2,
+            "y": 464.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1213.6,
+            "bodyWidth": 1213.6,
+            "bodyHeight": 582.5,
+            "bodyMaxHeight": "583px",
+            "scrollWidth": 1214,
+            "clientWidth": 1214,
+            "columnCount": 8,
+            "columns": [
+              "Item name",
+              "Category",
+              "Supplier",
+              "Base unit",
+              "Unit price",
+              "Total qty",
+              "Status",
+              "Actions"
+            ],
+            "visibleRows": 6,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 42
+        },
+        "1920x1080": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/items",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1590,
+            "height": 644.5,
+            "x": 298,
+            "y": 464.3,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1588,
+            "bodyWidth": 1588,
+            "bodyHeight": 582.5,
+            "bodyMaxHeight": "583px",
+            "scrollWidth": 1588,
+            "clientWidth": 1588,
+            "columnCount": 8,
+            "columns": [
+              "Item name",
+              "Category",
+              "Supplier",
+              "Base unit",
+              "Unit price",
+              "Total qty",
+              "Status",
+              "Actions"
+            ],
+            "visibleRows": 6,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 42
+        }
+      }
+    },
+    {
+      "screenId": "TR-LIST",
+      "module": "Transfer",
+      "name": "Transfer List",
+      "family": "REGISTRY_LIST",
+      "type": "List",
+      "status": null,
+      "route": "/transfers",
+      "measurements": {
+        "1366x768": {
+          "result": "PARTIAL",
+          "flags": [
+            "pagination-below-fold"
+          ],
+          "landedUrl": "/transfers",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 1049.9,
+            "height": 898.8,
+            "x": 283.1,
+            "y": 210.1,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1047.9,
+            "bodyWidth": 1047.9,
+            "bodyHeight": 388,
+            "bodyMaxHeight": "388px",
+            "scrollWidth": 1048,
+            "clientWidth": 1048,
+            "columnCount": 6,
+            "columns": [
+              "Ref No.",
+              "From → To",
+              "Date",
+              "Items",
+              "Workflow status",
+              "By"
+            ],
+            "visibleRows": 11,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": true
+          },
+          "pagination": {
+            "width": 352,
+            "height": 32,
+            "y": 1063.8,
+            "bottom": 1095.8,
+            "visibleInViewport": false
+          },
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": true,
+            "owners": [
+              {
+                "selector": "div.ant-table-body",
+                "scrollHeight": 1050,
+                "clientHeight": 388,
+                "overflowY": "auto"
+              }
+            ]
+          },
+          "blankBelowTable": 37
+        },
+        "1536x864": {
+          "result": "PARTIAL",
+          "flags": [
+            "pagination-below-fold"
+          ],
+          "landedUrl": "/transfers",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 1215.6,
+            "height": 898.8,
+            "x": 285.2,
+            "y": 210.1,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1213.6,
+            "bodyWidth": 1213.6,
+            "bodyHeight": 484,
+            "bodyMaxHeight": "484px",
+            "scrollWidth": 1214,
+            "clientWidth": 1214,
+            "columnCount": 6,
+            "columns": [
+              "Ref No.",
+              "From → To",
+              "Date",
+              "Items",
+              "Workflow status",
+              "By"
+            ],
+            "visibleRows": 11,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": true
+          },
+          "pagination": {
+            "width": 352,
+            "height": 32,
+            "y": 1063.8,
+            "bottom": 1095.8,
+            "visibleInViewport": false
+          },
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": true,
+            "owners": [
+              {
+                "selector": "div.ant-table-body",
+                "scrollHeight": 852,
+                "clientHeight": 484,
+                "overflowY": "auto"
+              }
+            ]
+          },
+          "blankBelowTable": 37
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "pagination-below-fold"
+          ],
+          "landedUrl": "/transfers",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1590,
+            "height": 898.8,
+            "x": 298,
+            "y": 210.1,
+            "maxWidth": "100%",
+            "padding": {
+              "top": 0,
+              "right": 0,
+              "bottom": 0,
+              "left": 0
+            }
+          },
+          "table": {
+            "containerWidth": 1588,
+            "bodyWidth": 1588,
+            "bodyHeight": 700,
+            "bodyMaxHeight": "700px",
+            "scrollWidth": 1588,
+            "clientWidth": 1588,
+            "columnCount": 6,
+            "columns": [
+              "Ref No.",
+              "From → To",
+              "Date",
+              "Items",
+              "Workflow status",
+              "By"
+            ],
+            "visibleRows": 11,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": {
+            "width": 352,
+            "height": 32,
+            "y": 1063.8,
+            "bottom": 1095.8,
+            "visibleInViewport": false
+          },
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 37
+        }
+      }
+    },
+    {
+      "screenId": "TR-NEW",
+      "module": "Transfer",
+      "name": "Create Transfer",
+      "family": "CREATE_FORM",
+      "type": "Create",
+      "status": null,
+      "route": "/transfers/new",
+      "measurements": {
+        "1366x768": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/transfers/new",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 1068,
+            "height": 257.3,
+            "x": 274,
+            "y": 190.9,
+            "maxWidth": "none",
+            "padding": {
+              "top": 16,
+              "right": 20,
+              "bottom": 16,
+              "left": 20
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1536x864": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/transfers/new",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 1238,
+            "height": 257.3,
+            "x": 274,
+            "y": 190.9,
+            "maxWidth": "none",
+            "padding": {
+              "top": 16,
+              "right": 20,
+              "bottom": 16,
+              "left": 20
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        },
+        "1920x1080": {
+          "result": "PASS",
+          "flags": [],
+          "landedUrl": "/transfers/new",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1352,
+            "height": 257.3,
+            "x": 409,
+            "y": 190.9,
+            "maxWidth": "none",
+            "padding": {
+              "top": 16,
+              "right": 20,
+              "bottom": 16,
+              "left": 20
+            }
+          },
+          "table": null,
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": null
+        }
+      }
+    },
+    {
+      "screenId": "TR-EDIT",
+      "module": "Transfer",
+      "name": "Edit Draft Transfer",
+      "family": "EDIT_FORM",
+      "type": "Edit",
+      "status": null,
+      "route": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb/edit",
+      "measurements": {
+        "1366x768": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb/edit",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 1068,
+            "height": 257.3,
+            "x": 274,
+            "y": 190.9,
+            "maxWidth": "none",
+            "padding": {
+              "top": 16,
+              "right": 20,
+              "bottom": 16,
+              "left": 20
+            }
+          },
+          "table": {
+            "containerWidth": 1026,
+            "bodyWidth": 1026,
+            "bodyHeight": 57,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1026,
+            "clientWidth": 1026,
+            "columnCount": 3,
+            "columns": [
+              "Item",
+              "UOM",
+              "Qty"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 503.6
+        },
+        "1536x864": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb/edit",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 1238,
+            "height": 257.3,
+            "x": 274,
+            "y": 190.9,
+            "maxWidth": "none",
+            "padding": {
+              "top": 16,
+              "right": 20,
+              "bottom": 16,
+              "left": 20
+            }
+          },
+          "table": {
+            "containerWidth": 1196,
+            "bodyWidth": 1196,
+            "bodyHeight": 57,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1196,
+            "clientWidth": 1196,
+            "columnCount": 3,
+            "columns": [
+              "Item",
+              "UOM",
+              "Qty"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 503.6
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb/edit",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1352,
+            "height": 257.3,
+            "x": 409,
+            "y": 190.9,
+            "maxWidth": "none",
+            "padding": {
+              "top": 16,
+              "right": 20,
+              "bottom": 16,
+              "left": 20
+            }
+          },
+          "table": {
+            "containerWidth": 1310,
+            "bodyWidth": 1310,
+            "bodyHeight": 57,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1310,
+            "clientWidth": 1310,
+            "columnCount": 3,
+            "columns": [
+              "Item",
+              "UOM",
+              "Qty"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 503.6
+        }
+      }
+    },
+    {
+      "screenId": "TR-DETAIL-POSTED",
+      "module": "Transfer",
+      "name": "Transfer Detail (POSTED)",
+      "family": "DETAIL_PAGE",
+      "type": "Detail",
+      "status": "POSTED",
+      "route": "/transfers/42d4e3e5-58bd-4674-90ba-46d990017fb6",
+      "measurements": {
+        "1366x768": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/42d4e3e5-58bd-4674-90ba-46d990017fb6",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 691.9,
+            "height": 216.9,
+            "x": 267.1,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 674.9,
+            "bodyWidth": 674.9,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 675,
+            "clientWidth": 675,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1536x864": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/42d4e3e5-58bd-4674-90ba-46d990017fb6",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 802.4,
+            "height": 216.9,
+            "x": 269.2,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 785.4,
+            "bodyWidth": 785.4,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 785,
+            "clientWidth": 785,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/42d4e3e5-58bd-4674-90ba-46d990017fb6",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1052,
+            "height": 216.9,
+            "x": 298,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 1035,
+            "bodyWidth": 1035,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1035,
+            "clientWidth": 1035,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        }
+      }
+    },
+    {
+      "screenId": "TR-DETAIL-PENDING_FINANCE",
+      "module": "Transfer",
+      "name": "Transfer Detail (PENDING_FINANCE)",
+      "family": "DETAIL_PAGE",
+      "type": "Detail",
+      "status": "PENDING_FINANCE",
+      "route": "/transfers/e1016e41-6d2b-42ba-8243-59ff709715c0",
+      "measurements": {
+        "1366x768": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/e1016e41-6d2b-42ba-8243-59ff709715c0",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 691.9,
+            "height": 216.9,
+            "x": 267.1,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 674.9,
+            "bodyWidth": 674.9,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 675,
+            "clientWidth": 675,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1536x864": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/e1016e41-6d2b-42ba-8243-59ff709715c0",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 802.4,
+            "height": 216.9,
+            "x": 269.2,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 785.4,
+            "bodyWidth": 785.4,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 785,
+            "clientWidth": 785,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/e1016e41-6d2b-42ba-8243-59ff709715c0",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1052,
+            "height": 216.9,
+            "x": 298,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 1035,
+            "bodyWidth": 1035,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1035,
+            "clientWidth": 1035,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        }
+      }
+    },
+    {
+      "screenId": "TR-DETAIL-DRAFT",
+      "module": "Transfer",
+      "name": "Transfer Detail (DRAFT)",
+      "family": "DETAIL_PAGE",
+      "type": "Detail",
+      "status": "DRAFT",
+      "route": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb",
+      "measurements": {
+        "1366x768": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 691.9,
+            "height": 216.9,
+            "x": 267.1,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 674.9,
+            "bodyWidth": 674.9,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 675,
+            "clientWidth": 675,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1536x864": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 802.4,
+            "height": 216.9,
+            "x": 269.2,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 785.4,
+            "bodyWidth": 785.4,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 785,
+            "clientWidth": 785,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/01475038-c70f-4fda-90ab-1f31143fa0eb",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1052,
+            "height": 216.9,
+            "x": 298,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 1035,
+            "bodyWidth": 1035,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1035,
+            "clientWidth": 1035,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        }
+      }
+    },
+    {
+      "screenId": "TR-DETAIL-PENDING_DEPT",
+      "module": "Transfer",
+      "name": "Transfer Detail (PENDING_DEPT)",
+      "family": "DETAIL_PAGE",
+      "type": "Detail",
+      "status": "PENDING_DEPT",
+      "route": "/transfers/095f501c-26f9-4ca0-9525-8f1b3085f3d7",
+      "measurements": {
+        "1366x768": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/095f501c-26f9-4ca0-9525-8f1b3085f3d7",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 691.9,
+            "height": 216.9,
+            "x": 267.1,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 674.9,
+            "bodyWidth": 674.9,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 675,
+            "clientWidth": 675,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1536x864": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/095f501c-26f9-4ca0-9525-8f1b3085f3d7",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 802.4,
+            "height": 216.9,
+            "x": 269.2,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 785.4,
+            "bodyWidth": 785.4,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 785,
+            "clientWidth": 785,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/095f501c-26f9-4ca0-9525-8f1b3085f3d7",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1052,
+            "height": 216.9,
+            "x": 298,
+            "y": 255.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 1035,
+            "bodyWidth": 1035,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1035,
+            "clientWidth": 1035,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 524.5
+        }
+      }
+    },
+    {
+      "screenId": "TR-DETAIL-REJECTED",
+      "module": "Transfer",
+      "name": "Transfer Detail (REJECTED)",
+      "family": "DETAIL_PAGE",
+      "type": "Detail",
+      "status": "REJECTED",
+      "route": "/transfers/432e7afb-70c1-4a08-9b6e-b0b0cba505ac",
+      "measurements": {
+        "1366x768": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/432e7afb-70c1-4a08-9b6e-b0b0cba505ac",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1116,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1366,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -364.8
+            }
+          },
+          "outerCard": {
+            "width": 691.9,
+            "height": 216.9,
+            "x": 267.1,
+            "y": 313.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 674.9,
+            "bodyWidth": 674.9,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 675,
+            "clientWidth": 675,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 466.5
+        },
+        "1536x864": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/432e7afb-70c1-4a08-9b6e-b0b0cba505ac",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1286,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1536,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -268.8
+            }
+          },
+          "outerCard": {
+            "width": 802.4,
+            "height": 216.9,
+            "x": 269.2,
+            "y": 313.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 785.4,
+            "bodyWidth": 785.4,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 785,
+            "clientWidth": 785,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 466.5
+        },
+        "1920x1080": {
+          "result": "PARTIAL",
+          "flags": [
+            "blank-area-below-table"
+          ],
+          "landedUrl": "/transfers/432e7afb-70c1-4a08-9b6e-b0b0cba505ac",
+          "appShell": {
+            "sider": {
+              "width": 250,
+              "height": 1132.8,
+              "x": 0
+            },
+            "header": {
+              "height": 65,
+              "width": 1670,
+              "y": 0
+            },
+            "contentAvailable": {
+              "width": 1920,
+              "height": 1132.8
+            },
+            "contentOffsets": {
+              "left": 0,
+              "top": 0,
+              "right": 0,
+              "bottom": -52.8
+            }
+          },
+          "outerCard": {
+            "width": 1052,
+            "height": 216.9,
+            "x": 298,
+            "y": 313.3,
+            "maxWidth": "none",
+            "padding": {
+              "top": 12,
+              "right": 14,
+              "bottom": 12,
+              "left": 14
+            }
+          },
+          "table": {
+            "containerWidth": 1035,
+            "bodyWidth": 1035,
+            "bodyHeight": 39,
+            "bodyMaxHeight": "none",
+            "scrollWidth": 1035,
+            "clientWidth": 1035,
+            "columnCount": 6,
+            "columns": [
+              "Item",
+              "UOM",
+              "Req. Qty",
+              "Posted Qty",
+              "Unit Cost",
+              "Total Value"
+            ],
+            "visibleRows": 1,
+            "horizontalScrollInside": false,
+            "verticalScrollInside": false
+          },
+          "pagination": null,
+          "modal": null,
+          "scroll": {
+            "pageVerticalScroll": true,
+            "pageHorizontalScroll": false,
+            "doubleVerticalScroll": false,
+            "owners": []
+          },
+          "blankBelowTable": 466.5
+        }
+      }
+    }
+  ]
+}

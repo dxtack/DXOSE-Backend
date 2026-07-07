@@ -1,0 +1,34 @@
+{
+  "results": [
+    {
+      "command": "npm install --no-audit --no-fund",
+      "label": "frontend_lockfile_install",
+      "exit": 0,
+      "outputTail": "\nup to date in 2s\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe C:\\DX OS&E\\OSE-Frontend\\node_modules\\@angular\\cli\\bin\\ng.js build",
+      "label": "frontend_build",
+      "environment": "C:\\DX OS&E\\OSE-Frontend",
+      "exit": 0,
+      "passed": "PASS",
+      "failed": null,
+      "skipped": 0,
+      "durationMs": 27409,
+      "exactFailure": null,
+      "outputTail": "▲ [WARNING] NG8113: DecimalPipe is not used within the template of TransferDetailComponent [plugin angular-compiler]\n\n    src/app/features/transfers/transfer-detail/transfer-detail.component.ts:55:4:\n      55 │     DecimalPipe,\n         ╵     ~~~~~~~~~~~\n\n\n"
+    },
+    {
+      "command": "C:\\Program Files\\nodejs\\node.exe C:\\DX OS&E\\OSE-Frontend\\node_modules\\@angular\\cli\\bin\\ng.js test --watch=false --browsers=ChromeHeadless",
+      "label": "frontend_unit_headless",
+      "environment": "C:\\DX OS&E\\OSE-Frontend",
+      "exit": 1,
+      "passed": null,
+      "failed": "FAIL",
+      "skipped": 0,
+      "durationMs": 614,
+      "exactFailure": "Node.js version v25.6.0 detected.\nOdd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.\nThe following packages are required but were not found:\n  - The \"browsers\" option requires either \"@vitest/browser-playwright\", \"@vitest/browser-webdriverio\", or \"@vitest/browser-preview\" to be installed.\nPlease install the missing packages and rerun the test command.\n",
+      "outputTail": "Node.js version v25.6.0 detected.\nOdd numbered Node.js versions will not enter LTS status and should not be used for production. For more information, please see https://nodejs.org/en/about/previous-releases/.\nThe following packages are required but were not found:\n  - The \"browsers\" option requires either \"@vitest/browser-playwright\", \"@vitest/browser-webdriverio\", or \"@vitest/browser-preview\" to be installed.\nPlease install the missing packages and rerun the test command.\n"
+    }
+  ]
+}

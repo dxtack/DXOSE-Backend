@@ -1,0 +1,75 @@
+{
+  "generated_at": "2026-06-27T16:47:17Z",
+  "files": [
+    {
+      "file_name": "GATE_B_BLOCKED_ITEMS.md",
+      "sha256": "3DA29B981DB1C55031FCD179D250B391AD43711CCA0A2D7796147F968CF43BC4",
+      "size_bytes": 25255
+    },
+    {
+      "file_name": "gate_b_build_final.py",
+      "sha256": "7162B53676E908D1B84DD0D521B9F368E06CFAAF91DBD6F7134C5DD44CC61697",
+      "size_bytes": 45213
+    },
+    {
+      "file_name": "GATE_B_CODE_SNAPSHOT.json",
+      "sha256": "EE6355AAAE3766ED74A97D6B6A395DA1836D32DDC38B25027DE9EF2F03CADEAF",
+      "size_bytes": 3905
+    },
+    {
+      "file_name": "GATE_B_COMMAND_LOG.md",
+      "sha256": "2AD1B5287C319A1068971E9D81F4FE3CA6DDD78B60F3D9EB3FB4293A15F5856B",
+      "size_bytes": 6589
+    },
+    {
+      "file_name": "GATE_B_ENVIRONMENT_BASELINE.json",
+      "sha256": "2F8C3D09D758826671D79290CDA470843FFACA9EE58B7A7B53C20BA0C77F7478",
+      "size_bytes": 17036
+    },
+    {
+      "file_name": "GATE_B_EVIDENCE_INDEX.json",
+      "sha256": "9879BDA7C89277A22C4D86EBEAAA4E1B8BC3B6241BA2B14FA28C5E0D49F2695D",
+      "size_bytes": 239
+    },
+    {
+      "file_name": "GATE_B_FILE_INTEGRITY.json",
+      "sha256": "A27C2BBDF371ABE30E1EE62847B586BF365D48FAF51FA3BFC567F57BBDDBA556",
+      "size_bytes": 2516
+    },
+    {
+      "file_name": "GATE_B_FINDINGS.md",
+      "sha256": "B35309C919D4355CFE408120B6C5E92CCD6D9017CA298463108FB2644F27EF44",
+      "size_bytes": 4586
+    },
+    {
+      "file_name": "GATE_B_REQUIREMENT_MATRIX.csv",
+      "sha256": "4CF78C066AF7E381D1197FD16DFCAC51D0D576B8422DF024DA6810BCE0834936",
+      "size_bytes": 182132
+    },
+    {
+      "file_name": "GATE_B_RUNTIME_RESULTS.json",
+      "sha256": "E13356C6184BAC5287DE29F309FCD4EFC1B3329EAC483F62E4A234D719CA0F63",
+      "size_bytes": 2921
+    },
+    {
+      "file_name": "GATE_B_RUNTIME_SCENARIOS.csv",
+      "sha256": "B928DDDA6E695028A34A5AE263DAABB9797655B7C9A058135FD098BFD5865746",
+      "size_bytes": 5224
+    },
+    {
+      "file_name": "GATE_B_STATUS_DECISION_LOG.csv",
+      "sha256": "43581C141308B888145EA0BCB5EB0687E019C6598FC313C2A68FAF1E96FA06C7",
+      "size_bytes": 42883
+    },
+    {
+      "file_name": "GATE_B_SUMMARY.json",
+      "sha256": "450407C67FB813635E51035D0BF1CB9B86710D7C96A0331886CFD9156B8C95F1",
+      "size_bytes": 1007
+    },
+    {
+      "file_name": "GATE_B_VALIDATION.json",
+      "sha256": "0486C4390D57AC4A185D4EEB3D9462F1A0297CA648EAE9FE9A83BFCD35ECF058",
+      "size_bytes": 141
+    }
+  ]
+}

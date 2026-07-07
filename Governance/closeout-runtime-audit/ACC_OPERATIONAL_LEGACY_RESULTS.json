@@ -1,0 +1,668 @@
+{
+  "executedAt": "2026-06-26T23:37:28.294Z",
+  "tenant": {
+    "slug": "grand-horizon",
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3"
+  },
+  "fixtureTag": "CLOSEOUT_RT_AUDIT",
+  "stockFixture": {
+    "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+    "itemName": "Garbage Bag Roll (50pcs)",
+    "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+    "locationName": "Main Store",
+    "departmentId": "dd8e4d25-b467-4b72-ac7c-791a659c07f3",
+    "qtyOnHand": 15,
+    "unitCost": 18
+  },
+  "zeroLegacyChainResolver": "PASS (P30 — see TEST_EXECUTION_RESULTS)",
+  "zeroOperationalLegacy": "TESTED_BELOW",
+  "breakageAutoApproval": [
+    {
+      "userKey": "DEPT_MANAGER_A",
+      "user": "fb.manager@grandhorizon.com",
+      "role": "DEPT_MANAGER",
+      "jwtPermissionsSample": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW"
+      ],
+      "endpoint": "POST /api/breakage",
+      "requestBody": {
+        "reason": "CLOSEOUT_RT_AUDIT disposable breakage test",
+        "suggestedAction": "HOTEL",
+        "notes": "CLOSEOUT_RT_AUDIT",
+        "lines": [
+          {
+            "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+            "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+            "qty": 1,
+            "unitCost": 18,
+            "totalValue": 18
+          }
+        ]
+      },
+      "initialStatus": "DRAFT (expected for non-auto roles)",
+      "httpStatus": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "constitutionResult": "OBSERVED"
+    },
+    {
+      "userKey": "STOREKEEPER",
+      "user": "store@grandhorizon.com",
+      "role": "STOREKEEPER",
+      "jwtPermissionsSample": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "TRANSFER_VIEW"
+      ],
+      "endpoint": "POST /api/breakage",
+      "requestBody": {
+        "reason": "CLOSEOUT_RT_AUDIT disposable breakage test",
+        "suggestedAction": "HOTEL",
+        "notes": "CLOSEOUT_RT_AUDIT",
+        "lines": [
+          {
+            "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+            "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+            "qty": 1,
+            "unitCost": 18,
+            "totalValue": 18
+          }
+        ]
+      },
+      "initialStatus": "DRAFT (expected for non-auto roles)",
+      "httpStatus": 201,
+      "errorCode": null,
+      "finalDocumentStatus": "DRAFT",
+      "approvalRequest": {
+        "id": "28d952d6-9b72-46ab-9709-124948078c73",
+        "status": "PENDING",
+        "currentStep": 2,
+        "totalSteps": 4,
+        "accWorkflowVersionId": "f1c40d9e-ce82-4836-ba80-bd58118a962f",
+        "steps": [
+          {
+            "stepNumber": 1,
+            "requiredRole": "DEPT_MANAGER",
+            "status": "APPROVED",
+            "actedBy": "store@grandhorizon.com",
+            "actedAt": "2026-06-26T23:37:29.555Z",
+            "comment": "Auto-approved by system due to high-level authority."
+          },
+          {
+            "stepNumber": 2,
+            "requiredRole": "COST_CONTROL",
+            "status": "PENDING",
+            "actedBy": null,
+            "actedAt": null,
+            "comment": null
+          },
+          {
+            "stepNumber": 3,
+            "requiredRole": "FINANCE_MANAGER",
+            "status": "PENDING",
+            "actedBy": null,
+            "actedAt": null,
+            "comment": null
+          },
+          {
+            "stepNumber": 4,
+            "requiredRole": "GENERAL_MANAGER",
+            "status": "PENDING",
+            "actedBy": null,
+            "actedAt": null,
+            "comment": null
+          }
+        ]
+      },
+      "ledger": [],
+      "stockDelta": {
+        "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+        "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+        "qtyOnHandAfter": "15"
+      },
+      "audit": [
+        {
+          "action": "CREATE",
+          "changedAt": "2026-06-26T23:37:29.625Z",
+          "changedBy": "119786df-ef21-40df-a585-319e6ea474da"
+        }
+      ],
+      "constitutionResult": "NO_AUTO_APPROVE"
+    },
+    {
+      "userKey": "COST_CONTROL",
+      "user": "cost@grandhorizon.com",
+      "role": "COST_CONTROL",
+      "jwtPermissionsSample": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "TRANSFER_VIEW",
+        "GRN_VIEW",
+        "GRN_MANAGE"
+      ],
+      "endpoint": "POST /api/breakage",
+      "requestBody": {
+        "reason": "CLOSEOUT_RT_AUDIT disposable breakage test",
+        "suggestedAction": "HOTEL",
+        "notes": "CLOSEOUT_RT_AUDIT",
+        "lines": [
+          {
+            "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+            "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+            "qty": 1,
+            "unitCost": 18,
+            "totalValue": 18
+          }
+        ]
+      },
+      "initialStatus": "DRAFT (expected for non-auto roles)",
+      "httpStatus": 403,
+      "errorCode": null,
+      "constitutionResult": "OBSERVED"
+    },
+    {
+      "userKey": "FINANCE",
+      "user": "finance@grandhorizon.com",
+      "role": "FINANCE_MANAGER",
+      "jwtPermissionsSample": [
+        "BASIC_DATA_VIEW",
+        "BASIC_DATA_EDIT",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE"
+      ],
+      "endpoint": "POST /api/breakage",
+      "requestBody": {
+        "reason": "CLOSEOUT_RT_AUDIT disposable breakage test",
+        "suggestedAction": "HOTEL",
+        "notes": "CLOSEOUT_RT_AUDIT",
+        "lines": [
+          {
+            "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+            "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+            "qty": 1,
+            "unitCost": 18,
+            "totalValue": 18
+          }
+        ]
+      },
+      "initialStatus": "DRAFT (expected for non-auto roles)",
+      "httpStatus": 201,
+      "errorCode": null,
+      "finalDocumentStatus": "DRAFT",
+      "approvalRequest": {
+        "id": "3632d23b-6057-469a-ad6a-cd237fc4638d",
+        "status": "PENDING",
+        "currentStep": 2,
+        "totalSteps": 4,
+        "accWorkflowVersionId": "f1c40d9e-ce82-4836-ba80-bd58118a962f",
+        "steps": [
+          {
+            "stepNumber": 1,
+            "requiredRole": "DEPT_MANAGER",
+            "status": "APPROVED",
+            "actedBy": "finance@grandhorizon.com",
+            "actedAt": "2026-06-26T23:37:30.695Z",
+            "comment": "Auto-approved by system due to high-level authority."
+          },
+          {
+            "stepNumber": 2,
+            "requiredRole": "COST_CONTROL",
+            "status": "PENDING",
+            "actedBy": null,
+            "actedAt": null,
+            "comment": null
+          },
+          {
+            "stepNumber": 3,
+            "requiredRole": "FINANCE_MANAGER",
+            "status": "PENDING",
+            "actedBy": null,
+            "actedAt": null,
+            "comment": null
+          },
+          {
+            "stepNumber": 4,
+            "requiredRole": "GENERAL_MANAGER",
+            "status": "PENDING",
+            "actedBy": null,
+            "actedAt": null,
+            "comment": null
+          }
+        ]
+      },
+      "ledger": [],
+      "stockDelta": {
+        "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+        "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+        "qtyOnHandAfter": "15"
+      },
+      "audit": [
+        {
+          "action": "CREATE",
+          "changedAt": "2026-06-26T23:37:30.738Z",
+          "changedBy": "e553ca9c-d315-4f28-99ad-1574d1fd49da"
+        }
+      ],
+      "constitutionResult": "NO_AUTO_APPROVE"
+    },
+    {
+      "userKey": "GM",
+      "error": "login_failed",
+      "http": 401
+    },
+    {
+      "userKey": "ORG_MANAGER",
+      "error": "login_failed",
+      "http": 401
+    },
+    {
+      "userKey": "ADMIN",
+      "user": "admin@grandhorizon.com",
+      "role": "ADMIN",
+      "jwtPermissionsSample": [
+        "BASIC_DATA_EDIT",
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE"
+      ],
+      "endpoint": "POST /api/breakage",
+      "requestBody": {
+        "reason": "CLOSEOUT_RT_AUDIT disposable breakage test",
+        "suggestedAction": "HOTEL",
+        "notes": "CLOSEOUT_RT_AUDIT",
+        "lines": [
+          {
+            "itemId": "0f97c9cb-5771-4c95-9b6d-eb4ec45ed4c6",
+            "locationId": "3dee5398-c0a1-423b-81db-451f295dab61",
+            "qty": 1,
+            "unitCost": 18,
+            "totalValue": 18
+          }
+        ]
+      },
+      "initialStatus": "DRAFT (expected for non-auto roles)",
+      "httpStatus": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "constitutionResult": "OBSERVED"
+    },
+    {
+      "userKey": "SUPER_ADMIN",
+      "error": "login_failed",
+      "http": 403
+    }
+  ],
+  "lostAutoApproval": [
+    {
+      "userKey": "GM",
+      "loginFailed": true
+    },
+    {
+      "userKey": "ORG_MANAGER",
+      "loginFailed": true
+    },
+    {
+      "userKey": "DEPT_MANAGER_A",
+      "user": "fb.manager@grandhorizon.com",
+      "role": "DEPT_MANAGER",
+      "httpStatus": 403
+    }
+  ],
+  "legacyApprovalRoutes": [
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-dept",
+      "actor": "DEPT_MANAGER_A",
+      "role": "DEPT_MANAGER",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "message": "Action \"read\" denied: document outside your department/location scope.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-dept",
+      "actor": "STOREKEEPER",
+      "role": "STOREKEEPER",
+      "hasApproveBreakagePermission": false,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": null,
+      "message": "Access denied. Insufficient permissions.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-dept",
+      "actor": "COST_CONTROL",
+      "role": "COST_CONTROL",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 409,
+      "errorCode": "CONCURRENCY_VERSION_REQUIRED",
+      "message": "Concurrency version is required for this operation. Reload the document and retry.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-cost",
+      "actor": "DEPT_MANAGER_A",
+      "role": "DEPT_MANAGER",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "message": "Action \"read\" denied: document outside your department/location scope.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-cost",
+      "actor": "STOREKEEPER",
+      "role": "STOREKEEPER",
+      "hasApproveBreakagePermission": false,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": null,
+      "message": "Access denied. Insufficient permissions.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-cost",
+      "actor": "COST_CONTROL",
+      "role": "COST_CONTROL",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 400,
+      "errorCode": null,
+      "message": "Document must be in DEPT_APPROVED status.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-finance",
+      "actor": "DEPT_MANAGER_A",
+      "role": "DEPT_MANAGER",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "message": "Action \"read\" denied: document outside your department/location scope.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-finance",
+      "actor": "STOREKEEPER",
+      "role": "STOREKEEPER",
+      "hasApproveBreakagePermission": false,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": null,
+      "message": "Access denied. Insufficient permissions.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-finance",
+      "actor": "COST_CONTROL",
+      "role": "COST_CONTROL",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 400,
+      "errorCode": null,
+      "message": "Document must be in COST_CONTROL_APPROVED status.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-gm",
+      "actor": "DEPT_MANAGER_A",
+      "role": "DEPT_MANAGER",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": "SCOPE_VIOLATION",
+      "message": "Action \"read\" denied: document outside your department/location scope.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-gm",
+      "actor": "STOREKEEPER",
+      "role": "STOREKEEPER",
+      "hasApproveBreakagePermission": false,
+      "statusBefore": "DRAFT",
+      "httpStatus": 403,
+      "errorCode": null,
+      "message": "Access denied. Insufficient permissions.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    },
+    {
+      "docCase": "INTERNAL_no_approvalRequest",
+      "route": "POST /breakage/:id/approve-gm",
+      "actor": "COST_CONTROL",
+      "role": "COST_CONTROL",
+      "hasApproveBreakagePermission": true,
+      "statusBefore": "DRAFT",
+      "httpStatus": 400,
+      "errorCode": null,
+      "message": "Document must be in FINANCE_APPROVED status.",
+      "statusAfter": "DRAFT",
+      "posting": false,
+      "ledgerCount": 0,
+      "stepBypassPossible": false
+    }
+  ],
+  "getPassFastForward": [
+    {
+      "userKey": "DEPT_MANAGER_A",
+      "user": "fb.manager@grandhorizon.com",
+      "role": "DEPT_MANAGER",
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "INVENTORY_VIEW",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "REPORTS_VIEW",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_VIEW",
+        "ISSUE_VIEW",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_CREATE",
+        "LOST_FOUND_RETURN",
+        "WORKFLOW_PIPELINE_VIEW",
+        "REQUISITION_VIEW",
+        "REQUISITION_CREATE",
+        "REQUISITION_SUBMIT",
+        "REQUISITION_APPROVE",
+        "GET_PASS_APPROVE"
+      ],
+      "createHttp": 201,
+      "submitHttp": 200,
+      "submitError": null,
+      "initialStatus": "DRAFT",
+      "statusAfterSubmit": "PENDING_COST_CONTROL",
+      "expectedFirstPendingStep": "PENDING_DEPT (typical)",
+      "approvalStamps": {
+        "dept": "326c29fa-8969-4dab-b8db-9e5dabf142ea",
+        "costControl": null,
+        "finance": null,
+        "gm": null,
+        "security": null
+      },
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "intermediateApprovalsBySubmitter": true
+    },
+    {
+      "userKey": "FINANCE",
+      "user": "finance@grandhorizon.com",
+      "role": "FINANCE_MANAGER",
+      "permissions": [
+        "BASIC_DATA_VIEW",
+        "BASIC_DATA_EDIT",
+        "INVENTORY_VIEW",
+        "MOVEMENTS_VIEW",
+        "LEDGER_VIEW",
+        "INVENTORY_HISTORY_VIEW",
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_VIEW",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "GRN_VIEW",
+        "GRN_MANAGE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "ADJUSTMENT_CREATE",
+        "STOCK_COUNT_VIEW",
+        "STOCK_COUNT_MANAGE",
+        "REPORTS_VIEW",
+        "REPORTS_EXPORT",
+        "READ_BREAKAGE",
+        "READ_LOST",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "VIEW_DASHBOARD",
+        "DASHBOARD_VIEW",
+        "GET_PASS_VIEW",
+        "GET_PASS_CREATE",
+        "GET_PASS_APPROVE",
+        "GET_PASS_APPROVE_EXIT",
+        "GET_PASS_APPROVE_RETURN",
+        "GET_PASS_FORCE_CLOSE_INITIATE",
+        "GET_PASS_CONFIRM_DESTINATION",
+        "IMPORT_EXCEL",
+        "IMPORT_CREATE",
+        "AUDIT_LOG_VIEW",
+        "PERIOD_CLOSE_MANAGE",
+        "INTEGRITY_VIEW",
+        "HOTEL_USERS_MANAGE",
+        "USER_MANAGE",
+        "TENANT_OPS_DIAGNOSE",
+        "ISSUE_VIEW",
+        "ADJUSTMENT_VIEW",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_RETURN",
+        "WORKFLOW_PIPELINE_VIEW",
+        "ACCESS_CONTROL_VIEW",
+        "PAR_LEVELS_VIEW",
+        "PAR_LEVELS_MANAGE",
+        "REQUISITION_VIEW",
+        "REQUISITION_CREATE",
+        "REQUISITION_SUBMIT",
+        "REQUISITION_APPROVE",
+        "SETTINGS_MANAGE",
+        "TENANT_MANAGE"
+      ],
+      "createHttp": 201,
+      "submitHttp": 200,
+      "submitError": null,
+      "initialStatus": "DRAFT",
+      "statusAfterSubmit": "PENDING_GM",
+      "expectedFirstPendingStep": "PENDING_DEPT (typical)",
+      "approvalStamps": {
+        "dept": null,
+        "costControl": null,
+        "finance": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+        "gm": null,
+        "security": null
+      },
+      "auditActions": [
+        "SUBMIT",
+        "CREATE"
+      ],
+      "intermediateApprovalsBySubmitter": true
+    },
+    {
+      "userKey": "GM",
+      "loginFailed": true
+    },
+    {
+      "userKey": "ORG_MANAGER",
+      "loginFailed": true
+    },
+    {
+      "userKey": "SUPER_ADMIN",
+      "loginFailed": true
+    }
+  ],
+  "orgSuperPermissionBypass": [
+    {
+      "error": "no_acc_doc"
+    }
+  ]
+}

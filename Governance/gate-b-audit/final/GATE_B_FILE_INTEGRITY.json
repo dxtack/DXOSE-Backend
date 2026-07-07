@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-06-27T16:57:03Z",
+  "directory": "c:\\DX OS&E\\Governance\\gate-b-audit\\final",
+  "excludes_self": true,
+  "files": [
+    {
+      "file_name": "gate-b-final-runtime.js",
+      "sha256": "D30D878CFBA5A9C04C37852ED2580D21FB815ED70DD03440663A814332D321BA",
+      "size_bytes": 7810
+    },
+    {
+      "file_name": "GATE_B_BLOCKED_ITEMS.md",
+      "sha256": "9ACD41FF833A98818C398BD3789036918192208938AD0BF1F31429EACD869BDC",
+      "size_bytes": 30558
+    },
+    {
+      "file_name": "gate_b_build_final.py",
+      "sha256": "7162B53676E908D1B84DD0D521B9F368E06CFAAF91DBD6F7134C5DD44CC61697",
+      "size_bytes": 45213
+    },
+    {
+      "file_name": "GATE_B_CLOSEOUT_CORRECTION.md",
+      "sha256": "3097604C4540CF5A312C04ADAE52C25BFEC2706351C319D11D8C9A7FB0E8356D",
+      "size_bytes": 1393
+    },
+    {
+      "file_name": "gate_b_closeout_correction.py",
+      "sha256": "C310B9E718B57C9892E13E8088E686A179024A38A895629850E0094B27117559",
+      "size_bytes": 30650
+    },
+    {
+      "file_name": "GATE_B_CODE_SNAPSHOT.json",
+      "sha256": "EE6355AAAE3766ED74A97D6B6A395DA1836D32DDC38B25027DE9EF2F03CADEAF",
+      "size_bytes": 3905
+    },
+    {
+      "file_name": "GATE_B_COMMAND_LOG.md",
+      "sha256": "2AD1B5287C319A1068971E9D81F4FE3CA6DDD78B60F3D9EB3FB4293A15F5856B",
+      "size_bytes": 6589
+    },
+    {
+      "file_name": "GATE_B_CURRENT_SESSION_RUNTIME.json",
+      "sha256": "090A47E5B132E33B7799463F867685ACEDBF9653AB70310321DBBB6FCDB2B206",
+      "size_bytes": 4863
+    },
+    {
+      "file_name": "GATE_B_ENVIRONMENT_BASELINE.json",
+      "sha256": "2F8C3D09D758826671D79290CDA470843FFACA9EE58B7A7B53C20BA0C77F7478",
+      "size_bytes": 17036
+    },
+    {
+      "file_name": "GATE_B_EVIDENCE_INDEX.json",
+      "sha256": "5625A871F72DDAA810274D915C39E14F3DDE0324D8A2E28C6A2807C846F49A2A",
+      "size_bytes": 7952
+    },
+    {
+      "file_name": "GATE_B_FINDINGS.md",
+      "sha256": "7B76D95EBE6C2224A392A415945558B5C7E9796DF6ED25A9D154B538726C813A",
+      "size_bytes": 2047
+    },
+    {
+      "file_name": "GATE_B_HISTORICAL_EVIDENCE.json",
+      "sha256": "6D7ADFC4ECEA90E17F4A7040CAB6DE287BEAA652092E7754E6477FC183E8E765",
+      "size_bytes": 1435
+    },
+    {
+      "file_name": "GATE_B_REQUIREMENT_MATRIX.csv",
+      "sha256": "59E3EAD6260905902D7E595E99D3E0FBFBA91D32413682D47B731CCF33B1E838",
+      "size_bytes": 181633
+    },
+    {
+      "file_name": "GATE_B_RUNTIME_RESULTS.json",
+      "sha256": "C8F624E730DB1C0B9CA5BF3F455BDC42323C078EB6C8D9B1A0441D0BB8AED038",
+      "size_bytes": 3184
+    },
+    {
+      "file_name": "GATE_B_RUNTIME_SCENARIOS.csv",
+      "sha256": "3D97976CB7EA9F7C609DD32DD6000ABEA1167C4F7D7087658C6E752C978FE3B5",
+      "size_bytes": 1218
+    },
+    {
+      "file_name": "GATE_B_STATUS_DECISION_LOG.csv",
+      "sha256": "43581C141308B888145EA0BCB5EB0687E019C6598FC313C2A68FAF1E96FA06C7",
+      "size_bytes": 42883
+    },
+    {
+      "file_name": "GATE_B_SUMMARY.json",
+      "sha256": "2D152A877136E550CCF15DC3A64C7252FA6F101EE5D9BA7C7D372394B13F8A17",
+      "size_bytes": 1308
+    },
+    {
+      "file_name": "GATE_B_VALIDATION.json",
+      "sha256": "44827A119BB185648120B2A9D708FEAAA6FD95A044B5479A52EED5653D1A2DA6",
+      "size_bytes": 122
+    }
+  ]
+}

@@ -1,0 +1,216 @@
+{
+  "manifest_version": "gate-a.final",
+  "generated_by": "gate_a_review_pack.py",
+  "generation_timestamp": "2026-06-27T15:51:16Z",
+  "directory": "Governance/constitution-extraction",
+  "files": [
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_FRESH_REGISTER.csv",
+      "file_name": "CONSTITUTION_FRESH_REGISTER.csv",
+      "file_size_bytes": 239509,
+      "line_count": 477,
+      "sha256": "BBAA877C60C92D47920AFE16D67B77E613BA2AFECA8A1514D61797E77338AAE9",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_FRESH_REGISTER.md",
+      "file_name": "CONSTITUTION_FRESH_REGISTER.md",
+      "file_size_bytes": 50090,
+      "line_count": 644,
+      "sha256": "DA371B7A8DE7894FCE8F066609EDFE0AA30EEBAF6360CCAC5624282739B02B44",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_EXTRACTION_VALIDATION.json",
+      "file_name": "CONSTITUTION_EXTRACTION_VALIDATION.json",
+      "file_size_bytes": 2060,
+      "line_count": null,
+      "sha256": "4F557AB759551B1E73840E5E74830D1B48B353228E73A8F2133F3F889C6A3E9E",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_SOURCE_FIDELITY.json",
+      "file_name": "CONSTITUTION_SOURCE_FIDELITY.json",
+      "file_size_bytes": 470,
+      "line_count": null,
+      "sha256": "51380FE3742F352F0AC58FC63BC5D07811343848E443C2DED4DE32391E3F138D",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/GATE_A_WORKSPACE_VALIDATION.json",
+      "file_name": "GATE_A_WORKSPACE_VALIDATION.json",
+      "file_size_bytes": 690,
+      "line_count": null,
+      "sha256": "223C72B7B6B58DFD591683E8FEBE28E9070A9DAA548FE4229B646505D28401CE",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_SEMANTIC_ADJUDICATION.csv",
+      "file_name": "CONSTITUTION_SEMANTIC_ADJUDICATION.csv",
+      "file_size_bytes": 102132,
+      "line_count": 477,
+      "sha256": "88B772D43B12D92CD5C423D72BC2AB6248DDFB0DD385B24FA870C57451329FA1",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_PRODUCT_REQUIREMENTS.csv",
+      "file_name": "CONSTITUTION_PRODUCT_REQUIREMENTS.csv",
+      "file_size_bytes": 75988,
+      "line_count": 170,
+      "sha256": "6A53DA5642C1770E251C767BD7B7DBD9038A622BB3BC111CD9C0F58970199ABC",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_UX_QA_REQUIREMENTS.csv",
+      "file_name": "CONSTITUTION_UX_QA_REQUIREMENTS.csv",
+      "file_size_bytes": 29201,
+      "line_count": 78,
+      "sha256": "309D1916F81680874BD5663B58B241597FFA728A09BFF68816CCE0A6691CFC7B",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_GOVERNANCE_REQUIREMENTS.csv",
+      "file_name": "CONSTITUTION_GOVERNANCE_REQUIREMENTS.csv",
+      "file_size_bytes": 8426,
+      "line_count": 18,
+      "sha256": "95B9EE740824DAC5D5F1B2F004E4522B7F8C51285B413BE10B3B0563ADECB6AB",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_GOVERNANCE_DEFINITIONS.csv",
+      "file_name": "CONSTITUTION_GOVERNANCE_DEFINITIONS.csv",
+      "file_size_bytes": 15377,
+      "line_count": 44,
+      "sha256": "7C4DCD12F2FDC314E7CD1C4DD82AC8EE37EFECD286EBA38852CB937A5A7F5252",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_OPTIONAL_CAPABILITIES.csv",
+      "file_name": "CONSTITUTION_OPTIONAL_CAPABILITIES.csv",
+      "file_size_bytes": 4221,
+      "line_count": 10,
+      "sha256": "805C7F7A22D543212EB254CB1D27196F9879F1DE34B04889791CBAC17730E145",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_STRONG_RECOMMENDATIONS.csv",
+      "file_name": "CONSTITUTION_STRONG_RECOMMENDATIONS.csv",
+      "file_size_bytes": 2318,
+      "line_count": 6,
+      "sha256": "14ED98B597718CC8AEB014FDCB70D96E698BECE0FDB713C2A1BDD69FEF7CDF38",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CURRENT_GATE_A_VERSION.json",
+      "file_name": "CURRENT_GATE_A_VERSION.json",
+      "file_size_bytes": 840,
+      "line_count": null,
+      "sha256": "B34269F032B3A1A856829987347D4CBD90BBD85F126F32C365D665BF74557A09",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/validate_constitution_extraction.py",
+      "file_name": "validate_constitution_extraction.py",
+      "file_size_bytes": 11921,
+      "line_count": 265,
+      "sha256": "9ED20B0528D380382B25EC8040AEBF2798EC49560427E7173CC05314803E3E4F",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/validate_source_fidelity.py",
+      "file_name": "validate_source_fidelity.py",
+      "file_size_bytes": 3362,
+      "line_count": 89,
+      "sha256": "CCDC329B441A7035C8D5802157BE3704EBC6B282077A792E2C4142B863CD1729",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/validate_workspace.py",
+      "file_name": "validate_workspace.py",
+      "file_size_bytes": 3314,
+      "line_count": 83,
+      "sha256": "F7425ED0E8701FBEC79C1A78365FC44C7931C1ACCA443B6FBBC00C13540CAC08",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/constitution_semantic.py",
+      "file_name": "constitution_semantic.py",
+      "file_size_bytes": 13544,
+      "line_count": 249,
+      "sha256": "2B65102E4F57FA04574473FD4171B083C1F6D3201A975306B9875FE3689D1D50",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/constitution_adjudication.py",
+      "file_name": "constitution_adjudication.py",
+      "file_size_bytes": 12916,
+      "line_count": 283,
+      "sha256": "B0492341FD9D507C3215F9CB11C19F75548AA65233179D1298213F08D941D729",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/gate_a_finalize.py",
+      "file_name": "gate_a_finalize.py",
+      "file_size_bytes": 27390,
+      "line_count": 584,
+      "sha256": "6A895AE37161DB2A67B9F5FC4316F71F578FC9B1DA4CAC675AFF25065230B0E7",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/run_gate_a_final.py",
+      "file_name": "run_gate_a_final.py",
+      "file_size_bytes": 2886,
+      "line_count": 79,
+      "sha256": "C28E1CE43751351C86BDFBD4B42894B94911436B553CE64474098763C63DEB0A",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/CONSTITUTION_EXTRACTION_SOURCE.json",
+      "file_name": "CONSTITUTION_EXTRACTION_SOURCE.json",
+      "file_size_bytes": 606,
+      "line_count": null,
+      "sha256": "5FEAFD8C5CF65AC9A197EDDA085701509659E41E011D94C1CEF75C46CFCF7631",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/extract_constitution_from_pdf.py",
+      "file_name": "extract_constitution_from_pdf.py",
+      "file_size_bytes": 5119,
+      "line_count": 153,
+      "sha256": "1A61D5891A30E08C535A3C44894D5F070938759035097319517B03180DD18F24",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/GATE_A_CHAPTER_REVIEW_SAMPLES.md",
+      "file_name": "GATE_A_CHAPTER_REVIEW_SAMPLES.md",
+      "file_size_bytes": 10087,
+      "line_count": 352,
+      "sha256": "399A300C3AA1415DF0B18B13162EBB72071AF737D496FB46A40972B724BF8926",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/GATE_A_FILE_INTEGRITY.json",
+      "file_name": "GATE_A_FILE_INTEGRITY.json",
+      "file_size_bytes": 9603,
+      "line_count": null,
+      "sha256": "4C2CBCD4D5CD7CA44122725DF0BDB0334F74E306D8822FD87CDFCFD966512A74",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/GATE_A_ID_MIGRATION.json",
+      "file_name": "GATE_A_ID_MIGRATION.json",
+      "file_size_bytes": 10139,
+      "line_count": null,
+      "sha256": "11B1D29866A2B16BE2632AF7ADE07A54F6932DCE3D6A0F9372384D4B50FE294F",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    },
+    {
+      "relative_path": "Governance/constitution-extraction/GATE_A_MD_REPRODUCTION.json",
+      "file_name": "GATE_A_MD_REPRODUCTION.json",
+      "file_size_bytes": 169,
+      "line_count": null,
+      "sha256": "D32D5FEDAFDD9B1E76478AF5952E80C59AC0440992D109C3AED2A5B6235C33C0",
+      "generation_timestamp": "2026-06-27T15:51:16Z"
+    }
+  ]
+}

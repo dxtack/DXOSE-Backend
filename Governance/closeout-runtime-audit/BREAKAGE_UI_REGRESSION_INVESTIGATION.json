@@ -1,0 +1,19 @@
+{
+  "executedAt": "2026-06-27T01:12:09.217Z",
+  "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+  "rootCause": "Harness DB inserts with CLOSEOUT_RT_AUDIT tag; STATUS.undefined = missing i18n for non-standard status or null status in list mapper",
+  "rows": [
+    {
+      "recordId": "9b5af6a0-f3b4-4de1-be31-e0bfe3c9b53f",
+      "fixtureTag": "CLOSEOUT_RT_AUDIT",
+      "createdByScript": "closeout-runtime-audit",
+      "number": "BRK-2026-00109",
+      "statusDb": "APPROVED",
+      "lines": 1,
+      "creator": "org-mgr@closeout-audit.local",
+      "reason": "CLOSEOUT_RT_AUDIT breakage create matrix",
+      "whyVisible": "harness/fixture",
+      "cleanupRestoration": "DO NOT DELETE — posted"
+    }
+  ]
+}

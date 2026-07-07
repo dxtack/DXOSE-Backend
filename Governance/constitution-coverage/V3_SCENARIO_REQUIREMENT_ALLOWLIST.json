@@ -1,0 +1,898 @@
+{
+  "version": "lock-correction-v1",
+  "generatedAt": "2026-06-27T22:52:32.100Z",
+  "description": "Delivered scenario→requirement allow-list with semantic whyAllowed; v3 baseline frozen",
+  "scenarios": [
+    {
+      "scenarioId": "V2-CF-GP-NEVER-SUBMIT",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Get Pass submit returned HTTP 200 without active ACC assignment — proves Scope gate missing on submit API."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001",
+        "C05-5.2-011"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-CF-LEG-LOST-DEPT",
+      "allowedRequirementIds": [],
+      "whyAllowed": {},
+      "forbiddenExamples": [
+        "C04-4.3-001",
+        "C04-4.3-003",
+        "C03-3.3-001"
+      ],
+      "crossCuttingAllowed": true
+    },
+    {
+      "scenarioId": "V2-CF-GP-FF-FINANCE",
+      "allowedRequirementIds": [
+        "C04-4.3-001",
+        "C03-3.3-001"
+      ],
+      "whyAllowed": {
+        "C04-4.3-001": "Finance creator submit fast-forwards to PENDING_GM skipping ACC-pinned approval chain steps — lifecycle bypass.",
+        "C03-3.3-001": "Reviewer/creator authority model violated when financeApprovedBy set without dept/cc stamps."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003",
+        "C05-5.2-011"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-CF-GP-FF-ORG",
+      "allowedRequirementIds": [
+        "C04-4.3-001",
+        "C03-3.3-001"
+      ],
+      "whyAllowed": {
+        "C04-4.3-001": "Org creator submit jumps to PENDING_SECURITY with all stamps — skips intermediate workflow steps.",
+        "C03-3.3-001": "Creator role bypasses step-by-step reviewer assignment enforcement."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003",
+        "C05-5.2-011"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-CF-GP-XT-READ",
+      "allowedRequirementIds": [
+        "C04-4.2-002",
+        "C23-23.6-002"
+      ],
+      "whyAllowed": {
+        "C04-4.2-002": "Cross-tenant Get Pass read returned HTTP 404 — tenant isolation on read path.",
+        "C23-23.6-002": "Lookup/tenant boundary PASS for Get Pass module read probe."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-CF-GRN-RESUBMIT-DEAD",
+      "allowedRequirementIds": [
+        "C02-2.7-002",
+        "C03-3.4-009"
+      ],
+      "whyAllowed": {
+        "C02-2.7-002": "Independent /resubmit route exists in FE but backend returns 404 — violates Edit-then-Submit after Reject model.",
+        "C03-3.4-009": "REJECTED document must not re-enter workflow via separate resubmit action."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-CF-WP-NEVER-LIST",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Workflow pipeline list returned HTTP 200 with 50 rows without assignment — Scope gate missing on pipeline list API."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001",
+        "C07-7.8-002"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-CF-WP-NEVER-SUMMARY",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Pipeline summary returned HTTP 200 with 179 counts without assignment."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-CF-WP-NEVER-ALERTS",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Pipeline alerts returned HTTP 200 with 15 items without assignment."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-A-NEVER-SUBMIT",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Get Pass submit succeeded for user with no assignment record."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-A-INACTIVE-SUBMIT",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Inactive assignment still allowed submit — Scope/lifecycle gate failure."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-A-DELETED-SUBMIT",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Submit after deleted assignment still HTTP 200 — assignment Scope not enforced."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001",
+        "C08-8.6-002"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-A-WRONG-PROP-SUBMIT",
+      "allowedRequirementIds": [
+        "C04-4.3-003",
+        "C04-4.4-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Submit allowed outside assigned property scope.",
+        "C04-4.4-003": "Wrong-property assignment did not block Get Pass submit."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-A-VALID-SUBMIT",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Positive control — valid assignment permits submit (DRAFT→PENDING_COST_CONTROL)."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-A-STALE-JWT",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Stale JWT session still permitted submit — session/assignment Scope gate failure."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001",
+        "C08-8.6-002"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-B-NEVER-LIST",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Buyer pipeline list exposed 50 rows without assignment."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-B-NEVER-SUMMARY",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Buyer summary returned empty but HTTP 200 without assignment check proven."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-B-NEVER-ALERTS",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Buyer alerts returned 15 items without assignment."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-B-FIN-POS",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Finance positive-position probe — empty result with authorized finance context."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-B-DASH-NEVER",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Dashboard data returned HTTP 200 without assignment."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-C-WF-EFFECTIVE",
+      "allowedRequirementIds": [],
+      "whyAllowed": {},
+      "forbiddenExamples": [
+        "C05-5.2-011",
+        "C02-2.1-002",
+        "C02-2.1-003",
+        "C02-2.3-001"
+      ],
+      "crossCuttingAllowed": true
+    },
+    {
+      "scenarioId": "V2-D-GRN-SB",
+      "allowedRequirementIds": [
+        "C03-3.4-001",
+        "C03-3.4-002",
+        "C03-3.4-003",
+        "C03-3.4-004",
+        "C03-3.4-005"
+      ],
+      "whyAllowed": {
+        "C03-3.4-001": "GRN Send Back returned DRAFT — document not ended.",
+        "C03-3.4-002": "Send Back reason captured in GRN Send Back request body before status reset.",
+        "C03-3.4-003": "Creator retains edit authority while document is DRAFT after Send Back.",
+        "C03-3.4-004": "After Send Back document editable at DRAFT; edit HTTP 200 observed.",
+        "C03-3.4-005": "Same GRN transaction continues — Send Back did not spawn new document id."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-D-GRN-EDIT",
+      "allowedRequirementIds": [
+        "C03-3.4-004",
+        "C07-7.2-001"
+      ],
+      "whyAllowed": {
+        "C03-3.4-004": "Creator edit on DRAFT after Send Back path — HTTP 200.",
+        "C07-7.2-001": "GRN remains server-recognized draft before submit."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-D-GRN-SUBMIT-AFTER-SB",
+      "allowedRequirementIds": [
+        "C02-2.7-001",
+        "C02-2.7-003"
+      ],
+      "whyAllowed": {
+        "C02-2.7-001": "After Return path uses Edit then Submit on same GRN.",
+        "C02-2.7-003": "Submit re-enters workflow after Send Back on GRN."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-D-GRN-RESUBMIT-CALL",
+      "allowedRequirementIds": [
+        "C02-2.7-002",
+        "C03-3.4-009"
+      ],
+      "whyAllowed": {
+        "C02-2.7-002": "After Reject path must use Edit-then-Submit not independent /resubmit — backend route absent (404).",
+        "C03-3.4-009": "Backend /resubmit returns 404 — dead route aligns with no Re-submit after Reject."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-D-GRN-AUDIT",
+      "allowedRequirementIds": [
+        "C22-22.2-001"
+      ],
+      "whyAllowed": {
+        "C22-22.2-001": "SEND_BACK and SUBMIT audit events recorded on GRN Send Back path."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-BRK-SUBMIT",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Breakage approval chain step advance to DEPT_APPROVED — chain step only, not final posting proof."
+      },
+      "forbiddenExamples": [
+        "C02-2.3-007"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-BRK-AP-CC",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Breakage CC approval step PASS."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-BRK-AP-FIN",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Breakage Finance approval step PASS."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-BRK-AP-GM",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Breakage GM final approval step PASS — posting lifecycle separate probe."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-LOST-CREATE",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Lost Items create reaches DEPT_APPROVED — chain step only."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-LOST-AP-CC",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Lost CC approval step PASS."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-LOST-AP-FIN",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Lost Finance approval step PASS."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-E-LOST-AP-GM",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Lost GM approval step PASS."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-F-RPT-BRK-APPROVED-OUT",
+      "allowedRequirementIds": [
+        "C02-2.4.2-001",
+        "C02-2.3-007"
+      ],
+      "whyAllowed": {
+        "C02-2.4.2-001": "Approved Breakage with ledger not visible in report — report derives from POSTED filter.",
+        "C02-2.3-007": "APPROVED vs POSTED lifecycle mismatch after posting effects."
+      },
+      "forbiddenExamples": [
+        "C05-5.2-011"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-F-RPT-LOST-LEDGER-OUT",
+      "allowedRequirementIds": [
+        "C02-2.4.2-001",
+        "C02-2.3-007"
+      ],
+      "whyAllowed": {
+        "C02-2.4.2-001": "Lost ledger row exists but lost-analysis report rows=0.",
+        "C02-2.3-007": "Document remains APPROVED while posting effects exist — standardized lifecycle state mismatch."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-F-RPT-POSTED-IN",
+      "allowedRequirementIds": [
+        "C02-2.4.2-001",
+        "C02-2.3-007"
+      ],
+      "whyAllowed": {
+        "C02-2.4.2-001": "Posted ledger present but parent status APPROVED excludes from POSTED-only reports.",
+        "C02-2.3-007": "APPROVED vs POSTED divergence hides constitutionally posted documents from reports."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-F-RPT-DRAFT-OUT",
+      "allowedRequirementIds": [
+        "C02-2.4.2-001"
+      ],
+      "whyAllowed": {
+        "C02-2.4.2-001": "DRAFT document excluded from financial report — PASS."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-PERM-CHECK",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Movements ADJUSTMENT permissions present for direct-post family."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-NO-ASSIGN",
+      "allowedRequirementIds": [
+        "C04-4.3-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Movement create denied HTTP 403 without assignment — Scope gate PASS."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-CREATE",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Authorized movement create HTTP 201."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-VALIDATE",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Movement validation rejects invalid payload HTTP 422."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-WRONG-SCOPE",
+      "allowedRequirementIds": [
+        "C04-4.3-003",
+        "C04-4.4-003"
+      ],
+      "whyAllowed": {
+        "C04-4.3-003": "Movement create HTTP 201 for user assigned to different property — Scope failure.",
+        "C04-4.4-003": "Cross-property movement not denied."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-NEG-INV",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Negative inventory blocked HTTP 422 on movement post path."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-POST",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Movement POST→POSTED with ledger and stock update."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-IDEMP",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Duplicate movement post rejected HTTP 400."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-G-MODEL",
+      "allowedRequirementIds": [
+        "C05-5.2-011"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "ADJUSTMENT direct-post model: DRAFT→POSTED without ACC approval chain."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-I-REQ-PIPELINE",
+      "allowedRequirementIds": [
+        "C04-4.3-004"
+      ],
+      "whyAllowed": {
+        "C04-4.3-004": "Requisition excluded from operational pipeline rows=0."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V2-I-STOCK-RPT",
+      "allowedRequirementIds": [
+        "C04-4.3-004"
+      ],
+      "whyAllowed": {
+        "C04-4.3-004": "Retired stock report not in pipeline rows=0."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-SB-GRN",
+      "allowedRequirementIds": [
+        "C03-3.4-001",
+        "C03-3.4-002",
+        "C03-3.4-003",
+        "C03-3.4-004",
+        "C03-3.4-005",
+        "C02-2.7-001",
+        "C02-2.7-003"
+      ],
+      "whyAllowed": {
+        "C03-3.4-001": "v3 GRN Send Back returns DRAFT — document continues.",
+        "C03-3.4-002": "Send Back reason required in v3 GRN probe before status transition.",
+        "C03-3.4-003": "Creator edit HTTP 200 after Send Back while status=DRAFT.",
+        "C03-3.4-004": "Edit then Submit path exercised — validate+submit after Send Back on same GRN.",
+        "C03-3.4-005": "Same GRN id continues after Send Back and resubmit — transaction not split.",
+        "C02-2.7-001": "After Return workflow path is Edit then Submit on GRN — observed in v3 probe.",
+        "C02-2.7-003": "Submit after Send Back re-enters workflow (PENDING_APPROVAL) on same document."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-E-POSTING-BREAKAGE",
+      "allowedRequirementIds": [
+        "C05-5.2-011",
+        "C02-2.3-007"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Auto-posting triggered at GM approval but status remains APPROVED not POSTED.",
+        "C02-2.3-007": "Lifecycle state diverges from posting effects."
+      },
+      "forbiddenExamples": [
+        "C02-2.1-002"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-E-POSTING-LOST",
+      "allowedRequirementIds": [
+        "C05-5.2-011",
+        "C02-2.3-007"
+      ],
+      "whyAllowed": {
+        "C05-5.2-011": "Lost Items same APPROVED-after-posting pattern as Breakage.",
+        "C02-2.3-007": "Lifecycle remains APPROVED when postedAt and ledger set — state standardization failure."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-E-POSTING-REPORT-LINK",
+      "allowedRequirementIds": [
+        "C02-2.4.2-001",
+        "C02-2.3-007"
+      ],
+      "whyAllowed": {
+        "C02-2.4.2-001": "Ledger+postedAt present but POSTED-only report filter excludes document.",
+        "C02-2.3-007": "Report exclusion caused by APPROVED status vs POSTED lifecycle expectation."
+      },
+      "forbiddenExamples": [
+        "C05-5.2-011"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-SB-TRANSFER",
+      "allowedRequirementIds": [
+        "C03-3.4-001",
+        "C03-3.4-004",
+        "C02-2.7-001",
+        "C02-2.7-003"
+      ],
+      "whyAllowed": {
+        "C03-3.4-001": "Transfer Send Back route HTTP 404 — Send Back not implemented.",
+        "C03-3.4-004": "Cannot test Edit-then-Submit after Return because Send Back route missing.",
+        "C02-2.7-001": "Return path blocked at Transfer — no Send Back to reach Edit-then-Submit.",
+        "C02-2.7-003": "Submit-after-Return not reachable on Transfer due to missing Send Back API."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-003"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-REJECT-TRANSFER",
+      "allowedRequirementIds": [
+        "C03-3.4-006",
+        "C03-3.4-010"
+      ],
+      "whyAllowed": {
+        "C03-3.4-006": "Transfer Reject returns REJECTED — terminates document.",
+        "C03-3.4-010": "Reject terminates business transaction on Transfer."
+      },
+      "forbiddenExamples": [
+        "C03-3.4-007",
+        "C03-3.4-008"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-SB-BREAKAGE",
+      "allowedRequirementIds": [
+        "C03-3.4-001",
+        "C03-3.4-004",
+        "C02-2.7-001"
+      ],
+      "whyAllowed": {
+        "C03-3.4-001": "Breakage Send Back HTTP 404.",
+        "C03-3.4-004": "Edit-then-Submit after Return untestable — Send Back route absent on Breakage.",
+        "C02-2.7-001": "Return workflow path not available on Breakage at review step."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-REJECT-BREAKAGE",
+      "allowedRequirementIds": [
+        "C03-3.4-006",
+        "C03-3.4-010"
+      ],
+      "whyAllowed": {
+        "C03-3.4-006": "Breakage Reject PASS to REJECTED terminal state.",
+        "C03-3.4-010": "Reject terminates Breakage business transaction — document ended."
+      },
+      "forbiddenExamples": [
+        "C03-3.4-007",
+        "C03-3.4-008"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-SB-LOST",
+      "allowedRequirementIds": [
+        "C03-3.4-001",
+        "C03-3.4-004"
+      ],
+      "whyAllowed": {
+        "C03-3.4-001": "Lost Send Back HTTP 404.",
+        "C03-3.4-004": "Edit after Return untestable on Lost Items — Send Back route missing."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-REJECT-LOST",
+      "allowedRequirementIds": [
+        "C03-3.4-006",
+        "C03-3.4-010"
+      ],
+      "whyAllowed": {
+        "C03-3.4-006": "Lost Reject PASS — document reaches REJECTED terminal state.",
+        "C03-3.4-010": "Reject ends Lost Items business transaction per v3 probe."
+      },
+      "forbiddenExamples": [
+        "C03-3.4-007"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-SB-GETPASS",
+      "allowedRequirementIds": [
+        "C03-3.4-001",
+        "C03-3.4-004"
+      ],
+      "whyAllowed": {
+        "C03-3.4-001": "Get Pass Send Back HTTP 404 during approval.",
+        "C03-3.4-004": "Edit-then-Submit after Return blocked — no Send Back route on Get Pass approval chain."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-REJECT-GETPASS",
+      "allowedRequirementIds": [
+        "C03-3.4-006",
+        "C03-3.4-010"
+      ],
+      "whyAllowed": {
+        "C03-3.4-006": "Get Pass Reject failed HTTP 500 — Reject action did not end document.",
+        "C03-3.4-010": "Reject did not terminate workflow — still PENDING_COST_CONTROL."
+      },
+      "forbiddenExamples": [
+        "C03-3.4-007",
+        "C03-3.4-008"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-SB-IC",
+      "allowedRequirementIds": [
+        "C03-3.4-001",
+        "C03-3.4-004"
+      ],
+      "whyAllowed": {
+        "C03-3.4-001": "IC session Send Back HTTP 404 at PENDING_APPROVAL.",
+        "C03-3.4-004": "Edit-then-Submit after Return untestable on IC sessions — Send Back route missing."
+      },
+      "forbiddenExamples": [],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-H-REJECT-IC",
+      "allowedRequirementIds": [
+        "C03-3.4-006",
+        "C03-3.4-010"
+      ],
+      "whyAllowed": {
+        "C03-3.4-006": "IC Reject returned HTTP 403 — Reject execution failed.",
+        "C03-3.4-010": "Session remained PENDING_APPROVAL — transaction not terminated."
+      },
+      "forbiddenExamples": [
+        "C03-3.4-007",
+        "C03-3.4-008"
+      ],
+      "crossCuttingAllowed": false
+    },
+    {
+      "scenarioId": "V3-GRN-RESUBMIT-BROWSER",
+      "allowedRequirementIds": [
+        "C02-2.7-002",
+        "C03-3.4-009"
+      ],
+      "whyAllowed": {
+        "C02-2.7-002": "Independent Re-submit UI/API on REJECTED GRN violates Edit-then-Submit model for new attempts.",
+        "C03-3.4-009": "FE resubmitRejected() static code exists; backend /resubmit 404 — dead Re-submit path."
+      },
+      "forbiddenExamples": [
+        "C04-4.3-001"
+      ],
+      "crossCuttingAllowed": false
+    }
+  ],
+  "crossCuttingFindings": [
+    {
+      "crossCuttingFindingId": "V2-C-WF-EFFECTIVE",
+      "classification": "Configuration Drift",
+      "reason": "No exact 393 requirement expresses effective GET_PASS workflow configuration inheritance across tenants",
+      "constitutionalAuthority": "Workflow Contract GET_PASS §5; GP effective resolver — published chain must match contract without unauthorized GM step",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V3_FINAL.json",
+      "actual": "21/21 effective chains contain PENDING_GM; 0 tenant-specific overrides; 21 inherit global configuration"
+    },
+    {
+      "crossCuttingFindingId": "V2-CF-LEG-LOST-DEPT",
+      "classification": "Operational Legacy",
+      "reason": "No exact 393 requirement names legacy /approve-dept route; runtime proves ACC-unpinned approval bypass on Lost Items",
+      "constitutionalAuthority": "Constitution §4.3 Action Allowed; ACC-pinned approval chain",
+      "evidence": "Governance/runtime-revalidation/P0_RUNTIME_V3_FINAL.json",
+      "actual": "HTTP 200 DRAFT→DEPT_APPROVED on legacy /approve-dept with pin=null"
+    }
+  ]
+}

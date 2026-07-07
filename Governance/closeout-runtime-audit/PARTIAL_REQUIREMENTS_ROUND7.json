@@ -1,0 +1,4858 @@
+{
+  "executedAt": "2026-06-27T00:50:01.152Z",
+  "count": 61,
+  "rows": [
+    {
+      "requirementId": "C02-2.1-004",
+      "requirement": "Internal status codes must never be exposed to end users.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.3-003",
+      "requirement": "Internal status codes must never be exposed to end users.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.3-005",
+      "requirement": "Internal workflow step names must never be exposed to end users.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.4.1-001",
+      "requirement": "Posting is the single business commit point for all operational and financial effects within the DX OSE ERP Platform.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.4.1-002",
+      "requirement": "No operational or financial effect shall be considered official before Posting unless this Constitution explicitly states otherwise.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.5-004",
+      "requirement": "Documents in Submitted state shall not be editable.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.5-007",
+      "requirement": "Documents in Rejected state shall not be editable.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.6-003",
+      "requirement": "Business termination shall use governed lifecycle actions (Cancel, Reject, Void, Close, etc.) instead of Delete after Draft.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.7-001",
+      "requirement": "After Return, the workflow path shall be Edit then Submit.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.7-002",
+      "requirement": "There shall be no separate action named Re-submit.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.7-004",
+      "requirement": "After Reject, the same document must not re-enter workflow.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C02-2.7-005",
+      "requirement": "After Reject, a new document is required to repeat the operation.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.1-001",
+      "requirement": "Users shall see only the actions they need for their role and document state.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.1-002",
+      "requirement": "Action behavior shall remain consistent across all DX OSE modules regardless of workflow implementation.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.4-004",
+      "requirement": "Send Back next step shall be Edit then Submit.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.4-006",
+      "requirement": "Reject shall end the document.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.4-007",
+      "requirement": "Reject shall not allow edit.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.4-008",
+      "requirement": "Reject shall require a reason.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.4-009",
+      "requirement": "Reject next step shall require a new document if the operation repeats.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C03-3.4-010",
+      "requirement": "Reject shall terminate the business transaction.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.1-001",
+      "requirement": "Posting is the single irreversible business commit point for all operational and financial effects within the DX OSE Platform.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.1-002",
+      "requirement": "Posting is the only operation permitted to create official operational and financial business effects.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.1-003",
+      "requirement": "Documents become business-immutable after Posting except through formally governed reversal or adjustment procedures.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-001",
+      "requirement": "Before Posting, the platform shall verify user authority.",
+      "applicableModules": [
+        "Auth"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Auth"
+      ],
+      "testScenariosMissing": [
+        "Auth E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-003",
+      "requirement": "Before Posting, the platform shall verify open inventory/financial period for Posting Date.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-004",
+      "requirement": "Before Posting, the platform shall perform full document revalidation.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-005",
+      "requirement": "Before Posting, the platform shall verify stock availability for outbound documents.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-006",
+      "requirement": "Full revalidation shall occur immediately before Posting regardless of prior validation.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-007",
+      "requirement": "Posting shall use a single transactional boundary.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-008",
+      "requirement": "Partial posting is prohibited.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-009",
+      "requirement": "Any posting failure shall leave the document and related business data completely unchanged.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-010",
+      "requirement": "Repeating the same posting request shall never create additional effects.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-012",
+      "requirement": "Final Workflow Approval equals business authorization for Posting.",
+      "applicableModules": [
+        "Auth"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Auth"
+      ],
+      "testScenariosMissing": [
+        "Auth E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-013",
+      "requirement": "No additional posting confirmation is required by default.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C05-5.2-014",
+      "requirement": "Posting behavior shall remain deterministic and repeat-safe throughout the platform.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.3-002",
+      "requirement": "Each document shall permanently maintain Posting Date.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.3-003",
+      "requirement": "Each document shall permanently maintain Assigned Posting Period.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.3-004",
+      "requirement": "Document Date and Posting Date must never be treated as interchangeable.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-001",
+      "requirement": "Posting is permitted only when Posting Period is Open and all validations pass.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-002",
+      "requirement": "Future posting restrictions shall apply to Posting Date only, not Document Date.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-003",
+      "requirement": "Posting into a Closed period is prohibited.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C06-6.5-008",
+      "requirement": "Assigned Posting Period shall be immutable after Posting.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C07-7.4-002",
+      "requirement": "The platform shall define draft access rights.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.4-003",
+      "requirement": "Conflicting draft operations shall be rejected.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.6-004",
+      "requirement": "Reject must not execute twice on the same version without detection.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.7-001",
+      "requirement": "Posting must not execute except on the latest valid document version after concurrency verification.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C08-8.8-001",
+      "requirement": "The platform shall reject conflicting updates.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C09-9.3-001",
+      "requirement": "System Document Numbers shall be unique within governed numbering scope.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.1-001",
+      "requirement": "Inbound movement documents shall not require stock check at posting.",
+      "applicableModules": [
+        "Movement"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Movement"
+      ],
+      "testScenariosMissing": [
+        "Movement E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.1-002",
+      "requirement": "Outbound movement documents shall require stock check at posting.",
+      "applicableModules": [
+        "Movement"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Movement"
+      ],
+      "testScenariosMissing": [
+        "Movement E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-001",
+      "requirement": "Stock availability shall be validated against the latest committed inventory state at Posting.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-006",
+      "requirement": "Stock validation shall be against the source inventory location defined by the transaction.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-008",
+      "requirement": "No transaction shall violate constitutional stock integrity rules.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-012",
+      "requirement": "Inbound documents shall not require stock check at posting.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-013",
+      "requirement": "Outbound stock validation shall be authoritative on the platform.",
+      "applicableModules": [
+        "Auth"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Auth"
+      ],
+      "testScenariosMissing": [
+        "Auth E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C10-10.2-015",
+      "requirement": "Valuation at Posting shall follow Chapter 5 posting rules.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C12-12.3-001",
+      "requirement": "System header fields including document number, status, created by/at, and posted by/at must not be user-editable.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C12-12.5-001",
+      "requirement": "Changes to property, department, or warehouse after lines exist or after workflow progress must require confirmation.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C12-12.5-002",
+      "requirement": "Changes to property, department, or warehouse after lines exist or after workflow progress shall follow document business rules.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C14-14.3-004",
+      "requirement": "Required attachments must block submit when missing.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        }
+      ]
+    },
+    {
+      "requirementId": "C15-15.2-001",
+      "requirement": "Reject shall require a reason where defined.",
+      "applicableModules": [
+        "Unknown"
+      ],
+      "modulesTested": [],
+      "modulesMissing": [
+        "Unknown"
+      ],
+      "testScenariosMissing": [
+        "Unknown E2E not linked to requirement ID"
+      ],
+      "linkedScenarios": [
+        {
+          "scenarioId": "GP-FF-GM",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-FF-SUPER_ADMIN_OP",
+          "harness": "ACC_OPERATIONAL_LEGACY_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-submit-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-approve_cc-DEPT_MANAGER",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-NO_ASSIGN",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-reject_cc-COST_CONTROL",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-update-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GP-delete-AUDITOR",
+          "harness": "GET_PASS_PERMISSION_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-LIST",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-CREATE-VALIDATE",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "GRN-NO-ASSIGN",
+          "harness": "GRN_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-CREATE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-START",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-COUNTS",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-SUBMIT-APPROVAL",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-FINANCE-APPROVE-NEG",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-NO-ASSIGN",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "IC-VARIANCE",
+          "harness": "INVENTORY_COUNT_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-CREATE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-NO-ASSIGN",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-SAME-STORE",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-INSUFFICIENT",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        },
+        {
+          "scenarioId": "TR-FINANCE-LIST",
+          "harness": "TRANSFER_RUNTIME_HARNESS.json"
+        }
+      ]
+    }
+  ]
+}

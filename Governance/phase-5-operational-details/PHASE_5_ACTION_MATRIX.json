@@ -1,0 +1,155 @@
+{
+  "generatedAt": "2026-06-28T00:00:00.000Z",
+  "phase": "phase-5-operational-details",
+  "actions": [
+    {
+      "id": "MX-TR-01",
+      "module": "TRANSFER",
+      "route": "POST /api/transfers/:id/submit",
+      "method": "POST",
+      "permission": "TRANSFER_CREATE",
+      "allowedStatuses": ["DRAFT"],
+      "assignmentRequired": true,
+      "concurrencyRequired": true,
+      "resultingStatus": "PENDING_DEPT",
+      "ledgerEffect": "none",
+      "stockEffect": "none",
+      "timelineEvent": "SUBMIT_FOR_APPROVAL",
+      "runtimeAllow": { "testId": "P5-MX-TR-SUBMIT-OK", "actor": "storekeeper", "createTransfer": true },
+      "runtimeDeny": { "testId": "P5-MX-TR-SUBMIT-DENY", "actor": "viewOnly", "fixture": "transfer.draft", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-TR-02",
+      "module": "TRANSFER",
+      "route": "POST /api/transfers/:id/approve",
+      "method": "POST",
+      "permission": "TRANSFER_APPROVE",
+      "allowedStatuses": ["PENDING_DEPT", "PENDING_FINANCE"],
+      "assignmentRequired": true,
+      "concurrencyRequired": true,
+      "resultingStatus": "PENDING_FINANCE|POSTED",
+      "ledgerEffect": "TRANSFER_OUT+TRANSFER_IN on finance step",
+      "runtimeAllow": { "testId": "P5-MX-TR-APPROVE-OK", "actor": "deptManager", "fixture": "transfer.pendingDept" },
+      "runtimeDeny": { "testId": "P5-MX-TR-APPROVE-DENY", "actor": "storekeeper", "fixture": "transfer.pendingDept", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-TR-03",
+      "module": "TRANSFER",
+      "route": "POST /api/transfers/:id/reject",
+      "method": "POST",
+      "permission": "TRANSFER_APPROVE",
+      "allowedStatuses": ["PENDING_DEPT", "PENDING_FINANCE"],
+      "resultingStatus": "REJECTED",
+      "ledgerEffect": "none",
+      "runtimeAllow": { "testId": "P5-MX-TR-REJECT-OK", "actor": "financeManager", "fixture": "transfer.pendingFinanceReject" },
+      "runtimeDeny": { "testId": "P5-MX-TR-REJECT-DENY", "actor": "viewOnly", "fixture": "transfer.pendingFinance", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-TR-04",
+      "module": "TRANSFER",
+      "route": "PATCH /api/transfers/:id",
+      "method": "PATCH",
+      "permission": "TRANSFER_CREATE",
+      "allowedStatuses": ["DRAFT"],
+      "runtimeAllow": { "testId": "P5-MX-TR-PATCH-OK", "actor": "storekeeper", "fixture": "transfer.draft" },
+      "runtimeDeny": { "testId": "P5-MX-TR-PATCH-DENY", "actor": "viewOnly", "fixture": "transfer.draft", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-TR-05",
+      "module": "TRANSFER",
+      "route": "DELETE /api/transfers/:id",
+      "method": "DELETE",
+      "permission": "TRANSFER_CREATE",
+      "allowedStatuses": ["DRAFT"],
+      "runtimeAllow": { "testId": "P5-MX-TR-DELETE-OK", "actor": "storekeeper", "fixture": "transfer.draftDelete" },
+      "runtimeDeny": { "testId": "P5-MX-TR-DELETE-DENY", "actor": "viewOnly", "fixture": "transfer.draft", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-BRK-01",
+      "module": "BREAKAGE",
+      "route": "POST /api/breakage/:id/submit",
+      "method": "POST",
+      "permission": "MANAGE_INVENTORY",
+      "allowedStatuses": ["DRAFT"],
+      "assignmentRequired": true,
+      "resultingStatus": "DEPT_APPROVED",
+      "runtimeAllow": { "testId": "P5-MX-BRK-SUBMIT-OK", "actor": "storekeeper", "fixture": "breakage.draftSubmit" },
+      "runtimeDeny": { "testId": "P5-MX-BRK-SUBMIT-DENY", "actor": "viewOnly", "fixture": "breakage.draft", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-BRK-02",
+      "module": "BREAKAGE",
+      "route": "POST /api/breakage/:id/approve",
+      "method": "POST",
+      "permission": "APPROVE_BREAKAGE",
+      "allowedStatuses": ["DEPT_APPROVED", "COST_CONTROL_APPROVED", "FINANCE_APPROVED"],
+      "assignmentRequired": true,
+      "resultingStatus": "next step|APPROVED",
+      "ledgerEffect": "BREAKAGE on GM final",
+      "runtimeAllow": { "testId": "P5-MX-BRK-APPROVE-OK", "actor": "costControl", "fixture": "breakage.pendingCostControl" },
+      "runtimeDeny": { "testId": "P5-MX-BRK-APPROVE-DENY", "actor": "storekeeper", "fixture": "breakage.pendingCostControl", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-BRK-03",
+      "module": "BREAKAGE",
+      "route": "POST /api/breakage/:id/reject",
+      "method": "POST",
+      "permission": "APPROVE_BREAKAGE",
+      "resultingStatus": "REJECTED",
+      "runtimeAllow": { "testId": "P5-MX-BRK-REJECT-OK", "actor": "costControl", "fixture": "breakage.pendingCostControlReject" },
+      "runtimeDeny": { "testId": "P5-MX-BRK-REJECT-DENY", "actor": "viewOnly", "fixture": "breakage.pendingCostControl", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-BRK-04",
+      "module": "BREAKAGE",
+      "route": "POST /api/breakage/:id/void",
+      "method": "POST",
+      "permission": "MANAGE_INVENTORY",
+      "allowedStatuses": ["DRAFT", "REJECTED"],
+      "resultingStatus": "VOID",
+      "ledgerEffect": "none",
+      "runtimeAllow": { "testId": "P5-MX-BRK-VOID-OK", "actor": "storekeeper", "fixture": "breakage.rejected" },
+      "runtimeDeny": { "testId": "P5-MX-BRK-VOID-DENY", "actor": "viewOnly", "fixture": "breakage.pendingCostControl", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-LOST-01",
+      "module": "LOST",
+      "route": "POST /api/lost/:id/approve",
+      "method": "POST",
+      "permission": "APPROVE_LOST",
+      "allowedStatuses": ["DEPT_APPROVED", "COST_CONTROL_APPROVED", "FINANCE_APPROVED"],
+      "assignmentRequired": true,
+      "resultingStatus": "next|APPROVED",
+      "ledgerEffect": "LOST on GM final",
+      "runtimeAllow": { "testId": "P5-MX-LOST-APPROVE-OK", "actor": "costControl", "fixture": "lost.deptApproved" },
+      "runtimeDeny": { "testId": "P5-MX-LOST-APPROVE-DENY", "actor": "viewOnly", "fixture": "lost.deptApproved", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-LOST-02",
+      "module": "LOST",
+      "route": "POST /api/lost/:id/reject",
+      "method": "POST",
+      "permission": "APPROVE_LOST",
+      "resultingStatus": "REJECTED",
+      "runtimeAllow": { "testId": "P5-MX-LOST-REJECT-OK", "actor": "costControl", "fixture": "lost.deptApprovedReject" },
+      "runtimeDeny": { "testId": "P5-MX-LOST-REJECT-DENY", "actor": "viewOnly", "fixture": "lost.deptApproved", "expectedHttp": 403 }
+    },
+    {
+      "id": "MX-LOST-03",
+      "module": "LOST",
+      "route": "POST /api/lost/:id/approve",
+      "method": "POST",
+      "permission": "APPROVE_LOST",
+      "allowedStatuses": ["FINANCE_APPROVED"],
+      "resultingStatus": "APPROVED",
+      "ledgerEffect": "LOST",
+      "runtimeAllow": {
+        "testId": "P5-MX-LOST-TREATMENT-OK",
+        "actor": "generalManager",
+        "fixture": "lost.pendingGm",
+        "body": { "accountability": "EMPLOYEE", "comment": "Phase5 matrix treatment" }
+      },
+      "runtimeDeny": { "testId": "P5-MX-LOST-TREATMENT-DENY", "actor": "viewOnly", "fixture": "lost.pendingFinance", "expectedHttp": 403 }
+    }
+  ]
+}

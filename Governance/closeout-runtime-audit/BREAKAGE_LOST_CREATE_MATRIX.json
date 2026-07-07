@@ -1,0 +1,325 @@
+{
+  "executedAt": "2026-06-27T00:11:51.962Z",
+  "createMatrix": [
+    {
+      "userKey": "DEPT_MANAGER_FB",
+      "email": "dept-mgr-fb@closeout-audit.local",
+      "role": "DEPT_MANAGER",
+      "permissionsSample": [
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "GET_PASS_CREATE",
+        "LOST_FOUND_VIEW"
+      ],
+      "hasBreakageCreate": true,
+      "assignmentDepartmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "selectedDepartmentFromStock": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "deptFixtureCode": "FB",
+      "endpoint": "POST /breakage",
+      "http": 201,
+      "errorCode": null,
+      "documentStatus": "DRAFT",
+      "approvalRequestStatus": "PENDING",
+      "currentStep": 2,
+      "step1": {
+        "status": "APPROVED",
+        "requiredRole": "DEPT_MANAGER",
+        "actedBy": "dept-mgr-fb@closeout-audit.local",
+        "comment": "Auto-approved by system due to high-level authority.",
+        "represents": "CREATOR_AS_DEPT_SUBMITTER"
+      },
+      "ledgerMutations": 0,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE",
+      "constitutionClassification": "NOT_A_DEFECT_WITHOUT_FURTHER_REVIEW"
+    },
+    {
+      "userKey": "DEPT_MANAGER_HK",
+      "email": "dept-mgr-hk@closeout-audit.local",
+      "role": "DEPT_MANAGER",
+      "permissionsSample": [
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "GET_PASS_CREATE",
+        "LOST_FOUND_VIEW"
+      ],
+      "hasBreakageCreate": true,
+      "assignmentDepartmentId": "5e246726-faaf-48e4-a002-80aae4639dce",
+      "selectedDepartmentFromStock": "5e246726-faaf-48e4-a002-80aae4639dce",
+      "deptFixtureCode": "HK",
+      "endpoint": "POST /breakage",
+      "http": 201,
+      "errorCode": null,
+      "documentStatus": "DRAFT",
+      "approvalRequestStatus": "PENDING",
+      "currentStep": 2,
+      "step1": {
+        "status": "APPROVED",
+        "requiredRole": "DEPT_MANAGER",
+        "actedBy": "dept-mgr-hk@closeout-audit.local",
+        "comment": "Auto-approved by system due to high-level authority.",
+        "represents": "CREATOR_AS_DEPT_SUBMITTER"
+      },
+      "ledgerMutations": 0,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE",
+      "constitutionClassification": "NOT_A_DEFECT_WITHOUT_FURTHER_REVIEW"
+    },
+    {
+      "userKey": "DEPT_CREATOR_FB",
+      "email": "creator-fb@closeout-audit.local",
+      "role": "DEPT_MANAGER",
+      "permissionsSample": [
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "LOST_ITEMS_VIEW",
+        "APPROVE_LOST",
+        "LOST_CREATE",
+        "GET_PASS_CREATE",
+        "LOST_FOUND_VIEW"
+      ],
+      "hasBreakageCreate": true,
+      "assignmentDepartmentId": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "selectedDepartmentFromStock": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "deptFixtureCode": "FB",
+      "endpoint": "POST /breakage",
+      "http": 201,
+      "errorCode": null,
+      "documentStatus": "DRAFT",
+      "approvalRequestStatus": "PENDING",
+      "currentStep": 2,
+      "step1": {
+        "status": "APPROVED",
+        "requiredRole": "DEPT_MANAGER",
+        "actedBy": "creator-fb@closeout-audit.local",
+        "comment": "Auto-approved by system due to high-level authority.",
+        "represents": "CREATOR_AS_DEPT_SUBMITTER"
+      },
+      "ledgerMutations": 0,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE",
+      "constitutionClassification": "NOT_A_DEFECT_WITHOUT_FURTHER_REVIEW"
+    },
+    {
+      "userKey": "STOREKEEPER",
+      "email": "storekeeper-a@closeout-audit.local",
+      "role": "STOREKEEPER",
+      "permissionsSample": [
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "BREAKAGE_CREATE",
+        "GET_PASS_CREATE",
+        "IMPORT_CREATE",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "ISSUE_APPROVE",
+        "REQUISITION_CREATE",
+        "LOST_FOUND_VIEW",
+        "LOST_FOUND_CREATE",
+        "REQUISITION_APPROVE"
+      ],
+      "hasBreakageCreate": true,
+      "assignmentDepartmentId": null,
+      "selectedDepartmentFromStock": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "deptFixtureCode": "FB",
+      "endpoint": "POST /breakage",
+      "http": 201,
+      "errorCode": null,
+      "documentStatus": "DRAFT",
+      "approvalRequestStatus": "PENDING",
+      "currentStep": 2,
+      "step1": {
+        "status": "APPROVED",
+        "requiredRole": "DEPT_MANAGER",
+        "actedBy": "storekeeper-a@closeout-audit.local",
+        "comment": "Auto-approved by system due to high-level authority.",
+        "represents": "CREATOR_AS_DEPT_SUBMITTER"
+      },
+      "ledgerMutations": 0,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE",
+      "constitutionClassification": "NOT_A_DEFECT_WITHOUT_FURTHER_REVIEW"
+    },
+    {
+      "userKey": "FINANCE",
+      "email": "finance-a@closeout-audit.local",
+      "role": "FINANCE_MANAGER",
+      "permissionsSample": [
+        "MOVEMENT_CREATE",
+        "ISSUE_CREATE",
+        "ISSUE_APPROVE",
+        "TRANSFER_CREATE",
+        "TRANSFER_APPROVE",
+        "BREAKAGE_VIEW",
+        "BREAKAGE_CREATE",
+        "APPROVE_BREAKAGE",
+        "ADJUSTMENT_CREATE",
+        "READ_BREAKAGE",
+        "READ_LOST",
+        "LOST_ITEMS_VIEW"
+      ],
+      "hasBreakageCreate": true,
+      "assignmentDepartmentId": null,
+      "selectedDepartmentFromStock": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "deptFixtureCode": "FB",
+      "endpoint": "POST /breakage",
+      "http": 201,
+      "errorCode": null,
+      "documentStatus": "DRAFT",
+      "approvalRequestStatus": "PENDING",
+      "currentStep": 2,
+      "step1": {
+        "status": "APPROVED",
+        "requiredRole": "DEPT_MANAGER",
+        "actedBy": "finance-a@closeout-audit.local",
+        "comment": "Auto-approved by system due to high-level authority.",
+        "represents": "CREATOR_AS_DEPT_SUBMITTER"
+      },
+      "ledgerMutations": 0,
+      "interpretation": "INTENDED_DEPT_AUTO_SUBMIT_ON_CREATE",
+      "constitutionClassification": "NOT_A_DEFECT_WITHOUT_FURTHER_REVIEW"
+    },
+    {
+      "userKey": "COST_CONTROL",
+      "email": "cost-a@closeout-audit.local",
+      "role": "COST_CONTROL",
+      "permissionsSample": [
+        "BREAKAGE_VIEW",
+        "APPROVE_BREAKAGE",
+        "READ_BREAKAGE",
+        "READ_LOST",
+        "APPROVE_LOST",
+        "LOST_FOUND_RETURN",
+        "GET_PASS_CREATE",
+        "GET_PASS_APPROVE",
+        "GET_PASS_APPROVE_RETURN"
+      ],
+      "hasBreakageCreate": false,
+      "assignmentDepartmentId": null,
+      "selectedDepartmentFromStock": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "deptFixtureCode": "FB",
+      "endpoint": "POST /breakage",
+      "http": 403,
+      "errorCode": null,
+      "step1": null,
+      "ledgerMutations": 0,
+      "interpretation": "PERMISSION_OR_SCOPE_DENIED",
+      "constitutionClassification": null
+    },
+    {
+      "userKey": "GM",
+      "email": "gm-a@closeout-audit.local",
+      "role": "GENERAL_MANAGER",
+      "permissionsSample": [
+        "APPROVE_BREAKAGE",
+        "APPROVE_INVENTORY_COUNT",
+        "APPROVE_LOST",
+        "GET_PASS_APPROVE_FINAL",
+        "GET_PASS_FORCE_CLOSE_APPROVE",
+        "LOST_FOUND_RETURN"
+      ],
+      "hasBreakageCreate": false,
+      "assignmentDepartmentId": null,
+      "selectedDepartmentFromStock": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "deptFixtureCode": "FB",
+      "endpoint": "POST /breakage",
+      "http": 403,
+      "errorCode": null,
+      "step1": null,
+      "ledgerMutations": 0,
+      "interpretation": "PERMISSION_OR_SCOPE_DENIED",
+      "constitutionClassification": null
+    },
+    {
+      "userKey": "ORG_MANAGER",
+      "result": "BLOCKED",
+      "reason": "org_switch_failed"
+    },
+    {
+      "userKey": "SUPER_ADMIN_OP",
+      "email": "super-op-a@closeout-audit.local",
+      "role": "SUPER_ADMIN",
+      "permissionsSample": [
+        "APPROVE_INVENTORY_COUNT",
+        "READ_BREAKAGE",
+        "READ_LOST"
+      ],
+      "hasBreakageCreate": false,
+      "assignmentDepartmentId": null,
+      "selectedDepartmentFromStock": "81f93410-f1d7-4714-8f61-1ec93c6915bb",
+      "deptFixtureCode": "FB",
+      "endpoint": "POST /breakage",
+      "http": 403,
+      "errorCode": null,
+      "step1": null,
+      "ledgerMutations": 0,
+      "interpretation": "PERMISSION_OR_SCOPE_DENIED",
+      "constitutionClassification": null
+    }
+  ],
+  "lostMatrix": [
+    {
+      "userKey": "DEPT_MANAGER_FB",
+      "http": 201,
+      "documentStatus": "DEPT_APPROVED",
+      "step1": {
+        "stepNumber": 1,
+        "requiredRole": "DEPT_MANAGER",
+        "status": "APPROVED",
+        "actedBy": "dept-mgr-fb@closeout-audit.local",
+        "actedAt": "2026-06-27T00:11:39.805Z",
+        "comment": "Auto-approved by system due to high-level authority."
+      },
+      "currentStep": 2
+    },
+    {
+      "userKey": "STOREKEEPER",
+      "http": 201,
+      "documentStatus": "DEPT_APPROVED",
+      "step1": {
+        "stepNumber": 1,
+        "requiredRole": "DEPT_MANAGER",
+        "status": "APPROVED",
+        "actedBy": "storekeeper-a@closeout-audit.local",
+        "actedAt": "2026-06-27T00:11:40.270Z",
+        "comment": "Auto-approved by system due to high-level authority."
+      },
+      "currentStep": 2
+    },
+    {
+      "userKey": "FINANCE",
+      "http": 201,
+      "documentStatus": "DEPT_APPROVED",
+      "step1": {
+        "stepNumber": 1,
+        "requiredRole": "DEPT_MANAGER",
+        "status": "APPROVED",
+        "actedBy": "finance-a@closeout-audit.local",
+        "actedAt": "2026-06-27T00:11:40.719Z",
+        "comment": "Auto-approved by system due to high-level authority."
+      },
+      "currentStep": 2
+    },
+    {
+      "userKey": "GM",
+      "http": 403
+    }
+  ]
+}

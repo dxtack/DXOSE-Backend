@@ -1,0 +1,66 @@
+{
+  "executedAt": "2026-06-27T00:54:31.818Z",
+  "count": 10,
+  "ids": [
+    {
+      "requirementId": "C02-2.1-002",
+      "requirement": "Internal workflow implementation must never be exposed to end users.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C02-2.1-003",
+      "requirement": "Internal workflow step names must never be exposed to end users.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C02-2.3-001",
+      "requirement": "Each module shall provide a consistent mapping between internal workflow states and standardized user-facing lifecycle states.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C02-2.3-002",
+      "requirement": "Internal workflow identifiers must never be exposed to end users.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C05-5.2-002",
+      "requirement": "Before Posting, the platform shall verify valid workflow state.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C05-5.2-011",
+      "requirement": "Posting shall be automatically triggered upon successful final workflow approval unless a document-specific governance policy defines otherwise.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C07-7.2-001",
+      "requirement": "Every operational document shall begin as a server-recognized draft unless Workflow Contracts define otherwise.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C08-8.6-003",
+      "requirement": "Approve must not execute twice on the same version without detection.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C15-15.3-001",
+      "requirement": "Workflow comments shall become immutable once recorded.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    },
+    {
+      "requirementId": "C22-22.2-001",
+      "requirement": "Every workflow action must generate an audit record.",
+      "conflict": "Published workflow includes PENDING_GM vs constitution chain"
+    }
+  ],
+  "anchors": [
+    {
+      "topic": "Get Pass GM step in global workflow",
+      "evidence": "GET_PASS_WORKFLOW_ROLLOUT_AUDIT.json — 20/20 tenants PENDING_GM"
+    },
+    {
+      "topic": "Finance creator fast-forward without BDR",
+      "evidence": "GET_PASS_CREATOR_FAST_FORWARD_AUTHORITY_AUDIT.json"
+    }
+  ]
+}

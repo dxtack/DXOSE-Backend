@@ -1,0 +1,69 @@
+{
+  "generatedAt": "2026-07-03T17:58:44.132Z",
+  "rows": 500,
+  "viewports": [
+    {
+      "viewport": "1366x768",
+      "measure": {
+        "pageScroll": false,
+        "pageScrollAmount": 0,
+        "hPageOverflow": false,
+        "bodyClientH": 167,
+        "bodyScrollH": 3552,
+        "tableVScroll": true,
+        "tableHScroll": false,
+        "rowHeight": 61,
+        "visibleRows": 2.7,
+        "domRows": 50,
+        "footerVisible": true,
+        "footerOverlapsTable": false,
+        "subtitleVisible": true
+      },
+      "consoleErrors": [],
+      "failedRequests": [],
+      "screenshot": "OSE-backend/Governance/responsive-audit/item-import//screenshots//compact-after//IM-IMPORT-VALIDATION__1366x768__top-500.png"
+    },
+    {
+      "viewport": "1536x864",
+      "measure": {
+        "pageScroll": false,
+        "pageScrollAmount": 0,
+        "hPageOverflow": false,
+        "bodyClientH": 197,
+        "bodyScrollH": 2558,
+        "tableVScroll": true,
+        "tableHScroll": false,
+        "rowHeight": 41,
+        "visibleRows": 4.8,
+        "domRows": 50,
+        "footerVisible": true,
+        "footerOverlapsTable": false,
+        "subtitleVisible": true
+      },
+      "consoleErrors": [],
+      "failedRequests": [],
+      "screenshot": "OSE-backend/Governance/responsive-audit/item-import//screenshots//compact-after//IM-IMPORT-VALIDATION__1536x864__top-500.png"
+    },
+    {
+      "viewport": "1920x1080",
+      "measure": {
+        "pageScroll": false,
+        "pageScrollAmount": 0,
+        "hPageOverflow": false,
+        "bodyClientH": 413,
+        "bodyScrollH": 2558,
+        "tableVScroll": true,
+        "tableHScroll": false,
+        "rowHeight": 41,
+        "visibleRows": 10.1,
+        "domRows": 50,
+        "footerVisible": true,
+        "footerOverlapsTable": false,
+        "subtitleVisible": true
+      },
+      "consoleErrors": [],
+      "failedRequests": [],
+      "screenshot": "OSE-backend/Governance/responsive-audit/item-import//screenshots//compact-after//IM-IMPORT-VALIDATION__1920x1080__top-500.png"
+    }
+  ]
+}

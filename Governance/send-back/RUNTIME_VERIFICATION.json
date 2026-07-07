@@ -1,0 +1,189 @@
+{
+  "generatedAt": "2026-07-02T20:42:33.379Z",
+  "classification": "RUNTIME_VERIFICATION",
+  "runTag": "SB-VERIFY-1783024951488",
+  "database": {
+    "credentialsMasked": true,
+    "host": "127.0.0.1",
+    "database": "ose_inventory"
+  },
+  "migration": {
+    "targetMigration": "20260702232000_get_pass_approval_request_link",
+    "presentOnDisk": true,
+    "note": "Captured via prisma migrate status/deploy in this workstream"
+  },
+  "getPassBackfill": {
+    "openPending": 73,
+    "withApprovalRequest": 73,
+    "unlinked": 0
+  },
+  "tenant": {
+    "id": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+    "slug": "grand-horizon"
+  },
+  "actor": {
+    "id": "f542ddf7-8c50-456e-9e37-6ac701e53c28"
+  },
+  "modules": [
+    {
+      "module": "INVENTORY_COUNT",
+      "entityType": "STOCK_COUNT",
+      "proofs": {
+        "sameApprovalRequestId": true,
+        "sameAccWorkflowVersionId": true,
+        "oneStepRewind": true,
+        "previousStepPending": true,
+        "laterStepsWaiting": true,
+        "reasonPreserved": true,
+        "workflowRound": true,
+        "timelineSendBack": true,
+        "timelineHasSourceTarget": true,
+        "creatorResubmitStep1": true,
+        "noNewApprovalRequest": true,
+        "concurrentSendBackOneWinner": true,
+        "concurrentSendBackGuardedUpdateMany": true
+      },
+      "blockers": [],
+      "concurrency": {
+        "fulfilled": 1,
+        "rejected": 1,
+        "conflictRejected": 1
+      },
+      "status": "VERIFIED"
+    },
+    {
+      "module": "TRANSFER",
+      "entityType": "TRANSFER",
+      "proofs": {
+        "sameApprovalRequestId": true,
+        "sameAccWorkflowVersionId": true,
+        "oneStepRewind": true,
+        "previousStepPending": true,
+        "laterStepsWaiting": true,
+        "reasonPreserved": true,
+        "workflowRound": true,
+        "timelineSendBack": true,
+        "timelineHasSourceTarget": true,
+        "creatorResubmitStep1": true,
+        "noNewApprovalRequest": true,
+        "concurrentSendBackOneWinner": true,
+        "concurrentSendBackGuardedUpdateMany": true
+      },
+      "blockers": [],
+      "concurrency": {
+        "fulfilled": 1,
+        "rejected": 1,
+        "conflictRejected": 1
+      },
+      "status": "VERIFIED"
+    },
+    {
+      "module": "BREAKAGE",
+      "entityType": "BREAKAGE",
+      "proofs": {
+        "sameApprovalRequestId": true,
+        "sameAccWorkflowVersionId": true,
+        "oneStepRewind": true,
+        "previousStepPending": true,
+        "laterStepsWaiting": true,
+        "reasonPreserved": true,
+        "workflowRound": true,
+        "timelineSendBack": true,
+        "timelineHasSourceTarget": true,
+        "creatorResubmitStep1": true,
+        "noNewApprovalRequest": true,
+        "concurrentSendBackOneWinner": true,
+        "concurrentSendBackGuardedUpdateMany": true
+      },
+      "blockers": [],
+      "concurrency": {
+        "fulfilled": 1,
+        "rejected": 1,
+        "conflictRejected": 1
+      },
+      "status": "VERIFIED"
+    },
+    {
+      "module": "LOST_ITEMS",
+      "entityType": "LOST",
+      "proofs": {
+        "sameApprovalRequestId": true,
+        "sameAccWorkflowVersionId": true,
+        "oneStepRewind": true,
+        "previousStepPending": true,
+        "laterStepsWaiting": true,
+        "reasonPreserved": true,
+        "workflowRound": true,
+        "timelineSendBack": true,
+        "timelineHasSourceTarget": true,
+        "creatorResubmitStep1": true,
+        "noNewApprovalRequest": true,
+        "concurrentSendBackOneWinner": true,
+        "concurrentSendBackGuardedUpdateMany": true
+      },
+      "blockers": [],
+      "concurrency": {
+        "fulfilled": 1,
+        "rejected": 1,
+        "conflictRejected": 1
+      },
+      "status": "VERIFIED"
+    },
+    {
+      "module": "GRN",
+      "entityType": "GRN",
+      "proofs": {
+        "sameApprovalRequestId": true,
+        "sameAccWorkflowVersionId": true,
+        "oneStepRewind": true,
+        "previousStepPending": true,
+        "laterStepsWaiting": true,
+        "reasonPreserved": true,
+        "workflowRound": true,
+        "timelineSendBack": true,
+        "timelineHasSourceTarget": true,
+        "creatorResubmitStep1": true,
+        "noNewApprovalRequest": true,
+        "concurrentSendBackOneWinner": true,
+        "concurrentSendBackGuardedUpdateMany": true
+      },
+      "blockers": [],
+      "concurrency": {
+        "fulfilled": 1,
+        "rejected": 1,
+        "conflictRejected": 1
+      },
+      "status": "VERIFIED"
+    },
+    {
+      "module": "GET_PASS",
+      "entityType": "GET_PASS",
+      "proofs": {
+        "sameApprovalRequestId": true,
+        "sameAccWorkflowVersionId": true,
+        "oneStepRewind": true,
+        "previousStepPending": true,
+        "laterStepsWaiting": true,
+        "reasonPreserved": true,
+        "workflowRound": true,
+        "timelineSendBack": true,
+        "timelineHasSourceTarget": true,
+        "creatorResubmitStep1": true,
+        "noNewApprovalRequest": true,
+        "concurrentSendBackOneWinner": true,
+        "concurrentSendBackGuardedUpdateMany": true
+      },
+      "blockers": [],
+      "concurrency": {
+        "fulfilled": 1,
+        "rejected": 1,
+        "conflictRejected": 1
+      },
+      "status": "VERIFIED"
+    }
+  ],
+  "testTotals": {
+    "note": "See backend-runtime-evidence.json testMatrix for unit test counts"
+  },
+  "finalClassification": "CLOSED — RUNTIME VERIFIED"
+}

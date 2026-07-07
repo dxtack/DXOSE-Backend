@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-06-28T11:07:00.000Z",
+  "phaseClosed": true,
+  "skippedCount": 0,
+  "titleRequirement": "Workflow Timeline (exact h2)",
+  "actorRequirement": "hasBy && !hasActedBy",
+  "modules": {
+    "GRN": {
+      "fixtureIdFrom": "PHASE_4_TIMELINE_FIXTURES.json#grn.id",
+      "runtimeScenario": "P4-API-GRN",
+      "browserScenario": "P4-BR-GRN",
+      "requiredEvents": ["SUBMIT_FOR_APPROVAL", "RECEIVED_VALIDATED", "COST_CONTROL", "FINANCE"]
+    },
+    "TRANSFER": {
+      "fixtureIdFrom": "PHASE_4_TIMELINE_FIXTURES.json#transfer.id",
+      "runtimeScenario": "P4-API-TR",
+      "browserScenario": "P4-BR-TR"
+    },
+    "BREAKAGE": {
+      "fixtureIdFrom": "PHASE_4_TIMELINE_FIXTURES.json#breakage.id",
+      "runtimeScenario": "P4-API-BRK",
+      "browserScenario": "P4-BR-BRK"
+    },
+    "GET_PASS_V4_SEND_BACK_RESUBMIT": {
+      "fixtureIdFrom": "PHASE_4_TIMELINE_FIXTURES.json#getPassSendBackResubmit.id",
+      "runtimeScenarios": ["P4-API-GP-SB", "P4-API-GP-RS", "P4-API-GP-SB-ORDER"],
+      "browserScenarios": ["P4-BR-GP-V4-SB", "P4-BR-GP-SB-EVENT", "P4-BR-GP-RS-EVENT"],
+      "lifecycleCounts": { "SEND_BACK": 1, "RESUBMIT": 1, "SUBMIT_FOR_APPROVAL": 1 }
+    },
+    "GET_PASS_V4_PHYSICAL_RETURN": {
+      "fixtureIdFrom": "PHASE_4_TIMELINE_FIXTURES.json#getPassPhysicalReturn.id",
+      "runtimeScenario": "P4-API-GP-RET",
+      "browserScenarios": ["P4-BR-GP-RET", "P4-BR-GP-RET-EVENT"],
+      "requiredStages": ["SECURITY_OUT", "RETURN_PROCESSED"],
+      "forbiddenLifecycle": ["SEND_BACK", "RESUBMIT"]
+    },
+    "GET_PASS_V3_GM": {
+      "fixtureIdFrom": "PHASE_4_TIMELINE_FIXTURES.json#getPassV3Gm.id",
+      "runtimeScenarios": ["P4-API-GP-V3-GM", "P4-API-GP-V3-ORDER"],
+      "browserScenarios": ["P4-BR-GP-V3-GM", "P4-BR-GP-V3-GM-STAGE"],
+      "requires": ["gmApprovedAt", "GENERAL_MANAGER stage", "SECURITY after GM"]
+    },
+    "INVENTORY_COUNT": {
+      "fixtureIdFrom": "PHASE_4_TIMELINE_FIXTURES.json#inventoryCount.id",
+      "runtimeScenarios": ["P4-API-IC", "P4-API-IC-SEM"],
+      "browserScenarios": ["P4-BR-IC", "P4-BR-IC-SEM"],
+      "badgeRules": { "COUNT_SUBMITTED": "Completed", "SUBMIT_FOR_APPROVAL": "Submitted (once)" }
+    }
+  }
+}

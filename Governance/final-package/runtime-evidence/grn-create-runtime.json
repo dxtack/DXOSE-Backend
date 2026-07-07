@@ -1,0 +1,38 @@
+{
+  "url": "http://127.0.0.1:4200/inventory/grn/new",
+  "hostCount": 1,
+  "hostStyles": {
+    "display": "flex",
+    "height": "646.609px",
+    "width": "1158px",
+    "overflow": "clip visible",
+    "visibility": "visible",
+    "opacity": "1",
+    "offsetHeight": 647,
+    "offsetWidth": 1158,
+    "innerHTMLLen": 17903
+  },
+  "invStyles": {
+    "display": "flex",
+    "height": "646.609px",
+    "offsetHeight": 647
+  },
+  "boundingBox": {
+    "x": 266,
+    "y": 89,
+    "width": 1158,
+    "height": 646.609375
+  },
+  "supplierVisible": true,
+  "cardVisible": true,
+  "h1Visible": true,
+  "layoutOk": true,
+  "firstPageError": null,
+  "consoleErrors": [],
+  "pageErrors": [],
+  "navigationAfterCreate": {
+    "dashOk": true,
+    "shellOk": true,
+    "url": "http://127.0.0.1:4200/dashboard"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "gate": "Gate C Remediation",
+  "verified_at_utc": "2026-06-27T17:10:30Z",
+  "exit_gate": "INCOMPLETE — see GATE_C_FINAL_VALIDATION.json",
+  "findings": {
+    "FIND-002": {
+      "final_status": "REMEDIATED",
+      "runtime": "Passed",
+      "final_verification": "GATE_C_FINAL_RUNTIME_RESULTS.json"
+    },
+    "FIND-001": {
+      "final_status": "REMEDIATED",
+      "runtime": "Passed",
+      "surface_inventory": "GATE_C_LOST_STATUS_SURFACE_INVENTORY.csv"
+    },
+    "FIND-003": {
+      "final_status": "PARTIAL",
+      "runtime": "Browser E2E failed enter_advances on 6 shells; INVENTORY_COUNT blocked",
+      "browser_results": "GATE_C_BROWSER_RESULTS.json"
+    }
+  },
+  "build_test": {
+    "frontend_production_build": "PASS",
+    "backend_runtime_scenarios": "PASS (7/7 Gate C)",
+    "backend_unit_tests_getpass": "Pre-existing failures unrelated to Gate C"
+  },
+  "scope_compliance": {
+    "gate_a_unchanged": true,
+    "gate_b_closeout_unchanged": true,
+    "role_permission_fallback_unchanged": true,
+    "no_workflow_acc_db_changes": true,
+    "only_three_findings": true
+  }
+}

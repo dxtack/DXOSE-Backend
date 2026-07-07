@@ -1,0 +1,47 @@
+{
+  "executedAt": "2026-06-28T00:58:52.621Z",
+  "approvedConstitutionChain": [
+    "PENDING_DEPT",
+    "PENDING_COST_CONTROL",
+    "PENDING_FINANCE",
+    "PENDING_SECURITY"
+  ],
+  "beforeSummary": {
+    "definitionCount": 1,
+    "globalDefinitions": 1,
+    "tenantScopedDefinitions": 0,
+    "publishedVersions": 2,
+    "archivedVersions": 1,
+    "draftVersions": 0,
+    "versionsWithGmStep": 1,
+    "tenantsConstitutionAligned": 0,
+    "tenantsWithDrift": 20,
+    "totalPinnedDocuments": 24,
+    "documentsOnGmVersions": 24
+  },
+  "afterSummary": {
+    "definitionCount": 1,
+    "globalDefinitions": 1,
+    "tenantScopedDefinitions": 0,
+    "publishedVersions": 1,
+    "archivedVersions": 3,
+    "draftVersions": 0,
+    "versionsWithGmStep": 1,
+    "tenantsConstitutionAligned": 20,
+    "tenantsWithDrift": 0,
+    "totalPinnedDocuments": 24,
+    "documentsOnGmVersions": 24
+  },
+  "remediationActions": [
+    {
+      "definitionId": "e6b77bd5-b349-4cd1-a061-331c036e15a6",
+      "definitionKey": "standard",
+      "tenantId": null,
+      "skipped": false,
+      "previousPublishedVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+      "newPublishedVersionId": "01a06d7c-1c05-4060-b847-a50ac4946485",
+      "newVersionNumber": 4
+    }
+  ],
+  "allTenantsAligned": true
+}

@@ -1,0 +1,60 @@
+{
+  "reviewedAt": "2026-06-27T18:00:00Z",
+  "policy": "Legacy closeout harnesses NOT executed as-is; safe P0 suite used instead.",
+  "harnesses": [
+    {
+      "script": "00-seed-test-identities.js",
+      "targetTenant": "grand-horizon",
+      "mutatesDb": true,
+      "postingEffects": false,
+      "hasFinallyCleanup": false,
+      "staleIdsRisk": "medium",
+      "operationalHotelRisk": "high — creates CLOSEOUT users on grand-horizon",
+      "passProvesProduct": false,
+      "decision": "NOT RUN — use pre-seeded TEST_IDENTITIES read-only where needed"
+    },
+    {
+      "script": "12-no-assign-investigation.js",
+      "targetTenant": "grand-horizon",
+      "mutatesDb": true,
+      "postingEffects": "GP submit mutation",
+      "hasFinallyCleanup": false,
+      "operationalHotelRisk": "high",
+      "decision": "NOT RUN — replaced by p0-runtime-suite.cjs GP-A scenarios"
+    },
+    {
+      "script": "43-workflow-pipeline-scope.js",
+      "targetTenant": "grand-horizon",
+      "mutatesDb": false,
+      "passProvesProduct": true,
+      "operationalHotelRisk": "read-only but uses grand-horizon",
+      "decision": "NOT RUN — replaced by p0-runtime-suite.cjs WP-B scenarios"
+    },
+    {
+      "script": "44-lost-legacy-reproduce.js",
+      "targetTenant": "grand-horizon",
+      "mutatesDb": true,
+      "postingEffects": "possible on chain complete",
+      "hasFinallyCleanup": false,
+      "operationalHotelRisk": "high — creates INTERNAL LOST on grand-horizon",
+      "decision": "NOT RUN — replaced by p0-runtime-suite.cjs LEG-C safe probe + LEG-F if disposable seeded"
+    },
+    {
+      "script": "09-grn-runtime-final.js",
+      "targetTenant": "grand-horizon",
+      "mutatesDb": true,
+      "postingEffects": "GRN post + stock",
+      "hasFinallyCleanup": false,
+      "operationalHotelRisk": "high",
+      "decision": "NOT RUN — GRN-E resubmit probe only in P0 suite; full GRN E2E BLOCKED without disposable GRN seed"
+    },
+    {
+      "script": "gate-c-keyboard-browser-run.mjs",
+      "targetTenant": "grand-horizon (auth only)",
+      "mutatesDb": "IC session create+start via API",
+      "postingEffects": false,
+      "hasFinallyCleanup": false,
+      "decision": "RUN for Gate C regression — tagged GATE_C_KEYBOARD_V2 sessions"
+    }
+  ]
+}

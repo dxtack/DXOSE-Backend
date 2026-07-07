@@ -1,0 +1,360 @@
+{
+  "at": "2026-06-26T19:22:35.574Z",
+  "tenantId": "d7f5e85c-86f9-487d-b17d-708cebcf9ca3",
+  "fixtures": [
+    {
+      "scenario": "three_send_back_cycle_4_active",
+      "grnId": "39230fd2-3076-40ae-b426-28dbe9ad40a7",
+      "grnNumber": "GRN-2026-00019",
+      "status": "PENDING_APPROVAL",
+      "timelineEntryCount": 15,
+      "expectedEntryCount": 15,
+      "financeCompletedCount": 3,
+      "sendBackCount": 3,
+      "resubmitCount": 3,
+      "activeCycle": 4,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "RECEIVED_VALIDATED",
+          "displayTitleKey": "TIMELINE.STAGE.RECEIVED_VALIDATED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:35.696Z",
+          "stepNumber": 0,
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.000Z",
+          "reason": null,
+          "note": "Cost OK",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "7c61fb1e-de21-40d1-83e0-231cd713ba4a",
+            "approvalStepId": "b3a3f590-8938-4105-b2f1-ba900158ce06"
+          },
+          "globalOrder": 2,
+          "durationMs": 304
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T19:22:36.055Z",
+          "reason": null,
+          "note": "Finance OK",
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "7c61fb1e-de21-40d1-83e0-231cd713ba4a",
+            "approvalStepId": "51e98e47-3e0f-4cc7-8be4-97903c3d341e"
+          },
+          "globalOrder": 3,
+          "durationMs": 55
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SEND_BACK",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SEND_BACK",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.120Z",
+          "reason": "Send back for correction",
+          "previousCycleNumber": null,
+          "newCycleNumber": null,
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "f58c7602-4336-4155-89f1-be3b34c865ea"
+          },
+          "globalOrder": 4,
+          "durationMs": 65
+        },
+        {
+          "cycleNumber": 2,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.RESUBMIT",
+          "status": "COMPLETED",
+          "lifecycleEventType": "RESUBMIT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.218Z",
+          "reason": null,
+          "previousCycleNumber": 1,
+          "newCycleNumber": 2,
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "3a3783d5-5e8b-42c5-81ce-3795b9d9e618"
+          },
+          "globalOrder": 5,
+          "durationMs": 98
+        },
+        {
+          "cycleNumber": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.299Z",
+          "reason": null,
+          "note": "Cost OK",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "2b630ccc-d54a-48d6-94d9-0aedc9b83857",
+            "approvalStepId": "446c935e-a66b-47f4-a97b-0b24d92e0a6f"
+          },
+          "globalOrder": 6,
+          "durationMs": 81
+        },
+        {
+          "cycleNumber": 2,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T19:22:36.336Z",
+          "reason": null,
+          "note": "Finance OK",
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "2b630ccc-d54a-48d6-94d9-0aedc9b83857",
+            "approvalStepId": "30fc5772-1287-4187-ab44-6558f93aba25"
+          },
+          "globalOrder": 7,
+          "durationMs": 37
+        },
+        {
+          "cycleNumber": 2,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SEND_BACK",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SEND_BACK",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.398Z",
+          "reason": "Send back for correction",
+          "previousCycleNumber": null,
+          "newCycleNumber": null,
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "2be3bc9b-a364-445c-93ef-4a36aa0f5926"
+          },
+          "globalOrder": 8,
+          "durationMs": 62
+        },
+        {
+          "cycleNumber": 3,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.RESUBMIT",
+          "status": "COMPLETED",
+          "lifecycleEventType": "RESUBMIT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.507Z",
+          "reason": null,
+          "previousCycleNumber": 2,
+          "newCycleNumber": 3,
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "ede18fe5-38fc-4df8-ac81-f574fcba19e7"
+          },
+          "globalOrder": 9,
+          "durationMs": 109
+        },
+        {
+          "cycleNumber": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.592Z",
+          "reason": null,
+          "note": "Cost OK",
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "9301a9b7-6176-416b-a448-3d34dd069062",
+            "approvalStepId": "a80bf05e-9177-4ba1-9b00-c060dedfa211"
+          },
+          "globalOrder": 10,
+          "durationMs": 85
+        },
+        {
+          "cycleNumber": 3,
+          "entryType": "APPROVAL_STEP_COMPLETED",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "e553ca9c-d315-4f28-99ad-1574d1fd49da",
+            "name": "Youssef Karimi"
+          },
+          "actedAt": "2026-06-26T19:22:36.635Z",
+          "reason": null,
+          "note": "Finance OK",
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "9301a9b7-6176-416b-a448-3d34dd069062",
+            "approvalStepId": "ba10982b-481f-46bb-bf3a-6ad01df266e2"
+          },
+          "globalOrder": 11,
+          "durationMs": 43
+        },
+        {
+          "cycleNumber": 3,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.SEND_BACK",
+          "status": "COMPLETED",
+          "lifecycleEventType": "SEND_BACK",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.688Z",
+          "reason": "Send back for correction",
+          "previousCycleNumber": null,
+          "newCycleNumber": null,
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "feaac31e-509e-4a07-b6cc-a59879794492"
+          },
+          "globalOrder": 12,
+          "durationMs": 53
+        },
+        {
+          "cycleNumber": 4,
+          "entryType": "LIFECYCLE_EVENT",
+          "stageKey": "LIFECYCLE",
+          "displayTitleKey": "TIMELINE.LIFECYCLE.RESUBMIT",
+          "status": "COMPLETED",
+          "lifecycleEventType": "RESUBMIT",
+          "actor": {
+            "id": "4bff14a5-8646-4592-97b3-d090dd9047fe",
+            "name": "Nadia Ibrahim"
+          },
+          "actedAt": "2026-06-26T19:22:36.770Z",
+          "reason": null,
+          "previousCycleNumber": 3,
+          "newCycleNumber": 4,
+          "stepNumber": 0,
+          "sourceRef": {
+            "auditLogId": "739e1a39-1b6e-4f58-81ab-0df5c2af95b0"
+          },
+          "globalOrder": 13,
+          "durationMs": 82
+        },
+        {
+          "cycleNumber": 4,
+          "entryType": "APPROVAL_STEP_CURRENT",
+          "stageKey": "COST_CONTROL",
+          "displayTitleKey": "TIMELINE.STAGE.COST_CONTROL_APPROVAL",
+          "status": "IN_PROGRESS",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 1,
+          "sourceRef": {
+            "approvalRequestId": "d60e3747-0db2-437c-84af-62ae5acf31ac",
+            "approvalStepId": "05f989db-7948-4774-8caa-56591f5194a0"
+          },
+          "globalOrder": 14
+        },
+        {
+          "cycleNumber": 4,
+          "entryType": "APPROVAL_STEP_FUTURE",
+          "stageKey": "FINANCE",
+          "displayTitleKey": "TIMELINE.STAGE.FINANCE_APPROVAL",
+          "status": "PENDING",
+          "actor": null,
+          "actedAt": null,
+          "stepNumber": 2,
+          "sourceRef": {
+            "approvalRequestId": "d60e3747-0db2-437c-84af-62ae5acf31ac",
+            "approvalStepId": "a5322232-a9db-48e1-8eb0-89c6d5474a83"
+          },
+          "globalOrder": 15
+        }
+      ]
+    },
+    {
+      "scenario": "posted_single_cycle",
+      "grnId": "0693d5ea-855e-44dd-b063-e58dcc2bff35",
+      "grnNumber": "GRN-E2E-CONVERT-1776506863557",
+      "status": "POSTED",
+      "timelineEntryCount": 2,
+      "timelineEntries": [
+        {
+          "cycleNumber": 1,
+          "entryType": "MILESTONE_COMPLETED",
+          "stageKey": "RECEIVED_VALIDATED",
+          "displayTitleKey": "TIMELINE.STAGE.RECEIVED_VALIDATED_COMPLETED",
+          "status": "COMPLETED",
+          "actor": {
+            "id": "f542ddf7-8c50-456e-9e37-6ac701e53c28",
+            "name": "Sarah Ahmed"
+          },
+          "actedAt": "2026-04-18T10:07:43.564Z",
+          "stepNumber": 0,
+          "globalOrder": 1
+        },
+        {
+          "cycleNumber": 1,
+          "entryType": "POSTING",
+          "stageKey": "POSTED",
+          "displayTitleKey": "TIMELINE.STAGE.POSTED_COMPLETED",
+          "status": "POSTED",
+          "actor": {
+            "id": "f542ddf7-8c50-456e-9e37-6ac701e53c28",
+            "name": "Sarah Ahmed"
+          },
+          "actedAt": "2026-04-18T10:07:43.608Z",
+          "stepNumber": 99,
+          "globalOrder": 2,
+          "durationMs": 44
+        }
+      ]
+    }
+  ]
+}

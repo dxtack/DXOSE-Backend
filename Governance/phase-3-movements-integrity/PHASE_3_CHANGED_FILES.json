@@ -1,0 +1,34 @@
+{
+  "phase": "Phase 3 — Browser verification reopen (strict principal path)",
+  "generatedAt": "2026-06-28T02:17:46.049Z",
+  "gateVersion": "phase3-browser-strict-v1",
+  "productFiles": [],
+  "testAndEvidenceFiles": [
+    {
+      "path": "Governance/phase-3-movements-integrity/phase-3-movement-register-browser.cjs",
+      "change": "rewritten",
+      "why": "Strict 12-step Movement Register browser path; FAIL unless DRAFT and POSTED and ledger exact match"
+    }
+  ],
+  "governanceFiles": [
+    "Governance/phase-3-movements-integrity/PHASE_3_BROWSER_RESULTS.json",
+    "Governance/phase-3-movements-integrity/PHASE_3_RUNTIME_RESULTS.json",
+    "Governance/phase-3-movements-integrity/PHASE_3_REMEDIATION_REPORT.md",
+    "Governance/phase-3-movements-integrity/PHASE_3_ROOT_CAUSE_AUDIT.md",
+    "Governance/phase-3-movements-integrity/PHASE_3_CHANGED_FILES.json"
+  ],
+  "browserVerification": {
+    "pass": true,
+    "docId": "fbf76ddc-2272-486c-b725-1192aa6a43a7",
+    "documentNo": "ADJ-2026-00108",
+    "postHttp": 200,
+    "ledgerQtyIn": 3,
+    "ledgerTotalValue": 15
+  },
+  "explicitlyNotModified": [
+    "OSE-backend/** (product)",
+    "Governance/phase-1-assignment-scope/**",
+    "Governance/phase-2-get-pass-workflow-drift/**",
+    "phase-3-movements-integrity-gate.cjs (runtime gate not re-run)"
+  ]
+}

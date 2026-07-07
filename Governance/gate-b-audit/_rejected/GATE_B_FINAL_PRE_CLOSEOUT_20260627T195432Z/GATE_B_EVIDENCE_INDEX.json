@@ -1,0 +1,12 @@
+{
+  "findings": [
+    "FIND-001",
+    "FIND-002",
+    "FIND-003",
+    "FIND-004",
+    "FIND-005",
+    "FIND-006",
+    "FIND-007"
+  ],
+  "code_snapshot": "c:\\DX OS&E\\Governance\\gate-b-audit\\final\\GATE_B_CODE_SNAPSHOT.json"
+}

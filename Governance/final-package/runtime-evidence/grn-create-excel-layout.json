@@ -1,0 +1,50 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "width": 1920,
+        "height": 1080
+      },
+      "overflow": {
+        "docScrollWidth": 1920,
+        "docClientWidth": 1920,
+        "bodyScrollWidth": 1920,
+        "ok": true
+      },
+      "metrics": {
+        "hostRight": 1912,
+        "footerRight": 1888,
+        "viewportWidth": 1920,
+        "footerInsideHost": true,
+        "tableWrapScrollable": false,
+        "tableWrapClientWidth": 1540,
+        "tableWrapScrollWidth": 1540
+      },
+      "screenshotPath": "C:\\DX OS&E\\Governance\\final-package\\runtime-evidence\\grn-create-excel-1920.png"
+    },
+    {
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "overflow": {
+        "docScrollWidth": 1366,
+        "docClientWidth": 1366,
+        "bodyScrollWidth": 1366,
+        "ok": true
+      },
+      "metrics": {
+        "hostRight": 1350,
+        "footerRight": 1332.9375,
+        "viewportWidth": 1366,
+        "footerInsideHost": true,
+        "tableWrapScrollable": false,
+        "tableWrapClientWidth": 999.875,
+        "tableWrapScrollWidth": 1000
+      },
+      "screenshotPath": "C:\\DX OS&E\\Governance\\final-package\\runtime-evidence\\grn-create-excel-1366.png"
+    }
+  ],
+  "pass": true,
+  "note": "At 1366px wide preview tables scroll inside .grn-create-page__table-wrap only."
+}

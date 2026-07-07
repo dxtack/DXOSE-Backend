@@ -1,0 +1,217 @@
+{
+  "runAt": "2026-07-03T16:27:25.317Z",
+  "apiBase": "http://127.0.0.1:4000/api",
+  "tenant": {
+    "slug": "dx-airport-hotel",
+    "id": "bf7638b8-04db-4051-94d1-0cf039827c00",
+    "name": "DX Airport Hotel",
+    "user": "daniel.carter@dxuat.com"
+  },
+  "tenantB": {
+    "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+    "slug": "closeout-audit-hotel-disposable"
+  },
+  "itemsUsed": {
+    "fresh": {
+      "id": "a2df226a-2bc4-498c-bc26-5de1c0002ec3",
+      "code": "P1G-FB-1782604688975",
+      "imageUrlBefore": null,
+      "imageUrlAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783096045671.webp"
+    },
+    "existing": null
+  },
+  "scenarios": {
+    "01_valid_image_preview_confirm": {
+      "status": "PASS",
+      "previewStatus": "matched",
+      "confirm": {
+        "uploaded": 1,
+        "skipped": 0,
+        "failed": 0,
+        "details": [
+          {
+            "filename": "P1G-FB-1782604688975.png",
+            "itemCode": "P1G-FB-1782604688975",
+            "itemId": "a2df226a-2bc4-498c-bc26-5de1c0002ec3",
+            "itemName": "PHASE1_SCOPE_GATE Item FB",
+            "status": "uploaded"
+          }
+        ]
+      },
+      "imageUrlAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783096045671.webp",
+      "stored": {
+        "bufferLength": 1666,
+        "format": "webp",
+        "width": 800,
+        "height": 800
+      }
+    },
+    "02_webp_800_contain": {
+      "status": "PASS",
+      "stored": {
+        "bufferLength": 1666,
+        "format": "webp",
+        "width": 800,
+        "height": 800
+      }
+    },
+    "03_skip_existing": {
+      "status": "PASS",
+      "previewStatus": "existingImage",
+      "confirm": {
+        "uploaded": 0,
+        "skipped": 1,
+        "failed": 0,
+        "details": [
+          {
+            "filename": "P1G-FB-1782604688975.png",
+            "itemCode": "P1G-FB-1782604688975",
+            "itemId": "a2df226a-2bc4-498c-bc26-5de1c0002ec3",
+            "itemName": "PHASE1_SCOPE_GATE Item FB",
+            "status": "skipped",
+            "reason": "Existing image skipped"
+          }
+        ]
+      },
+      "imageUrlBefore": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783096045671.webp",
+      "imageUrlAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783096045671.webp"
+    },
+    "04_replace_existing": {
+      "status": "PASS",
+      "imageUrlBefore": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783096045671.webp",
+      "imageUrlAfter": "/uploads/items/item-a2df226a-2bc4-498c-bc26-5de1c0002ec3-1783096045847.webp",
+      "confirm": {
+        "uploaded": 1,
+        "skipped": 0,
+        "failed": 0,
+        "details": [
+          {
+            "filename": "P1G-FB-1782604688975.png",
+            "itemCode": "P1G-FB-1782604688975",
+            "itemId": "a2df226a-2bc4-498c-bc26-5de1c0002ec3",
+            "itemName": "PHASE1_SCOPE_GATE Item FB",
+            "status": "uploaded"
+          }
+        ]
+      }
+    },
+    "05_unmatched": {
+      "status": "PASS",
+      "row": {
+        "filename": "ZZZ-NO-SUCH-CODE-999.png",
+        "itemCode": "ZZZ-NO-SUCH-CODE-999",
+        "itemId": null,
+        "itemName": null,
+        "status": "unmatched",
+        "reason": "No item with code \"ZZZ-NO-SUCH-CODE-999\"",
+        "hasExistingImage": false
+      }
+    },
+    "06_invalid_content": {
+      "status": "PASS",
+      "row": {
+        "filename": "P1G-FB-1782604688975.png",
+        "itemCode": "P1G-FB-1782604688975",
+        "itemId": null,
+        "itemName": null,
+        "status": "invalid",
+        "reason": "Input buffer contains unsupported image format",
+        "hasExistingImage": false
+      }
+    },
+    "07_duplicate": {
+      "status": "PASS",
+      "rows": [
+        {
+          "filename": "P1G-FB-1782604688975.jpg",
+          "itemCode": "P1G-FB-1782604688975",
+          "itemId": null,
+          "itemName": null,
+          "status": "duplicate",
+          "reason": "Duplicate item code or filename in ZIP",
+          "hasExistingImage": false
+        },
+        {
+          "filename": "P1G-FB-1782604688975.png",
+          "itemCode": "P1G-FB-1782604688975",
+          "itemId": null,
+          "itemName": null,
+          "status": "duplicate",
+          "reason": "Duplicate item code or filename in ZIP",
+          "hasExistingImage": false
+        }
+      ]
+    },
+    "08_tenant_isolation": {
+      "status": "PASS",
+      "foreignCode": "CLOSEOUT-COPY-1782519745201",
+      "row": {
+        "filename": "CLOSEOUT-COPY-1782519745201.png",
+        "itemCode": "CLOSEOUT-COPY-1782519745201",
+        "itemId": null,
+        "itemName": null,
+        "status": "unmatched",
+        "reason": "No item with code \"CLOSEOUT-COPY-1782519745201\"",
+        "hasExistingImage": false
+      },
+      "tenantB": "closeout-audit-hotel-disposable"
+    },
+    "09_token_single_use": {
+      "status": "PASS",
+      "first": 200,
+      "second": 404,
+      "message": "Preview session not found or expired"
+    },
+    "10_token_expiry": {
+      "status": "SKIP",
+      "reason": "API runtime expiry skipped; covered by bulkItemImageUpload.expiry.test.js (TTL=50ms integration)"
+    },
+    "11_temp_cleanup": {
+      "status": "PASS",
+      "tempCountBefore": 1,
+      "tempCountAfter": 0,
+      "tempToken": "aae01a86-eb99-448b-90d0-7e605e18d387"
+    },
+    "12_partial_success": {
+      "status": "PASS",
+      "confirm": {
+        "uploaded": 1,
+        "skipped": 1,
+        "failed": 0,
+        "details": [
+          {
+            "filename": "BAD-FILE.png",
+            "itemCode": "BAD-FILE",
+            "itemId": null,
+            "itemName": null,
+            "status": "skipped",
+            "reason": "Input buffer contains unsupported image format"
+          },
+          {
+            "filename": "P1G-FB-1782604688975.png",
+            "itemCode": "P1G-FB-1782604688975",
+            "itemId": "a2df226a-2bc4-498c-bc26-5de1c0002ec3",
+            "itemName": "PHASE1_SCOPE_GATE Item FB",
+            "status": "uploaded"
+          }
+        ]
+      }
+    },
+    "13_ui_availability_separated": {
+      "status": "PASS",
+      "permission": "MANAGE_MASTER_DATA"
+    }
+  },
+  "backendTests": {
+    "note": "See npm run test:unit bulkItemImage* — 11 tests"
+  },
+  "frontendBuild": {
+    "status": "PASS",
+    "output": "OSE-Frontend/dist/OSE"
+  },
+  "filesChangedAvailability": [
+    "OSE-Frontend/src/app/features/items/items-list/items-list.component.ts",
+    "OSE-Frontend/src/app/features/items/items-list/items-list.component.html",
+    "OSE-Frontend/src/app/core/services/auth.service.ts"
+  ]
+}

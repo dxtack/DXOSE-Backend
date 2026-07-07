@@ -1,0 +1,40 @@
+{
+  "executedAt": "2026-06-27T00:34:22.483Z",
+  "script": "10-transfer-runtime-v3",
+  "harnessExit": 0,
+  "counts": {
+    "PASS": 4,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT_EXECUTED": 0,
+    "NOT_APPLICABLE": 0
+  },
+  "total": 4,
+  "countValidation": "PASS + FAIL + BLOCKED + NOT_EXECUTED + NOT_APPLICABLE = total",
+  "hadUnexpected500": false,
+  "missingFixtures": [],
+  "missingIdentities": [],
+  "meta": {},
+  "scenarios": [
+    {
+      "id": "TR-CREATE",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "TR-NO-ASSIGN",
+      "result": "PASS",
+      "http": 403
+    },
+    {
+      "id": "TR-SAME-STORE",
+      "result": "PASS",
+      "http": 400
+    },
+    {
+      "id": "TR-INSUFFICIENT",
+      "result": "PASS",
+      "http": 403
+    }
+  ]
+}

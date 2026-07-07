@@ -1,0 +1,2467 @@
+{
+  "executedAt": "2026-06-27T18:44:33.674Z",
+  "tag": "HEAD_RT_V2",
+  "api": "http://127.0.0.1:4000/api",
+  "disposableTenant": "closeout-audit-hotel-disposable",
+  "summary": {
+    "PASS": 37,
+    "FAIL": 20,
+    "BLOCKED": 1,
+    "NOT APPLICABLE": 1,
+    "total": 59
+  },
+  "bySection": {
+    "A": {
+      "PASS": 2,
+      "FAIL": 6,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 8
+    },
+    "C-legacy": {
+      "PASS": 0,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 1
+    },
+    "D-ff": {
+      "PASS": 0,
+      "FAIL": 2,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 2
+    },
+    "E-grn": {
+      "PASS": 1,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 1
+    },
+    "B": {
+      "PASS": 2,
+      "FAIL": 6,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 8
+    },
+    "C": {
+      "PASS": 0,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 1
+    },
+    "D": {
+      "PASS": 6,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 6
+    },
+    "E": {
+      "PASS": 11,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 11
+    },
+    "F": {
+      "PASS": 1,
+      "FAIL": 3,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 4
+    },
+    "G": {
+      "PASS": 8,
+      "FAIL": 1,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 9
+    },
+    "H": {
+      "PASS": 4,
+      "FAIL": 0,
+      "BLOCKED": 1,
+      "NOT APPLICABLE": 1,
+      "total": 6
+    },
+    "I": {
+      "PASS": 2,
+      "FAIL": 0,
+      "BLOCKED": 0,
+      "NOT APPLICABLE": 0,
+      "total": 2
+    }
+  },
+  "scenarios": [
+    {
+      "id": "V2-CF-GP-NEVER-SUBMIT",
+      "section": "A",
+      "expected": "403/401/422 submit denied",
+      "actual": "HTTP 200 submit without assignment",
+      "result": "FAIL",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#GP-A-NEVER-SUBMIT",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-LEG-LOST-DEPT",
+      "section": "C-legacy",
+      "expected": "legacy blocked or ACC-pinned",
+      "actual": "HTTP 200 DRAFT->DEPT_APPROVED pin=null",
+      "result": "FAIL",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#LEG-C-LOST-DEPT",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-GP-FF-FINANCE",
+      "section": "D-ff",
+      "expected": "No Dept/CC skip on Finance submit",
+      "actual": "status=PENDING_GM financeApprovedBy set; dept/cc null",
+      "result": "FAIL",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#GP-D-FF-FINANCE",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-GP-FF-ORG",
+      "section": "D-ff",
+      "expected": "No auto-complete all steps",
+      "actual": "HTTP 200 status=PENDING_SECURITY all stamps",
+      "result": "FAIL",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#GP-D-FF-ORG_MANAGER",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-GP-XT-READ",
+      "section": "A",
+      "expected": "404 cross-tenant read",
+      "actual": "HTTP 404",
+      "result": "PASS",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#GP-A-XT-READ",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-GRN-RESUBMIT-DEAD",
+      "section": "E-grn",
+      "expected": "Backend /resubmit absent",
+      "actual": "HTTP 404 on POST /grn/:id/resubmit",
+      "result": "PASS",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#GRN-E-RESUBMIT-LIVE",
+        "feRef": "grn.service.ts:137",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-WP-NEVER-LIST",
+      "section": "B",
+      "expected": "403 or empty pipeline list",
+      "actual": "HTTP 200 count=50",
+      "result": "FAIL",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#WP-B-NEVER-list",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-WP-NEVER-SUMMARY",
+      "section": "B",
+      "expected": "403 or empty summary",
+      "actual": "HTTP 200 count=179",
+      "result": "FAIL",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#WP-B-NEVER/summary",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-CF-WP-NEVER-ALERTS",
+      "section": "B",
+      "expected": "403 or empty alerts",
+      "actual": "HTTP 200 count=15",
+      "result": "FAIL",
+      "evidence": {
+        "evidencePath": "P0_RUNTIME_RESULTS.json#WP-B-NEVER/alerts",
+        "carryForward": true,
+        "v1ExecutedAt": "2026-06-27T18:23:38.057Z",
+        "note": "Carried forward from v1 — valid runtime proof, not re-executed"
+      },
+      "at": "2026-06-27T18:44:23.626Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-A-NEVER-SUBMIT",
+      "section": "A",
+      "expected": "403/401/422 no status change",
+      "actual": "HTTP 200 status DRAFT->PENDING_COST_CONTROL",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "70ceecb4-7952-4ef4-b38f-46a7c47930cf",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [],
+          "hasActiveAssignmentForTenant": false
+        },
+        "body": {
+          "success": true,
+          "data": {
+            "id": "e3872e63-4489-4e49-b715-cec400bbf522",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "passNo": "GP-2026-00070",
+            "concurrencyVersion": 1,
+            "postingDate": null,
+            "assignedPostingPeriod": null,
+            "transferType": "PERMANENT",
+            "isInternalTransfer": false,
+            "targetTenantId": null,
+            "returnDate": null,
+            "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+            "borrowingEntity": "HEAD_RT_V2 never",
+            "expectedReturnDate": null,
+            "status": "PENDING_COST_CONTROL",
+            "deptApprovedBy": "70ceecb4-7952-4ef4-b38f-46a7c47930cf",
+            "deptApprovedAt": "2026-06-27T18:44:24.286Z",
+            "costControlApprovedBy": null,
+            "costControlApprovedAt": null,
+            "financeApprovedBy": null,
+            "financeApprovedAt": null,
+            "gmApprovedBy": null,
+            "gmApprovedAt": null,
+            "securityApprovedBy": null,
+            "securityApprovedAt": null,
+            "destinationSecurityApprovedBy": null,
+            "destinationSecurityApprovedAt": null,
+            "destinationSecurityExitBy": null,
+            "destinationSecurityExitAt": null,
+            "checkedOutBy": null,
+            "checkedOutAt": null,
+            "closedBy": null,
+            "closedAt": null,
+            "closeReason": null,
+            "closedVia": null,
+            "settlementPayload": null,
+            "settlementSubmittedBy": null,
+            "settlementSubmittedAt": null,
+            "settlementApprovedBy": null,
+            "settlementApprovedAt": null,
+            "settlementPriorStatus": null,
+            "settlementRejectionReason": null,
+            "settlementRejectedBy": null,
+            "settlementRejectedAt": null,
+            "settlementCancelledBy": null,
+            "settlementCancelledAt": null,
+            "receivedById": null,
+            "receivedAt": null,
+            "receivedCondition": null,
+            "receivedNotes": null,
+            "destinationDeptAcceptedAt": null,
+            "destinationDeptAcceptedBy": null,
+            "destinationDepartmentId": null,
+            "destinationLocationId": null,
+            "reason": "HEAD_RT_V2 never",
+            "notes": null,
+            "rejectionReason": null,
+            "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "createdBy": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+            "createdAt": "2026-06-27T18:44:24.047Z",
+            "updatedAt": "2026-06-27T18:44:24.289Z",
+            "department": {
+              "id": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+              "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT FB",
+              "code": "FB",
+              "isActive": true,
+              "createdAt": "2026-06-27T00:21:46.410Z",
+              "updatedAt": "2026-06-27T00:21:46.410Z"
+            },
+            "tenant": {
+              "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+              "slug": "closeout-audit-hotel-disposable",
+              "email": null,
+              "phone": null,
+              "address": null
+            },
+            "targetTenant": null,
+            "createdByUser": {
+              "id": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+              "email": "head_rt_v2-gp-creator@head-rt-v2.local",
+              "passwordHash": "$2a$10$uUVAHXjDeWlqrJlWgDGYoO3LlFBuEdIAxH7/oC/FvB76V0lfxs7SO",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-creator",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:23.875Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:54.933Z",
+              "updatedAt": "2026-06-27T18:44:23.877Z"
+            },
+            "deptApprover": {
+              "id": "70ceecb4-7952-4ef4-b38f-46a7c47930cf",
+              "email": "head_rt_v2-gp-never@head-rt-v2.local",
+              "passwordHash": "$2a$10$Oodpf346S4M.DimSdRoXBOFn7DQmvfLtwuMzSrxIM5Jp72urNIhSm",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-never",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:24.214Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:55.193Z",
+              "updatedAt": "2026-06-27T18:44:24.217Z"
+            },
+            "costControlApprover": null,
+            "financeApprover": null,
+            "gmApprover": null,
+            "securityApprover": null,
+            "destinationSecurityApprover": null,
+            "destinationSecurityExitUser": null,
+            "checkoutUser": null,
+            "closingUser": null,
+            "receivedBy": null,
+            "destinationDeptAccepter": null,
+            "lines": [
+              {
+                "id": "3bc6db14-dfa7-4f72-9875-8ce2a4851094",
+                "getPassId": "e3872e63-4489-4e49-b715-cec400bbf522",
+                "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                "qty": "1",
+                "qtyReturned": "0",
+                "returnedGoodQty": "0",
+                "returnedDamagedQty": "0",
+                "returnedLostQty": "0",
+                "damagePhotos": null,
+                "qtyReceivedAtDestination": "0",
+                "qtyDiscrepancyAtDestination": "0",
+                "unitCost": "0",
+                "conditionOut": "GOOD",
+                "receivedCondition": null,
+                "discrepancyReason": null,
+                "status": "PENDING",
+                "notes": null,
+                "item": {
+                  "id": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "Dinner Plate - Porcelain",
+                  "description": null,
+                  "categoryId": null,
+                  "subcategoryId": null,
+                  "supplierId": null,
+                  "barcode": null,
+                  "unitPrice": "22",
+                  "imageUrl": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:25.204Z",
+                  "updatedAt": "2026-06-27T00:22:25.204Z",
+                  "code": "CLOSEOUT-COPY-1782519745201",
+                  "defaultStoreId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+                  "reorderPoint": 0,
+                  "reorderQty": 0
+                },
+                "location": {
+                  "id": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "CLOSEOUT_RT_AUDIT Store",
+                  "type": "MAIN_STORE",
+                  "description": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:02.927Z",
+                  "updatedAt": "2026-06-27T00:22:02.927Z",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3"
+                },
+                "returns": []
+              }
+            ],
+            "reverseAuditTrail": {
+              "shipBackAt": null,
+              "shipBackBy": null,
+              "shipBackByUser": null,
+              "confirmReturnExitAt": null,
+              "confirmReturnExitBy": null,
+              "confirmReturnExitByUser": null,
+              "confirmReturnArrivalAt": null,
+              "confirmReturnArrivalBy": null,
+              "confirmReturnArrivalByUser": null,
+              "acceptReturnDeptAt": null,
+              "acceptReturnDeptBy": null,
+              "acceptReturnDeptByUser": null
+            },
+            "userFacingState": "In Review"
+          }
+        },
+        "readHttp": 403
+      },
+      "at": "2026-06-27T18:44:24.369Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-A-INACTIVE-SUBMIT",
+      "section": "A",
+      "expected": "403/401/422 no status change",
+      "actual": "HTTP 200 status DRAFT->PENDING_COST_CONTROL",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "b7abb4f4-efd0-45a5-a8d3-942e278a709b",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [
+            {
+              "id": "99c08a13-0ef2-45e8-8c10-c27eca71dfdb",
+              "isActive": false,
+              "notes": "HEAD_RT_V2 gp-inact",
+              "propertyIds": [
+                "1e7c184a-bd45-448a-ad75-27a512f124d4"
+              ],
+              "propertySlugs": [
+                "closeout-audit-hotel-disposable"
+              ],
+              "departmentIds": [
+                "38c84663-58eb-449e-ad61-1fb68a7820c3"
+              ]
+            }
+          ],
+          "hasActiveAssignmentForTenant": false
+        },
+        "body": {
+          "success": true,
+          "data": {
+            "id": "d0df1532-6847-4adc-8477-24e7164da132",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "passNo": "GP-2026-00071",
+            "concurrencyVersion": 1,
+            "postingDate": null,
+            "assignedPostingPeriod": null,
+            "transferType": "PERMANENT",
+            "isInternalTransfer": false,
+            "targetTenantId": null,
+            "returnDate": null,
+            "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+            "borrowingEntity": "HEAD_RT_V2 inactive",
+            "expectedReturnDate": null,
+            "status": "PENDING_COST_CONTROL",
+            "deptApprovedBy": "b7abb4f4-efd0-45a5-a8d3-942e278a709b",
+            "deptApprovedAt": "2026-06-27T18:44:24.673Z",
+            "costControlApprovedBy": null,
+            "costControlApprovedAt": null,
+            "financeApprovedBy": null,
+            "financeApprovedAt": null,
+            "gmApprovedBy": null,
+            "gmApprovedAt": null,
+            "securityApprovedBy": null,
+            "securityApprovedAt": null,
+            "destinationSecurityApprovedBy": null,
+            "destinationSecurityApprovedAt": null,
+            "destinationSecurityExitBy": null,
+            "destinationSecurityExitAt": null,
+            "checkedOutBy": null,
+            "checkedOutAt": null,
+            "closedBy": null,
+            "closedAt": null,
+            "closeReason": null,
+            "closedVia": null,
+            "settlementPayload": null,
+            "settlementSubmittedBy": null,
+            "settlementSubmittedAt": null,
+            "settlementApprovedBy": null,
+            "settlementApprovedAt": null,
+            "settlementPriorStatus": null,
+            "settlementRejectionReason": null,
+            "settlementRejectedBy": null,
+            "settlementRejectedAt": null,
+            "settlementCancelledBy": null,
+            "settlementCancelledAt": null,
+            "receivedById": null,
+            "receivedAt": null,
+            "receivedCondition": null,
+            "receivedNotes": null,
+            "destinationDeptAcceptedAt": null,
+            "destinationDeptAcceptedBy": null,
+            "destinationDepartmentId": null,
+            "destinationLocationId": null,
+            "reason": "HEAD_RT_V2 inactive",
+            "notes": null,
+            "rejectionReason": null,
+            "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "createdBy": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+            "createdAt": "2026-06-27T18:44:24.430Z",
+            "updatedAt": "2026-06-27T18:44:24.676Z",
+            "department": {
+              "id": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+              "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT FB",
+              "code": "FB",
+              "isActive": true,
+              "createdAt": "2026-06-27T00:21:46.410Z",
+              "updatedAt": "2026-06-27T00:21:46.410Z"
+            },
+            "tenant": {
+              "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+              "slug": "closeout-audit-hotel-disposable",
+              "email": null,
+              "phone": null,
+              "address": null
+            },
+            "targetTenant": null,
+            "createdByUser": {
+              "id": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+              "email": "head_rt_v2-gp-creator@head-rt-v2.local",
+              "passwordHash": "$2a$10$uUVAHXjDeWlqrJlWgDGYoO3LlFBuEdIAxH7/oC/FvB76V0lfxs7SO",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-creator",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:23.875Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:54.933Z",
+              "updatedAt": "2026-06-27T18:44:23.877Z"
+            },
+            "deptApprover": {
+              "id": "b7abb4f4-efd0-45a5-a8d3-942e278a709b",
+              "email": "head_rt_v2-gp-inact@head-rt-v2.local",
+              "passwordHash": "$2a$10$Z/b2/JLqcM1g5ZU6NlHNBOfPDCXA4Rkvzgq56qv24Ktmg2XOeefjq",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-inact",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:24.611Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:55.278Z",
+              "updatedAt": "2026-06-27T18:44:24.613Z"
+            },
+            "costControlApprover": null,
+            "financeApprover": null,
+            "gmApprover": null,
+            "securityApprover": null,
+            "destinationSecurityApprover": null,
+            "destinationSecurityExitUser": null,
+            "checkoutUser": null,
+            "closingUser": null,
+            "receivedBy": null,
+            "destinationDeptAccepter": null,
+            "lines": [
+              {
+                "id": "1941ec53-62f4-4877-9681-4dab4561a599",
+                "getPassId": "d0df1532-6847-4adc-8477-24e7164da132",
+                "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                "qty": "1",
+                "qtyReturned": "0",
+                "returnedGoodQty": "0",
+                "returnedDamagedQty": "0",
+                "returnedLostQty": "0",
+                "damagePhotos": null,
+                "qtyReceivedAtDestination": "0",
+                "qtyDiscrepancyAtDestination": "0",
+                "unitCost": "0",
+                "conditionOut": "GOOD",
+                "receivedCondition": null,
+                "discrepancyReason": null,
+                "status": "PENDING",
+                "notes": null,
+                "item": {
+                  "id": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "Dinner Plate - Porcelain",
+                  "description": null,
+                  "categoryId": null,
+                  "subcategoryId": null,
+                  "supplierId": null,
+                  "barcode": null,
+                  "unitPrice": "22",
+                  "imageUrl": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:25.204Z",
+                  "updatedAt": "2026-06-27T00:22:25.204Z",
+                  "code": "CLOSEOUT-COPY-1782519745201",
+                  "defaultStoreId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+                  "reorderPoint": 0,
+                  "reorderQty": 0
+                },
+                "location": {
+                  "id": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "CLOSEOUT_RT_AUDIT Store",
+                  "type": "MAIN_STORE",
+                  "description": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:02.927Z",
+                  "updatedAt": "2026-06-27T00:22:02.927Z",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3"
+                },
+                "returns": []
+              }
+            ],
+            "reverseAuditTrail": {
+              "shipBackAt": null,
+              "shipBackBy": null,
+              "shipBackByUser": null,
+              "confirmReturnExitAt": null,
+              "confirmReturnExitBy": null,
+              "confirmReturnExitByUser": null,
+              "confirmReturnArrivalAt": null,
+              "confirmReturnArrivalBy": null,
+              "confirmReturnArrivalByUser": null,
+              "acceptReturnDeptAt": null,
+              "acceptReturnDeptBy": null,
+              "acceptReturnDeptByUser": null
+            },
+            "userFacingState": "In Review"
+          }
+        },
+        "readHttp": 403
+      },
+      "at": "2026-06-27T18:44:24.764Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-A-DELETED-SUBMIT",
+      "section": "A",
+      "expected": "403/401/422 no status change",
+      "actual": "HTTP 200 status DRAFT->PENDING_COST_CONTROL",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "4a626fca-4fb6-4725-99f5-002a3aa11e29",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [],
+          "hasActiveAssignmentForTenant": false
+        },
+        "body": {
+          "success": true,
+          "data": {
+            "id": "bd070bac-9a79-43a5-8147-c776072cf968",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "passNo": "GP-2026-00072",
+            "concurrencyVersion": 1,
+            "postingDate": null,
+            "assignedPostingPeriod": null,
+            "transferType": "PERMANENT",
+            "isInternalTransfer": false,
+            "targetTenantId": null,
+            "returnDate": null,
+            "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+            "borrowingEntity": "HEAD_RT_V2 deleted",
+            "expectedReturnDate": null,
+            "status": "PENDING_COST_CONTROL",
+            "deptApprovedBy": "4a626fca-4fb6-4725-99f5-002a3aa11e29",
+            "deptApprovedAt": "2026-06-27T18:44:25.073Z",
+            "costControlApprovedBy": null,
+            "costControlApprovedAt": null,
+            "financeApprovedBy": null,
+            "financeApprovedAt": null,
+            "gmApprovedBy": null,
+            "gmApprovedAt": null,
+            "securityApprovedBy": null,
+            "securityApprovedAt": null,
+            "destinationSecurityApprovedBy": null,
+            "destinationSecurityApprovedAt": null,
+            "destinationSecurityExitBy": null,
+            "destinationSecurityExitAt": null,
+            "checkedOutBy": null,
+            "checkedOutAt": null,
+            "closedBy": null,
+            "closedAt": null,
+            "closeReason": null,
+            "closedVia": null,
+            "settlementPayload": null,
+            "settlementSubmittedBy": null,
+            "settlementSubmittedAt": null,
+            "settlementApprovedBy": null,
+            "settlementApprovedAt": null,
+            "settlementPriorStatus": null,
+            "settlementRejectionReason": null,
+            "settlementRejectedBy": null,
+            "settlementRejectedAt": null,
+            "settlementCancelledBy": null,
+            "settlementCancelledAt": null,
+            "receivedById": null,
+            "receivedAt": null,
+            "receivedCondition": null,
+            "receivedNotes": null,
+            "destinationDeptAcceptedAt": null,
+            "destinationDeptAcceptedBy": null,
+            "destinationDepartmentId": null,
+            "destinationLocationId": null,
+            "reason": "HEAD_RT_V2 deleted",
+            "notes": null,
+            "rejectionReason": null,
+            "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "createdBy": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+            "createdAt": "2026-06-27T18:44:24.831Z",
+            "updatedAt": "2026-06-27T18:44:25.076Z",
+            "department": {
+              "id": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+              "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT FB",
+              "code": "FB",
+              "isActive": true,
+              "createdAt": "2026-06-27T00:21:46.410Z",
+              "updatedAt": "2026-06-27T00:21:46.410Z"
+            },
+            "tenant": {
+              "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+              "slug": "closeout-audit-hotel-disposable",
+              "email": null,
+              "phone": null,
+              "address": null
+            },
+            "targetTenant": null,
+            "createdByUser": {
+              "id": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+              "email": "head_rt_v2-gp-creator@head-rt-v2.local",
+              "passwordHash": "$2a$10$uUVAHXjDeWlqrJlWgDGYoO3LlFBuEdIAxH7/oC/FvB76V0lfxs7SO",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-creator",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:23.875Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:54.933Z",
+              "updatedAt": "2026-06-27T18:44:23.877Z"
+            },
+            "deptApprover": {
+              "id": "4a626fca-4fb6-4725-99f5-002a3aa11e29",
+              "email": "head_rt_v2-gp-del@head-rt-v2.local",
+              "passwordHash": "$2a$10$4hcTEK2W6yjTOCnSJdFqsumYnrTpgCdCdIe53ZYWH7noC/uHR/E9m",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-del",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:25.020Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:55.366Z",
+              "updatedAt": "2026-06-27T18:44:25.022Z"
+            },
+            "costControlApprover": null,
+            "financeApprover": null,
+            "gmApprover": null,
+            "securityApprover": null,
+            "destinationSecurityApprover": null,
+            "destinationSecurityExitUser": null,
+            "checkoutUser": null,
+            "closingUser": null,
+            "receivedBy": null,
+            "destinationDeptAccepter": null,
+            "lines": [
+              {
+                "id": "a82ea2c3-3fae-4b05-b333-b25579951bd1",
+                "getPassId": "bd070bac-9a79-43a5-8147-c776072cf968",
+                "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                "qty": "1",
+                "qtyReturned": "0",
+                "returnedGoodQty": "0",
+                "returnedDamagedQty": "0",
+                "returnedLostQty": "0",
+                "damagePhotos": null,
+                "qtyReceivedAtDestination": "0",
+                "qtyDiscrepancyAtDestination": "0",
+                "unitCost": "0",
+                "conditionOut": "GOOD",
+                "receivedCondition": null,
+                "discrepancyReason": null,
+                "status": "PENDING",
+                "notes": null,
+                "item": {
+                  "id": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "Dinner Plate - Porcelain",
+                  "description": null,
+                  "categoryId": null,
+                  "subcategoryId": null,
+                  "supplierId": null,
+                  "barcode": null,
+                  "unitPrice": "22",
+                  "imageUrl": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:25.204Z",
+                  "updatedAt": "2026-06-27T00:22:25.204Z",
+                  "code": "CLOSEOUT-COPY-1782519745201",
+                  "defaultStoreId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+                  "reorderPoint": 0,
+                  "reorderQty": 0
+                },
+                "location": {
+                  "id": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "CLOSEOUT_RT_AUDIT Store",
+                  "type": "MAIN_STORE",
+                  "description": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:02.927Z",
+                  "updatedAt": "2026-06-27T00:22:02.927Z",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3"
+                },
+                "returns": []
+              }
+            ],
+            "reverseAuditTrail": {
+              "shipBackAt": null,
+              "shipBackBy": null,
+              "shipBackByUser": null,
+              "confirmReturnExitAt": null,
+              "confirmReturnExitBy": null,
+              "confirmReturnExitByUser": null,
+              "confirmReturnArrivalAt": null,
+              "confirmReturnArrivalBy": null,
+              "confirmReturnArrivalByUser": null,
+              "acceptReturnDeptAt": null,
+              "acceptReturnDeptBy": null,
+              "acceptReturnDeptByUser": null
+            },
+            "userFacingState": "In Review"
+          }
+        },
+        "readHttp": 403
+      },
+      "at": "2026-06-27T18:44:25.141Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-A-WRONG-PROP-SUBMIT",
+      "section": "A",
+      "expected": "403/401/422 no status change",
+      "actual": "HTTP 200 status DRAFT->PENDING_COST_CONTROL",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "147a8f11-92f0-4720-ae60-91258800e5a6",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [
+            {
+              "id": "556054cb-7882-4abe-972f-4e9dbea31b9d",
+              "isActive": true,
+              "notes": "HEAD_RT_V2 gp-wrong",
+              "propertyIds": [
+                "bf7638b8-04db-4051-94d1-0cf039827c00"
+              ],
+              "propertySlugs": [
+                "dx-airport-hotel"
+              ],
+              "departmentIds": []
+            }
+          ],
+          "hasActiveAssignmentForTenant": false
+        },
+        "body": {
+          "success": true,
+          "data": {
+            "id": "f3cf8d6b-877f-4b28-8f1d-74a08cae72b7",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "passNo": "GP-2026-00073",
+            "concurrencyVersion": 1,
+            "postingDate": null,
+            "assignedPostingPeriod": null,
+            "transferType": "PERMANENT",
+            "isInternalTransfer": false,
+            "targetTenantId": null,
+            "returnDate": null,
+            "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+            "borrowingEntity": "HEAD_RT_V2 wrongprop",
+            "expectedReturnDate": null,
+            "status": "PENDING_COST_CONTROL",
+            "deptApprovedBy": "147a8f11-92f0-4720-ae60-91258800e5a6",
+            "deptApprovedAt": "2026-06-27T18:44:25.411Z",
+            "costControlApprovedBy": null,
+            "costControlApprovedAt": null,
+            "financeApprovedBy": null,
+            "financeApprovedAt": null,
+            "gmApprovedBy": null,
+            "gmApprovedAt": null,
+            "securityApprovedBy": null,
+            "securityApprovedAt": null,
+            "destinationSecurityApprovedBy": null,
+            "destinationSecurityApprovedAt": null,
+            "destinationSecurityExitBy": null,
+            "destinationSecurityExitAt": null,
+            "checkedOutBy": null,
+            "checkedOutAt": null,
+            "closedBy": null,
+            "closedAt": null,
+            "closeReason": null,
+            "closedVia": null,
+            "settlementPayload": null,
+            "settlementSubmittedBy": null,
+            "settlementSubmittedAt": null,
+            "settlementApprovedBy": null,
+            "settlementApprovedAt": null,
+            "settlementPriorStatus": null,
+            "settlementRejectionReason": null,
+            "settlementRejectedBy": null,
+            "settlementRejectedAt": null,
+            "settlementCancelledBy": null,
+            "settlementCancelledAt": null,
+            "receivedById": null,
+            "receivedAt": null,
+            "receivedCondition": null,
+            "receivedNotes": null,
+            "destinationDeptAcceptedAt": null,
+            "destinationDeptAcceptedBy": null,
+            "destinationDepartmentId": null,
+            "destinationLocationId": null,
+            "reason": "HEAD_RT_V2 wrongprop",
+            "notes": null,
+            "rejectionReason": null,
+            "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "createdBy": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+            "createdAt": "2026-06-27T18:44:25.197Z",
+            "updatedAt": "2026-06-27T18:44:25.414Z",
+            "department": {
+              "id": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+              "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT FB",
+              "code": "FB",
+              "isActive": true,
+              "createdAt": "2026-06-27T00:21:46.410Z",
+              "updatedAt": "2026-06-27T00:21:46.410Z"
+            },
+            "tenant": {
+              "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+              "slug": "closeout-audit-hotel-disposable",
+              "email": null,
+              "phone": null,
+              "address": null
+            },
+            "targetTenant": null,
+            "createdByUser": {
+              "id": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+              "email": "head_rt_v2-gp-creator@head-rt-v2.local",
+              "passwordHash": "$2a$10$uUVAHXjDeWlqrJlWgDGYoO3LlFBuEdIAxH7/oC/FvB76V0lfxs7SO",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-creator",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:23.875Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:54.933Z",
+              "updatedAt": "2026-06-27T18:44:23.877Z"
+            },
+            "deptApprover": {
+              "id": "147a8f11-92f0-4720-ae60-91258800e5a6",
+              "email": "head_rt_v2-gp-wrong@head-rt-v2.local",
+              "passwordHash": "$2a$10$BxhG/Jc8nT8Azb1UPZuckOa6y24HM7SXyJB0zqwF7EVW.xM12PldC",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-wrong",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:25.359Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:55.455Z",
+              "updatedAt": "2026-06-27T18:44:25.362Z"
+            },
+            "costControlApprover": null,
+            "financeApprover": null,
+            "gmApprover": null,
+            "securityApprover": null,
+            "destinationSecurityApprover": null,
+            "destinationSecurityExitUser": null,
+            "checkoutUser": null,
+            "closingUser": null,
+            "receivedBy": null,
+            "destinationDeptAccepter": null,
+            "lines": [
+              {
+                "id": "eaf604e5-eec6-4eda-a9a8-d49fcb706b20",
+                "getPassId": "f3cf8d6b-877f-4b28-8f1d-74a08cae72b7",
+                "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                "qty": "1",
+                "qtyReturned": "0",
+                "returnedGoodQty": "0",
+                "returnedDamagedQty": "0",
+                "returnedLostQty": "0",
+                "damagePhotos": null,
+                "qtyReceivedAtDestination": "0",
+                "qtyDiscrepancyAtDestination": "0",
+                "unitCost": "0",
+                "conditionOut": "GOOD",
+                "receivedCondition": null,
+                "discrepancyReason": null,
+                "status": "PENDING",
+                "notes": null,
+                "item": {
+                  "id": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "Dinner Plate - Porcelain",
+                  "description": null,
+                  "categoryId": null,
+                  "subcategoryId": null,
+                  "supplierId": null,
+                  "barcode": null,
+                  "unitPrice": "22",
+                  "imageUrl": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:25.204Z",
+                  "updatedAt": "2026-06-27T00:22:25.204Z",
+                  "code": "CLOSEOUT-COPY-1782519745201",
+                  "defaultStoreId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+                  "reorderPoint": 0,
+                  "reorderQty": 0
+                },
+                "location": {
+                  "id": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "CLOSEOUT_RT_AUDIT Store",
+                  "type": "MAIN_STORE",
+                  "description": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:02.927Z",
+                  "updatedAt": "2026-06-27T00:22:02.927Z",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3"
+                },
+                "returns": []
+              }
+            ],
+            "reverseAuditTrail": {
+              "shipBackAt": null,
+              "shipBackBy": null,
+              "shipBackByUser": null,
+              "confirmReturnExitAt": null,
+              "confirmReturnExitBy": null,
+              "confirmReturnExitByUser": null,
+              "confirmReturnArrivalAt": null,
+              "confirmReturnArrivalBy": null,
+              "confirmReturnArrivalByUser": null,
+              "acceptReturnDeptAt": null,
+              "acceptReturnDeptBy": null,
+              "acceptReturnDeptByUser": null
+            },
+            "userFacingState": "In Review"
+          }
+        },
+        "readHttp": 403
+      },
+      "at": "2026-06-27T18:44:25.484Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-A-VALID-SUBMIT",
+      "section": "A",
+      "expected": "200 submit success",
+      "actual": "HTTP 200 status DRAFT->PENDING_COST_CONTROL",
+      "result": "PASS",
+      "evidence": {
+        "dbSnap": {
+          "userId": "a3a3d0b1-4637-47b2-9b74-8935a3df03b2",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [
+            {
+              "id": "2f81af8f-ad62-4259-a7c1-a191d94b3fcb",
+              "isActive": true,
+              "notes": "HEAD_RT_V2 gp-valid",
+              "propertyIds": [
+                "1e7c184a-bd45-448a-ad75-27a512f124d4"
+              ],
+              "propertySlugs": [
+                "closeout-audit-hotel-disposable"
+              ],
+              "departmentIds": [
+                "38c84663-58eb-449e-ad61-1fb68a7820c3"
+              ]
+            }
+          ],
+          "hasActiveAssignmentForTenant": true
+        },
+        "body": {
+          "success": true,
+          "data": {
+            "id": "620ba19d-330f-44e5-bbab-b2b420a7440e",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "passNo": "GP-2026-00074",
+            "concurrencyVersion": 1,
+            "postingDate": null,
+            "assignedPostingPeriod": null,
+            "transferType": "PERMANENT",
+            "isInternalTransfer": false,
+            "targetTenantId": null,
+            "returnDate": null,
+            "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+            "borrowingEntity": "HEAD_RT_V2 valid",
+            "expectedReturnDate": null,
+            "status": "PENDING_COST_CONTROL",
+            "deptApprovedBy": "a3a3d0b1-4637-47b2-9b74-8935a3df03b2",
+            "deptApprovedAt": "2026-06-27T18:44:25.735Z",
+            "costControlApprovedBy": null,
+            "costControlApprovedAt": null,
+            "financeApprovedBy": null,
+            "financeApprovedAt": null,
+            "gmApprovedBy": null,
+            "gmApprovedAt": null,
+            "securityApprovedBy": null,
+            "securityApprovedAt": null,
+            "destinationSecurityApprovedBy": null,
+            "destinationSecurityApprovedAt": null,
+            "destinationSecurityExitBy": null,
+            "destinationSecurityExitAt": null,
+            "checkedOutBy": null,
+            "checkedOutAt": null,
+            "closedBy": null,
+            "closedAt": null,
+            "closeReason": null,
+            "closedVia": null,
+            "settlementPayload": null,
+            "settlementSubmittedBy": null,
+            "settlementSubmittedAt": null,
+            "settlementApprovedBy": null,
+            "settlementApprovedAt": null,
+            "settlementPriorStatus": null,
+            "settlementRejectionReason": null,
+            "settlementRejectedBy": null,
+            "settlementRejectedAt": null,
+            "settlementCancelledBy": null,
+            "settlementCancelledAt": null,
+            "receivedById": null,
+            "receivedAt": null,
+            "receivedCondition": null,
+            "receivedNotes": null,
+            "destinationDeptAcceptedAt": null,
+            "destinationDeptAcceptedBy": null,
+            "destinationDepartmentId": null,
+            "destinationLocationId": null,
+            "reason": "HEAD_RT_V2 valid",
+            "notes": null,
+            "rejectionReason": null,
+            "accWorkflowVersionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "createdBy": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+            "createdAt": "2026-06-27T18:44:25.527Z",
+            "updatedAt": "2026-06-27T18:44:25.738Z",
+            "department": {
+              "id": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+              "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT FB",
+              "code": "FB",
+              "isActive": true,
+              "createdAt": "2026-06-27T00:21:46.410Z",
+              "updatedAt": "2026-06-27T00:21:46.410Z"
+            },
+            "tenant": {
+              "id": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "name": "CLOSEOUT_RT_AUDIT Disposable Hotel",
+              "slug": "closeout-audit-hotel-disposable",
+              "email": null,
+              "phone": null,
+              "address": null
+            },
+            "targetTenant": null,
+            "createdByUser": {
+              "id": "b725c7b5-8bd6-4db3-8935-c93cd48272f8",
+              "email": "head_rt_v2-gp-creator@head-rt-v2.local",
+              "passwordHash": "$2a$10$uUVAHXjDeWlqrJlWgDGYoO3LlFBuEdIAxH7/oC/FvB76V0lfxs7SO",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-creator",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:23.875Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:54.933Z",
+              "updatedAt": "2026-06-27T18:44:23.877Z"
+            },
+            "deptApprover": {
+              "id": "a3a3d0b1-4637-47b2-9b74-8935a3df03b2",
+              "email": "head_rt_v2-gp-valid@head-rt-v2.local",
+              "passwordHash": "$2a$10$HK5ezGKhDzClmY.X47VQneD0XiBjUszzN0FwIJn/nx6NDRq27wHh6",
+              "firstName": "HEAD_RT_V2",
+              "lastName": "gp-valid",
+              "department": null,
+              "phone": null,
+              "isActive": true,
+              "lastLoginAt": "2026-06-27T18:44:25.683Z",
+              "permissionVersion": 0,
+              "createdAt": "2026-06-27T18:36:55.545Z",
+              "updatedAt": "2026-06-27T18:44:25.686Z"
+            },
+            "costControlApprover": null,
+            "financeApprover": null,
+            "gmApprover": null,
+            "securityApprover": null,
+            "destinationSecurityApprover": null,
+            "destinationSecurityExitUser": null,
+            "checkoutUser": null,
+            "closingUser": null,
+            "receivedBy": null,
+            "destinationDeptAccepter": null,
+            "lines": [
+              {
+                "id": "123d88e7-9d7d-4dac-9de9-1754fb940d8c",
+                "getPassId": "620ba19d-330f-44e5-bbab-b2b420a7440e",
+                "itemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                "qty": "1",
+                "qtyReturned": "0",
+                "returnedGoodQty": "0",
+                "returnedDamagedQty": "0",
+                "returnedLostQty": "0",
+                "damagePhotos": null,
+                "qtyReceivedAtDestination": "0",
+                "qtyDiscrepancyAtDestination": "0",
+                "unitCost": "0",
+                "conditionOut": "GOOD",
+                "receivedCondition": null,
+                "discrepancyReason": null,
+                "status": "PENDING",
+                "notes": null,
+                "item": {
+                  "id": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "Dinner Plate - Porcelain",
+                  "description": null,
+                  "categoryId": null,
+                  "subcategoryId": null,
+                  "supplierId": null,
+                  "barcode": null,
+                  "unitPrice": "22",
+                  "imageUrl": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:25.204Z",
+                  "updatedAt": "2026-06-27T00:22:25.204Z",
+                  "code": "CLOSEOUT-COPY-1782519745201",
+                  "defaultStoreId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3",
+                  "reorderPoint": 0,
+                  "reorderQty": 0
+                },
+                "location": {
+                  "id": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+                  "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+                  "name": "CLOSEOUT_RT_AUDIT Store",
+                  "type": "MAIN_STORE",
+                  "description": null,
+                  "isActive": true,
+                  "createdAt": "2026-06-27T00:22:02.927Z",
+                  "updatedAt": "2026-06-27T00:22:02.927Z",
+                  "departmentId": "38c84663-58eb-449e-ad61-1fb68a7820c3"
+                },
+                "returns": []
+              }
+            ],
+            "reverseAuditTrail": {
+              "shipBackAt": null,
+              "shipBackBy": null,
+              "shipBackByUser": null,
+              "confirmReturnExitAt": null,
+              "confirmReturnExitBy": null,
+              "confirmReturnExitByUser": null,
+              "confirmReturnArrivalAt": null,
+              "confirmReturnArrivalBy": null,
+              "confirmReturnArrivalByUser": null,
+              "acceptReturnDeptAt": null,
+              "acceptReturnDeptBy": null,
+              "acceptReturnDeptByUser": null
+            },
+            "userFacingState": "In Review"
+          }
+        },
+        "readHttp": 200
+      },
+      "at": "2026-06-27T18:44:25.809Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-A-STALE-JWT",
+      "section": "A",
+      "expected": "403/401/422 after assignment deactivated",
+      "actual": "HTTP 200",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "f70980c3-24fc-4aa1-80fb-c832e5101c6c",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [
+            {
+              "id": "8fa8afb4-8028-4e48-84f4-d15c3b6b62d9",
+              "isActive": false,
+              "notes": "HEAD_RT_V2 gp-stale",
+              "propertyIds": [
+                "1e7c184a-bd45-448a-ad75-27a512f124d4"
+              ],
+              "propertySlugs": [
+                "closeout-audit-hotel-disposable"
+              ],
+              "departmentIds": [
+                "38c84663-58eb-449e-ad61-1fb68a7820c3"
+              ]
+            }
+          ],
+          "hasActiveAssignmentForTenant": false
+        },
+        "permissions": [
+          "BASIC_DATA_VIEW",
+          "INVENTORY_VIEW",
+          "ISSUE_CREATE",
+          "ISSUE_APPROVE",
+          "TRANSFER_VIEW",
+          "TRANSFER_CREATE",
+          "TRANSFER_APPROVE",
+          "BREAKAGE_VIEW",
+          "BREAKAGE_CREATE",
+          "APPROVE_BREAKAGE",
+          "REPORTS_VIEW",
+          "LOST_ITEMS_VIEW",
+          "APPROVE_LOST",
+          "LOST_CREATE",
+          "VIEW_DASHBOARD",
+          "DASHBOARD_VIEW",
+          "GET_PASS_CREATE",
+          "GET_PASS_VIEW",
+          "ISSUE_VIEW",
+          "LOST_FOUND_VIEW",
+          "LOST_FOUND_CREATE",
+          "LOST_FOUND_RETURN",
+          "WORKFLOW_PIPELINE_VIEW",
+          "REQUISITION_VIEW",
+          "REQUISITION_CREATE",
+          "REQUISITION_SUBMIT",
+          "REQUISITION_APPROVE",
+          "GET_PASS_APPROVE"
+        ]
+      },
+      "at": "2026-06-27T18:44:26.095Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-B-NEVER-LIST",
+      "section": "B",
+      "expected": "403 or empty (no active assignment)",
+      "actual": "HTTP 200 count=50",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "8800b35b-765e-4b64-998e-4801c504407e",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [],
+          "hasActiveAssignmentForTenant": false
+        },
+        "sampleIds": [
+          "lost:8ad09f24-0809-42b5-ab6b-07f0ae899a60",
+          "grn:e52f2fcd-02a3-4612-9aaa-8ba739635c3f",
+          "grn:f2519932-17e6-48d0-b926-694123af8982"
+        ]
+      },
+      "at": "2026-06-27T18:44:26.490Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-B-NEVER-SUMMARY",
+      "section": "B",
+      "expected": "403 or empty (no active assignment)",
+      "actual": "HTTP 200 count=0",
+      "result": "PASS",
+      "evidence": {
+        "dbSnap": {
+          "userId": "8800b35b-765e-4b64-998e-4801c504407e",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [],
+          "hasActiveAssignmentForTenant": false
+        },
+        "sampleIds": []
+      },
+      "at": "2026-06-27T18:44:26.543Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-B-NEVER-ALERTS",
+      "section": "B",
+      "expected": "403 or empty (no active assignment)",
+      "actual": "HTTP 200 count=15",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "8800b35b-765e-4b64-998e-4801c504407e",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [],
+          "hasActiveAssignmentForTenant": false
+        },
+        "sampleIds": [
+          "lost:8ad09f24-0809-42b5-ab6b-07f0ae899a60",
+          "breakage:af932526-8cfc-4f6a-a123-640e12e8d1c7",
+          "breakage:8dd368d7-3056-4941-927d-3b0a90b42c11"
+        ]
+      },
+      "at": "2026-06-27T18:44:26.638Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-B-FIN-POS",
+      "section": "B",
+      "expected": "200 authorized finance list",
+      "actual": "HTTP 200 count=0",
+      "result": "PASS",
+      "evidence": {
+        "dbSnap": {
+          "userId": "03c98f84-cf2e-4a65-953c-34b5d46c02e4",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "FINANCE_MANAGER",
+          "assignments": [
+            {
+              "id": "28924532-8b29-45bd-854f-0ebd0dbc547f",
+              "isActive": true,
+              "notes": "HEAD_RT_V2 wp-fin",
+              "propertyIds": [
+                "1e7c184a-bd45-448a-ad75-27a512f124d4"
+              ],
+              "propertySlugs": [
+                "closeout-audit-hotel-disposable"
+              ],
+              "departmentIds": []
+            }
+          ],
+          "hasActiveAssignmentForTenant": true
+        }
+      },
+      "at": "2026-06-27T18:44:26.703Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-B-DASH-NEVER",
+      "section": "B",
+      "expected": "dashboard empty or denied without assignment",
+      "actual": "HTTP 200",
+      "result": "FAIL",
+      "evidence": {
+        "dbSnap": {
+          "userId": "8800b35b-765e-4b64-998e-4801c504407e",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "DEPT_MANAGER",
+          "assignments": [],
+          "hasActiveAssignmentForTenant": false
+        },
+        "data": {
+          "meta": {
+            "dashboardProfile": "department",
+            "departmentScoped": false
+          },
+          "inventoryOverview": {
+            "totalValue": 0,
+            "totalStores": 0,
+            "totalActiveItems": 0,
+            "totalQtyOnHand": 0,
+            "valueByDepartment": []
+          },
+          "monthlyPerformance": {
+            "consumptionValue": 0,
+            "consumptionDelta": 0,
+            "transfersCount": 0,
+            "lossValue": 0,
+            "lossDelta": 0,
+            "fillRate": 0,
+            "totalRequisitions": 0,
+            "fulfilledRequisitions": 0
+          },
+          "riskIndicators": null,
+          "operationalHealth": {
+            "openReqsCount": 0,
+            "pendingTransfersCount": 0,
+            "pendingGrnsCount": 0,
+            "pendingLossCount": 0,
+            "overdueLoansCount": 0,
+            "pendingStockReportsCount": 0,
+            "details": {
+              "openReqs": [],
+              "pendingTransfers": [],
+              "pendingGrns": [],
+              "pendingLoss": [],
+              "overdueLoans": [],
+              "pendingStockReports": []
+            }
+          },
+          "controlTower": {
+            "monthlyApprovedLosses": {
+              "totalValue": 80,
+              "documentCount": 8
+            },
+            "workflowHealth": [
+              {
+                "status": "POSTED",
+                "count": 1
+              },
+              {
+                "status": "DRAFT",
+                "count": 12
+              },
+              {
+                "status": "DEPT_APPROVED",
+                "count": 11
+              }
+            ],
+            "stockAlerts": [],
+            "accountabilityDistribution": {
+              "companyLoss": 0,
+              "employeeDeduction": 0,
+              "targetHotelCompensation": 0,
+              "unspecified": 80
+            },
+            "lossVsBreakage": {
+              "breakageValue": 6,
+              "lostValue": 10
+            },
+            "topVulnerableItems": [
+              {
+                "itemName": "Dinner Plate - Porcelain",
+                "eventCount": 8,
+                "totalCost": 16
+              }
+            ],
+            "pendingMyActionCount": 0,
+            "activeUsersCount": 71
+          },
+          "myRequestStatus": [],
+          "generatedAt": "2026-06-27T18:44:26.723Z",
+          "scope": {
+            "profile": "LOCATIONS",
+            "scopeSource": "UR_ASSIGNMENT",
+            "scopeLabel": "No ACC scope assignment",
+            "departmentId": null,
+            "role": "DEPT_MANAGER",
+            "allowedLocationCount": 0
+          },
+          "scopeLabel": "No ACC scope assignment",
+          "scopeApplied": true,
+          "reason": "SCOPE_NO_LOCATIONS_ASSIGNED"
+        }
+      },
+      "at": "2026-06-27T18:44:26.738Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-C-WF-EFFECTIVE",
+      "section": "C",
+      "expected": "Constitution GP chain without GM",
+      "actual": "21/21 effective chains contain GM; 0 tenant-specific, 21 inherit global",
+      "result": "FAIL",
+      "evidence": {
+        "rows": [
+          {
+            "tenant": "dx-marina-hotel",
+            "tenantId": "13a21ce5-2c05-4d14-9c2d-6ec796046b81",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "platform",
+            "tenantId": "193b6308-3cc3-40cb-8796-34b10673c59a",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "closeout-audit-hotel-disposable",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "dx-hospitality-group",
+            "tenantId": "3f763a13-177d-44e7-81f5-5640a7e8ead5",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "dx-executive-suites",
+            "tenantId": "4605fe49-5496-4e9b-8824-2bb3f57ab29f",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "voco-khobar",
+            "tenantId": "531e7ce8-59e8-4f87-af4b-8b534816bde7",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "voco",
+            "tenantId": "5676fa76-bd8d-4e18-820e-a915198d3ec3",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          },
+          {
+            "tenant": "rotana-2",
+            "tenantId": "676ec92e-91cc-475a-a269-c0d7d3aa7268",
+            "moduleKey": "GET_PASS",
+            "found": true,
+            "versionId": "aec08f69-0668-479e-bef5-1e79fdf69fa7",
+            "definitionTenantId": null,
+            "source": "global",
+            "steps": [
+              "PENDING_DEPT",
+              "PENDING_COST_CONTROL",
+              "PENDING_FINANCE",
+              "PENDING_GM",
+              "PENDING_SECURITY"
+            ],
+            "roleCodes": [
+              "DEPT_MANAGER",
+              "COST_CONTROL",
+              "FINANCE_MANAGER",
+              "GENERAL_MANAGER",
+              "SECURITY"
+            ],
+            "hasGM": true
+          }
+        ],
+        "fullPath": "Governance/runtime-revalidation/GP_EFFECTIVE_WORKFLOW_V2.json"
+      },
+      "at": "2026-06-27T18:44:26.954Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-D-GRN-SB",
+      "section": "D",
+      "expected": "send-back -> DRAFT",
+      "actual": "HTTP 200 status=DRAFT",
+      "result": "PASS",
+      "evidence": {
+        "ccAp": 200,
+        "sub1": 200
+      },
+      "at": "2026-06-27T18:44:27.922Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-D-GRN-EDIT",
+      "section": "D",
+      "expected": "creator can edit DRAFT",
+      "actual": "HTTP 200",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:27.922Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-D-GRN-SUBMIT-AFTER-SB",
+      "section": "D",
+      "expected": "validate+submit after send-back (not /resubmit)",
+      "actual": "validate HTTP 200 submit HTTP 200 status=PENDING_APPROVAL",
+      "result": "PASS",
+      "evidence": {
+        "sub2Body": {
+          "success": true,
+          "data": {
+            "id": "8a8bfcd6-f608-4f4b-b4e6-c0db13de72fe",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "grnNumber": "HEAD_RT_V2-GRN-SB-1782585867289",
+            "supplierInvoiceNumber": "HEAD_RT_V2-GRN-SB-1782585867289",
+            "concurrencyVersion": 4,
+            "postingDate": null,
+            "assignedPostingPeriod": null,
+            "vendorId": "9ec46b81-309c-4c03-8678-4d224797bb1a",
+            "vendorNameSnapshot": "HEAD_RT_V2",
+            "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+            "receivingDate": "2026-06-27T18:44:27.294Z",
+            "pdfAttachmentUrl": "/head-rt-v2.pdf",
+            "status": "PENDING_APPROVAL",
+            "rejectionReason": null,
+            "notes": "HEAD_RT_V2 edited after send-back",
+            "isEditedAfterRejection": false,
+            "lastEditedBy": null,
+            "importedBy": "ce405eff-3d57-474c-a2af-d419c389c5f0",
+            "approvedBy": null,
+            "rejectedBy": null,
+            "postedBy": null,
+            "postedAt": null,
+            "accWorkflowVersionId": "b842628d-670f-4f9a-bf41-16f070246b95",
+            "approvalRequestId": "12f21fe0-11b5-4993-b476-28d5812c73f4",
+            "createdAt": "2026-06-27T18:44:27.296Z",
+            "updatedAt": "2026-06-27T18:44:27.786Z",
+            "vendor": {
+              "name": "HEAD_RT_REVAL Supplier"
+            },
+            "location": {
+              "name": "CLOSEOUT_RT_AUDIT Store"
+            },
+            "importedByUser": {
+              "firstName": "HEAD_RT_V2",
+              "lastName": "grn-fin"
+            },
+            "approvedByUser": null,
+            "postedByUser": null,
+            "rejectedByUser": null,
+            "lastEditedByUser": null,
+            "lines": [
+              {
+                "id": "f7453880-67c6-487d-958b-b88b938c94cf",
+                "grnImportId": "8a8bfcd6-f608-4f4b-b4e6-c0db13de72fe",
+                "futurelogItemCode": "V2-001",
+                "futurelogDescription": "V2",
+                "futurelogUom": "EA",
+                "orderedQty": "1",
+                "receivedQty": "1",
+                "unitPrice": "10",
+                "internalItemId": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                "internalUomId": "dca5d574-f178-4c8d-a5c8-36359536067b",
+                "conversionFactor": "1",
+                "qtyInBaseUnit": "1",
+                "isMapped": true,
+                "item": {
+                  "id": "2b2d7770-0517-4d3d-b7ab-ea3a6d099c88",
+                  "name": "Dinner Plate - Porcelain",
+                  "barcode": null
+                },
+                "uom": {
+                  "id": "dca5d574-f178-4c8d-a5c8-36359536067b",
+                  "name": "EA",
+                  "abbreviation": "EA"
+                }
+              }
+            ],
+            "approvalRequest": {
+              "id": "12f21fe0-11b5-4993-b476-28d5812c73f4",
+              "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+              "requestType": "GRN_IMPORT",
+              "status": "PENDING",
+              "documentId": null,
+              "storeTransferId": null,
+              "grnImportId": "8a8bfcd6-f608-4f4b-b4e6-c0db13de72fe",
+              "cycleNumber": 2,
+              "currentStep": 1,
+              "totalSteps": 2,
+              "createdBy": "ce405eff-3d57-474c-a2af-d419c389c5f0",
+              "createdAt": "2026-06-27T18:44:27.777Z",
+              "resolvedAt": null,
+              "accWorkflowVersionId": "b842628d-670f-4f9a-bf41-16f070246b95",
+              "steps": [
+                {
+                  "id": "e9d10a4c-076b-458f-b24f-6340f9c99a87",
+                  "requestId": "12f21fe0-11b5-4993-b476-28d5812c73f4",
+                  "stepNumber": 1,
+                  "requiredRoleId": "6051d474-1ccd-4f4e-a278-0f045de1e4ac",
+                  "status": "PENDING",
+                  "actedBy": null,
+                  "actedAt": null,
+                  "comment": null,
+                  "accountabilityType": null,
+                  "requiredRole": {
+                    "code": "COST_CONTROL",
+                    "name": "Cost Control"
+                  },
+                  "actedByUser": null
+                },
+                {
+                  "id": "74d4a57c-9620-4cfa-a2bf-3f20a1451060",
+                  "requestId": "12f21fe0-11b5-4993-b476-28d5812c73f4",
+                  "stepNumber": 2,
+                  "requiredRoleId": "a589a9ad-8fcd-4c15-a4fc-df5c36da3145",
+                  "status": "PENDING",
+                  "actedBy": null,
+                  "actedAt": null,
+                  "comment": null,
+                  "accountabilityType": null,
+                  "requiredRole": {
+                    "code": "FINANCE_MANAGER",
+                    "name": "Finance Manager"
+                  },
+                  "actedByUser": null
+                }
+              ]
+            },
+            "userFacingState": "In Review",
+            "pdfAttachmentDisplayUrl": "/uploads//head-rt-v2.pdf",
+            "workflowTimeline": [
+              {
+                "order": 1,
+                "kind": "MILESTONE",
+                "stageTitle": "RECEIVED & VALIDATED",
+                "roleLabel": null,
+                "actorName": "HEAD_RT_V2 grn-fin",
+                "actedAt": "2026-06-27T18:44:27.296Z",
+                "status": "COMPLETED"
+              },
+              {
+                "order": 2,
+                "kind": "APPROVAL",
+                "stageTitle": "COST CONTROL APPROVED",
+                "roleLabel": null,
+                "actorName": null,
+                "actedAt": null,
+                "status": "PENDING"
+              },
+              {
+                "order": 3,
+                "kind": "APPROVAL",
+                "stageTitle": "FINANCE APPROVED",
+                "roleLabel": null,
+                "actorName": null,
+                "actedAt": null,
+                "status": "PENDING"
+              }
+            ]
+          }
+        },
+        "val2Body": {
+          "success": true,
+          "data": {
+            "id": "8a8bfcd6-f608-4f4b-b4e6-c0db13de72fe",
+            "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+            "grnNumber": "HEAD_RT_V2-GRN-SB-1782585867289",
+            "supplierInvoiceNumber": "HEAD_RT_V2-GRN-SB-1782585867289",
+            "concurrencyVersion": 3,
+            "postingDate": null,
+            "assignedPostingPeriod": null,
+            "vendorId": "9ec46b81-309c-4c03-8678-4d224797bb1a",
+            "vendorNameSnapshot": "HEAD_RT_V2",
+            "locationId": "28d9feca-23ec-416c-be8b-b862c5dbc8db",
+            "receivingDate": "2026-06-27T18:44:27.294Z",
+            "pdfAttachmentUrl": "/head-rt-v2.pdf",
+            "status": "VALIDATED",
+            "rejectionReason": null,
+            "notes": "HEAD_RT_V2 edited after send-back",
+            "isEditedAfterRejection": false,
+            "lastEditedBy": null,
+            "importedBy": "ce405eff-3d57-474c-a2af-d419c389c5f0",
+            "approvedBy": null,
+            "rejectedBy": null,
+            "postedBy": null,
+            "postedAt": null,
+            "accWorkflowVersionId": null,
+            "approvalRequestId": null,
+            "createdAt": "2026-06-27T18:44:27.296Z",
+            "updatedAt": "2026-06-27T18:44:27.718Z"
+          }
+        }
+      },
+      "at": "2026-06-27T18:44:27.924Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-D-GRN-RESUBMIT-CALL",
+      "section": "D",
+      "expected": "/resubmit dead on backend",
+      "actual": "HTTP 404",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:27.924Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-D-GRN-AUDIT",
+      "section": "D",
+      "expected": "SEND_BACK audit; resubmit via submit not separate action",
+      "actual": "SEND_BACK,SUBMIT",
+      "result": "PASS",
+      "evidence": {
+        "audit": [
+          {
+            "action": "SEND_BACK",
+            "note": "GRN_SEND_BACK | HEAD_RT_V2 review",
+            "changedAt": "2026-06-27T18:44:27.633Z"
+          },
+          {
+            "action": "SUBMIT",
+            "note": "GRN_RESUBMIT",
+            "changedAt": "2026-06-27T18:44:27.795Z"
+          }
+        ]
+      },
+      "at": "2026-06-27T18:44:27.924Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-D-GRN-FE-RESUBMIT",
+      "section": "D",
+      "expected": "Resubmit UI only on REJECTED not DRAFT-after-send-back",
+      "actual": "Static: grn-detail shows resubmitRejected only when status===REJECTED (lines 129-135 html)",
+      "result": "PASS",
+      "evidence": {
+        "path": "OSE-Frontend/src/app/features/grn/grn-detail/grn-detail.component.html",
+        "note": "After send-back status=DRAFT uses Submit not Resubmit — REJECTED path still calls dead /resubmit API"
+      },
+      "at": "2026-06-27T18:44:27.924Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-BRK-SUBMIT",
+      "section": "E",
+      "expected": "submit enters approval chain",
+      "actual": "HTTP 200 status=DEPT_APPROVED",
+      "result": "PASS",
+      "evidence": {
+        "skPerms": [
+          "BASIC_DATA_VIEW",
+          "INVENTORY_VIEW",
+          "MOVEMENTS_VIEW",
+          "LEDGER_VIEW",
+          "INVENTORY_HISTORY_VIEW",
+          "MOVEMENT_CREATE",
+          "ISSUE_CREATE",
+          "TRANSFER_VIEW",
+          "TRANSFER_DISPATCH_RECEIVE",
+          "GRN_VIEW"
+        ]
+      },
+      "at": "2026-06-27T18:44:29.441Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-BRK-AP-CC",
+      "section": "E",
+      "expected": "CC approve advances",
+      "actual": "HTTP 200 status=COST_CONTROL_APPROVED",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:29.541Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-BRK-AP-FIN",
+      "section": "E",
+      "expected": "FIN approve advances",
+      "actual": "HTTP 200 status=FINANCE_APPROVED",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:29.636Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-BRK-AP-GM",
+      "section": "E",
+      "expected": "GM approve advances",
+      "actual": "HTTP 200 status=APPROVED",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:29.744Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-BRK-FINAL",
+      "section": "E",
+      "expected": "Final APPROVED with postedAt + ledger + stock delta",
+      "actual": "status=APPROVED postedAt=set ledger=1 stock 200->198",
+      "result": "PASS",
+      "evidence": {
+        "constitutionNote": "Final doc status APPROVED not POSTED; posting+ledger occur at final approval"
+      },
+      "at": "2026-06-27T18:44:29.754Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-LOST-CREATE",
+      "section": "E",
+      "expected": "create enters workflow (DEPT_APPROVED)",
+      "actual": "status=DEPT_APPROVED",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:29.866Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-LOST-AP-CC",
+      "section": "E",
+      "expected": "CC approve",
+      "actual": "HTTP 200 status=COST_CONTROL_APPROVED",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:29.972Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-LOST-AP-FIN",
+      "section": "E",
+      "expected": "FIN approve",
+      "actual": "HTTP 200 status=FINANCE_APPROVED",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:30.070Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-LOST-AP-GM",
+      "section": "E",
+      "expected": "GM approve",
+      "actual": "HTTP 200 status=APPROVED",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:30.183Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-LOST-FINAL",
+      "section": "E",
+      "expected": "Lost final APPROVED + posting",
+      "actual": "status=APPROVED postedAt=set ledger=1",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:30.187Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-E-BRK-LOST-PARITY",
+      "section": "E",
+      "expected": "Breakage and Lost both APPROVED (not POSTED) with posting side-effects",
+      "actual": "breakage=APPROVED+ledger lost=APPROVED+ledger=1",
+      "result": "PASS",
+      "evidence": {
+        "answer": "Both become APPROVED (not POSTED) with postedAt+ledger+stock at final approval"
+      },
+      "at": "2026-06-27T18:44:30.187Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-F-RPT-BRK-APPROVED-OUT",
+      "section": "F",
+      "expected": "APPROVED breakage with ledger in financial report OR documented POSTED-only filter",
+      "actual": "brkInReport=false ledger=1 doc=BRK-2026-00020 rows=0",
+      "result": "FAIL",
+      "evidence": {
+        "note": "reports.service.js parent filter status=POSTED; product final status=APPROVED"
+      },
+      "at": "2026-06-27T18:44:30.689Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-F-RPT-LOST-LEDGER-OUT",
+      "section": "F",
+      "expected": "Lost APPROVED+ledger in loss-analysis if POSTED-only",
+      "actual": "lostInReport=false ledger=1 doc=LST-2026-00008",
+      "result": "FAIL",
+      "evidence": {},
+      "at": "2026-06-27T18:44:30.689Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-F-RPT-POSTED-IN",
+      "section": "F",
+      "expected": "Product-completed doc with ledger appears in financial report",
+      "actual": "brk=false lost=false anyLedger=2",
+      "result": "FAIL",
+      "evidence": {
+        "sampleDocNos": [],
+        "lostSample": []
+      },
+      "at": "2026-06-27T18:44:30.689Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-F-RPT-DRAFT-OUT",
+      "section": "F",
+      "expected": "DRAFT not in financial report",
+      "actual": "draftInReport=false",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:30.689Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-PERM-CHECK",
+      "section": "G",
+      "expected": "FINANCE_MANAGER has ADJUSTMENT_CREATE",
+      "actual": "hasAdj=true perms=ADJUSTMENT_CREATE,ADJUSTMENT_VIEW",
+      "result": "PASS",
+      "evidence": {
+        "dbSnap": {
+          "userId": "297fbe7a-4fe9-4893-84c5-68420f9fa2a3",
+          "tenantId": "1e7c184a-bd45-448a-ad75-27a512f124d4",
+          "tenantMemberActive": true,
+          "roleCode": "FINANCE_MANAGER",
+          "assignments": [
+            {
+              "id": "7e7f9d0d-4faf-49b7-994a-1870121fa4a5",
+              "isActive": true,
+              "notes": "HEAD_RT_V2 mov-fin",
+              "propertyIds": [
+                "1e7c184a-bd45-448a-ad75-27a512f124d4"
+              ],
+              "propertySlugs": [
+                "closeout-audit-hotel-disposable"
+              ],
+              "departmentIds": []
+            }
+          ],
+          "hasActiveAssignmentForTenant": true
+        }
+      },
+      "at": "2026-06-27T18:44:31.009Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-NO-ASSIGN",
+      "section": "G",
+      "expected": "403 no assignment",
+      "actual": "HTTP 403",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:31.028Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-CREATE",
+      "section": "G",
+      "expected": "201/200 create adjustment",
+      "actual": "HTTP 201",
+      "result": "PASS",
+      "evidence": {
+        "message": "Movement document created successfully"
+      },
+      "at": "2026-06-27T18:44:31.072Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-VALIDATE",
+      "section": "G",
+      "expected": "422 on zero qty",
+      "actual": "HTTP 422",
+      "result": "PASS",
+      "evidence": {
+        "message": "Line quantity must be greater than zero."
+      },
+      "at": "2026-06-27T18:44:31.103Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-WRONG-SCOPE",
+      "section": "G",
+      "expected": "403/422 wrong property scope denied",
+      "actual": "HTTP 201",
+      "result": "FAIL",
+      "evidence": {
+        "note": "User assigned only to dx-airport-hotel property",
+        "message": "Movement document created successfully"
+      },
+      "at": "2026-06-27T18:44:31.292Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-NEG-INV",
+      "section": "G",
+      "expected": "422 or post guard on negative outbound",
+      "actual": "HTTP 422",
+      "result": "PASS",
+      "evidence": {
+        "message": "Line quantity must be greater than zero."
+      },
+      "at": "2026-06-27T18:44:31.321Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-POST",
+      "section": "G",
+      "expected": "post -> POSTED + ledger + stock",
+      "actual": "HTTP 200 status=POSTED ledger=1 stock 196->199",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:31.445Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-IDEMP",
+      "section": "G",
+      "expected": "duplicate post rejected",
+      "actual": "HTTP 400",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:31.445Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-G-MODEL",
+      "section": "G",
+      "expected": "Movements are direct-post documents (create DRAFT then POST)",
+      "actual": "ADJUSTMENT create->DRAFT then POST->POSTED with ledger; no ACC approval chain",
+      "result": "PASS",
+      "evidence": {
+        "constitutionNote": "Direct-post document family — not workflow-governed like breakage"
+      },
+      "at": "2026-06-27T18:44:31.445Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-H-GRN",
+      "section": "H",
+      "expected": "GRN send-back live",
+      "actual": "Covered in V2-D-GRN-SB",
+      "result": "PASS",
+      "evidence": {
+        "ref": "V2-D-GRN-SB"
+      },
+      "at": "2026-06-27T18:44:31.445Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-H-TRANSFER-RETURN",
+      "section": "H",
+      "expected": "Transfer reject/return mutates status",
+      "actual": "HTTP 200 status=REJECTED",
+      "result": "PASS",
+      "evidence": {
+        "note": "No /send-back route; reject is return-to-creator path",
+        "message": null
+      },
+      "at": "2026-06-27T18:44:32.537Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-H-BRK-REJECT",
+      "section": "H",
+      "expected": "Breakage reject returns to editable state (DRAFT or REJECTED)",
+      "actual": "HTTP 200 status=REJECTED",
+      "result": "PASS",
+      "evidence": {
+        "message": "Step rejected. Document returned to DRAFT."
+      },
+      "at": "2026-06-27T18:44:33.236Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-H-LOST-REJECT",
+      "section": "H",
+      "expected": "Lost reject returns to editable state",
+      "actual": "HTTP 200 status=REJECTED",
+      "result": "PASS",
+      "evidence": {
+        "note": "No /send-back route; reject is return path"
+      },
+      "at": "2026-06-27T18:44:33.431Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-H-GP",
+      "section": "H",
+      "expected": "Get Pass return lifecycle (not send-back label)",
+      "actual": "No POST /get-passes/:id/send-back; return via OUT/RETURN statuses",
+      "result": "NOT APPLICABLE",
+      "evidence": {
+        "constitutionRef": "Get Pass: Return lifecycle — not reviewer send-back"
+      },
+      "at": "2026-06-27T18:44:33.431Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-H-IC",
+      "section": "H",
+      "expected": "Inventory count return/reject path",
+      "actual": "Not executed — requires IC session in REVIEW; static: void/reject routes exist",
+      "result": "BLOCKED",
+      "evidence": {
+        "reason": "No disposable IC session at REVIEW without long setup"
+      },
+      "at": "2026-06-27T18:44:33.431Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-I-REQ-PIPELINE",
+      "section": "I",
+      "expected": "Requisition excluded from pipeline if out of scope",
+      "actual": "REQUISITION rows=0 total=0",
+      "result": "PASS",
+      "evidence": {
+        "sample": [],
+        "collectorNote": "workflow-pipeline.collectors.js includes collectRequisitions"
+      },
+      "at": "2026-06-27T18:44:33.674Z",
+      "tag": "HEAD_RT_V2"
+    },
+    {
+      "id": "V2-I-STOCK-RPT",
+      "section": "I",
+      "expected": "Retired stock report not in operational pipeline",
+      "actual": "STOCK_REPORT rows=0",
+      "result": "PASS",
+      "evidence": {},
+      "at": "2026-06-27T18:44:33.674Z",
+      "tag": "HEAD_RT_V2"
+    }
+  ]
+}
