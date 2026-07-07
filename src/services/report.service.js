@@ -1,10 +1,78 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const ExcelJS = require('exceljs');
-const PDFDocument = require('pdfkit');
 const { getStorage } = require('../config/storage');
+const { generateReportPDF } = require('./pdf.service');
+const { enrichWithGrouping } = require('./report-orchestrator.service');
+const { getReportColumns } = require('./report-column-contracts');
+const { resolveExportDataset } = require('../utils/report-export.util');
+const excelService = require('./excel.service');
+const { resolveScopeContext, clampReportFilters } = require('./scope/scopeContext');
+const { buildTotalsFooterRow, computeTotals } = require('./report-analytics-totals');
+const { buildReportReference } = require('../utils/report-format.util');
+const { getDisplayCurrency } = require('../platform/displayCurrency.service');
+const { maskExportRows } = require('../platform/export-mask.service');
+const { resolveFamily } = require('./report-family-registry');
+const { resolveFinalLossTreatment, getDocumentApprovalSteps } = require('../utils/resolveFinalLossTreatment');
+const { filterDetailColumnDefs } = require('./pdf/report-pdf-profiles');
+const {
+    resolvePdfClassification,
+    buildBreakageSignatureSlots,
+} = require('./pdf/report-pdf-signatures.util');
+const { replayOfficialLedgerBalances, parseBalanceMapKey } = require('./ledgerReplay.service');
+const { generateStockBackedValuationReport, describeValuationBasis } = require('./inventoryValuation.service');
+
+const BREAKAGE_FINANCIAL_STATUSES = ['POSTED', 'APPROVED'];
+const BREAKAGE_PENDING_STATUSES = [
+    'DRAFT',
+    'PENDING_APPROVAL',
+    'DEPT_APPROVED',
+    'COST_CONTROL_APPROVED',
+    'FINANCE_APPROVED',
+    'COUNTING',
+    'RECOUNTING',
+    'REVEAL_REVIEW',
+];
 
 const OFFICIAL_LEDGER_WHERE = { affectsValuation: true };
+
+/**
+ * Resolve CURRENT snapshot version for report end date (Ch.6.17 / D12).
+ */
+async function resolveSnapshotVersionForReport(tenantId, endDate) {
+    const end = endDate instanceof Date ? endDate : new Date(endDate);
+    const year = end.getFullYear();
+    const month = end.getMonth() + 1;
+    const period = await prisma.periodClose.findFirst({
+        where: { tenantId, year, month, status: 'CLOSED' },
+        include: {
+            snapshotVersions: {
+                where: { status: 'CURRENT' },
+                take: 1,
+                select: { id: true },
+            },
+        },
+    });
+    return period?.snapshotVersions?.[0]?.id ?? null;
+}
+
+/**
+ * Latest StockCountLocationQty per (itemId, locationId) by highest roundNo.
+ * When filterLocationId is set, only cells for that location are considered.
+ * (Aligned with inventory count reporting stabilization — slices 1–3.)
+ */
+const pickLatestCountedCells = (locationQtys, filterLocationId) => {
+    const sorted = [...(locationQtys || [])].sort((a, b) => b.roundNo - a.roundNo);
+    const map = new Map();
+    for (const c of sorted) {
+        if (filterLocationId && c.locationId !== filterLocationId) continue;
+        const key = `${c.itemId}:${c.locationId}`;
+        if (!map.has(key)) map.set(key, c);
+    }
+    return [...map.values()].filter((c) => c.countedQty != null);
+};
+
+const sessionHasAnyCountedCells = (locationQtys) =>
+    (locationQtys || []).some((q) => q.countedQty != null);
 
 const optimizeReportPayload = (data, { includeSupplier = false, includeLocationQtys = false } = {}) => {
     if (!data || !Array.isArray(data.rows)) return data;
@@ -45,23 +113,44 @@ const getDateRange = (startDate, endDate) => {
  */
 const generateReport = async (
     tenantId,
-    { reportType, departmentIds, startDate, endDate, generatedBy, categoryId, includeSupplier = false, includeLocationQtys = false }
+    { reportType, departmentIds, startDate, endDate, generatedBy, categoryId, locationIds: requestedLocationIds, includeSupplier = false, includeLocationQtys = false, healthPreset },
+    user = null,
 ) => {
-    if (!['SUMMARY', 'DETAIL', 'BREAKAGE', 'OMC', 'TRANSFERS', 'AGING'].includes(reportType)) {
+    if (!['SUMMARY', 'DETAIL', 'BREAKAGE', 'LOST', 'OMC', 'TRANSFERS', 'AGING'].includes(reportType)) {
         throw new Error('Invalid report type');
     }
 
     const { start, end } = getDateRange(startDate, endDate);
     let data = {};
-    let reportName = `${reportType} Report`;
+    const REPORT_TYPE_LABEL = {
+        BREAKAGE: 'Breakage',
+        LOST: 'Loss',
+        OMC: 'OMC',
+        TRANSFERS: 'Transfers',
+        AGING: 'Aging',
+        DETAIL: 'Detail',
+        SUMMARY: 'Summary',
+    };
+    let reportName = `${REPORT_TYPE_LABEL[reportType] ?? reportType} Report`;
+
+    let deptIds = Array.isArray(departmentIds) && departmentIds.length > 0 ? departmentIds : null;
+    let locationIdsClamp = null;
+    if (user) {
+        const scope = await resolveScopeContext(user, tenantId);
+        const clamped = clampReportFilters(
+            { departmentIds: deptIds || [], locationIds: [] },
+            scope,
+        );
+        deptIds = clamped.departmentIds?.length ? clamped.departmentIds : deptIds;
+        locationIdsClamp = clamped.locationIds?.length ? clamped.locationIds : null;
+    }
 
     // Fetch selected departments
-    const deptIds = Array.isArray(departmentIds) && departmentIds.length > 0 ? departmentIds : null;
     let deptNames = 'All Departments';
     if (deptIds) {
         const depts = await prisma.department.findMany({ where: { id: { in: deptIds } } });
         deptNames = depts.map(d => d.name).join(', ');
-        reportName = `${reportType} Report — ${deptNames}`;
+        reportName = `${REPORT_TYPE_LABEL[reportType] ?? reportType} Report — ${deptNames}`;
     }
 
     // Fetch category to link locations to its explicit mapping
@@ -94,7 +183,14 @@ const generateReport = async (
         locationWhere.departmentId = { in: deptIds };
     }
     const locations = await prisma.location.findMany({ where: locationWhere });
-    const locationIds = locations.map(l => l.id);
+    let locationIds = locations.map(l => l.id);
+    if (Array.isArray(requestedLocationIds) && requestedLocationIds.length > 0) {
+        const allowed = new Set(requestedLocationIds);
+        locationIds = locationIds.filter((id) => allowed.has(id));
+    }
+    if (locationIdsClamp?.length) {
+        locationIds = locationIds.filter((id) => locationIdsClamp.includes(id));
+    }
 
     // Common Item Include for Item details
     const itemInclude = {
@@ -103,43 +199,108 @@ const generateReport = async (
 
     switch (reportType) {
         case 'SUMMARY':
+            data = await generateVarianceReport(
+                tenantId,
+                locationIds,
+                start,
+                end,
+                true,
+                categoryId,
+                { includeSupplier, includeLocationQtys }
+            );
+            break;
         case 'DETAIL':
             data = await generateVarianceReport(
                 tenantId,
                 locationIds,
                 start,
                 end,
-                reportType === 'SUMMARY',
+                false,
                 categoryId,
                 { includeSupplier, includeLocationQtys }
             );
+            {
+                const detailTotals = computeTotals('detail-report', data.rows);
+                const enrichedDetail = enrichWithGrouping(
+                    {
+                        rows: data.rows,
+                        totals: detailTotals,
+                        meta: { reportType: 'DETAIL' },
+                        locations: data.locations,
+                    },
+                    'detail-report',
+                );
+                data = { ...data, ...enrichedDetail, totals: detailTotals };
+            }
             break;
-        case 'BREAKAGE':
+        case 'BREAKAGE': {
             data = await generateBreakageReport(tenantId, locationIds, start, end, categoryId, {
-                includeSupplier,
-                includeLocationQtys
+                movementTypes: ['BREAKAGE', 'LOAN_WRITE_OFF'],
             });
+            const enrichedBrk = enrichWithGrouping(
+                { rows: data.rows, totals: data.totals, meta: { reportType: 'BREAKAGE' } },
+                'breakage-loss-report',
+            );
+            data = { ...data, ...enrichedBrk };
             break;
-        case 'OMC':
+        }
+        case 'LOST': {
+            data = await generateBreakageReport(tenantId, locationIds, start, end, categoryId, {
+                movementTypes: ['LOST'],
+            });
+            const enrichedLost = enrichWithGrouping(
+                { rows: data.rows, totals: data.totals, meta: { reportType: 'LOST' } },
+                'breakage-loss-report',
+            );
+            data = { ...data, ...enrichedLost };
+            break;
+        }
+        case 'OMC': {
             data = await generateOMCReport(tenantId, locationIds, start, end, categoryId, {
                 includeSupplier,
-                includeLocationQtys
+                includeLocationQtys,
             });
+            const enriched = enrichWithGrouping(
+                { rows: data.rows, totals: data.totals, meta: { reportType: 'OMC' } },
+                'omc-report',
+            );
+            data = { ...data, ...enriched };
             break;
-        case 'TRANSFERS':
+        }
+        case 'TRANSFERS': {
             data = await generateTransfersReport(tenantId, locationIds, start, end, categoryId, {
                 includeSupplier,
-                includeLocationQtys
+                includeLocationQtys,
             });
+            const transferRows = data.rows ?? [];
+            const enriched = enrichWithGrouping(
+                {
+                    rows: transferRows,
+                    totals: {
+                        rowCount: transferRows.length,
+                        totalQty: transferRows.reduce((s, r) => s + Number(r.qty || 0), 0),
+                        totalValue: transferRows.reduce((s, r) => s + Number(r.value || 0), 0),
+                    },
+                    meta: { reportType: 'TRANSFERS' },
+                },
+                'transfer-history',
+            );
+            data = { ...data, ...enriched };
             break;
+        }
         case 'AGING':
             data = await generateAgingReport(tenantId, locationIds, end, categoryId, {
                 includeSupplier,
                 includeLocationQtys
             });
+            if (healthPreset && Array.isArray(data.rows)) {
+                data.rows = filterAgingRowsByHealthPreset(data.rows, healthPreset);
+            }
             break;
     }
     data = optimizeReportPayload(data, { includeSupplier, includeLocationQtys });
+
+    const snapshotVersionId = await resolveSnapshotVersionForReport(tenantId, end);
 
     // Save to Database
     const generatedReport = await prisma.generatedReport.create({
@@ -152,7 +313,8 @@ const generateReport = async (
             endDate: end,
             // Persist only the final API shape to keep JSON size lean.
             data: { ...data, deptNames },
-            generatedBy
+            generatedBy,
+            snapshotVersionId,
         }
     });
 
@@ -184,31 +346,17 @@ const generateVarianceReport = async (
         include: { item: { include: { category: true, ...(includeSupplier ? { supplier: true } : {}) } } }
     });
 
-    const locations = await prisma.location.findMany({ where: { tenantId, id: { in: locationIds } } });
+    const locations = await prisma.location.findMany({
+        where: { tenantId, id: { in: locationIds } },
+        include: { department: true },
+    });
+    const locMap = Object.fromEntries(locations.map((l) => [l.id, l]));
 
-    // Build Item map and identify all unique items
-    const itemMap = {};
-    stockBalances.forEach(sb => {
-        if (!itemMap[sb.itemId]) {
-            itemMap[sb.itemId] = { ...sb.item, balances: {} };
-        }
-        itemMap[sb.itemId].balances[sb.locationId] = { qty: Number(sb.qtyOnHand || 0), value: Number(sb.totalValue || 0) };
+    const emptyMove = () => ({
+        inQty: 0, inVal: 0, outQty: 0, outVal: 0, brkQty: 0, brkVal: 0, adjQty: 0, obQty: 0, obVal: 0,
     });
 
-    // 2. Fetch Period Movements (In / Out / Tfr)
-    const periodLedger = await prisma.inventoryLedger.groupBy({
-        by: ['itemId', 'locationId', 'movementType'],
-        where: { tenantId, ...OFFICIAL_LEDGER_WHERE, locationId: { in: locationIds }, createdAt: { gte: start, lte: end } },
-        _sum: { qtyIn: true, qtyOut: true, totalValue: true }
-    });
-
-    // Bucket movements per item
-    const moves = {}; // itemId -> { inQty, inVal, outQty, outVal, brkQty, brkVal, adjQty, obQty, obVal }
-    for (const p of periodLedger) {
-        if (!moves[p.itemId]) {
-            moves[p.itemId] = { inQty: 0, inVal: 0, outQty: 0, outVal: 0, brkQty: 0, brkVal: 0, adjQty: 0, obQty: 0, obVal: 0 };
-        }
-        const m = moves[p.itemId];
+    const applyLedgerBucket = (m, p) => {
         const qIn = Number(p._sum.qtyIn || 0);
         const qOut = Number(p._sum.qtyOut || 0);
         const val = Number(p._sum.totalValue || 0);
@@ -224,11 +372,37 @@ const generateVarianceReport = async (
         } else if (p.movementType === 'ADJUSTMENT' || p.movementType === 'COUNT_ADJUSTMENT') {
             m.adjQty += (qIn - qOut);
         }
+    };
+    const itemMap = {};
+    stockBalances.forEach(sb => {
+        if (!itemMap[sb.itemId]) {
+            itemMap[sb.itemId] = { ...sb.item, balances: {} };
+        }
+        itemMap[sb.itemId].balances[sb.locationId] = { qty: Number(sb.qtyOnHand || 0), value: Number(sb.totalValue || 0) };
+    });
+
+    // 2. Fetch Period Movements (In / Out / Tfr)
+    const periodLedger = await prisma.inventoryLedger.groupBy({
+        by: ['itemId', 'locationId', 'movementType'],
+        where: { tenantId, ...OFFICIAL_LEDGER_WHERE, locationId: { in: locationIds }, createdAt: { gte: start, lte: end } },
+        _sum: { qtyIn: true, qtyOut: true, totalValue: true }
+    });
+
+    // Bucket movements per item (summary) and per item+location (detail)
+    const moves = {};
+    const movesByLoc = {};
+    for (const p of periodLedger) {
+        if (!moves[p.itemId]) moves[p.itemId] = emptyMove();
+        applyLedgerBucket(moves[p.itemId], p);
+
+        const locKey = `${p.itemId}_${p.locationId}`;
+        if (!movesByLoc[locKey]) movesByLoc[locKey] = emptyMove();
+        applyLedgerBucket(movesByLoc[locKey], p);
     }
 
     // 3. Fetch Active Gate Passes
     const activePasses = await prisma.getPassLine.groupBy({
-        by: ['itemId'],
+        by: ['itemId', 'locationId'],
         where: {
             getPass: { tenantId, status: { in: ['OUT', 'PARTIALLY_RETURNED'] } },
             locationId: { in: locationIds }
@@ -236,102 +410,169 @@ const generateVarianceReport = async (
         _sum: { qty: true, qtyReturned: true }
     });
     const gatePassMap = {};
+    const gatePassMapByLoc = {};
     for (const ap of activePasses) {
-        gatePassMap[ap.itemId] = Number(ap._sum.qty || 0) - Number(ap._sum.qtyReturned || 0);
+        const qty = Number(ap._sum.qty || 0) - Number(ap._sum.qtyReturned || 0);
+        gatePassMapByLoc[`${ap.itemId}_${ap.locationId}`] = qty;
+        gatePassMap[ap.itemId] = (gatePassMap[ap.itemId] || 0) + qty;
     }
 
-    // 4. Physical Count
+    // 4. Physical Count — POSTED sessions in range touching report locations (primary OR scoped).
+    //    Canonical: sum latest counted StockCountLocationQty per (itemId, locationId) per touched location;
+    //    legacy: sum StockCountLine.countedQty once per session (no double-count across scoped locations).
+    const itemIdSet = new Set(Object.keys(itemMap));
     const countSessions = await prisma.stockCountSession.findMany({
-        where: { tenantId, locationId: { in: locationIds }, countDate: { gte: start, lte: end }, status: 'POSTED' },
+        where: {
+            tenantId,
+            countDate: { gte: start, lte: end },
+            status: 'POSTED',
+            OR: [
+                { locationId: { in: locationIds } },
+                { scopedLocations: { some: { locationId: { in: locationIds } } } },
+            ],
+        },
         orderBy: { countDate: 'asc' },
-        include: { lines: true }
+        include: {
+            lines: { where: { countedQty: { not: null } } },
+            locationQtys: {
+                select: { itemId: true, locationId: true, roundNo: true, countedQty: true },
+            },
+            scopedLocations: { select: { locationId: true } },
+        },
     });
     const physicalCounts = {};
+    const physicalCountsByLoc = {};
     for (const session of countSessions) {
-        for (const line of session.lines) {
-            if (line.countedQty !== null) {
-                if (!physicalCounts[line.itemId]) physicalCounts[line.itemId] = 0;
-                physicalCounts[line.itemId] += Number(line.countedQty);
+        const touched = new Set();
+        if (locationIds.includes(session.locationId)) touched.add(session.locationId);
+        for (const sl of session.scopedLocations || []) {
+            if (locationIds.includes(sl.locationId)) touched.add(sl.locationId);
+        }
+        if (touched.size === 0) continue;
+
+        if (sessionHasAnyCountedCells(session.locationQtys)) {
+            for (const locId of touched) {
+                const cells = pickLatestCountedCells(session.locationQtys, locId);
+                for (const cell of cells) {
+                    if (!itemIdSet.has(cell.itemId)) continue;
+                    const add = Number(cell.countedQty);
+                    const locKey = `${cell.itemId}_${locId}`;
+                    physicalCountsByLoc[locKey] = (physicalCountsByLoc[locKey] || 0) + add;
+                    physicalCounts[cell.itemId] = (physicalCounts[cell.itemId] || 0) + add;
+                }
+            }
+        } else {
+            for (const line of session.lines) {
+                if (line.countedQty == null || !itemIdSet.has(line.itemId)) continue;
+                const add = Number(line.countedQty);
+                physicalCounts[line.itemId] = (physicalCounts[line.itemId] || 0) + add;
+                if (touched.has(session.locationId)) {
+                    const locKey = `${line.itemId}_${session.locationId}`;
+                    physicalCountsByLoc[locKey] = (physicalCountsByLoc[locKey] || 0) + add;
+                }
             }
         }
     }
 
-    // 5. Combine and resolve Opening -> Theoretical
-    let rows = [];
-    for (const itemId of Object.keys(itemMap)) {
-        const item = itemMap[itemId];
-        const unitPrice = Number(item.unitPrice || 0);
-        
-        let closeQty = 0;
-        let closeVal = 0;
-        const locationQtys = {};
-
-        // Aggregate across selected locations
-        for (const locId of locationIds) {
-            const locBal = item.balances[locId];
-            const q = locBal ? locBal.qty : 0;
-            locationQtys[locId] = q;
-            closeQty += q;
-        }
-        
-        // Calculate total closing value dynamically using unitPrice
-        closeVal = closeQty * unitPrice;
-
-        const mov = moves[itemId] || { inQty: 0, inVal: 0, outQty: 0, outVal: 0, brkQty: 0, brkVal: 0, adjQty: 0, obQty: 0, obVal: 0 };
-        
-        // Reverse Engineer Opening mathematically (Closing - Inwards + Outwards - Adjustments - OpeningBalances)
+    const buildVarianceRow = (item, unitPrice, closeQty, mov, gatePassQty, physQty, extras = {}) => {
+        const closeVal = closeQty * unitPrice;
         const totalPeriodIn = mov.inQty;
         const totalPeriodOut = mov.outQty + mov.brkQty;
         const trueOpenQty = closeQty - totalPeriodIn + totalPeriodOut - mov.adjQty - mov.obQty;
-        
-        // The Report expects Opening Balance to include any imported OPENING_BALANCE ledgers
         const reportOpenQty = trueOpenQty + mov.obQty;
         const reportOpenVal = reportOpenQty * unitPrice;
-
-        const gatePassQty = gatePassMap[itemId] || 0;
-        
-        // Theoretical = Report Opening + Inwards - Outwards (Issues) - Breakage - GatePass
         const theorQty = reportOpenQty + mov.inQty - mov.outQty - mov.brkQty - gatePassQty;
         const theorVal = theorQty * unitPrice;
-
-        const physQty = physicalCounts[itemId] !== undefined ? physicalCounts[itemId] : closeQty; // fallback to close
         const varianceQty = physQty - theorQty;
         const varianceVal = varianceQty * unitPrice;
 
-        rows.push({
+        return {
             itemId: item.id,
             category: item.category?.name || 'Uncategorized',
             itemCode: item.barcode || 'N/A',
             itemName: item.name || 'Unknown Item',
             ...(includeSupplier ? { supplier: item.supplier?.name || '' } : {}),
-            unitPrice: unitPrice,
-
+            unitPrice,
             openingQty: Number(reportOpenQty.toFixed(4)),
             openingValue: Number(reportOpenVal.toFixed(2)),
-            
             inwardQty: Number(mov.inQty.toFixed(4)),
             inwardValue: Number((mov.inQty * unitPrice).toFixed(2)),
-            
             outwardQty: Number(mov.outQty.toFixed(4)),
             outwardValue: Number((mov.outQty * unitPrice).toFixed(2)),
-
             breakageQty: Number(mov.brkQty.toFixed(4)),
             breakageValue: Number((mov.brkQty * unitPrice).toFixed(2)),
-
             gatePassQty: Number(gatePassQty.toFixed(4)),
             gatePassValue: Number((gatePassQty * unitPrice).toFixed(2)),
-
             theoreticalQty: Number(theorQty.toFixed(4)),
             theoreticalValue: Number(theorVal.toFixed(2)),
-
             physicalQty: Number(physQty.toFixed(4)),
+            physicalValue: Number((physQty * unitPrice).toFixed(2)),
             varianceQty: Number(varianceQty.toFixed(4)),
             varianceValue: Number(varianceVal.toFixed(2)),
-
             closingQty: Number(closeQty.toFixed(4)),
             closingValue: Number(closeVal.toFixed(2)),
-            ...(includeLocationQtys ? { locationQtys } : {})
-        });
+            ...extras,
+        };
+    };
+
+    const hasMoveActivity = (mov) =>
+        mov.inQty || mov.outQty || mov.brkQty || mov.adjQty || mov.obQty;
+
+    // 5. Combine and resolve Opening -> Theoretical
+    let rows = [];
+    if (isSummary) {
+        for (const itemId of Object.keys(itemMap)) {
+            const item = itemMap[itemId];
+            const unitPrice = Number(item.unitPrice || 0);
+
+            let closeQty = 0;
+            const locationQtys = {};
+
+            for (const locId of locationIds) {
+                const locBal = item.balances[locId];
+                const q = locBal ? locBal.qty : 0;
+                locationQtys[locId] = q;
+                closeQty += q;
+            }
+
+            const mov = moves[itemId] || emptyMove();
+            const gatePassQty = gatePassMap[itemId] || 0;
+            const physQty = physicalCounts[itemId] !== undefined ? physicalCounts[itemId] : closeQty;
+
+            rows.push(buildVarianceRow(item, unitPrice, closeQty, mov, gatePassQty, physQty, {
+                ...(includeLocationQtys ? { locationQtys } : {}),
+            }));
+        }
+    } else {
+        for (const itemId of Object.keys(itemMap)) {
+            const item = itemMap[itemId];
+            const unitPrice = Number(item.unitPrice || 0);
+
+            for (const locId of locationIds) {
+                const locBal = item.balances[locId];
+                const closeQty = locBal ? locBal.qty : 0;
+                const locKey = `${itemId}_${locId}`;
+                const mov = movesByLoc[locKey] || emptyMove();
+                const gatePassQty = gatePassMapByLoc[locKey] || 0;
+                const hasPhysical = physicalCountsByLoc[locKey] !== undefined;
+                const physQty = hasPhysical ? physicalCountsByLoc[locKey] : closeQty;
+
+                if (closeQty === 0 && !hasMoveActivity(mov) && !hasPhysical && gatePassQty === 0) continue;
+
+                const loc = locMap[locId];
+                const departmentName = loc?.department?.name || '';
+                const locationName = loc?.name || '';
+
+                rows.push(buildVarianceRow(item, unitPrice, closeQty, mov, gatePassQty, physQty, {
+                    departmentName,
+                    locationName,
+                    department: departmentName,
+                    location: locationName,
+                    locationId: locId,
+                    ...(includeLocationQtys ? { locationQtys: { [locId]: closeQty } } : {}),
+                }));
+            }
+        }
     }
 
     if (isSummary) {
@@ -369,54 +610,141 @@ const generateVarianceReport = async (
 
     // Make sure we pass the location names to the FE so they can render headers
     const locationList = locations.map(l => ({ id: l.id, name: l.name }));
-    
-    // Sort rows alphabetically by category then name
-    rows.sort((a, b) => a.category.localeCompare(b.category) || a.itemName.localeCompare(b.itemName));
+
+    rows.sort((a, b) =>
+        (a.departmentName || '').localeCompare(b.departmentName || '') ||
+        (a.locationName || '').localeCompare(b.locationName || '') ||
+        a.category.localeCompare(b.category) ||
+        a.itemName.localeCompare(b.itemName)
+    );
 
     return { rows, locations: locationList };
 };
 
+function resolveBreakageApprover(doc) {
+    const steps = getDocumentApprovalSteps(doc);
+    const approved = steps
+        .filter((s) => s.status === 'APPROVED' && s.actedByUser)
+        .sort((a, b) => b.stepNumber - a.stepNumber);
+    if (!approved.length) return '—';
+    const u = approved[0].actedByUser;
+    return `${u.firstName || ''} ${u.lastName || ''}`.trim() || '—';
+}
+
+function breakageDocInPeriodWhere(start, end, locationIds) {
+    return {
+        OR: [
+            { postedAt: { gte: start, lte: end } },
+            { postedAt: null, documentDate: { gte: start, lte: end } },
+            { createdAt: { gte: start, lte: end } },
+        ],
+        ...(locationIds.length > 0
+            ? { lines: { some: { locationId: { in: locationIds } } } }
+            : {}),
+    };
+}
+
 /**
- * 3. Breakage Report
+ * 3. Breakage Report — financial loss control (Document → Category → Items)
  */
 const generateBreakageReport = async (tenantId, locationIds, start, end, categoryId, options = {}) => {
     const includeSupplier = Boolean(options.includeSupplier);
+    const movementTypes = Array.isArray(options.movementTypes)
+        ? options.movementTypes
+        : ['BREAKAGE', 'LOAN_WRITE_OFF'];
     const storage = getStorage();
-    const breakages = await prisma.movementDocument.findMany({
-        where: {
-            tenantId,
-            movementType: { in: ['BREAKAGE', 'LOST', 'LOAN_WRITE_OFF'] },
-            status: { in: ['APPROVED', 'POSTED'] },
-            OR: [
-                { postedAt: { gte: start, lte: end } },
-                // Legacy fallback: old posted docs may miss postedAt.
-                { postedAt: null, documentDate: { gte: start, lte: end } },
-            ],
-            sourceLocationId: locationIds.length > 0 ? { in: locationIds } : undefined
-        },
-        include: {
-            lines: {
-                include: { item: { include: { category: true, ...(includeSupplier ? { supplier: true } : {}) } } }
+    const baseWhere = {
+        tenantId,
+        movementType: { in: movementTypes },
+        ...breakageDocInPeriodWhere(start, end, locationIds),
+    };
+
+    const [breakages, pendingDocs, postedDocs] = await Promise.all([
+        prisma.movementDocument.findMany({
+            where: {
+                ...baseWhere,
+                status: { in: BREAKAGE_FINANCIAL_STATUSES },
             },
-            createdByUser: true
-        },
-        orderBy: [{ postedAt: 'asc' }, { documentDate: 'asc' }]
-    });
+            include: {
+                lines: {
+                    include: {
+                        item: {
+                            include: {
+                                category: true,
+                                itemUnits: { include: { unit: true } },
+                                ...(includeSupplier ? { supplier: true } : {}),
+                            },
+                        },
+                        unit: true,
+                    },
+                },
+                createdByUser: { select: { firstName: true, lastName: true } },
+                approvalRequests: {
+                    include: {
+                        steps: {
+                            include: { actedByUser: { select: { firstName: true, lastName: true } } },
+                            orderBy: { stepNumber: 'asc' },
+                        },
+                    },
+                },
+            },
+            orderBy: [{ postedAt: 'asc' }, { documentDate: 'asc' }],
+        }),
+        prisma.movementDocument.findMany({
+            where: {
+                ...baseWhere,
+                status: { in: BREAKAGE_PENDING_STATUSES },
+            },
+            select: { id: true, documentNo: true },
+        }),
+        prisma.movementDocument.findMany({
+            where: {
+                ...baseWhere,
+                status: { in: BREAKAGE_FINANCIAL_STATUSES },
+            },
+            select: { id: true, documentNo: true },
+        }),
+    ]);
 
     // Get location and department names separately
     const locationMap = {};
-    const usedLocationIds = [...new Set(breakages.map(b => b.sourceLocationId).filter(Boolean))];
+    const usedLocationIds = [
+        ...new Set(breakages.flatMap((b) => b.lines.map((line) => line.locationId)).filter(Boolean)),
+    ];
 
     if (usedLocationIds.length > 0) {
-        const locs = await prisma.location.findMany({ 
+        const locs = await prisma.location.findMany({
             where: { id: { in: usedLocationIds } },
-            include: { department: true }
+            include: { department: true },
         });
-        locs.forEach(l => {
+        locs.forEach((l) => {
             locationMap[l.id] = {
                 name: l.name,
-                departmentName: l.department?.name || 'N/A'
+                departmentName: l.department?.name || 'N/A',
             };
+        });
+    }
+
+    // WAC fallback: one batch query for all (itemId, locationId) pairs in this report.
+    const wacPairs = [];
+    for (const doc of breakages) {
+        for (const line of doc.lines) {
+            if (locationIds.length > 0 && !locationIds.includes(line.locationId)) continue;
+            wacPairs.push({ itemId: line.itemId, locationId: line.locationId });
+        }
+    }
+    const uniqueWacPairs = [...new Map(wacPairs.map(p => [`${p.itemId}_${p.locationId}`, p])).values()];
+    const wacMap = {};
+    if (uniqueWacPairs.length > 0) {
+        const balances = await prisma.stockBalance.findMany({
+            where: {
+                tenantId,
+                OR: uniqueWacPairs.map(p => ({ itemId: p.itemId, locationId: p.locationId })),
+            },
+            select: { itemId: true, locationId: true, wacUnitCost: true },
+        });
+        balances.forEach(b => {
+            wacMap[`${b.itemId}_${b.locationId}`] = Number(b.wacUnitCost) || 0;
         });
     }
 
@@ -431,35 +759,96 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
             }
         }
 
+        const approvedBy = resolveBreakageApprover(doc);
+        const postedBy = doc.createdByUser
+            ? `${doc.createdByUser.firstName || ''} ${doc.createdByUser.lastName || ''}`.trim()
+            : approvedBy;
+
+        const approvalSteps = getDocumentApprovalSteps(doc);
+        const finalTreatment = resolveFinalLossTreatment({
+            suggestedAction: doc.suggestedAction,
+            responsibleEmployeeName: doc.responsibleEmployeeName,
+            approvalSteps,
+        });
+
         doc.lines.forEach((line) => {
             if (categoryId && line.item.categoryId !== categoryId) return;
+            if (locationIds.length > 0 && !locationIds.includes(line.locationId)) return;
             const effectiveDate = doc.postedAt || doc.documentDate;
+            const qty = Number(line.qtyInBaseUnit) || 0;
+            const wacKey = `${line.itemId}_${line.locationId}`;
+            const wacFallback = wacMap[wacKey] || 0;
+            const unitCost = Number(line.unitCost) || Number(line.item?.unitPrice) || wacFallback;
+            const lineValue = Number(line.totalValue) || qty * unitCost;
+            const uom =
+                line.unit?.name ||
+                line.item?.itemUnits?.find((iu) => iu.unitType === 'BASE')?.unit?.name ||
+                '—';
+
             rows.push({
                 date: effectiveDate.toISOString().split('T')[0],
                 documentNo: doc.documentNo,
+                documentKey: doc.documentNo,
                 movementType: doc.movementType,
-                department: locationMap[doc.sourceLocationId]?.departmentName || 'N/A',
-                location: locationMap[doc.sourceLocationId]?.name || doc.sourceLocationId || 'N/A',
-                createdBy: doc.createdByUser ? `${doc.createdByUser.firstName} ${doc.createdByUser.lastName}` : 'N/A',
+                status: doc.status,
+                sourceType: doc.sourceType || 'INTERNAL',
+                sourceLabel: doc.sourceType === 'GET_PASS_RETURN' ? 'Get Pass Related' : 'Operational',
+                department: locationMap[line.locationId]?.departmentName || 'N/A',
+                location: locationMap[line.locationId]?.name || line.locationId || 'N/A',
                 category: line.item.category?.name || 'Uncategorized',
                 itemCode: line.item.barcode || '',
                 itemName: line.item.name,
+                uom,
+                qty,
+                unitCost: Number(unitCost.toFixed(4)),
+                lineValue: Number(lineValue.toFixed(2)),
+                value: Number(lineValue.toFixed(2)),
+                approvedBy,
+                createdBy: postedBy,
                 ...(includeSupplier ? { supplier: line.item.supplier?.name || '' } : {}),
-                qty: Number(line.qtyInBaseUnit) || 0,
-                value: Number(line.totalValue) || (Number(line.qtyInBaseUnit) * Number(line.item.unitPrice || 0)),
                 reason: doc.reason || '',
                 photoKey: doc.photoKey || null,
                 photoUrl,
                 suggestedAction: doc.suggestedAction || null,
+                chargeTo: finalTreatment.chargeTo,
+                chargeToLabel: finalTreatment.chargeToLabel,
+                finalResponsibleParty: finalTreatment.responsibleParty,
                 postedAt: doc.postedAt || null,
-                // No dedicated responsible user relation in schema yet; expose available owner fields.
                 responsibleUserId: doc.createdBy || null,
                 responsibleUserName: doc.responsibleEmployeeName || null,
             });
         });
     }
 
-    return { rows };
+    const totalQty = rows.reduce((s, r) => s + Number(r.qty || 0), 0);
+    const totalValue = rows.reduce((s, r) => s + Number(r.lineValue || 0), 0);
+
+    const categoryLoss = {};
+    for (const r of rows) {
+        const cat = r.category || 'Uncategorized';
+        categoryLoss[cat] = (categoryLoss[cat] || 0) + Number(r.lineValue || 0);
+    }
+    let highestLossCategory = '—';
+    let highestLossValue = 0;
+    for (const [cat, val] of Object.entries(categoryLoss)) {
+        if (val > highestLossValue) {
+            highestLossValue = val;
+            highestLossCategory = cat;
+        }
+    }
+
+    return {
+        rows,
+        totals: {
+            totalQty: parseFloat(totalQty.toFixed(4)),
+            totalValue: parseFloat(totalValue.toFixed(2)),
+            rowCount: rows.length,
+            postedDocumentCount: new Set(postedDocs.map((d) => d.documentNo)).size,
+            pendingDocumentCount: new Set(pendingDocs.map((d) => d.documentNo)).size,
+            highestLossCategory,
+            highestLossValue: parseFloat(highestLossValue.toFixed(2)),
+        },
+    };
 };
 
 /**
@@ -479,6 +868,37 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
  *
  * Closing = Opening + OB + In + TransferIn - Out - TransferOut ± Adjustment
  */
+function computeOmcRiskFlags(row) {
+    const flags = [];
+    const available = row.openingQty + row.inQty;
+
+    if (row.closingQty < -0.001) {
+        flags.push('NEGATIVE_BALANCE');
+    }
+    if (row.lostQty > 0) {
+        flags.push('LOST_DECLARED');
+    }
+    if (row.breakageQty > 0) {
+        flags.push('BREAKAGE_DECLARED');
+    }
+    if (row.loanWriteOffQty > 0) {
+        flags.push('WRITE_OFF_DECLARED');
+    }
+    if (row.adjQty !== 0) {
+        flags.push(row.adjQty < 0 ? 'NEGATIVE_ADJUSTMENT' : 'POSITIVE_ADJUSTMENT');
+    }
+    if (available > 0 && row.outQty / available > 0.8) {
+        flags.push('HIGH_OUTBOUND_RATIO');
+    }
+    if (row.inQty === 0 && row.outQty > 0) {
+        flags.push('PURE_DRAWDOWN');
+    }
+    if (row.tfrOutQty > 0 && row.tfrInQty === 0) {
+        flags.push('NET_TRANSFER_LOSS');
+    }
+    return flags;
+}
+
 const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, options = {}) => {
     const includeSupplier = Boolean(options.includeSupplier);
     const includeLocationQtys = Boolean(options.includeLocationQtys);
@@ -519,10 +939,37 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
         _sum: { qtyIn: true, qtyOut: true, totalValue: true },
     });
 
+    // ── Step 2b: StockBalance tertiary fallback ───────────────────────────────
+    // Used when no period close AND ledger history is insufficient (e.g. OB entries
+    // stored with affectsValuation=false). Reverse-engineer opening from current balance.
+    const stockBalances = await prisma.stockBalance.findMany({
+        where: { tenantId, ...(locFilter ? { locationId: locFilter } : {}) },
+        select: { itemId: true, locationId: true, qtyOnHand: true, wacUnitCost: true },
+    });
+    const stockBalMap = {};
+    stockBalances.forEach(sb => {
+        stockBalMap[`${sb.itemId}_${sb.locationId}`] = {
+            qty: Number(sb.qtyOnHand || 0),
+            wac: Number(sb.wacUnitCost || 0),
+        };
+    });
+
     // ── Step 3: Period movements (raw, to separate by type) ──────────────────
     const periodEntries = await prisma.inventoryLedger.findMany({
         where: { tenantId, ...OFFICIAL_LEDGER_WHERE, locationId: locFilter, createdAt: { gte: start, lte: end } },
         select: { itemId: true, locationId: true, movementType: true, qtyIn: true, qtyOut: true, totalValue: true, unitCost: true },
+    });
+
+    // Custody get-pass outs (non-valuation) — operational narrative only, not closing qty
+    const custodyGetPassOutEntries = await prisma.inventoryLedger.findMany({
+        where: {
+            tenantId,
+            movementType: 'GET_PASS_OUT',
+            affectsValuation: false,
+            locationId: locFilter,
+            createdAt: { gte: start, lte: end },
+        },
+        select: { itemId: true, locationId: true, qtyOut: true },
     });
 
     // ── Step 4: Build key set ─────────────────────────────────────────────────
@@ -530,6 +977,7 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
     Object.keys(snapshotMap).forEach(k => keySet.add(k));
     ledgerBefore.forEach(l => keySet.add(`${l.itemId}_${l.locationId}`));
     periodEntries.forEach(l => keySet.add(`${l.itemId}_${l.locationId}`));
+    custodyGetPassOutEntries.forEach(l => keySet.add(`${l.itemId}_${l.locationId}`));
 
     // ── Step 5: Load item + location details ──────────────────────────────────
     const allItemIds = [...new Set([...keySet].map(k => k.split('_')[0]))];
@@ -552,10 +1000,20 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
     for (const e of periodEntries) {
         const key = `${e.itemId}_${e.locationId}`;
         if (!moveMap[key]) moveMap[key] = {
-            obQty: 0, obValue: 0,          // Initial Load (OPENING_BALANCE only)
-            inQty: 0, inValue: 0,           // Operational In (RECEIVE + RETURN)
-            outQty: 0, outValue: 0,
-            tfrInQty: 0, tfrOutQty: 0,
+            obQty: 0, obValue: 0,
+            // Inbound breakdown
+            grnQty: 0, grnValue: 0,
+            returnQty: 0, returnValue: 0,
+            tfrInQty: 0, tfrInValue: 0,
+            getPassReturnQty: 0,
+            // Outbound breakdown
+            issueQty: 0, issueValue: 0,
+            tfrOutQty: 0, tfrOutValue: 0,
+            breakageQty: 0, breakageValue: 0,
+            lostQty: 0, lostValue: 0,
+            getPassOutQty: 0,
+            loanWriteOffQty: 0,
+            // Adjustments
             adjQty: 0, adjValue: 0,
         };
         const m = moveMap[key];
@@ -565,21 +1023,52 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
 
         switch (e.movementType) {
             case 'OPENING_BALANCE':
-                // ← Separate bucket: Initial Load
                 m.obQty += qIn; m.obValue += val; break;
-            case 'RECEIVE': case 'RETURN': case 'GET_PASS_RETURN':
-                // ← Operational receipts only
-                m.inQty += qIn; m.inValue += val; break;
+            case 'RECEIVE':
+                m.grnQty += qIn; m.grnValue += val; break;
+            case 'RETURN':
+                m.returnQty += qIn; m.returnValue += val; break;
+            case 'GET_PASS_RETURN':
+                m.getPassReturnQty += qIn; break;
             case 'TRANSFER_IN':
-                m.inQty += qIn; m.inValue += val; m.tfrInQty += qIn; break;
-            case 'ISSUE': case 'BREAKAGE': case 'LOST': case 'GET_PASS_OUT': case 'LOAN_WRITE_OFF':
-                m.outQty += qOut; m.outValue += val; break;
+                m.tfrInQty += qIn; m.tfrInValue += val; break;
+            case 'ISSUE':
+                m.issueQty += qOut; m.issueValue += val; break;
             case 'TRANSFER_OUT':
-                m.outQty += qOut; m.outValue += val; m.tfrOutQty += qOut; break;
+                m.tfrOutQty += qOut; m.tfrOutValue += val; break;
+            case 'BREAKAGE':
+                m.breakageQty += qOut; m.breakageValue += val; break;
+            case 'LOST':
+                m.lostQty += qOut; m.lostValue += val; break;
+            case 'GET_PASS_OUT':
+                m.getPassOutQty += qOut; break;
+            case 'LOAN_WRITE_OFF':
+                m.loanWriteOffQty += qOut; break;
             case 'ADJUSTMENT': case 'COUNT_ADJUSTMENT':
                 m.adjQty += (qIn - qOut);
                 m.adjValue += (qIn > 0 ? val : -val); break;
         }
+    }
+
+    for (const e of custodyGetPassOutEntries) {
+        const key = `${e.itemId}_${e.locationId}`;
+        if (!moveMap[key]) {
+            moveMap[key] = {
+                obQty: 0, obValue: 0,
+                grnQty: 0, grnValue: 0,
+                returnQty: 0, returnValue: 0,
+                tfrInQty: 0, tfrInValue: 0,
+                getPassReturnQty: 0,
+                issueQty: 0, issueValue: 0,
+                tfrOutQty: 0, tfrOutValue: 0,
+                breakageQty: 0, breakageValue: 0,
+                lostQty: 0, lostValue: 0,
+                getPassOutQty: 0,
+                loanWriteOffQty: 0,
+                adjQty: 0, adjValue: 0,
+            };
+        }
+        moveMap[key].getPassOutQty += Number(e.qtyOut || 0);
     }
 
     // ── Step 7: Build rows ────────────────────────────────────────────────────
@@ -602,19 +1091,43 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
             }
         }
 
-        const m = moveMap[key] || { obQty: 0, obValue: 0, inQty: 0, inValue: 0, outQty: 0, outValue: 0, tfrInQty: 0, tfrOutQty: 0, adjQty: 0, adjValue: 0 };
+        const m = moveMap[key] || {
+            obQty: 0, obValue: 0,
+            grnQty: 0, grnValue: 0, returnQty: 0, returnValue: 0, tfrInQty: 0, tfrInValue: 0, getPassReturnQty: 0,
+            issueQty: 0, issueValue: 0, tfrOutQty: 0, tfrOutValue: 0, breakageQty: 0, breakageValue: 0,
+            lostQty: 0, lostValue: 0, getPassOutQty: 0, loanWriteOffQty: 0,
+            adjQty: 0, adjValue: 0,
+        };
 
-        // Closing = Opening + OB + In + TfrIn - Out - TfrOut ± Adj
-        const closeQty   = openQty + m.obQty + m.inQty - m.outQty + m.adjQty;
+        // Derived totals (computed from granular buckets)
+        const totalInQty   = m.grnQty + m.returnQty + m.tfrInQty + m.getPassReturnQty;
+        const totalInValue = m.grnValue + m.returnValue + m.tfrInValue;
+        // getPassOutQty is custody/ops narrative — excluded from official closing qty (ADR-002)
+        const totalOutQty  = m.issueQty + m.tfrOutQty + m.breakageQty + m.lostQty + m.loanWriteOffQty;
+        const totalOutValue = m.issueValue + m.tfrOutValue + m.breakageValue + m.lostValue;
+
+        // Tertiary opening fallback: reverse-engineer from current stockBalance.
+        // Handles cases where no period close exists and OB entries lack affectsValuation.
+        // Formula: Opening = CurrentBalance − OB − In + Out − Adj
+        if (openQty === 0 && openValue === 0 && !snapshotMap[key] && stockBalMap[key]) {
+            const sb = stockBalMap[key];
+            openQty   = sb.qty - m.obQty - totalInQty + totalOutQty - m.adjQty;
+            openWac   = sb.wac;
+            openValue = openQty * sb.wac;
+        }
+
+        // Closing = Opening + OB + In - Out ± Adj
+        const closeQty = openQty + m.obQty + totalInQty - totalOutQty + m.adjQty;
 
         // Closing WAC: recalculate weighted average including OB and In
-        const totalInValue = openValue + m.obValue + m.inValue;
-        const totalInQty   = openQty + m.obQty + m.inQty;
-        const closeWac = totalInQty > 0 ? totalInValue / totalInQty : openWac;
-        const closeValue = closeQty * closeWac;
+        const totalInValueForWac = openValue + m.obValue + totalInValue;
+        const totalInQtyForWac   = openQty + m.obQty + totalInQty;
+        const closeWac = totalInQtyForWac > 0 ? totalInValueForWac / totalInQtyForWac : openWac;
+        const carryingWac = snapshotMap[key]?.wac ?? stockBalMap[key]?.wac ?? closeWac;
+        const closeValue = closeQty * carryingWac;
 
         // Skip rows with zero activity
-        if (openQty === 0 && m.obQty === 0 && m.inQty === 0 && m.outQty === 0 && m.adjQty === 0) continue;
+        if (openQty === 0 && m.obQty === 0 && totalInQty === 0 && totalOutQty === 0 && m.adjQty === 0) continue;
 
         rows.push({
             department:   locMap[locationId]?.department?.name || '',
@@ -623,34 +1136,73 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
             itemCode:     itemMap[itemId]?.barcode || '',
             itemName:     itemMap[itemId]?.name || 'Unknown',
             ...(includeSupplier ? { supplier: itemMap[itemId]?.supplier?.name || '' } : {}),
-            openingQty:   Number(openQty.toFixed(4)),
-            openingValue: Number(openValue.toFixed(2)),
-            obQty:        Number(m.obQty.toFixed(4)),         // Initial Load (OB)
-            obValue:      Number(m.obValue.toFixed(2)),
-            inQty:        Number(m.inQty.toFixed(4)),          // Operational In
-            inValue:      Number(m.inValue.toFixed(2)),
-            outQty:       Number(m.outQty.toFixed(4)),
-            outValue:     Number(m.outValue.toFixed(2)),
+            openingQty:   Number((openQty + m.obQty).toFixed(4)),
+            openingValue: Number((openValue + m.obValue).toFixed(2)),
+            obQty:        0,
+            obValue:      0,
+            // Inbound breakdown
+            inQty:        Number(totalInQty.toFixed(4)),
+            inValue:      Number(totalInValue.toFixed(2)),
+            grnQty:       Number(m.grnQty.toFixed(4)),
+            returnQty:    Number((m.returnQty + m.getPassReturnQty).toFixed(4)),
             tfrInQty:     Number(m.tfrInQty.toFixed(4)),
+            getPassReturnQty: 0,
+            // Outbound breakdown
+            outQty:       Number(totalOutQty.toFixed(4)),
+            outValue:     Number(totalOutValue.toFixed(2)),
+            issueQty:     Number((m.issueQty + m.getPassOutQty).toFixed(4)),
             tfrOutQty:    Number(m.tfrOutQty.toFixed(4)),
+            breakageQty:  Number(m.breakageQty.toFixed(4)),
+            lostQty:      Number((m.lostQty + m.loanWriteOffQty).toFixed(4)),
+            getPassOutQty: 0,
+            loanWriteOffQty: 0,
+            // Adjustment
             adjQty:       Number(m.adjQty.toFixed(4)),
             adjValue:     Number(m.adjValue.toFixed(2)),
+            // Closing
             closingQty:   Number(closeQty.toFixed(4)),
             closingValue: Number(closeValue.toFixed(2)),
             unitCost:     Number(closeWac.toFixed(4)),
             ...(includeLocationQtys ? { locationQtys: { [locationId]: Number(closeQty.toFixed(4)) } } : {}),
+            riskFlags: computeOmcRiskFlags({
+                closingQty: closeQty, inQty: totalInQty, outQty: totalOutQty,
+                openingQty: openQty, lostQty: m.lostQty, breakageQty: m.breakageQty,
+                loanWriteOffQty: m.loanWriteOffQty, adjQty: m.adjQty,
+                tfrInQty: m.tfrInQty, tfrOutQty: m.tfrOutQty,
+            }),
         });
     }
 
     rows.sort((a, b) =>
-        a.department.localeCompare(b.department) ||
-        a.location.localeCompare(b.location) ||
-        a.category.localeCompare(b.category) ||
-        a.itemName.localeCompare(b.itemName)
+        (a.department || '').localeCompare(b.department || '') ||
+        (a.location   || '').localeCompare(b.location   || '') ||
+        (a.itemName   || '').localeCompare(b.itemName   || '')
     );
+
+    const sum = (key) => rows.reduce((s, r) => s + Number(r[key] || 0), 0);
+    const totals = {
+        totalOpeningQty:   Number(sum('openingQty').toFixed(4)),
+        totalInQty:        Number(sum('inQty').toFixed(4)),
+        totalGrnQty:       Number(sum('grnQty').toFixed(4)),
+        totalReturnQty:    Number(sum('returnQty').toFixed(4)),
+        totalTfrInQty:     Number(sum('tfrInQty').toFixed(4)),
+        totalOutQty:       Number(sum('outQty').toFixed(4)),
+        totalIssueQty:     Number(sum('issueQty').toFixed(4)),
+        totalTfrOutQty:    Number(sum('tfrOutQty').toFixed(4)),
+        totalBreakageQty:  Number(sum('breakageQty').toFixed(4)),
+        totalLostQty:      Number(sum('lostQty').toFixed(4)),
+        totalAdjQty:       Number(sum('adjQty').toFixed(4)),
+        totalClosingQty:   Number(sum('closingQty').toFixed(4)),
+        totalOpeningValue: Number(sum('openingValue').toFixed(2)),
+        totalInValue:      Number(sum('inValue').toFixed(2)),
+        totalOutValue:     Number(sum('outValue').toFixed(2)),
+        totalClosingValue: Number(sum('closingValue').toFixed(2)),
+        rowCount: rows.length,
+    };
 
     return {
         rows,
+        totals,
         snapshotUsed: bestClose ? { year: bestClose.year, month: bestClose.month, closedAt: bestClose.closedAt } : null,
     };
 };
@@ -666,7 +1218,7 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
     const transfers = await prisma.storeTransfer.findMany({
         where: {
             tenantId,
-            status: { in: ['RECEIVED', 'CLOSED'] },
+            status: { in: ['POSTED', 'RECEIVED', 'CLOSED'] },
             AND: [
                 {
                     OR: [
@@ -699,6 +1251,9 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
             const isOut = locationIds.includes(doc.sourceLocationId);
             const isIn = locationIds.includes(doc.destLocationId);
             const effectiveDate = doc.receivedAt || doc.transferDate;
+            const receivedAtStr = doc.receivedAt
+                ? doc.receivedAt.toISOString().split('T')[0]
+                : '';
 
             let type = 'Internal';
             if (isOut && !isIn) type = 'Transfer Out';
@@ -706,7 +1261,12 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
 
             rows.push({
                 date: effectiveDate.toISOString().split('T')[0],
+                transferNo: doc.transferNo,
                 documentNo: doc.transferNo,
+                documentKey: doc.transferNo,
+                status: doc.status,
+                transferDate: effectiveDate.toISOString().split('T')[0],
+                receivedAt: receivedAtStr,
                 type,
                 fromLocation: doc.sourceLocation?.name || '',
                 toLocation: doc.destLocation?.name || '',
@@ -733,6 +1293,14 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
     });
 
     return { rows };
+};
+
+const filterAgingRowsByHealthPreset = (rows, preset) => {
+    const p = String(preset || '').toLowerCase();
+    if (p === 'slow') return rows.filter((r) => Number(r.daysOld) > 90);
+    if (p === 'dead') return rows.filter((r) => Number(r.daysOld) >= 180 || r.lastReceiveDate === 'Never');
+    if (p === 'zero') return rows.filter((r) => r.lastReceiveDate === 'Never' || Number(r.daysOld) >= 365);
+    return rows;
 };
 
 /**
@@ -821,7 +1389,7 @@ const getHistory = async (tenantId, reportType) => {
 const getReportById = async (tenantId, reportId) => {
     const report = await prisma.generatedReport.findFirst({
         where: { id: reportId, tenantId },
-        include: { department: true, generatedByUser: true }
+        include: { department: true, generatedByUser: true, tenant: true }
     });
     if (!report) throw new Error('Report not found');
     return report;
@@ -829,167 +1397,400 @@ const getReportById = async (tenantId, reportId) => {
 
 // ─── Export Logic ───
 
+/** PDF fallback columns for saved reports not using report-column-contracts in resolveEngineExportRows. */
 const getColumnsForReport = (reportType) => {
     switch (reportType) {
         case 'SUMMARY': return [
             { key: 'category', label: 'Category', width: 25 }, { key: 'openingQty', label: 'Opening Qty', width: 15 },
             { key: 'openingValue', label: 'Op Value', width: 15 }, { key: 'closingQty', label: 'Closing Qty', width: 15 },
             { key: 'closingValue', label: 'Cl Value', width: 15 }, { key: 'physicalQty', label: 'Phys Count', width: 15 },
-            { key: 'varianceQty', label: 'Var Qty', width: 15 }, { key: 'varianceValue', label: 'Var Value', width: 15 }
-        ];
-        case 'DETAIL': return [
-            { key: 'category', label: 'Category', width: 15 }, { key: 'itemCode', label: 'Code', width: 15 }, 
-            { key: 'itemName', label: 'Item Name', width: 25 }, { key: 'supplier', label: 'Supplier', width: 20 },
-            { key: 'openingQty', label: 'Open Qty', width: 10 }, { key: 'openingValue', label: 'Open Val', width: 12 },
-            { key: 'inwardQty', label: 'GRN Qty', width: 10 }, { key: 'inwardValue', label: 'GRN Val', width: 12 },
-            { key: 'breakageQty', label: 'Brk Qty', width: 10 }, { key: 'breakageValue', label: 'Brk Val', width: 12 },
-            { key: 'gatePassQty', label: 'Pass Qty', width: 10 }, { key: 'gatePassValue', label: 'Pass Val', width: 12 },
-            { key: 'theoreticalQty', label: 'Book Qty', width: 10 }, { key: 'theoreticalValue', label: 'Book Val', width: 12 },
-            { key: 'physicalQty', label: 'Phys Qty', width: 10 }, { key: 'varianceQty', label: 'Var Qty', width: 10 }, 
-            { key: 'varianceValue', label: 'Var Val', width: 12 }, { key: 'closingQty', label: 'Close Qty', width: 10 },
-            { key: 'closingValue', label: 'Close Val', width: 12 }
-        ];
-        case 'BREAKAGE': return [
-            { key: 'date', label: 'Date', width: 12 }, { key: 'documentNo', label: 'Doc No', width: 18 },
-            { key: 'location', label: 'Location', width: 20 }, { key: 'itemName', label: 'Item', width: 30 },
-            { key: 'qty', label: 'Qty', width: 10 }, { key: 'value', label: 'Value', width: 15 },
-            { key: 'reason', label: 'Reason', width: 25 }, { key: 'createdBy', label: 'Created By', width: 20 }
-        ];
-        case 'OMC': return [
-            { key: 'department',   label: 'Department',  width: 18 },
-            { key: 'location',     label: 'Location',    width: 20 },
-            { key: 'category',     label: 'Category',    width: 18 },
-            { key: 'itemCode',     label: 'Code',        width: 14 },
-            { key: 'itemName',     label: 'Item Name',   width: 28 },
-            { key: 'openingQty',   label: 'Open Qty',    width: 12 },
-            { key: 'openingValue', label: 'Open Value',  width: 12 },
-            { key: 'inQty',        label: 'In (+)',      width: 10 },
-            { key: 'tfrInQty',     label: 'Tfr In',     width: 10 },
-            { key: 'outQty',       label: 'Out (-)',     width: 10 },
-            { key: 'tfrOutQty',    label: 'Tfr Out',    width: 10 },
-            { key: 'adjQty',       label: 'Adj Qty',    width: 10 },
-            { key: 'adjValue',     label: 'Adj Value',  width: 12 },
-            { key: 'closingQty',   label: 'Close Qty',  width: 12 },
-            { key: 'closingValue', label: 'Close Value',width: 12 },
-            { key: 'unitCost',     label: 'WAC',        width: 12 },
-        ];
-        case 'TRANSFERS': return [
-            { key: 'date', label: 'Date', width: 12 }, { key: 'documentNo', label: 'Trf No', width: 18 },
-            { key: 'type', label: 'Type', width: 15 }, { key: 'fromLocation', label: 'From', width: 20 },
-            { key: 'toLocation', label: 'To', width: 20 }, { key: 'itemCode', label: 'Code', width: 15 },
-            { key: 'itemName', label: 'Item', width: 30 },
-            { key: 'qty', label: 'Qty', width: 10 }, { key: 'requestedBy', label: 'Requested By', width: 20 }
+            { key: 'varianceQty', label: 'Var Qty', width: 15 }, { key: 'varianceValue', label: 'Var Value', width: 15 },
         ];
         case 'AGING': return [
             { key: 'location', label: 'Location', width: 20 }, { key: 'category', label: 'Category', width: 20 },
             { key: 'itemName', label: 'Item', width: 30 }, { key: 'qtyOnHand', label: 'Qty', width: 10 },
             { key: 'value', label: 'Value', width: 12 },
             { key: 'lastReceiveDate', label: 'Last Rx', width: 15 }, { key: 'daysOld', label: 'Days Old', width: 10 },
-            { key: 'bucket', label: 'Bucket', width: 15 }
-        ];
-        case 'VALUATION': return [
-            { key: 'department',  label: 'Department',  width: 18 },
-            { key: 'location',    label: 'Location',    width: 20 },
-            { key: 'category',    label: 'Category',    width: 18 },
-            { key: 'itemCode',    label: 'Code',        width: 14 },
-            { key: 'itemName',    label: 'Item Name',   width: 28 },
-            { key: 'qtyOnHand',   label: 'Qty On Hand', width: 12 },
-            { key: 'unitCost',    label: 'WAC',         width: 12 },
-            { key: 'totalValue',  label: 'Total Value', width: 14 },
+            { key: 'bucket', label: 'Bucket', width: 15 },
         ];
         default: return [];
     }
 };
 
-const exportExcel = async (tenantId, reportId) => {
+/** Saved SUMMARY snapshot columns — faithful to generateVarianceReport(isSummary) shape. */
+const SUMMARY_SAVED_EXPORT_COLUMNS = [
+    { header: 'Category', key: 'category', width: 25, format: 'text', align: 'left' },
+    { header: 'Opening Qty', key: 'openingQty', width: 15, format: 'qty', align: 'right' },
+    { header: 'Opening Value', key: 'openingValue', width: 15, format: 'sar', align: 'right' },
+    { header: 'Closing Qty', key: 'closingQty', width: 15, format: 'qty', align: 'right' },
+    { header: 'Closing Value', key: 'closingValue', width: 15, format: 'sar', align: 'right' },
+    { header: 'Physical Qty', key: 'physicalQty', width: 15, format: 'qty', align: 'right' },
+    { header: 'Variance Qty', key: 'varianceQty', width: 15, format: 'qty', align: 'right' },
+    { header: 'Variance Value', key: 'varianceValue', width: 15, format: 'sar', align: 'right' },
+];
+
+const SUMMARY_SNAPSHOT_NUMERIC_KEYS = [
+    'openingQty', 'openingValue', 'closingQty', 'closingValue',
+    'physicalQty', 'varianceQty', 'varianceValue',
+];
+
+function computeSummarySnapshotTotals(rows) {
+    const totals = {};
+    for (const key of SUMMARY_SNAPSHOT_NUMERIC_KEYS) {
+        totals[key] = Number(rows.reduce((s, r) => s + Number(r[key] || 0), 0).toFixed(2));
+    }
+    return totals;
+}
+
+function buildSummarySavedExportRows(snapshotRows, totals) {
+    const exportRows = (snapshotRows || []).map((r) => ({
+        category: r.category ?? '',
+        openingQty: r.openingQty,
+        openingValue: r.openingValue,
+        closingQty: r.closingQty,
+        closingValue: r.closingValue,
+        physicalQty: r.physicalQty,
+        varianceQty: r.varianceQty,
+        varianceValue: r.varianceValue,
+    }));
+    const footer = totals || (exportRows.length ? computeSummarySnapshotTotals(exportRows) : null);
+    if (footer) {
+        exportRows.push({ rowType: 'GRAND_TOTAL', category: 'TOTAL', ...footer });
+    }
+    return exportRows;
+}
+
+function buildSavedReportExportMetadata(report, options = {}) {
+    const generatedBy = report.generatedByUser
+        ? `${report.generatedByUser.firstName || ''} ${report.generatedByUser.lastName || ''}`.trim()
+            || report.generatedByUser.email || 'System'
+        : 'System';
+    const periodStart = report.startDate
+        ? new Date(report.startDate).toLocaleDateString('en-GB') : 'N/A';
+    const periodEnd = report.endDate
+        ? new Date(report.endDate).toLocaleDateString('en-GB') : 'N/A';
+    return {
+        generatedBy,
+        generatedAt: report.createdAt ? new Date(report.createdAt).toISOString() : new Date().toISOString(),
+        filters: {
+            startDate: periodStart,
+            endDate: periodEnd,
+            ...(options.sourceFilter && options.sourceFilter !== 'all' && {
+                sourceFilter: options.sourceFilter,
+            }),
+            ...(options.chargeToFilter && options.chargeToFilter !== 'all' && {
+                chargeToFilter: options.chargeToFilter,
+            }),
+        },
+    };
+}
+
+function mapContractColumns(columnDefs) {
+    return (columnDefs || []).map((c) => ({
+        header: c.header,
+        key: c.key,
+        width: c.width || 12,
+        format: c.format || 'text',
+        align: c.align || 'left',
+    }));
+}
+
+function applyBreakageSourceFilter(reportData, sourceFilter) {
+    if (!sourceFilter || sourceFilter === 'all') return reportData;
+    const targetLabel = sourceFilter === 'get-pass' ? 'Get Pass Related' : 'Operational';
+    const filteredRows = (reportData.rows || []).filter(
+        (r) => (r.sourceLabel || 'Operational') === targetLabel,
+    );
+    const totalQty = filteredRows.reduce((s, r) => s + Number(r.qty || 0), 0);
+    const totalValue = filteredRows.reduce((s, r) => s + Number(r.lineValue ?? r.value ?? 0), 0);
+    const updatedTotals = {
+        ...reportData.totals,
+        totalQty,
+        totalValue,
+        rowCount: filteredRows.length,
+    };
+    const enriched = enrichWithGrouping(
+        { rows: filteredRows, totals: updatedTotals },
+        'breakage-loss-report',
+    );
+    return { ...reportData, ...enriched, rows: filteredRows, totals: updatedTotals };
+}
+
+function applyBreakageChargeToFilter(reportData, chargeToFilter) {
+    if (!chargeToFilter || chargeToFilter === 'all') return reportData;
+    const filteredRows = (reportData.rows || []).filter(
+        (r) => r.chargeTo === chargeToFilter,
+    );
+    const totalQty = filteredRows.reduce((s, r) => s + Number(r.qty || 0), 0);
+    const totalValue = filteredRows.reduce((s, r) => s + Number(r.lineValue ?? r.value ?? 0), 0);
+    const updatedTotals = {
+        ...reportData.totals,
+        totalQty,
+        totalValue,
+        rowCount: filteredRows.length,
+    };
+    const enriched = enrichWithGrouping(
+        { rows: filteredRows, totals: updatedTotals },
+        'breakage-loss-report',
+    );
+    return { ...reportData, ...enriched, rows: filteredRows, totals: updatedTotals };
+}
+
+function applyBreakageReportFilters(reportData, options = {}) {
+    let data = reportData;
+    if (options.sourceFilter) {
+        data = applyBreakageSourceFilter(data, options.sourceFilter);
+    }
+    if (options.chargeToFilter) {
+        data = applyBreakageChargeToFilter(data, options.chargeToFilter);
+    }
+    return data;
+}
+
+function relabelCurrencyHeaders(columns, currency) {
+    const code = String(currency || 'SAR').toUpperCase();
+    return (columns || []).map((c) => ({
+        ...c,
+        header: String(c.header || c.label || '')
+            .replace(/\(SAR\)/gi, `(${code})`)
+            .replace(/\bSAR\b/g, code),
+    }));
+}
+
+async function exportSummarySavedExcel(report) {
+    const payload = report.data || {};
+    const rows = buildSummarySavedExportRows(payload.rows, payload.totals);
+    return excelService.generateExcelBuffer(
+        rows,
+        SUMMARY_SAVED_EXPORT_COLUMNS,
+        report.reportName,
+        buildSavedReportExportMetadata(report),
+    );
+}
+
+async function exportAgingSavedExcel(report) {
+    const columnDefs = getReportColumns('inventory-health-aging');
+    const rows = report.data?.rows || [];
+    return excelService.generateExcelBuffer(
+        rows,
+        mapContractColumns(columnDefs),
+        report.reportName,
+        buildSavedReportExportMetadata(report),
+    );
+}
+
+async function exportEngineGroupedExcel(report, options = {}) {
+    if (report.reportType === 'BREAKAGE' || report.reportType === 'LOST') {
+        report.data = applyBreakageReportFilters(report.data, {
+            sourceFilter: options.sourceFilter,
+            chargeToFilter: options.chargeToFilter,
+        });
+    }
+
+    const { rows, columns } = resolveEngineExportRows(report, {
+        formatCells: false,
+        ...(options.visibleGroupIds !== undefined && { visibleGroupIds: options.visibleGroupIds }),
+    });
+    const maskedRows = maskExportRows(rows, options.user);
+    const exportColumns = relabelCurrencyHeaders(columns, options.displayCurrency);
+
+    return excelService.generateExcelBuffer(
+        maskedRows,
+        exportColumns,
+        report.reportName,
+        {
+            ...buildSavedReportExportMetadata(report, options),
+            ...(report.reportType === 'OMC' && { accentProfile: 'omc-movement' }),
+            ...(report.reportType === 'DETAIL' && { densityProfile: 'wide' }),
+        },
+    );
+}
+
+const exportExcel = async (tenantId, reportId, options = {}) => {
+    const displayCurrency = await getDisplayCurrency(tenantId);
     const report = await getReportById(tenantId, reportId);
-    const columns = getColumnsForReport(report.reportType);
-
-    const wb = new ExcelJS.Workbook();
-    wb.creator = 'OSE Inventory';
-    const ws = wb.addWorksheet(report.reportType);
-
-    // Title rows
-    ws.addRow([report.reportName]);
-    ws.addRow([`Period: ${report.startDate ? new Date(report.startDate).toLocaleDateString() : 'N/A'} - ${report.endDate ? new Date(report.endDate).toLocaleDateString() : 'N/A'}`]);
-    ws.addRow([]); // Blank
-
-    // Header
-    ws.columns = columns.map(c => ({ header: c.label, key: c.key, width: c.width }));
-
-    // Fill data
-    const rows = report.data.rows || [];
-    rows.forEach(r => ws.addRow(r));
-
-    // Styling
-    const headerRow = ws.getRow(4);
-    headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
-    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1E40AF' } };
-
-    return wb;
+    if (
+        report.reportType === 'BREAKAGE' ||
+        report.reportType === 'LOST' ||
+        report.reportType === 'TRANSFERS' ||
+        report.reportType === 'OMC' ||
+        report.reportType === 'DETAIL'
+    ) {
+        return exportEngineGroupedExcel(report, { ...options, displayCurrency });
+    }
+    if (report.reportType === 'SUMMARY') {
+        return exportSummarySavedExcel(report);
+    }
+    if (report.reportType === 'AGING') {
+        return exportAgingSavedExcel(report);
+    }
+    throw Object.assign(
+        new Error(`Excel export not supported for report type: ${report.reportType}`),
+        { status: 400 },
+    );
 };
 
-const exportPdf = async (tenantId, reportId) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            const report = await getReportById(tenantId, reportId);
-            const columns = getColumnsForReport(report.reportType);
-            const rows = report.data.rows || [];
+function resolveEngineExportRows(report, options = {}) {
+    const payload = report.data || {};
+    const reportType = report.reportType;
+    let columnDefs =
+        (reportType === 'BREAKAGE' || reportType === 'LOST')
+            ? getReportColumns('breakage-loss-report')
+            : reportType === 'OMC'
+              ? getReportColumns('omc-report')
+              : reportType === 'DETAIL'
+                ? getReportColumns('detail-report')
+                : reportType === 'TRANSFERS'
+                  ? getReportColumns('transfer-history')
+                  : null;
+    if (reportType === 'DETAIL' && options.visibleGroupIds !== undefined && columnDefs?.length) {
+        columnDefs = filterDetailColumnDefs(columnDefs, options.visibleGroupIds);
+    }
+    const legacyColumns = getColumnsForReport(reportType).map((c) => ({
+        header: c.header || c.label,
+        key: c.key,
+        width: c.width || 12,
+        format: c.format || 'text',
+        align: c.align || 'left',
+    }));
 
-            const doc = new PDFDocument({ margin: 30, size: 'A4', layout: 'landscape' });
-            let buffers = [];
-            doc.on('data', buffers.push.bind(buffers));
-            doc.on('end', () => {
-                let pdfData = Buffer.concat(buffers);
-                resolve(pdfData);
-            });
+    if (
+        (reportType === 'BREAKAGE' || reportType === 'LOST' || reportType === 'OMC' || reportType === 'DETAIL' || reportType === 'TRANSFERS') &&
+        payload.groupingEnabled &&
+        payload.flatRows?.length
+    ) {
+        const footerRow = buildTotalsFooterRow(columnDefs, payload.totals);
+        const exportSet = resolveExportDataset(payload, columnDefs, footerRow, options);
+        if (exportSet) return exportSet;
+    }
 
-            // Header
-            doc.fontSize(18).text(report.reportName, { align: 'center' });
-            doc.fontSize(10).fillColor('gray').text(`Period: ${report.startDate ? new Date(report.startDate).toLocaleDateString() : 'N/A'} - ${report.endDate ? new Date(report.endDate).toLocaleDateString() : 'N/A'}`, { align: 'center' });
-            doc.moveDown(2);
+    const rows = payload.rows || [];
+    const footerRow = columnDefs ? buildTotalsFooterRow(columnDefs, payload.totals) : null;
+    return {
+        rows: footerRow ? [...rows, footerRow] : rows,
+        columns: columnDefs?.length
+            ? columnDefs.map((c) => ({
+                  header: c.header,
+                  key: c.key,
+                  width: c.width || 12,
+                  format: c.format || 'text',
+                  align: c.align || 'left',
+              }))
+            : legacyColumns,
+    };
+}
 
-            // Very simple Table drawing manually or using simple text columns
-            let y = doc.y;
-            let startX = 30;
+const exportPdf = async (tenantId, reportId, options = {}) => {
+    const displayCurrency = await getDisplayCurrency(tenantId);
+    const report = await getReportById(tenantId, reportId);
+    if (report.reportType === 'BREAKAGE' || report.reportType === 'LOST') {
+        report.data = applyBreakageReportFilters(report.data, {
+            sourceFilter: options.sourceFilter,
+            chargeToFilter: options.chargeToFilter,
+        });
+    }
+    const visibleGroupIds =
+        report.reportType === 'DETAIL' && options.visibleGroupIds !== undefined
+            ? options.visibleGroupIds
+            : undefined;
+    const { rows, columns } = resolveEngineExportRows(report, {
+        formatCells: false,
+        visibleGroupIds,
+    });
+    const maskedRows = maskExportRows(rows, options.user);
+    const exportColumns = relabelCurrencyHeaders(columns, displayCurrency);
+    const generatedBy = report.generatedByUser
+        ? `${report.generatedByUser.firstName || ''} ${report.generatedByUser.lastName || ''}`.trim() || report.generatedByUser.email || 'System'
+        : 'System';
+    const reportBasis =
+        (report.reportType === 'AGING' || report.reportType === 'DETAIL') && report.startDate
+            ? formatAgingReviewMonthLabel(report.startDate)
+            : report.startDate && report.endDate
+              ? `${new Date(report.startDate).toLocaleDateString('en-GB')} - ${new Date(report.endDate).toLocaleDateString('en-GB')}`
+              : report.startDate
+                  ? `As of ${new Date(report.startDate).toLocaleDateString('en-GB')}`
+                  : 'Ad hoc report';
 
-            // Draw headers
-            doc.fontSize(9).fillColor('black');
-            let xOffset = startX;
-            columns.forEach(col => {
-                doc.text(col.label, xOffset, y, { width: col.width * 5, align: 'left' });
-                xOffset += col.width * 5 + 10;
-            });
+    const generatedAt = report.createdAt || new Date().toISOString();
 
-            y += 15;
-            doc.moveTo(startX, y).lineTo(800, y).stroke();
-            y += 5;
+    const cardId =
+        (report.reportType === 'BREAKAGE' || report.reportType === 'LOST')
+            ? 'breakage-loss-report'
+            : report.reportType === 'OMC'
+              ? 'omc-report'
+              : report.reportType === 'DETAIL'
+                ? 'detail-report'
+                : report.reportType === 'TRANSFERS'
+                  ? 'transfer-history'
+                  : report.reportType === 'AGING'
+                    ? 'inventory-health-aging'
+                    : report.reportType;
+    const family = resolveFamily(cardId);
+    const classification = resolvePdfClassification(options.user || {}, options.classification);
 
-            // Draw rows
-            doc.fontSize(8).fillColor('#333');
-            for (let i = 0; i < rows.length; i++) {
-                if (y > 550) {
-                    doc.addPage({ layout: 'landscape' });
-                    y = 30;
-                }
-                const r = rows[i];
-                xOffset = startX;
+    let signatureSlots = null;
+    if (report.reportType === 'BREAKAGE') {
+        signatureSlots = await buildBreakageSignatureSlots(
+            tenantId,
+            report.data?.rows || [],
+            { generatedBy, generatedAt },
+        );
+    }
 
-                columns.forEach(col => {
-                    const val = r[col.key];
-                    const valStr = (val !== null && val !== undefined) ? String(val) : '';
-                    doc.text(valStr, xOffset, y, { width: col.width * 5, align: 'left', lineBreak: false, ellipsis: true });
-                    xOffset += col.width * 5 + 10;
-                });
-                y += 15;
-            }
+    const purposeLine =
+        report.reportType === 'LOST'
+            ? 'This report documents items recorded as lost, categorised by operational source, for audit accountability.'
+            : report.reportType === 'BREAKAGE'
+              ? 'This report documents breakage and write-off transactions with quantities and values for audit review.'
+              : undefined;
 
-            doc.end();
-        } catch (error) {
-            reject(error);
-        }
+    const rawRows = report.data?.rows || [];
+    const pdfTotals =
+        report.reportType === 'AGING'
+            ? {
+                  rowCount: rawRows.length,
+                  totalQty: rawRows.reduce((s, r) => s + Number(r.qtyOnHand || 0), 0),
+                  totalValue: rawRows.reduce((s, r) => s + Number(r.value || 0), 0),
+                  criticalCount: rawRows.filter((r) => Number(r.daysOld || 0) > 90).length,
+              }
+            : report.reportType === 'DETAIL'
+              ? (report.data?.totals || computeTotals('detail-report', rawRows))
+              : report.data?.totals || null;
+
+    return generateReportPDF(maskedRows, exportColumns, report.reportName, {
+        displayCurrency,
+        generatedBy,
+        generatedAt,
+        tenantName: report.tenant?.name || 'DX OSE',
+        reportBasis,
+        reportType: cardId,
+        familyId: family?.familyId || 'generic',
+        groupingEnabled: Boolean(report.data?.groupingEnabled),
+        bilingualHeaders: false,
+        classification,
+        signatureSlots,
+        purposeLine,
+        reportReference: buildReportReference(report.reportType, generatedAt),
+        reportId: report.id,
+        totalRows: (report.data?.rows || []).length,
+        totals: pdfTotals,
+        ...(report.reportType === 'AGING'
+            ? { periodMetaLabel: 'Review Month:', suppressPurposeLine: true }
+            : report.reportType === 'DETAIL'
+              ? { periodMetaLabel: 'Review Month:', visibleGroupIds: visibleGroupIds ?? [] }
+              : {}),
+        filters: {
+            department: report.department?.name || report.data?.deptNames || undefined,
+            period: reportBasis,
+        },
     });
 };
+
+function formatAgingReviewMonthLabel(startDate) {
+    const d = new Date(startDate);
+    if (Number.isNaN(d.getTime())) return '—';
+    return d.toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+}
 
 /**
  * 7. Valuation Report — As-of-Date
@@ -1008,152 +1809,51 @@ const exportPdf = async (tenantId, reportId) => {
  * @param {Object}  filters         — { locationIds, departmentIds, categoryId }
  */
 const generateValuationReport = async (tenantId, asOfDate, filters = {}) => {
-    const { locationIds = [], departmentIds = [], categoryId, snapshotId } = filters;
+    const useLegacyReplay = process.env.INVENTORY_VALUATION_SOURCE === 'ledger_replay';
 
-    // ── Resolve locations ────────────────────────────────────────────────────
-    const locWhere = { tenantId, isActive: true };
-    if (locationIds.length > 0)   locWhere.id = { in: locationIds };
-    if (departmentIds.length > 0) locWhere.departmentId = { in: departmentIds };
-    const locations = await prisma.location.findMany({ where: locWhere, include: { department: true } });
-    const resolvedLocIds = locations.map(l => l.id);
-    const locMap = {};
-    locations.forEach(l => (locMap[l.id] = l));
-
-    if (resolvedLocIds.length === 0) return { rows: [], asOfDate, totalValue: 0 };
-
-    // ── Resolve items (optional category filter) ─────────────────────────────
-    const itemWhere = { tenantId, isActive: true };
-    if (categoryId) itemWhere.categoryId = categoryId;
-    const items = await prisma.item.findMany({ where: itemWhere, include: { category: true } });
-    const itemMap = {};
-    items.forEach(i => (itemMap[i.id] = i));
-    const resolvedItemIds = items.map(i => i.id);
-
-    // ── Step 1: Best PeriodSnapshot on or before asOfDate ───────────────────
-    const asOf = new Date(asOfDate);
-    asOf.setHours(23, 59, 59, 999);
-
-    let bestClose = null;
-    if (snapshotId) {
-        bestClose = await prisma.periodClose.findFirst({
-            where: { id: snapshotId, tenantId, status: 'CLOSED' },
-        });
-        if (!bestClose) {
-            throw Object.assign(new Error('Invalid snapshotId. Closed snapshot not found.'), { status: 400 });
-        }
-        if (bestClose.closedAt > asOf) {
-            throw Object.assign(new Error('snapshotId must be on or before asOfDate.'), { status: 400 });
-        }
-    }
-    if (!bestClose) {
-        bestClose = await prisma.periodClose.findFirst({
-            where: { tenantId, status: 'CLOSED', closedAt: { lte: asOf } },
-            orderBy: { closedAt: 'desc' },
-        });
+    if (!useLegacyReplay) {
+        const stockBacked = await generateStockBackedValuationReport(tenantId, asOfDate, filters);
+        return optimizeReportPayload(stockBacked, { includeSupplier: false, includeLocationQtys: false });
     }
 
-    // Snapshot map: key = `itemId_locationId` → { qty, wac, value }
-    const balanceMap = {};
+    const { categoryId } = filters;
 
-    if (bestClose) {
-        const snapshots = await prisma.periodSnapshot.findMany({
-            where: {
-                periodCloseId: bestClose.id,
-                locationId: { in: resolvedLocIds },
-                itemId: { in: resolvedItemIds },
-            },
-        });
-        for (const s of snapshots) {
-            balanceMap[`${s.itemId}_${s.locationId}`] = {
-                qty: Number(s.closingQty),
-                wac: Number(s.wacUnitCost),
-                value: Number(s.closingValue),
-            };
-        }
+    const replay = await replayOfficialLedgerBalances(tenantId, asOfDate, filters);
+    const { balanceMap, bestClose, asOf, itemMap, locMap, resolvedLocIds } = replay;
+
+    if (resolvedLocIds.length === 0) {
+        return {
+            rows: [],
+            asOfDate: asOf.toISOString(),
+            totalValue: 0,
+            truthSource: 'LEDGER_REPLAY',
+        };
     }
 
-    // ── Step 2: Replay Ledger from snapshot point → asOfDate ────────────────
-    const ledgerEntries = await prisma.inventoryLedger.findMany({
-        where: {
-            tenantId,
-            ...OFFICIAL_LEDGER_WHERE,
-            locationId: { in: resolvedLocIds },
-            itemId: { in: resolvedItemIds },
-            createdAt: {
-                gte: bestClose?.closedAt ?? new Date(0),
-                lte: asOf,
-            },
-        },
-        orderBy: { createdAt: 'asc' }, // chronological order matters for WAC
-        select: { itemId: true, locationId: true, movementType: true, qtyIn: true, qtyOut: true, unitCost: true, totalValue: true },
-    });
-
-    // Replay each ledger entry to update running balance + WAC
-    for (const e of ledgerEntries) {
-        const key = `${e.itemId}_${e.locationId}`;
-        if (!balanceMap[key]) balanceMap[key] = { qty: 0, wac: 0, value: 0 };
-        const b = balanceMap[key];
-        const qIn  = Number(e.qtyIn  || 0);
-        const qOut = Number(e.qtyOut || 0);
-        const val  = Number(e.totalValue || 0);
-        const unitCost = Number(e.unitCost || 0);
-
-        switch (e.movementType) {
-            case 'RECEIVE':
-            case 'OPENING_BALANCE':
-            case 'RETURN':
-            case 'TRANSFER_IN':
-            case 'GET_PASS_RETURN': {
-                // Recalculate WAC on receipt
-                const newTotalQty = b.qty + qIn;
-                const newTotalVal = b.value + val;
-                b.wac   = newTotalQty > 0 ? newTotalVal / newTotalQty : (unitCost || b.wac);
-                b.qty   = newTotalQty;
-                b.value = newTotalVal;
-                break;
-            }
-            case 'ISSUE':
-            case 'BREAKAGE':
-            case 'TRANSFER_OUT':
-            case 'GET_PASS_OUT':
-            case 'LOAN_WRITE_OFF':
-                b.qty   -= qOut;
-                b.value  = b.qty * b.wac;  // WAC unchanged on outbound
-                break;
-            case 'ADJUSTMENT':
-            case 'COUNT_ADJUSTMENT': {
-                const net = qIn - qOut;
-                b.qty  += net;
-                b.value = b.qty * b.wac;   // WAC unchanged on adjustment
-                break;
-            }
-        }
-        // Guard against negative qty drift
-        if (b.qty < 0) { b.qty = 0; b.value = 0; }
-    }
-
-    // ── Step 3: Build report rows ────────────────────────────────────────────
     const rows = [];
     let grandTotal = 0;
 
     for (const [key, bal] of Object.entries(balanceMap)) {
         if (bal.qty <= 0 && bal.value <= 0) continue;
-        const [itemId, locationId] = key.split('_');
+        const parsed = parseBalanceMapKey(key);
+        if (!parsed) continue;
+        const { itemId, locationId } = parsed;
         const item = itemMap[itemId];
-        const loc  = locMap[locationId];
+        const loc = locMap[locationId];
         if (!item || !loc) continue;
+        if (categoryId && item.categoryId !== categoryId) continue;
 
         const totalValue = Number((bal.qty * bal.wac).toFixed(2));
         grandTotal += totalValue;
 
         rows.push({
-            department:  loc.department?.name || '',
-            location:    loc.name,
-            category:    item.category?.name || '',
-            itemCode:    item.barcode || '',
-            itemName:    item.name,
-            qtyOnHand:   Number(bal.qty.toFixed(4)),
-            unitCost:    Number(bal.wac.toFixed(4)),
+            department: loc.department?.name || '',
+            location: loc.name,
+            category: item.category?.name || '',
+            itemCode: item.barcode || '',
+            itemName: item.name,
+            qtyOnHand: Number(bal.qty.toFixed(4)),
+            unitCost: Number(bal.wac.toFixed(4)),
             totalValue,
         });
     }
@@ -1169,17 +1869,85 @@ const generateValuationReport = async (tenantId, asOfDate, filters = {}) => {
         rows,
         asOfDate: asOf.toISOString(),
         totalValue: Number(grandTotal.toFixed(2)),
+        truthSource: 'LEDGER_REPLAY',
         snapshotUsed: bestClose
             ? { id: bestClose.id, year: bestClose.year, month: bestClose.month, closedAt: bestClose.closedAt }
             : null,
     }, { includeSupplier: false, includeLocationQtys: false });
 };
 
+/**
+ * Excel export for valuation — uses generateValuationReport only (same rows/filters as on-screen report).
+ */
+const VALUATION_EXPORT_COLUMNS = [
+    { header: 'Department', key: 'department', width: 18, format: 'text', align: 'left' },
+    { header: 'Location', key: 'location', width: 18, format: 'text', align: 'left' },
+    { header: 'Category', key: 'category', width: 16, format: 'text', align: 'left' },
+    { header: 'Item Code', key: 'itemCode', width: 14, format: 'text', align: 'left' },
+    { header: 'Item Name', key: 'itemName', width: 28, format: 'text', align: 'left' },
+    { header: 'Qty On Hand', key: 'qtyOnHand', width: 12, format: 'qty', align: 'right' },
+    { header: 'WAC', key: 'unitCost', width: 12, format: 'sar', align: 'right' },
+    { header: 'Total Value', key: 'totalValue', width: 14, format: 'sar', align: 'right' },
+];
+
+const exportValuationExcel = async (tenantId, asOfDate, filters = {}) => {
+    const data = await generateValuationReport(tenantId, asOfDate, filters);
+    const exportRows = [...(data.rows || [])];
+
+    if (data.totalValue != null) {
+        exportRows.push({
+            rowType: 'GRAND_TOTAL',
+            department: 'Grand total (value)',
+            location: '',
+            category: '',
+            itemCode: '',
+            itemName: '',
+            qtyOnHand: '',
+            unitCost: '',
+            totalValue: data.totalValue,
+        });
+    }
+
+    const asOfLabel = data.asOfDate
+        ? new Date(data.asOfDate).toLocaleDateString('en-GB')
+        : String(asOfDate);
+
+    const metadata = {
+        generatedBy: 'OSE Inventory',
+        generatedAt: new Date().toISOString(),
+        filters: {
+            asOfDate: asOfLabel,
+            truthSource: data.truthSource,
+            valuationBasis: data.valuationBasis,
+            effectiveAsOfDate: data.effectiveAsOfDate,
+            requestedAsOfDate: data.requestedAsOfDate,
+            valuationBasisLabel: describeValuationBasis(data),
+            ...(data.warning && { warning: data.warning }),
+            ...(data.snapshotUsed && {
+                snapshotBasis: `Snapshot: ${data.snapshotUsed.year}${data.snapshotUsed.month != null ? '/' + data.snapshotUsed.month : ''} (closed ${data.snapshotUsed.closedAt ? new Date(data.snapshotUsed.closedAt).toLocaleString('en-GB') : ''})`,
+            }),
+            ...(filters.departmentIds?.length && { departmentIds: filters.departmentIds.join(', ') }),
+            ...(filters.categoryId && { categoryId: filters.categoryId }),
+            ...(filters.locationIds?.length && { locationCount: String(filters.locationIds.length) }),
+        },
+    };
+
+    return excelService.generateExcelBuffer(
+        exportRows,
+        VALUATION_EXPORT_COLUMNS,
+        'Inventory Carrying Value Review',
+        metadata,
+    );
+};
+
 module.exports = {
     generateReport,
+    generateVarianceReport,
     generateValuationReport,
+    exportValuationExcel,
     getHistory,
     getReportById,
     exportExcel,
-    exportPdf
+    exportPdf,
+    generateOMCReport,
 };

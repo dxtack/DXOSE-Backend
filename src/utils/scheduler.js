@@ -4,6 +4,7 @@ const notificationService = require('../services/notification.service');
 const emailService = require('../services/email.service');
 const getPassService = require('../services/getPass.service');
 const { processMailQueue } = require('../services/mail/queue');
+const { processAuditWriteQueue } = require('../services/audit-write-queue.service');
 const { invalidateTenantCache } = require('../middleware/subscription');
 const logger = require('./logger');
 
@@ -79,7 +80,58 @@ cron.schedule('*/2 * * * *', async () => {
     }
 });
 
+// Every 2 minutes: re-drive failed audit_log writes queued in audit_write_queue (P0-C).
+cron.schedule('*/2 * * * *', async () => {
+    try {
+        const result = await processAuditWriteQueue();
+        if (result.picked > 0) {
+            logger.info(
+                `[CRON] audit write queue: picked=${result.picked} completed=${result.completed} failed=${result.failed}`,
+            );
+        }
+    } catch (error) {
+        logger.error('[CRON] audit write queue processing failed', {
+            message: error.message,
+            stack: error.stack,
+        });
+    }
+});
+
+// Daily auto close — Ch.6.14 (respects tenant settings; no bypass when blockers exist).
+cron.schedule('0 2 * * *', async () => {
+    if (process.env.DISABLE_PERIOD_AUTO_CLOSE_CRON === '1' || process.env.DISABLE_PERIOD_AUTO_CLOSE_CRON === 'true') {
+        return;
+    }
+    logger.info('[CRON] Starting period auto close job...');
+    try {
+        const { runAutoCloseJob } = require('../services/periodAutoClose.service');
+        const results = await runAutoCloseJob();
+        const closed = results.filter((r) => r.closed).length;
+        const blocked = results.filter((r) => r.closed === false && r.checklist).length;
+        logger.info(`[CRON] Period auto close completed: tenants=${results.length}, closed=${closed}, blocked=${blocked}.`);
+    } catch (error) {
+        logger.error('[CRON] Period auto close failed', { message: error.message, stack: error.stack });
+    }
+});
+
 logger.info('[CRON] Scheduler initialized.');
+
+// Daily 06:00 — integrity scan all active tenants (persisted history per tenant).
+cron.schedule('0 6 * * *', async () => {
+    if (process.env.DISABLE_INTEGRITY_CRON === '1' || process.env.DISABLE_INTEGRITY_CRON === 'true') {
+        return;
+    }
+    logger.info('[CRON] Starting daily integrity scan...');
+    try {
+        const { runIntegrityScansForAllTenants } = require('../services/integrityScheduler.service');
+        const result = await runIntegrityScansForAllTenants();
+        logger.info(
+            `[CRON] Integrity scan completed: tenants=${result.scanned}/${result.totalTenants}, unhealthy=${result.unhealthy}.`,
+        );
+    } catch (error) {
+        logger.error('[CRON] Integrity scan failed', { message: error.message, stack: error.stack });
+    }
+});
 
 // Run every day at 9:00 AM: mark overdue gate passes and notify cost control users.
 cron.schedule('0 9 * * *', async () => {

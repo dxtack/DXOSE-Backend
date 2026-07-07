@@ -82,6 +82,46 @@ const snapshotHistory = async (req, res, next) => {
     }
 };
 
+const resolutionService = require('../services/periodCloseResolution.service');
+
+const getResolutionWorkspace = async (req, res, next) => {
+    try {
+        const year = parseInt(req.query.year, 10);
+        const month = parseInt(req.query.month, 10);
+        const data = await resolutionService.getResolutionWorkspace(req.user.tenantId, { year, month });
+        res.json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const postResolutionDocument = async (req, res, next) => {
+    try {
+        const data = await resolutionService.postResolutionDocument(req.user.tenantId, req.user.id, req.body);
+        res.json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const deleteResolutionDocument = async (req, res, next) => {
+    try {
+        const data = await resolutionService.deleteResolutionDocument(req.user.tenantId, req.user.id, req.body);
+        res.json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const carryForwardGetPass = async (req, res, next) => {
+    try {
+        const data = await resolutionService.carryForwardGetPass(req.user.tenantId, req.user.id, req.body);
+        res.json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
 module.exports = {
     getPeriods,
     getPeriodById,
@@ -90,4 +130,8 @@ module.exports = {
     cancelClose,
     reopenPeriod,
     snapshotHistory,
+    getResolutionWorkspace,
+    postResolutionDocument,
+    deleteResolutionDocument,
+    carryForwardGetPass,
 };

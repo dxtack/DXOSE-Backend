@@ -3,7 +3,8 @@
  * Blockers=0 required for CLOSED — no environment bypass.
  */
 const { PrismaClient } = require('@prisma/client');
-const { periodEndInstant } = require('../platform/postingPeriod.util');
+const { periodEndInstant, assignedPeriodKey } = require('../platform/postingPeriod.util');
+const { getCarriedForwardGetPassIds } = require('../platform/getPassPeriodResolution.util');
 
 const prisma = new PrismaClient();
 
@@ -127,13 +128,15 @@ async function runMonthEndCloseChecklist(tenantId, opts = {}) {
     }
 
     const blockingGetPasses = openGetPasses.filter((gp) => getPassIsBlockerForPeriod(gp, year, month));
-    if (blockingGetPasses.length > 0) {
+    const carriedForward = await getCarriedForwardGetPassIds(tenantId, assignedPeriodKey(year, month));
+    const unresolvedGetPasses = blockingGetPasses.filter((gp) => !carriedForward.has(gp.id));
+    if (unresolvedGetPasses.length > 0) {
         findings.push({
             code: 'GET_PASS_RESOLUTION_REQUIRED',
             severity: 'BLOCKER',
             message: 'Get pass(es) require resolution before close (§6.13).',
-            count: blockingGetPasses.length,
-            sample: blockingGetPasses.slice(0, 5).map((g) => ({ id: g.id, passNo: g.passNo, status: g.status })),
+            count: unresolvedGetPasses.length,
+            sample: unresolvedGetPasses.slice(0, 5).map((g) => ({ id: g.id, passNo: g.passNo, status: g.status })),
         });
     }
 

@@ -13,6 +13,7 @@ const VIEW = requireAnyPermission(
 );
 
 router.get('/', authenticate, VIEW, ctrl.getPeriods);
+router.get('/resolution', authenticate, requireAnyPermission('PERIOD_CLOSE_RESOLUTION', 'PERIOD_CLOSE_MANAGE'), ctrl.getResolutionWorkspace);
 router.get('/:id/snapshots', authenticate, VIEW, ctrl.snapshotHistory);
 router.get('/:id', authenticate, VIEW, ctrl.getPeriodById);
 
@@ -25,6 +26,25 @@ router.post(
     authenticate,
     requireAnyPermission('PERIOD_REOPEN_EXECUTE', 'PERIOD_CLOSE_MANAGE'),
     ctrl.reopenPeriod,
+);
+
+router.post(
+    '/resolution/post',
+    authenticate,
+    requirePermission('PERIOD_CLOSE_DOCUMENT_POST'),
+    ctrl.postResolutionDocument,
+);
+router.post(
+    '/resolution/delete',
+    authenticate,
+    requirePermission('PERIOD_CLOSE_DOCUMENT_DELETE'),
+    ctrl.deleteResolutionDocument,
+);
+router.post(
+    '/resolution/get-pass/carry-forward',
+    authenticate,
+    requirePermission('PERIOD_CLOSE_GET_PASS_CARRY_FORWARD'),
+    ctrl.carryForwardGetPass,
 );
 
 module.exports = router;
