@@ -11,6 +11,7 @@ model Tenant {
   id                  String               @id @default(uuid()) @db.Uuid
   name                String
   slug                String               @unique
+  timezone            String               @default("Asia/Riyadh")
   subscriptionTier    String               @default("starter")
   logoUrl             String?
   address             String?
@@ -45,6 +46,7 @@ model Tenant {
   locations           Location[]
   movementDocuments   MovementDocument[]
   periodCloses           PeriodClose[]
+  periodOpeningVerifications PeriodOpeningVerification[]
   periodAutoCloseSettings PeriodAutoCloseSettings?
   savedStockReports   SavedStockReport[]
   stockBalances       StockBalance[]
@@ -67,7 +69,6 @@ model Tenant {
   vendorMappings      VendorMapping[]
   incomingGetPasses   GetPass[]            @relation("GetPassTargetTenant")
   systemNotifications    SystemNotification[]
-  lostFoundItems         LostFoundItem[]
   urAssignmentProperties UrAssignmentProperty[]
   accWorkflowDefinitions AccWorkflowDefinition[]
   accFieldSecurityRules  AccFieldSecurityRule[]
@@ -134,7 +135,6 @@ model User {
   adminLogs                        SuperAdminLog[]      @relation("AdminLogUser")
   memberships                      TenantMember[]
   systemNotifications              SystemNotification[]
-  lostFoundItems                   LostFoundItem[]      @relation("LostFoundCreatedBy")
   urUserOverrides                  UrUserPermissionOverride[]
   urUserScopes                     UrUserScope[]
   urAssignments                    UrUserAssignment[]
@@ -557,6 +557,7 @@ model InventoryLedger {
   referenceType         String?
   referenceId           String?          @db.Uuid
   referenceNo           String?
+  postingEffectKey      String?
   postingDate           DateTime?
   assignedPostingPeriod String?
   requiresApproval      Boolean          @default(false)
@@ -580,7 +581,40 @@ model InventoryLedger {
   @@index([tenantId, locationId, itemId])
   @@index([tenantId, locationId, itemId, createdAt])
   @@index([tenantId, referenceId])
+  @@unique([tenantId, postingEffectKey])
   @@map("inventory_ledger")
+}
+
+model PostingExecution {
+  id           String          @id @default(uuid()) @db.Uuid
+  tenantId     String          @db.Uuid
+  executionKey String
+  sourceType   String
+  sourceId     String          @db.Uuid
+  status       String
+  startedAt    DateTime        @default(now())
+  completedAt  DateTime?
+  effects      PostingEffect[]
+
+  @@unique([tenantId, executionKey])
+  @@index([tenantId, sourceType, sourceId])
+  @@map("posting_executions")
+}
+
+model PostingEffect {
+  id           String           @id @default(uuid()) @db.Uuid
+  tenantId     String           @db.Uuid
+  executionId  String           @db.Uuid
+  effectKey    String
+  sourceLineId String           @db.Uuid
+  effectType   String
+  ledgerId     String?          @db.Uuid
+  execution    PostingExecution @relation(fields: [executionId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, effectKey])
+  @@index([executionId])
+  @@index([ledgerId])
+  @@map("posting_effects")
 }
 
 model StockBalance {
@@ -711,7 +745,11 @@ model ApprovalRequest {
   @@index([accWorkflowVersionId])
   @@index([grnImportId])
   @@index([getPassId])
-  @@unique([grnImportId, cycleNumber])
+  /// DB enforces partial unique index `approval_requests_grnImportId_cycleNumber_key`
+  /// on (grnImportId, cycleNumber) WHERE grnImportId IS NOT NULL
+  /// (migration 20260627190000_grn_cycle_number_unique). Not declared as @@unique:
+  /// Prisma 5.22 cannot express WHERE on @@unique; a full @@unique would wrongly
+  /// reject legitimate NULL grnImportId rows (Breakage/Lost/Transfer/Get Pass/etc.).
   @@map("approval_requests")
 }
 
@@ -787,6 +825,8 @@ model StockCountSession {
   approvalRequestId  String?           @unique @db.Uuid
   movementDocumentId String?           @db.Uuid
   postedAt           DateTime?
+  postingDate        DateTime?
+  assignedPostingPeriod String?
   snapshotAt         DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
   status             MovementStatus    @default(DRAFT)
@@ -807,6 +847,8 @@ model StockCountSession {
   @@index([status])
   @@index([tenantId, status, snapshotAt])
   @@index([tenantId, departmentId])
+  @@index([tenantId, postingDate])
+  @@index([tenantId, assignedPostingPeriod])
   @@map("stock_count_sessions")
 }
 
@@ -878,8 +920,10 @@ model PeriodClose {
   legacyAnnualPendingReview Boolean                 @default(false)
   createdAt                 DateTime                @default(now())
   updatedAt                 DateTime                @updatedAt
+  openingVerificationId     String?                 @unique @db.Uuid
   tenant                    Tenant                  @relation(fields: [tenantId], references: [id])
   snapshotVersions          PeriodSnapshotVersion[]
+  openingVerification       PeriodOpeningVerification? @relation("TargetPeriodOpeningVerification", fields: [openingVerificationId], references: [id], onDelete: Restrict)
 
   @@unique([tenantId, year, month])
   @@index([tenantId])
@@ -899,10 +943,74 @@ model PeriodSnapshotVersion {
   periodClose   PeriodClose           @relation(fields: [periodCloseId], references: [id], onDelete: Restrict)
   lines         PeriodSnapshotLine[]
   reports       GeneratedReport[]
+  openingVerifications PeriodOpeningVerification[]
 
   @@unique([periodCloseId, versionNumber])
   @@index([periodCloseId, status])
   @@map("period_snapshot_versions")
+}
+
+model PeriodOpeningVerification {
+  id                       String                              @id @default(uuid()) @db.Uuid
+  tenantId                 String                              @db.Uuid
+  targetYear               Int
+  targetMonth              Int
+  verificationType         PeriodOpeningVerificationType
+  status                   PeriodOpeningVerificationStatus
+  isCurrent                Boolean                             @default(true)
+  sourcePeriodCloseId      String?                             @db.Uuid
+  sourceSnapshotVersionId  String?                             @db.Uuid
+  algorithmVersion         String
+  quantityTolerance        Decimal                             @db.Decimal(15, 4)
+  wacTolerance             Decimal                             @db.Decimal(15, 4)
+  valueTolerance           Decimal                             @db.Decimal(15, 4)
+  snapshotHash             String?
+  ledgerHash               String?
+  openingStockHash         String?
+  evidenceHash             String
+  generatedBy              String?                             @db.Uuid
+  generatedAt              DateTime                            @default(now())
+  acceptedBy               String?                             @db.Uuid
+  acceptedAt               DateTime?
+  bootstrapReason          String?
+  bootstrapSource          String?
+  invalidatedAt            DateTime?
+  invalidationReason       String?
+  createdAt                DateTime                            @default(now())
+  tenant                   Tenant                              @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  sourceSnapshotVersion    PeriodSnapshotVersion?              @relation(fields: [sourceSnapshotVersionId], references: [id], onDelete: Restrict)
+  targetPeriod             PeriodClose?                        @relation("TargetPeriodOpeningVerification")
+  lines                    PeriodOpeningVerificationLine[]
+
+  @@index([tenantId, targetYear, targetMonth, isCurrent])
+  @@index([sourceSnapshotVersionId, status])
+  @@map("period_opening_verifications")
+}
+
+model PeriodOpeningVerificationLine {
+  id                    String                                  @id @default(uuid()) @db.Uuid
+  verificationId        String                                  @db.Uuid
+  itemId                 String?                                 @db.Uuid
+  locationId             String?                                 @db.Uuid
+  classification        PeriodOpeningContinuityClassification
+  snapshotQty           Decimal?                                @db.Decimal(15, 4)
+  snapshotWac           Decimal?                                @db.Decimal(15, 4)
+  snapshotValue         Decimal?                                @db.Decimal(15, 4)
+  ledgerQty             Decimal?                                @db.Decimal(15, 4)
+  ledgerWac             Decimal?                                @db.Decimal(15, 4)
+  ledgerValue           Decimal?                                @db.Decimal(15, 4)
+  openingQty            Decimal?                                @db.Decimal(15, 4)
+  openingWac            Decimal?                                @db.Decimal(15, 4)
+  openingValue          Decimal?                                @db.Decimal(15, 4)
+  quantityDelta         Decimal?                                @db.Decimal(15, 4)
+  wacDelta              Decimal?                                @db.Decimal(15, 4)
+  valueDelta            Decimal?                                @db.Decimal(15, 4)
+  issueCodes            Json?
+  verification          PeriodOpeningVerification               @relation(fields: [verificationId], references: [id], onDelete: Cascade)
+
+  @@index([verificationId, classification])
+  @@index([itemId, locationId])
+  @@map("period_opening_verification_lines")
 }
 
 model PeriodSnapshotLine {
@@ -940,14 +1048,14 @@ model AuditLog {
   entityType    String
   entityId      String
   action        AuditAction
-  changedBy     String      @db.Uuid
+  changedBy     String?     @db.Uuid
   changedAt     DateTime    @default(now())
   beforeValue   Json?
   afterValue    Json?
   ipAddress     String?
   userAgent     String?
   note          String?
-  changedByUser User        @relation(fields: [changedBy], references: [id])
+  changedByUser User?       @relation(fields: [changedBy], references: [id], onDelete: Restrict)
   tenant        Tenant      @relation(fields: [tenantId], references: [id])
 
   @@index([tenantId, entityType, entityId])
@@ -988,6 +1096,7 @@ model GrnImport {
   lastEditedBy           String?   @db.Uuid
   importedBy             String    @db.Uuid
   approvedBy             String?   @db.Uuid
+  approvedAt             DateTime?
   rejectedBy             String?   @db.Uuid
   postedBy               String?   @db.Uuid
   postedAt               DateTime?
@@ -1010,6 +1119,7 @@ model GrnImport {
 
   @@unique([tenantId, grnNumber])
   @@index([tenantId, status])
+  @@index([tenantId, status, receivingDate])
   @@index([tenantId, vendorId])
   @@index([tenantId, locationId])
   @@index([accWorkflowVersionId])
@@ -1438,26 +1548,6 @@ model SystemNotification {
   @@map("system_notifications")
 }
 
-model LostFoundItem {
-  id              String          @id @default(uuid()) @db.Uuid
-  itemName        String
-  description     String?         @db.Text
-  status          LostFoundStatus @default(FOUND)
-  photoKey        String?
-  handedOverTo    String?
-  handedOverDate  DateTime?
-  tenantId        String          @db.Uuid
-  createdBy       String          @db.Uuid
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  tenant          Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
-  createdByUser   User            @relation("LostFoundCreatedBy", fields: [createdBy], references: [id], onDelete: Restrict)
-
-  @@index([tenantId, status, createdAt])
-  @@index([tenantId, createdAt])
-  @@map("lost_found_items")
-}
-
 model GetPassLine {
   id                          String            @id @default(uuid()) @db.Uuid
   getPassId                   String            @db.Uuid
@@ -1528,6 +1618,8 @@ model SavedStockReport {
   createdBy         String                 @db.Uuid
   approvalRequestId String?                @unique @db.Uuid
   postedAt          DateTime?
+  postingDate       DateTime?
+  assignedPostingPeriod String?
   createdAt         DateTime               @default(now())
   updatedAt         DateTime               @updatedAt
   lines             SavedStockReportLine[]
@@ -1540,6 +1632,8 @@ model SavedStockReport {
   @@index([tenantId])
   @@index([tenantId, status])
   @@index([tenantId, locationId])
+  @@index([tenantId, postingDate])
+  @@index([tenantId, assignedPostingPeriod])
   @@map("saved_stock_reports")
 }
 
@@ -1839,6 +1933,31 @@ enum SnapshotVersionStatus {
   SUPERSEDED
 }
 
+enum PeriodOpeningVerificationType {
+  CONTINUITY
+  BOOTSTRAP
+}
+
+enum PeriodOpeningVerificationStatus {
+  PASS
+  FAIL
+  INDETERMINATE
+  INVALIDATED
+}
+
+enum PeriodOpeningContinuityClassification {
+  MATCH
+  QTY_MISMATCH
+  WAC_MISMATCH
+  VALUE_MISMATCH
+  MULTI_MISMATCH
+  MISSING_SNAPSHOT_CELL
+  MISSING_OPENING_CELL
+  IRRECONSTRUCTIBLE
+  MULTIPLE_CURRENT_SNAPSHOTS
+  ACTIVITY_ALREADY_STARTED
+}
+
 enum ReportVersionStatus {
   CURRENT
   SUPERSEDED
@@ -1857,6 +1976,8 @@ enum AuditAction {
   LOGOUT
   SUBMIT
   CLOSE_PERIOD
+  START_CLOSE
+  CANCEL_CLOSE
   REOPEN_PERIOD
   LOCK_OB
   FINALIZE_OB
@@ -1874,11 +1995,6 @@ enum ReportType {
   OMC
   TRANSFERS
   AGING
-}
-
-enum LostFoundStatus {
-  FOUND
-  RETURNED
 }
 
 // ─── User Rights Foundation (Phase 1 — Silent, Additive Only) ────────────────

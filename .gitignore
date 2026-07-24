@@ -5,6 +5,8 @@ node_modules/
 .env
 .env.*
 !.env.example
+!.env.staging.example
+!.env.test.example
 
 # Runtime / generated storage
 logs/
@@ -20,3 +22,13 @@ coverage/
 .DS_Store
 .idea/
 .vscode/
+
+# Local working artifacts
+backups/
+tmp/
+*.dump
+inventory_backup.sql
+
+
+test-results/
+

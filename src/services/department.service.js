@@ -1,4 +1,12 @@
 const prisma = require('../config/database');
+const {
+    isScopeEngineEnabled,
+    resolveUserScope,
+    departmentLookupScopeWhere,
+    mergeScopeIntoWhere,
+    assertDepartmentInScope,
+    parseMasterDataTenantWideQuery,
+} = require('./scope/scope.service');
 
 const createDepartment = async (data, tenantId) => {
     const [dupName, dupCode] = await Promise.all([
@@ -16,6 +24,8 @@ const createDepartment = async (data, tenantId) => {
 
 const MAX_DEPARTMENT_PAGE = 500;
 
+const parseBoolQuery = (value) => value === true || value === 'true';
+
 const parseDepartmentPagination = (querySkip, queryTake, defaultTake = 50) => {
     let skip = parseInt(querySkip, 10);
     if (!Number.isFinite(skip) || skip < 0) skip = 0;
@@ -25,17 +35,17 @@ const parseDepartmentPagination = (querySkip, queryTake, defaultTake = 50) => {
     return { skip, take };
 };
 
-const getDepartments = async (tenantId, query = {}) => {
+const getDepartments = async (tenantId, query = {}, user = null) => {
     const { search, isActive, includeInactive, slim } = query;
     const { skip, take } = parseDepartmentPagination(query.skip, query.take, 50);
 
     const hasExplicitIsActive = Object.prototype.hasOwnProperty.call(query, 'isActive');
     const includeAllInactive = includeInactive === 'true' || includeInactive === true;
 
-    const where = {
+    let where = {
         tenantId,
         ...(!hasExplicitIsActive && !includeAllInactive ? { isActive: true } : {}),
-        ...(hasExplicitIsActive ? { isActive: isActive === 'true' } : {}),
+        ...(hasExplicitIsActive ? { isActive: parseBoolQuery(isActive) } : {}),
         ...(search && {
             OR: [
                 { name: { contains: search, mode: 'insensitive' } },
@@ -43,6 +53,11 @@ const getDepartments = async (tenantId, query = {}) => {
             ]
         }),
     };
+
+    if (user && isScopeEngineEnabled() && !parseMasterDataTenantWideQuery(query)) {
+        const scope = await resolveUserScope(user, tenantId);
+        where = mergeScopeIntoWhere(where, departmentLookupScopeWhere(scope));
+    }
 
     const slimMode = slim === 'true' || slim === true;
     const include = slimMode
@@ -65,7 +80,11 @@ const getDepartments = async (tenantId, query = {}) => {
     return { departments, total, skip, take };
 };
 
-const getDepartmentById = async (id, tenantId) => {
+const getDepartmentById = async (id, tenantId, user = null) => {
+    if (user && isScopeEngineEnabled()) {
+        const scope = await resolveUserScope(user, tenantId);
+        await assertDepartmentInScope(id, tenantId, scope, 'read');
+    }
     const dept = await prisma.department.findFirst({
         where: { id, tenantId },
         include: {

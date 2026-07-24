@@ -10,7 +10,7 @@ const createDepartment = async (req, res, next) => {
 
 const getDepartments = async (req, res, next) => {
     try {
-        const result = await departmentService.getDepartments(req.user.tenantId, req.query);
+        const result = await departmentService.getDepartments(req.user.tenantId, req.query, req.user);
         return success(res, result.departments, 'Departments fetched successfully', 200, {
             total: result.total,
             skip: result.skip,
@@ -21,7 +21,7 @@ const getDepartments = async (req, res, next) => {
 
 const getDepartment = async (req, res, next) => {
     try {
-        const dept = await departmentService.getDepartmentById(req.params.id, req.user.tenantId);
+        const dept = await departmentService.getDepartmentById(req.params.id, req.user.tenantId, req.user);
         return success(res, dept);
     } catch (err) { next(err); }
 };

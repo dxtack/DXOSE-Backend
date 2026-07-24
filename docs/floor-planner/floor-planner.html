@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX OSE Floor Planner</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: #f5f5f5;
+        }
+
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        #three-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .control-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            min-width: 280px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .control-panel h2 {
+            margin-bottom: 15px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px 5px 5px 0;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #45a049;
+        }
+
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        button.secondary {
+            background: #2196F3;
+        }
+
+        button.secondary:hover {
+            background: #0b7dda;
+        }
+
+        button.danger {
+            background: #f44336;
+        }
+
+        button.danger:hover {
+            background: #da190b;
+        }
+
+        .info-panel {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .info-panel div {
+            margin: 5px 0;
+        }
+
+        .info-panel strong {
+            color: #333;
+        }
+
+        .status-log {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 100;
+            width: 300px;
+            max-height: 400px;
+            overflow-y: auto;
+            font-size: 12px;
+        }
+
+        .status-log h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .log-entry {
+            padding: 5px;
+            margin: 3px 0;
+            border-left: 3px solid #4CAF50;
+            padding-left: 8px;
+            background: #f9f9f9;
+        }
+
+        .log-entry.warning {
+            border-left-color: #ff9800;
+        }
+
+        .log-entry.error {
+            border-left-color: #f44336;
+        }
+
+        .log-entry.info {
+            border-left-color: #2196F3;
+        }
+
+        .mode-indicator {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .mode-indicator.drawing {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .mode-indicator.viewing {
+            background: #2196F3;
+            color: white;
+        }
+
+        .mode-indicator.placement {
+            background: #ff9800;
+            color: white;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .coordinate-display {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 100;
+        }
+
+        .snap-indicator {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid #ff4444;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 50;
+            display: none;
+            transform: translate(-50%, -50%);
+        }
+
+        .length-segment-panel {
+            margin-top: 8px;
+            padding: 10px;
+            background: #f0f7ff;
+            border-radius: 6px;
+            border: 1px solid #b3d9ff;
+            display: none;
+        }
+
+        .length-segment-panel.active {
+            display: block;
+        }
+
+        .length-segment-panel input {
+            width: 100%;
+            margin-top: 4px;
+        }
+
+        .placement-hint {
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+            display: none;
+        }
+
+        .placement-hint.active {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="canvas-container">
+        <canvas id="three-canvas"></canvas>
+        <div id="snapIndicator" class="snap-indicator"></div>
+
+        <div class="control-panel">
+            <h2>Floor Planner Controls</h2>
+            <div id="modeIndicator" class="mode-indicator viewing">VIEW MODE</div>
+
+            <div class="control-group">
+                <label>Drawing Mode</label>
+                <button id="toggleDrawing">Start Drawing</button>
+                <button id="clearLastPoint" class="secondary">Clear Last Point</button>
+                <button id="closePolygon" class="secondary">Close Polygon</button>
+                <button id="cancelDrawing" class="danger">Cancel Drawing</button>
+            </div>
+
+            <div id="lengthSegmentPanel" class="length-segment-panel">
+                <label for="lengthMmInput">Wall length (mm)</label>
+                <input type="number" id="lengthMmInput" min="50" max="200000" step="50" value="3000">
+                <p style="font-size:11px;color:#555;margin-top:6px;">Drag on floor, use ← → arrows, Enter to confirm,
+                    Esc to cancel.</p>
+            </div>
+
+            <div class="control-group">
+                <label>Grid Settings</label>
+                <button id="toggleGrid">Toggle Grid</button>
+                <button id="toggleSnap">Toggle Snap</button>
+                <select id="gridSizeSelect">
+                    <option value="100">100 mm</option>
+                    <option value="500">500 mm</option>
+                    <option value="1000">1000 mm</option>
+                </select>
+            </div>
+
+            <div class="control-group">
+                <label>Length step (keyboard nudge, mm)</label>
+                <input type="number" id="lengthStepMm" min="1" max="10000" step="1" value="50">
+            </div>
+
+            <div class="control-group">
+                <label>Quick Actions</label>
+                <button id="createBoxRoom" class="secondary">Create Box Room</button>
+            </div>
+
+            <div id="placementHint" class="placement-hint">
+                Click floor to position asset. Confirm or cancel below.
+                <div style="margin-top:8px;">
+                    <button id="confirmPlacement" class="secondary">Confirm placement</button>
+                    <button id="cancelPlacement" class="danger">Cancel</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label>Camera</label>
+                <button id="zoomIn">Zoom In</button>
+                <button id="zoomOut">Zoom Out</button>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div><strong>Points:</strong> <span id="pointCount">0</span></div>
+            <div><strong>Grid:</strong> <span id="gridStatus">Visible</span></div>
+            <div><strong>Snap:</strong> <span id="snapStatus">Enabled</span></div>
+            <div><strong>Zoom:</strong> <span id="zoomLevel">50</span> px/m</div>
+            <div><strong>Instructions:</strong></div>
+            <div style="font-size: 11px; margin-top: 5px;">
+                • Click "Start Drawing" to begin<br>
+                • First segment: drag length on floor<br>
+                • Next points: click corners; right-click closes<br>
+                • G = Toggle Grid, S = Toggle Snap<br>
+                • +/- = Zoom
+            </div>
+        </div>
+
+        <div class="status-log">
+            <h3>Status Log</h3>
+            <div id="statusLog"></div>
+        </div>
+
+        <div class="coordinate-display">
+            <div>X: <span id="xValue">0</span></div>
+            <div>Y: <span id="yValue">0</span></div>
+            <div id="worldCoords">0 mm, 0 mm</div>
+            <div id="snapInfo">Snap: ON</div>
+        </div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+
+        (function () {
+            const floorPlannerConfig = window.__FLOOR_PLANNER_CONFIG__ || {};
+            const GRID_HALF_EXTENT_MM = floorPlannerConfig.gridHalfExtentMm ?? 25000;
+            const MAX_DRAWING_POINTS = floorPlannerConfig.maxDrawingPoints ?? 64;
+            const LENGTH_DRAG_MIN_MM = 50;
+            const LENGTH_DRAG_MAX_MM = 200000;
+            const SNAP_VERTEX_RADIUS_MM = floorPlannerConfig.snapVertexRadiusMm ?? 200;
+            const WALL_HEIGHT_MM = floorPlannerConfig.wallHeightMm ?? 2700;
+            const WALL_THICKNESS_MM = floorPlannerConfig.wallThicknessMm ?? 150;
+
+            let scene, camera, renderer;
+            let gridGroup, walls, previewLine, pointMarkers, snapIndicator3D;
+            let pendingAssetGroup;
+            let raycaster, mouse;
+            let animationId;
+
+            let gridVisible = true;
+            let snapEnabled = true;
+            let orthoGuideActive = true;
+            const snapGridSize = { x: 50, y: 50 };
+            let currentZoom = 50;
+            let lastWorldPos = { x: 0, y: 0 };
+            let lastMouseWorldX = 0;
+            let lastMouseWorldZ = 0;
+
+            const drawingPoints = [];
+            let isDrawingMode = false;
+            let placementMode = false;
+            let pendingAsset = null;
+            let pendingPlacement = null;
+
+            const lengthSegmentDrag = {
+                active: false,
+                start: null,
+                end: null,
+                lengthMm: 3000,
+                previewLine: null,
+            };
+
+            const canvas = document.getElementById('three-canvas');
+            const snapIndicator = document.getElementById('snapIndicator');
+            const lengthSegmentPanel = document.getElementById('lengthSegmentPanel');
+            const lengthMmInput = document.getElementById('lengthMmInput');
+            const placementHint = document.getElementById('placementHint');
+
+            function addLog(type, message) {
+                const log = document.getElementById('statusLog');
+                if (!log) return;
+                const entry = document.createElement('div');
+                entry.className = 'log-entry' + (type === 'warning' || type === 'error' || type === 'info' ? ' ' + type : '');
+                const prefix = type === 'system' ? '⚙ ' : type === 'success' ? '✓ ' : type === 'warning' ? '⚠ ' : type === 'error' ? '✗ ' : '• ';
+                entry.textContent = prefix + message;
+                log.insertBefore(entry, log.firstChild);
+                while (log.children.length > 40) log.removeChild(log.lastChild);
+            }
+
+            function postFloorPlannerMessage(payload) {
+                try {
+                    if (window.parent && window.parent !== window) {
+                        window.parent.postMessage({ source: 'dx-ose-floor-planner', ...payload }, '*');
+                    }
+                } catch (_) { /* cross-origin */ }
+            }
+
+            function worldToUserMm(worldX, worldZ) {
+                return { x: worldX, y: worldZ };
+            }
+
+            function userMmToWorld(displayX, displayY) {
+                return new THREE.Vector3(displayX, 0, displayY);
+            }
+
+            function getCurrentSnapRadius() {
+                const sx = snapGridSize.x > 0 ? snapGridSize.x : 50;
+                const sy = snapGridSize.y > 0 ? snapGridSize.y : 50;
+                return { x: sx, y: sy };
+            }
+
+            function getSnapRadiusMm() {
+                return SNAP_VERTEX_RADIUS_MM;
+            }
+
+            function snapPointToDisplayGrid(worldPoint) {
+                const sx = snapGridSize.x > 0 ? snapGridSize.x : 50;
+                const sy = snapGridSize.y > 0 ? snapGridSize.y : 50;
+                const display = worldToUserMm(worldPoint.x, worldPoint.z);
+                const snappedX = sx > 0 ? Math.round(display.x / sx) * sx : display.x;
+                const snappedY = sy > 0 ? Math.round(display.y / sy) * sy : display.y;
+                return userMmToWorld(snappedX, snappedY);
+            }
+
+            function isPointWithinGrid(point) {
+                if (!point) return false;
+                const lim = GRID_HALF_EXTENT_MM;
+                return Math.abs(point.x) <= lim && Math.abs(point.z) <= lim;
+            }
+
+            function hideSnapIndicatorOverlay() {
+                snapIndicator.style.display = 'none';
+            }
+
+            function syncSnapIndicatorPosition() {
+                if (!snapIndicator3D || !snapIndicator3D.visible || !camera) {
+                    hideSnapIndicatorOverlay();
+                    return;
+                }
+                const pos = snapIndicator3D.position.clone();
+                pos.project(camera);
+                const rect = canvas.getBoundingClientRect();
+                const x = (pos.x * 0.5 + 0.5) * rect.width + rect.left;
+                const y = (-pos.y * 0.5 + 0.5) * rect.height + rect.top;
+                if (pos.z > 1) {
+                    hideSnapIndicatorOverlay();
+                    return;
+                }
+                snapIndicator.style.left = x + 'px';
+                snapIndicator.style.top = y + 'px';
+                snapIndicator.style.display = 'block';
+            }
+
+            function updateSnapSettings() {
+                document.getElementById('snapStatus').textContent = snapEnabled ? 'Enabled' : 'Disabled';
+                document.getElementById('snapInfo').textContent =
+                    `Snap: ${snapEnabled ? 'ON' : 'OFF'} | Grid: ${snapGridSize.x}×${snapGridSize.y} mm`;
+            }
+
+            function updatePointCount() {
+                document.getElementById('pointCount').textContent = String(drawingPoints.length);
+            }
+
+            function updateModeIndicator() {
+                const el = document.getElementById('modeIndicator');
+                if (placementMode) {
+                    el.textContent = 'PLACEMENT MODE';
+                    el.className = 'mode-indicator placement';
+                } else if (isDrawingMode) {
+                    el.textContent = 'DRAWING MODE';
+                    el.className = 'mode-indicator drawing';
+                } else {
+                    el.textContent = 'VIEW MODE';
+                    el.className = 'mode-indicator viewing';
+                }
+            }
+
+            function createGrid() {
+                if (gridGroup) {
+                    scene.remove(gridGroup);
+                    gridGroup.traverse((obj) => {
+                        if (obj.geometry) obj.geometry.dispose();
+                        if (obj.material) obj.material.dispose();
+                    });
+                }
+                gridGroup = new THREE.Group();
+                gridGroup.name = 'grid';
+
+                const step = snapGridSize.x > 0 ? snapGridSize.x : 50;
+                const extent = GRID_HALF_EXTENT_MM;
+                const majorEvery = Math.max(1, Math.round(1000 / step));
+
+                const minorMat = new THREE.LineBasicMaterial({ color: 0xdddddd, transparent: true, opacity: 0.35 });
+                const majorMat = new THREE.LineBasicMaterial({ color: 0xaaaaaa, transparent: true, opacity: 0.55 });
+
+                for (let i = -extent; i <= extent; i += step) {
+                    const isMajor = Math.round(i / step) % majorEvery === 0;
+                    const mat = isMajor ? majorMat : minorMat;
+
+                    const geoX = new THREE.BufferGeometry().setFromPoints([
+                        new THREE.Vector3(i, 0, -extent),
+                        new THREE.Vector3(i, 0, extent),
+                    ]);
+                    gridGroup.add(new THREE.Line(geoX, mat));
+
+                    const geoZ = new THREE.BufferGeometry().setFromPoints([
+                        new THREE.Vector3(-extent, 0, i),
+                        new THREE.Vector3(extent, 0, i),
+                    ]);
+                    gridGroup.add(new THREE.Line(geoZ, mat));
+                }
+
+                scene.add(gridGroup);
+                gridGroup.visible = gridVisible;
+            }
+
+            function rebuildPointMarkers() {
+                while (pointMarkers.children.length) {
+                    const c = pointMarkers.children[0];
+                    pointMarkers.remove(c);
+                    if (c.geometry) c.geometry.dispose();
+                    if (c.material) c.material.dispose();
+                }
+                const geo = new THREE.SphereGeometry(Math.max(40, WALL_THICKNESS_MM * 0.35), 12, 12);
+                const mat = new THREE.MeshBasicMaterial({ color: 0x2196f3 });
+                drawingPoints.forEach((p) => {
+                    const m = new THREE.Mesh(geo, mat);
+                    m.position.set(p.x, 20, p.z);
+                    pointMarkers.add(m);
+                });
+            }
+
+            function clearPreviewLine() {
+                if (previewLine) {
+                    scene.remove(previewLine);
+                    previewLine.geometry.dispose();
+                    previewLine.material.dispose();
+                    previewLine = null;
+                }
+            }
+
+            function updatePreviewLine(from, to) {
+                clearPreviewLine();
+                if (!from || !to) return;
+                const geo = new THREE.BufferGeometry().setFromPoints([
+                    new THREE.Vector3(from.x, 5, from.z),
+                    new THREE.Vector3(to.x, 5, to.z),
+                ]);
+                previewLine = new THREE.Line(geo, new THREE.LineBasicMaterial({ color: 0xff9800, linewidth: 2 }));
+                scene.add(previewLine);
+            }
+
+            function clearWalls() {
+                while (walls.children.length) {
+                    const w = walls.children[0];
+                    walls.remove(w);
+                    if (w.geometry) w.geometry.dispose();
+                    if (w.material) w.material.dispose();
+                }
+            }
+
+            function buildWallMesh(x1, z1, x2, z2) {
+                const dx = x2 - x1;
+                const dz = z2 - z1;
+                const len = Math.hypot(dx, dz);
+                if (len < 1) return null;
+
+                const geo = new THREE.BoxGeometry(len, WALL_HEIGHT_MM, WALL_THICKNESS_MM);
+                const mat = new THREE.MeshLambertMaterial({ color: 0x9e9e9e });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set((x1 + x2) / 2, WALL_HEIGHT_MM / 2, (z1 + z2) / 2);
+                mesh.rotation.y = -Math.atan2(dz, dx);
+                mesh.userData.type = 'wall';
+                mesh.userData.vertices = [
+                    new THREE.Vector3(x1, 0, z1),
+                    new THREE.Vector3(x2, 0, z2),
+                ];
+                mesh.castShadow = true;
+                mesh.receiveShadow = true;
+                return mesh;
+            }
+
+            function rebuildWallsFromPoints(closed) {
+                clearWalls();
+                if (drawingPoints.length < 2) return;
+                const limit = closed ? drawingPoints.length : drawingPoints.length - 1;
+                for (let i = 0; i < limit; i++) {
+                    const a = drawingPoints[i];
+                    const b = drawingPoints[(i + 1) % drawingPoints.length];
+                    const wall = buildWallMesh(a.x, a.z, b.x, b.z);
+                    if (wall) walls.add(wall);
+                }
+            }
+
+            function setDrawingButtons() {
+                document.getElementById('toggleDrawing').textContent = isDrawingMode ? 'Stop Drawing' : 'Start Drawing';
+                document.getElementById('clearLastPoint').disabled = !isDrawingMode || drawingPoints.length === 0;
+                document.getElementById('closePolygon').disabled = !isDrawingMode || drawingPoints.length < 3;
+                document.getElementById('cancelDrawing').disabled = !isDrawingMode && drawingPoints.length === 0;
+            }
+
+            function toggleDrawing() {
+                if (placementMode) cancelPendingPlacement();
+                isDrawingMode = !isDrawingMode;
+                if (!isDrawingMode) {
+                    clearPreviewLine();
+                    cancelLengthSegmentDrag();
+                }
+                updateModeIndicator();
+                setDrawingButtons();
+                addLog('info', isDrawingMode ? 'Drawing mode enabled' : 'Drawing mode disabled');
+            }
+
+            function clearLastPoint() {
+                if (!drawingPoints.length) return;
+                drawingPoints.pop();
+                rebuildPointMarkers();
+                rebuildWallsFromPoints(false);
+                updatePointCount();
+                setDrawingButtons();
+                addLog('info', 'Removed last point');
+            }
+
+            function cancelDrawing() {
+                cancelLengthSegmentDrag();
+                drawingPoints.length = 0;
+                clearPreviewLine();
+                clearWalls();
+                rebuildPointMarkers();
+                updatePointCount();
+                isDrawingMode = false;
+                updateModeIndicator();
+                setDrawingButtons();
+                addLog('warning', 'Drawing cancelled');
+            }
+
+            function finishDrawing() {
+                if (drawingPoints.length < 3) {
+                    addLog('warning', 'Need at least 3 points to close polygon');
+                    return;
+                }
+                cancelLengthSegmentDrag();
+                clearPreviewLine();
+                rebuildWallsFromPoints(true);
+                isDrawingMode = false;
+                updateModeIndicator();
+                setDrawingButtons();
+                const payload = {
+                    points: drawingPoints.map((p) => ({ x: p.x, y: p.z })),
+                    closed: true,
+                };
+                addLog('success', `Polygon closed with ${drawingPoints.length} points`);
+                postFloorPlannerMessage({ type: 'FLOOR_PLAN_CLOSED', payload });
+            }
+
+            function finalizeLengthSegment(from, to) {
+                if (!from || !to) return;
+                if (Math.hypot(to.x - from.x, to.z - from.z) < LENGTH_DRAG_MIN_MM) {
+                    addLog('warning', 'Segment too short');
+                    return;
+                }
+                drawingPoints.push(to.clone());
+                rebuildPointMarkers();
+                rebuildWallsFromPoints(false);
+                updatePointCount();
+                setDrawingButtons();
+                clearPreviewLine();
+                addLog('info', `Added point (${Math.round(to.x)}, ${Math.round(to.z)}) mm`);
+            }
+
+            function showLengthPanel(show) {
+                lengthSegmentPanel.classList.toggle('active', show);
+            }
+
+            function startLengthSegmentDrag(startPoint) {
+                lengthSegmentDrag.active = true;
+                lengthSegmentDrag.start = startPoint.clone();
+                lengthSegmentDrag.lengthMm = parseInt(lengthMmInput.value, 10) || 3000;
+                showLengthPanel(true);
+                updateLengthSegmentPreviewFromMm();
+                addLog('info', 'Drag first wall length (Enter to confirm)');
+            }
+
+            function cancelLengthSegmentDrag() {
+                if (lengthSegmentDrag.previewLine) {
+                    scene.remove(lengthSegmentDrag.previewLine);
+                    lengthSegmentDrag.previewLine.geometry.dispose();
+                    lengthSegmentDrag.previewLine.material.dispose();
+                    lengthSegmentDrag.previewLine = null;
+                }
+                lengthSegmentDrag.active = false;
+                lengthSegmentDrag.start = null;
+                lengthSegmentDrag.end = null;
+                showLengthPanel(false);
+                clearPreviewLine();
+            }
+
+            function computeEndFromLength(start, lengthMm, angleRad) {
+                return new THREE.Vector3(
+                    start.x + Math.cos(angleRad) * lengthMm,
+                    0,
+                    start.z + Math.sin(angleRad) * lengthMm,
+                );
+            }
+
+            function updateLengthSegmentPreview(endPoint) {
+                if (!lengthSegmentDrag.active || !lengthSegmentDrag.start) return;
+                let end = endPoint.clone();
+                if (orthoGuideActive) {
+                    const dx = Math.abs(end.x - lengthSegmentDrag.start.x);
+                    const dz = Math.abs(end.z - lengthSegmentDrag.start.z);
+                    if (dx >= dz) end.z = lengthSegmentDrag.start.z;
+                    else end.x = lengthSegmentDrag.start.x;
+                }
+                end = snapPoint(end, null);
+                lengthSegmentDrag.end = end;
+                lengthSegmentDrag.lengthMm = Math.hypot(
+                    end.x - lengthSegmentDrag.start.x,
+                    end.z - lengthSegmentDrag.start.z,
+                );
+                lengthSegmentDrag.lengthMm = Math.max(
+                    LENGTH_DRAG_MIN_MM,
+                    Math.min(LENGTH_DRAG_MAX_MM, lengthSegmentDrag.lengthMm),
+                );
+                lengthMmInput.value = String(Math.round(lengthSegmentDrag.lengthMm));
+                updatePreviewLine(lengthSegmentDrag.start, end);
+            }
+
+            function updateLengthSegmentPreviewFromMm() {
+                if (!lengthSegmentDrag.active || !lengthSegmentDrag.start) return;
+                let angleRad = Math.atan2(
+                    lastMouseWorldZ - lengthSegmentDrag.start.z,
+                    lastMouseWorldX - lengthSegmentDrag.start.x,
+                );
+                if (orthoGuideActive) {
+                    const adx = Math.abs(lastMouseWorldX - lengthSegmentDrag.start.x);
+                    const adz = Math.abs(lastMouseWorldZ - lengthSegmentDrag.start.z);
+                    if (adx >= adz) angleRad = lastMouseWorldX >= lengthSegmentDrag.start.x ? 0 : Math.PI;
+                    else angleRad = lastMouseWorldZ >= lengthSegmentDrag.start.z ? Math.PI / 2 : -Math.PI / 2;
+                }
+                const len = Math.max(
+                    LENGTH_DRAG_MIN_MM,
+                    Math.min(LENGTH_DRAG_MAX_MM, lengthSegmentDrag.lengthMm),
+                );
+                let end = computeEndFromLength(lengthSegmentDrag.start, len, angleRad);
+                end = snapPoint(end, null);
+                lengthSegmentDrag.end = end;
+                lengthSegmentDrag.lengthMm = Math.hypot(
+                    end.x - lengthSegmentDrag.start.x,
+                    end.z - lengthSegmentDrag.start.z,
+                );
+                lengthMmInput.value = String(Math.round(lengthSegmentDrag.lengthMm));
+                updatePreviewLine(lengthSegmentDrag.start, end);
+            }
+
+            function finishLengthSegmentDrag(event) {
+                if (!lengthSegmentDrag.active || !lengthSegmentDrag.start) {
+                    cancelLengthSegmentDrag();
+                    return;
+                }
+                let end = lengthSegmentDrag.end;
+                if (event && event.clientX != null) {
+                    const wp = getMouseWorldPosition(event);
+                    if (wp) updateLengthSegmentPreview(snapPoint(wp, null));
+                    end = lengthSegmentDrag.end;
+                }
+                if (!end) {
+                    updateLengthSegmentPreviewFromMm();
+                    end = lengthSegmentDrag.end;
+                }
+                if (!end || !isPointWithinGrid(end)) {
+                    addLog('warning', 'Invalid segment end');
+                    return;
+                }
+                drawingPoints.push(lengthSegmentDrag.start.clone());
+                drawingPoints.push(end.clone());
+                rebuildPointMarkers();
+                rebuildWallsFromPoints(false);
+                updatePointCount();
+                setDrawingButtons();
+                addLog('success', `First wall: ${Math.round(lengthSegmentDrag.lengthMm)} mm`);
+                cancelLengthSegmentDrag();
+            }
+
+            function toggleGrid() {
+                gridVisible = !gridVisible;
+                if (gridGroup) gridGroup.visible = gridVisible;
+                document.getElementById('gridStatus').textContent = gridVisible ? 'Visible' : 'Hidden';
+                addLog('info', `Grid ${gridVisible ? 'shown' : 'hidden'}`);
+            }
+
+            function toggleSnap() {
+                snapEnabled = !snapEnabled;
+                updateSnapSettings();
+                if (!snapEnabled) {
+                    snapIndicator3D.visible = false;
+                    hideSnapIndicatorOverlay();
+                }
+                addLog('info', `Snap ${snapEnabled ? 'enabled' : 'disabled'}`);
+            }
+
+            function createBoxRoom() {
+                if (placementMode) cancelPendingPlacement();
+                const w = 4000;
+                const d = 3000;
+                cancelDrawing();
+                isDrawingMode = true;
+                updateModeIndicator();
+                drawingPoints.push(
+                    new THREE.Vector3(-w / 2, 0, -d / 2),
+                    new THREE.Vector3(w / 2, 0, -d / 2),
+                    new THREE.Vector3(w / 2, 0, d / 2),
+                    new THREE.Vector3(-w / 2, 0, d / 2),
+                );
+                rebuildPointMarkers();
+                rebuildWallsFromPoints(true);
+                updatePointCount();
+                setDrawingButtons();
+                addLog('success', `Box room ${w}×${d} mm created`);
+                postFloorPlannerMessage({
+                    type: 'FLOOR_PLAN_BOX_ROOM',
+                    payload: { widthMm: w, depthMm: d, points: drawingPoints.map((p) => ({ x: p.x, y: p.z })) },
+                });
+            }
+
+            function clearPendingAssetGroup() {
+                if (pendingAssetGroup) {
+                    scene.remove(pendingAssetGroup);
+                    pendingAssetGroup.traverse((c) => {
+                        if (c.geometry) c.geometry.dispose();
+                        if (c.material) c.material.dispose();
+                    });
+                    pendingAssetGroup = null;
+                }
+            }
+
+            function buildPlaceholderAssetMesh(asset) {
+                const group = new THREE.Group();
+                const w = asset?.widthMm ?? 600;
+                const d = asset?.depthMm ?? 600;
+                const h = asset?.heightMm ?? 800;
+                const geo = new THREE.BoxGeometry(w, h, d);
+                const mat = new THREE.MeshLambertMaterial({
+                    color: asset?.color ?? 0x4caf50,
+                    transparent: true,
+                    opacity: 0.85,
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.y = h / 2;
+                group.add(mesh);
+                return group;
+            }
+
+            function beginAssetPlacement(asset) {
+                if (isDrawingMode) toggleDrawing();
+                pendingAsset = asset || { label: 'Asset', widthMm: 600, depthMm: 600, heightMm: 800 };
+                placementMode = true;
+                pendingPlacement = null;
+                clearPendingAssetGroup();
+                pendingAssetGroup = buildPlaceholderAssetMesh(pendingAsset);
+                scene.add(pendingAssetGroup);
+                placementHint.classList.add('active');
+                updateModeIndicator();
+                addLog('info', `Placing: ${pendingAsset.label || 'asset'}`);
+            }
+
+            function placeAssetAt(x, z) {
+                if (!pendingAssetGroup) return;
+                pendingAssetGroup.position.set(x, 0, z);
+                pendingPlacement = { x, z, asset: pendingAsset };
+            }
+
+            function confirmPendingPlacement() {
+                if (!pendingPlacement) {
+                    addLog('warning', 'Click the floor to position the asset first');
+                    return;
+                }
+                postFloorPlannerMessage({ type: 'ASSET_PLACED', payload: pendingPlacement });
+                addLog('success', 'Asset placement confirmed');
+                cancelPendingPlacement();
+            }
+
+            function cancelPendingPlacement() {
+                placementMode = false;
+                pendingAsset = null;
+                pendingPlacement = null;
+                clearPendingAssetGroup();
+                placementHint.classList.remove('active');
+                updateModeIndicator();
+            }
+
+            function setupCamera() {
+                camera.position.set(0, 30000, 0);
+                camera.lookAt(0, 0, 0);
+                camera.up.set(0, 0, -1);
+            }
+
+            function updateCameraZoom() {
+                const height = Math.max(8000, 1200000 / Math.max(10, currentZoom));
+                camera.position.y = height;
+                camera.lookAt(0, 0, 0);
+                document.getElementById('zoomLevel').textContent = String(Math.round(currentZoom));
+            }
+
+            function zoomCamera(delta) {
+                currentZoom = Math.max(10, Math.min(200, currentZoom - delta / 2000));
+                updateCameraZoom();
+                addLog('info', `Zoom: ${Math.round(currentZoom)} px/m`);
+            }
+
+            function getMouseWorldPosition(event) {
+                if (!raycaster || !camera) return null;
+                const rect = canvas.getBoundingClientRect();
+                mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+                mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+                raycaster.setFromCamera(mouse, camera);
+                const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+                const hit = new THREE.Vector3();
+                if (!raycaster.ray.intersectPlane(plane, hit)) return null;
+                return hit;
+            }
+
+            function snapPoint(worldPoint, excludeVertex) {
+                let finalPoint;
+                const excludeIdx =
+                    excludeVertex != null &&
+                        typeof excludeVertex.index === 'number' &&
+                        Number.isFinite(excludeVertex.index)
+                        ? excludeVertex.index
+                        : -1;
+
+                if (snapEnabled) {
+                    if (snapGridSize.x > 0 || snapGridSize.y > 0) {
+                        finalPoint = snapPointToDisplayGrid(worldPoint);
+                    } else {
+                        finalPoint = worldPoint.clone();
+                    }
+
+                    let nearestDisplay = null;
+                    let minDisplayDist = Infinity;
+                    for (let i = 0; i < drawingPoints.length; i++) {
+                        if (i === excludeIdx) continue;
+                        const p = drawingPoints[i];
+                        const display = worldToUserMm(p.x, p.z);
+                        const dist =
+                            Math.abs(display.x - worldPoint.x) +
+                            Math.abs(display.y - worldPoint.z);
+                        if (dist < minDisplayDist) {
+                            minDisplayDist = dist;
+                            nearestDisplay = { x: display.x, y: display.y, index: i };
+                        }
+                    }
+                    if (walls) {
+                        for (let w = 0; w < walls.children.length; w++) {
+                            const wall = walls.children[w];
+                            if (wall.userData.type !== 'wall') continue;
+                            const vertices = wall.userData.vertices;
+                            if (!vertices) continue;
+                            for (let v = 0; v < vertices.length; v++) {
+                                const p = vertices[v];
+                                const display = worldToUserMm(p.x, p.z);
+                                const dist =
+                                    Math.abs(display.x - worldPoint.x) +
+                                    Math.abs(display.y - worldPoint.z);
+                                if (dist < minDisplayDist) {
+                                    minDisplayDist = dist;
+                                    nearestDisplay = { x: display.x, y: display.y, vertexIndex: v, wall };
+                                }
+                            }
+                        }
+                    }
+                    const snapR = getSnapRadiusMm();
+                    if (nearestDisplay && minDisplayDist <= snapR) {
+                        finalPoint = userMmToWorld(nearestDisplay.x, nearestDisplay.y);
+                    }
+
+                    if (nearestDisplay && minDisplayDist <= snapR) {
+                        snapIndicator3D.position.set(finalPoint.x, 0, finalPoint.z);
+                        snapIndicator3D.visible = true;
+                        syncSnapIndicatorPosition();
+                    } else {
+                        snapIndicator3D.visible = false;
+                        hideSnapIndicatorOverlay();
+                    }
+                } else {
+                    finalPoint = worldPoint.clone();
+                    snapIndicator3D.visible = false;
+                    hideSnapIndicatorOverlay();
+                }
+
+                return finalPoint;
+            }
+
+            function onPointerDown(event) {
+                if (placementMode && pendingAsset) {
+                    const worldPoint = getMouseWorldPosition(event);
+                    if (!worldPoint) return;
+                    const snapped = snapPoint(worldPoint);
+                    if (!isPointWithinGrid(snapped)) {
+                        addLog('warning', 'Cannot place outside the grid area.');
+                        return;
+                    }
+                    placeAssetAt(snapped.x, snapped.z);
+                    return;
+                }
+                if (!isDrawingMode || event.button !== 0) return;
+                const worldPoint = getMouseWorldPosition(event);
+                if (!worldPoint || drawingPoints.length >= MAX_DRAWING_POINTS) {
+                    if (drawingPoints.length >= MAX_DRAWING_POINTS)
+                        addLog('warning', `Maximum ${MAX_DRAWING_POINTS} points reached`);
+                    return;
+                }
+                const snapped = snapPoint(worldPoint);
+                if (!isPointWithinGrid(snapped)) {
+                    addLog('warning', 'Cannot draw outside the grid area.');
+                    return;
+                }
+                if (drawingPoints.length === 0) {
+                    startLengthSegmentDrag(snapped);
+                    return;
+                }
+                const last = drawingPoints[drawingPoints.length - 1];
+                if (Math.hypot(snapped.x - last.x, snapped.z - last.z) < 1) return;
+                finalizeLengthSegment(last, snapped);
+            }
+
+            function onPointerMove(event) {
+                const worldPoint = getMouseWorldPosition(event);
+                if (!worldPoint) return;
+                lastMouseWorldX = worldPoint.x;
+                lastMouseWorldZ = worldPoint.z;
+                const snapped = snapPoint(worldPoint);
+                updateCoordinateDisplay({ x: snapped.x, y: snapped.z });
+
+                if (placementMode && pendingAssetGroup) {
+                    pendingAssetGroup.position.set(snapped.x, 0, snapped.z);
+                    pendingPlacement = { x: snapped.x, z: snapped.z, asset: pendingAsset };
+                }
+
+                if (lengthSegmentDrag.active) {
+                    updateLengthSegmentPreview(snapped);
+                    return;
+                }
+
+                if (orthoGuideActive && isDrawingMode && drawingPoints.length) {
+                    const last = drawingPoints[drawingPoints.length - 1];
+                    let end = snapped.clone();
+                    const dx = Math.abs(snapped.x - last.x);
+                    const dz = Math.abs(snapped.z - last.z);
+                    if (dx >= dz) end.z = last.z;
+                    else end.x = last.x;
+                    updatePreviewLine(last, end);
+                }
+            }
+
+            function onPointerUp(event) {
+                if (lengthSegmentDrag.active) finishLengthSegmentDrag(event);
+            }
+
+            function onContextMenu(event) {
+                event.preventDefault();
+                if (lengthSegmentDrag.active) {
+                    cancelLengthSegmentDrag();
+                    return;
+                }
+                if (!isDrawingMode) return;
+                if (drawingPoints.length >= 3) finishDrawing();
+            }
+
+            function updateCoordinateDisplay(worldPos) {
+                lastWorldPos = worldPos || lastWorldPos;
+                const x = lastWorldPos.x;
+                const y = lastWorldPos.y;
+                document.getElementById('xValue').textContent = `${Math.round(x)} mm`;
+                document.getElementById('yValue').textContent = `${Math.round(y)} mm`;
+                document.getElementById('worldCoords').textContent =
+                    `${Math.round(x)} mm, ${Math.round(y)} mm`;
+                const { x: sx, y: sy } = getCurrentSnapRadius();
+                document.getElementById('snapInfo').textContent =
+                    `Snap: ${snapEnabled ? 'ON' : 'OFF'} | Grid: ${Math.round(sx)}×${Math.round(sy)} mm`;
+            }
+
+            function animate() {
+                animationId = requestAnimationFrame(animate);
+                if (renderer && scene && camera) {
+                    renderer.render(scene, camera);
+                }
+                syncSnapIndicatorPosition();
+            }
+
+            function initScene() {
+                try {
+                    scene = new THREE.Scene();
+                    scene.background = new THREE.Color(0xffffff);
+
+                    camera = new THREE.PerspectiveCamera(
+                        45,
+                        window.innerWidth / window.innerHeight,
+                        1,
+                        1000000,
+                    );
+
+                    renderer = new THREE.WebGLRenderer({
+                        canvas,
+                        antialias: true,
+                        preserveDrawingBuffer: true,
+                    });
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+                    renderer.shadowMap.enabled = true;
+
+                    raycaster = new THREE.Raycaster();
+                    mouse = new THREE.Vector2();
+
+                    const ambient = new THREE.AmbientLight(0xffffff, 0.65);
+                    scene.add(ambient);
+                    const dir = new THREE.DirectionalLight(0xffffff, 0.55);
+                    dir.position.set(10000, 20000, 5000);
+                    dir.castShadow = true;
+                    scene.add(dir);
+
+                    walls = new THREE.Group();
+                    walls.name = 'walls';
+                    scene.add(walls);
+
+                    pointMarkers = new THREE.Group();
+                    pointMarkers.name = 'pointMarkers';
+                    scene.add(pointMarkers);
+
+                    snapIndicator3D = new THREE.Mesh(
+                        new THREE.SphereGeometry(80, 8, 8),
+                        new THREE.MeshBasicMaterial({ color: 0xff4444, transparent: true, opacity: 0.5 }),
+                    );
+                    snapIndicator3D.visible = false;
+                    scene.add(snapIndicator3D);
+
+                    createGrid();
+                    updateSnapSettings();
+                } catch (err) {
+                    addLog('error', 'Scene init failed: ' + (err.message || err));
+                    throw err;
+                }
+            }
+
+            function initControls() {
+                document.getElementById('toggleDrawing').onclick = toggleDrawing;
+                document.getElementById('clearLastPoint').onclick = clearLastPoint;
+                document.getElementById('closePolygon').onclick = finishDrawing;
+                document.getElementById('cancelDrawing').onclick = cancelDrawing;
+                document.getElementById('toggleGrid').onclick = toggleGrid;
+                document.getElementById('toggleSnap').onclick = toggleSnap;
+                document.getElementById('createBoxRoom').onclick = createBoxRoom;
+
+                document.getElementById('zoomIn').onclick = () => zoomCamera(-10000);
+                document.getElementById('zoomOut').onclick = () => zoomCamera(10000);
+                document.getElementById('gridSizeSelect').onchange = function () {
+                    const v = parseInt(this.value, 10);
+                    if (v === 100 || v === 500 || v === 1000) {
+                        snapGridSize.x = v;
+                        snapGridSize.y = v;
+                    }
+                    createGrid();
+                    updateSnapSettings();
+                    updateCoordinateDisplay(lastWorldPos);
+                };
+                document.getElementById('confirmPlacement')?.addEventListener('click', confirmPendingPlacement);
+                document.getElementById('cancelPlacement')?.addEventListener('click', cancelPendingPlacement);
+
+                lengthMmInput.addEventListener('input', function () {
+                    if (!lengthSegmentDrag.active) return;
+                    lengthSegmentDrag.lengthMm = parseInt(this.value, 10) || LENGTH_DRAG_MIN_MM;
+                    updateLengthSegmentPreviewFromMm();
+                });
+
+                canvas.addEventListener('mousedown', onPointerDown);
+                canvas.addEventListener('mousemove', onPointerMove);
+                window.addEventListener('mouseup', onPointerUp);
+                canvas.addEventListener('contextmenu', onContextMenu);
+            }
+
+            function init() {
+                addLog('system', 'Floor Planner initializing...');
+                initScene();
+                addLog('info', 'Scene ready (three.js).');
+                initControls();
+                setupCamera();
+                updateCameraZoom();
+                setDrawingButtons();
+                animate();
+                requestAnimationFrame(syncSnapIndicatorPosition);
+                updateCoordinateDisplay({ x: 0, y: 0 });
+                addLog('success', 'Floor Planner ready.');
+                postFloorPlannerMessage({ type: 'FLOOR_PLANNER_READY' });
+            }
+
+            window.addEventListener('message', function (event) {
+                const data = event.data;
+                if (!data || data.target !== 'dx-ose-floor-planner') return;
+                if (data.type === 'START_ASSET_PLACEMENT') {
+                    beginAssetPlacement(data.asset);
+                }
+                if (data.type === 'LOAD_FLOOR_PLAN' && Array.isArray(data.points)) {
+                    cancelDrawing();
+                    data.points.forEach((pt) => {
+                        drawingPoints.push(new THREE.Vector3(pt.x, 0, pt.y ?? pt.z ?? 0));
+                    });
+                    rebuildPointMarkers();
+                    rebuildWallsFromPoints(!!data.closed);
+                    updatePointCount();
+                }
+                if (data.type === 'SET_GRID_MM' && data.size) {
+                    snapGridSize.x = data.size;
+                    snapGridSize.y = data.size;
+                    createGrid();
+                    updateSnapSettings();
+                }
+            });
+
+            window.addEventListener('resize', function () {
+                if (!camera || !renderer) return;
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                syncSnapIndicatorPosition();
+            });
+
+            window.addEventListener('load', init);
+
+            document.addEventListener('keydown', function (e) {
+                const tag = e.target && e.target.tagName;
+                if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+                const step = Math.max(1, parseInt(document.getElementById('lengthStepMm')?.value, 10) || 50);
+                const coarse = e.shiftKey ? step * 10 : step;
+                if (e.key === 'g' || e.key === 'G') toggleGrid();
+                if (e.key === 's' || e.key === 'S') toggleSnap();
+                if (e.key === '+' || e.key === '=') zoomCamera(-5000);
+                if (e.key === '-') zoomCamera(5000);
+                if (lengthSegmentDrag.active) {
+                    if (e.key === 'ArrowLeft') {
+                        lengthSegmentDrag.lengthMm = Math.max(LENGTH_DRAG_MIN_MM, lengthSegmentDrag.lengthMm - coarse);
+                        updateLengthSegmentPreviewFromMm();
+                        e.preventDefault();
+                    }
+                    if (e.key === 'ArrowRight') {
+                        lengthSegmentDrag.lengthMm = Math.min(LENGTH_DRAG_MAX_MM, lengthSegmentDrag.lengthMm + coarse);
+                        updateLengthSegmentPreviewFromMm();
+                        e.preventDefault();
+                    }
+                    if (e.key === 'Enter') {
+                        finishLengthSegmentDrag({ clientX: 0, clientY: 0 });
+                        e.preventDefault();
+                    }
+                    if (e.key === 'Escape') {
+                        cancelLengthSegmentDrag();
+                        e.preventDefault();
+                    }
+                }
+            });
+        })();
+    </script>
+</body>
+
+</html>

@@ -2,6 +2,13 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const ExcelJS = require('exceljs');
 const settingService = require('./setting.service');
+const {
+    resolveScopeContext,
+    scopeWhereFor,
+    metaFor,
+    assertInScope,
+    SCOPE_MODULE,
+} = require('./scope/scopeContext');
 
 const normalizeComparableName = (value) => String(value || '').trim().replace(/\s+/g, ' ').toLowerCase();
 
@@ -32,7 +39,7 @@ const decorateStockBalanceRow = (row, tenantId) => {
 
 // ─── Shared WHERE builder ──────────────────────────────────────────────────────
 const buildWhere = (tenantId, query = {}, includeZero = false) => {
-    const { locationId, categoryId, departmentId, search, showZero } = query;
+    const { locationId, categoryId, departmentId, search, showZero, negativeOnly, lowStockOnly } = query;
 
     const itemFilter = {};
     if (categoryId) itemFilter.categoryId = categoryId;
@@ -43,45 +50,131 @@ const buildWhere = (tenantId, query = {}, includeZero = false) => {
         ];
     }
 
-    return {
+    const qtyFilter = (() => {
+        if (negativeOnly === 'true') return { lt: 0 };
+        if (lowStockOnly === 'true') return undefined;
+        if (!includeZero && showZero !== 'true') return { gt: 0 };
+        return undefined;
+    })();
+
+    const base = {
         tenantId,
-        ...(!includeZero && showZero !== 'true' && { qtyOnHand: { gt: 0 } }),
+        ...(qtyFilter !== undefined && { qtyOnHand: qtyFilter }),
         ...(locationId && { locationId }),
         ...(departmentId && { location: { departmentId } }),
         ...(Object.keys(itemFilter).length > 0 && { item: itemFilter }),
     };
+
+    return base;
 };
 
+/** Mirrors Stock Balances UI display helpers (export only). */
+const EXPORT_COLUMN_LABELS = {
+    itemName: 'Item name',
+    barcode: 'Barcode',
+    category: 'Category',
+    department: 'Department',
+    location: 'Location / Store',
+    available: 'Available',
+    totalValue: 'Total Value',
+    reorderStatus: 'Reorder status',
+};
+
+const exportRowReorderStatus = (row) => {
+    const qty = Number(row.qtyOnHand);
+    const reorder = Number(row.reorderPoint ?? row.item?.reorderPoint ?? 0);
+    if (qty === 0) return 'out_of_stock';
+    if (reorder > 0 && qty < reorder) return 'low_stock';
+    return 'in_stock';
+};
+
+const exportReorderStatusLabel = (row) => {
+    if (row.pendingCategorization) return 'Pending Categorization';
+    switch (exportRowReorderStatus(row)) {
+        case 'out_of_stock':
+            return 'Out of Stock';
+        case 'low_stock':
+            return 'Low Stock';
+        default:
+            return 'In Stock';
+    }
+};
+
+const exportDisplayItemName = (row) => row.displayName?.trim() || row.item?.name?.trim() || '—';
+const exportDisplayBarcode = (row) => row.displayBarcode?.trim() || row.item?.barcode?.trim() || '—';
+
+const exportDisplayCategoryName = (row) => {
+    if (row.displayCategoryName?.trim()) return row.displayCategoryName.trim();
+    if (row.pendingCategorization) return 'Pending Categorization';
+    return row.item?.category?.name?.trim() || 'Uncategorized';
+};
+
+const exportDisplayDepartmentName = (row) =>
+    row.displayDepartmentName?.trim() || row.item?.department?.name?.trim() || '—';
+
+const exportAvailableQty = (row) => Number(row.qtyOnHand ?? 0) - Number(row.qtyBlocked ?? 0);
+
+const exportLineValue = (row) => Number(row.qtyOnHand ?? 0) * Number(row.wacUnitCost ?? 0);
+
+const formatExportQty = (n) =>
+    Number(n ?? 0).toLocaleString('en-US', { maximumFractionDigits: 2 });
+
+const formatExportMoney = (n) =>
+    Number(n ?? 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
 // ─── GET STOCK BALANCES (paginated) ───────────────────────────────────────────
-const getStockBalances = async (tenantId, query = {}) => {
+const getStockBalances = async (tenantId, query = {}, user = null) => {
     const obStatus = await settingService.getObStatus(tenantId);
     if (obStatus !== 'FINALIZED') {
         return { balances: [], total: 0 };
     }
 
     const { skip = 0, take = 50 } = query;
-    const where = buildWhere(tenantId, query);
+    const scope = user ? await resolveScopeContext(user, tenantId) : null;
+    const scopeWhere = scope ? scopeWhereFor(SCOPE_MODULE.STOCK, scope) : {};
+    const where = { ...buildWhere(tenantId, query), ...scopeWhere };
+    const lowStockOnly = query.lowStockOnly === 'true';
 
-    const [balances, total] = await Promise.all([
-        prisma.stockBalance.findMany({
-            where,
-            skip: parseInt(skip),
-            take: parseInt(take),
-            include: {
-                item: {
-                    select: {
-                        id: true, tenantId: true, name: true, barcode: true,
-                        reorderPoint: true,
-                        category: { select: { name: true } },
-                        department: { select: { name: true } },
-                    },
-                },
-                location: { select: { id: true, name: true, type: true } },
+    const include = {
+        item: {
+            select: {
+                id: true, tenantId: true, name: true, barcode: true,
+                reorderPoint: true,
+                category: { select: { name: true } },
+                department: { select: { name: true } },
             },
-            orderBy: [{ location: { name: 'asc' } }, { item: { name: 'asc' } }],
-        }),
-        prisma.stockBalance.count({ where }),
-    ]);
+        },
+        location: { select: { id: true, name: true, type: true } },
+    };
+
+    let balances;
+    let total;
+
+    if (lowStockOnly) {
+        const { qtyOnHand: _omit, ...lowWhere } = where;
+        const all = await prisma.stockBalance.findMany({
+            where: lowWhere,
+            include,
+        });
+        const filtered = all.filter((b) => {
+            const qty = Number(b.qtyOnHand);
+            const reorder = Number(b.reorderPoint ?? b.item?.reorderPoint ?? 0);
+            return reorder > 0 && qty <= reorder;
+        });
+        total = filtered.length;
+        balances = filtered.slice(parseInt(skip), parseInt(skip) + parseInt(take));
+    } else {
+        [balances, total] = await Promise.all([
+            prisma.stockBalance.findMany({
+                where,
+                skip: parseInt(skip),
+                take: parseInt(take),
+                include,
+                orderBy: [{ location: { name: 'asc' } }, { item: { name: 'asc' } }],
+            }),
+            prisma.stockBalance.count({ where }),
+        ]);
+    }
 
     const normalizedBalances = balances
         .map((row) => decorateStockBalanceRow(row, tenantId))
@@ -95,11 +188,12 @@ const getStockBalances = async (tenantId, query = {}) => {
             });
         });
 
-    return { balances: normalizedBalances, total };
+    const scopeMeta = scope ? metaFor(scope, { total }) : null;
+    return { balances: normalizedBalances, total, ...scopeMeta };
 };
 
 // ─── GET SUMMARY STATS ────────────────────────────────────────────────────────
-const getStockSummary = async (tenantId, query = {}) => {
+const getStockSummary = async (tenantId, query = {}, user = null) => {
     const obStatus = await settingService.getObStatus(tenantId);
     if (obStatus !== 'FINALIZED') {
         return {
@@ -111,7 +205,9 @@ const getStockSummary = async (tenantId, query = {}) => {
         };
     }
 
-    const where = buildWhere(tenantId, query, true); // include zero-qty for totals
+    const scope = user ? await resolveScopeContext(user, tenantId) : null;
+    const scopeWhere = scope ? scopeWhereFor(SCOPE_MODULE.STOCK, scope) : {};
+    const where = { ...buildWhere(tenantId, query, true), ...scopeWhere };
 
     const [totalItems, rows] = await Promise.all([
         prisma.stockBalance.count({ where }),
@@ -150,17 +246,22 @@ const getStockSummary = async (tenantId, query = {}) => {
 };
 
 // ─── EXPORT TO EXCEL ──────────────────────────────────────────────────────────
-const exportStockBalances = async (tenantId, query = {}) => {
+const exportStockBalances = async (tenantId, query = {}, user = null) => {
     const obStatus = await settingService.getObStatus(tenantId);
-    const where = buildWhere(tenantId, query);
+    const scope = user ? await resolveScopeContext(user, tenantId) : null;
+    const scopeWhere = scope ? scopeWhereFor(SCOPE_MODULE.STOCK, scope) : {};
+    const where = { ...buildWhere(tenantId, query), ...scopeWhere };
+    const lowStockOnly = query.lowStockOnly === 'true';
 
-    const balances =
+    const rawBalances =
         obStatus === 'FINALIZED'
             ? await prisma.stockBalance.findMany({
                   where,
                   include: {
                       item: {
                           select: {
+                              id: true,
+                              tenantId: true,
                               name: true,
                               barcode: true,
                               reorderPoint: true,
@@ -174,26 +275,40 @@ const exportStockBalances = async (tenantId, query = {}) => {
               })
             : [];
 
+    let balances = rawBalances.map((row) => decorateStockBalanceRow(row, tenantId));
+
+    if (lowStockOnly) {
+        balances = balances.filter((b) => {
+            const qty = Number(b.qtyOnHand);
+            const reorder = Number(b.reorderPoint ?? b.item?.reorderPoint ?? 0);
+            return reorder > 0 && qty <= reorder;
+        });
+    }
+
+    balances.sort((a, b) => {
+        const locationSort = (a.location?.name ?? '').localeCompare(b.location?.name ?? '', undefined, {
+            sensitivity: 'base',
+        });
+        if (locationSort !== 0) return locationSort;
+        return normalizeComparableName(a.displayName).localeCompare(normalizeComparableName(b.displayName), undefined, {
+            sensitivity: 'base',
+        });
+    });
+
     const wb = new ExcelJS.Workbook();
     wb.creator = 'OSE Inventory';
 
     const ws = wb.addWorksheet('Stock Balances');
 
-    // Header styling
     ws.columns = [
-        { header: 'Item Name', key: 'name', width: 35 },
-        { header: 'Barcode', key: 'barcode', width: 18 },
-        { header: 'Department', key: 'dept', width: 20 },
-        { header: 'Category', key: 'cat', width: 20 },
-        { header: 'Location', key: 'loc', width: 22 },
-        { header: 'Qty On Hand', key: 'qty', width: 14 },
-        { header: 'Qty Blocked', key: 'blocked', width: 12 },
-        { header: 'Lost (cumulative)', key: 'lost', width: 14 },
-        { header: 'Damage (cumulative)', key: 'damage', width: 16 },
-        { header: 'Reorder Point', key: 'reorder', width: 14 },
-        { header: 'WAC (SAR)', key: 'wac', width: 14 },
-        { header: 'Total Value (SAR)', key: 'value', width: 18 },
-        { header: 'Status', key: 'status', width: 14 },
+        { header: EXPORT_COLUMN_LABELS.itemName, key: 'name', width: 35 },
+        { header: EXPORT_COLUMN_LABELS.barcode, key: 'barcode', width: 18 },
+        { header: EXPORT_COLUMN_LABELS.category, key: 'cat', width: 20 },
+        { header: EXPORT_COLUMN_LABELS.department, key: 'dept', width: 20 },
+        { header: EXPORT_COLUMN_LABELS.location, key: 'loc', width: 22 },
+        { header: EXPORT_COLUMN_LABELS.available, key: 'available', width: 14 },
+        { header: EXPORT_COLUMN_LABELS.totalValue, key: 'value', width: 18 },
+        { header: EXPORT_COLUMN_LABELS.reorderStatus, key: 'status', width: 16 },
     ];
 
     const headerRow = ws.getRow(1);
@@ -203,55 +318,43 @@ const exportStockBalances = async (tenantId, query = {}) => {
 
     let grandTotal = 0;
 
-    balances.forEach(b => {
-        const qty = Number(b.qtyOnHand);
-        const blocked = Number(b.qtyBlocked || 0);
-        const lost = Number(b.totalQtyLost || 0);
-        const damage = Number(b.totalQtyDamage || 0);
-        const wac = Number(b.wacUnitCost);
-        const avail = Math.max(0, qty - blocked);
-        const value = avail * wac;
-        const reorder = Number(b.item?.reorderPoint || 0);
-        grandTotal += value;
-
-        const isLow = reorder > 0 && qty <= reorder;
-        const isZero = qty === 0;
+    balances.forEach((b) => {
+        const lineVal = exportLineValue(b);
+        grandTotal += lineVal;
+        const statusKey = exportRowReorderStatus(b);
 
         const row = ws.addRow({
-            name: b.item?.name || '',
-            barcode: b.item?.barcode || '',
-            dept: b.item?.department?.name || '',
-            cat: b.item?.category?.name || '',
-            loc: b.location?.name || '',
-            qty,
-            blocked,
-            lost,
-            damage,
-            reorder: reorder || '',
-            wac: wac.toFixed(2),
-            value: value.toFixed(2),
-            status: isZero ? 'Zero Stock' : isLow ? 'Low Stock' : 'OK',
+            name: exportDisplayItemName(b),
+            barcode: exportDisplayBarcode(b),
+            cat: exportDisplayCategoryName(b),
+            dept: exportDisplayDepartmentName(b) || '—',
+            loc: b.location?.name || '—',
+            available: formatExportQty(exportAvailableQty(b)),
+            value: `SAR ${formatExportMoney(lineVal)}`,
+            status: exportReorderStatusLabel(b),
         });
 
-        // Color rows by status
-        if (isZero) {
+        row.getCell('available').alignment = { horizontal: 'right' };
+        row.getCell('value').alignment = { horizontal: 'right' };
+        row.getCell('status').alignment = { horizontal: 'center' };
+
+        if (statusKey === 'out_of_stock') {
             row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFF1F0' } };
-        } else if (isLow) {
+        } else if (statusKey === 'low_stock') {
             row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFFFFBEB' } };
         }
     });
 
-    // Grand total row
     ws.addRow({});
     const totalRow = ws.addRow({
         name: 'GRAND TOTAL',
-        value: grandTotal.toFixed(2),
+        value: `SAR ${formatExportMoney(grandTotal)}`,
     });
     totalRow.font = { bold: true };
     totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF0FDF4' } };
+    totalRow.getCell('value').alignment = { horizontal: 'right' };
 
-    // Border on header
-    ws.getRow(1).eachCell(cell => {
+    ws.getRow(1).eachCell((cell) => {
         cell.border = {
             bottom: { style: 'medium', color: { argb: 'FF1E40AF' } },
         };

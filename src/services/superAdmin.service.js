@@ -4,13 +4,31 @@ const { generateAccessToken } = require('../utils/jwt');
 const { invalidateTenantCache } = require('../middleware/subscription');
 const logger = require('../utils/logger');
 const { assertOrgManagerAssignmentWithinOrgHierarchy } = require('../utils/membershipGuard');
+const { normalizeEmailForLookup, findUserByEmailForLookup } = require('../utils/emailNormalize');
 const { activeSeatCountsByTenantIds, countActiveSeats } = require('../utils/tenantMemberActive');
-const { getPermissionsForMembership, membershipRoleCode, connectRole } = require('./rbac.service');
+const accRuntime = require('../acc-runtime');
+const { membershipRoleCode, connectRole } = require('./rbac.service');
 const { seedDefaultUnitsForTenant } = require('./unitSeed.service');
+const { syncMembershipToAssignment } = require('./acc-membership-assignment-sync.service');
+const { createAssignmentsWithProvisioning } = require('./acc-assignment-fanout.service');
+const { openPeriod } = require('./periodClose.service');
+const { tenantPeriodYearMonth } = require('../utils/tenant-calendar.util');
 const {
     resolveHotelSubStatusForCreate,
     effectiveSubStatusForTenantList,
 } = require('../utils/resolveHotelSubStatus');
+
+/** Reload TenantMember with role and dual-write ACC assignment (same TX). */
+async function syncMemberAccInTx(tx, tenantId, userId) {
+    const membership = await tx.tenantMember.findUnique({
+        where: { tenantId_userId: { tenantId, userId } },
+        include: { role: true },
+    });
+    if (membership) {
+        await syncMembershipToAssignment(tx, membership);
+    }
+    return membership;
+}
 
 // ─── Plan Defaults ────────────────────────────────────────────────────────────
 const PLAN_DEFAULTS = {
@@ -251,6 +269,66 @@ const fetchActiveTenantAdminMemberships = (tenantId) =>
         orderBy: { createdAt: 'asc' },
     });
 
+/**
+ * Mirrors create-organization wizard: "same as org manager" when ORG_MANAGER on every branch.
+ */
+const detectOrgManagerBranchSync = async (db, orgTenantId, orgManagerUserId) => {
+    if (!orgTenantId || !orgManagerUserId) return 'separate';
+
+    const children = await db.tenant.findMany({
+        where: { parentId: orgTenantId, isActive: true },
+        select: { id: true },
+    });
+    if (children.length === 0) return 'same';
+
+    const orgManagerBranchCount = await db.tenantMember.count({
+        where: {
+            userId: orgManagerUserId,
+            tenantId: { in: children.map((c) => c.id) },
+            role: { code: 'ORG_MANAGER' },
+            isActive: true,
+        },
+    });
+
+    return orgManagerBranchCount === children.length ? 'same' : 'separate';
+};
+
+/** Grant org manager inherited access on every branch hotel (role ORG_MANAGER, same as tenant.service). */
+const syncOrgManagerAsAdminOnBranches = async (
+    tx,
+    { orgTenantId, userId, membershipActive }
+) => {
+    const children = await tx.tenant.findMany({
+        where: { parentId: orgTenantId, isActive: true },
+        select: { id: true },
+    });
+
+    const nextActive = membershipActive !== undefined ? Boolean(membershipActive) : true;
+
+    for (const child of children) {
+        await assertOrgManagerAssignmentWithinOrgHierarchy(tx, {
+            userId,
+            targetTenantId: child.id,
+        });
+
+        await tx.tenantMember.upsert({
+            where: { tenantId_userId: { tenantId: child.id, userId } },
+            create: {
+                tenant: { connect: { id: child.id } },
+                user: { connect: { id: userId } },
+                role: connectRole('ORG_MANAGER'),
+                isActive: nextActive,
+            },
+            update: {
+                role: connectRole('ORG_MANAGER'),
+                isActive: nextActive,
+            },
+        });
+    }
+
+    return children.map((c) => c.id);
+};
+
 const pickPrimaryAdmin = (memberships) => {
     const admins = memberships.filter((m) => membershipRoleCode(m) === 'ADMIN');
     const orgManagers = memberships.filter((m) => membershipRoleCode(m) === 'ORG_MANAGER');
@@ -302,6 +380,11 @@ const getTenant = async (tenantId) => {
             lastName: row.user.lastName,
         }));
 
+    const organizationManagerBranchSync =
+        tenant.parentId === null && primaryAdmin?.id
+            ? await detectOrgManagerBranchSync(prisma, tenant.id, primaryAdmin.id)
+            : null;
+
     return {
         ...tenantRest,
         subStatus: effectiveSubStatusForTenantList(tenant),
@@ -309,43 +392,112 @@ const getTenant = async (tenantId) => {
         branches: (branchesRaw || []).map(toBranchRow),
         primaryAdmin,
         orgManagers,
+        organizationManagerBranchSync,
     };
 };
 
-// ─── Tenant administrators (ADMIN + ORG_MANAGER) ─────────────────────────────
-const getTenantAdmins = async (tenantId) => {
-    const tenant = await prisma.tenant.findUnique({ where: { id: tenantId }, select: { id: true } });
-    if (!tenant) throw Object.assign(new Error('Tenant not found.'), { statusCode: 404 });
+const TENANT_ADMIN_ROLE_CODES = ['ADMIN', 'ORG_MANAGER'];
+const TENANT_FALLBACK_MANAGER_ROLE_CODES = [
+    'ADMIN',
+    'ORG_MANAGER',
+    'GENERAL_MANAGER',
+    'FINANCE_MANAGER',
+    'DEPT_MANAGER',
+];
 
-    const rows = await prisma.tenantMember.findMany({
-        where: {
-            tenantId,
-            role: { code: { in: ['ADMIN', 'ORG_MANAGER'] } },
-        },
-        include: {
-            user: { select: { id: true, email: true, firstName: true, lastName: true, isActive: true } },
-            role: { select: { code: true } },
-        },
-    });
+const mapTenantAdminRow = (m) => ({
+    id: m.user.id,
+    email: m.user.email,
+    firstName: m.user.firstName,
+    lastName: m.user.lastName,
+    isActive: m.isActive && m.user.isActive,
+    membershipActive: m.isActive,
+    userActive: m.user.isActive,
+    role: membershipRoleCode(m),
+});
 
-    const rank = (code) => (code === 'ADMIN' ? 0 : 1);
+const sortTenantAdminRows = (rows) => {
+    const rank = (code) => {
+        if (code === 'ADMIN') return 0;
+        if (code === 'ORG_MANAGER') return 1;
+        if (code === 'GENERAL_MANAGER') return 2;
+        if (code === 'FINANCE_MANAGER') return 3;
+        return 4;
+    };
     rows.sort((a, b) => {
         const ca = membershipRoleCode(a);
         const cb = membershipRoleCode(b);
         if (rank(ca) !== rank(cb)) return rank(ca) - rank(cb);
+        if (a.isActive !== b.isActive) return a.isActive ? -1 : 1;
         return new Date(a.createdAt) - new Date(b.createdAt);
     });
+    return rows;
+};
 
-    const admins = rows.map((m) => ({
-        id: m.user.id,
-        email: m.user.email,
-        firstName: m.user.firstName,
-        lastName: m.user.lastName,
-        isActive: m.isActive && m.user.isActive,
-        role: membershipRoleCode(m),
-    }));
+// ─── Tenant administrators (ADMIN + ORG_MANAGER, with hotel staff fallback) ───
+const getTenantAdmins = async (tenantId) => {
+    const tenant = await prisma.tenant.findUnique({ where: { id: tenantId }, select: { id: true } });
+    if (!tenant) throw Object.assign(new Error('Tenant not found.'), { statusCode: 404 });
+
+    const include = {
+        user: { select: { id: true, email: true, firstName: true, lastName: true, isActive: true } },
+        role: { select: { code: true } },
+    };
+
+    let rows = await prisma.tenantMember.findMany({
+        where: {
+            tenantId,
+            role: { code: { in: TENANT_ADMIN_ROLE_CODES } },
+        },
+        include,
+    });
+
+    if (rows.length === 0) {
+        rows = await prisma.tenantMember.findMany({
+            where: {
+                tenantId,
+                role: { code: { in: TENANT_FALLBACK_MANAGER_ROLE_CODES } },
+            },
+            include,
+        });
+    }
+
+    sortTenantAdminRows(rows);
+
+    const admins = rows.map(mapTenantAdminRow);
 
     return { admins };
+};
+
+const applyTenantAdminProfileFields = async (data, userId, membership) => {
+    const userData = {};
+    if (data.firstName !== undefined) userData.firstName = String(data.firstName).trim();
+    if (data.lastName !== undefined) userData.lastName = String(data.lastName).trim();
+
+    if (data.email !== undefined) {
+        const normalized = normalizeEmailForLookup(data.email);
+        if (!normalized) {
+            throw Object.assign(new Error('A valid email is required.'), { statusCode: 400 });
+        }
+
+        const currentNormalized = normalizeEmailForLookup(membership.user.email);
+        if (normalized !== currentNormalized) {
+            const existingUser = await findUserByEmailForLookup(prisma, normalized);
+            if (existingUser && existingUser.id !== userId) {
+                return {
+                    reassignToUserId: existingUser.id,
+                    userData: null,
+                };
+            }
+            userData.email = normalized;
+        }
+    }
+
+    if (data.password) {
+        userData.passwordHash = await hashPassword(data.password);
+    }
+
+    return { reassignToUserId: null, userData };
 };
 
 const updateTenantAdmin = async (tenantId, userId, data, adminUserId, ipAddress) => {
@@ -360,38 +512,113 @@ const updateTenantAdmin = async (tenantId, userId, data, adminUserId, ipAddress)
         throw Object.assign(new Error('User is not a member of this tenant.'), { statusCode: 404 });
     }
 
-    const rc = membershipRoleCode(membership);
-    if (rc !== 'ADMIN' && rc !== 'ORG_MANAGER') {
-        throw Object.assign(new Error('Only tenant administrators can be updated here.'), { statusCode: 403 });
-    }
-
-    const userData = {};
-    if (data.firstName !== undefined) userData.firstName = String(data.firstName).trim();
-    if (data.lastName !== undefined) userData.lastName = String(data.lastName).trim();
-    if (data.email !== undefined) {
-        const normalized = String(data.email).toLowerCase().trim();
-        const conflict = await prisma.user.findFirst({
-            where: { email: normalized, NOT: { id: userId } },
-            select: { id: true },
-        });
-        if (conflict) {
-            throw Object.assign(new Error('This email is already in use.'), { statusCode: 409 });
+    const profileFields = await applyTenantAdminProfileFields(data, userId, membership);
+    if (profileFields.reassignToUserId) {
+        const targetUserId = profileFields.reassignToUserId;
+        const userData = {};
+        if (data.firstName !== undefined) userData.firstName = String(data.firstName).trim();
+        if (data.lastName !== undefined) userData.lastName = String(data.lastName).trim();
+        if (data.password) {
+            userData.passwordHash = await hashPassword(data.password);
         }
-        userData.email = normalized;
-    }
-    if (data.password) {
-        userData.passwordHash = await hashPassword(data.password);
+        const bumpPermission = data.password ? { permissionVersion: { increment: 1 } } : {};
+        const membershipActive = data.isActive !== undefined ? Boolean(data.isActive) : true;
+
+        await prisma.$transaction(async (tx) => {
+            await assertOrgManagerAssignmentWithinOrgHierarchy(tx, {
+                userId: targetUserId,
+                targetTenantId: tenantId,
+            });
+            if (Object.keys(userData).length > 0 || Object.keys(bumpPermission).length > 0) {
+                await tx.user.update({
+                    where: { id: targetUserId },
+                    data: { ...userData, ...bumpPermission },
+                });
+            }
+            await tx.tenantMember.upsert({
+                where: { tenantId_userId: { tenantId, userId: targetUserId } },
+                create: {
+                    tenant: { connect: { id: tenantId } },
+                    user: { connect: { id: targetUserId } },
+                    role: connectRole('GENERAL_MANAGER'),
+                    isActive: membershipActive,
+                },
+                update: {
+                    role: connectRole('GENERAL_MANAGER'),
+                    isActive: membershipActive,
+                },
+            });
+        });
+
+        invalidateTenantCache(tenantId);
+
+        await logAdminAction(
+            adminUserId,
+            'TENANT_ADMIN_UPDATED',
+            tenantId,
+            {
+                targetUserId,
+                reassignedFromUserId: userId,
+                updatedFields: [...Object.keys(userData), 'role', 'isActive'],
+            },
+            ipAddress
+        );
+
+        const reassigned = await prisma.tenantMember.findUnique({
+            where: { tenantId_userId: { tenantId, userId: targetUserId } },
+            include: {
+                user: {
+                    select: {
+                        id: true,
+                        email: true,
+                        firstName: true,
+                        lastName: true,
+                        isActive: true,
+                        updatedAt: true,
+                    },
+                },
+                role: { select: { code: true } },
+            },
+        });
+
+        return {
+            id: reassigned.user.id,
+            email: reassigned.user.email,
+            firstName: reassigned.user.firstName,
+            lastName: reassigned.user.lastName,
+            isActive: reassigned.isActive && reassigned.user.isActive,
+            role: membershipRoleCode(reassigned),
+        };
     }
 
+    // Super-admin may update any tenant member returned by getTenantAdmins (profile + isActive).
+    const userData = profileFields.userData;
+    const emailChanged =
+        data.email !== undefined &&
+        normalizeEmailForLookup(data.email) !== normalizeEmailForLookup(membership.user.email);
     const bumpPermission =
-        data.email !== undefined || data.password !== undefined ? { permissionVersion: { increment: 1 } } : {};
+        emailChanged || data.password ? { permissionVersion: { increment: 1 } } : {};
 
     const membershipData = {};
     if (data.isActive !== undefined) membershipData.isActive = Boolean(data.isActive);
 
-    if (Object.keys(userData).length === 0 && Object.keys(membershipData).length === 0) {
+    const orgTenant = await prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: { id: true, parentId: true },
+    });
+    const isRootOrgManager =
+        orgTenant?.parentId === null && membershipRoleCode(membership) === 'ORG_MANAGER';
+    const shouldSyncBranches = Boolean(data.syncHotelAdminsAsOrgManager) && isRootOrgManager;
+
+    if (
+        Object.keys(userData).length === 0 &&
+        Object.keys(membershipData).length === 0 &&
+        !shouldSyncBranches
+    ) {
         throw Object.assign(new Error('No valid fields to update.'), { statusCode: 400 });
     }
+
+    let syncedBranchIds = [];
 
     await prisma.$transaction(async (tx) => {
         if (Object.keys(userData).length > 0 || Object.keys(bumpPermission).length > 0) {
@@ -406,6 +633,16 @@ const updateTenantAdmin = async (tenantId, userId, data, adminUserId, ipAddress)
                 data: membershipData,
             });
         }
+        if (shouldSyncBranches) {
+            syncedBranchIds = await syncOrgManagerAsAdminOnBranches(tx, {
+                orgTenantId: tenantId,
+                userId,
+                membershipActive: data.isActive,
+            });
+            for (const branchId of syncedBranchIds) {
+                invalidateTenantCache(branchId);
+            }
+        }
     });
 
     invalidateTenantCache(tenantId);
@@ -414,7 +651,12 @@ const updateTenantAdmin = async (tenantId, userId, data, adminUserId, ipAddress)
         adminUserId,
         'TENANT_ADMIN_UPDATED',
         tenantId,
-        { targetUserId: userId, updatedFields: [...Object.keys(userData), ...Object.keys(membershipData)] },
+        {
+            targetUserId: userId,
+            updatedFields: [...Object.keys(userData), ...Object.keys(membershipData)],
+            syncHotelAdminsAsOrgManager: shouldSyncBranches,
+            syncedBranchIds,
+        },
         ipAddress
     );
 
@@ -603,14 +845,33 @@ const createTenant = async (data, adminUserId, ipAddress) => {
                 create: {
                     tenant: { connect: { id: t.id } },
                     user: { connect: { id: adminUser.id } },
-                    role: connectRole('ADMIN'),
+                    role: connectRole('ORG_MANAGER'),
                     isActive: true,
                 },
                 update: {
-                    role: connectRole('ADMIN'),
+                    role: connectRole('ORG_MANAGER'),
                     isActive: true,
                 },
             });
+            await syncMemberAccInTx(tx, t.id, adminUser.id);
+            if (resolvedParentId) {
+                const currentPeriod = tenantPeriodYearMonth(new Date(), t.timezone);
+                await openPeriod(
+                    t.id,
+                    {
+                        year: currentPeriod.year,
+                        month: currentPeriod.month,
+                        reason: 'Hotel provisioning',
+                        bootstrapApproval: {
+                            approvedBy: adminUserId,
+                            reason: 'Zero-state hotel provisioning',
+                            source: 'SUPER_ADMIN_PROVISIONING',
+                        },
+                    },
+                    adminUserId,
+                    tx,
+                );
+            }
         } else if (resolvedParentId) {
             const orgManagerMembership = await tx.tenantMember.findFirst({
                 where: {
@@ -642,14 +903,31 @@ const createTenant = async (data, adminUserId, ipAddress) => {
                 create: {
                     tenant: { connect: { id: t.id } },
                     user: { connect: { id: orgManagerMembership.userId } },
-                    role: connectRole('ADMIN'),
+                    role: connectRole('ORG_MANAGER'),
                     isActive: true,
                 },
                 update: {
-                    role: connectRole('ADMIN'),
+                    role: connectRole('ORG_MANAGER'),
                     isActive: true,
                 },
             });
+            await syncMemberAccInTx(tx, t.id, orgManagerMembership.userId);
+            const currentPeriod = tenantPeriodYearMonth(new Date(), t.timezone);
+            await openPeriod(
+                t.id,
+                {
+                    year: currentPeriod.year,
+                    month: currentPeriod.month,
+                    reason: 'Hotel provisioning',
+                    bootstrapApproval: {
+                        approvedBy: adminUserId,
+                        reason: 'Zero-state hotel provisioning',
+                        source: 'SUPER_ADMIN_PROVISIONING',
+                    },
+                },
+                adminUserId,
+                tx,
+            );
         }
 
         return t;
@@ -856,7 +1134,9 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
             },
         });
 
-        // 4) Memberships: org manager on org; hotel admin on hotel (second user when emails differ)
+        // 4) Memberships: ORG_MANAGER on org; same-as-org-manager hotel membership is ORG_MANAGER
+        //    (matches wizard WIZARD_HOTEL_ADMIN_SAME_TIP + tenant.service branch inherit).
+        //    Separate new hotel admin (different email) remains GENERAL_MANAGER below.
         await tx.tenantMember.upsert({
             where: { tenantId_userId: { tenantId: orgTenant.id, userId: orgManagerUser.id } },
             create: {
@@ -867,6 +1147,8 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
             },
             update: { role: connectRole('ORG_MANAGER'), isActive: true },
         });
+        // Dual-write ACC for org membership (property scoped to org root; all-properties refined after TX)
+        await syncMemberAccInTx(tx, orgTenant.id, orgManagerUser.id);
 
         if (separateHotelAdmin) {
             const hotelAdminUser = await findOrCreateUser({
@@ -882,11 +1164,30 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
                 create: {
                     tenant: { connect: { id: hotelTenant.id } },
                     user: { connect: { id: hotelAdminUser.id } },
-                    role: connectRole('ADMIN'),
+                    role: connectRole('GENERAL_MANAGER'),
                     isActive: true,
                 },
-                update: { role: connectRole('ADMIN'), isActive: true },
+                update: { role: connectRole('GENERAL_MANAGER'), isActive: true },
             });
+            await syncMemberAccInTx(tx, hotelTenant.id, hotelAdminUser.id);
+
+            // Period registry for current month (same TX as hotel create)
+            const currentPeriod = tenantPeriodYearMonth(new Date(), hotelTenant.timezone);
+            await openPeriod(
+                hotelTenant.id,
+                {
+                    year: currentPeriod.year,
+                    month: currentPeriod.month,
+                    reason: 'Full organization hotel provisioning',
+                    bootstrapApproval: {
+                        approvedBy: adminUserId,
+                        reason: 'Zero-state full-organization hotel provisioning',
+                        source: 'SUPER_ADMIN_PROVISIONING',
+                    },
+                },
+                adminUserId,
+                tx,
+            );
 
             return {
                 organization: orgTenant,
@@ -901,16 +1202,35 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
             targetTenantId: hotelTenant.id,
         });
 
+        // Same admin email: hotel membership is ORG_MANAGER (same as organization manager)
         await tx.tenantMember.upsert({
             where: { tenantId_userId: { tenantId: hotelTenant.id, userId: orgManagerUser.id } },
             create: {
                 tenant: { connect: { id: hotelTenant.id } },
                 user: { connect: { id: orgManagerUser.id } },
-                role: connectRole('ADMIN'),
+                role: connectRole('ORG_MANAGER'),
                 isActive: true,
             },
-            update: { role: connectRole('ADMIN'), isActive: true },
+            update: { role: connectRole('ORG_MANAGER'), isActive: true },
         });
+        await syncMemberAccInTx(tx, hotelTenant.id, orgManagerUser.id);
+
+        const currentPeriod = tenantPeriodYearMonth(new Date(), hotelTenant.timezone);
+        await openPeriod(
+            hotelTenant.id,
+            {
+                year: currentPeriod.year,
+                month: currentPeriod.month,
+                reason: 'Full organization hotel provisioning',
+                bootstrapApproval: {
+                    approvedBy: adminUserId,
+                    reason: 'Zero-state full-organization hotel provisioning',
+                    source: 'SUPER_ADMIN_PROVISIONING',
+                },
+            },
+            adminUserId,
+            tx,
+        );
 
         return {
             organization: orgTenant,
@@ -939,11 +1259,46 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
         throw e;
     }
 
+    // ORG_MANAGER all-properties ACC assignment (user-rights / multi-hotel) — after TX commit
+    try {
+        const orgRole = await prisma.role.findUnique({
+            where: { code: 'ORG_MANAGER' },
+            select: { id: true },
+        });
+        const orgRootId = created.organization.id;
+        const orgRows = await prisma.tenant.findMany({
+            where: { isActive: true, OR: [{ id: orgRootId }, { parentId: orgRootId }] },
+            select: { id: true },
+        });
+        const orgGroupIds = new Set(orgRows.map((r) => r.id));
+        if (orgRole && created.adminUser?.id) {
+            await createAssignmentsWithProvisioning(
+                adminUserId,
+                {
+                    userId: created.adminUser.id,
+                    roleId: orgRole.id,
+                    propertyIds: [],
+                    departmentIds: [],
+                    notes: 'full-organization ORG_MANAGER all-properties',
+                },
+                { orgGroupIds, actorRoleCode: 'SUPER_ADMIN' },
+            );
+        }
+    } catch (accErr) {
+        logger.error('[full-organization] ORG_MANAGER ACC all-properties provision failed', {
+            message: accErr.message,
+            orgId: created?.organization?.id,
+        });
+        throw accErr;
+    }
+
     await logAdminAction(adminUserId, 'TENANT_CREATED', created.organization.id, {
         kind: 'FULL_ORG_SETUP',
         organization: { name: orgName, slug: orgSlug },
         hotel: { name: hotelName, slug: hotelSlug, subStatus: created.hotel.subStatus },
         maxBranches,
+        hotelOperatorRole:
+            created.hotelAdminUser?.id === created.adminUser?.id ? 'ORG_MANAGER' : 'GENERAL_MANAGER',
     }, ipAddress);
 
     return created;
@@ -1180,18 +1535,26 @@ const impersonateTenant = async (tenantId, adminUserId, ipAddress) => {
 
     // Find first admin user in tenant for the token payload
     const adminMembership = await prisma.tenantMember.findFirst({
-        where: { tenantId, role: { code: 'ADMIN' }, isActive: true, user: { isActive: true } },
+        where: {
+            tenantId,
+            role: { code: { in: ['GENERAL_MANAGER', 'ORG_MANAGER'] } },
+            isActive: true,
+            user: { isActive: true },
+        },
         include: { user: true, role: true },
+        orderBy: { createdAt: 'asc' },
     });
     if (!adminMembership) {
         throw Object.assign(
-            new Error('No active admin user in target tenant.'),
+            new Error('No active hotel/org manager user in target tenant.'),
             { statusCode: 404 }
         );
     }
 
     const rc = membershipRoleCode(adminMembership);
-    const permissions = await getPermissionsForMembership({
+    const permissions = await accRuntime.resolvePermissionsForMembership({
+        userId: adminMembership.user.id,
+        membership: adminMembership,
         roleId: adminMembership.roleId,
         roleCode: rc,
     });

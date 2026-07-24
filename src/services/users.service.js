@@ -5,11 +5,68 @@ const {
     countActiveSeats,
     assertSingletonRoleAvailable,
 } = require('../utils/tenantMemberActive');
-const { membershipRoleCode, connectRole } = require('./rbac.service');
+const { membershipRoleCode, connectRole, loadOrgManagerUserIdSet, resolveMembershipBusinessRole, userHasOrgManagerMembership, normalizeRole } = require('./rbac.service');
+const { assertAssignableRole } = require('./rbac.constants');
+const { syncMembershipToAssignment } = require('./acc-membership-assignment-sync.service');
+const {
+    ACC_OPERATIONAL_EXCLUDED_ROLE_CODES,
+    isAccOperationalExcludedRoleCode,
+} = require('../constants/role-codes.constants');
+
+/** ACC P2 — Settings is identity-only; access changes belong in ACC. */
+function throwAccessManagedInAcc() {
+    throw Object.assign(
+        new Error('Role and access changes are managed in Access Control Center. Settings manages identity only.'),
+        { statusCode: 403, code: 'ACCESS_MANAGED_IN_ACC' },
+    );
+}
 
 /**
  * M01 — User Management Service (Admin operations)
  */
+
+const mapMembershipScopeFields = (membership, user) => ({
+    canViewAllDepartments: Boolean(membership?.canViewAllDepartments),
+    canViewAllLocations: Boolean(membership?.canViewAllLocations),
+    allowedLocations: (user?.locationUsers || []).map((lu) => ({
+        id: lu.location.id,
+        name: lu.location.name,
+        type: lu.location.type,
+    })),
+});
+
+const resolveMembershipDisplayRole = (membership, orgManagerUserIds) => {
+    const rawRole = membershipRoleCode(membership);
+    return resolveMembershipBusinessRole(rawRole, orgManagerUserIds.has(membership.userId));
+};
+
+const syncUserLocationAssignments = async (tx, tenantId, userId, locationIds) => {
+    if (!Array.isArray(locationIds)) return;
+    const ids = [...new Set(locationIds.map((id) => String(id)).filter(Boolean))];
+    if (ids.length > 0) {
+        const valid = await tx.location.count({
+            where: { tenantId, id: { in: ids }, isActive: true },
+        });
+        if (valid !== ids.length) {
+            throw Object.assign(new Error('Invalid location for this tenant.'), { statusCode: 400 });
+        }
+    }
+    const existing = await tx.locationUser.findMany({
+        where: { userId, location: { tenantId } },
+        select: { locationId: true },
+    });
+    const existingIds = new Set(existing.map((row) => row.locationId));
+    const toAdd = ids.filter((id) => !existingIds.has(id));
+    const toRemove = [...existingIds].filter((id) => !ids.includes(id));
+    if (toRemove.length > 0) {
+        await tx.locationUser.deleteMany({
+            where: { userId, locationId: { in: toRemove } },
+        });
+    }
+    for (const locationId of toAdd) {
+        await tx.locationUser.create({ data: { userId, locationId } });
+    }
+};
 
 const listUsers = async (tenantId, { page = 1, limit = 20, role, isActive, search } = {}) => {
     const pageNum = Number(page) || 1;
@@ -18,7 +75,11 @@ const listUsers = async (tenantId, { page = 1, limit = 20, role, isActive, searc
 
     const where = {
         tenantId,
-        ...(role ? { role: { code: role } } : {}),
+        ...(role
+            ? isAccOperationalExcludedRoleCode(role)
+                ? { role: { code: { in: [] } } }
+                : { role: { code: role } }
+            : { role: { code: { notIn: [...ACC_OPERATIONAL_EXCLUDED_ROLE_CODES] } } }),
         ...(isActive !== undefined ? { isActive: isActive === 'true' } : {}),
         ...(search ? {
             user: {
@@ -68,12 +129,15 @@ const listUsers = async (tenantId, { page = 1, limit = 20, role, isActive, searc
         }),
     ]);
 
+    const orgManagerUserIds = await loadOrgManagerUserIdSet(memberships.map((membership) => membership.userId));
+
     const users = memberships.map((membership) => ({
         ...membership.user,
-        role: membershipRoleCode(membership),
+        role: resolveMembershipDisplayRole(membership, orgManagerUserIds),
         departmentId: membership.department?.id || null,
         department: membership.department?.name || membership.user.department || null,
         isActive: membership.isActive && membership.user.isActive,
+        ...mapMembershipScopeFields(membership, membership.user),
     }));
 
     return {
@@ -86,11 +150,12 @@ const listUsers = async (tenantId, { page = 1, limit = 20, role, isActive, searc
     };
 };
 
-const getAdminTenantIds = async (db, userId) => {
-    const adminMemberships = await db.tenantMember.findMany({
+/** Tenants where requester is ORG_MANAGER (legacy — org-root memberships only). */
+const getOrgManagerTenantIds = async (db, userId) => {
+    const memberships = await db.tenantMember.findMany({
         where: {
             userId,
-            role: { code: 'ADMIN' },
+            role: { code: 'ORG_MANAGER' },
             isActive: true,
             tenantId: { not: null },
         },
@@ -98,24 +163,77 @@ const getAdminTenantIds = async (db, userId) => {
         distinct: ['tenantId'],
     });
 
-    return adminMemberships
-        .map((membership) => membership.tenantId)
-        .filter(Boolean);
+    return memberships.map((membership) => membership.tenantId).filter(Boolean);
+};
+
+/**
+ * All tenant IDs an ORG_MANAGER may search/import users from (org root + branch hotels).
+ * - Org roots where user is ORG_MANAGER
+ * - Active branch hotels under those roots
+ * - Direct branch memberships where user is ORG_MANAGER
+ */
+const resolveOrgHierarchyTenantIds = async (db, userId) => {
+    const directTenantIds = await getOrgManagerTenantIds(db, userId);
+    if (directTenantIds.length === 0) return [];
+
+    const directTenants = await db.tenant.findMany({
+        where: { id: { in: directTenantIds }, isActive: true },
+        select: { id: true, parentId: true },
+    });
+
+    const orgRootIds = new Set();
+    for (const tenant of directTenants) {
+        if (tenant.parentId == null) {
+            orgRootIds.add(tenant.id);
+        } else {
+            orgRootIds.add(tenant.parentId);
+        }
+    }
+
+    if (orgRootIds.size === 0) {
+        return [...new Set(directTenantIds)];
+    }
+
+    const hierarchyTenants = await db.tenant.findMany({
+        where: {
+            isActive: true,
+            OR: [
+                { id: { in: [...orgRootIds] } },
+                { parentId: { in: [...orgRootIds] } },
+            ],
+        },
+        select: { id: true },
+    });
+
+    return [...new Set([...hierarchyTenants.map((t) => t.id), ...directTenantIds])];
+};
+
+const assertUserInOrgHierarchy = async (db, { userId, hierarchyTenantIds }) => {
+    if (!userId || hierarchyTenantIds.length === 0) return false;
+    const membership = await db.tenantMember.findFirst({
+        where: {
+            userId,
+            tenantId: { in: hierarchyTenantIds },
+            isActive: true,
+        },
+        select: { tenantId: true },
+    });
+    return Boolean(membership);
 };
 
 const searchExistingUsers = async (requestingUserId, email) => {
     const normalizedEmail = (email || '').trim().toLowerCase();
     if (!normalizedEmail) return [];
 
-    const adminTenantIds = await getAdminTenantIds(prisma, requestingUserId);
-    if (adminTenantIds.length === 0) return [];
+    const hierarchyTenantIds = await resolveOrgHierarchyTenantIds(prisma, requestingUserId);
+    if (hierarchyTenantIds.length === 0) return [];
 
     const users = await prisma.user.findMany({
         where: {
             email: { contains: normalizedEmail, mode: 'insensitive' },
             memberships: {
                 some: {
-                    tenantId: { in: adminTenantIds },
+                    tenantId: { in: hierarchyTenantIds },
                     isActive: true,
                 },
             },
@@ -135,7 +253,7 @@ const searchExistingUsers = async (requestingUserId, email) => {
 };
 
 const createUser = async (tenantId, data, requestingUserId) => {
-    const email = data.email.toLowerCase();
+    assertAssignableRole(data.role);
 
     const user = await prisma.$transaction(async (tx) => {
         const tenant = await tx.tenant.findUnique({
@@ -161,9 +279,31 @@ const createUser = async (tenantId, data, requestingUserId) => {
             }
         }
 
-        let targetUser = await tx.user.findUnique({ where: { email } });
+        const hierarchyTenantIds = await resolveOrgHierarchyTenantIds(tx, requestingUserId);
+
+        let targetUser = null;
+        if (data.existingUserId) {
+            targetUser = await tx.user.findUnique({ where: { id: data.existingUserId } });
+            if (!targetUser) {
+                throw Object.assign(new Error('Existing user not found.'), { statusCode: 404 });
+            }
+            const normalizedEmail = (data.email || targetUser.email || '').trim().toLowerCase();
+            if (normalizedEmail && targetUser.email.toLowerCase() !== normalizedEmail) {
+                throw Object.assign(
+                    new Error('Email does not match the selected existing user.'),
+                    { statusCode: 400 },
+                );
+            }
+        } else {
+            const email = (data.email || '').trim().toLowerCase();
+            if (!email) {
+                throw Object.assign(new Error('Valid email required.'), { statusCode: 400 });
+            }
+            targetUser = await tx.user.findUnique({ where: { email } });
+        }
 
         if (!targetUser) {
+            const email = (data.email || '').trim().toLowerCase();
             if (!data.password) {
                 throw Object.assign(new Error('Password is required for creating a new user.'), { statusCode: 400 });
             }
@@ -185,23 +325,18 @@ const createUser = async (tenantId, data, requestingUserId) => {
             // Membership Guard: ORG_MANAGER users cannot be assigned outside their org hierarchy.
             await assertOrgManagerAssignmentWithinOrgHierarchy(tx, { userId: targetUser.id, targetTenantId: tenantId });
 
-            const adminTenantIds = await getAdminTenantIds(tx, requestingUserId);
-            if (adminTenantIds.length === 0) {
+            if (hierarchyTenantIds.length === 0) {
                 throw Object.assign(new Error('You are not authorized to import existing users.'), { statusCode: 403 });
             }
 
-            const sharedMembership = await tx.tenantMember.findFirst({
-                where: {
-                    userId: targetUser.id,
-                    tenantId: { in: adminTenantIds },
-                    isActive: true,
-                },
-                select: { tenantId: true },
+            const inHierarchy = await assertUserInOrgHierarchy(tx, {
+                userId: targetUser.id,
+                hierarchyTenantIds,
             });
-            if (!sharedMembership) {
+            if (!inHierarchy) {
                 throw Object.assign(
                     new Error('You can only import users that belong to your managed tenants.'),
-                    { statusCode: 403 }
+                    { statusCode: 403 },
                 );
             }
         }
@@ -259,12 +394,21 @@ const createUser = async (tenantId, data, requestingUserId) => {
             },
         });
 
+        await syncMembershipToAssignment(tx, membership);
+
+        await tx.user.update({
+            where: { id: targetUser.id },
+            data: { permissionVersion: { increment: 1 } },
+        });
+
+        const hasOrgManagerMembership = await userHasOrgManagerMembership(targetUser.id, tx);
+
         return {
             id: membership.user.id,
             email: membership.user.email,
             firstName: membership.user.firstName,
             lastName: membership.user.lastName,
-            role: membershipRoleCode(membership),
+            role: resolveMembershipBusinessRole(membershipRoleCode(membership), hasOrgManagerMembership),
             departmentId: membership.department?.id || null,
             department: membership.department?.name || null,
             phone: membership.user.phone,
@@ -327,14 +471,47 @@ const updateUser = async (tenantId, userId, data, requestingUserId) => {
         let updatedMembership = membership;
         const membershipUpdate = {};
         if (data.isActive !== undefined) membershipUpdate.isActive = data.isActive;
-        if (data.role !== undefined) membershipUpdate.role = connectRole(data.role);
+        if (data.canViewAllDepartments !== undefined) {
+            membershipUpdate.canViewAllDepartments = Boolean(data.canViewAllDepartments);
+        }
+        if (data.canViewAllLocations !== undefined) {
+            membershipUpdate.canViewAllLocations = Boolean(data.canViewAllLocations);
+        }
+        // Mirror createUser: apply membership department via departmentId (connect / disconnect).
+        if (data.departmentId !== undefined) {
+            if (data.departmentId) {
+                const departmentRecord = await tx.department.findFirst({
+                    where: {
+                        id: data.departmentId,
+                        tenantId,
+                        isActive: true,
+                    },
+                    select: { id: true, name: true },
+                });
+                if (!departmentRecord) {
+                    throw Object.assign(new Error('Invalid department for this tenant.'), {
+                        statusCode: 400,
+                    });
+                }
+                membershipUpdate.department = { connect: { id: departmentRecord.id } };
+            } else {
+                membershipUpdate.department = { disconnect: true };
+            }
+        }
+        if (data.role !== undefined) {
+            const currentCode = normalizeRole(membershipRoleCode(membership));
+            const requestedCode = normalizeRole(data.role);
+            if (requestedCode !== currentCode) {
+                throwAccessManagedInAcc();
+            }
+        }
         const nextMembershipActive =
             data.isActive !== undefined ? Boolean(data.isActive) : membership.isActive;
         const willBeEffectivelyActive = nextMembershipActive && membership.user.isActive;
         if (data.role !== undefined && willBeEffectivelyActive) {
             await assertSingletonRoleAvailable(tx, {
                 tenantId,
-                role: data.role,
+                role: membershipRoleCode(membership),
                 excludeUserId: userId,
             });
         }
@@ -342,20 +519,60 @@ const updateUser = async (tenantId, userId, data, requestingUserId) => {
             updatedMembership = await tx.tenantMember.update({
                 where: { tenantId_userId: { tenantId, userId } },
                 data: membershipUpdate,
-                include: { user: true, role: true },
+                include: { user: true, role: true, department: { select: { id: true, name: true } } },
             });
         }
+
+        if (data.locationIds !== undefined) {
+            await syncUserLocationAssignments(tx, tenantId, userId, data.locationIds);
+        }
+
+        if (Object.keys(membershipUpdate).length > 0 || data.locationIds !== undefined) {
+            await tx.user.update({
+                where: { id: userId },
+                data: { permissionVersion: { increment: 1 } },
+            });
+        }
+
+        const membershipWithScope = await tx.tenantMember.findUnique({
+            where: { tenantId_userId: { tenantId, userId } },
+            include: {
+                role: true,
+                department: { select: { id: true, name: true } },
+                user: {
+                    include: {
+                        locationUsers: {
+                            include: { location: { select: { id: true, name: true, type: true } } },
+                        },
+                    },
+                },
+            },
+        });
+
+        const scopeMembership = membershipWithScope || updatedMembership;
+        const hasOrgManagerMembership = await userHasOrgManagerMembership(userId, tx);
+
+        if (scopeMembership) {
+            await syncMembershipToAssignment(tx, scopeMembership);
+        }
+
+        const resolvedDepartment =
+            membershipWithScope?.department ||
+            updatedMembership?.department ||
+            null;
 
         return {
             id: updatedUser.id,
             email: updatedUser.email,
             firstName: updatedUser.firstName,
             lastName: updatedUser.lastName,
-            role: membershipRoleCode(updatedMembership),
-            department: updatedUser.department,
+            role: resolveMembershipBusinessRole(membershipRoleCode(scopeMembership), hasOrgManagerMembership),
+            departmentId: resolvedDepartment?.id || membershipWithScope?.departmentId || null,
+            department: resolvedDepartment?.name || updatedUser.department || null,
             phone: updatedUser.phone,
-            isActive: updatedMembership.isActive && updatedUser.isActive,
+            isActive: (membershipWithScope || updatedMembership).isActive && updatedUser.isActive,
             updatedAt: updatedUser.updatedAt,
+            ...mapMembershipScopeFields(membershipWithScope || updatedMembership, membershipWithScope?.user),
         };
     });
 
@@ -363,47 +580,7 @@ const updateUser = async (tenantId, userId, data, requestingUserId) => {
 };
 
 const updateUserRole = async (tenantId, userId, role, requestingUserId) => {
-    // Prevent self role change
-    if (userId === requestingUserId) {
-        throw Object.assign(new Error('You cannot change your own role.'), { statusCode: 400 });
-    }
-
-    const membership = await prisma.tenantMember.findUnique({
-        where: { tenantId_userId: { tenantId, userId } },
-        include: { user: { select: { isActive: true } } },
-    });
-    if (!membership) {
-        throw Object.assign(new Error('User not found.'), { statusCode: 404 });
-    }
-
-    if (membership.isActive && membership.user.isActive) {
-        await assertSingletonRoleAvailable(prisma, {
-            tenantId,
-            role,
-            excludeUserId: userId,
-        });
-    }
-
-    const updated = await prisma.$transaction(async (tx) => {
-        const m = await tx.tenantMember.update({
-            where: { tenantId_userId: { tenantId, userId } },
-            data: { role: connectRole(role) },
-            include: { user: true, role: true },
-        });
-        await tx.user.update({
-            where: { id: userId },
-            data: { permissionVersion: { increment: 1 } },
-        });
-        return m;
-    });
-
-    return {
-        id: updated.user.id,
-        email: updated.user.email,
-        firstName: updated.user.firstName,
-        lastName: updated.user.lastName,
-        role: membershipRoleCode(updated),
-    };
+    throwAccessManagedInAcc();
 };
 
 const getUserById = async (tenantId, userId) => {
@@ -435,13 +612,26 @@ const getUserById = async (tenantId, userId) => {
         throw Object.assign(new Error('User not found.'), { statusCode: 404 });
     }
 
+    const orgManagerUserIds = await loadOrgManagerUserIdSet([membership.userId]);
+
     return {
         ...membership.user,
-        role: membershipRoleCode(membership),
+        role: resolveMembershipDisplayRole(membership, orgManagerUserIds),
         departmentId: membership.department?.id || null,
         department: membership.department?.name || membership.user.department || null,
         isActive: membership.isActive && membership.user.isActive,
+        ...mapMembershipScopeFields(membership, membership.user),
     };
 };
 
-module.exports = { listUsers, searchExistingUsers, createUser, updateUser, updateUserRole, getUserById };
+module.exports = {
+    listUsers,
+    searchExistingUsers,
+    createUser,
+    updateUser,
+    updateUserRole,
+    getUserById,
+    getOrgManagerTenantIds,
+    resolveOrgHierarchyTenantIds,
+    assertUserInOrgHierarchy,
+};

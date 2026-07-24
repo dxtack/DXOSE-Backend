@@ -9,21 +9,30 @@ const { uploadAttachment, uploadImage } = require('../middleware/upload.middlewa
 router.use(authenticate);
 
 // ── CRUD ─────────────────────────────────────────────────────────────────────
-// Must use BREAKAGE_CREATE (not MANAGE_INVENTORY/MOVEMENT_CREATE): INTERNAL docs start at DEPT_APPROVED with
-// step 1 auto-recorded — only roles trusted to open the workflow should create (ADMIN, STOREKEEPER, DEPT_MANAGER).
-router.post('/', requirePermission('BREAKAGE_CREATE'), uploadImage.single('photo'), ctrl.createBreakage);
-router.get('/', requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE'), ctrl.getBreakages);
-router.get('/:id', requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE'), ctrl.getBreakage);
+router.post(
+    '/',
+    requirePermission('BREAKAGE_CREATE'),
+    uploadImage.any(),
+    ctrl.createBreakage,
+);
+router.get(
+    '/',
+    requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE', 'APPROVE_BREAKAGE'),
+    ctrl.getBreakages,
+);
+router.get(
+    '/:id',
+    requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE', 'APPROVE_BREAKAGE'),
+    ctrl.getBreakage,
+);
+router.put('/:id', requirePermission('BREAKAGE_CREATE'), ctrl.updateBreakage);
 
 // ── Workflow ──────────────────────────────────────────────────────────────────
-router.post('/:id/submit', requirePermission('MANAGE_INVENTORY'), ctrl.submitBreakage);
-router.post('/:id/approve-dept', requirePermission('APPROVE_BREAKAGE'), ctrl.approveDept);
-router.post('/:id/approve-cost', requirePermission('APPROVE_BREAKAGE'), ctrl.approveCost);
-router.post('/:id/approve-finance', requirePermission('APPROVE_BREAKAGE'), ctrl.approveFinance);
-router.post('/:id/approve-gm', requirePermission('APPROVE_BREAKAGE'), ctrl.approveGm);
+router.post('/:id/submit', requirePermission('BREAKAGE_CREATE'), ctrl.submitBreakage);
 router.post('/:id/approve', requirePermission('APPROVE_BREAKAGE'), ctrl.approveBreakage);
-router.post('/:id/reject', requirePermission('APPROVE_BREAKAGE'), ctrl.rejectBreakage);
-router.post('/:id/void', requirePermission('MANAGE_INVENTORY'), ctrl.voidBreakage);
+router.post('/:id/reject', requireAnyPermission('BREAKAGE_CREATE', 'APPROVE_BREAKAGE'), ctrl.rejectBreakage);
+router.post('/:id/send-back', requirePermission('APPROVE_BREAKAGE'), ctrl.sendBackBreakage);
+router.post('/:id/void', requirePermission('BREAKAGE_CREATE'), ctrl.voidBreakage);
 
 /**
  * @openapi
@@ -60,10 +69,18 @@ router.post('/:id/void', requirePermission('MANAGE_INVENTORY'), ctrl.voidBreakag
  *       403: { $ref: '#/components/responses/Forbidden' }
  *       404: { $ref: '#/components/responses/NotFound' }
  */
-router.post('/:id/attachment', requirePermission('MANAGE_INVENTORY'), uploadAttachment.single('file'), ctrl.uploadAttachment);
+router.post('/:id/attachment', requirePermission('BREAKAGE_CREATE'), uploadAttachment.single('file'), ctrl.uploadAttachment);
 
 // ── Evidence ──────────────────────────────────────────────────────────────────
-router.get('/:id/evidence', requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE'), ctrl.getEvidence);
-router.get('/:id/evidence/pdf', requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE'), ctrl.getEvidencePDF);
+router.get(
+    '/:id/evidence',
+    requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE', 'APPROVE_BREAKAGE'),
+    ctrl.getEvidence,
+);
+router.get(
+    '/:id/evidence/pdf',
+    requireAnyPermission('VIEW_INVENTORY', 'BREAKAGE_VIEW', 'READ_BREAKAGE', 'APPROVE_BREAKAGE'),
+    ctrl.getEvidencePDF,
+);
 
 module.exports = router;

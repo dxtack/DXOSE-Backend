@@ -1,0 +1,17 @@
+-- Schema alignment only (no DDL applied to the live database).
+--
+-- A) approval_requests: keep existing PARTIAL unique index
+--    approval_requests_grnImportId_cycleNumber_key
+--    ON ("grnImportId", "cycleNumber") WHERE "grnImportId" IS NOT NULL
+--    (created by 20260627190000_grn_cycle_number_unique).
+--    schema.prisma intentionally omits @@unique([grnImportId, cycleNumber])
+--    because Prisma 5.22 cannot express a WHERE predicate on @@unique; a full
+--    unique would break legitimate NULL grnImportId approval rows.
+--
+-- B) audit_log.changedBy: keep existing ON DELETE RESTRICT
+--    (audit_log_changedBy_fkey from init). schema.prisma now declares
+--    onDelete: Restrict explicitly so Prisma no longer assumes SET NULL
+--    for the optional FK.
+--
+-- Intentional no-op: DB already matches the desired physical state.
+SELECT 1;

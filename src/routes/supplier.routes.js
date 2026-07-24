@@ -3,8 +3,10 @@ const router = express.Router();
 const supplierController = require('../controllers/supplier.controller');
 const { authenticate: protect } = require('../middleware/authenticate');
 const { requirePermission } = require('../middleware/authorize');
+const { requireBranchPropertyForMutation } = require('../middleware/requireBranchPropertyContext');
 
 router.use(protect);
+router.use(requireBranchPropertyForMutation);
 
 router
     .route('/')

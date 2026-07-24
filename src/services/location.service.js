@@ -1,11 +1,22 @@
 const { PrismaClient } = require('@prisma/client');
 const { validate: uuidValidate } = require('uuid');
 const prisma = new PrismaClient();
+const {
+    isScopeEngineEnabled,
+    resolveUserScope,
+    resolveLocationLookupScopeWhere,
+    LOCATION_LOOKUP_PURPOSE,
+    mergeScopeIntoWhere,
+    assertDepartmentInScope,
+    assertLocationInScope,
+    parseMasterDataTenantWideQuery,
+} = require('./scope/scope.service');
 
 const MAX_LOCATION_PAGE = 1000;
 const MAX_LOCATION_SLIM = 5000;
 
 const isSlimQuery = (value) => value === 'true' || value === true;
+const parseBoolQuery = (value) => value === true || value === 'true';
 
 const parseLocationPagination = (querySkip, queryTake, defaultTake = 100) => {
     let skip = parseInt(querySkip, 10);
@@ -116,7 +127,7 @@ const createLocation = async (data, tenantId) => {
 /**
  * Get all locations
  */
-const getLocations = async (tenantId, query = {}) => {
+const getLocations = async (tenantId, query = {}, user = null) => {
     const { search, type, isActive, departmentId, categoryId, slim } = query;
     const slimMode = isSlimQuery(slim);
 
@@ -131,12 +142,12 @@ const getLocations = async (tenantId, query = {}) => {
 
     const hasExplicitIsActive = Object.prototype.hasOwnProperty.call(query, 'isActive');
 
-    const where = {
+    let where = {
         tenantId,
         ...(type && { type }),
         ...(departmentId && { departmentId }),
         ...(departmentId && !hasExplicitIsActive ? { isActive: true } : {}),
-        ...(hasExplicitIsActive ? { isActive: isActive === 'true' } : {}),
+        ...(hasExplicitIsActive ? { isActive: parseBoolQuery(isActive) } : {}),
         ...(categoryId && {
             locationCategories: {
                 some: { categoryId }
@@ -146,6 +157,30 @@ const getLocations = async (tenantId, query = {}) => {
             name: { contains: search, mode: 'insensitive' }
         })
     };
+
+    const lookupPurpose = String(query.lookupPurpose || query.purpose || '').trim();
+
+    if (user && isScopeEngineEnabled() && !parseMasterDataTenantWideQuery(query)) {
+        const scope = await resolveUserScope(user, tenantId);
+        if (departmentId) {
+            await assertDepartmentInScope(departmentId, tenantId, scope, 'list');
+        }
+        const normalizedPurpose = lookupPurpose.toLowerCase().replace(/-/g, '_');
+        if (
+            normalizedPurpose === LOCATION_LOOKUP_PURPOSE.TRANSFER_DESTINATION &&
+            !isSlimQuery(query.slim)
+        ) {
+            const error = new Error(
+                'lookupPurpose=transfer_destination requires slim=true (minimal location picker payload).',
+            );
+            error.statusCode = 400;
+            throw error;
+        }
+        where = mergeScopeIntoWhere(
+            where,
+            resolveLocationLookupScopeWhere(scope, normalizedPurpose),
+        );
+    }
 
     if (slimMode) {
         const locations = await prisma.location.findMany({
@@ -182,7 +217,11 @@ const getLocations = async (tenantId, query = {}) => {
 /**
  * Get location by ID
  */
-const getLocationById = async (id, tenantId) => {
+const getLocationById = async (id, tenantId, user = null) => {
+    if (user && isScopeEngineEnabled()) {
+        const scope = await resolveUserScope(user, tenantId);
+        await assertLocationInScope(id, tenantId, scope, 'read');
+    }
     const location = await prisma.location.findFirst({
         where: { id, tenantId },
         include: {

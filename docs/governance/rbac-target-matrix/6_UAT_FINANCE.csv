@@ -1,0 +1,17 @@
+Test_ID,Priority,Role,Module,Action,Expected_Result,Must_Not_Require_ADMIN,Pre_Requisite
+U01,P0,FINANCE_MANAGER,User Settings,Open role dropdown,ADMIN not in list,Y,Matrix approved
+U02,P0,API,Users,POST user with role ADMIN,403 with clear message,Y,API block implemented
+U03,P0,FINANCE_MANAGER,Users,Create edit deactivate hotel user,Success tenant-scoped,Y,P1 USERS_COMPANY_MANAGE
+U04,P0,FINANCE_MANAGER,GRN,Create validate submit post,Full flow success,Y,
+U05,P0,FINANCE_MANAGER,Transfer,Create submit dept approve finance post,Success,Y,
+U06,P0,FINANCE_MANAGER,Breakage,List sees tenant documents not wrongly empty,Rows with scope explanation if debug,Y,
+U07,P0,FINANCE_MANAGER,Breakage,Approve appropriate step,Success,Y,
+U08,P0,FINANCE_MANAGER,Lost Items,Same as breakage,Success,Y,
+U09,P0,FINANCE_MANAGER,Inventory Count,Create session count approve,Success,Y,
+U10,P0,FINANCE_MANAGER,Get Pass,Return close exit flows,Success,Y,
+U11,P1,FINANCE_MANAGER,Ledger,View filtered export,Success,Y,
+U12,P1,FINANCE_MANAGER,Reports,Generate and export,Success,Y,
+U13,P1,FINANCE_MANAGER,Period Close,Close period,Success,Y,
+U14,P1,ORG_MANAGER,Same hotel,Compare visibility to Finance on switched tenant,Parity except org-only screens,Y,
+U15,P1,LEGACY_ADMIN,Login,Existing ADMIN membership,Works until migrated,N,Compat window
+U16,P0,SUPER_ADMIN,Hotel GRN post,Should not be normal operator path,Blocked or documented break-glass only,Y,

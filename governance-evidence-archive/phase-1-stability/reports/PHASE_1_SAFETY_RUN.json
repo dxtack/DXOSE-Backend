@@ -1,0 +1,41 @@
+{
+  "status": "FAIL",
+  "executedAt": "2026-07-21T14:06:32.589Z",
+  "testDatabase": "ose_inventory_test",
+  "stages": [
+    {
+      "name": "Environment and DB Safety Guard",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 88,
+      "command": null,
+      "cwd": null,
+      "files": null,
+      "tests": null,
+      "passed": null,
+      "failed": null,
+      "skipped": null,
+      "evidence": null
+    },
+    {
+      "name": "Backend Unit",
+      "status": "FAIL",
+      "exitCode": 1,
+      "durationMs": 35277,
+      "command": "npm run test:unit",
+      "cwd": "C:\\DX OS&E\\OSE-backend",
+      "files": 60,
+      "tests": 343,
+      "passed": 327,
+      "failed": 16,
+      "skipped": 0,
+      "evidence": null
+    }
+  ],
+  "residuals": {},
+  "productDatabaseTouched": false,
+  "openFindings": [
+    "SF-004",
+    "SF-007"
+  ]
+}

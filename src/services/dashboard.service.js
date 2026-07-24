@@ -1,5 +1,87 @@
 const prisma = require('../config/database');
+const { openGrnStatusesForQuery } = require('../constants/grnStatus');
 const { normalizeRole } = require('./rbac.service');
+const { resolveScopeContext, metaFor } = require('./scope/scopeContext');
+const { hasActiveAssignmentForProperty } = require('./scope/assignment-mutation.guard');
+const {
+    getWorkflowPipelineSummary,
+    getWorkflowPipelineAlerts,
+    getScopedPipelineItems,
+} = require('./workflow-pipeline/workflow-pipeline.service');
+
+const emptyOperationalHealth = () => ({
+    pendingTransfersCount: 0,
+    pendingGrnsCount: 0,
+    pendingLossCount: 0,
+    overdueLoansCount: 0,
+    pendingStockReportsCount: 0,
+    details: {
+        pendingTransfers: [],
+        pendingGrns: [],
+        pendingLoss: [],
+        overdueLoans: [],
+        pendingStockReports: [],
+    },
+});
+
+/** Align dashboard operationalHealth counts with Workflow Pipeline (single source of truth). */
+async function alignOperationalHealthWithPipeline(tenantId, userCtx, operationalHealth) {
+    try {
+        const [summary, alertItems, pipelineItems] = await Promise.all([
+            getWorkflowPipelineSummary(tenantId, userCtx),
+            getWorkflowPipelineAlerts(tenantId, userCtx, { limit: 40 }),
+            getScopedPipelineItems(tenantId, userCtx),
+        ]);
+        const oh = summary.operationalHealth || {};
+        const mapDetail = (i) => ({
+            id: i.documentId,
+            transferNo: i.module === 'TRANSFER' ? i.documentNo : undefined,
+            documentNo: i.documentNo,
+            grnNumber: i.module === 'GRN' ? i.documentNo : undefined,
+            passNo: i.module === 'GET_PASS' ? i.documentNo : undefined,
+            status: i.status,
+            waitingForRole: i.waitingForRole,
+            borrowingEntity: i.meta?.borrowingEntity,
+            expectedReturnDate: i.meta?.expectedReturnDate,
+        });
+        const byModule = (mod) => alertItems.filter((i) => i.module === mod).slice(0, 5).map(mapDetail);
+
+        return {
+            ...operationalHealth,
+            pendingTransfersCount: oh.pendingTransfersCount ?? operationalHealth?.pendingTransfersCount ?? 0,
+            pendingGrnsCount: oh.pendingGrnsCount ?? operationalHealth?.pendingGrnsCount ?? 0,
+            pendingLossCount: oh.pendingLossCount ?? operationalHealth?.pendingLossCount ?? 0,
+            overdueLoansCount: oh.overdueLoansCount ?? summary.getPassOverdue ?? 0,
+            pendingStockReportsCount: operationalHealth?.pendingStockReportsCount ?? 0,
+            pipeline: {
+                total: summary.total,
+                mine: summary.mine,
+                critical: summary.critical,
+                warning: summary.warning,
+                overdue: summary.overdue,
+                byModule: summary.byModule,
+            },
+            details: {
+                pendingTransfers: byModule('TRANSFER'),
+                pendingGrns: byModule('GRN'),
+                pendingLoss: [...byModule('BREAKAGE'), ...byModule('LOST')],
+                overdueLoans: pipelineItems
+                    .filter((i) => i.module === 'GET_PASS' && (i.overdue || i.priority === 'critical'))
+                    .slice(0, 5)
+                    .map((i) => ({
+                        id: i.documentId,
+                        loanNo: i.documentNo,
+                        passNo: i.documentNo,
+                        borrowingEntity: i.meta?.borrowingEntity,
+                        expectedReturnDate: i.meta?.expectedReturnDate,
+                    })),
+                pendingStockReports: operationalHealth?.details?.pendingStockReports || [],
+            },
+        };
+    } catch {
+        return operationalHealth;
+    }
+}
 
 /**
  * UI layout + API payload shape for role-adaptive dashboard.
@@ -8,7 +90,7 @@ const { normalizeRole } = require('./rbac.service');
  */
 function resolveDashboardProfile(role) {
     const r = normalizeRole(role || '');
-    if (['SUPER_ADMIN', 'ORG_MANAGER', 'ADMIN', 'GENERAL_MANAGER', 'FINANCE_MANAGER', 'AUDITOR'].includes(r)) {
+    if (['SUPER_ADMIN', 'ORG_MANAGER', 'GENERAL_MANAGER', 'FINANCE_MANAGER', 'AUDITOR'].includes(r)) {
         return 'executive';
     }
     if (['STOREKEEPER', 'COST_CONTROL'].includes(r)) return 'operations';
@@ -26,16 +108,28 @@ function resolveDashboardProfile(role) {
 
 const getDashboardSummary = async (tenantId, userCtx = null) => {
     const profile = resolveDashboardProfile(userCtx?.role);
+    const scope = userCtx?.id ? await resolveScopeContext(userCtx, tenantId) : null;
+    const scopeMeta = scope ? metaFor(scope) : null;
+
+    let payload;
     if (profile === 'security') {
-        return buildSecuritySummary(tenantId, userCtx);
+        payload = await buildSecuritySummary(tenantId, userCtx);
+    } else if (profile === 'operations') {
+        payload = await buildOperationsSummary(tenantId, userCtx, scope);
+    } else if (profile === 'department') {
+        payload = await buildDepartmentSummary(tenantId, userCtx);
+    } else {
+        payload = await buildExecutiveSummary(tenantId, userCtx);
     }
-    if (profile === 'operations') {
-        return buildOperationsSummary(tenantId, userCtx);
+
+    if (userCtx?.id && tenantId && normalizeRole(userCtx.role) !== 'SUPER_ADMIN') {
+        const hasAssignment = await hasActiveAssignmentForProperty(userCtx, tenantId);
+        if (!hasAssignment && payload.operationalHealth) {
+            payload.operationalHealth = emptyOperationalHealth();
+        }
     }
-    if (profile === 'department') {
-        return buildDepartmentSummary(tenantId, userCtx);
-    }
-    return buildExecutiveSummary(tenantId, userCtx);
+
+    return { ...payload, ...scopeMeta };
 };
 
 /** Full financial / GM-style dashboard (default). */
@@ -50,7 +144,6 @@ async function buildExecutiveSummary(tenantId, userCtx) {
         valueByStore,
         thisMonthMovements,
         prevMonthMovements,
-        requisitionStats,
         agingData,
         topConsumed,
         topSlow,
@@ -151,31 +244,6 @@ async function buildExecutiveSummary(tenantId, userCtx) {
             };
         })(),
 
-        // ── Q5: Requisition Fill Rate ────────────────────────────────────
-        (async () => {
-            const [total, fulfilled] = await Promise.all([
-                prisma.storeRequisition.count({
-                    where: {
-                        tenantId,
-                        status: { in: ['APPROVED', 'PARTIALLY_ISSUED', 'FULLY_ISSUED', 'CLOSED'] },
-                        createdAt: { gte: monthStart },
-                    },
-                }),
-                prisma.storeRequisition.count({
-                    where: {
-                        tenantId,
-                        status: { in: ['FULLY_ISSUED', 'CLOSED'] },
-                        createdAt: { gte: monthStart },
-                    },
-                }),
-            ]);
-            return {
-                totalRequisitions: total,
-                fulfilledRequisitions: fulfilled,
-                fillRate: total > 0 ? Math.round((fulfilled / total) * 100) : 0,
-            };
-        })(),
-
         // ── Q6: Aging Buckets ────────────────────────────────────────────
         (async () => {
             const rows = await prisma.$queryRaw`
@@ -245,18 +313,17 @@ async function buildExecutiveSummary(tenantId, userCtx) {
 
         // ── Q8: Operational Health ───────────────────────────────────────
         (async () => {
-            const [openReqs, pendingTransfers, pendingGrns, pendingLoss, overdueLoans, pendingStockReports] = await Promise.all([
-                prisma.storeRequisition.findMany({
-                    where: { tenantId, status: { in: ['SUBMITTED', 'APPROVED', 'PARTIALLY_ISSUED'] } },
-                    select: { id: true, requisitionNo: true, status: true, requestedBy: true }
-                }).catch(() => []),
+            const [pendingTransfers, pendingGrns, pendingLoss, overdueLoans] = await Promise.all([
                 prisma.storeTransfer.findMany({
-                    where: { tenantId, status: { in: ['SUBMITTED', 'APPROVED', 'IN_TRANSIT'] } },
+                    where: { tenantId, status: { in: ['PENDING_DEPT', 'PENDING_FINANCE'] } },
                     select: { id: true, transferNo: true, status: true, sourceLocationId: true, destLocationId: true }
                 }).catch(() => []),
                 prisma.grnImport.findMany({
-                    where: { tenantId, status: { in: ['DRAFT', 'VALIDATED', 'PENDING_APPROVAL'] } },
-                    select: { id: true, grnNumber: true, status: true, vendorId: true }
+                    where: {
+                        tenantId,
+                        status: { in: openGrnStatusesForQuery() },
+                    },
+                    select: { id: true, grnNumber: true, status: true, vendorId: true },
                 }).catch(() => []),
                 prisma.movementDocument.findMany({
                     where: { tenantId, movementType: 'BREAKAGE', status: 'DRAFT' },
@@ -265,21 +332,15 @@ async function buildExecutiveSummary(tenantId, userCtx) {
                 prisma.getPass.findMany({
                     where: { tenantId, status: { in: ['OUT', 'PARTIALLY_RETURNED'] }, expectedReturnDate: { lt: now } },
                     select: { id: true, passNo: true, borrowingEntity: true, expectedReturnDate: true }
-                }).catch(() => []),
-                prisma.savedStockReport.findMany({
-                    where: { tenantId, status: 'PENDING_APPROVAL' },
-                    select: { id: true, reportNo: true, status: true }
                 }).catch(() => [])
             ]);
             return {
-                openReqsCount: openReqs.length,
                 pendingTransfersCount: pendingTransfers.length,
                 pendingGrnsCount: pendingGrns.length,
                 pendingLossCount: pendingLoss.length,
                 overdueLoansCount: overdueLoans.length,
-                pendingStockReportsCount: pendingStockReports.length,
+                pendingStockReportsCount: 0,
                 details: {
-                    openReqs: openReqs.slice(0, 5),
                     pendingTransfers: pendingTransfers.slice(0, 5),
                     pendingGrns: pendingGrns.slice(0, 5),
                     pendingLoss: pendingLoss.slice(0, 5),
@@ -290,7 +351,7 @@ async function buildExecutiveSummary(tenantId, userCtx) {
                         borrowingEntity: p.borrowingEntity,
                         expectedReturnDate: p.expectedReturnDate
                     })),
-                    pendingStockReports: pendingStockReports.slice(0, 5)
+                    pendingStockReports: []
                 }
             };
         })(),
@@ -313,6 +374,12 @@ async function buildExecutiveSummary(tenantId, userCtx) {
         departmentId: null,
     });
 
+    const operationalHealthAligned = await alignOperationalHealthWithPipeline(
+        tenantId,
+        userCtx,
+        operationalHealth,
+    );
+
     return {
         meta: { dashboardProfile: 'executive' },
         inventoryOverview: {
@@ -325,9 +392,6 @@ async function buildExecutiveSummary(tenantId, userCtx) {
             transfersCount: thisMonthMovements.transfersCount,
             lossValue: thisMonthMovements.lossValue,
             lossDelta,
-            fillRate: requisitionStats.fillRate,
-            totalRequisitions: requisitionStats.totalRequisitions,
-            fulfilledRequisitions: requisitionStats.fulfilledRequisitions,
         },
         riskIndicators: {
             aging: agingData,
@@ -335,37 +399,55 @@ async function buildExecutiveSummary(tenantId, userCtx) {
             topSlow,
             lossVsConsumptionPct: lossVsConsumption,
         },
-        operationalHealth,
+        operationalHealth: operationalHealthAligned,
         controlTower,
         generatedAt: now.toISOString(),
     };
 }
 
 /** Storekeeper / Cost Control — quantities, alerts, pending workflow (lean payload). */
-async function buildOperationsSummary(tenantId, userCtx) {
+async function buildOperationsSummary(tenantId, userCtx, scope = null) {
     const now = new Date();
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const prevMonthStart = new Date(now.getFullYear(), now.getMonth() - 1, 1);
     const prevMonthEnd = new Date(now.getFullYear(), now.getMonth(), 0, 23, 59, 59, 999);
 
+    const stockScopeWhere =
+        scope && !scope.isTenantWide && scope.allowedLocationIds?.length
+            ? { locationId: { in: scope.allowedLocationIds } }
+            : {};
+
     const [
         inventoryTotals,
         thisMonthMovements,
         prevMonthMovements,
-        requisitionStats,
         operationalHealth,
         controlTower,
     ] = await Promise.all([
         (async () => {
             const [balances, storeCount, itemCount] = await Promise.all([
                 prisma.stockBalance.aggregate({
-                    where: { tenantId },
+                    where: { tenantId, ...stockScopeWhere },
                     _sum: { qtyOnHand: true },
                 }),
-                prisma.location.count({ where: { tenantId, isActive: true } }),
+                prisma.location.count({
+                    where: {
+                        tenantId,
+                        isActive: true,
+                        ...(stockScopeWhere.locationId ? { id: stockScopeWhere.locationId } : {}),
+                    },
+                }),
                 prisma.item.count({ where: { tenantId, isActive: true } }),
             ]);
-            const valueResult = await prisma.$queryRaw`
+            const valueResult =
+                scope && !scope.isTenantWide && scope.allowedLocationIds?.length
+                    ? await prisma.$queryRaw`
+                SELECT COALESCE(SUM(sb."qtyOnHand" * sb."wacUnitCost"), 0)::float as "totalValue"
+                FROM stock_balances sb
+                WHERE sb."tenantId" = ${tenantId}::uuid
+                  AND sb."locationId" = ANY(${scope.allowedLocationIds}::uuid[])
+            `
+                    : await prisma.$queryRaw`
                 SELECT COALESCE(SUM("qtyOnHand" * "wacUnitCost"), 0)::float as "totalValue"
                 FROM stock_balances
                 WHERE "tenantId" = ${tenantId}::uuid
@@ -428,41 +510,17 @@ async function buildOperationsSummary(tenantId, userCtx) {
             };
         })(),
         (async () => {
-            const [total, fulfilled] = await Promise.all([
-                prisma.storeRequisition.count({
-                    where: {
-                        tenantId,
-                        status: { in: ['APPROVED', 'PARTIALLY_ISSUED', 'FULLY_ISSUED', 'CLOSED'] },
-                        createdAt: { gte: monthStart },
-                    },
-                }),
-                prisma.storeRequisition.count({
-                    where: {
-                        tenantId,
-                        status: { in: ['FULLY_ISSUED', 'CLOSED'] },
-                        createdAt: { gte: monthStart },
-                    },
-                }),
-            ]);
-            return {
-                totalRequisitions: total,
-                fulfilledRequisitions: fulfilled,
-                fillRate: total > 0 ? Math.round((fulfilled / total) * 100) : 0,
-            };
-        })(),
-        (async () => {
             const nowOp = new Date();
-            const [openReqs, pendingTransfers, pendingGrns, pendingLoss, overdueLoans, pendingStockReports] = await Promise.all([
-                prisma.storeRequisition.findMany({
-                    where: { tenantId, status: { in: ['SUBMITTED', 'APPROVED', 'PARTIALLY_ISSUED'] } },
-                    select: { id: true, requisitionNo: true, status: true, requestedBy: true },
-                }).catch(() => []),
+            const [pendingTransfers, pendingGrns, pendingLoss, overdueLoans] = await Promise.all([
                 prisma.storeTransfer.findMany({
-                    where: { tenantId, status: { in: ['SUBMITTED', 'APPROVED', 'IN_TRANSIT'] } },
+                    where: { tenantId, status: { in: ['PENDING_DEPT', 'PENDING_FINANCE'] } },
                     select: { id: true, transferNo: true, status: true, sourceLocationId: true, destLocationId: true },
                 }).catch(() => []),
                 prisma.grnImport.findMany({
-                    where: { tenantId, status: { in: ['DRAFT', 'VALIDATED', 'PENDING_APPROVAL'] } },
+                    where: {
+                        tenantId,
+                        status: { in: openGrnStatusesForQuery() },
+                    },
                     select: { id: true, grnNumber: true, status: true, vendorId: true },
                 }).catch(() => []),
                 prisma.movementDocument.findMany({
@@ -473,20 +531,14 @@ async function buildOperationsSummary(tenantId, userCtx) {
                     where: { tenantId, status: { in: ['OUT', 'PARTIALLY_RETURNED'] }, expectedReturnDate: { lt: nowOp } },
                     select: { id: true, passNo: true, borrowingEntity: true, expectedReturnDate: true },
                 }).catch(() => []),
-                prisma.savedStockReport.findMany({
-                    where: { tenantId, status: 'PENDING_APPROVAL' },
-                    select: { id: true, reportNo: true, status: true },
-                }).catch(() => []),
             ]);
             return {
-                openReqsCount: openReqs.length,
                 pendingTransfersCount: pendingTransfers.length,
                 pendingGrnsCount: pendingGrns.length,
                 pendingLossCount: pendingLoss.length,
                 overdueLoansCount: overdueLoans.length,
-                pendingStockReportsCount: pendingStockReports.length,
+                pendingStockReportsCount: 0,
                 details: {
-                    openReqs: openReqs.slice(0, 5),
                     pendingTransfers: pendingTransfers.slice(0, 5),
                     pendingGrns: pendingGrns.slice(0, 5),
                     pendingLoss: pendingLoss.slice(0, 5),
@@ -497,7 +549,7 @@ async function buildOperationsSummary(tenantId, userCtx) {
                         borrowingEntity: p.borrowingEntity,
                         expectedReturnDate: p.expectedReturnDate,
                     })),
-                    pendingStockReports: pendingStockReports.slice(0, 5),
+                    pendingStockReports: [],
                 },
             };
         })(),
@@ -511,6 +563,12 @@ async function buildOperationsSummary(tenantId, userCtx) {
     const consumptionDelta = calcDelta(thisMonthMovements.consumptionValue, prevMonthMovements.consumptionValue);
     const lossDelta = calcDelta(thisMonthMovements.lossValue, prevMonthMovements.lossValue);
 
+    const operationalHealthAligned = await alignOperationalHealthWithPipeline(
+        tenantId,
+        userCtx,
+        operationalHealth,
+    );
+
     return {
         meta: { dashboardProfile: 'operations' },
         inventoryOverview: {
@@ -523,12 +581,9 @@ async function buildOperationsSummary(tenantId, userCtx) {
             transfersCount: thisMonthMovements.transfersCount,
             lossValue: thisMonthMovements.lossValue,
             lossDelta,
-            fillRate: requisitionStats.fillRate,
-            totalRequisitions: requisitionStats.totalRequisitions,
-            fulfilledRequisitions: requisitionStats.fulfilledRequisitions,
         },
         riskIndicators: null,
-        operationalHealth,
+        operationalHealth: operationalHealthAligned,
         controlTower,
         generatedAt: now.toISOString(),
     };
@@ -562,20 +617,15 @@ async function buildDepartmentSummary(tenantId, userCtx) {
                 transfersCount: 0,
                 lossValue: 0,
                 lossDelta: 0,
-                fillRate: 0,
-                totalRequisitions: 0,
-                fulfilledRequisitions: 0,
             },
             riskIndicators: null,
             operationalHealth: {
-                openReqsCount: 0,
                 pendingTransfersCount: 0,
                 pendingGrnsCount: 0,
                 pendingLossCount: 0,
                 overdueLoansCount: 0,
                 pendingStockReportsCount: 0,
                 details: {
-                    openReqs: [],
                     pendingTransfers: [],
                     pendingGrns: [],
                     pendingLoss: [],
@@ -594,7 +644,6 @@ async function buildDepartmentSummary(tenantId, userCtx) {
         valueByStore,
         thisMonthMovements,
         prevMonthMovements,
-        requisitionStats,
         agingData,
         topConsumed,
         topSlow,
@@ -699,31 +748,6 @@ async function buildDepartmentSummary(tenantId, userCtx) {
             };
         })(),
         (async () => {
-            const [total, fulfilled] = await Promise.all([
-                prisma.storeRequisition.count({
-                    where: {
-                        tenantId,
-                        status: { in: ['APPROVED', 'PARTIALLY_ISSUED', 'FULLY_ISSUED', 'CLOSED'] },
-                        createdAt: { gte: monthStart },
-                        location: { departmentId },
-                    },
-                }),
-                prisma.storeRequisition.count({
-                    where: {
-                        tenantId,
-                        status: { in: ['FULLY_ISSUED', 'CLOSED'] },
-                        createdAt: { gte: monthStart },
-                        location: { departmentId },
-                    },
-                }),
-            ]);
-            return {
-                totalRequisitions: total,
-                fulfilledRequisitions: fulfilled,
-                fillRate: total > 0 ? Math.round((fulfilled / total) * 100) : 0,
-            };
-        })(),
-        (async () => {
             const rows = await prisma.$queryRaw`
                 SELECT
                     CASE
@@ -790,21 +814,16 @@ async function buildDepartmentSummary(tenantId, userCtx) {
         })(),
         (async () => {
             const nowOp = new Date();
-            const [openReqs, pendingTransfers, pendingGrns, pendingLoss, overdueLoans, pendingStockReports] = await Promise.all([
-                prisma.storeRequisition.findMany({
-                    where: {
-                        tenantId,
-                        status: { in: ['SUBMITTED', 'APPROVED', 'PARTIALLY_ISSUED'] },
-                        location: { departmentId },
-                    },
-                    select: { id: true, requisitionNo: true, status: true, requestedBy: true },
-                }).catch(() => []),
+            const [pendingTransfers, pendingGrns, pendingLoss, overdueLoans] = await Promise.all([
                 prisma.storeTransfer.findMany({
-                    where: { tenantId, status: { in: ['SUBMITTED', 'APPROVED', 'IN_TRANSIT'] } },
+                    where: { tenantId, status: { in: ['PENDING_DEPT', 'PENDING_FINANCE'] } },
                     select: { id: true, transferNo: true, status: true, sourceLocationId: true, destLocationId: true },
                 }).catch(() => []),
                 prisma.grnImport.findMany({
-                    where: { tenantId, status: { in: ['DRAFT', 'VALIDATED', 'PENDING_APPROVAL'] } },
+                    where: {
+                        tenantId,
+                        status: { in: openGrnStatusesForQuery() },
+                    },
                     select: { id: true, grnNumber: true, status: true, vendorId: true },
                 }).catch(() => []),
                 prisma.movementDocument.findMany({
@@ -820,20 +839,14 @@ async function buildDepartmentSummary(tenantId, userCtx) {
                     where: { tenantId, status: { in: ['OUT', 'PARTIALLY_RETURNED'] }, expectedReturnDate: { lt: nowOp } },
                     select: { id: true, passNo: true, borrowingEntity: true, expectedReturnDate: true },
                 }).catch(() => []),
-                prisma.savedStockReport.findMany({
-                    where: { tenantId, status: 'PENDING_APPROVAL', location: { departmentId } },
-                    select: { id: true, reportNo: true, status: true },
-                }).catch(() => []),
             ]);
             return {
-                openReqsCount: openReqs.length,
                 pendingTransfersCount: pendingTransfers.length,
                 pendingGrnsCount: pendingGrns.length,
                 pendingLossCount: pendingLoss.length,
                 overdueLoansCount: overdueLoans.length,
-                pendingStockReportsCount: pendingStockReports.length,
+                pendingStockReportsCount: 0,
                 details: {
-                    openReqs: openReqs.slice(0, 5),
                     pendingTransfers: pendingTransfers.slice(0, 5),
                     pendingGrns: pendingGrns.slice(0, 5),
                     pendingLoss: pendingLoss.slice(0, 5),
@@ -844,7 +857,7 @@ async function buildDepartmentSummary(tenantId, userCtx) {
                         borrowingEntity: p.borrowingEntity,
                         expectedReturnDate: p.expectedReturnDate,
                     })),
-                    pendingStockReports: pendingStockReports.slice(0, 5),
+                    pendingStockReports: [],
                 },
             };
         })(),
@@ -886,9 +899,6 @@ async function buildDepartmentSummary(tenantId, userCtx) {
             transfersCount: thisMonthMovements.transfersCount,
             lossValue: thisMonthMovements.lossValue,
             lossDelta,
-            fillRate: requisitionStats.fillRate,
-            totalRequisitions: requisitionStats.totalRequisitions,
-            fulfilledRequisitions: requisitionStats.fulfilledRequisitions,
         },
         riskIndicators: {
             aging: agingData,
@@ -896,7 +906,7 @@ async function buildDepartmentSummary(tenantId, userCtx) {
             topSlow,
             lossVsConsumptionPct: lossVsConsumption,
         },
-        operationalHealth,
+        operationalHealth: await alignOperationalHealthWithPipeline(tenantId, userCtx, operationalHealth),
         controlTower,
         myRequestStatus,
         generatedAt: now.toISOString(),
@@ -932,7 +942,7 @@ async function buildSecuritySummary(tenantId, userCtx) {
 /** Storekeeper / Cost Control — alerts + workflow + pending list only (lean). */
 async function computeControlTowerOperations(tenantId, monthStart, userCtx) {
     const role = userCtx?.role ? normalizeRole(userCtx.role) : '';
-    const elevated = ['ADMIN', 'ORG_MANAGER', 'SUPER_ADMIN'].includes(role);
+    const elevated = ['ORG_MANAGER', 'SUPER_ADMIN', 'FINANCE_MANAGER'].includes(role);
 
     const [
         workflowGrouped,
@@ -1058,7 +1068,7 @@ async function computeControlTowerMetrics(tenantId, monthStart, userCtx, opts = 
     }
 
     const role = userCtx?.role ? normalizeRole(userCtx.role) : '';
-    const elevated = ['ADMIN', 'ORG_MANAGER', 'SUPER_ADMIN'].includes(role);
+    const elevated = ['ORG_MANAGER', 'SUPER_ADMIN', 'FINANCE_MANAGER'].includes(role);
 
     const postedWhere = {
         tenantId,
@@ -1496,13 +1506,13 @@ const aggregateBranchMetrics = async (tenantId, monthStart) => {
         prisma.storeTransfer.count({
             where: {
                 tenantId,
-                status: { in: ['SUBMITTED', 'APPROVED', 'IN_TRANSIT'] },
+                status: { in: ['PENDING_DEPT', 'PENDING_FINANCE'] },
             },
         }),
         prisma.grnImport.count({
             where: {
                 tenantId,
-                status: { in: ['DRAFT', 'VALIDATED', 'PENDING_APPROVAL'] },
+                status: { in: openGrnStatusesForQuery() },
             },
         }),
         prisma.stockCountSession.count({
@@ -1531,7 +1541,7 @@ const getOrganizationSummary = async (parentTenantId) => {
 
     const branches = await prisma.tenant.findMany({
         where: { parentId: parentTenantId },
-        select: { id: true, name: true },
+        select: { id: true, name: true, slug: true, subStatus: true },
         orderBy: { name: 'asc' },
     });
 
@@ -1540,6 +1550,9 @@ const getOrganizationSummary = async (parentTenantId) => {
             const m = await aggregateBranchMetrics(b.id, monthStart);
             return {
                 branchName: b.name,
+                tenantId: b.id,
+                tenantSlug: b.slug,
+                subStatus: b.subStatus,
                 inventoryValue: m.inventoryValue,
                 consumption: m.consumption,
                 waste: m.waste,

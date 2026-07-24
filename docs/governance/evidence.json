@@ -1,0 +1,512 @@
+{
+  "2.2-04": {
+    "status": "Blocked (BDR)",
+    "evidence": "Governance decision pending â€” no Cancelled label shipped",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "API+UI status labels",
+    "gap": "Cancelled user-facing label not ratified",
+    "bdr": "BDR-007"
+  },
+  "2.3-01": {
+    "status": "Partially Compliant",
+    "evidence": "mapUserFacingState on GRN/Transfer/Breakage/Get Pass BE; FE constitution-lifecycle.util on detail partial",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "lifecyclePresentation.service.js; transferWorkflow.util.js; getPass.service.js; breakage.service.js; constitution-lifecycle.util.ts",
+    "gap": "Inventory Count, Lost Items, Movement forms still expose internal status enums in UI"
+  },
+  "2.3-02": {
+    "status": "Partially Compliant",
+    "evidence": "GRN/Transfer/Breakage/Get Pass use userFacingState when present",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "FE detail components",
+    "gap": "Not verified on all operational modules"
+  },
+  "2.7-02": {
+    "status": "Fully Compliant",
+    "evidence": "resubmitRejectedGrn removed",
+    "scope": "GRN",
+    "applied": "grn.service.js; grn-detail",
+    "gap": "None"
+  },
+  "2.7-04": {
+    "status": "Fully Compliant",
+    "evidence": "REJECTED terminal; PATCH blocked",
+    "scope": "GRN",
+    "applied": "grn.service.js",
+    "gap": "None"
+  },
+  "3.4-01": {
+    "status": "Fully Compliant",
+    "evidence": "sendBackGrn API + FE modal",
+    "scope": "GRN",
+    "applied": "POST /grn/:id/send-back",
+    "gap": "None"
+  },
+  "3.4-03": {
+    "status": "Fully Compliant",
+    "evidence": "Send Back reason required in modal",
+    "scope": "GRN",
+    "applied": "grn-detail ValidationOrchestrator",
+    "gap": "None"
+  },
+  "3.6-01": {
+    "status": "Partially Compliant",
+    "evidence": "GRN detail button order Approveâ†’Send Backâ†’Reject",
+    "scope": "GRN",
+    "applied": "grn-detail.component.html",
+    "gap": "Not verified on Transfer, Breakage, Get Pass, Lost Items"
+  },
+  "4.1-05": {
+    "status": "Fully Compliant",
+    "evidence": "ACC catalog SSOT",
+    "scope": "Platform-wide",
+    "applied": "acc-authority/; rbac.service.js",
+    "gap": "None"
+  },
+  "5.2-07": {
+    "status": "Fully Compliant",
+    "evidence": "postingEngine transactional post",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "postingEngine.service.js; postingGoverned*.service.js",
+    "gap": "None"
+  },
+  "5.2-10": {
+    "status": "Partially Compliant",
+    "evidence": "Idempotent posting guards on GRN/Transfer",
+    "scope": "GRN, Transfer",
+    "applied": "assertNoDuplicate* in postingGoverned services",
+    "gap": "Needs Evidence on all outbound modules"
+  },
+  "6.3-02": {
+    "status": "Partially Compliant",
+    "evidence": "postingDate set on GRN/Transfer/Breakage/Get Pass post paths",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "postingGovernedGrn.service.js; postingGovernedTransfer.service.js; breakage final post; getPass checkout",
+    "gap": "Movement, Lost Items, Inventory Count â€” Needs Evidence"
+  },
+  "6.3-03": {
+    "status": "Partially Compliant",
+    "evidence": "assignedPostingPeriod on same paths",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "postingPeriod.util.js",
+    "gap": "Same as 6.3-02"
+  },
+  "6.6-02": {
+    "status": "Partially Compliant",
+    "evidence": "Period resolution workspace API + FE tables",
+    "scope": "Period Close",
+    "applied": "periodResolution.service.js; period-close-page.component.html",
+    "gap": "Revalidate & Close action not wired; per-doc resolution actions not implemented"
+  },
+  "7.2-01": {
+    "status": "Partially Compliant",
+    "evidence": "Server DRAFT on Transfer/Get Pass create; GRN/Breakage paths differ",
+    "scope": "GRN, Transfer, Get Pass, Breakage",
+    "applied": "transfer.service.js; getPass.service.js; grn.service.js; breakage.service.js",
+    "gap": "GRN one-shot VALIDATED path; Breakage DEPT_APPROVED on create; auto-save not verified"
+  },
+  "7.7-01": {
+    "status": "Needs Evidence",
+    "evidence": "Not verified in code inspection gate",
+    "gap": "No verified server auto-save on meaningful events platform-wide"
+  },
+  "7.10-01": {
+    "status": "Partially Compliant",
+    "evidence": "documentDraftCanDeactivateGuard on GRN create route only",
+    "scope": "GRN",
+    "applied": "app.routes.ts; document-draft-can-deactivate.guard.ts",
+    "gap": "Transfer, Get Pass, Breakage create forms â€” Needs Evidence"
+  },
+  "8.2-01": {
+    "status": "Partially Compliant",
+    "evidence": "concurrencyVersion + assertConcurrencyVersion on GRN/Transfer/Get Pass/Breakage mutations",
+    "scope": "GRN, Transfer, Get Pass, Breakage",
+    "applied": "schema.prisma; concurrency.service.js; service mutations",
+    "gap": "FE does not send concurrencyVersion on Transfer/Get Pass/Breakage; not all GRN mutations"
+  },
+  "8.6-01": {
+    "status": "Partially Compliant",
+    "evidence": "assertConcurrencyVersion on update/submit/approve paths where wired",
+    "scope": "GRN, Transfer, Get Pass, Breakage",
+    "applied": "concurrency.service.js consumers",
+    "gap": "Protected mutations not exhaustively verified per module"
+  },
+  "9.2-01": {
+    "status": "Fully Compliant",
+    "evidence": "generateDocNumber platform-only",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "docNumbering.service.js",
+    "gap": "None"
+  },
+  "9.2-06": {
+    "status": "Fully Compliant",
+    "evidence": "supplierInvoiceNumber separate from grnNumber",
+    "scope": "GRN",
+    "applied": "schema.prisma; grn-create",
+    "gap": "None"
+  },
+  "9.3-05": {
+    "status": "Fully Compliant",
+    "evidence": "Unified docNumbering.service for transaction modules",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "docNumbering.service.js",
+    "gap": "None"
+  },
+  "10.2-02": {
+    "status": "Fully Compliant",
+    "evidence": "Negative stock blocked at posting",
+    "scope": "Inventory",
+    "applied": "postingEngine; location-item-resolution",
+    "gap": "None"
+  },
+  "11.4-01": {
+    "status": "Partially Compliant",
+    "evidence": "displayCurrency pipe on GRN + Transfer detail monetary fields; tenant API",
+    "scope": "GRN, Transfer",
+    "applied": "displayCurrency.service.js; display-currency.pipe.ts; main-layout load",
+    "gap": "Dashboard, reports, breakage/lost detail, stock reports still hardcoded SAR"
+  },
+  "14.3-01": {
+    "status": "Partially Compliant",
+    "evidence": "assertAttachmentMutable on breakage upload + GRN draft invoice patch",
+    "scope": "GRN, Breakage",
+    "applied": "attachmentGovernance.service.js",
+    "gap": "Other modules with attachments â€” Needs Evidence"
+  },
+  "17.3-01": {
+    "status": "Partially Compliant",
+    "evidence": "appKeyboardNav on GRN create/detail only",
+    "scope": "GRN",
+    "applied": "keyboard-navigation.directive.ts",
+    "gap": "All other document/master-data screens"
+  },
+  "18.2-06": {
+    "status": "Partially Compliant",
+    "evidence": "Backend returns err.code; errorFamily via errorRegistry in errorHandler",
+    "scope": "Platform-wide",
+    "applied": "errorHandler.js; errorRegistry.js",
+    "gap": "Not all API errors use registry codes; FE classify only on 409"
+  },
+  "18.2-13": {
+    "status": "Fully Compliant",
+    "evidence": "Server validation authoritative on post/workflow",
+    "scope": "GRN, Transfer, Breakage",
+    "applied": "Backend services",
+    "gap": "None"
+  },
+  "22.2-01": {
+    "status": "Partially Compliant",
+    "evidence": "logAction/logGovernedEvent on workflow actions",
+    "scope": "GRN, Transfer, Get Pass, Breakage",
+    "applied": "auditTrail.service.js",
+    "gap": "Not exhaustively verified per action type"
+  },
+  "22.3-01": {
+    "status": "Partially Compliant",
+    "evidence": "documentTimeline API GRN/TRANSFER/BREAKAGE/GET_PASS; FE timeline on detail modules",
+    "scope": "GRN, Transfer, Breakage, Get Pass",
+    "applied": "documentTimeline.service.js; returns-workflow-timeline",
+    "gap": "GRN FE does not render auditEvents from constitution timeline API"
+  },
+  "23.1-01": {
+    "status": "Partially Compliant",
+    "evidence": "SharedLookupService used on GRN create item search only",
+    "scope": "GRN",
+    "applied": "shared-lookup.service.ts; grn-create",
+    "gap": "Transfer, Get Pass, Breakage, Lost, Movement use parallel lookup paths"
+  },
+  "24.1-01": {
+    "status": "Fully Compliant",
+    "evidence": "Desktop SPA only (Angular)",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend SPA",
+    "gap": "None"
+  },
+  "29.7-01": {
+    "status": "Fully Compliant",
+    "evidence": "Requirement-level traceability register is the implementation SSOT",
+    "scope": "Governance",
+    "applied": "OSE-backend/docs/OSE-backend/docs/governance/CONSTITUTION_TRACEABILITY_MATRIX.md; OSE-backend/docs/OSE-backend/docs/governance/build-register.mjs",
+    "gap": "None"
+  },
+  "7.12-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.2 â€” DraftManager API contract defined; Phase 2 implementation",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-02": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.3 â€” storage key includes tenantId, userId, screenKey, entityId?, schemaVersion",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-03": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.4 â€” Compatible schemaVersion â†’ Restore",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-04": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.4 â€” Upgradeable schemaVersion â†’ Migrate then restore",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-05": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.4 â€” Incompatible schemaVersion â†’ Ignore + user notice",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-06": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.5 â€” idempotent save/delete/clear",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-07": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.5 â€” restore() is read-only",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-08": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.5 â€” clear() removes local + linked server draft",
+    "scope": "Platform-wide",
+    "applied": "draft-manager.service.ts; constitution-platform.service.ts; DELETE /constitution/grn/draft/:id",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-09": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.6 â€” configurable debounce/snapshot; defaults in continuity-policy-defaults.json",
+    "scope": "Platform-wide",
+    "applied": "document-draft-continuity.service.ts; continuity-policy-defaults.json",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.12-10": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.7.12.7 â€” local cache does not replace server draft per Ch.7.2",
+    "scope": "Platform-wide",
+    "applied": "grn-create.component.ts; constitution-platform.service.ts",
+    "gap": "Verify: grn-create E2E â€” server+local draft sync on submit",
+    "bdr": "BDR-010"
+  },
+  "7.12-11": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.12.8 â€” DraftManager emits draft.saved/restored/migration/recovery events",
+    "scope": "Platform-wide",
+    "applied": "OSE-Frontend/src/app/core/services/draft-manager.service.ts; document-draft-continuity.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.13-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.7.13.1 â€” GRN first pilot; server API exists, UI not wired",
+    "scope": "GRN",
+    "applied": "grn-create.component.ts; constitution-platform.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "7.13-02": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.7.13.3 â€” generalization order after GRN pilot",
+    "scope": "GRN, Transfer, Stock Count, Adjustment, Purchase Order",
+    "applied": "movement-form.component.ts; inventory-count-page.component.ts",
+    "gap": "Transfer create screen not in codebase yet",
+    "bdr": "BDR-010"
+  },
+  "14.10-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.14.10.2 â€” temp upload stores attachmentId in draft",
+    "scope": "Platform-wide",
+    "applied": "attachment-upload.service.ts; grn-create.component.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "14.10-02": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.14.10.2 â€” no binary content in draft JSON",
+    "scope": "Platform-wide",
+    "applied": "attachment-upload.service.ts; grn-create.component.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "14.10-03": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.14.10.5 â€” configurable retention; default 48h in continuity-policy-defaults.json",
+    "scope": "Platform-wide",
+    "applied": "continuityMaintenanceScheduler.service.js; scheduler.js",
+    "gap": "R2 object-store sweep deferred â€” local driver only",
+    "bdr": "BDR-010"
+  },
+  "14.10-04": {
+    "status": "Deferred",
+    "evidence": "Ch.14.10.6 â€” temp attachment operations auditable per Ch.22",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/OSE-backend/docs/governance/chapters/CH14-TEMPORARY-ATTACHMENT-EXTENSIONS.md",
+    "gap": "Verify: audit log entries on temp upload, link, cleanup",
+    "bdr": "BDR-010"
+  },
+  "30.1-01": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.30.1 â€” platform-wide session policy; no module-specific refresh",
+    "scope": "Platform-wide",
+    "applied": "session-manager.service.ts",
+    "gap": "Verify: codebase scan â€” no module schedules token refresh outside SessionManager",
+    "bdr": "BDR-010"
+  },
+  "30.2-01": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.30.2.1 â€” AuthService limited to login/logout/tokens/refresh",
+    "scope": "Platform-wide",
+    "applied": "auth.service.ts",
+    "gap": "Verify: auth.service.ts has no idle or proactive refresh scheduling",
+    "bdr": "BDR-010"
+  },
+  "30.2-02": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.30.2.2 â€” SessionManager owns refresh schedule, idle, recovery",
+    "scope": "Platform-wide",
+    "applied": "session-manager.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "30.2-03": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.30.2.3 â€” interceptor single-flight refresh + one retry as fallback",
+    "scope": "Platform-wide",
+    "applied": "auth.interceptor.ts",
+    "gap": "Verify: auth.interceptor.spec.ts â€” 401 TOKEN_EXPIRED retries once after refresh",
+    "bdr": "BDR-010"
+  },
+  "30.3-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.30.3.1 â€” configurable safety margin; default 3m in continuity-policy-defaults.json",
+    "scope": "Platform-wide",
+    "applied": "session-manager.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "30.3-02": {
+    "status": "Deferred",
+    "evidence": "Ch.30.3.2 â€” proactive refresh only when Active",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/OSE-backend/docs/governance/chapters/CH30-SESSION-CONTINUITY.md",
+    "gap": "Verify: session-manager.service.spec.ts â€” no refresh while Idle",
+    "bdr": "BDR-010"
+  },
+  "30.4-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.30.4 â€” configurable idle policy; default 30m in continuity-policy-defaults.json",
+    "scope": "Platform-wide",
+    "applied": "session-manager.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "30.4-02": {
+    "status": "Deferred",
+    "evidence": "Ch.30.4.2 â€” proactive refresh suspended while Idle",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/OSE-backend/docs/governance/chapters/CH30-SESSION-CONTINUITY.md",
+    "gap": "Verify: session-manager.service.spec.ts â€” refresh timer cleared on Idle",
+    "bdr": "BDR-010"
+  },
+  "30.4-03": {
+    "status": "Deferred",
+    "evidence": "Ch.30.4.3 â€” resume from Idle refreshes or ends session",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/OSE-backend/docs/governance/chapters/CH30-SESSION-CONTINUITY.md",
+    "gap": "Verify: session-manager.service.spec.ts â€” activity after Idle triggers refresh or login",
+    "bdr": "BDR-010"
+  },
+  "30.6-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.30.6.1 â€” flush, message, returnUrl, skip guard on expiry",
+    "scope": "Platform-wide",
+    "applied": "session-manager.service.ts; login.component.ts; grn-create.component.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "30.6-02": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.30.6.2 REQ-SESSION-RECOVERY-001 â€” full context + draft restore after re-login",
+    "scope": "Platform-wide",
+    "applied": "session-manager.service.ts; login.component.ts; grn-create.component.ts",
+    "gap": "Browser E2E for post-expiry re-login UI flow deferred",
+    "bdr": "BDR-010"
+  },
+  "30.10-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.30.10 â€” SessionManager emits proactive_refresh/idle/expired/recovery events",
+    "scope": "Platform-wide",
+    "applied": "session-manager.service.ts",
+    "gap": "None",
+    "bdr": "BDR-010"
+  },
+  "30.10-02": {
+    "status": "Deferred",
+    "evidence": "Ch.30.10.3 â€” no tokens or full payloads in continuity events",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/OSE-backend/docs/governance/chapters/CH30-SESSION-CONTINUITY.md",
+    "gap": "Verify: session-telemetry.service.spec.ts â€” payload schema excludes secrets",
+    "bdr": "BDR-010"
+  },
+  "30.7-01": {
+    "status": "Partially Compliant",
+    "evidence": "Ch.30.7 â€” tenant switch in flight preserves session",
+    "scope": "Platform-wide",
+    "applied": "auth.interceptor.ts IS_TENANT_SWITCH_REQUEST; auth.service.ts isTenantSwitchInProgress",
+    "gap": "Verify: auth.interceptor.spec.ts â€” 401 during switch-tenant does not logout",
+    "bdr": "BDR-010"
+  },
+  "31.2-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.31.2 — root contains only OSE-backend and OSE-Frontend",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/governance/chapters/CH31-REPOSITORY-ROOT-GOVERNANCE.md",
+    "gap": "None",
+    "bdr": "None"
+  },
+  "31.3-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.31.3 — prohibited root folders removed (.cursor, Governance, logs)",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/governance/CONSTITUTION_AMENDMENT_REPOSITORY-ROOT-GOVERNANCE.md",
+    "gap": "None",
+    "bdr": "None"
+  },
+  "31.4-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.31.4 — Constitution SSOT under OSE-backend/docs/governance/",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/governance/",
+    "gap": "None",
+    "bdr": "None"
+  },
+  "31.5-01": {
+    "status": "Fully Compliant",
+    "evidence": "Ch.31.5 — root structural changes require Governance documentation first",
+    "scope": "Platform-wide",
+    "applied": "OSE-backend/docs/governance/chapters/CH31-REPOSITORY-ROOT-GOVERNANCE.md",
+    "gap": "None",
+    "bdr": "None"
+  }
+}

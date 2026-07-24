@@ -3,7 +3,9 @@
 const { PrismaClient } = require('@prisma/client');
 const { getPassIsBlockerForPeriod } = require('../services/periodCloseGovernance.service');
 const { getCarriedForwardGetPassIds } = require('./getPassPeriodResolution.util');
-const { assignedPeriodKey } = require('./postingPeriod.util');
+const { assignedPeriodKey, monthBounds } = require('./postingPeriod.util');
+const { toUtcPeriodYearMonth } = require('../utils/report-date-range.util');
+const { getTenantTimezone } = require('../services/tenantTimezone.service');
 
 const prisma = new PrismaClient();
 
@@ -14,11 +16,15 @@ const ACTIVE_GET_PASS = ['OUT', 'DISPATCHED', 'IN_TRANSIT', 'RETURNING', 'RETURN
 
 /**
  * Ch.6.9 — Close resolution workspace pending documents for a closing period.
+ * Lists only documents whose dates fall in the target tenant-local month.
  */
 async function getPeriodResolutionWorkspace(tenantId, { fiscalYear, fiscalPeriod } = {}) {
-    const year = Number(fiscalYear) || new Date().getFullYear();
-    const month = Number(fiscalPeriod) || new Date().getMonth() + 1;
+    const timezone = await getTenantTimezone(tenantId, prisma);
+    const nowPeriod = toUtcPeriodYearMonth(new Date(), timezone);
+    const year = Number(fiscalYear) || nowPeriod.year;
+    const month = Number(fiscalPeriod) || nowPeriod.month;
     const fromPeriod = assignedPeriodKey(year, month);
+    const { start: periodStart, end: periodEnd } = monthBounds(year, month, timezone);
     const carriedForward = await getCarriedForwardGetPassIds(tenantId, fromPeriod);
 
     const periodRow = await prisma.periodClose.findFirst({
@@ -27,7 +33,11 @@ async function getPeriodResolutionWorkspace(tenantId, { fiscalYear, fiscalPeriod
 
     const [grns, transfers, movements, getPasses] = await Promise.all([
         prisma.grnImport.findMany({
-            where: { tenantId, status: { in: PENDING_GRN } },
+            where: {
+                tenantId,
+                status: { in: PENDING_GRN },
+                receivingDate: { gte: periodStart, lte: periodEnd },
+            },
             select: {
                 id: true,
                 grnNumber: true,
@@ -40,7 +50,12 @@ async function getPeriodResolutionWorkspace(tenantId, { fiscalYear, fiscalPeriod
             orderBy: { receivingDate: 'desc' },
         }),
         prisma.storeTransfer.findMany({
-            where: { tenantId, status: { in: PENDING_TRANSFER }, postedAt: null },
+            where: {
+                tenantId,
+                status: { in: PENDING_TRANSFER },
+                postedAt: null,
+                transferDate: { gte: periodStart, lte: periodEnd },
+            },
             select: {
                 id: true,
                 transferNo: true,
@@ -53,7 +68,12 @@ async function getPeriodResolutionWorkspace(tenantId, { fiscalYear, fiscalPeriod
             orderBy: { transferDate: 'desc' },
         }),
         prisma.movementDocument.findMany({
-            where: { tenantId, status: { in: PENDING_MOVEMENT }, postedAt: null },
+            where: {
+                tenantId,
+                status: { in: PENDING_MOVEMENT },
+                postedAt: null,
+                documentDate: { gte: periodStart, lte: periodEnd },
+            },
             select: {
                 id: true,
                 documentNo: true,
@@ -85,7 +105,7 @@ async function getPeriodResolutionWorkspace(tenantId, { fiscalYear, fiscalPeriod
     ]);
 
     const blockingGetPasses = getPasses.filter(
-        (gp) => !carriedForward.has(gp.id) && getPassIsBlockerForPeriod(gp, year, month),
+        (gp) => !carriedForward.has(gp.id) && getPassIsBlockerForPeriod(gp, year, month, timezone),
     );
 
     const pendingDocuments = [
@@ -127,13 +147,14 @@ async function getPeriodResolutionWorkspace(tenantId, { fiscalYear, fiscalPeriod
             documentDate: p.createdAt,
             postingDate: p.postingDate,
             assignedPostingPeriod: p.assignedPostingPeriod,
-            resolutionActions: ['GET_PASS_RESOLVE', 'GET_PASS_CARRY_FORWARD'],
+            resolutionActions: ['GET_PASS_CARRY_FORWARD'],
         })),
     ];
 
     return {
         fiscalYear: year,
         fiscalPeriod: month,
+        timezone,
         periodStatus: periodRow?.status ?? 'OPEN',
         pendingDocuments,
         blockedDocuments: pendingDocuments,

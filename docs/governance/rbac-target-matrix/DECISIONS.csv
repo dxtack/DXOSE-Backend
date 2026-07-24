@@ -1,0 +1,22 @@
+Decision_ID,Topic,Decision,Date,Applies_To,Notes
+P1,Finance manages hotel users,YES - HOTEL_USERS_MANAGE tenant-scoped (see P6),2026-05-18,RBAC,Not org-wide USERS_COMPANY_MANAGE
+P2,Finance OB lock finalize,NO - ORG_MANAGER and SUPER_ADMIN only,2026-05-18,RBAC,Operational vs platform boundary
+P3,ADMIN role in database,Deprecate only - no hard delete no new UI assign,2026-05-18,RBAC,Legacy memberships until migrated
+P4,TRANSFER_DISPATCH_RECEIVE,Legacy L - no new assignments,2026-05-18,RBAC,V2 approve+post only
+P5,Matrix status,FROZEN v1 — implementation authorized,2026-05-19,All,GOVERNANCE_FREEZE_v1.txt
+P6,Hotel users permission,HOTEL_USERS_MANAGE for FINANCE; USERS_COMPANY_MANAGE ORG-only,2026-05-19,RBAC,API enforces tenantId on hotel user CRUD
+S1,Scope before RBAC,APPROVED - Scope Model before RBAC rollout,2026-05-18,Scope+RBAC,Permissions alone insufficient
+S2,Finance Manager scope,Tenant-wide all departments all locations in tenant,2026-05-18,8_SCOPE_RULES,canViewAllDepartments=Y canViewAllLocations=Y
+S3,ORG Manager scope,Tenant-wide on active property; org-wide when switching hotels,2026-05-18,8_SCOPE_RULES,Not platform Super Admin
+S4,Dept Manager scope,Own department only via Location.departmentId,2026-05-18,8_SCOPE_RULES,F&B must not see HK and vice versa
+S5,Storekeeper scope,Assigned locations only via LocationUser,2026-05-18,8_SCOPE_RULES,No full hotel unless canViewAllLocations
+S6,Cost Control scope,Tenant-wide,2026-05-18,8_SCOPE_RULES,Regulatory visibility
+S7,Auditor scope,Tenant-wide read-only,2026-05-18,8_SCOPE_RULES,No write actions
+S8,Security scope,Get Pass and gate scope only,2026-05-18,8_SCOPE_RULES,Not general inventory lists
+S9,Scope Engine mandatory,Every List Detail Export and workflow action passes Scope Engine,2026-05-19,9_MODULE,assertInScope required
+S10,Empty state,Must distinguish scope zero vs no data in tenant,2026-05-18,UX+API,meta.scopeApplied and user-facing message
+S11,Out of scope direct URL,404 or 403 SCOPE_VIOLATION; never leak rows,2026-05-18,API,Detail and export included
+S12,scopeSource field,APPROVED — include in scope meta for debugging,2026-05-19,Scope,7_USER_SCOPE_MODEL.csv
+S13,assertInScope on actions,APPROVED — all workflow mutations not only lists,2026-05-19,Scope,SCOPE_ENGINE_PRINCIPLE.txt
+S14,Export scope rule,APPROVED — no export bypasses Scope Engine,2026-05-19,Scope,Same filters as list
+S15,Scope basis per module,APPROVED — 11_MODULE_SCOPE_BASIS; not creator-primary,2026-05-19,Scope,Creator draft hint only

@@ -50,7 +50,12 @@ const login = async (req, res) => {
  * POST /api/auth/refresh
  */
 const refresh = async (req, res) => {
-    const { refreshToken } = req.body;
+    const fromBody = req.body?.refreshToken;
+    const fromCookie = req.cookies?.[REFRESH_TOKEN_COOKIE_NAME];
+    const refreshToken =
+        (typeof fromBody === 'string' && fromBody.trim()) ||
+        (typeof fromCookie === 'string' && fromCookie.trim()) ||
+        undefined;
     const result = await authService.refresh(refreshToken);
     return success(res, result, 'Token refreshed.');
 };

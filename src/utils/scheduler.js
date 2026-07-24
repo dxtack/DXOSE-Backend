@@ -41,7 +41,12 @@ cron.schedule('0 8 * * *', async () => {
     try {
         // Find active tenant admins
         const tenants = await prisma.tenantMember.findMany({
-            where: { role: { code: 'ADMIN' }, isActive: true, tenantId: { not: null }, user: { isActive: true } },
+            where: {
+                role: { code: { in: ['GENERAL_MANAGER', 'ORG_MANAGER'] } },
+                isActive: true,
+                tenantId: { not: null },
+                user: { isActive: true },
+            },
             select: { tenantId: true, user: { select: { email: true } } },
             distinct: ['tenantId']
         });
@@ -97,8 +102,8 @@ cron.schedule('*/2 * * * *', async () => {
     }
 });
 
-// Daily auto close — Ch.6.14 (respects tenant settings; no bypass when blockers exist).
-cron.schedule('0 2 * * *', async () => {
+// Poll auto close every five minutes; each tenant is evaluated in Tenant.timezone.
+cron.schedule('*/5 * * * *', async () => {
     if (process.env.DISABLE_PERIOD_AUTO_CLOSE_CRON === '1' || process.env.DISABLE_PERIOD_AUTO_CLOSE_CRON === 'true') {
         return;
     }
@@ -115,6 +120,24 @@ cron.schedule('0 2 * * *', async () => {
 });
 
 logger.info('[CRON] Scheduler initialized.');
+
+// Daily 03:00 — BDR-010 draft expiration + temp attachment cleanup (Ch.7.9 / Ch.14.10).
+cron.schedule('0 3 * * *', async () => {
+    if (process.env.DISABLE_CONTINUITY_CRON === '1' || process.env.DISABLE_CONTINUITY_CRON === 'true') {
+        return;
+    }
+    logger.info('[CRON] Starting continuity maintenance (draft expiration + temp attachments)...');
+    try {
+        const { runContinuityMaintenanceJobs } = require('../services/continuityMaintenanceScheduler.service');
+        const result = await runContinuityMaintenanceJobs();
+        logger.info('[CRON] Continuity maintenance completed', result);
+    } catch (error) {
+        logger.error('[CRON] Continuity maintenance failed', {
+            message: error.message,
+            stack: error.stack,
+        });
+    }
+});
 
 // Daily 06:00 — integrity scan all active tenants (persisted history per tenant).
 cron.schedule('0 6 * * *', async () => {

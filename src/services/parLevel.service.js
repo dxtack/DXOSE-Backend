@@ -1,4 +1,5 @@
 const prisma = require('../config/database');
+const locationItemResolution = require('./location-item-resolution.service');
 
 function badRequest(message) {
     const e = new Error(message);
@@ -6,30 +7,68 @@ function badRequest(message) {
     return e;
 }
 
-// ── GET PAR LEVELS FOR A LOCATION ─────────────────────────────────────────────
-const getParLevels = async (tenantId, locationId, { categoryId } = {}) => {
-    const where = { tenantId, locationId };
-    if (categoryId) {
-        where.item = { categoryId };
-    }
-    return prisma.stockBalance.findMany({
-        where,
-        include: {
-            item: {
-                select: {
-                    id: true, name: true, barcode: true, imageUrl: true, unitPrice: true,
-                    categoryId: true,
-                    category: { select: { id: true, name: true } },
-                }
-            },
-            location: { select: { id: true, name: true } },
-        },
-        orderBy: { item: { name: 'asc' } },
-    });
+/** Min-only: below configured minimum (qty may be zero). */
+const isBelowMinimumStock = (balance) => {
+    const qty = parseFloat(balance.qtyOnHand) || 0;
+    const min = parseFloat(balance.minQty) || 0;
+    return min > 0 && qty < min;
 };
 
-// ── UPDATE PAR LEVELS ─────────────────────────────────────────────────────────
-// updates = [{ itemId, locationId?, minQty, maxQty, reorderPoint }] — all rows must belong to `locationId` (tenant from JWT only).
+// ── GET PAR LEVELS FOR A LOCATION ─────────────────────────────────────────────
+const getParLevels = async (tenantId, locationId, { categoryId } = {}) => {
+    const { items } = await locationItemResolution.resolveItemsForLocation(tenantId, locationId, {
+        mode: locationItemResolution.MODES.RECEIVING,
+        categoryId,
+        take: 10000, // fetch all expected items for location
+    });
+
+    const itemIds = items.map((it) => it.id);
+    if (itemIds.length === 0) return [];
+
+    const balances = await prisma.stockBalance.findMany({
+        where: { tenantId, locationId, itemId: { in: itemIds } },
+    });
+
+    const balanceMap = new Map(balances.map((b) => [b.itemId, b]));
+
+    const location = await prisma.location.findFirst({
+        where: { id: locationId, tenantId },
+        select: { id: true, name: true },
+    });
+
+    const fullItems = await prisma.item.findMany({
+        where: { tenantId, id: { in: itemIds } },
+        select: {
+            id: true, name: true, barcode: true, imageUrl: true, unitPrice: true,
+            categoryId: true,
+            category: { select: { id: true, name: true, departmentId: true } },
+        },
+    });
+
+    const itemMap = new Map(fullItems.map((it) => [it.id, it]));
+
+    return items.map((it) => {
+        const bal = balanceMap.get(it.id);
+        const fullItem = itemMap.get(it.id);
+        return {
+            tenantId,
+            locationId,
+            itemId: it.id,
+            qtyOnHand: bal ? bal.qtyOnHand : 0,
+            qtyBlocked: bal ? bal.qtyBlocked : 0,
+            totalQtyLost: bal ? bal.totalQtyLost : 0,
+            totalQtyDamage: bal ? bal.totalQtyDamage : 0,
+            wacUnitCost: bal ? bal.wacUnitCost : 0,
+            minQty: bal ? bal.minQty : 0,
+            reorderPoint: bal ? bal.reorderPoint : 0,
+            item: fullItem,
+            location,
+        };
+    }).sort((a, b) => (a.item?.name || '').localeCompare(b.item?.name || ''));
+};
+
+// ── UPDATE PAR LEVELS (minQty only — max/reorder left unchanged in DB) ─────────
+// updates = [{ itemId, minQty? }] — all rows must belong to `locationId`.
 const updateParLevels = async (tenantId, locationId, updates) => {
     if (!locationId) throw badRequest('locationId is required');
     if (!Array.isArray(updates) || updates.length === 0) throw badRequest('updates must be a non-empty array');
@@ -50,89 +89,68 @@ const updateParLevels = async (tenantId, locationId, updates) => {
         }
     }
 
-    const existingRows = await prisma.stockBalance.findMany({
-        where: { tenantId, locationId, itemId: { in: [...new Set(itemIds)] } },
-        select: { itemId: true, minQty: true, maxQty: true, reorderPoint: true },
-    });
-    const byItemId = new Map(existingRows.map((r) => [r.itemId, r]));
-
     const num = (v) => {
         const n = typeof v === 'number' ? v : parseFloat(v);
         return Number.isFinite(n) ? n : NaN;
     };
 
     for (const u of updates) {
-        const row = byItemId.get(u.itemId);
-        if (!row) throw badRequest(`Stock balance not found for item at this location: ${u.itemId}`);
-
-        const effMin = u.minQty !== undefined ? num(u.minQty) : num(row.minQty);
-        const effMax = u.maxQty !== undefined ? num(u.maxQty) : num(row.maxQty);
-        const effReorder = u.reorderPoint !== undefined ? num(u.reorderPoint) : num(row.reorderPoint);
-
-        if ([effMin, effMax, effReorder].some((x) => Number.isNaN(x))) {
-            throw badRequest(`Invalid Par Levels for Item ID: ${u.itemId}`);
-        }
-        if (effMax > 0 && effMin > effMax) {
-            throw badRequest(`Invalid Par Levels for Item ID: ${u.itemId}`);
-        }
-        if (effMax > 0 && effReorder > effMax) {
-            throw badRequest(`Invalid Par Levels for Item ID: ${u.itemId}`);
+        if (u.minQty !== undefined) {
+            const effMin = num(u.minQty);
+            if (Number.isNaN(effMin) || effMin < 0) {
+                throw badRequest(`Invalid minimum quantity for Item ID: ${u.itemId}`);
+            }
         }
     }
 
-    const ops = updates.map((u) =>
-        prisma.stockBalance.update({
-            where: {
-                tenantId_itemId_locationId: {
+    const ops = updates
+        .filter((u) => u.minQty !== undefined)
+        .map((u) =>
+            prisma.stockBalance.upsert({
+                where: {
+                    tenantId_itemId_locationId: {
+                        tenantId,
+                        itemId: u.itemId,
+                        locationId,
+                    },
+                },
+                update: { minQty: u.minQty },
+                create: {
                     tenantId,
                     itemId: u.itemId,
                     locationId,
+                    qtyOnHand: 0,
+                    wacUnitCost: 0,
+                    minQty: u.minQty,
                 },
-            },
-            data: {
-                ...(u.minQty !== undefined && { minQty: u.minQty }),
-                ...(u.maxQty !== undefined && { maxQty: u.maxQty }),
-                ...(u.reorderPoint !== undefined && { reorderPoint: u.reorderPoint }),
-            },
-        })
-    );
+            })
+        );
+
+    if (ops.length === 0) throw badRequest('Each update must include minQty');
 
     await prisma.$transaction(ops);
-    return { updated: updates.length };
+    return { updated: ops.length };
 };
 
-// ── CHECK LOW STOCK ───────────────────────────────────────────────────────────
-// Returns items where qtyOnHand <= reorderPoint (and reorderPoint > 0)
+// ── CHECK LOW STOCK (min-only) ────────────────────────────────────────────────
 const checkLowStock = async (tenantId, locationId) => {
-    const where = { tenantId };
+    const where = { tenantId, minQty: { gt: 0 } };
     if (locationId) where.locationId = locationId;
 
     const balances = await prisma.stockBalance.findMany({
-        where: {
-            ...where,
-            OR: [
-                { reorderPoint: { gt: 0 } },
-                { minQty: { gt: 0 } },
-                { maxQty: { gt: 0 } }
-            ]
-        },
+        where,
         include: {
             item: { select: { id: true, name: true, barcode: true, imageUrl: true, unitPrice: true, department: { select: { name: true } } } },
             location: { select: { id: true, name: true } },
         },
     });
 
-    return balances.filter(b => {
-        const qty = parseFloat(b.qtyOnHand) || 0;
-        const reorder = parseFloat(b.reorderPoint) || 0;
-        const min = parseFloat(b.minQty) || 0;
-        // At or below reorder point; strictly below minimum safety stock
-        return (reorder > 0 && qty <= reorder) || (min > 0 && qty < min);
-    });
+    return balances.filter(isBelowMinimumStock);
 };
 
 module.exports = {
     getParLevels,
     updateParLevels,
     checkLowStock,
+    isBelowMinimumStock,
 };

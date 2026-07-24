@@ -1,22 +1,26 @@
 const prisma = require('../config/database');
+const {
+    getWorkflowPipelineSummary,
+    getWorkflowPipelineAlerts,
+} = require('./workflow-pipeline/workflow-pipeline.service');
 
 /**
  * Get low stock alerts — items where qtyOnHand <= reorderPoint (per StockBalance)
  */
 const getLowStockAlerts = async (tenantId) => {
-    // Get all balances where either reorderPoint OR minQty is set
     const balances = await prisma.stockBalance.findMany({
         where: {
             tenantId,
-            OR: [
-                { reorderPoint: { gt: 0 } },
-                { minQty: { gt: 0 } },
-            ],
+            OR: [{ reorderPoint: { gt: 0 } }, { minQty: { gt: 0 } }],
         },
         include: {
             item: {
                 select: {
-                    id: true, name: true, barcode: true, imageUrl: true, unitPrice: true,
+                    id: true,
+                    name: true,
+                    barcode: true,
+                    imageUrl: true,
+                    unitPrice: true,
                     category: { select: { name: true } },
                     supplier: { select: { name: true } },
                     department: { select: { name: true } },
@@ -66,10 +70,10 @@ const getLowStockAlerts = async (tenantId) => {
             minQty: min,
             severity,
             message,
+            deepLink: '/stock',
         });
     }
 
-    // Sort: critical first, then high, warning, info
     const severityOrder = { critical: 0, high: 1, warning: 2, info: 3 };
     alerts.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 
@@ -77,49 +81,15 @@ const getLowStockAlerts = async (tenantId) => {
 };
 
 /**
- * Get notification summary (counts for bell badge)
- * @param {string} tenantId
- * @param {string} [userId] — when set, includes unread in-app system notifications for this user
+ * Notification summary — workflow pipeline (SSOT) + low stock + system unread.
  */
-const getNotificationSummary = async (tenantId, userId) => {
-    const alerts = await getLowStockAlerts(tenantId);
-
-    // Count pending approvals
-    const pendingApprovals = await prisma.approvalRequest.count({
-        where: { tenantId, status: 'PENDING' },
-    }).catch(() => 0);
-
-    // Count overdue asset loans (now Get Passes)
-    const overdueLoans = await prisma.getPass.count({
-        where: {
-            tenantId,
-            status: { in: ['OUT', 'PARTIALLY_RETURNED'] },
-            expectedReturnDate: { lt: new Date() }
-        },
-    }).catch(() => 0);
-
-    // Count pending sub-types if any
-    const pendingBreakages = await prisma.approvalRequest.count({
-        where: { tenantId, status: 'PENDING', type: 'BREAKAGE' },
-    }).catch(() => 0);
-
-    const pendingRequisitions = await prisma.approvalRequest.count({
-        where: { tenantId, status: 'PENDING', type: 'REQUISITION' },
-    }).catch(() => 0);
-
-    const pendingStockReports = await prisma.approvalRequest.count({
-        where: { tenantId, status: 'PENDING', type: 'STOCK_REPORT' },
-    }).catch(() => 0);
-
-    const overdueLoansList = await prisma.getPass.findMany({
-        where: {
-            tenantId,
-            status: { in: ['OUT', 'PARTIALLY_RETURNED'] },
-            expectedReturnDate: { lt: new Date() }
-        },
-        orderBy: { expectedReturnDate: 'asc' },
-        take: 5
-    }).catch(() => []);
+const getNotificationSummary = async (tenantId, userId, userRole) => {
+    const userCtx = { id: userId, role: userRole };
+    const [stockAlerts, pipelineSummary, pipelineAlerts] = await Promise.all([
+        getLowStockAlerts(tenantId),
+        getWorkflowPipelineSummary(tenantId, userCtx).catch(() => null),
+        getWorkflowPipelineAlerts(tenantId, userCtx, { limit: 12 }).catch(() => []),
+    ]);
 
     let systemUnread = 0;
     if (userId) {
@@ -130,19 +100,57 @@ const getNotificationSummary = async (tenantId, userId) => {
             .catch(() => 0);
     }
 
+    const workflowCount = pipelineSummary?.total ?? 0;
+    const criticalWorkflow = pipelineSummary?.critical ?? 0;
+    const warningWorkflow = pipelineSummary?.warning ?? 0;
+    const mine = pipelineSummary?.mine ?? 0;
+    const overdueLoans = pipelineSummary?.getPassOverdue ?? 0;
+
+    const workflowNotifications = pipelineAlerts.map((item) => ({
+        id: item.id,
+        type: 'WORKFLOW',
+        module: item.module,
+        severity: item.priority === 'critical' ? 'critical' : item.priority === 'warning' ? 'warning' : 'info',
+        message: `${item.documentNo}: waiting for ${item.waitingForLabel || item.waitingForRole}`,
+        documentNo: item.documentNo,
+        status: item.status,
+        waitingForRole: item.waitingForRole,
+        waitingForLabel: item.waitingForLabel,
+        overdue: item.overdue,
+        deepLink: item.deepLink,
+        createdAt: item.pendingSince,
+    }));
+
+    const totalCount =
+        stockAlerts.length + workflowCount + systemUnread;
+
     return {
-        totalCount: alerts.length + pendingApprovals + overdueLoans + systemUnread,
-        lowStock: alerts.length,
-        criticalStock: alerts.filter(a => a.severity === 'critical').length,
-        warningStock: alerts.filter(a => a.severity === 'warning').length,
-        pendingApprovals,
-        pendingBreakages,
-        pendingRequisitions,
-        pendingStockReports,
+        totalCount,
+        lowStock: stockAlerts.length,
+        criticalStock: stockAlerts.filter((a) => a.severity === 'critical').length,
+        warningStock: stockAlerts.filter((a) => a.severity === 'warning').length,
+        pendingApprovals: (pipelineSummary?.byModule?.BREAKAGE || 0) + (pipelineSummary?.byModule?.LOST || 0),
+        pendingBreakages: pipelineSummary?.byModule?.BREAKAGE || 0,
+        pendingTransfers: pipelineSummary?.byModule?.TRANSFER || 0,
+        pendingGrns: pipelineSummary?.byModule?.GRN || 0,
+        pendingStockReports: 0,
         overdueLoans,
-        overdueLoansList,
+        overdueLoansList: workflowNotifications
+            .filter((n) => n.module === 'GET_PASS' && n.overdue)
+            .slice(0, 5),
+        workflowCount,
+        workflowMine: mine,
+        workflowCritical: criticalWorkflow,
+        workflowWarning: warningWorkflow,
         systemUnread,
-        alerts: alerts.slice(0, 20), // Top 20 alerts
+        alerts: [
+            ...workflowNotifications,
+            ...stockAlerts.slice(0, 8).map((a) => ({
+                ...a,
+                deepLink: a.deepLink || '/stock',
+            })),
+        ].slice(0, 20),
+        pipelineSummary,
     };
 };
 

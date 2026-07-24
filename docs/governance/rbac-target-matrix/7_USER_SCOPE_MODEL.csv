@@ -1,0 +1,39 @@
+Field,Entity,Exists_CURRENT,TARGET,Required_For_Go_Live,Notes
+
+departmentId,TenantMember,Y,Y,Y,Per-tenant department (e.g. F&B vs HK vs Engineering)
+
+allowedLocationIds,Derived from LocationUser + Location.tenantId,Y_PARTIAL,Y,Y,Resolve location_users where location.tenantId = active tenant
+
+canViewAllDepartments,TenantMember,N,Y,Y,Overrides department filter when true
+
+canViewAllLocations,TenantMember,N,Y,Y,Overrides location filter when true
+
+scopeProfile,Computed at runtime,N,Y,Y,TENANT_WIDE | DEPARTMENT | LOCATIONS | GET_PASS_GATE
+
+scopeSource,Computed field,N,Y,Y,Why scope was applied — diagnostics
+
+scopeSource_ORG_BYPASS,Enum value,N,Y,Y,ORG_MANAGER on active property
+
+scopeSource_CUSTOM_OVERRIDE,Enum value,N,Y,Y,canViewAllDepartments or canViewAllLocations on membership
+
+scopeSource_LOCATION_ASSIGNMENT,Enum value,N,Y,Y,STOREKEEPER LocationUser assignments
+
+scopeSource_DEPARTMENT,Enum value,N,Y,Y,TenantMember.departmentId + Location.departmentId
+
+scopeSource_ROLE_DEFAULT,Enum value,N,Y,Y,Role tenant-wide defaults FINANCE COST AUDITOR etc
+
+primaryLocationId,TenantMember,N,OPTIONAL,N,Display only not security boundary
+
+LocationUser,location_users table,Y,Y,Y,Filter by Location.tenantId
+
+Location.departmentId,locations,Y,Y,Y,Primary basis for Breakage Lost per 11_MODULE_SCOPE_BASIS
+
+MovementDocument.departmentId_UUID,movement_documents,N,OPTIONAL,N,Use line.location.departmentId not string department field
+
+RBAC_permissions_alone_sufficient,N,N,N,Y,Permissions control actions Scope controls rows
+
+Scope_Engine_required,All modules,N,Y,Y,List Detail Export workflow actions assertInScope
+
+Creator_based_primary_scope,N,N,N,Y,Forbidden — location/department only draft createdBy hint
+
+

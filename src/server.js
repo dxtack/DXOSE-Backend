@@ -1,4 +1,10 @@
 require('dotenv').config();
+
+// Windows + Docker Desktop: localhost may resolve to IPv6; host-mapped Postgres listens on 127.0.0.1:5433.
+if (process.env.DATABASE_URL) {
+    process.env.DATABASE_URL = process.env.DATABASE_URL.replace(/@localhost:/gi, '@127.0.0.1:');
+}
+
 require('express-async-errors');
 
 const express = require('express');
@@ -118,8 +124,21 @@ app.use(errorHandler);
 
 // ─── Start Server ─────────────────────────────────────────────────────────
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => {
-    logger.info(`🚀 OS&E API Server running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
-});
+const { ensureAccRuntimeConfigLoaded } = require('./services/acc-runtime-config.service');
+
+async function startServer() {
+    try {
+        await ensureAccRuntimeConfigLoaded();
+        logger.info('[acc] Runtime config loaded (P19 DB SSOT)');
+    } catch (err) {
+        logger.warn(`[acc] Runtime config load failed: ${err.message}`);
+    }
+
+    app.listen(PORT, () => {
+        logger.info(`🚀 OS&E API Server running on port ${PORT} [${process.env.NODE_ENV || 'development'}]`);
+    });
+}
+
+startServer();
 
 module.exports = app;

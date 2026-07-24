@@ -1,397 +1,305 @@
 const PDFDocument = require('pdfkit');
 const path = require('path');
 const fs = require('fs');
+const {
+    formatReportCell,
+    buildReportReference,
+    isTotalsFooterRow,
+    fmtSar,
+    fmtQty,
+} = require('../utils/report-format.util');
+const { resolveFamily } = require('./report-family-registry');
+const {
+    isGroupedExportData,
+    renderGroupedReportTable,
+    tryLoadLogo,
+    drawClassificationBadge,
+    drawEnterpriseFooter,
+    drawEnhancedSignatures,
+} = require('./pdf/report-pdf-presenter');
+const { TOKENS } = require('./pdf/report-pdf-design-tokens');
+const { ENTERPRISE_BRAND, stampEnterpriseDocumentFooters } = require('./pdf/report-pdf-enterprise');
+const { createEvidenceLayout, drawEvidenceMiniHeader } = require('./pdf/report-pdf-layout');
+const { drawEvidencePackHeader, drawCompactApprovalProgress } = require('./pdf/report-pdf-components');
+const { resolvePdfProfile, filterDetailProfileByVisibleGroups } = require('./pdf/report-pdf-profiles');
+const { registerPdfFonts } = require('./pdf/report-pdf-fonts');
+const { renderFlatProfileTable } = require('./pdf/report-pdf-table.engine');
+const {
+    drawReportKpiStrip,
+    drawCompactApprovalStrip,
+    drawGoldenApprovalStrip,
+    stampThreeZoneFooters,
+} = require('./pdf/report-pdf-chrome');
+const { generateSummaryInventoryPDF } = require('./pdf/report-summary-pdf.document');
+const { enrichGoldenTotals } = require('./pdf/report-golden-kpi.registry');
+const { resolveGoldenShellRev } = require('./pdf/report-golden-language');
+const {
+    WORKSPACE_LANDSCAPE_MARGINS,
+    createWorkspaceLayout,
+    renderWorkspaceReportChrome,
+    renderFlatAnalyticsTable,
+    drawFinancialTotalsSummary,
+    stampWorkspaceFooters,
+    renderLegacyStockCountEvidencePdf,
+} = require('./pdf/report-document.facade');
+
+const BRAND_NAVY = '#0f172a';
+const BRAND_BLUE = '#1d4ed8';
+const BRAND_SLATE = '#475569';
+const BRAND_MUTED = '#64748b';
+const BRAND_BORDER = '#cbd5e1';
+const BRAND_PANEL = '#f8fafc';
+const BRAND_WHITE = '#ffffff';
+
+const formatDate = (value) => (value ? new Date(value).toLocaleDateString('en-GB') : '—');
+const formatDateTime = (value) => (value ? new Date(value).toLocaleString('en-GB') : '—');
+const formatMoney = (value, currency = 'SAR') => {
+    const code = String(currency || 'SAR').toUpperCase();
+    return `${code} ${parseFloat(value || 0).toFixed(2)}`;
+};
+
+const printableValue = (value) => {
+    if (value == null || value === '') return '—';
+    if (Array.isArray(value)) return value.join(', ');
+    return String(value);
+};
+
+const activeFilterEntries = (filters = {}) =>
+    Object.entries(filters)
+        .filter(([, value]) => value != null && value !== '' && !(Array.isArray(value) && value.length === 0))
+        .map(([key, value]) => ({
+            label: key.replace(/([A-Z])/g, ' $1').replace(/^./, (char) => char.toUpperCase()),
+            value: printableValue(value),
+        }));
+
+const drawReportBanner = (doc, options = {}) => {
+    const marginLeft = 40;
+    const pageWidth = doc.page.width - 80;
+    const title = options.title || 'Report';
+    const subtitle = options.subtitle || 'Unified DX OSE reviewer-grade report';
+    const tenantName = options.tenantName || 'DX OSE';
+    const reportCode = options.reportCode || '';
+    const generatedBy = options.generatedBy || 'System';
+    const generatedAt = options.generatedAt || new Date().toISOString();
+
+    doc.fillColor(BRAND_NAVY).rect(marginLeft, 30, pageWidth, 68).fill();
+
+    const logoBuf = options.logoBuffer || tryLoadLogo(options);
+    if (logoBuf) {
+        try {
+            doc.image(logoBuf, marginLeft + pageWidth - 52, 34, { width: 40, height: 40, fit: [40, 40] });
+        } catch { /* optional logo */ }
+    }
+    doc.fillColor(BRAND_WHITE).fontSize(10).font('Helvetica-Bold').text('DX OSE', marginLeft + 14, 40);
+    doc.fillColor('#cbd5f5').fontSize(8).font('Helvetica').text('Unified reviewer-grade report identity', marginLeft + 14, 54);
+    doc.fillColor(BRAND_WHITE).fontSize(17).font('Helvetica-Bold').text(String(title).toUpperCase(), marginLeft + 14, 66, {
+        width: pageWidth - 170,
+    });
+
+    doc.fillColor(BRAND_WHITE).roundedRect(marginLeft + pageWidth - 136, 40, 122, 18, 9).fill();
+    doc.fillColor(BRAND_NAVY).fontSize(8).font('Helvetica-Bold').text(tenantName, marginLeft + pageWidth - 132, 45, {
+        width: 114,
+        align: 'center',
+    });
+
+    if (reportCode) {
+        doc.fillColor('#cbd5f5').fontSize(8).font('Helvetica').text(reportCode, marginLeft + pageWidth - 136, 66, {
+            width: 122,
+            align: 'center',
+        });
+    }
+
+    doc.fillColor('#cbd5f5').fontSize(8).font('Helvetica').text(
+        `${subtitle}  |  Generated ${formatDateTime(generatedAt)} by ${generatedBy}`,
+        marginLeft + 14,
+        84,
+        { width: pageWidth - 28 },
+    );
+
+    doc.y = 110;
+};
+
+const drawMetadataStrip = (doc, items = []) => {
+    if (!items.length) return;
+
+    const marginLeft = 40;
+    const pageWidth = doc.page.width - 80;
+    const itemWidth = pageWidth / items.length;
+    const startY = doc.y;
+
+    items.forEach((item, index) => {
+        const x = marginLeft + index * itemWidth;
+        doc.fillColor(BRAND_PANEL).rect(x, startY, itemWidth, 38).fill();
+        doc.strokeColor(BRAND_BORDER).lineWidth(0.5).rect(x, startY, itemWidth, 38).stroke();
+        doc.fillColor(BRAND_MUTED).fontSize(7.5).font('Helvetica-Bold').text(item.label, x + 8, startY + 7, {
+            width: itemWidth - 16,
+        });
+        doc.fillColor(BRAND_NAVY).fontSize(8.5).font('Helvetica-Bold').text(printableValue(item.value), x + 8, startY + 18, {
+            width: itemWidth - 16,
+            ellipsis: true,
+        });
+    });
+
+    doc.y = startY + 46;
+};
+
+/** Compact header for continuation pages (identity without full metadata strip). */
+const drawMiniReportHeader = (doc, options = {}) => {
+    const marginLeft = 40;
+    const pageWidth = doc.page.width - 80;
+    const title = options.title || 'Report';
+    const reportRef = options.reportReference || '';
+    const generatedBy = options.generatedBy || 'System';
+    const generatedAt = options.generatedAt || new Date().toISOString();
+
+    doc.fillColor(BRAND_PANEL).rect(marginLeft, 28, pageWidth, 28).fill();
+    doc.strokeColor(BRAND_BORDER).lineWidth(0.5).rect(marginLeft, 28, pageWidth, 28).stroke();
+    doc.fillColor(BRAND_NAVY).fontSize(9).font('Helvetica-Bold').text(String(title), marginLeft + 10, 34, {
+        width: pageWidth * 0.45,
+        ellipsis: true,
+    });
+    doc.fillColor(BRAND_MUTED).fontSize(7).font('Helvetica').text(
+        [reportRef, `Generated ${formatDateTime(generatedAt)}`, `By ${generatedBy}`].filter(Boolean).join('  |  '),
+        marginLeft + pageWidth * 0.42,
+        36,
+        { width: pageWidth * 0.56, align: 'right' },
+    );
+    doc.y = 64;
+};
+
+/** Reviewer signature block for export PDFs. */
+const drawReportSignatures = (doc, metadata = {}, layout = {}) => {
+    const marginLeft = layout.marginLeft ?? 40;
+    const pageWidth = layout.pageWidth ?? doc.page.width - 80;
+    const generatedBy = metadata.generatedBy || 'System';
+    const generatedAt = metadata.generatedAt || new Date().toISOString();
+
+    const needed = 130;
+    if (doc.y + needed > doc.page.height - 50) {
+        doc.addPage();
+        drawMiniReportHeader(doc, metadata);
+    }
+
+    doc.moveDown(1.2);
+    const sigStartY = doc.y;
+    const slots = [
+        { label: 'Prepared By', name: generatedBy, date: generatedAt },
+        { label: 'Reviewed By', name: metadata.reviewedBy || '', date: metadata.reviewedAt || null },
+        { label: 'Approved By', name: metadata.approvedBy || '', date: metadata.approvedAt || null },
+    ];
+    const sigW = pageWidth / slots.length;
+
+    slots.forEach((sig, i) => {
+        const sx = marginLeft + i * sigW;
+        doc.strokeColor('#94a3b8').lineWidth(1)
+            .moveTo(sx + 10, sigStartY + 52).lineTo(sx + sigW - 14, sigStartY + 52).stroke();
+        doc.fillColor(BRAND_NAVY).fontSize(8.5).font('Helvetica-Bold')
+            .text(sig.name || '_________________________', sx + 10, sigStartY + 56, {
+                width: sigW - 20,
+                align: 'center',
+                ellipsis: true,
+            });
+        doc.fillColor(BRAND_MUTED).fontSize(7.5).font('Helvetica')
+            .text(sig.label, sx + 10, sigStartY + 70, { width: sigW - 20, align: 'center' });
+        doc.fillColor(BRAND_SLATE).fontSize(7).font('Helvetica')
+            .text(sig.date ? formatDateTime(sig.date) : 'Date / Time: _______________', sx + 10, sigStartY + 84, {
+                width: sigW - 20,
+                align: 'center',
+            });
+        if (i < slots.length - 1) {
+            doc.strokeColor(BRAND_BORDER).lineWidth(0.5)
+                .moveTo(sx + sigW, sigStartY + 42).lineTo(sx + sigW, sigStartY + 96).stroke();
+        }
+    });
+    doc.y = sigStartY + 108;
+};
+
+/** Financial totals summary above signatures when metadata.totals is provided. */
+const drawPdfFinancialTotalsSummary = (doc, totals = {}, cardId = '', layout = {}) => {
+    if (!totals || !Object.keys(totals).length) return;
+    const marginLeft = layout.marginLeft ?? 40;
+    const pageWidth = layout.pageWidth ?? doc.page.width - 80;
+
+    const lines = [];
+    if (totals.totalBookQty != null) lines.push({ label: 'Total book qty / إجمالي الدفتر', value: fmtQty(totals.totalBookQty) });
+    if (totals.totalCountedQty != null) lines.push({ label: 'Total counted qty / إجمالي الجرد', value: fmtQty(totals.totalCountedQty) });
+    if (totals.totalVarianceQty != null) lines.push({ label: 'Total variance qty / فرق الكمية', value: fmtQty(totals.totalVarianceQty) });
+    if (totals.totalVarianceValue != null) lines.push({ label: 'Total variance value / قيمة الفرق', value: fmtSar(totals.totalVarianceValue) });
+    if (totals.totalQtyIn != null) lines.push({ label: 'Total qty in / وارد', value: fmtQty(totals.totalQtyIn) });
+    if (totals.totalQtyOut != null) lines.push({ label: 'Total qty out / صادر', value: fmtQty(totals.totalQtyOut) });
+    if (totals.totalNetQty != null) lines.push({ label: 'Net qty / صافي الكمية', value: fmtQty(totals.totalNetQty) });
+    if (totals.totalLineValue != null) lines.push({ label: 'Total line value / قيمة الأسطر', value: fmtSar(totals.totalLineValue) });
+    if (totals.totalLossValue != null) lines.push({ label: 'Total loss value / إجمالي الخسارة', value: fmtSar(totals.totalLossValue) });
+    if (totals.totalLossQty != null) lines.push({ label: 'Total loss qty / كمية الخسارة', value: fmtQty(totals.totalLossQty) });
+    if (totals.totalClosingQty != null) lines.push({ label: 'Closing qty / كمية ختامية', value: fmtQty(totals.totalClosingQty) });
+    if (totals.totalClosingValue != null) lines.push({ label: 'Closing value / قيمة ختامية', value: fmtSar(totals.totalClosingValue) });
+    if (totals.totalInQty != null) lines.push({ label: 'Inbound qty / وارد', value: fmtQty(totals.totalInQty) });
+    if (totals.totalOutQty != null) lines.push({ label: 'Outbound qty / صادر', value: fmtQty(totals.totalOutQty) });
+    if (totals.totalQty != null && totals.totalBookQty == null) lines.push({ label: 'Total qty', value: fmtQty(totals.totalQty) });
+    if (totals.totalValue != null && totals.totalVarianceValue == null && totals.totalLineValue == null) {
+        lines.push({ label: 'Total value / القيمة', value: fmtSar(totals.totalValue) });
+    }
+    if (totals.wacMissingCount != null && Number(totals.wacMissingCount) > 0) {
+        lines.push({ label: 'WAC missing lines', value: String(totals.wacMissingCount), warn: true });
+    }
+    if (!lines.length) return;
+
+    if (doc.y + 36 + lines.length * 14 > doc.page.height - 80) {
+        doc.addPage();
+        drawMiniReportHeader(doc, layout.headerOptions || {});
+    }
+
+    doc.fillColor(BRAND_MUTED).fontSize(8).font('Helvetica-Bold').text('Financial totals', marginLeft, doc.y);
+    doc.moveDown(0.3);
+    const boxY = doc.y;
+    doc.fillColor(BRAND_PANEL).rect(marginLeft, boxY, pageWidth, lines.length * 16 + 10).fill();
+    doc.strokeColor(BRAND_BORDER).lineWidth(0.5).rect(marginLeft, boxY, pageWidth, lines.length * 16 + 10).stroke();
+
+    lines.forEach((line, idx) => {
+        const y = boxY + 6 + idx * 16;
+        doc.fillColor(line.warn ? '#b45309' : BRAND_SLATE).fontSize(8).font('Helvetica-Bold')
+            .text(line.label, marginLeft + 10, y, { width: pageWidth * 0.45 });
+        doc.fillColor(BRAND_NAVY).fontSize(8.5).font('Helvetica-Bold')
+            .text(line.value, marginLeft + pageWidth * 0.48, y, { width: pageWidth * 0.48, align: 'right' });
+    });
+    doc.y = boxY + lines.length * 16 + 18;
+};
+
+const {
+    renderBreakageEvidencePack,
+    renderLostEvidencePack,
+    renderTransferEvidencePack,
+    renderGrnEvidencePack,
+} = require('./pdf/evidence-pack-pdf');
 
 /**
  * Generate Evidence PDF for a Breakage document.
  * @param {object} evidence - The output of breakage.service.getEvidence()
  * @returns {Buffer} - PDF buffer
  */
-const generateBreakageEvidencePDF = (evidence) => {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({ size: 'A4', margins: { top: 40, bottom: 60, left: 40, right: 40 } });
-        const chunks = [];
-        doc.on('data', c => chunks.push(c));
-        doc.on('end', () => resolve(Buffer.concat(chunks)));
-        doc.on('error', reject);
+const generateBreakageEvidencePDF = (evidence) => renderBreakageEvidencePack(evidence);
 
-        const { header, lineItems, approvalHistory, attachments, stockImpactSummary } = evidence;
+/**
+ * Generate Evidence PDF for a Lost Items document.
+ * @param {object} evidence - The output of lostItems.service.getEvidence()
+ * @returns {Buffer} - PDF buffer
+ */
+const generateLostEvidencePDF = (evidence) => renderLostEvidencePack(evidence);
 
-        const PW = doc.page.width - 80;   // usable width
-        const ML = 40;                     // left margin
-        const NAVY = '#1a3a5c';
-        const BLUE = '#2563eb';
-        const LGRAY = '#f1f5f9';
-        const GRAY = '#64748b';
-        const RED = '#dc2626';
-        const GREEN = '#16a34a';
-        const WHITE = '#ffffff';
-        const BDR = '#cbd5e1';
+/**
+ * @param {object} evidence - transfer.service getEvidence()
+ * @returns {Promise<Buffer>}
+ */
+const generateTransferEvidencePDF = (evidence) => renderTransferEvidencePack(evidence);
 
-        const fmt = (d) => d ? new Date(d).toLocaleDateString('en-GB') : '—';
-        const fmtDT = (d) => d ? new Date(d).toLocaleString('en-GB') : '—';
-        const toSAR = (n) => `SAR ${parseFloat(n || 0).toFixed(2)}`;
+/**
+ * @param {object} evidence - grn.service getEvidence()
+ * @returns {Promise<Buffer>}
+ */
+const generateGrnEvidencePDF = (evidence) => renderGrnEvidencePack(evidence);
 
-        // ── PAGE BREAK GUARD ─────────────────────────────────────────────────
-        const ensureSpace = (needed) => {
-            if (doc.y + needed > doc.page.height - 70) {
-                doc.addPage();
-            }
-        };
-
-        // ── SECTION HEADER ───────────────────────────────────────────────────
-        const section = (title) => {
-            ensureSpace(30);
-            doc.moveDown(0.6);
-            doc.fillColor(NAVY).fontSize(11).font('Helvetica-Bold').text(title, ML, doc.y);
-            doc.moveDown(0.15);
-            doc.strokeColor(BLUE).lineWidth(1.5)
-                .moveTo(ML, doc.y).lineTo(ML + PW, doc.y).stroke();
-            doc.moveDown(0.4);
-        };
-
-        // ── KV ROW ───────────────────────────────────────────────────────────
-        const kv = (label, value, x, y, w) => {
-            doc.fillColor(GRAY).fontSize(8).font('Helvetica').text(label + ':', x, y, { width: 90 });
-            doc.fillColor('#1e293b').fontSize(8.5).font('Helvetica-Bold').text(String(value || '—'), x + 92, y, { width: w - 92 });
-        };
-
-        // ════════════════════════════════════════════════════════════════════
-        // 1. HEADER BANNER
-        // ════════════════════════════════════════════════════════════════════
-        doc.fillColor(NAVY).rect(ML, 40, PW, 52).fill();
-
-        // Title
-        doc.fillColor(WHITE).fontSize(18).font('Helvetica-Bold')
-            .text('BREAKAGE EVIDENCE PACK', ML + 12, 50, { width: PW * 0.6 });
-
-        // Status badge
-        const badgeX = ML + PW - 100;
-        const statusColor = header.status === 'POSTED' ? GREEN : header.status === 'REJECTED' ? RED : '#f59e0b';
-        doc.fillColor(statusColor).roundedRect(badgeX, 55, 90, 20, 4).fill();
-        doc.fillColor(WHITE).fontSize(9).font('Helvetica-Bold')
-            .text(header.status.replace('_', ' '), badgeX, 60, { width: 90, align: 'center' });
-
-        // Doc No & Date
-        doc.fillColor('#94a3b8').fontSize(9).font('Helvetica')
-            .text(`Doc No: ${header.documentNo}   |   Date: ${fmt(header.documentDate)}`, ML + 12, 74);
-
-        doc.moveDown(2.2);
-
-        // ════════════════════════════════════════════════════════════════════
-        // 2. DOCUMENT INFO (two columns)
-        // ════════════════════════════════════════════════════════════════════
-        section('Document Information');
-
-        const infoY = doc.y;
-        const col1X = ML;
-        const col2X = ML + PW / 2 + 10;
-        const colW = PW / 2 - 10;
-
-        // Left column
-        kv('Created By', `${header.createdBy || '—'} (${header.createdByRole || '—'})`, col1X, infoY, colW);
-        kv('Email', header.createdByEmail, col1X, infoY + 16, colW);
-        kv('Created At', fmtDT(header.createdAt), col1X, infoY + 32, colW);
-        kv('Location', stockImpactSummary?.perItem?.[0]?.locationName || '—', col1X, infoY + 48, colW);
-
-        // Right column
-        kv('Status', header.status.replace('_', ' '), col2X, infoY, colW);
-        kv('Posted At', header.postedAt ? fmtDT(header.postedAt) : 'Not posted', col2X, infoY + 16, colW);
-        kv('Reason', header.reason, col2X, infoY + 32, colW);
-        if (header.notes) {
-            const notesPdf = String(header.notes).replace(/\s*\n\s*/g, ' · ').trim();
-            kv('Notes', notesPdf, col2X, infoY + 48, colW);
-        }
-
-        doc.y = infoY + 68;
-
-        // ════════════════════════════════════════════════════════════════════
-        // 3. BROKEN ITEMS TABLE
-        // ════════════════════════════════════════════════════════════════════
-        section('Broken Items');
-
-        const colWidths = [28, PW * 0.50, PW * 0.22, PW * 0.14];
-        const headers = ['#', 'Item Name', 'Barcode', 'Qty'];
-        const ROW_H = 20;
-        const HDR_H = 22;
-        let tableX = ML;
-        let tableY = doc.y;
-
-        // Header row
-        doc.fillColor(NAVY).rect(tableX, tableY, PW, HDR_H).fill();
-        let cx = tableX;
-        headers.forEach((h, i) => {
-            doc.fillColor(WHITE).fontSize(9).font('Helvetica-Bold')
-                .text(h, cx + 5, tableY + 6, { width: colWidths[i] - 6, align: i >= 2 ? 'center' : 'left' });
-            cx += colWidths[i];
-        });
-        tableY += HDR_H;
-
-        lineItems.forEach((item, idx) => {
-            ensureSpace(ROW_H + 2);
-            if (doc.y !== tableY) tableY = doc.y;
-
-            const bg = idx % 2 === 0 ? WHITE : LGRAY;
-            doc.fillColor(bg).rect(tableX, tableY, PW, ROW_H).fill();
-            // Border bottom
-            doc.strokeColor(BDR).lineWidth(0.5)
-                .moveTo(tableX, tableY + ROW_H).lineTo(tableX + PW, tableY + ROW_H).stroke();
-
-            cx = tableX;
-            const vals = [idx + 1, item.itemName, item.barcode || '—', item.qty];
-            vals.forEach((v, i) => {
-                doc.fillColor('#1e293b').fontSize(8.5).font(i === 3 ? 'Helvetica-Bold' : 'Helvetica')
-                    .text(String(v), cx + 5, tableY + 5, { width: colWidths[i] - 6, align: i >= 2 ? 'center' : 'left', ellipsis: true });
-                cx += colWidths[i];
-            });
-
-            tableY += ROW_H;
-        });
-
-        // Total loss banner
-        tableY += 6;
-        doc.fillColor(RED).rect(ML + PW - 180, tableY, 180, 26).fill();
-        doc.fillColor(WHITE).fontSize(11).font('Helvetica-Bold')
-            .text(`TOTAL LOSS: ${toSAR(stockImpactSummary?.totalLossValue)}`, ML + PW - 175, tableY + 6, { width: 170, align: 'center' });
-        doc.y = tableY + 36;
-        // 5. PHOTOS (embedded images)
-        // ════════════════════════════════════════════════════════════════════
-        const imageAttachments = attachments.filter(a => {
-            const ext = (a.url || a.filename || '').split('.').pop().toLowerCase();
-            return ['jpg', 'jpeg', 'png', 'webp'].includes(ext);
-        });
-
-        if (imageAttachments.length > 0) {
-            section('Photo Evidence');
-            const imgW = (PW - 20) / 3;
-            const imgH = 120;
-            let imgX = ML;
-            let imgY = doc.y;
-            let imgCount = 0;
-
-            imageAttachments.forEach((att) => {
-                try {
-                    const filename = (att.url || att.filename || '').split('/').pop();
-                    const filePath = path.join(__dirname, '../../uploads/attachments', filename);
-                    if (fs.existsSync(filePath)) {
-                        if (imgCount > 0 && imgCount % 3 === 0) {
-                            imgX = ML;
-                            imgY += imgH + 32;
-                            ensureSpace(imgH + 32);
-                        }
-                        doc.image(filePath, imgX, imgY, { width: imgW, height: imgH, fit: [imgW, imgH], align: 'center' });
-                        doc.fillColor(GRAY).fontSize(7).font('Helvetica')
-                            .text(att.originalName || 'Photo', imgX, imgY + imgH + 2, { width: imgW, align: 'center' });
-                        imgX += imgW + 10;
-                        imgCount++;
-                    }
-                } catch { /* skip if image fails */ }
-            });
-            if (imgCount > 0) doc.y = imgY + imgH + 20;
-        }
-
-        // ════════════════════════════════════════════════════════════════════
-        // 6. SIGNATURE BLOCK
-        // ════════════════════════════════════════════════════════════════════
-        // Always place on same page or new page
-        const roleMap = { DEPT_MANAGER: 'Head of Department', COST_CONTROL: 'Cost Control', FINANCE_MANAGER: 'Finance Manager' };
-
-        const sigSlots = [
-            { label: 'Requested By', name: header.createdBy || '', role: header.createdByRole || '', status: 'CREATED', actedAt: header.createdAt },
-            ...approvalHistory.map(s => ({
-                label: roleMap[s.role] || s.role,
-                name: s.actedBy ? s.actedBy.split(' (')[0] : '',
-                role: s.role,
-                status: s.status,
-                actedAt: s.actedAt,
-            })),
-        ];
-
-        // Ensure signature fits — min 140px
-        ensureSpace(145);
-        if (doc.y > doc.page.height - 210) { doc.addPage(); }
-
-        section('Signatures');
-
-        const sigCount = Math.min(sigSlots.length, 4);
-        const sigW = PW / sigCount;
-        const sigStartY = doc.y;
-
-        sigSlots.slice(0, sigCount).forEach((sig, i) => {
-            const sx = ML + i * sigW;
-            const sigColor = sig.status === 'APPROVED' || sig.status === 'CREATED' ? GREEN :
-                sig.status === 'REJECTED' ? RED : GRAY;
-
-            // Signature line
-            doc.strokeColor('#94a3b8').lineWidth(1)
-                .moveTo(sx + 8, sigStartY + 60).lineTo(sx + sigW - 12, sigStartY + 60).stroke();
-
-            // Name
-            doc.fillColor('#1e293b').fontSize(8.5).font('Helvetica-Bold')
-                .text(sig.name || '_______________', sx + 8, sigStartY + 64, { width: sigW - 16, align: 'center' });
-
-            // Role/Position
-            doc.fillColor(GRAY).fontSize(7.5).font('Helvetica')
-                .text(sig.label, sx + 8, sigStartY + 78, { width: sigW - 16, align: 'center' });
-
-            // Status badge
-            doc.fillColor(sigColor).fontSize(8).font('Helvetica-Bold')
-                .text(sig.status === 'CREATED' ? 'SUBMITTED' : sig.status, sx + 8, sigStartY + 92, { width: sigW - 16, align: 'center' });
-
-            // Date
-            doc.fillColor(GRAY).fontSize(7).font('Helvetica')
-                .text(sig.actedAt ? fmtDT(sig.actedAt) : '— / — / ——', sx + 8, sigStartY + 104, { width: sigW - 16, align: 'center' });
-
-            // Vertical divider (except last)
-            if (i < sigCount - 1) {
-                doc.strokeColor(BDR).lineWidth(0.5)
-                    .moveTo(sx + sigW, sigStartY + 50).lineTo(sx + sigW, sigStartY + 118).stroke();
-            }
-        });
-
-        doc.y = sigStartY + 128;
-
-        // ════════════════════════════════════════════════════════════════════
-        // 7. FOOTER (every page)
-        // ════════════════════════════════════════════════════════════════════
-        const range = doc.bufferedPageRange();
-        for (let i = range.start; i < range.start + range.count; i++) {
-            doc.switchToPage(i);
-            const fy = doc.page.height - 28;
-            doc.strokeColor(BDR).lineWidth(0.5)
-                .moveTo(ML, fy - 6).lineTo(ML + PW, fy - 6).stroke();
-            doc.fillColor(GRAY).fontSize(7).font('Helvetica')
-                .text(
-                    `OS&E Inventory System  |  Breakage Evidence Pack — ${header.documentNo}  |  Generated: ${fmtDT(evidence.generatedAt)}  |  Page ${i - range.start + 1} of ${range.count}`,
-                    ML, fy, { width: PW, align: 'center' }
-                );
-        }
-
-        doc.end();
-    });
-};
-
-
-const generateStockCountEvidencePDF = (evidence) => {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({
-            size: 'A4',
-            margins: { top: 50, bottom: 50, left: 60, right: 60 },
-        });
-
-        const chunks = [];
-        doc.on('data', chunk => chunks.push(chunk));
-        doc.on('end', () => resolve(Buffer.concat(chunks)));
-        doc.on('error', reject);
-
-        const PAGE_W = doc.page.width - 120;
-        const BLUE = '#1a4f8a';
-        const GREEN = '#166534';
-        const RED = '#991b1b';
-        const GRAY = '#6b7280';
-        const LGRAY = '#f3f4f6';
-
-        // Helper functions
-        const toSAR = (n) => `SAR ${parseFloat(n || 0).toFixed(2)}`;
-        const sectionHeader = (title, y) => {
-            doc.fillColor(BLUE).fontSize(11).font('Helvetica-Bold').text(title, 60, y || doc.y);
-            doc.moveDown(0.2);
-            doc.strokeColor(BLUE).lineWidth(1).moveTo(60, doc.y).lineTo(60 + PAGE_W, doc.y).stroke();
-            doc.moveDown(0.5);
-        };
-        const row = (label, value, indent = 60) => {
-            doc.fillColor(GRAY).fontSize(9).font('Helvetica').text(label + ':', indent, doc.y, { continued: true, width: 160 })
-                .fillColor('#111').text(' ' + (value ?? '—'), { width: PAGE_W - 160 });
-        };
-        const badgeColor = (status) => {
-            if (['APPROVED', 'POSTED'].includes(status)) return GREEN;
-            if (['REJECTED', 'VOID'].includes(status)) return RED;
-            return GRAY;
-        };
-
-        // 1. TITLE BLOCK
-        doc.rect(60, 45, PAGE_W, 46).fillColor(BLUE).fill();
-        doc.fillColor('#fff').fontSize(16).font('Helvetica-Bold')
-            .text('STOCK COUNT EVIDENCE PACK', 70, 52, { width: PAGE_W - 120 });
-        doc.fillColor('#c7d6ec').fontSize(9).font('Helvetica')
-            .text(`Session No: ${evidence.sessionInfo.sessionNo}   |   Status: ${evidence.sessionInfo.status}`, 70, 72);
-        doc.moveDown(2.5);
-
-        // 2. HEADER INFORMATION
-        sectionHeader('Session Header');
-        row('Session No.', evidence.sessionInfo.sessionNo);
-        row('Status', evidence.sessionInfo.status);
-        row('Location', evidence.sessionInfo.location);
-        row('Created By', evidence.sessionInfo.createdBy || '—');
-        row('Snapshot At', new Date(evidence.sessionInfo.snapshotAt).toLocaleString('en-GB'));
-        row('Posted At', evidence.sessionInfo.postedAt ? new Date(evidence.sessionInfo.postedAt).toLocaleString('en-GB') : 'Not yet posted');
-        doc.moveDown(1);
-
-        // 3. VARIANCE SUMMARY
-        sectionHeader('Variance Summary');
-        row('Items Counted', `${evidence.varianceSummary.itemsCounted} / ${evidence.varianceSummary.totalItems}`);
-        row('Total Overage (Qty)', evidence.varianceSummary.overQty);
-        row('Total Shortage (Qty)', evidence.varianceSummary.shortQty);
-        row('Net Variance Value', toSAR(evidence.varianceSummary.netVarianceValue));
-
-        doc.moveDown(1);
-
-        // 4. LINE ITEMS
-        sectionHeader('Count Details');
-        const colW = [100, 50, 60, 60, 60, PAGE_W - 330];
-        let y = doc.y;
-
-        doc.fillColor(LGRAY).rect(60, y - 2, PAGE_W, 18).fill();
-        doc.fillColor('#333').fontSize(9).font('Helvetica-Bold');
-        ['Item', 'WAC', 'Book Qty', 'Count Qty', 'Variance', 'Value'].forEach((h, i) => {
-            const x = 60 + colW.slice(0, i).reduce((a, b) => a + b, 0);
-            doc.text(h, x + 4, y, { width: colW[i] - 4 });
-        });
-        doc.moveDown(1.2);
-
-        evidence.lines.forEach((line, idx) => {
-            y = doc.y;
-            doc.fillColor(idx % 2 === 0 ? '#fff' : '#f9fafb').rect(60, y - 2, PAGE_W, 16).fill();
-            doc.fillColor('#111').fontSize(9).font('Helvetica');
-            [line.item, toSAR(line.unitCost), line.bookQty, line.countedQty ?? '—', line.varianceQty, toSAR(line.varianceValue)].forEach((val, i) => {
-                const x = 60 + colW.slice(0, i).reduce((a, b) => a + b, 0);
-                doc.text(String(val), x + 4, y, { width: colW[i] - 4 });
-            });
-            doc.moveDown(1);
-        });
-        doc.moveDown(0.5);
-
-        // 5. APPROVAL TIMELINE
-        if (evidence.approvalHistory.length > 0) {
-            sectionHeader('Approval Timeline');
-            evidence.approvalHistory.forEach((step) => {
-                const statusColor = badgeColor(step.status);
-                doc.fillColor(statusColor).fontSize(10).font('Helvetica-Bold')
-                    .text(`Step ${step.step}: ${step.role} [${step.status}]`);
-                row('Decided By', step.actedBy || 'Pending', 70);
-                row('Decision At', step.actedAt ? new Date(step.actedAt).toLocaleString('en-GB') : '—', 70);
-                if (step.comment) row('Comment', step.comment, 70);
-                doc.moveDown(0.7);
-            });
-            doc.moveDown(0.5);
-        }
-
-        // 6. LEDGER REFERENCE
-        if (evidence.ledgerEntries && evidence.ledgerEntries.length > 0) {
-            sectionHeader('Ledger Entries');
-            evidence.ledgerEntries.forEach((entry, idx) => {
-                doc.fillColor('#111').fontSize(9).font('Helvetica-Bold')
-                    .text(`Entry ${idx + 1}: ${entry.type}`);
-                row('Qty In', entry.qtyIn, 70);
-                row('Qty Out', entry.qtyOut, 70);
-                row('Total Value', toSAR(entry.totalValue), 70);
-                doc.moveDown(0.5);
-            });
-        }
-
-        doc.end();
-    });
-};
+/** Wave 1A — legacy /api/stock-count evidence PDF via enterprise facade (data unchanged). */
+const generateStockCountEvidencePDF = (evidence) => renderLegacyStockCountEvidencePdf(evidence);
 
 /**
  * Generic Report PDF Generator
@@ -404,115 +312,129 @@ const generateStockCountEvidencePDF = (evidence) => {
  * @param {Object} metadata   - {generatedBy, generatedAt, filters: {}}
  * @returns {Promise<Buffer>}
  */
+/** Wave 1A — workspace analytics PDF via enterprise document facade. */
 const generateReportPDF = (data, columns, title = 'Report', metadata = {}) => {
     return new Promise((resolve, reject) => {
         const doc = new PDFDocument({
             size: 'A4',
             layout: 'landscape',
-            margins: { top: 40, bottom: 40, left: 40, right: 40 },
+            margins: WORKSPACE_LANDSCAPE_MARGINS,
+            bufferPages: true,
         });
 
         const chunks = [];
-        doc.on('data', chunk => chunks.push(chunk));
+        doc.on('data', (chunk) => chunks.push(chunk));
         doc.on('end', () => resolve(Buffer.concat(chunks)));
         doc.on('error', reject);
 
-        const PAGE_W = doc.page.width - 80;
-        const BLUE = '#1a4f8a';
-        const GRAY = '#6b7280';
-        const LGRAY = '#f3f4f6';
+        const generatedAt = metadata.generatedAt || new Date().toISOString();
+        const generatedBy = metadata.generatedBy || 'System';
+        const reportType = metadata.reportType || metadata.cardId || '';
+        const family = resolveFamily(reportType);
+        const familyId = metadata.familyId || family?.familyId || 'generic';
+        const reportReference = metadata.reportReference || buildReportReference(reportType, generatedAt);
 
-        // ── 1. Title Bar ──────────────────────────────────────────────────
-        doc.rect(40, 35, PAGE_W, 40).fillColor(BLUE).fill();
-        doc.fillColor('#fff').fontSize(14).font('Helvetica-Bold')
-            .text(title.toUpperCase(), 50, 43, { width: PAGE_W - 20 });
-        doc.fillColor('#c7d6ec').fontSize(8).font('Helvetica')
-            .text(`Generated: ${metadata.generatedAt ? new Date(metadata.generatedAt).toLocaleString('en-GB') : new Date().toLocaleString('en-GB')}  |  By: ${metadata.generatedBy || 'System'}`, 50, 60);
-        doc.moveDown(2.5);
+        const profileRaw = resolvePdfProfile(reportType);
+        const goldenReference = Boolean(profileRaw?.goldenReference);
 
-        // ── 2. Filters Summary ────────────────────────────────────────────
-        if (metadata.filters && Object.keys(metadata.filters).length > 0) {
-            doc.fillColor(GRAY).fontSize(8).font('Helvetica-Bold').text('Filters:', 40, doc.y);
-            const filterText = Object.entries(metadata.filters)
-                .filter(([, v]) => v)
-                .map(([k, v]) => `${k}: ${v}`)
-                .join('  |  ');
-            doc.fillColor(GRAY).fontSize(8).font('Helvetica').text(filterText);
-            doc.moveDown(0.8);
-        }
-
-        // ── 3. Calculate column widths ────────────────────────────────────
-        const totalExcelW = columns.reduce((s, c) => s + (c.width || 15), 0);
-        const colWidths = columns.map(c => ((c.width || 15) / totalExcelW) * PAGE_W);
-        const ROW_H = 18;
-        const HEADER_H = 22;
-        const maxRowsPerPage = Math.floor((doc.page.height - doc.y - 60) / ROW_H);
-
-        // ── 4. Table Header ───────────────────────────────────────────────
-        const drawTableHeader = (y) => {
-            doc.fillColor(BLUE).rect(40, y, PAGE_W, HEADER_H).fill();
-            let x = 40;
-            columns.forEach((col, i) => {
-                doc.fillColor('#fff').fontSize(8).font('Helvetica-Bold')
-                    .text(col.header, x + 3, y + 5, { width: colWidths[i] - 6, ellipsis: true });
-                x += colWidths[i];
-            });
-            return y + HEADER_H;
+        const headerBase = {
+            title,
+            tenantName: metadata.tenantName || ENTERPRISE_BRAND.platformName,
+            reportReference,
+            generatedBy,
+            generatedAt,
+            classification: metadata.classification || 'INTERNAL USE',
+            reportType,
+            reportBasis: metadata.reportBasis,
+            filters: metadata.filters,
+            goldenReference,
         };
+        const pdfTotals = goldenReference
+            ? enrichGoldenTotals(reportType, metadata.totals, data, metadata)
+            : metadata.totals;
 
-        let tableY = drawTableHeader(doc.y);
-        let rowCount = 0;
+        registerPdfFonts(doc);
 
-        // ── 5. Data Rows ──────────────────────────────────────────────────
-        const formatVal = (val) => {
-            if (val === null || val === undefined) return '—';
-            if (typeof val === 'number') return val.toLocaleString('en-SA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            if (val instanceof Date) return val.toLocaleString('en-GB');
-            return String(val);
-        };
-
-        data.forEach((row, idx) => {
-            // Page break check
-            if (tableY + ROW_H > doc.page.height - 50) {
-                doc.addPage();
-                tableY = drawTableHeader(40);
-                rowCount = 0;
-            }
-
-            // Zebra striping
-            const bg = idx % 2 === 0 ? '#fff' : LGRAY;
-            doc.fillColor(bg).rect(40, tableY, PAGE_W, ROW_H).fill();
-
-            let x = 40;
-            columns.forEach((col, i) => {
-                const val = row[col.key];
-                doc.fillColor('#111').fontSize(7.5).font('Helvetica')
-                    .text(formatVal(val), x + 3, tableY + 4, { width: colWidths[i] - 6, ellipsis: true });
-                x += colWidths[i];
-            });
-
-            // Light grid line
-            doc.strokeColor('#e5e7eb').lineWidth(0.5)
-                .moveTo(40, tableY + ROW_H).lineTo(40 + PAGE_W, tableY + ROW_H).stroke();
-
-            tableY += ROW_H;
-            rowCount++;
+        const layout = createWorkspaceLayout(doc, { headerOptions: headerBase });
+        layout.displayCurrency = metadata.displayCurrency || 'SAR';
+        layout.formatMoney = (value) => formatMoney(value, layout.displayCurrency);
+        const profile =
+            reportType === 'detail-report' && Array.isArray(metadata.visibleGroupIds)
+                ? filterDetailProfileByVisibleGroups(profileRaw, metadata.visibleGroupIds, layout.pageWidth)
+                : profileRaw;
+        renderWorkspaceReportChrome(doc, layout, title, {
+            ...metadata,
+            ...headerBase,
+            reportType,
+            compactChrome: Boolean(profile?.compactChrome),
+            shellCompact: Boolean(profile?.shellCompact),
+            goldenReference,
         });
 
-        // ── 6. Summary line ───────────────────────────────────────────────
-        doc.moveDown(0.5);
-        doc.fillColor(GRAY).fontSize(8).font('Helvetica')
-            .text(`Total Rows: ${data.length}`, 40, tableY + 8);
+        if (profile) {
+            drawReportKpiStrip(doc, layout, pdfTotals, profile);
+        }
 
-        // ── 7. Footer ─────────────────────────────────────────────────────
-        const footerY = doc.page.height - 35;
-        doc.strokeColor(GRAY).lineWidth(0.5)
-            .moveTo(40, footerY - 6).lineTo(40 + PAGE_W, footerY - 6).stroke();
-        doc.fillColor(GRAY).fontSize(7).font('Helvetica')
-            .text(
-                `OS&E Inventory System  |  ${title}  |  ${new Date().toLocaleString('en-GB')}`,
-                40, footerY, { width: PAGE_W, align: 'center' }
-            );
+        const useGroupedPresenter =
+            profile?.mode !== 'flat' &&
+            metadata.groupingEnabled !== false &&
+            isGroupedExportData(data);
+
+        if (useGroupedPresenter) {
+            renderGroupedReportTable(doc, data, columns, {
+                marginLeft: layout.marginLeft,
+                pageWidth: layout.pageWidth,
+                familyId,
+                reportType,
+                profile,
+                totals: pdfTotals,
+                headerOptions: headerBase,
+                drawMiniHeader: layout.drawMiniHeader,
+            });
+        } else if (profile) {
+            renderFlatProfileTable(doc, layout, data, columns, { ...metadata, profile });
+        } else {
+            renderFlatAnalyticsTable(doc, layout, data, columns, metadata);
+        }
+
+        if (!profile?.grandTotalBand) {
+            const isSessionsHistory = reportType === 'count-sessions-history';
+            drawFinancialTotalsSummary(doc, layout, metadata.totals, {
+                sectionTitle: isSessionsHistory ? 'Session summary' : 'Financial totals',
+            });
+        }
+
+        if (profile) {
+            drawCompactApprovalStrip(doc, layout, {
+                ...metadata,
+                generatedBy,
+                generatedAt,
+                goldenReference,
+            });
+            stampThreeZoneFooters(doc, layout, {
+                ...metadata,
+                generatedBy,
+                generatedAt,
+                reportReference,
+                documentSuffix: metadata.documentSuffix ||
+                    (reportType === 'count-sessions-history' ? 'Operational Governance Report'
+                    : reportType === 'count-approval-history' ? 'Approval History Report'
+                    : 'Analytics Report'),
+                goldenShellRev: goldenReference ? resolveGoldenShellRev(reportType) : undefined,
+            });
+        } else {
+            drawGoldenApprovalStrip(doc, layout, { ...metadata, generatedBy, generatedAt });
+            stampWorkspaceFooters(doc, layout, {
+                ...metadata,
+                generatedBy,
+                generatedAt,
+                reportReference,
+                documentSuffix: metadata.documentSuffix ||
+                    (reportType === 'count-sessions-history' ? 'Operational Governance Report'
+                    : reportType === 'count-approval-history' ? 'Approval History Report'
+                    : 'Analytics Report'),
+            });
+        }
 
         doc.end();
     });
@@ -523,239 +445,110 @@ const generateReportPDF = (data, columns, title = 'Report', metadata = {}) => {
  * @param {object} report - The output of stockReport.service.getSavedReportById()
  * @returns {Buffer} - PDF buffer
  */
+/** Wave 1A — legacy saved stock report PDF via generateReportPDF (same line/total values). */
 const generateStockReportVariancePDF = (report) => {
-    return new Promise((resolve, reject) => {
-        const doc = new PDFDocument({ size: 'A4', margins: { top: 40, bottom: 60, left: 40, right: 40 }, bufferPages: true });
-        const chunks = [];
-        doc.on('data', c => chunks.push(c));
-        doc.on('end', () => resolve(Buffer.concat(chunks)));
-        doc.on('error', reject);
+    const columns = [
+        { header: 'Item Name', key: 'itemName', width: 35, align: 'left', format: 'text' },
+        { header: 'System Qty', key: 'bookQty', width: 13, align: 'right', format: 'qty' },
+        { header: 'Counted Qty', key: 'countedQty', width: 13, align: 'right', format: 'qty' },
+        { header: 'Variance Qty', key: 'varianceQty', width: 13, align: 'right', format: 'qty' },
+        { header: 'Unit Price (SAR)', key: 'unitPrice', width: 11, align: 'right', format: 'sar' },
+        { header: 'Variance Value', key: 'varianceValue', width: 15, align: 'right', format: 'sar' },
+    ];
 
-        const PW = doc.page.width - 80;
-        const ML = 40;
-        const NAVY = '#1a3a5c';
-        const BLUE = '#2563eb';
-        const LGRAY = '#f1f5f9';
-        const GRAY = '#64748b';
-        const RED = '#dc2626';
-        const GREEN = '#16a34a';
-        const WHITE = '#ffffff';
-        const BDR = '#cbd5e1';
-
-        const fmtDT = (d) => d ? new Date(d).toLocaleString('en-GB') : '—';
-        const toSAR = (n) => `SAR ${parseFloat(n || 0).toFixed(2)}`;
-
-        const ensureSpace = (needed) => {
-            if (doc.y + needed > doc.page.height - 70) doc.addPage();
-        };
-
-        const section = (title) => {
-            ensureSpace(30);
-            doc.moveDown(0.6);
-            doc.fillColor(NAVY).fontSize(11).font('Helvetica-Bold').text(title, ML, doc.y);
-            doc.moveDown(0.15);
-            doc.strokeColor(BLUE).lineWidth(1.5).moveTo(ML, doc.y).lineTo(ML + PW, doc.y).stroke();
-            doc.moveDown(0.4);
-        };
-
-        const kv = (label, value, x, y, w) => {
-            doc.fillColor(GRAY).fontSize(8).font('Helvetica').text(label + ':', x, y, { width: 90 });
-            doc.fillColor('#1e293b').fontSize(8.5).font('Helvetica-Bold').text(String(value || '—'), x + 92, y, { width: w - 92, ellipsis: true });
-        };
-
-        // 1. HEADER BANNER
-        doc.fillColor(NAVY).rect(0, 0, doc.page.width, 60).fill();
-        doc.fillColor(WHITE).fontSize(18).font('Helvetica-Bold').text('STOCK REPORT VARIANCE', ML, 20, { align: 'left' });
-
-        let statusColor = GRAY;
-        if (report.status === 'APPROVED' || report.status === 'POSTED') statusColor = GREEN;
-        if (report.status === 'REJECTED') statusColor = RED;
-
-        doc.fillColor(statusColor).rect(ML + PW - 100, 18, 100, 24).fill();
-        doc.fillColor(WHITE).fontSize(10).font('Helvetica-Bold').text(report.status, ML + PW - 100, 24, { width: 100, align: 'center' });
-
-        doc.y = 80;
-
-        // 2. REPORT DETAILS
-        section('Report Details');
-        let detailsY = doc.y;
-        const colW = PW / 2;
-        kv('Report No', report.reportNo, ML, detailsY, colW);
-        kv('Year', report.createdAt ? new Date(report.createdAt).getFullYear() : '—', ML + colW, detailsY, colW);
-        detailsY += 16;
-        kv('Location / Dept', report.location?.name || '—', ML, detailsY, PW);
-        detailsY += 16;
-        kv('Created Date', fmtDT(report.createdAt), ML, detailsY, colW);
-        kv('Total Items', report.lines.length, ML + colW, detailsY, colW);
-        doc.y = detailsY + 24;
-
-        if (report.notes) {
-            kv('Notes', report.notes, ML, doc.y, PW);
-            doc.y += 20;
-        }
-
-        // 3. ITEMS TABLE
-        section(`Inventory Count Details (${report.lines.length} Items)`);
-
-        const cols = [
-            { label: 'Item Name', w: PW * 0.35, align: 'left', key: 'name' },
-            { label: 'System Qty', w: PW * 0.13, align: 'center', key: 'book' },
-            { label: 'Counted Qty', w: PW * 0.13, align: 'center', key: 'count' },
-            { label: 'Variance Qty', w: PW * 0.13, align: 'center', key: 'varQty' },
-            { label: 'Unit Price', w: PW * 0.11, align: 'right', key: 'price' },
-            { label: 'Variance Val', w: PW * 0.15, align: 'right', key: 'varVal' },
-        ];
-
-        let tableY = doc.y;
-
-        const drawHeader = (startY) => {
-            doc.fillColor(NAVY).rect(ML, startY, PW, 24).fill();
-            let x = ML;
-            cols.forEach(c => {
-                doc.fillColor(WHITE).fontSize(8).font('Helvetica-Bold')
-                    .text(c.label, x + 4, startY + 6, { width: c.w - 8, align: c.align });
-                x += c.w;
-            });
-            return startY + 24;
-        };
-
-        tableY = drawHeader(tableY);
         let totalVarQty = 0;
         let totalVarVal = 0;
+    const rows = [];
 
-        report.lines.forEach((line, idx) => {
+    for (const line of report.lines || []) {
             const openQty = Number(line.openingQty || 0);
             const openVal = Number(line.openingValue || 0);
             const bookQty = Number(line.closingQty || 0);
-            const bookVal = Number(line.closingValue || 0);
             const countQty = Number(line.inwardQty || 0);
             const countVal = Number(line.inwardValue || 0);
-
-            // Use the exactly saved variance values to prevent unitPrice 0 bugs
             const varQty = Number(line.outwardQty || (countQty - bookQty));
             const varVal = Number(line.outwardValue || 0);
-            const unitPrice = Math.abs(varQty) > 0 ? Math.abs(varVal / varQty) : (countQty > 0 ? (countVal / countQty) : (openQty > 0 ? (openVal / openQty) : 0));
-
-            ensureSpace(20);
-            if (doc.y > doc.page.height - 80) {
-                doc.addPage();
-                tableY = drawHeader(40);
-                doc.y = tableY;
-            } else {
-                tableY = doc.y;
-            }
+        const unitPrice =
+            Math.abs(varQty) > 0
+                ? Math.abs(varVal / varQty)
+                : countQty > 0
+                    ? countVal / countQty
+                    : openQty > 0
+                        ? openVal / openQty
+                        : 0;
 
             totalVarQty += varQty;
             totalVarVal += varVal;
 
-            const bg = idx % 2 === 0 ? '#ffffff' : LGRAY;
-            doc.fillColor(bg).rect(ML, tableY, PW, 20).fill();
-
-            let x = ML;
-            // Item Name
-            doc.fillColor('#111827').fontSize(7.5).font('Helvetica')
-                .text(line.item.name, x + 4, tableY + 5, { width: cols[0].w - 8, ellipsis: true, align: 'left' });
-            x += cols[0].w;
-            // System Qty (book)
-            doc.fillColor(GRAY).fontSize(8).font('Helvetica')
-                .text(bookQty.toString(), x + 4, tableY + 5, { width: cols[1].w - 8, align: 'center' });
-            x += cols[1].w;
-            // Counted Qty
-            doc.fillColor('#111827').fontSize(8).font('Helvetica-Bold')
-                .text(countQty.toString(), x + 4, tableY + 5, { width: cols[2].w - 8, align: 'center' });
-            x += cols[2].w;
-            // Variance Qty
-            let varColor = varQty < 0 ? RED : varQty > 0 ? GREEN : GRAY;
-            doc.fillColor(varColor).fontSize(8).font('Helvetica-Bold')
-                .text(varQty.toString(), x + 4, tableY + 5, { width: cols[3].w - 8, align: 'center' });
-            x += cols[3].w;
-            // Unit Price
-            doc.fillColor(GRAY).fontSize(8).font('Helvetica')
-                .text(unitPrice.toFixed(2), x + 4, tableY + 5, { width: cols[4].w - 8, align: 'right' });
-            x += cols[4].w;
-            // Variance Value
-            doc.fillColor(varColor).fontSize(8).font('Helvetica-Bold')
-                .text(varVal.toFixed(2), x + 4, tableY + 5, { width: cols[5].w - 8, align: 'right' });
-
-            doc.strokeColor('#e5e7eb').lineWidth(0.5)
-                .moveTo(ML, tableY + 20).lineTo(ML + PW, tableY + 20).stroke();
-            doc.y = tableY + 20;
+        rows.push({
+            itemName: line.item?.name || '—',
+            bookQty,
+            countedQty: countQty,
+            varianceQty: varQty,
+            unitPrice,
+            varianceValue: varVal,
         });
+    }
 
-        // Totals Row
-        doc.y += 2;
-        tableY = doc.y;
-        doc.fillColor('#1e293b').rect(ML, tableY, PW, 24).fill();
-        doc.fillColor(WHITE).fontSize(8.5).font('Helvetica-Bold');
-        doc.text('TOTALS', ML + 4, tableY + 6, { width: cols[0].w + cols[1].w + cols[2].w - 8, align: 'right' });
+    const totalsRow = {
+        itemName: 'Totals',
+        bookQty: '',
+        countedQty: '',
+        varianceQty: totalVarQty,
+        unitPrice: '',
+        varianceValue: totalVarVal,
+        _isTotalsRow: true,
+    };
 
-        let tVarColor = totalVarQty < 0 ? '#fca5a5' : totalVarQty > 0 ? '#86efac' : WHITE;
-        doc.fillColor(tVarColor).text(totalVarQty.toFixed(0), ML + cols[0].w + cols[1].w + cols[2].w + 4, tableY + 6, { width: cols[3].w - 8, align: 'center' });
-
-        let tValColor = totalVarVal < 0 ? '#fca5a5' : totalVarVal > 0 ? '#86efac' : WHITE;
-        doc.fillColor(tValColor).text(toSAR(totalVarVal), ML + PW - cols[5].w + 4, tableY + 6, { width: cols[5].w - 8, align: 'right' });
-
-        doc.y = tableY + 36;
-
-        // 4. SIGNATURES
         const history = report.approvalRequest?.steps || [];
-        const sigSlots = [
-            { label: 'Prepared By', name: `${report.createdByUser?.firstName || ''} ${report.createdByUser?.lastName || ''}`.trim() || 'System User', role: 'Preparer', status: 'SUBMITTED', actedAt: report.createdAt },
-            ...history.map(s => ({
-                label: s.role === 'DEPT_MANAGER' ? 'Head of Department' : s.role === 'COST_CONTROL' ? 'Cost Control' : 'Finance Manager',
-                name: s.actedByUser ? `${s.actedByUser.firstName} ${s.actedByUser.lastName}` : s.actedBy?.split(' (')[0] || '',
-                role: s.role,
+    const signatureSlots = [
+        {
+            labelEn: 'Prepared by',
+            name: `${report.createdByUser?.firstName || ''} ${report.createdByUser?.lastName || ''}`.trim() || 'System User',
+            date: report.createdAt,
+            status: 'SUBMITTED',
+        },
+        ...history.map((s) => ({
+            labelEn:
+                s.role === 'DEPT_MANAGER'
+                    ? 'Head of Department'
+                    : s.role === 'COST_CONTROL'
+                        ? 'Cost Control'
+                        : 'Finance Manager',
+            name: s.actedByUser
+                ? `${s.actedByUser.firstName} ${s.actedByUser.lastName}`.trim()
+                : s.actedBy?.split(' (')[0] || '',
+            date: s.actedAt,
                 status: s.status,
-                actedAt: s.actedAt,
             })),
         ];
 
-        ensureSpace(145);
-        if (doc.y > doc.page.height - 210) doc.addPage();
-
-        doc.moveDown(2); // Provide spacing between table totals and signatures without a titled section
-
-        const sigCount = Math.min(sigSlots.length, 4);
-        const sigW = PW / sigCount;
-        const sigStartY = doc.y;
-
-        sigSlots.slice(0, sigCount).forEach((sig, i) => {
-            const sx = ML + i * sigW;
-            const sigColor = ['APPROVED', 'SUBMITTED', 'POSTED'].includes(sig.status) ? GREEN : sig.status === 'REJECTED' ? RED : GRAY;
-
-            // Role/Position first for title context under line
-            doc.strokeColor('#94a3b8').lineWidth(1)
-                .moveTo(sx + 8, sigStartY + 60).lineTo(sx + sigW - 12, sigStartY + 60).stroke();
-
-            doc.fillColor('#1e293b').fontSize(8.5).font('Helvetica-Bold')
-                .text(sig.name || '_______________', sx + 8, sigStartY + 64, { width: sigW - 16, align: 'center', ellipsis: true });
-
-            doc.fillColor(GRAY).fontSize(7.5).font('Helvetica')
-                .text(sig.label, sx + 8, sigStartY + 78, { width: sigW - 16, align: 'center' });
-
-            doc.fillColor(sigColor).fontSize(8).font('Helvetica-Bold')
-                .text(sig.status, sx + 8, sigStartY + 92, { width: sigW - 16, align: 'center' });
-
-            doc.fillColor(GRAY).fontSize(7).font('Helvetica')
-                .text(sig.actedAt ? fmtDT(sig.actedAt) : '— / — / ——', sx + 8, sigStartY + 104, { width: sigW - 16, align: 'center' });
-
-            if (i < sigCount - 1) {
-                doc.strokeColor(BDR).lineWidth(0.5)
-                    .moveTo(sx + sigW, sigStartY + 50).lineTo(sx + sigW, sigStartY + 118).stroke();
-            }
-        });
-
-        // FOOTER
-        const range = doc.bufferedPageRange();
-        for (let i = range.start; i < range.start + range.count; i++) {
-            doc.switchToPage(i);
-            const fy = doc.page.height - 28;
-            doc.strokeColor(BDR).lineWidth(0.5).moveTo(ML, fy - 6).lineTo(ML + PW, fy - 6).stroke();
-            doc.fillColor(GRAY).fontSize(7).font('Helvetica')
-                .text(`OS&E Inventory System  |  Stock Report Variance — ${report.reportNo}  |  Generated: ${new Date().toLocaleString('en-GB')}  |  Page ${i - range.start + 1} of ${range.count}`, ML, fy, { width: PW, align: 'center' });
-        }
-
-        doc.end();
+    const generatedAt = new Date().toISOString();
+    return generateReportPDF([...rows, totalsRow], columns, 'STOCK REPORT VARIANCE', {
+        generatedAt,
+        generatedBy:
+            `${report.createdByUser?.firstName || ''} ${report.createdByUser?.lastName || ''}`.trim() || 'System',
+        tenantName: report.location?.name || ENTERPRISE_BRAND.platformName,
+        reportType: 'stock-report-variance',
+        reportReference: buildReportReference('stock-report-variance', generatedAt),
+        classification: 'INTERNAL USE',
+        groupingEnabled: false,
+        documentSuffix: `Stock Report ${report.reportNo || ''}`.trim(),
+        reportBasis: report.reportNo
+            ? `Report ${report.reportNo} · ${report.status || ''}`
+            : report.status,
+        filters: {
+            'Report no': report.reportNo,
+            Location: report.location?.name,
+            Status: report.status,
+            'Total items': report.lines?.length,
+            Notes: report.notes || '',
+        },
+        totals: {
+            totalVarianceQty: totalVarQty,
+            totalVarianceValue: totalVarVal,
+        },
+        signatureSlots,
     });
 };
 
@@ -928,4 +721,20 @@ const generateAssetTransferPDF = (loan) => {
     });
 };
 
-module.exports = { generateBreakageEvidencePDF, generateStockCountEvidencePDF, generateReportPDF, generateStockReportVariancePDF, generateAssetTransferPDF };
+const { renderInventoryCountEvidencePdf } = require('./pdf/inventory-count-pdf.renderer');
+
+/** @deprecated Prefer inventory-count-pdf.renderer; kept for legacy imports. */
+const generateInventoryCountWorkflowPDF = (payload) => renderInventoryCountEvidencePdf(payload);
+
+module.exports = {
+    generateBreakageEvidencePDF,
+    generateLostEvidencePDF,
+    generateTransferEvidencePDF,
+    generateGrnEvidencePDF,
+    generateStockCountEvidencePDF,
+    generateReportPDF,
+    generateSummaryInventoryPDF,
+    generateStockReportVariancePDF,
+    generateAssetTransferPDF,
+    generateInventoryCountWorkflowPDF,
+};

@@ -1,5 +1,11 @@
 const { body, query, param, validationResult } = require('express-validator');
+const { isUUID } = require('validator');
 const { REFRESH_TOKEN_COOKIE_NAME } = require('./refreshCookie');
+const { normalizeEmailForLookup } = require('./emailNormalize');
+const { ASSIGNABLE_ROLE_CODES } = require('../constants/role-codes.constants');
+
+/** @deprecated use normalizeEmailForLookup from ./emailNormalize */
+const sanitizeEmailInput = normalizeEmailForLookup;
 
 const applyLifetimeSubStatusDefault = (req) => {
     const payload = req.body;
@@ -27,7 +33,11 @@ const validate = (req, res, next) => {
 
 // ─── Auth Validators ───────────────────────────────────────────────────────
 const loginValidator = [
-    body('email').isEmail().normalizeEmail().withMessage('Valid email required.'),
+    body('email')
+        .customSanitizer(normalizeEmailForLookup)
+        .isEmail()
+        .normalizeEmail()
+        .withMessage('Valid email required.'),
     body('password').notEmpty().withMessage('Password is required.'),
     body('tenantSlug').optional().trim(), // Optional — SUPER_ADMIN logs in without a tenant
     validate,
@@ -63,12 +73,20 @@ const changePasswordValidator = [
 ];
 
 const forgotPasswordValidator = [
-    body('email').isEmail().normalizeEmail().withMessage('Valid email required.'),
+    body('email')
+        .customSanitizer(normalizeEmailForLookup)
+        .isEmail()
+        .normalizeEmail()
+        .withMessage('Valid email required.'),
     validate,
 ];
 
 const resetPasswordValidator = [
-    body('email').isEmail().normalizeEmail().withMessage('Valid email required.'),
+    body('email')
+        .customSanitizer(normalizeEmailForLookup)
+        .isEmail()
+        .normalizeEmail()
+        .withMessage('Valid email required.'),
     body('otp')
         .matches(/^\d{6}$/)
         .withMessage('OTP must be a 6-digit code.'),
@@ -80,24 +98,24 @@ const resetPasswordValidator = [
 
 // ─── User Validators ───────────────────────────────────────────────────────
 const createUserValidator = [
-    body('email').isEmail().normalizeEmail().withMessage('Valid email required.'),
+    body('email')
+        .optional({ values: 'falsy' })
+        .customSanitizer(sanitizeEmailInput)
+        .isEmail()
+        .withMessage('Valid email required.')
+        .normalizeEmail(),
+    body('existingUserId').optional().isUUID().withMessage('existingUserId must be a valid UUID.'),
     body('password').optional().isLength({ min: 8 }).withMessage('Password must be at least 8 characters.'),
     body('firstName').optional().notEmpty().trim(),
     body('lastName').optional().notEmpty().trim(),
     body('role')
-        .isIn([
-            'ADMIN',
-            'ORG_MANAGER',
-            'STOREKEEPER',
-            'DEPT_MANAGER',
-            'COST_CONTROL',
-            'FINANCE_MANAGER',
-            'AUDITOR',
-            'SECURITY',
-            'GENERAL_MANAGER',
-        ])
+        .isIn([...ASSIGNABLE_ROLE_CODES])
         .withMessage('Invalid role.'),
     body('departmentId').optional({ nullable: true }).isUUID().withMessage('departmentId must be a valid UUID.'),
+    body('canViewAllDepartments').optional().isBoolean(),
+    body('canViewAllLocations').optional().isBoolean(),
+    body('locationIds').optional().isArray(),
+    body('locationIds.*').optional().isUUID(),
     validate,
 ];
 
@@ -108,35 +126,31 @@ const updateUserValidator = [
     body('password').optional().isLength({ min: 8 }).withMessage('Password must be at least 8 characters.'),
     body('role')
         .optional()
-        .isIn([
-            'ADMIN',
-            'ORG_MANAGER',
-            'STOREKEEPER',
-            'DEPT_MANAGER',
-            'COST_CONTROL',
-            'FINANCE_MANAGER',
-            'AUDITOR',
-            'SECURITY',
-            'GENERAL_MANAGER',
-        ])
+        .isIn([...ASSIGNABLE_ROLE_CODES])
         .withMessage('Invalid role.'),
     body('isActive').optional().isBoolean(),
+    body('departmentId')
+        .optional({ nullable: true })
+        .customSanitizer((v) => (v === '' ? null : v))
+        .custom((value) => {
+            if (value === null || value === undefined) {
+                return true;
+            }
+            if (isUUID(String(value))) {
+                return true;
+            }
+            throw new Error('departmentId must be a valid UUID.');
+        }),
+    body('canViewAllDepartments').optional().isBoolean(),
+    body('canViewAllLocations').optional().isBoolean(),
+    body('locationIds').optional().isArray(),
+    body('locationIds.*').optional().isUUID(),
     validate,
 ];
 
 const updateRoleValidator = [
     body('role')
-        .isIn([
-            'ADMIN',
-            'ORG_MANAGER',
-            'STOREKEEPER',
-            'DEPT_MANAGER',
-            'COST_CONTROL',
-            'FINANCE_MANAGER',
-            'AUDITOR',
-            'SECURITY',
-            'GENERAL_MANAGER',
-        ])
+        .isIn([...ASSIGNABLE_ROLE_CODES])
         .withMessage('Invalid role.'),
     validate,
 ];
@@ -363,9 +377,13 @@ const updateSuperAdminTenantAdminValidator = [
     body('lastName').optional().notEmpty().trim(),
     body('email').optional().isEmail().withMessage('email must be valid.').normalizeEmail(),
     body('isActive').optional().isBoolean().withMessage('isActive must be a boolean.'),
+    body('syncHotelAdminsAsOrgManager')
+        .optional()
+        .isBoolean()
+        .withMessage('syncHotelAdminsAsOrgManager must be a boolean.'),
     body('password').optional().isLength({ min: 8 }).withMessage('password must be at least 8 characters.'),
     body().custom((value, { req }) => {
-        const keys = ['firstName', 'lastName', 'email', 'isActive', 'password'];
+        const keys = ['firstName', 'lastName', 'email', 'isActive', 'password', 'syncHotelAdminsAsOrgManager'];
         if (!keys.some((k) => Object.prototype.hasOwnProperty.call(req.body, k))) {
             throw new Error('At least one of firstName, lastName, email, isActive, or password is required.');
         }

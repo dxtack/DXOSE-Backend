@@ -1,10 +1,40 @@
 const { resolvePostingPeriod } = require('../platform/postingPeriod.util');
-const { validatePostingDate } = require('./periodGuard.service');
+const { validatePostingDate, checkFuturePostingDate } = require('./periodGuard.service');
+const {
+    assertPositiveUnitCostForInboundQty,
+    assertNoZeroWacWithQty,
+} = require('./stockBalanceWacGuard.service');
+const { assertIntegerQuantity } = require('./integerQuantityGuard.service');
+const { getTenantTimezone } = require('./tenantTimezone.service');
 const err = (message, statusCode = 400) => {
     const e = new Error(message);
     e.statusCode = statusCode;
     return e;
 };
+
+const transferPostingEffectKey = ({ tenantId, transferId, transferLineId, direction }) =>
+    `v1|TRANSFER|${tenantId}|${transferId}|${transferLineId}|${direction}`;
+
+async function createIdempotentTransferLedgerEffect(tx, data) {
+    try {
+        return await tx.inventoryLedger.create({ data });
+    } catch (error) {
+        const target = Array.isArray(error?.meta?.target)
+            ? error.meta.target.join(',')
+            : String(error?.meta?.target || '');
+        if (error?.code === 'P2002' && target.includes('postingEffectKey')) {
+            throw Object.assign(
+                new Error('This transfer line has already been posted to the ledger. Duplicate effect prevented.'),
+                {
+                    statusCode: 409,
+                    code: 'POSTING_EFFECT_ALREADY_APPLIED',
+                    details: { postingEffectKey: data.postingEffectKey },
+                },
+            );
+        }
+        throw error;
+    }
+}
 
 async function assertNoDuplicateTransferPost(tx, tenantId, transferId) {
     const existing = await tx.inventoryLedger.findFirst({
@@ -20,16 +50,22 @@ async function assertNoDuplicateTransferPost(tx, tenantId, transferId) {
  * @param {object} trf — storeTransfer with lines[], sourceLocation, destLocation
  * @param {string} userId — Finance approver / poster
  * @param {Array<{ lineId: string, receivedQty: number }>} [receivedLines] — legacy receive override; defaults to requestedQty
+ * @param {{ postingDate?: Date|string, fromResolutionWorkspace?: boolean }} [opts]
  */
-async function postTransferInTransaction(tx, trf, userId, receivedLines = []) {
+async function postTransferInTransaction(tx, trf, userId, receivedLines = [], opts = {}) {
     const tenantId = trf.tenantId;
     await assertNoDuplicateTransferPost(tx, tenantId, trf.id);
+    const timezone = await getTenantTimezone(tenantId, tx);
 
     const destName = trf.destLocation?.name || trf.destLocationId;
     const sourceName = trf.sourceLocation?.name || trf.sourceLocationId;
-    const now = new Date();
-    await validatePostingDate(tenantId, now);
-    const { postingDate, assignedPostingPeriod } = resolvePostingPeriod(now);
+    const now = opts.postingDate != null ? new Date(opts.postingDate) : new Date();
+    if (opts.fromResolutionWorkspace) {
+        checkFuturePostingDate(now, timezone);
+    } else {
+        await validatePostingDate(tenantId, now, tx, timezone);
+    }
+    const { postingDate, assignedPostingPeriod } = resolvePostingPeriod(now, timezone);
 
     for (const line of trf.lines) {
         const override = receivedLines.find((r) => r.lineId === line.id);
@@ -41,94 +77,148 @@ async function postTransferInTransaction(tx, trf, userId, receivedLines = []) {
             throw new Error(`Received quantity for item ${line.itemId} cannot exceed requested quantity.`);
         }
         if (receivedQty <= 0) continue;
-
-        const srcKey = {
-            tenantId_itemId_locationId: {
-                tenantId,
+        assertIntegerQuantity({
+            qty: receivedQty,
+            field: 'receivedQty',
+            message:
+                'Cannot post transfer: quantity must be a whole number (integer). Fractional quantities are not allowed.',
+            details: {
+                transferNo: trf.transferNo,
                 itemId: line.itemId,
-                locationId: trf.sourceLocationId,
+                receivedQty,
             },
-        };
-        const srcBalance = await tx.stockBalance.findUnique({ where: srcKey });
-        if (!srcBalance || Number(srcBalance.qtyOnHand) < receivedQty) {
-            throw new Error(`Insufficient source stock for item ${line.itemId} at posting time.`);
+        });
+
+        const updatedSourceRows = await tx.$queryRaw`
+            UPDATE "stock_balances"
+            SET "qtyOnHand" = "qtyOnHand" - ${receivedQty},
+                "lastUpdated" = ${now}
+            WHERE "tenantId" = ${tenantId}::uuid
+              AND "itemId" = ${line.itemId}::uuid
+              AND "locationId" = ${trf.sourceLocationId}::uuid
+              AND "qtyOnHand" - "qtyBlocked" >= ${receivedQty}
+            RETURNING "qtyOnHand", "wacUnitCost"
+        `;
+        const updatedSource = updatedSourceRows[0];
+        if (!updatedSource) {
+            throw new Error(`Insufficient available source stock for item ${line.itemId} at posting time.`);
         }
 
-        const wac = Number(srcBalance.wacUnitCost);
+        const wac = Number(updatedSource.wacUnitCost);
+        assertPositiveUnitCostForInboundQty({
+            unitCost: wac,
+            qty: receivedQty,
+            message:
+                'Cannot post transfer: source stock has quantity but missing or zero WAC. ' +
+                'Correct the source item cost (GRN or Item Master) before transferring.',
+            details: {
+                transferNo: trf.transferNo,
+                itemId: line.itemId,
+                sourceLocationId: trf.sourceLocationId,
+                sourceWac: wac,
+            },
+        });
         const value = receivedQty * wac;
-        const srcQtyAfter = Number(srcBalance.qtyOnHand) - receivedQty;
+        const srcQtyAfter = Number(updatedSource.qtyOnHand);
 
-        await tx.stockBalance.update({
-            where: srcKey,
-            data: { qtyOnHand: { decrement: receivedQty }, lastUpdated: now },
+        await createIdempotentTransferLedgerEffect(tx, {
+            tenantId,
+            itemId: line.itemId,
+            locationId: trf.sourceLocationId,
+            movementType: 'TRANSFER_OUT',
+            qtyOut: receivedQty,
+            qtyIn: 0,
+            unitCost: wac,
+            totalValue: value,
+            balanceAfter: srcQtyAfter,
+            referenceType: 'TRANSFER',
+            referenceId: trf.id,
+            referenceNo: trf.transferNo,
+            postingEffectKey: transferPostingEffectKey({
+                tenantId,
+                transferId: trf.id,
+                transferLineId: line.id,
+                direction: 'OUT',
+            }),
+            notes: `Transfer OUT to ${destName}`,
+            createdBy: userId,
+            postingDate,
+            assignedPostingPeriod,
         });
 
-        await tx.inventoryLedger.create({
-            data: {
-                tenantId,
+        const updatedDestinationRows = await tx.$queryRaw`
+            INSERT INTO "stock_balances" (
+                "tenantId",
+                "itemId",
+                "locationId",
+                "qtyOnHand",
+                "wacUnitCost",
+                "lastUpdated"
+            )
+            VALUES (
+                ${tenantId}::uuid,
+                ${line.itemId}::uuid,
+                ${trf.destLocationId}::uuid,
+                ${receivedQty},
+                ${wac},
+                ${now}
+            )
+            ON CONFLICT ("tenantId", "itemId", "locationId")
+            DO UPDATE SET
+                "wacUnitCost" = CASE
+                    WHEN "stock_balances"."qtyOnHand" + EXCLUDED."qtyOnHand" > 0
+                    THEN (
+                        ("stock_balances"."qtyOnHand" * "stock_balances"."wacUnitCost")
+                        + (EXCLUDED."qtyOnHand" * EXCLUDED."wacUnitCost")
+                    ) / ("stock_balances"."qtyOnHand" + EXCLUDED."qtyOnHand")
+                    ELSE EXCLUDED."wacUnitCost"
+                END,
+                "qtyOnHand" = "stock_balances"."qtyOnHand" + EXCLUDED."qtyOnHand",
+                "lastUpdated" = EXCLUDED."lastUpdated"
+            RETURNING "qtyOnHand", "wacUnitCost"
+        `;
+        const updatedDestination = updatedDestinationRows[0];
+        const newTotalQty = Number(updatedDestination.qtyOnHand);
+        const newWac = Number(updatedDestination.wacUnitCost);
+
+        assertNoZeroWacWithQty({
+            qtyOnHand: newTotalQty,
+            wacUnitCost: newWac,
+            message:
+                'Cannot post transfer: destination stock would have quantity greater than zero with missing or zero WAC. ' +
+                'Correct the source item cost before transferring.',
+            details: {
+                transferNo: trf.transferNo,
                 itemId: line.itemId,
-                locationId: trf.sourceLocationId,
-                movementType: 'TRANSFER_OUT',
-                qtyOut: receivedQty,
-                qtyIn: 0,
-                unitCost: wac,
-                totalValue: value,
-                balanceAfter: srcQtyAfter,
-                referenceType: 'TRANSFER',
-                referenceId: trf.id,
-                referenceNo: trf.transferNo,
-                notes: `Transfer OUT to ${destName}`,
-                createdBy: userId,
-                postingDate,
-                assignedPostingPeriod,
+                destLocationId: trf.destLocationId,
+                resultingQty: newTotalQty,
+                resultingWac: newWac,
             },
         });
 
-        const dstKey = {
-            tenantId_itemId_locationId: {
+        await createIdempotentTransferLedgerEffect(tx, {
+            tenantId,
+            itemId: line.itemId,
+            locationId: trf.destLocationId,
+            movementType: 'TRANSFER_IN',
+            qtyIn: receivedQty,
+            qtyOut: 0,
+            unitCost: wac,
+            totalValue: value,
+            balanceAfter: newTotalQty,
+            referenceType: 'TRANSFER',
+            referenceId: trf.id,
+            referenceNo: trf.transferNo,
+            postingEffectKey: transferPostingEffectKey({
                 tenantId,
-                itemId: line.itemId,
-                locationId: trf.destLocationId,
-            },
-        };
-        const dstBalance = await tx.stockBalance.findUnique({ where: dstKey });
-        const prevQty = dstBalance ? Number(dstBalance.qtyOnHand) : 0;
-        const prevWac = dstBalance ? Number(dstBalance.wacUnitCost) : 0;
-        const newTotalQty = prevQty + receivedQty;
-        const newWac = newTotalQty > 0 ? (prevQty * prevWac + receivedQty * wac) / newTotalQty : wac;
-
-        await tx.stockBalance.upsert({
-            where: dstKey,
-            create: {
-                tenantId,
-                itemId: line.itemId,
-                locationId: trf.destLocationId,
-                qtyOnHand: receivedQty,
-                wacUnitCost: wac,
-                lastUpdated: now,
-            },
-            update: { qtyOnHand: newTotalQty, wacUnitCost: newWac, lastUpdated: now },
-        });
-
-        await tx.inventoryLedger.create({
-            data: {
-                tenantId,
-                itemId: line.itemId,
-                locationId: trf.destLocationId,
-                movementType: 'TRANSFER_IN',
-                qtyIn: receivedQty,
-                qtyOut: 0,
-                unitCost: wac,
-                totalValue: value,
-                balanceAfter: newTotalQty,
-                referenceType: 'TRANSFER',
-                referenceId: trf.id,
-                referenceNo: trf.transferNo,
-                notes: `Transfer IN from ${sourceName}`,
-                createdBy: userId,
-                postingDate,
-                assignedPostingPeriod,
-            },
+                transferId: trf.id,
+                transferLineId: line.id,
+                direction: 'IN',
+            }),
+            notes: `Transfer IN from ${sourceName}`,
+            createdBy: userId,
+            postingDate,
+            assignedPostingPeriod,
         });
 
         await tx.storeTransferLine.update({

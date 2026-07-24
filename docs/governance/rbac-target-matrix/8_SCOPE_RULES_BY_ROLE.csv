@@ -1,0 +1,11 @@
+Role,ScopeProfile,DepartmentScope,LocationScope,canViewAllDepartments_DEFAULT,canViewAllLocations_DEFAULT,ListVisibility,CreateConstraint,ApproveVisibility,ExportScope,Notes
+FINANCE_MANAGER,TENANT_WIDE,All departments in tenant,All locations in tenant,Y,Y,All data in active tenant,Any valid tenant location,All workflow steps tenant-wide,Full tenant export,Tenant operational owner; P1 manages hotel users
+ORG_MANAGER,TENANT_WIDE on active property,All on active tenant; org access when switching hotels,Y,Y,All on switched property,Same on property,All on property,Full on property,Org admin; not platform Super Admin
+DEPT_MANAGER,DEPARTMENT,Own department only,Locations in own department via Location.departmentId,N,N,Lines/docs where location.departmentId = user dept,Source and line locations must be in own department,Dept step + own submissions per workflow,Filtered to department,F&B must not see HK and vice versa
+STOREKEEPER,LOCATIONS,Optional dept alignment,Assigned locations only via LocationUser,N,N,Stock ledger movements at allowed locations only,Create/post only at allowed locations,As per permission not wider than locations,Export filtered to allowed locations,No full hotel unless canViewAllLocations granted
+COST_CONTROL,TENANT_WIDE,All tenant,All tenant,Y,Y,Tenant-wide regulatory review,Review any location,Cost approval steps tenant-wide,Tenant-wide,Approved: tenant-wide
+AUDITOR,TENANT_WIDE read-only,All tenant read,All tenant read,Y,Y,Read tenant-wide,No create,No approve,Read export tenant-wide,Read-only; no write actions
+GENERAL_MANAGER,TENANT_WIDE,All tenant,All tenant,Y,Y,Final approval visibility tenant-wide,Limited create,GM final steps,Tenant-wide,Final workflow steps where configured
+SECURITY,GET_PASS_GATE,Get Pass security context,Gate and security locations,N,N,Get Pass and security views only,Security checkout return exit flows,Security approval steps,Get Pass scope only,Not general inventory operator
+ADMIN_Legacy,LEGACY_COMPAT,Policy until migrated,Policy until migrated,Y,Y,Hidden from UI; legacy until migrated,Limited,N,N,Deprecated; no new assignments
+SUPER_ADMIN,PLATFORM,Not hotel operations default,N/A,N/A,N,N,N,N,Technical platform only

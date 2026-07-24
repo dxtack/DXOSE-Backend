@@ -1,0 +1,11 @@
+RoleCode,DisplayName,Tier,UI_Assignable,UI_Visible,DB_Exists,Operational_Super,Org_Admin,Platform_Technical,Hotel_User_Management,Notes
+SUPER_ADMIN,Super Admin,T0,N,N,Y,N,N,Y,N,Platform technical only; not hotel day-to-day operations
+ORG_MANAGER,Organization Manager,T1,Y,Y,Y,Y,Y,N,Y,Multi-property; all DB permissions; org-level settings
+FINANCE_MANAGER,Finance Manager,T1,Y,Y,Y,Y,N,N,Y,Tenant operational owner; replaces ADMIN for hotel ops (P1)
+ADMIN,Administrator (Legacy),DEPRECATED,N,N,Y,N,N,N,N,Deprecated: hidden from UI; no new assign; DB row retained
+STOREKEEPER,Storekeeper,T2,Y,Y,Y,N,N,N,N,Warehouse and receiving operations
+DEPT_MANAGER,Department Manager,T2,Y,Y,Y,N,N,N,N,Department requests and dept-level approvals
+COST_CONTROL,Cost Control,T2,Y,Y,Y,N,N,N,N,Cost review GRN and breakage pipeline
+GENERAL_MANAGER,General Manager,T2,Y,Y,Y,N,N,N,N,Final GM approval steps where configured
+AUDITOR,Auditor,T2,Y,Y,Y,N,N,N,N,Read-only audit and reports
+SECURITY,Security,T2,Y,Y,Y,N,N,N,N,Get Pass gate and security flows

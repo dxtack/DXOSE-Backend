@@ -4,6 +4,7 @@ const { assertOrgManagerAssignmentWithinOrgHierarchy } = require('../utils/membe
 const { activeSeatCountsByTenantIds, countActiveSeats } = require('../utils/tenantMemberActive');
 const { membershipRoleCode, connectRole } = require('./rbac.service');
 const { seedDefaultUnitsForTenant } = require('./unitSeed.service');
+const { DEFAULT_TENANT_TIMEZONE, assertIanaTimezone } = require('../utils/tenant-calendar.util');
 
 const listTenants = async (query = {}, userContext = null) => {
     const { page = 1, limit = 20, status, search } = query;
@@ -173,11 +174,13 @@ const createTenant = async (data) => {
         const resolvedLicenseStartDate = isOrgCreation
             ? new Date()
             : (data.licenseStartDate ? new Date(data.licenseStartDate) : new Date());
+        const timezone = assertIanaTimezone(data.timezone || DEFAULT_TENANT_TIMEZONE);
 
         const tenant = await tx.tenant.create({
             data: {
                 name: data.name,
                 slug: data.slug,
+                timezone,
                 ...(parentId ? { parent: { connect: { id: parentId } } } : {}),
                 planType: resolvedPlanType,
                 subStatus: normalizedSubStatus,
@@ -272,7 +275,7 @@ const createTenant = async (data) => {
             // 2) Assign branch admin.
             // If selected admin is already an inherited ORG_MANAGER, keep ORG_MANAGER role
             // (single membership per tenant), while admin permissions are still covered.
-            const branchAdminRole = parentOrgManagerIds.includes(adminUser.id) ? 'ORG_MANAGER' : 'ADMIN';
+            const branchAdminRole = parentOrgManagerIds.includes(adminUser.id) ? 'ORG_MANAGER' : 'GENERAL_MANAGER';
             await tx.tenantMember.upsert({
                 where: { tenantId_userId: { tenantId: tenant.id, userId: adminUser.id } },
                 create: {
@@ -306,7 +309,8 @@ const updateTenantLicense = async (id, data) => {
             maxUsers: data.maxUsers !== undefined ? Number(data.maxUsers) : tenant.maxUsers,
             licenseStartDate: data.licenseStartDate ? new Date(data.licenseStartDate) : tenant.licenseStartDate,
             licenseEndDate: data.licenseEndDate ? new Date(data.licenseEndDate) : tenant.licenseEndDate,
-            isActive: data.isActive !== undefined ? data.isActive : tenant.isActive
+            isActive: data.isActive !== undefined ? data.isActive : tenant.isActive,
+            timezone: data.timezone !== undefined ? assertIanaTimezone(data.timezone) : tenant.timezone,
         }
     });
 

@@ -1,5 +1,6 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const { toInclusiveUtcEndOfDay, toUtcStartOfDay } = require('../utils/report-date-range.util');
 
 const OFFICIAL_LEDGER_WHERE = { affectsValuation: true };
 
@@ -19,19 +20,18 @@ const OFFICIAL_LEDGER_WHERE = { affectsValuation: true };
 // All filtered to DEPARTMENT-OWNED LOCATIONS only (matches Stock Report logic)
 // ─────────────────────────────────────────────────────────────────────────────
 
-const getSummaryReport = async (tenantId, { startDate, endDate, departmentIds, categoryId }) => {
+const getSummaryReport = async (tenantId, { startDate, endDate, departmentIds, categoryId, locationIds: requestedLocationIds }) => {
     let start, end;
     if (startDate && endDate) {
-        start = new Date(startDate);
-        start.setHours(0, 0, 0, 0);
-        end = new Date(endDate);
-        end.setHours(23, 59, 59, 999);
+        start = toUtcStartOfDay(startDate);
+        end = toInclusiveUtcEndOfDay(endDate);
     } else {
-        // Fallback to current month if no dates provided
-        const m = new Date().getMonth();
-        const y = new Date().getFullYear();
-        start = new Date(y, m, 1, 0, 0, 0);
-        end = new Date(y, m + 1, 0, 23, 59, 59, 999);
+        // Fallback to current UTC calendar month if no dates provided
+        const now = new Date();
+        const y = now.getUTCFullYear();
+        const m = now.getUTCMonth();
+        start = new Date(Date.UTC(y, m, 1, 0, 0, 0, 0));
+        end = toInclusiveUtcEndOfDay(new Date(Date.UTC(y, m + 1, 0)).toISOString().slice(0, 10));
     }
 
     const empty = { rows: [], totals: null, period: { startDate: start.toISOString(), endDate: end.toISOString() } };
@@ -73,7 +73,16 @@ const getSummaryReport = async (tenantId, { startDate, endDate, departmentIds, c
         if (!deptLocMap[l.departmentId]) deptLocMap[l.departmentId] = new Set();
         deptLocMap[l.departmentId].add(l.id);
     }
-    const allLocationIds = deptLocRows.map(l => l.id);
+    let allLocationIds = deptLocRows.map(l => l.id);
+    if (Array.isArray(requestedLocationIds) && requestedLocationIds.length > 0) {
+        const allowed = new Set(requestedLocationIds);
+        allLocationIds = allLocationIds.filter((id) => allowed.has(id));
+        for (const deptId of Object.keys(deptLocMap)) {
+            for (const locId of [...deptLocMap[deptId]]) {
+                if (!allowed.has(locId)) deptLocMap[deptId].delete(locId);
+            }
+        }
+    }
     if (!allLocationIds.length) return empty;
 
     // Helper: item's location set
@@ -87,39 +96,41 @@ const getSummaryReport = async (tenantId, { startDate, endDate, departmentIds, c
     const openValMap = {};   // itemId → value (SAR)
     let usedSnapshot = false;
 
-    // Search order: Dec of prev year (annual) → prev month close
-    // Search order: look for the most recent closed period BEFORE the start date
+    // Most recent CLOSED period strictly before the report start month (PeriodClose.month is 1–12).
+    const startYear = start.getUTCFullYear();
+    const startMonth = start.getUTCMonth() + 1;
     const prevClose = await prisma.periodClose.findFirst({
         where: {
-            tenantId, 
+            tenantId,
             status: 'CLOSED',
-            // It should be something that ended before or exactly when our startDate begins.
-            // But since PeriodClose uses `year` and `month`, we can derive it from the `startDate`
             OR: [
-                { year: start.getFullYear(), month: start.getMonth() }, // 0 is January, so if start is Feb (1), it looks for periodClose of month=1 (which is Jan!) Wait, PeriodClose month is 1-12.
-                // Actually, if start is e.g. March 1 (month JS 2), we want Feb (month 2). 
-                { year: start.getFullYear(), month: start.getMonth() === 0 ? 12 : start.getMonth() },
-                { year: start.getFullYear() - 1, month: 12 },
-                { year: start.getFullYear() - 1, month: null }
+                { year: { lt: startYear } },
+                { year: startYear, month: { lt: startMonth } },
             ],
         },
         orderBy: [{ year: 'desc' }, { month: 'desc' }],
     });
 
     if (prevClose) {
-        const snaps = await prisma.periodSnapshot.findMany({
-            where: {
-                periodCloseId: prevClose.id,
-                itemId: { in: itemIds },
-                locationId: { in: allLocationIds },
-            },
-            select: { itemId: true, locationId: true, closingQty: true },
+        const currentVersion = await prisma.periodSnapshotVersion.findFirst({
+            where: { periodCloseId: prevClose.id, status: 'CURRENT' },
+            select: { id: true },
         });
-        for (const s of snaps) {
-            if (!itemLocSet(s.itemId).has(s.locationId)) continue;
-            openQtyMap[s.itemId] = (openQtyMap[s.itemId] || 0) + Number(s.closingQty);
+        if (currentVersion) {
+            const snaps = await prisma.periodSnapshotLine.findMany({
+                where: {
+                    snapshotVersionId: currentVersion.id,
+                    itemId: { in: itemIds },
+                    locationId: { in: allLocationIds },
+                },
+                select: { itemId: true, locationId: true, closingQty: true },
+            });
+            for (const s of snaps) {
+                if (!itemLocSet(s.itemId).has(s.locationId)) continue;
+                openQtyMap[s.itemId] = (openQtyMap[s.itemId] || 0) + Number(s.closingQty);
+            }
+            usedSnapshot = snaps.length > 0;
         }
-        usedSnapshot = true;
     }
 
     // Always compute opening value from ledger (accurate historical cost)

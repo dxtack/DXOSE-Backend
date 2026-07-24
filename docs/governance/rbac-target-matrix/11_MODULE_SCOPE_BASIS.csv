@@ -1,0 +1,15 @@
+Module,Primary_Scope_Basis,Scope_Fields,Secondary_Fallback,Creator_Based_Primary,Notes
+Breakage,Location Department,MovementLine.locationId to Location.departmentId,DRAFT: createdBy UI hint only,N,Operational truth = where loss occurred
+Lost,Location Department,MovementLine.locationId to Location.departmentId,DRAFT: createdBy UI hint only,N,Same as Breakage
+Transfer,Source Location (+ dest visibility),sourceLocationId destLocationId,None,N,Create constrained to source in scope; list if source OR dest in scope
+Get Pass,Department + Locations,GetPass.departmentId line.locationId,None,N,SECURITY uses GET_PASS_GATE profile
+Ledger,Location,InventoryLedger.locationId,None,N,
+Reports,Location and Department,Report filters clamped to user scope,None,N,Server rejects out-of-scope params
+Inventory Count,Session Locations,StockCountSession.locationId scoped session locations,None,N,
+GRN,Receiving Location,GRN line receive store locations,None,N,
+Stock Balances,Location,StockBalance.locationId,None,N,
+Issues,Location,MovementLine.locationId,None,N,
+Movements,Location,MovementLine.locationId,None,N,
+Dashboard,Scope profile aggregate,Derived from scope profile not bypass,None,N,
+Workflow Pipeline,Per underlying module,Module collectors use same basis,None,N,
+Users Admin,Tenant boundary,tenantId membership only,N,N,Permission not department scope

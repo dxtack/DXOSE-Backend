@@ -22,6 +22,7 @@ const auditService = require('./audit.service');
 const settingService = require('./setting.service');
 const { checkOpeningBalanceAllowed } = require('./periodGuard.service');
 const { getStorage } = require('../config/storage');
+const { assertIntegerQuantity } = require('./integerQuantityGuard.service');
 
 /**
  * Per-item opening qty from live data: sum of `qtyInBaseUnit` on all MovementLine rows whose
@@ -151,6 +152,22 @@ const ITEM_INCLUDE = {
             qtyOnHand: true,
             wacUnitCost: true,
             location: { select: { id: true, name: true } },
+        },
+    },
+};
+
+/** Paginated list — qty aggregates only; omit per-balance location join (list UI does not use it). */
+const ITEM_LIST_INCLUDE = {
+    department: { select: { id: true, name: true, code: true } },
+    category: { select: { id: true, name: true } },
+    subcategory: { select: { id: true, name: true } },
+    supplier: { select: { id: true, name: true } },
+    defaultStore: { select: { id: true, name: true, departmentId: true } },
+    itemUnits: { include: { unit: { select: { id: true, name: true, abbreviation: true } } } },
+    stockBalances: {
+        select: {
+            qtyOnHand: true,
+            wacUnitCost: true,
         },
     },
 };
@@ -297,11 +314,28 @@ const validateItemUnits = (itemUnits) => {
     const baseCount = types.filter(t => t === 'BASE').length;
     if (baseCount > 1) throw badRequest('Only one BASE unit is allowed per item.');
 
-    // Validate conversion rates
+    // Validate conversion rates — positive whole numbers only (§10.5 / UOM door)
     for (const u of itemUnits) {
-        const rate = parseFloat(u.conversionRate);
-        if (isNaN(rate) || rate <= 0) {
-            throw badRequest(`Conversion rate must be a positive number. Got: ${u.conversionRate}`);
+        const rate = Number(u.conversionRate);
+        assertIntegerQuantity({
+            qty: rate,
+            field: 'conversionRate',
+            message:
+                'Unit conversion rate must be a whole number (integer greater than zero). Fractional rates are not allowed.',
+            details: { unitId: u.unitId, unitType: u.unitType, conversionRate: u.conversionRate },
+        });
+        if (!(rate > 0)) {
+            throw Object.assign(
+                new Error(
+                    'Unit conversion rate must be a whole number (integer greater than zero). Fractional rates are not allowed.',
+                ),
+                {
+                    statusCode: 422,
+                    code: 'NON_INTEGER_QUANTITY',
+                    field: 'conversionRate',
+                    details: { unitId: u.unitId, unitType: u.unitType, conversionRate: u.conversionRate },
+                },
+            );
         }
         if (!['BASE', 'PURCHASE', 'ISSUE'].includes(u.unitType)) {
             throw badRequest(`Invalid unitType "${u.unitType}". Must be BASE, PURCHASE, or ISSUE.`);
@@ -520,7 +554,7 @@ const getItems = async (tenantId, query = {}) => {
     }
 
     const { skip, take } = parseItemPagination(query.skip, query.take, 20);
-    const include = catalogMode ? ITEM_CATALOG_INCLUDE : ITEM_INCLUDE;
+    const include = catalogMode ? ITEM_CATALOG_INCLUDE : ITEM_LIST_INCLUDE;
 
     const [items, total] = await Promise.all([
         prisma.item.findMany({
@@ -540,9 +574,9 @@ const getItems = async (tenantId, query = {}) => {
             : new Map();
     const enrichCtx = { obStatus, draftAgg };
 
-    const enrichedItems = await Promise.all(
-        items.map(async (it) => attachDisplayImageUrl(enrichItemWithOpeningFields(it, enrichCtx)))
-    );
+    // List rows: defer image URL signing to the client (lazy per-thumb hydration).
+    // Blocking on storage.getSignedUrl() per row delayed the list API when many items carry images.
+    const enrichedItems = items.map((it) => enrichItemWithOpeningFields(it, enrichCtx));
     const rankedItems = search ? sortItemsBySearchRank(enrichedItems, search) : enrichedItems;
 
     return {
@@ -557,8 +591,9 @@ const locationItemResolution = require('./location-item-resolution.service');
 const { sortItemsBySearchRank } = require('../utils/item-search-rank.util');
 
 /**
- * Items at warehouse — default RECEIVING mode (GRN: balance + default store + category mapping).
- * Pass mode=operational for StockBalance-only catalog.
+ * Items at warehouse — default RECEIVING mode.
+ * Location link = StockBalance row at that location (qty may be 0).
+ * Pass mode=operational for the same set with optional requirePositiveOnHand.
  */
 const getItemsByLocationId = async (tenantId, locationId, query = {}) => {
     const mode = query.mode || locationItemResolution.MODES.RECEIVING;
@@ -581,8 +616,8 @@ const getItemsByLocationId = async (tenantId, locationId, query = {}) => {
 };
 
 /**
- * List-select at warehouse — default OPERATIONAL (StockBalance only).
- * Pass mode=receiving for GRN-style expanded catalog.
+ * List-select at warehouse — default OPERATIONAL (StockBalance at location).
+ * Pass mode=receiving for GRN (same location balances, always includes qty 0).
  */
 const getAllItemsByLocationId = async (tenantId, locationId, query = {}) => {
     const mode = query.mode || locationItemResolution.MODES.OPERATIONAL;
@@ -997,7 +1032,31 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
     const rows = XLSX.utils.sheet_to_json(ws, { defval: '' });
 
     if (rows.length === 0) throw badRequest('The uploaded file has no data rows.');
-    if (rows.length > 1000) throw badRequest('Maximum 1000 rows per import.');
+
+    // P2 #26 — skip blank padding and official template example (nameless lookup prefill).
+    const TEMPLATE_PREFILL_KEYS = new Set([
+        'name', 'department', 'category', 'vendor', 'supplier', 'base unit', 'baseunit', 'unit price', 'unitprice',
+    ]);
+    const isLogicalEmptyImportRow = (row) =>
+        Object.values(row || {}).every((v) => String(v ?? '').trim() === '');
+    const hasImportName = (row) => String(row['Name'] || row['name'] || '').trim().length > 0;
+    const isTemplateExampleGhost = (row) => {
+        if (hasImportName(row)) return false;
+        const unitPrice = String(row['Unit Price'] || row['unitPrice'] || row['unit_price'] || '').trim();
+        if (unitPrice) return false;
+        for (const [key, value] of Object.entries(row || {})) {
+            const cell = String(value ?? '').trim();
+            if (!cell) continue;
+            if (!TEMPLATE_PREFILL_KEYS.has(key.toLowerCase())) return false; // store qty etc.
+        }
+        // Nameless + only prefill columns (or fully blank) → template ghost
+        return true;
+    };
+    const meaningfulRows = rows.filter(
+        (row) => !isLogicalEmptyImportRow(row) && !isTemplateExampleGhost(row),
+    );
+    if (meaningfulRows.length === 0) throw badRequest('The uploaded file has no data rows.');
+    if (meaningfulRows.length > 1000) throw badRequest('Maximum 1000 rows per import.');
 
     // Fetch lookup data once
     const [categories, units, departments, locations, suppliers] = await Promise.all([
@@ -1026,7 +1085,7 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
         'reorder point', 'reorder qty', 'reorderpoint', 'reorderqty', 'is active', 'active',
     ]);
 
-    const allHeaders = rows.length > 0 ? Object.keys(rows[0]) : [];
+    const allHeaders = meaningfulRows.length > 0 ? Object.keys(meaningfulRows[0]) : Object.keys(rows[0] || {});
     const storeHeaders = allHeaders.filter(h => !FIXED_COLUMNS.has(h.toLowerCase()));
     // ── Normalized location matching ─────────────────────────────────────────
     // Handles: exact match, case differences, H&B/H&K → F&B/HK normalization,
@@ -1088,7 +1147,7 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
 
     // Preload existing DB items for fast "exists in DB" checks
     const incomingNames = [...new Set(
-        rows
+        meaningfulRows
             .map(row => String(row['Name'] || row['name'] || '').trim().toLowerCase())
             .filter(Boolean)
     )];
@@ -1107,7 +1166,7 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
     // In-file duplicate detection
     const seenNames = new Set();
 
-    const preview = rows.map((row, idx) => {
+    const preview = meaningfulRows.map((row, idx) => {
         const issues = [];
         const rowNum = idx + 2;
         const addIssue = (field, message, severity, code) => {
@@ -1236,7 +1295,7 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
 
     return {
         preview,
-        total: rows.length,
+        total: meaningfulRows.length,
         valid: validCount,
         invalid: invalidCount,
         storeColumns: storeColumnNames.map(s => s.header),
@@ -1278,6 +1337,7 @@ const upsertOpeningBalanceForItemLocation = async (
         unitCost,
         userId,
         itemName,
+        user = null,
     },
     movementService
 ) => {
@@ -1373,7 +1433,8 @@ const upsertOpeningBalanceForItemLocation = async (
             where: { id: canonicalDoc.id },
             data: {
                 documentDate: txDate,
-                notes: `Opening Balance import (multi-location) — includes ${itemName}`,
+                // Do not name a single item — final summary is written after confirmImport completes.
+                notes: 'Opening Balance import (multi-location)',
             },
         });
 
@@ -1388,7 +1449,7 @@ const upsertOpeningBalanceForItemLocation = async (
             movementType: 'OPENING_BALANCE',
             documentDate: txDate.toISOString(),
             destLocationId: locationId,
-            notes: `Opening Balance import (multi-location) — includes ${itemName}`,
+            notes: 'Opening Balance import (multi-location)',
             lines: [
                 {
                     itemId,
@@ -1403,18 +1464,20 @@ const upsertOpeningBalanceForItemLocation = async (
         userId,
         tx,
         { origin: 'INTERNAL' },
+        user,
     );
 
     return { kind: 'draft_created', documentNo: obDoc.documentNo };
 };
 
 // ── EXCEL IMPORT: CONFIRM ─────────────────────────────────────────────────────
-const confirmImport = async (rows, tenantId, createdBy, asOpeningBalance = false) => {
+const confirmImport = async (rows, tenantId, createdBy, asOpeningBalance = false, user = null) => {
     const movementService = require('./movement.service');
 
     let inserted = 0, updated = 0, failed = 0;
     const failures = [];
-    const obDocuments = []; // OB draft document numbers (official posting happens on finalize)
+    const obDocumentNos = []; // may repeat once per store-line touch; uniqued below
+    let obLineCount = 0;
     let obLocationUpdates = 0;
 
     for (const row of rows) {
@@ -1425,6 +1488,11 @@ const confirmImport = async (rows, tenantId, createdBy, asOpeningBalance = false
         }
 
         const { name, unitPrice, departmentId, defaultStoreId, categoryId, supplierId, baseUnitId, storeQuantities } = row.data;
+        if (!String(name || '').trim()) {
+            failed++;
+            failures.push({ rowNum: row.rowNum, errors: ['Name is required'] });
+            continue;
+        }
 
         try {
             const txResult = await prisma.$transaction(async (tx) => {
@@ -1496,6 +1564,7 @@ const confirmImport = async (rows, tenantId, createdBy, asOpeningBalance = false
                                 unitCost: unitPrice,
                                 userId: createdBy,
                                 itemName: name,
+                                user,
                             },
                             movementService
                         );
@@ -1519,7 +1588,8 @@ const confirmImport = async (rows, tenantId, createdBy, asOpeningBalance = false
             if (txResult.wasInserted) inserted++;
             if (txResult.wasUpdated) updated++;
             for (const no of txResult.obDocNosThisRow || []) {
-                obDocuments.push(no);
+                obDocumentNos.push(no);
+                obLineCount += 1;
             }
             obLocationUpdates += txResult.obLocationsUpdatedThisRow || 0;
         } catch (err) {
@@ -1528,93 +1598,62 @@ const confirmImport = async (rows, tenantId, createdBy, asOpeningBalance = false
         }
     }
 
+    // Unique document numbers — one OB doc can receive many store-lines during import.
+    const obDocuments = [...new Set(obDocumentNos.filter(Boolean))];
+
+    // Finalize notes with accurate line counts (never a single arbitrary item name).
+    if (asOpeningBalance && obDocuments.length > 0) {
+        for (const documentNo of obDocuments) {
+            const doc = await prisma.movementDocument.findFirst({
+                where: {
+                    documentNo,
+                    tenantId,
+                    movementType: 'OPENING_BALANCE',
+                },
+                include: {
+                    _count: { select: { lines: true } },
+                    lines: {
+                        select: { itemId: true, locationId: true },
+                    },
+                },
+            });
+            if (!doc) {
+                continue;
+            }
+            const lineCount = doc._count.lines;
+            const locationCount = new Set(
+                (doc.lines || []).map((l) => l.locationId).filter(Boolean),
+            ).size;
+            const notes =
+                locationCount > 1
+                    ? `Opening Balance import (multi-location) — ${lineCount} lines across ${locationCount} locations`
+                    : `Opening Balance import — ${lineCount} lines`;
+            await prisma.movementDocument.update({
+                where: { id: doc.id },
+                data: { notes },
+            });
+        }
+    }
+
     return {
         inserted, updated, failed, failures,
         ...(asOpeningBalance && {
             obDocuments,
             obCount: obDocuments.length,
+            obLineCount,
             obLocationUpdates,
         }),
     };
 };
-// ── BULK UPLOAD IMAGES (ZIP) ──────────────────────────────────────────────────
-// Accepts the raw ZIP bytes (multer.memoryStorage) and pipes each matched image
-// through the storage provider, so the flow is identical whether bytes land on
-// local disk or in R2.
-const bulkUploadImages = async (zipBuffer, tenantId) => {
-    const AdmZip = require('adm-zip');
-    const { putBuffer, buildItemImageKey, deleteFile } = require('../middleware/upload.middleware');
+// ── BULK UPLOAD IMAGES (ZIP) — legacy direct upload; prefer preview/confirm flow ──
+const {
+    previewBulkItemImages,
+    confirmBulkItemImages,
+    bulkUploadImagesLegacy,
+} = require('./bulkItemImageUpload.service');
 
-    const zip = new AdmZip(Buffer.isBuffer(zipBuffer) ? zipBuffer : undefined);
-    const entries = zip.getEntries();
-
-    const IMAGE_EXTS = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
-    const MIME_BY_EXT = {
-        '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
-        '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif',
-    };
-    const results = { matched: 0, skipped: 0, errors: [], details: [] };
-
-    const items = await prisma.item.findMany({
-        where: { tenantId },
-        select: { id: true, barcode: true, name: true, imageUrl: true },
-    });
-
-    const barcodeMap = new Map();
-    for (const item of items) {
-        if (item.barcode) barcodeMap.set(item.barcode.toLowerCase(), item);
-    }
-
-    for (const entry of entries) {
-        if (entry.isDirectory || entry.entryName.startsWith('__MACOSX') || entry.entryName.startsWith('.')) continue;
-
-        const filename = path.basename(entry.entryName);
-        const ext = path.extname(filename).toLowerCase();
-        const nameWithoutExt = path.basename(filename, ext).trim();
-
-        if (!IMAGE_EXTS.includes(ext)) {
-            results.skipped++;
-            results.details.push({ file: filename, status: 'skipped', reason: 'Not an image file' });
-            continue;
-        }
-
-        const item = barcodeMap.get(nameWithoutExt.toLowerCase());
-        if (!item) {
-            results.skipped++;
-            results.details.push({ file: filename, status: 'skipped', reason: `No item with barcode "${nameWithoutExt}"` });
-            continue;
-        }
-
-        try {
-            const buffer = entry.getData();
-            const key = buildItemImageKey(tenantId, filename, item.id);
-            await putBuffer(key, {
-                buffer,
-                size: buffer.length,
-                mimetype: MIME_BY_EXT[ext] || 'application/octet-stream',
-                originalname: filename,
-            });
-
-            // Delete old image if one was set (best-effort; no-op under r2 for legacy paths).
-            if (item.imageUrl && item.imageUrl !== key) {
-                deleteFile(item.imageUrl).catch(() => { /* ignore */ });
-            }
-
-            await prisma.item.update({
-                where: { id: item.id },
-                data: { imageUrl: key },
-            });
-
-            results.matched++;
-            results.details.push({ file: filename, status: 'matched', itemName: item.name, barcode: item.barcode });
-        } catch (err) {
-            results.errors.push({ file: filename, error: err.message });
-            results.details.push({ file: filename, status: 'error', reason: err.message });
-        }
-    }
-
-    return results;
-};
+/** @deprecated Use previewBulkItemImages + confirmBulkItemImages */
+const bulkUploadImages = bulkUploadImagesLegacy;
 
 module.exports = {
     checkItemCreationRequirements,
@@ -1632,4 +1671,6 @@ module.exports = {
     parseImportFile,
     confirmImport,
     bulkUploadImages,
+    previewBulkItemImages,
+    confirmBulkItemImages,
 };

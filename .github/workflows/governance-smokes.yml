@@ -1,0 +1,34 @@
+# Phase 1 governance lock — static verification (no database required).
+# Fails the build if audit facade bypasses, enum drift, or legacy evidence invariants regress.
+name: Governance static smokes
+
+on:
+  push:
+    paths:
+      - 'OSE-backend/**'
+      - '.github/workflows/governance-smokes.yml'
+  pull_request:
+    paths:
+      - 'OSE-backend/**'
+      - '.github/workflows/governance-smokes.yml'
+
+jobs:
+  governance-static:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: OSE-backend
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: OSE-backend/package-lock.json
+
+      - name: Install dependencies (runs prisma generate via postinstall)
+        run: npm ci
+
+      - name: Run governance static smokes
+        run: npm run smoke:governance-static

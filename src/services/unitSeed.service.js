@@ -26,8 +26,14 @@ const DEFAULT_UNITS = [
     ['Person/Pax', 'pax'],
 ];
 
+/** Only these seeded unit names stay Active by default. */
+const ACTIVE_DEFAULT_UNIT_NAMES = new Set(['Piece', 'Unit']);
+
+const isDefaultUnitActive = (name) => ACTIVE_DEFAULT_UNIT_NAMES.has(name);
+
 const seedDefaultUnitsForTenant = async (tx, tenantId) => {
     for (const [name, abbreviation] of DEFAULT_UNITS) {
+        const isActive = isDefaultUnitActive(name);
         await tx.unit.upsert({
             where: {
                 tenantId_name: {
@@ -35,15 +41,15 @@ const seedDefaultUnitsForTenant = async (tx, tenantId) => {
                     name,
                 },
             },
+            // Status-only on update — preserve abbreviation / description / ids.
             update: {
-                abbreviation,
-                isActive: true,
+                isActive,
             },
             create: {
                 tenantId,
                 name,
                 abbreviation,
-                isActive: true,
+                isActive,
             },
         });
     }
@@ -51,5 +57,7 @@ const seedDefaultUnitsForTenant = async (tx, tenantId) => {
 
 module.exports = {
     DEFAULT_UNITS,
+    ACTIVE_DEFAULT_UNIT_NAMES,
+    isDefaultUnitActive,
     seedDefaultUnitsForTenant,
 };

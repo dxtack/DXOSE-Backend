@@ -1,0 +1,214 @@
+{
+  "pdfFacade": [
+    "Unify generateReportPDF header/footer with report-pdf-enterprise (T2 analytics)",
+    "Deprecate or delegate generateStockCountEvidencePDF + generateStockReportVariancePDF"
+  ],
+  "contracts": [
+    "negative-stock-report",
+    "slow-moving-items",
+    "dead-stock",
+    "critical-stock-levels",
+    "zero-movement-items",
+    "high-consumption-items",
+    "count-sessions-history",
+    "open-count-sessions",
+    "pending-approval-sessions",
+    "rejected-count-sessions",
+    "count-approval-history",
+    "count-posting-summary",
+    "blind-count-review",
+    "recount-analysis",
+    "count-accuracy-pct",
+    "cycle-count-performance",
+    "multi-location-count-review",
+    "count-timeline-report",
+    "count-exceptions",
+    "missing-items-report",
+    "unexpected-found-items",
+    "lost-items-register",
+    "get-pass-activity",
+    "open-get-passes",
+    "overdue-returns",
+    "temporary-movement-report",
+    "returned-vs-outstanding-assets",
+    "pending-operational-actions",
+    "period-close-validation",
+    "posting-integrity-check",
+    "rejected-transactions",
+    "missing-approval-detection",
+    "evidence-completeness-report",
+    "pending-review-queue",
+    "reviewer-action-queue",
+    "operational-attention-report",
+    "high-risk-sessions",
+    "critical-variance-review",
+    "escalated-operational-issues",
+    "open-workflow-attention",
+    "reviewer-workload",
+    "reviewer-sla-tracking",
+    "daily-operational-review",
+    "operational-follow-up-tracker"
+  ],
+  "highRiskLive": [
+    {
+      "cardId": "summary-report",
+      "risks": "Multiple cards → same screen; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "detail-report",
+      "risks": "Multiple cards → same screen; Flat PDF table; no group subtotals"
+    },
+    {
+      "cardId": "valuation-report",
+      "risks": "Multiple cards → same screen; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "stock-snapshot",
+      "risks": "Multiple cards → same screen; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "inventory-aging",
+      "risks": "Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "negative-stock-report",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "slow-moving-items",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "dead-stock",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "critical-stock-levels",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "zero-movement-items",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "high-consumption-items",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "stock-movement-analysis",
+      "risks": "Shares column contract with sibling card; Dual path: legacy analytics + handler alias to ledger contract"
+    },
+    {
+      "cardId": "inventory-turnover",
+      "risks": "Multiple cards → same screen; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "inventory-by-department",
+      "risks": "Multiple cards → same screen; Flat PDF table; no group subtotals"
+    },
+    {
+      "cardId": "inventory-by-location",
+      "risks": "Shares column contract with sibling card"
+    },
+    {
+      "cardId": "inventory-by-category",
+      "risks": "Multiple cards → same screen; Flat PDF table; no group subtotals"
+    },
+    {
+      "cardId": "stock-adjustment-summary",
+      "risks": "Shares column contract with sibling card; Dual path: handler ledger + legacy movement docs"
+    },
+    {
+      "cardId": "variance-by-location",
+      "risks": "Shares column contract with sibling card"
+    },
+    {
+      "cardId": "variance-by-department",
+      "risks": "Shares column contract with sibling card; Group key uses category field for department card"
+    },
+    {
+      "cardId": "variance-by-category",
+      "risks": "Shares column contract with sibling card"
+    },
+    {
+      "cardId": "variance-by-counter",
+      "risks": "Shares column contract with sibling card"
+    },
+    {
+      "cardId": "variance-value-impact",
+      "risks": "Shares column contract with sibling card"
+    },
+    {
+      "cardId": "top-variance-items",
+      "risks": "Shares column contract with sibling card"
+    },
+    {
+      "cardId": "count-sessions-history",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "open-count-sessions",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "pending-approval-sessions",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "rejected-count-sessions",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "count-approval-history",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "count-posting-summary",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "blind-count-review",
+      "risks": "Card title ≠ dataset (session list proxy); PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "recount-analysis",
+      "risks": "Card title ≠ dataset (session list proxy); PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "count-accuracy-pct",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "cycle-count-performance",
+      "risks": "Card title ≠ dataset (session list proxy); PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "multi-location-count-review",
+      "risks": "Card title ≠ dataset (session list proxy); PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "count-timeline-report",
+      "risks": "Card title ≠ dataset (session list proxy); PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "count-exceptions",
+      "risks": "PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "missing-items-report",
+      "risks": "Card title ≠ dataset (session list proxy); PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "unexpected-found-items",
+      "risks": "Card title ≠ dataset (session list proxy); PDF/Excel dynamic headers; weak SAR alignment; Flat PDF table; no group subtotals; Generic family — no KPI strip"
+    },
+    {
+      "cardId": "breakage-loss-report",
+      "risks": "Multiple cards → same screen"
+    },
+    {
+      "cardId": "breakage-trend-analysis",
+      "risks": "Multiple cards → same screen; Shares column contract with sibling card"
+    }
+  ]
+}

@@ -1,6 +1,13 @@
 const { validate: uuidValidate } = require('uuid');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+const {
+    isScopeEngineEnabled,
+    resolveUserScope,
+    clampCategoryLookupQuery,
+    parseMasterDataTenantWideQuery,
+    assertDepartmentInScope,
+} = require('./scope/scope.service');
 
 // ==========================================
 // CATEGORIES
@@ -22,14 +29,27 @@ const createCategory = async (data, tenantId) => {
     });
 };
 
-const getCategories = async (tenantId, query = {}) => {
-    const { skip = 0, take = 10, search, isActive, departmentId, departmentIds } = query;
+const getCategories = async (tenantId, query = {}, user = null) => {
+    let effectiveQuery = { ...query };
+    if (user && isScopeEngineEnabled() && !parseMasterDataTenantWideQuery(query)) {
+        const scope = await resolveUserScope(user, tenantId);
+        effectiveQuery = clampCategoryLookupQuery(effectiveQuery, scope);
+    }
+
+    const { skip = 0, take = 10, search, isActive, departmentId, departmentIds } = effectiveQuery;
 
     let dIds = null;
     if (departmentIds) {
         dIds = departmentIds.split(',').map(id => id.trim()).filter(Boolean);
     } else if (departmentId) {
         dIds = [departmentId];
+    }
+
+    if (user && isScopeEngineEnabled() && !parseMasterDataTenantWideQuery(query) && dIds?.length) {
+        const scope = await resolveUserScope(user, tenantId);
+        for (const id of dIds) {
+            await assertDepartmentInScope(id, tenantId, scope, 'list');
+        }
     }
 
     const where = {

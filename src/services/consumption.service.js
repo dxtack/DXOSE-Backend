@@ -1,14 +1,13 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../config/database');
 const XLSX = require('xlsx');
+const { toInclusiveUtcEndOfDay } = require('../utils/report-date-range.util');
 
 // ── GET CONSUMPTION REPORT ────────────────────────────────────────────────────
 const getConsumptionReport = async (tenantId, { departmentId, locationId, categoryId, dateFrom, dateTo }) => {
     if (!dateFrom || !dateTo) throw Object.assign(new Error('Date range is required'), { status: 400 });
 
     const from = new Date(dateFrom);
-    const to = new Date(dateTo);
-    to.setHours(23, 59, 59, 999);
+    const to = toInclusiveUtcEndOfDay(dateTo);
 
     // Build location filter
     let locationIds = null;

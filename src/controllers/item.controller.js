@@ -1,3 +1,4 @@
+const prisma = require('../config/database');
 const itemService = require('../services/item.service');
 const { success } = require('../utils/response');
 const { randomUUID } = require('crypto');
@@ -189,11 +190,54 @@ const importConfirm = async (req, res, next) => {
             throw e;
         }
 
-        const result = await itemService.confirmImport(rowsToConfirm, req.user.tenantId, req.user.id, asOpeningBalanceFinal);
+        const result = await itemService.confirmImport(
+            rowsToConfirm,
+            req.user.tenantId,
+            req.user.id,
+            asOpeningBalanceFinal,
+            req.user,
+        );
         return success(res, result, `Import complete: ${result.inserted} inserted, ${result.updated} updated, ${result.failed} failed`);
     } catch (err) { next(err); }
 };
-// ── Bulk Upload Images (ZIP) ──────────────────────────────────────────────────
+// ── Bulk Upload Images (ZIP) — preview / confirm ─────────────────────────────
+const bulkUploadImagesPreview = async (req, res, next) => {
+    try {
+        if (!req.file) {
+            const e = new Error('No ZIP file uploaded.'); e.statusCode = 400; throw e;
+        }
+        const result = await itemService.previewBulkItemImages(req.file.buffer, req.user.tenantId);
+        return success(res, result, 'Bulk image preview ready');
+    } catch (err) {
+        next(err);
+    }
+};
+
+const bulkUploadImagesConfirm = async (req, res, next) => {
+    try {
+        const { previewToken, replaceExisting } = req.body || {};
+        if (!previewToken || typeof previewToken !== 'string') {
+            const e = new Error('previewToken is required.'); e.statusCode = 400; throw e;
+        }
+        const replace = String(replaceExisting ?? 'false').toLowerCase() === 'true'
+            || replaceExisting === true;
+        const result = await itemService.confirmBulkItemImages(
+            previewToken,
+            req.user.tenantId,
+            { replaceExisting: replace },
+        );
+        return success(
+            res,
+            result,
+            `Bulk upload complete: ${result.uploaded} uploaded, ${result.skipped} skipped, ${result.failed} failed`,
+        );
+    } catch (err) {
+        next(err);
+    }
+};
+
+// ── Bulk Upload Images (ZIP) — legacy direct upload ───────────────────────────
+/** @deprecated Prefer bulkUploadImagesPreview + bulkUploadImagesConfirm */
 const bulkUploadImages = async (req, res, next) => {
     try {
         if (!req.file) {
@@ -294,8 +338,6 @@ const exportItems = async (req, res, next) => {
 
 // ── Download Import Template (.xlsx) ──────────────────────────────────────────
 const downloadTemplate = async (req, res, next) => {
-    const { PrismaClient } = require('@prisma/client');
-    const prisma = new PrismaClient();
     try {
         const ExcelJS = require('exceljs');
         const tenantId = req.user.tenantId;
@@ -339,26 +381,8 @@ const downloadTemplate = async (req, res, next) => {
         wsItems.columns = [...fixedColumns, ...storeColumns];
         const totalColumns = FIXED_COL_COUNT + storeColumns.length;
 
-        // Optional example row: only tenant lookup values (no hardcoded demo labels)
-        const firstUnitLabel = units[0]
-            ? `${units[0].name} (${units[0].abbreviation})`
-            : '';
-        const exRowData = {
-            name: '',
-            department: departments[0]?.name ?? '',
-            category: categories[0]?.name ?? '',
-            vendor: suppliers[0]?.name ?? '',
-            baseUnit: firstUnitLabel,
-            unitPrice: '',
-        };
-        locations.forEach((loc) => {
-            exRowData[`store__${loc.name}`] = '';
-        });
-
-        const exRow = wsItems.addRow(exRowData);
-        exRow.eachCell({ includeEmpty: true }, (cell) => {
-            cell.font = { italic: true, color: { argb: 'FF6B7280' } };
-        });
+        // P2 #26 — no nameless example row (was parsed as a false invalid preview row).
+        // Leave row 2 empty for the user; validation applies to a modest range only.
 
         // Style fixed header columns (blue)
         _styleHeaderRow(wsItems, FIXED_COL_COUNT);
@@ -399,8 +423,8 @@ const downloadTemplate = async (req, res, next) => {
 
         _styleHeaderRow(wsRef, 5);
 
-        // ── Data Validation (Dropdowns) ──
-        const VALIDATION_ROWS = 100;
+        // ── Data Validation (Dropdowns) — modest range to avoid expanding used-range ghosts
+        const VALIDATION_ROWS = 30;
         const deptList = departments.map(d => d.name).filter(Boolean);
         const catList = categories.map(c => c.name).filter(Boolean);
         const unitList = units.map(u => `${u.name} (${u.abbreviation})`).filter(Boolean);
@@ -446,8 +470,6 @@ const downloadTemplate = async (req, res, next) => {
         res.send(Buffer.from(buf));
     } catch (err) {
         next(err);
-    } finally {
-        await prisma.$disconnect();
     }
 };
 
@@ -464,6 +486,8 @@ module.exports = {
     updateItemUnits,
     importPreview,
     importConfirm,
+    bulkUploadImagesPreview,
+    bulkUploadImagesConfirm,
     bulkUploadImages,
     downloadTemplate,
     exportItems,

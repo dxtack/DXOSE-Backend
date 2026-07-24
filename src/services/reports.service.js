@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const excelService = require('./excel.service');
+const { toInclusiveUtcEndOfDay } = require('../utils/report-date-range.util');
 
 const OFFICIAL_LEDGER_WHERE = { affectsValuation: true };
 
@@ -85,9 +86,7 @@ const getMovementHistory = async (tenantId, filters = {}) => {
     }
 
     const fromDate = new Date(dateFrom);
-    const toDate = new Date(dateTo);
-    // Ensure toDate includes the end of the day if it's just a date string
-    toDate.setHours(23, 59, 59, 999);
+    const toDate = toInclusiveUtcEndOfDay(dateTo);
 
     const where = {
         tenantId,
@@ -176,8 +175,7 @@ const getBreakageReport = async (tenantId, filters = {}) => {
     }
 
     const fromDate = new Date(dateFrom);
-    const toDate = new Date(dateTo);
-    toDate.setHours(23, 59, 59, 999);
+    const toDate = toInclusiveUtcEndOfDay(dateTo);
 
     const where = {
         tenantId,
@@ -206,16 +204,18 @@ const getBreakageReport = async (tenantId, filters = {}) => {
         orderBy: { createdAt: 'asc' },
     });
 
-    // Fetch parent document reasons in one query (for Remarks column)
+    // Fetch parent document reasons and sourceType in one query (piggyback on existing join)
     // referenceId on each ledger row points to movementDocument.id
     const referenceIds = [...new Set(ledgerRows.map(r => r.referenceId).filter(Boolean))];
     let reasonMap = {};
+    let sourceTypeMap = {};
     if (referenceIds.length > 0) {
         const docs = await prisma.movementDocument.findMany({
-            where: { id: { in: referenceIds }, tenantId, status: { in: ['APPROVED', 'POSTED'] } },
-            select: { id: true, reason: true },
+            where: { id: { in: referenceIds }, tenantId, status: 'POSTED' },
+            select: { id: true, reason: true, sourceType: true },
         });
         reasonMap = Object.fromEntries(docs.map(d => [d.id, d.reason]));
+        sourceTypeMap = Object.fromEntries(docs.map(d => [d.id, d.sourceType]));
     }
 
     const data = ledgerRows
@@ -225,6 +225,7 @@ const getBreakageReport = async (tenantId, filters = {}) => {
             const qty = Number(r.qtyOut);
             const unitCost = Number(r.unitCost);
             const totalCost = Number(r.totalValue);
+            const rawSourceType = (r.referenceId && sourceTypeMap[r.referenceId]) || 'INTERNAL';
             return {
                 postingDate: r.createdAt,          // UI label: "Posting Date"
                 referenceNo: r.referenceNo || r.referenceId || '-',
@@ -239,6 +240,8 @@ const getBreakageReport = async (tenantId, filters = {}) => {
                 postedBy: r.createdByUser
                     ? `${r.createdByUser.firstName} ${r.createdByUser.lastName}`
                     : 'System',
+                sourceType: rawSourceType,
+                sourceLabel: rawSourceType === 'GET_PASS_RETURN' ? 'Get Pass Related' : 'Operational',
             };
         });
 
@@ -263,11 +266,185 @@ const getBreakageReport = async (tenantId, filters = {}) => {
     };
 };
 
+const getLostReport = async (tenantId, filters = {}) => {
+    const { dateFrom, dateTo, locationId } = filters;
+
+    if (!dateFrom || !dateTo) {
+        throw new Error('dateFrom and dateTo are mandatory for Lost Report');
+    }
+
+    const fromDate = new Date(dateFrom);
+    const toDate = toInclusiveUtcEndOfDay(dateTo);
+
+    const where = {
+        tenantId,
+        ...OFFICIAL_LEDGER_WHERE,
+        movementType: 'LOST',
+        createdAt: {
+            gte: fromDate,
+            lte: toDate,
+        },
+    };
+
+    if (locationId) where.locationId = locationId;
+
+    const ledgerRows = await prisma.inventoryLedger.findMany({
+        where,
+        include: {
+            item: {
+                include: {
+                    category: true,
+                    itemUnits: { include: { unit: true } }
+                },
+            },
+            location: true,
+            createdByUser: { select: { firstName: true, lastName: true } },
+        },
+        orderBy: { createdAt: 'asc' },
+    });
+
+    const referenceIds = [...new Set(ledgerRows.map(r => r.referenceId).filter(Boolean))];
+    let reasonMap = {};
+    let sourceTypeMap = {};
+    if (referenceIds.length > 0) {
+        const docs = await prisma.movementDocument.findMany({
+            where: { id: { in: referenceIds }, tenantId, status: 'POSTED' },
+            select: { id: true, reason: true, sourceType: true },
+        });
+        reasonMap = Object.fromEntries(docs.map(d => [d.id, d.reason]));
+        sourceTypeMap = Object.fromEntries(docs.map(d => [d.id, d.sourceType]));
+    }
+
+    const data = ledgerRows
+        .filter(r => !r.referenceId || reasonMap[r.referenceId] !== undefined)
+        .map(r => {
+            const qty = Number(r.qtyOut);
+            const unitCost = Number(r.unitCost);
+            const totalCost = Number(r.totalValue);
+            const rawSourceType = (r.referenceId && sourceTypeMap[r.referenceId]) || 'INTERNAL';
+            return {
+                postingDate: r.createdAt,
+                referenceNo: r.referenceNo || r.referenceId || '-',
+                locationName: r.location?.name || 'Unknown',
+                itemCode: r.item?.sku || r.item?.barcode || r.item?.id?.substring(0, 8) || '-',
+                itemName: r.item?.name || '-',
+                uom: r.item?.itemUnits?.find(iu => iu.unitType === 'BASE')?.unit?.name || '-',
+                qty,
+                unitCost,
+                totalCost,
+                remarks: (r.referenceId && reasonMap[r.referenceId]) || r.notes || '-',
+                postedBy: r.createdByUser
+                    ? `${r.createdByUser.firstName} ${r.createdByUser.lastName}`
+                    : 'System',
+                sourceType: rawSourceType,
+                sourceLabel: rawSourceType === 'GET_PASS_RETURN' ? 'Get Pass Related' : 'Operational',
+            };
+        });
+
+    const totalQty = data.reduce((s, r) => s + r.qty, 0);
+    const totalAmount = data.reduce((s, r) => s + r.totalCost, 0);
+    const documentCount = new Set(data.map(r => r.referenceNo).filter(n => n !== '-')).size;
+
+    return {
+        data,
+        totals: {
+            totalQty: parseFloat(totalQty.toFixed(4)),
+            totalAmount: parseFloat(totalAmount.toFixed(4)),
+            documentCount,
+        },
+        filters: {
+            dateFrom,
+            dateTo,
+            locationId: locationId || null,
+        },
+    };
+};
+
+/**
+ * Latest StockCountLocationQty per (itemId, locationId) by highest roundNo.
+ * When filterLocationId is set, only cells for that location are considered.
+ */
+const pickLatestCountedCells = (locationQtys, filterLocationId) => {
+    const sorted = [...(locationQtys || [])].sort((a, b) => b.roundNo - a.roundNo);
+    const map = new Map();
+    for (const c of sorted) {
+        if (filterLocationId && c.locationId !== filterLocationId) continue;
+        const key = `${c.itemId}:${c.locationId}`;
+        if (!map.has(key)) map.set(key, c);
+    }
+    return [...map.values()].filter((c) => c.countedQty !== null);
+};
+
+/** Per-item WAC from session lines (legacy). */
+const wacByItemFromLines = (lines) => {
+    const byItem = new Map();
+    const byItemLoc = new Map();
+    for (const l of lines || []) {
+        const wac = Number(l.wacUnitCost || 0);
+        byItem.set(l.itemId, wac);
+        if (l.locationId) byItemLoc.set(`${l.itemId}:${l.locationId}`, wac);
+    }
+    return { byItem, byItemLoc };
+};
+
+/** Load official WAC from stock balance for item×location pairs. */
+const buildBalanceWacMap = async (tenantId, pairs) => {
+    if (!pairs.length) return new Map();
+    const unique = [...new Map(pairs.map((p) => [`${p.itemId}:${p.locationId}`, p])).values()];
+    const balances = await prisma.stockBalance.findMany({
+        where: {
+            tenantId,
+            OR: unique.map((p) => ({ itemId: p.itemId, locationId: p.locationId })),
+        },
+        select: { itemId: true, locationId: true, wacUnitCost: true },
+    });
+    const m = new Map();
+    for (const b of balances) {
+        m.set(`${b.itemId}:${b.locationId}`, Number(b.wacUnitCost || 0));
+    }
+    return m;
+};
+
+/**
+ * Resolve WAC: prefer frozen count line, else live stock balance (audit-grade fallback).
+ */
+const resolveWac = (itemId, locationId, lineMaps, balanceMap) => {
+    const lineLoc = lineMaps.byItemLoc.get(`${itemId}:${locationId}`) ?? 0;
+    const lineItem = lineMaps.byItem.get(itemId) ?? 0;
+    const lineWac = lineLoc > 0 ? lineLoc : lineItem > 0 ? lineItem : 0;
+    const balanceWac = balanceMap.get(`${itemId}:${locationId}`) ?? 0;
+
+    if (lineWac > 0) {
+        return { wac: lineWac, wacSource: 'COUNT_LINE' };
+    }
+    if (balanceWac > 0) {
+        return { wac: balanceWac, wacSource: 'STOCK_BALANCE' };
+    }
+    return { wac: 0, wacSource: 'MISSING' };
+};
+
+const collectSessionWacPairs = (session, filterLocationId) => {
+    const pairs = [];
+    const cells = pickLatestCountedCells(session.locationQtys, filterLocationId || null);
+    for (const c of cells) {
+        pairs.push({ itemId: c.itemId, locationId: c.locationId });
+    }
+    const locId = session.locationId;
+    for (const l of session.lines || []) {
+        if (l.countedQty === null) continue;
+        pairs.push({ itemId: l.itemId, locationId: l.locationId || locId });
+    }
+    return pairs;
+};
+
 /**
  * M13.4 - Stock Count Variance Report
  *
  * Shows variance between book quantity and counted quantity.
  * Date filter = countDate
+ *
+ * Read path (stabilization): prefer StockCountLocationQty (latest round per item×location)
+ * when any counted cells exist; otherwise fall back to StockCountLine (legacy-only sessions).
  */
 const getCountVariances = async (tenantId, filters = {}) => {
     const { dateFrom, dateTo, locationId } = filters;
@@ -277,8 +454,7 @@ const getCountVariances = async (tenantId, filters = {}) => {
     }
 
     const fromDate = new Date(dateFrom);
-    const toDate = new Date(dateTo);
-    toDate.setHours(23, 59, 59, 999);
+    const toDate = toInclusiveUtcEndOfDay(dateTo);
 
     const where = {
         tenantId,
@@ -288,63 +464,140 @@ const getCountVariances = async (tenantId, filters = {}) => {
         },
     };
 
-    if (locationId) where.locationId = locationId;
+    if (locationId) {
+        where.OR = [
+            { locationId },
+            { scopedLocations: { some: { locationId } } },
+        ];
+    }
 
     const sessions = await prisma.stockCountSession.findMany({
         where,
         include: {
             location: true,
+            department: { select: { name: true } },
             createdByUser: { select: { firstName: true, lastName: true } },
             lines: {
                 include: {
                     item: {
-                        include: { category: true, itemUnits: { include: { unit: true } } }
-                    }
-                }
-            }
+                        include: {
+                            category: true,
+                            department: { select: { name: true } },
+                            itemUnits: { include: { unit: true } },
+                        },
+                    },
+                },
+            },
+            locationQtys: {
+                include: {
+                    item: {
+                        include: {
+                            category: true,
+                            department: { select: { name: true } },
+                            itemUnits: { include: { unit: true } },
+                        },
+                    },
+                    location: true,
+                },
+            },
         },
-        orderBy: { countDate: 'asc' }
+        orderBy: { countDate: 'asc' },
     });
 
     const data = [];
-    sessions.forEach(session => {
-        session.lines.forEach(line => {
-            const bookQty = Number(line.bookQty || 0);
-            const countedQty = line.countedQty !== null ? Number(line.countedQty) : null;
-            const varianceQty = line.varianceQty !== null ? Number(line.varianceQty) : 0;
-            const wacUnitCost = Number(line.wacUnitCost || 0);
-            const varianceValue = line.varianceValue !== null ? Number(line.varianceValue) : 0;
+    const createdByLabel = (session) =>
+        session.createdByUser
+            ? `${session.createdByUser.firstName} ${session.createdByUser.lastName}`
+            : 'System';
 
-            // Include lines that have been counted
-            if (countedQty !== null) {
+    const allPairs = sessions.flatMap((s) => collectSessionWacPairs(s, locationId || null));
+    const balanceWacMap = await buildBalanceWacMap(tenantId, allPairs);
+
+    for (const session of sessions) {
+        const label = createdByLabel(session);
+        const lineMaps = wacByItemFromLines(session.lines);
+        const cells = pickLatestCountedCells(session.locationQtys, locationId || null);
+        const countDateStr =
+            session.countDate instanceof Date
+                ? session.countDate.toISOString().split('T')[0]
+                : String(session.countDate).split('T')[0];
+
+        if (cells.length > 0) {
+            for (const cell of cells) {
+                const item = cell.item;
+                const locId = cell.locationId;
+                const { wac, wacSource } = resolveWac(cell.itemId, locId, lineMaps, balanceWacMap);
+                const varianceQty = Number(cell.varianceQty || 0);
+                const varianceValue = Number((varianceQty * wac).toFixed(2));
                 data.push({
                     sessionNo: session.sessionNo,
-                    countDate: session.countDate,
-                    locationName: session.location?.name || 'Unknown',
-                    itemCode: line.item?.sku || line.item?.barcode || line.item?.id?.substring(0, 8) || '-',
-                    itemName: line.item?.name || '-',
-                    category: line.item?.category?.name || '-',
-                    uom: line.item?.itemUnits?.find(iu => iu.unitType === 'BASE')?.unit?.name || '-',
-                    bookQty,
-                    countedQty,
+                    countDate: countDateStr,
+                    locationName: cell.location?.name || 'Unknown',
+                    department: session.department?.name || item?.department?.name || '-',
+                    itemCode: item?.sku || item?.barcode || item?.id?.substring(0, 8) || '-',
+                    itemName: item?.name || '-',
+                    category: item?.category?.name || '-',
+                    uom: item?.itemUnits?.find((iu) => iu.unitType === 'BASE')?.unit?.name || '-',
+                    bookQty: Number(cell.bookQty || 0),
+                    countedQty: cell.countedQty !== null ? Number(cell.countedQty) : null,
                     varianceQty,
-                    wacUnitCost,
-                    varianceValue: parseFloat(varianceValue.toFixed(4)),
+                    wacUnitCost: wac,
+                    varianceValue,
+                    wacSource,
+                    wacMissing: wac === 0 && varianceQty !== 0,
                     status: session.status,
-                    notes: line.notes || session.notes || '-',
-                    postedBy: session.createdByUser
-                        ? `${session.createdByUser.firstName} ${session.createdByUser.lastName}`
-                        : 'System',
+                    notes: cell.countNote || session.notes || '-',
+                    postedBy: label,
                 });
             }
-        });
-    });
+            continue;
+        }
+
+        for (const line of session.lines) {
+            const bookQty = Number(line.bookQty || 0);
+            const countedQty = line.countedQty !== null ? Number(line.countedQty) : null;
+            if (countedQty === null) continue;
+
+            const locId = line.locationId || session.locationId;
+            const { wac, wacSource } = resolveWac(line.itemId, locId, lineMaps, balanceWacMap);
+            const varianceQty = line.varianceQty !== null ? Number(line.varianceQty) : countedQty - bookQty;
+            let varianceValue =
+                line.varianceValue !== null && Number(line.varianceValue) !== 0
+                    ? Number(line.varianceValue)
+                    : Number((varianceQty * wac).toFixed(2));
+            if (varianceValue === 0 && wac > 0 && varianceQty !== 0) {
+                varianceValue = Number((varianceQty * wac).toFixed(2));
+            }
+
+            data.push({
+                sessionNo: session.sessionNo,
+                countDate: countDateStr,
+                locationName: session.location?.name || 'Unknown',
+                department: session.department?.name || line.item?.department?.name || '-',
+                itemCode: line.item?.sku || line.item?.barcode || line.item?.id?.substring(0, 8) || '-',
+                itemName: line.item?.name || '-',
+                category: line.item?.category?.name || '-',
+                uom: line.item?.itemUnits?.find((iu) => iu.unitType === 'BASE')?.unit?.name || '-',
+                bookQty,
+                countedQty,
+                varianceQty,
+                wacUnitCost: wac,
+                varianceValue,
+                wacSource,
+                wacMissing: wac === 0 && varianceQty !== 0,
+                status: session.status,
+                notes: line.notes || session.notes || '-',
+                postedBy: label,
+            });
+        }
+    }
 
     const totalVarianceQty = data.reduce((s, r) => s + r.varianceQty, 0);
     const totalVarianceValue = data.reduce((s, r) => s + r.varianceValue, 0);
     const totalBookQty = data.reduce((s, r) => s + r.bookQty, 0);
-    const totalCountedQty = data.reduce((s, r) => s + r.countedQty, 0);
-    const sessionCount = new Set(data.map(r => r.sessionNo)).size;
+    const totalCountedQty = data.reduce((s, r) => s + (r.countedQty ?? 0), 0);
+    const sessionCount = new Set(data.map((r) => r.sessionNo)).size;
+    const wacMissingCount = data.filter((r) => r.wacMissing).length;
 
     return {
         data,
@@ -352,8 +605,10 @@ const getCountVariances = async (tenantId, filters = {}) => {
             totalBookQty: parseFloat(totalBookQty.toFixed(4)),
             totalCountedQty: parseFloat(totalCountedQty.toFixed(4)),
             totalVarianceQty: parseFloat(totalVarianceQty.toFixed(4)),
-            totalVarianceValue: parseFloat(totalVarianceValue.toFixed(4)),
+            totalVarianceValue: parseFloat(totalVarianceValue.toFixed(2)),
             sessionCount,
+            wacMissingCount,
+            rowCount: data.length,
         },
         filters: {
             dateFrom,
@@ -373,8 +628,7 @@ const getOmcReport = async (tenantId, { dateFrom, dateTo, locationId, categoryId
     }
 
     const fromDate = new Date(dateFrom);
-    const toDate = new Date(dateTo);
-    toDate.setHours(23, 59, 59, 999);
+    const toDate = toInclusiveUtcEndOfDay(dateTo);
 
     // 1. Fetch relevant items
     const itemWhere = { tenantId, isActive: true };
@@ -493,15 +747,16 @@ const getOmcReport = async (tenantId, { dateFrom, dateTo, locationId, categoryId
 const getTransferHistoryReport = async (tenantId, { dateFrom, dateTo, sourceLocationId, destLocationId, itemId, status } = {}) => {
     const where = {
         tenantId,
-        // Transfers impact stock only after receipt/closure.
-        status: status || { in: ['RECEIVED', 'CLOSED'] },
+        // Completed / terminal transfer statuses that belong in history defaults.
+        // Align with generateTransfersReport + report-workspace TRANSFER_COMPLETED_STATUSES.
+        // TransferStatus has no VOID; REJECTED excluded (never stock-impacting completion).
+        status: status || { in: ['POSTED', 'RECEIVED', 'CLOSED'] },
     };
     if (sourceLocationId) where.sourceLocationId = sourceLocationId;
     if (destLocationId) where.destLocationId = destLocationId;
     if (dateFrom || dateTo) {
         const fromDate = dateFrom ? new Date(dateFrom) : null;
-        const toDate = dateTo ? new Date(dateTo) : null;
-        if (toDate) toDate.setHours(23, 59, 59, 999);
+        const toDate = dateTo ? toInclusiveUtcEndOfDay(dateTo) : null;
         where.AND = [
             {
                 OR: [
@@ -511,9 +766,10 @@ const getTransferHistoryReport = async (tenantId, { dateFrom, dateTo, sourceLoca
                             ...(toDate ? { lte: toDate } : {}),
                         },
                     },
+                    // EX-010: no transferDate fallback — use postedAt when receivedAt is null.
                     {
                         receivedAt: null,
-                        transferDate: {
+                        postedAt: {
                             ...(fromDate ? { gte: fromDate } : {}),
                             ...(toDate ? { lte: toDate } : {}),
                         },
@@ -536,7 +792,7 @@ const getTransferHistoryReport = async (tenantId, { dateFrom, dateTo, sourceLoca
                 },
             },
         },
-        orderBy: [{ receivedAt: 'asc' }, { transferDate: 'asc' }],
+        orderBy: [{ receivedAt: 'asc' }, { postedAt: 'asc' }, { transferDate: 'asc' }],
     });
 
     // Filter by itemId if given
@@ -548,11 +804,13 @@ const getTransferHistoryReport = async (tenantId, { dateFrom, dateTo, sourceLoca
     for (const t of filtered) {
         for (const l of t.lines) {
             if (itemId && l.itemId !== itemId) continue;
+            const periodDate = t.receivedAt || t.postedAt;
+            if (!periodDate) continue;
             rows.push({
                 transferNo: t.transferNo,
                 transferDate: t.transferDate,
-                postedAt: t.receivedAt || null,
-                date: t.receivedAt || t.transferDate,
+                postedAt: t.postedAt || t.receivedAt || null,
+                date: periodDate,
                 status: t.status,
                 sourceLocation: t.sourceLocation?.name,
                 destLocation: t.destLocation?.name,
@@ -580,14 +838,13 @@ const getBreakagePLReport = async (tenantId, { dateFrom, dateTo, locationId, doc
     const where = {
         tenantId,
         movementType: 'BREAKAGE',
-        status: { in: ['APPROVED', 'POSTED'] },
+        status: 'POSTED',
     };
     if (locationId) where.sourceLocationId = locationId;
     if (documentSubtype) where.documentSubtype = documentSubtype;
     if (dateFrom || dateTo) {
         const fromDate = dateFrom ? new Date(dateFrom) : null;
-        const toDate = dateTo ? new Date(dateTo) : null;
-        if (toDate) toDate.setHours(23, 59, 59, 999);
+        const toDate = dateTo ? toInclusiveUtcEndOfDay(dateTo) : null;
         where.OR = [
             {
                 postedAt: {
@@ -667,66 +924,6 @@ const getBreakagePLReport = async (tenantId, { dateFrom, dateTo, locationId, doc
 };
 
 /**
- * M13.8 — Requisition Fill Rate Report
- * Fill %, partial rate, days to fulfill.
- */
-const getRequisitionFillReport = async (tenantId, { dateFrom, dateTo, departmentName } = {}) => {
-    const where = {
-        tenantId,
-        status: { in: ['CLOSED', 'FULLY_ISSUED', 'PARTIALLY_ISSUED'] },
-    };
-    if (departmentName) where.departmentName = { contains: departmentName, mode: 'insensitive' };
-    if (dateFrom || dateTo) {
-        where.createdAt = {};
-        if (dateFrom) where.createdAt.gte = new Date(dateFrom);
-        if (dateTo) where.createdAt.lte = new Date(dateTo);
-    }
-
-    const reqs = await prisma.storeRequisition.findMany({
-        where,
-        include: {
-            lines: true,
-            requestedByUser: { select: { firstName: true, lastName: true } },
-        },
-        orderBy: { createdAt: 'desc' },
-    });
-
-    const rows = reqs.map(r => {
-        const totalRequested = r.lines.reduce((s, l) => s + Number(l.requestedQty), 0);
-        const totalIssued = r.lines.reduce((s, l) => s + Number(l.totalIssuedQty), 0);
-        const fillPct = totalRequested > 0 ? (totalIssued / totalRequested) * 100 : 0;
-        const isPartial = fillPct > 0 && fillPct < 100;
-        const daysToFulfill = r.closedAt
-            ? Math.round((new Date(r.closedAt) - new Date(r.createdAt)) / 86400000)
-            : null;
-
-        return {
-            requisitionNo: r.requisitionNo,
-            departmentName: r.departmentName,
-            status: r.status,
-            createdAt: r.createdAt,
-            closedAt: r.closedAt,
-            requestedBy: `${r.requestedByUser?.firstName ?? ''} ${r.requestedByUser?.lastName ?? ''}`.trim(),
-            totalRequested,
-            totalIssued,
-            fillPct: parseFloat(fillPct.toFixed(2)),
-            isPartial,
-            daysToFulfill,
-        };
-    });
-
-    const avg = arr => arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null;
-    const filled = rows.filter(r => r.daysToFulfill != null);
-    return {
-        total: rows.length,
-        avgFillPct: parseFloat((avg(rows.map(r => r.fillPct)) ?? 0).toFixed(2)),
-        avgDaysToFulfill: filled.length ? parseFloat(avg(filled.map(r => r.daysToFulfill)).toFixed(1)) : null,
-        partialRate: parseFloat(((rows.filter(r => r.isPartial).length / (rows.length || 1)) * 100).toFixed(2)),
-        data: rows,
-    };
-};
-
-/**
  * M13.9 — Inventory Aging Report
  * Items with last movement older than `days` threshold.
  */
@@ -777,11 +974,11 @@ module.exports = {
     getStockValuation,
     getMovementHistory,
     getBreakageReport,
+    getLostReport,
     getCountVariances,
     getOmcReport,
     // Phase 6
     getTransferHistoryReport,
     getBreakagePLReport,
-    getRequisitionFillReport,
     getInventoryAgingReport,
 };

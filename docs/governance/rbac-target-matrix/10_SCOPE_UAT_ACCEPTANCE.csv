@@ -1,0 +1,13 @@
+Test_ID,Priority,Actor,Scenario,Steps,Expected_Result,Fail_If
+SC01,P0,F&B Dept User,Breakage list isolation,Login as F&B DEPT_MANAGER open Breakage,Only F&B department documents visible,Any HK document appears
+SC02,P0,HK Dept User,Breakage list isolation,Login as HK DEPT_MANAGER open Breakage,Only HK documents visible,Any F&B document appears
+SC03,P0,F&B User,Direct URL to HK document,Open /breakage/:id for HK doc while logged in as F&B,404 or SCOPE_VIOLATION,HK detail loads
+SC04,P0,Finance Manager,Sees both departments,Login Finance open Breakage,F&B and HK visible when data exists,Wrongly empty or missing dept without scope message
+SC05,P0,Storekeeper,Location isolation,SK assigned to Store A only,Stock and Ledger show Store A only,Other stores visible
+SC06,P0,Storekeeper,Transfer create location,Create transfer from out-of-scope source,Validation error or 403,Transfer created from forbidden location
+SC07,P1,Cost Control,Tenant-wide Lost list,Login COST_CONTROL open Lost,All departments visible unless user filters,N/A wrongly blocked
+SC08,P1,Auditor,Read-only tenant-wide,Login AUDITOR view report,Read succeeds; no approve/post,Write or approve succeeds
+SC09,P1,F&B User,Empty state scope message,List with zero in-scope rows,Clear scope message not generic empty,Silent empty with no scope hint
+SC10,P1,Finance Manager,Ledger full tenant,Finance opens Ledger,All tenant locations when unfiltered,Wrongly blocked
+SC11,P1,API,No scope bypass,GET list with params outside user scope,Filtered results or 400 SCOPE,Rows from other dept/location returned
+SC12,P1,ORG Manager,Active property scope,ORG switches to Hotel B,Sees Hotel B data not Hotel A,Cross-hotel data leak

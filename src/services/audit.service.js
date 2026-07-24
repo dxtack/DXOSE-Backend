@@ -1,5 +1,5 @@
 const prisma = require('../config/database');
-const logger = require('../utils/logger');
+const { writeAuditLog } = require('./auditWriter.service');
 
 /**
  * M14 — Audit Service
@@ -7,24 +7,19 @@ const logger = require('../utils/logger');
  */
 
 const log = async ({ tenantId, entityType, entityId, action, changedBy, beforeValue, afterValue, ipAddress, userAgent }) => {
-    try {
-        await prisma.auditLog.create({
-            data: {
-                tenantId,
-                entityType,
-                entityId: String(entityId),
-                action,
-                changedBy,
-                beforeValue: beforeValue ? JSON.parse(JSON.stringify(beforeValue)) : undefined,
-                afterValue: afterValue ? JSON.parse(JSON.stringify(afterValue)) : undefined,
-                ipAddress,
-                userAgent,
-            },
-        });
-    } catch (err) {
-        // Audit logging must never crash the main request
-        logger.error(`Audit log write failed: ${err.message}`, { tenantId, entityType, entityId, action });
-    }
+    await writeAuditLog({
+        tenantId,
+        entityType,
+        entityId,
+        action,
+        changedBy,
+        note: null,
+        beforeValue: beforeValue ?? null,
+        afterValue: afterValue ?? null,
+        ipAddress,
+        userAgent,
+        tx: null,
+    });
 };
 
 const getAuditLog = async (tenantId, { entityType, entityId, changedBy, from, to, page = 1, limit = 50 } = {}) => {

@@ -1,5 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { writeAuditLog } = require('./auditWriter.service');
 
 /**
  * Central audit trail logger for OS&E Inventory System.
@@ -16,6 +15,8 @@ const prisma = new PrismaClient();
  *     afterValue,         // optional snapshot after change
  *     tx,                 // optional prisma transaction client
  *   });
+ *
+ * `action` must be a member of Prisma `AuditAction` or the write is skipped (errors are logged, never thrown).
  */
 const logAction = async ({
     tenantId,
@@ -28,33 +29,28 @@ const logAction = async ({
     afterValue = null,
     tx = null,
 }) => {
-    const client = tx || prisma;
-    try {
-        await client.auditLog.create({
-            data: {
-                tenantId,
-                entityType,
-                entityId,
-                action,
-                changedBy,
-                note,
-                beforeValue,
-                afterValue,
-            },
-        });
-    } catch (err) {
-        // Audit logging must never break main flow
-        console.error('[AuditTrail] Failed to log action:', err.message, { tenantId, entityType, entityId, action });
-    }
+    await writeAuditLog({
+        tenantId,
+        entityType,
+        entityId,
+        action,
+        changedBy,
+        note,
+        beforeValue,
+        afterValue,
+        tx,
+    });
 };
 
 // ── Entity Type constants ──────────────────────────────────────────────────
 const EntityType = {
     MOVEMENT:       'MOVEMENT',
     STOCK_COUNT:    'STOCK_COUNT',
+    STOCK_REPORT:   'STOCK_REPORT',
     PERIOD_CLOSE:   'PERIOD_CLOSE',
     GRN:            'GRN',
     BREAKAGE:       'BREAKAGE',
+    LOST:           'LOST',
     TRANSFER:       'TRANSFER',
     ITEM:           'ITEM',
     LOCATION:       'LOCATION',
@@ -62,6 +58,7 @@ const EntityType = {
     CATEGORY:       'CATEGORY',
     SETTINGS:       'SETTINGS',
     USER:           'USER',
+    GET_PASS:       'GET_PASS',
 };
 
 module.exports = { logAction, EntityType };

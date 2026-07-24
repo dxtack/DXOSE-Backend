@@ -8,9 +8,10 @@ const sendError = (res, err) => {
 };
 
 const assertFinance = (req) => {
-    const role = req.user?.role;
-    if (!['FINANCE_MANAGER', 'COST_CONTROL', 'ADMIN'].includes(role))
-        throw Object.assign(new Error('Finance role required for mapping operations.'), { status: 403 });
+    const { hasPermission } = require('../middleware/authorize');
+    if (!hasPermission(req.user, 'BASIC_DATA_EDIT') && !hasPermission(req.user, 'GRN_MANAGE')) {
+        throw Object.assign(new Error('Insufficient permissions for mapping operations.'), { status: 403 });
+    }
 };
 
 // ─── Item Mappings ────────────────────────────────────────────────────────────

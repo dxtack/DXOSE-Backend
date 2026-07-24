@@ -3,8 +3,10 @@ const router = express.Router();
 const ctrl = require('../controllers/department.controller');
 const { authenticate } = require('../middleware/authenticate');
 const { requirePermission } = require('../middleware/authorize');
+const { requireBranchPropertyForMutation } = require('../middleware/requireBranchPropertyContext');
 
 router.use(authenticate);
+router.use(requireBranchPropertyForMutation);
 
 router.route('/')
     .post(requirePermission('BASIC_DATA_EDIT'), ctrl.createDepartment)

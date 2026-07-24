@@ -8,12 +8,31 @@ const { success } = require('../utils/response');
  */
 const getLedgerEntries = async (req, res, next) => {
     try {
-        const result = await ledgerService.getLedgerEntries(req.user.tenantId, req.query);
-        return success(res, result.entries, 'Ledger entries fetched successfully', 200, {
-            total: result.total,
+        const result = await ledgerService.getLedgerEntries(req.user.tenantId, req.query, req.user);
+        const { entries, total, scope, scopeApplied, scopeLabel, reason } = result;
+        return success(res, entries, 'Ledger entries fetched successfully', 200, {
+            total,
             skip: parseInt(req.query.skip) || 0,
             take: parseInt(req.query.take) || 50,
+            scope,
+            scopeApplied,
+            scopeLabel,
+            reason,
         });
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
+ * @desc    Export ledger entries with filters
+ * @route   GET /api/ledger/export
+ * @access  Private
+ */
+const exportLedgerEntries = async (req, res, next) => {
+    try {
+        const entries = await ledgerService.exportLedgerEntries(req.user.tenantId, req.query, req.user);
+        return success(res, entries, 'Ledger entries exported successfully');
     } catch (error) {
         next(error);
     }
@@ -28,7 +47,9 @@ const getLedgerByDocument = async (req, res, next) => {
     try {
         const entries = await ledgerService.getLedgerByDocument(
             req.params.documentId,
-            req.user.tenantId
+            req.user.tenantId,
+            req.user,
+            { documentNo: req.query.documentNo },
         );
         return success(res, entries, 'Document ledger entries fetched successfully');
     } catch (error) {
@@ -38,5 +59,6 @@ const getLedgerByDocument = async (req, res, next) => {
 
 module.exports = {
     getLedgerEntries,
+    exportLedgerEntries,
     getLedgerByDocument
 };

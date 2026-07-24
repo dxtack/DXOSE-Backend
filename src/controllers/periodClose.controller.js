@@ -1,4 +1,5 @@
 const periodCloseService = require('../services/periodClose.service');
+const { buildPeriodOpeningContinuityReport } = require('../services/periodOpeningContinuity.service');
 
 const getPeriods = async (req, res, next) => {
     try {
@@ -13,6 +14,45 @@ const getPeriodById = async (req, res, next) => {
     try {
         const data = await periodCloseService.getPeriodById(req.params.id, req.user.tenantId);
         res.json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const getOpeningContinuityReport = async (req, res, next) => {
+    try {
+        const data = await buildPeriodOpeningContinuityReport({
+            tenantId: req.user.tenantId,
+            targetYear: parseInt(req.query.year, 10),
+            targetMonth: parseInt(req.query.month, 10),
+            generatedBy: req.user.id,
+        });
+        res.json(data);
+    } catch (err) {
+        next(err);
+    }
+};
+
+const openPeriod = async (req, res, next) => {
+    try {
+        const { year, month, reason, bootstrap, bootstrapReason } = req.body;
+        const data = await periodCloseService.openPeriod(
+            req.user.tenantId,
+            {
+                year: parseInt(year, 10),
+                month: parseInt(month, 10),
+                reason,
+                bootstrapApproval: bootstrap
+                    ? {
+                        approvedBy: req.user.id,
+                        reason: bootstrapReason,
+                        source: 'PERIOD_OPEN_API',
+                    }
+                    : null,
+            },
+            req.user.id,
+        );
+        res.status(201).json(data);
     } catch (err) {
         next(err);
     }
@@ -125,6 +165,8 @@ const carryForwardGetPass = async (req, res, next) => {
 module.exports = {
     getPeriods,
     getPeriodById,
+    getOpeningContinuityReport,
+    openPeriod,
     closePeriod,
     startClose,
     cancelClose,

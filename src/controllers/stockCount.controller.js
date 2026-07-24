@@ -1,10 +1,22 @@
 const stockCountService = require('../services/stockCount.service');
+const stockCountEvidence = require('../services/stockCountEvidence.service');
 const pdfService = require('../services/pdf.service');
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+
+const { isLegacyStockCountBlocked } = require('../middleware/blockLegacyStockCountMutations');
 
 exports.createSession = async (req, res, next) => {
     try {
+        if (isLegacyStockCountBlocked()) {
+            return res.status(403).json({
+                status: 'error',
+                message:
+                    'Legacy stock-count session creation is disabled. Use POST /api/inventory-count/sessions.',
+                error: {
+                    code: 'LEGACY_STOCK_COUNT_CREATE_DISABLED',
+                    canonicalPath: '/api/inventory-count/sessions',
+                },
+            });
+        }
         const { locationId, notes } = req.body;
         const session = await stockCountService.createSession(
             req.user.tenantId,
@@ -20,7 +32,7 @@ exports.createSession = async (req, res, next) => {
 
 exports.getSessions = async (req, res, next) => {
     try {
-        const result = await stockCountService.getSessions(req.user.tenantId, req.query);
+        const result = await stockCountService.getSessions(req.user.tenantId, req.query, req.user);
         res.status(200).json({ status: 'success', data: result });
     } catch (error) {
         next(error);
@@ -29,7 +41,7 @@ exports.getSessions = async (req, res, next) => {
 
 exports.getSession = async (req, res, next) => {
     try {
-        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId);
+        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId, req.user);
         res.status(200).json({ status: 'success', data: session });
     } catch (error) {
         next(error);
@@ -75,69 +87,17 @@ exports.voidSession = async (req, res, next) => {
     }
 };
 
-const buildEvidenceJSON = async (session, tenantId) => {
-    let ledgerEntries = [];
-    if (session.status === 'POSTED') {
-        ledgerEntries = await prisma.inventoryLedger.findMany({
-            where: { referenceId: session.id, tenantId }
-        });
-    }
-
-    const positiveVariances = session.lines.filter(l => Number(l.varianceQty) > 0);
-    const negativeVariances = session.lines.filter(l => Number(l.varianceQty) < 0);
-
-    const totalPositiveValue = positiveVariances.reduce((sum, l) => sum + Math.abs(Number(l.varianceValue)), 0);
-    const totalNegativeValue = negativeVariances.reduce((sum, l) => sum + Math.abs(Number(l.varianceValue)), 0);
-
-    return {
-        sessionInfo: {
-            sessionNo: session.sessionNo,
-            location: session.location.name,
-            status: session.status,
-            snapshotAt: session.snapshotAt,
-            postedAt: session.postedAt,
-            createdBy: `${session.createdByUser.firstName} ${session.createdByUser.lastName}`
-        },
-        approvalHistory: session.approvalRequest ? session.approvalRequest.steps.map(s => ({
-            step: s.stepNumber,
-            role: s.requiredRole?.code ?? s.requiredRole,
-            status: s.status,
-            actedBy: s.actedByUser ? `${s.actedByUser.firstName} ${s.actedByUser.lastName}` : null,
-            actedAt: s.actedAt,
-            comment: s.comment
-        })) : [],
-        varianceSummary: {
-            itemsCounted: session.lines.filter(l => l.countedQty !== null).length,
-            totalItems: session.lines.length,
-            overQty: positiveVariances.reduce((sum, l) => sum + Math.abs(Number(l.varianceQty)), 0),
-            shortQty: negativeVariances.reduce((sum, l) => sum + Math.abs(Number(l.varianceQty)), 0),
-            overValue: totalPositiveValue,
-            shortValue: totalNegativeValue,
-            netVarianceValue: totalPositiveValue - totalNegativeValue
-        },
-        lines: session.lines.map(l => ({
-            item: l.item.name,
-            bookQty: Number(l.bookQty),
-            countedQty: l.countedQty ? Number(l.countedQty) : null,
-            varianceQty: Number(l.varianceQty),
-            unitCost: Number(l.wacUnitCost),
-            varianceValue: Number(l.varianceValue)
-        })),
-        ledgerEntries: ledgerEntries.map(l => ({
-            itemId: l.itemId,
-            type: l.movementType,
-            qtyIn: Number(l.qtyIn),
-            qtyOut: Number(l.qtyOut),
-            totalValue: Number(l.totalValue)
-        }))
-    };
+const buildEvidencePayload = async (session, tenantId) => {
+    const evidence = await stockCountEvidence.buildEvidencePack(session, tenantId);
+    const { excelRows, ...payload } = evidence;
+    return { payload, excelRows };
 };
 
 exports.getEvidencePack = async (req, res, next) => {
     try {
-        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId);
-        const evidence = await buildEvidenceJSON(session, req.user.tenantId);
-        res.status(200).json({ status: 'success', data: evidence });
+        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId, req.user);
+        const { payload } = await buildEvidencePayload(session, req.user.tenantId);
+        res.status(200).json({ status: 'success', data: payload });
     } catch (error) {
         next(error);
     }
@@ -145,10 +105,10 @@ exports.getEvidencePack = async (req, res, next) => {
 
 exports.downloadEvidencePdf = async (req, res, next) => {
     try {
-        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId);
-        const evidence = await buildEvidenceJSON(session, req.user.tenantId);
+        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId, req.user);
+        const { payload } = await buildEvidencePayload(session, req.user.tenantId);
 
-        const doc = await pdfService.generateStockCountEvidencePDF(evidence);
+        const doc = await pdfService.generateStockCountEvidencePDF(payload);
         res.setHeader('Content-Type', 'application/pdf');
         res.setHeader('Content-Disposition', `attachment; filename=evidence-${session.sessionNo}.pdf`);
         res.setHeader('Content-Length', doc.length);
@@ -160,7 +120,8 @@ exports.downloadEvidencePdf = async (req, res, next) => {
 exports.downloadExcel = async (req, res, next) => {
     try {
         const ExcelJS = require('exceljs');
-        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId);
+        const session = await stockCountService.getSessionById(req.params.id, req.user.tenantId, req.user);
+        const { excelRows, payload } = await buildEvidencePayload(session, req.user.tenantId);
 
         const wb = new ExcelJS.Workbook();
         wb.creator = 'OSE Inventory System';
@@ -234,16 +195,16 @@ exports.downloadExcel = async (req, res, next) => {
             border: { left: { style: 'medium', color: { argb: 'FFD97706' } }, right: { style: 'medium', color: { argb: 'FFD97706' } } }
         };
 
-        session.lines.forEach((line, idx) => {
+        excelRows.forEach((line, idx) => {
             const varQty = Number(line.varianceQty || 0);
             const varVal = Number(line.varianceValue || 0);
-            const counted = line.countedQty !== null ? Number(line.countedQty) : null;
+            const counted = line.countedQty !== null && line.countedQty !== undefined ? Number(line.countedQty) : null;
 
             const row = ws.addRow({
                 num: idx + 1,
-                item: line.item.name,
-                barcode: line.item.barcode || '',
-                category: line.item.category?.name || '',
+                item: line.itemLabel,
+                barcode: line.barcode || '',
+                category: line.category || '',
                 bookQty: Number(line.bookQty),
                 counted: counted,
                 varQty: counted !== null ? varQty : null,
@@ -283,13 +244,13 @@ exports.downloadExcel = async (req, res, next) => {
 
         // ── Summary row ───────────────────────────────────────────────────────
         ws.addRow([]);
-        const pos = session.lines.filter(l => Number(l.varianceQty) > 0);
-        const neg = session.lines.filter(l => Number(l.varianceQty) < 0);
+        const pos = excelRows.filter((l) => Number(l.varianceQty) > 0);
+        const neg = excelRows.filter((l) => Number(l.varianceQty) < 0);
         const totalOver = pos.reduce((s, l) => s + Math.abs(Number(l.varianceValue)), 0);
         const totalShort = neg.reduce((s, l) => s + Math.abs(Number(l.varianceValue)), 0);
 
         const summaryRows = [
-            ['', 'Total Items Counted', '', '', '', session.lines.filter(l => l.countedQty !== null).length, '', '', ''],
+            ['', 'Total Items Counted', '', '', '', excelRows.filter((l) => l.countedQty !== null && l.countedQty !== undefined).length, '', '', ''],
             ['', 'Total Overages (SAR)', '', '', '', '', '', '', totalOver],
             ['', 'Total Shortages (SAR)', '', '', '', '', '', '', totalShort],
             ['', 'Net Variance (SAR)', '', '', '', '', '', '', totalOver - totalShort],

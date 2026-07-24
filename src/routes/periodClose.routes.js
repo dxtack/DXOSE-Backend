@@ -6,25 +6,26 @@ const ctrl = require('../controllers/periodClose.controller');
 
 const VIEW = requireAnyPermission(
     'PERIOD_CLOSE_EXECUTE',
+    'PERIOD_RECLOSE_EXECUTE',
     'PERIOD_CLOSE_RESOLUTION',
     'PERIOD_REOPEN_EXECUTE',
-    'PERIOD_CLOSE_MANAGE',
-    'INTEGRITY_VIEW',
 );
 
 router.get('/', authenticate, VIEW, ctrl.getPeriods);
-router.get('/resolution', authenticate, requireAnyPermission('PERIOD_CLOSE_RESOLUTION', 'PERIOD_CLOSE_MANAGE'), ctrl.getResolutionWorkspace);
+router.get('/resolution', authenticate, requirePermission('PERIOD_CLOSE_RESOLUTION'), ctrl.getResolutionWorkspace);
+router.get('/opening-continuity', authenticate, VIEW, ctrl.getOpeningContinuityReport);
 router.get('/:id/snapshots', authenticate, VIEW, ctrl.snapshotHistory);
 router.get('/:id', authenticate, VIEW, ctrl.getPeriodById);
 
-router.post('/start-close', authenticate, requireAnyPermission('PERIOD_CLOSE_EXECUTE', 'PERIOD_CLOSE_MANAGE'), ctrl.startClose);
-router.post('/cancel-close', authenticate, requireAnyPermission('PERIOD_CLOSE_RESOLUTION', 'PERIOD_CLOSE_MANAGE'), ctrl.cancelClose);
-router.post('/close', authenticate, requireAnyPermission('PERIOD_CLOSE_EXECUTE', 'PERIOD_RECLOSE_EXECUTE', 'PERIOD_CLOSE_MANAGE'), ctrl.closePeriod);
+router.post('/open', authenticate, requirePermission('PERIOD_CLOSE_EXECUTE'), ctrl.openPeriod);
+router.post('/start-close', authenticate, requirePermission('PERIOD_CLOSE_EXECUTE'), ctrl.startClose);
+router.post('/cancel-close', authenticate, requirePermission('PERIOD_CLOSE_RESOLUTION'), ctrl.cancelClose);
+router.post('/close', authenticate, requireAnyPermission('PERIOD_CLOSE_EXECUTE', 'PERIOD_RECLOSE_EXECUTE'), ctrl.closePeriod);
 
 router.post(
     '/:id/reopen',
     authenticate,
-    requireAnyPermission('PERIOD_REOPEN_EXECUTE', 'PERIOD_CLOSE_MANAGE'),
+    requirePermission('PERIOD_REOPEN_EXECUTE'),
     ctrl.reopenPeriod,
 );
 

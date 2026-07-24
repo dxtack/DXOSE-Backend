@@ -1,3 +1,10 @@
+require('dotenv').config();
+
+// Windows + Docker Desktop: localhost may resolve to IPv6; host-mapped Postgres uses 127.0.0.1:5433.
+if (process.env.DATABASE_URL) {
+    process.env.DATABASE_URL = process.env.DATABASE_URL.replace(/@localhost:/gi, '@127.0.0.1:');
+}
+
 const { PrismaClient } = require('@prisma/client');
 const logger = require('../utils/logger');
 

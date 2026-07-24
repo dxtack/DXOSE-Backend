@@ -21,8 +21,10 @@ function dockerBinaryExists(p) {
 }
 
 function resolveDocker() {
+    const programFiles = process.env['ProgramFiles'] || 'C:\\Program Files';
     const extra = [
         process.env.DOCKER_PATH,
+        path.join(programFiles, 'Docker', 'Docker', 'resources', 'bin', 'docker.exe'),
         `${DOCKER_APP_BIN}/docker`,
         '/usr/local/bin/docker',
         '/opt/homebrew/bin/docker',
@@ -30,8 +32,15 @@ function resolveDocker() {
     for (const p of extra) {
         if (dockerBinaryExists(p)) return p;
     }
-    const which = spawnSync('which', ['docker'], { encoding: 'utf8' });
-    if (which.status === 0 && which.stdout.trim()) return which.stdout.trim();
+    if (process.platform === 'win32') {
+        const w = spawnSync('where.exe', ['docker'], { encoding: 'utf8' });
+        if (w.status === 0 && w.stdout.trim()) {
+            return w.stdout.split(/\r?\n/).map((s) => s.trim()).find(Boolean) || null;
+        }
+    } else {
+        const which = spawnSync('which', ['docker'], { encoding: 'utf8' });
+        if (which.status === 0 && which.stdout.trim()) return which.stdout.trim();
+    }
     return null;
 }
 
@@ -40,15 +49,15 @@ if (!docker) {
     console.error(`
 Docker CLI not found. Local PostgreSQL for this repo is defined in docker-compose.yml.
 
-1) Install Docker Desktop for Mac:
-   https://docs.docker.com/desktop/install/mac-install/
+1) Install Docker Desktop (Windows or Mac) and ensure the docker command is on PATH:
+   https://docs.docker.com/desktop/
 
-2) Open Docker Desktop and wait until it is running.
+2) Open Docker Desktop and wait until the engine is running.
 
-3) In this project directory:
+3) From the repo root:
    npm run db:up
 
-4) Then apply schema and demo data:
+4) Then apply schema and demo data (first-time setup):
    npm run db:migrate
    npm run db:seed
 `);

@@ -1,8 +1,14 @@
 /**
  * Governed GRN post (Phase G1) — stock + ledger + movement mirror in one transaction.
  */
-const { validatePostingDate } = require('./periodGuard.service');
+const { validatePostingDate, checkFuturePostingDate } = require('./periodGuard.service');
 const { resolvePostingPeriod } = require('../platform/postingPeriod.util');
+const {
+    assertPositiveUnitCostForInboundQty,
+} = require('./stockBalanceWacGuard.service');
+const { assertIntegerQuantity } = require('./integerQuantityGuard.service');
+const { applyAtomicWeightedReceipt } = require('./weightedReceipt.service');
+const { getTenantTimezone } = require('./tenantTimezone.service');
 
 const err = (message, statusCode = 400) => {
     const e = new Error(message);
@@ -23,18 +29,25 @@ async function assertNoDuplicateGrnPost(tx, tenantId, grnId) {
  * @param {import('@prisma/client').Prisma.TransactionClient} tx
  * @param {object} grn — grnImport with lines[]
  * @param {string} userId
+ * @param {{ postingDate?: Date|string, fromResolutionWorkspace?: boolean }} [opts]
+ *        When fromResolutionWorkspace, caller must have run assertPeriodAllowPostingForResolution.
  */
-async function postGrnInTransaction(tx, grn, userId) {
+async function postGrnInTransaction(tx, grn, userId, opts = {}) {
     const tenantId = grn.tenantId;
     await assertNoDuplicateGrnPost(tx, tenantId, grn.id);
+    const timezone = await getTenantTimezone(tenantId, tx);
 
     if (!grn.lines?.length) {
         throw err('GRN has no lines to post', 422);
     }
 
-    const postedAt = new Date();
-    await validatePostingDate(tenantId, postedAt);
-    const { postingDate, assignedPostingPeriod } = resolvePostingPeriod(postedAt);
+    const postedAt = opts.postingDate != null ? new Date(opts.postingDate) : new Date();
+    if (opts.fromResolutionWorkspace) {
+        checkFuturePostingDate(postedAt, timezone);
+    } else {
+        await validatePostingDate(tenantId, postedAt, tx, timezone);
+    }
+    const { postingDate, assignedPostingPeriod } = resolvePostingPeriod(postedAt, timezone);
 
     for (const line of grn.lines) {
         if (!line.internalItemId || !line.internalUomId) {
@@ -45,36 +58,39 @@ async function postGrnInTransaction(tx, grn, userId) {
         if (qtyToPost <= 0) {
             throw err('Line has zero or negative quantity — aborting post');
         }
+        assertIntegerQuantity({
+            qty: qtyToPost,
+            field: 'qtyInBaseUnit',
+            message:
+                'Cannot post GRN: quantity must be a whole number (integer). Fractional quantities are not allowed.',
+            details: { grnNumber: grn.grnNumber, itemId: line.internalItemId, qty: qtyToPost },
+        });
 
         const lineUnitPrice = Number(line.unitPrice);
+        assertPositiveUnitCostForInboundQty({
+            unitCost: lineUnitPrice,
+            qty: qtyToPost,
+            message:
+                'Cannot post GRN: a line has quantity greater than zero but unit price is missing or zero. ' +
+                'Enter a valid unit price on every received line, then retry.',
+            details: {
+                grnNumber: grn.grnNumber,
+                itemId: line.internalItemId,
+                receivedQty: qtyToPost,
+                unitPrice: lineUnitPrice,
+            },
+        });
         const totalValue = qtyToPost * lineUnitPrice;
 
-        const stockKey = {
-            tenantId_itemId_locationId: {
-                tenantId,
-                itemId: line.internalItemId,
-                locationId: grn.locationId,
-            },
-        };
-
-        const balance = await tx.stockBalance.findUnique({ where: stockKey });
-        const prevQty = balance ? Number(balance.qtyOnHand) : 0;
-        const prevWac = balance ? Number(balance.wacUnitCost) : 0;
-        const newQty = prevQty + qtyToPost;
-        const newWac =
-            newQty > 0 ? (prevQty * prevWac + qtyToPost * lineUnitPrice) / newQty : lineUnitPrice;
-
-        await tx.stockBalance.upsert({
-            where: stockKey,
-            create: {
-                tenantId,
-                itemId: line.internalItemId,
-                locationId: grn.locationId,
-                qtyOnHand: newQty,
-                wacUnitCost: newWac,
-            },
-            update: { qtyOnHand: newQty, wacUnitCost: newWac, lastUpdated: new Date() },
+        const updatedStock = await applyAtomicWeightedReceipt(tx, {
+            tenantId,
+            itemId: line.internalItemId,
+            locationId: grn.locationId,
+            qty: qtyToPost,
+            unitCost: lineUnitPrice,
+            context: `GRN ${grn.grnNumber}`,
         });
+        const newQty = updatedStock.qtyOnHand;
 
         await tx.inventoryLedger.create({
             data: {

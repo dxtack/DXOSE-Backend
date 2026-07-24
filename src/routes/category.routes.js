@@ -3,9 +3,11 @@ const router = express.Router();
 const categoryController = require('../controllers/category.controller');
 const { authenticate: protect } = require('../middleware/authenticate');
 const { requirePermission } = require('../middleware/authorize');
+const { requireBranchPropertyForMutation } = require('../middleware/requireBranchPropertyContext');
 
 // Apply protection to all category routes
 router.use(protect);
+router.use(requireBranchPropertyForMutation);
 
 // Categories
 router

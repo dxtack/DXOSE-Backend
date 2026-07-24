@@ -3,38 +3,104 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const emailService = require('./email.service');
-const { checkPeriodLock } = require('./periodGuard.service');
+const postingEngine = require('./postingEngine.service');
+const { logAction, EntityType } = require('./auditTrail.service');
+const logger = require('../utils/logger');
+const { logGovernedEvent } = require('./auditGoverned.service');
 const {
     createStoreTransferApprovalRequest,
     processStoreTransferApproval,
     transferStatusForActiveStep,
 } = require('./approvalChain.service');
+const {
+    executeWorkflowSendBackInTx,
+    executeCreatorResubmitInTx,
+    normalizeReason,
+} = require('../platform/workflowSendBack.service');
+const { appendSendBackNotes, isSendBackReturned } = require('../platform/lifecyclePresentation.service');
+const { assertUserHasTransferStepPermission } = require('../acc-authority/step-permission-enforcement');
+const { normalizeRole } = require('./rbac.service');
+const { resolveWorkflowForDocument } = require('./acc-workflow-runtime.service');
+const { userDisplayName } = require('../utils/timeline-present.util');
+const {
+    AWAITING_POSTING_BUCKET,
+    PENDING_REVIEW_BUCKET,
+    awaitingPostingListWhere,
+    pendingReviewListWhere,
+    mapTransferDetailResponse,
+    mapTransferListRow,
+    TRANSFER_LIST_STATUSES,
+} = require('./transferWorkflow.util');
+
+const ALLOWED_TRANSFER_WORKFLOW_BUCKETS = new Set([
+    AWAITING_POSTING_BUCKET,
+    PENDING_REVIEW_BUCKET,
+]);
+const { assertIntegerQuantity } = require('./integerQuantityGuard.service');
+const {
+    resolveScopeContext,
+    scopeWhereFor,
+    metaFor,
+    assertInScope,
+    assertLocationInScope,
+    SCOPE_MODULE,
+} = require('./scope/scopeContext');
+const { assertConcurrencyVersion, bumpConcurrencyUpdate } = require('../platform/concurrency.service');
+
+/** Destination may be outside the requester's department; must exist and be active in tenant. */
+const assertTransferDestinationActive = async (destLocationId, tenantId) => {
+    const loc = await prisma.location.findFirst({
+        where: { id: destLocationId, tenantId, isActive: true },
+        select: { id: true },
+    });
+    if (!loc) {
+        throw Object.assign(new Error('Destination location not found or inactive'), { status: 400 });
+    }
+};
+
+const TERMINAL_STATUSES = ['POSTED', 'REJECTED'];
+const PENDING_APPROVAL_STATUSES = ['PENDING_DEPT', 'PENDING_FINANCE'];
 
 // ─── Auto-number ──────────────────────────────────────────────────────────────
 
-const generateTransferNo = async (tenantId) => {
-    const prefix = `TRF-${new Date().toISOString().slice(0, 7).replace('-', '')}`;
-    const last = await prisma.storeTransfer.findFirst({
-        where: { tenantId, transferNo: { startsWith: prefix } },
-        orderBy: { transferNo: 'desc' },
-        select: { transferNo: true },
-    });
-    const seq = last ? parseInt(last.transferNo.split('-').pop()) + 1 : 1;
-    return `${prefix}-${String(seq).padStart(4, '0')}`;
+const { generateDocNumber, DocPrefix } = require('./docNumbering.service');
+
+const generateTransferNo = async (tenantId, transferDate = new Date()) => {
+    return generateDocNumber(tenantId, DocPrefix.TRANSFER, transferDate);
 };
 
 // ─── Guards ───────────────────────────────────────────────────────────────────
 
-const findTransfer = async (id, tenantId) => {
+const findTransfer = async (id, tenantId, user = null) => {
     const trf = await prisma.storeTransfer.findFirst({
         where: { id, tenantId },
         include: {
-            lines: true,
-            sourceLocation: { select: { name: true } },
-            destLocation: { select: { name: true } },
+            lines: {
+                include: {
+                    item: { select: { name: true, barcode: true } },
+                },
+            },
+            sourceLocation: { select: { name: true, departmentId: true } },
+            destLocation: { select: { name: true, departmentId: true } },
+            requestedByUser: { select: { firstName: true, lastName: true } },
+            approvalRequest: {
+                include: {
+                    steps: {
+                        orderBy: { stepNumber: 'asc' },
+                        include: {
+                            requiredRole: { select: { code: true, name: true } },
+                            actedByUser: { select: { firstName: true, lastName: true } },
+                        },
+                    },
+                },
+            },
         },
     });
     if (!trf) throw Object.assign(new Error('Transfer not found'), { status: 404 });
+    if (user) {
+        const scope = await resolveScopeContext(user, tenantId);
+        await assertInScope(SCOPE_MODULE.TRANSFER, trf, scope, 'read');
+    }
     return trf;
 };
 
@@ -42,40 +108,232 @@ const assertStatus = (trf, ...allowed) => {
     if (!allowed.includes(trf.status))
         throw Object.assign(
             new Error(`Transfer must be in ${allowed.join(' or ')} status, currently ${trf.status}`),
-            { status: 422 }
+            { status: 422 },
         );
 };
 
-const assertLocked = (trf) => {
-    const immutable = [
-        'PENDING_DEPT',
-        'PENDING_FINANCE',
-        'PENDING_FINAL',
-        'SUBMITTED',
-        'APPROVED',
-        'IN_TRANSIT',
-        'RECEIVED',
-        'CLOSED',
-        'REJECTED',
+const { assertLinesHaveStockAtLocation } = require('./location-item-resolution.service');
+
+/** Ensure each line has StockBalance at source and sufficient on-hand qty. */
+const assertTransferLinesAtSource = async (tenantId, sourceLocationId, lines) => {
+    if (!lines?.length) {
+        throw Object.assign(new Error('At least one line is required'), { status: 400 });
+    }
+    for (const l of lines) {
+        assertIntegerQuantity({
+            qty: l.requestedQty,
+            field: 'requestedQty',
+            message: 'Quantity must be a whole number (integer). Fractional quantities are not allowed.',
+            details: { itemId: l.itemId, requestedQty: Number(l.requestedQty) },
+        });
+    }
+    const normalized = lines.map((l) => ({
+        itemId: l.itemId,
+        locationId: sourceLocationId,
+        qty: l.requestedQty,
+        requestedQty: l.requestedQty,
+    }));
+    await assertLinesHaveStockAtLocation(prisma, tenantId, normalized, {
+        defaultLocationId: sourceLocationId,
+        requirePositiveOnHand: true,
+        validateQtyAgainstOnHand: true,
+    });
+};
+
+/**
+ * Send Back targets: Creator (step 0) + prior participants.
+ * Skip STEP rows acted by the document creator (covered by Creator target).
+ */
+const buildTransferSendBackTargets = (trf, approval) => {
+    if (!trf || !approval) return [];
+    const currentStepNo = Number(approval.currentStep);
+    if (currentStepNo <= 0) return [];
+
+    const creatorId = trf.requestedBy || null;
+    const targets = [
+        {
+            stepNumber: 0,
+            targetType: 'CREATOR',
+            roleCode: null,
+            actorName: userDisplayName(trf.requestedByUser) || null,
+        },
     ];
-    if (immutable.includes(trf.status))
-        throw Object.assign(
-            new Error(`Transfer is locked (status: ${trf.status}) and cannot be modified`),
-            { status: 423 }
-        );
+
+    const steps = Array.isArray(approval.steps)
+        ? [...approval.steps].sort((a, b) => a.stepNumber - b.stepNumber)
+        : [];
+
+    for (const st of steps) {
+        if (st.stepNumber >= currentStepNo) break;
+        const actedById = st.actedBy || st.actedByUser?.id || null;
+        if (creatorId && actedById && String(actedById) === String(creatorId)) {
+            continue;
+        }
+        const roleCode = st.requiredRole?.code || st.requiredRole || null;
+        targets.push({
+            stepNumber: st.stepNumber,
+            targetType: 'STEP',
+            roleCode,
+            actorName: userDisplayName(st.actedByUser) || null,
+        });
+    }
+
+    return targets;
+};
+
+/**
+ * Stock gate from Dept Manager (step 1) through final Finance post.
+ * Source location is the transfer header location.
+ */
+const buildTransferCheckoutStockGate = async (trf) => {
+    const approval = trf?.approvalRequest;
+    if (!approval) return null;
+    const current = Number(approval.currentStep);
+    const total = Number(approval.totalSteps);
+    if (!Number.isFinite(current) || current < 1) return null;
+    if (!Number.isFinite(total) || current > total) return null;
+    const status = String(trf.status || '').toUpperCase();
+    if (status === 'POSTED' || status === 'REJECTED') return null;
+    if (!PENDING_APPROVAL_STATUSES.includes(status)) return null;
+
+    const sourceLocationId = trf.sourceLocationId;
+    const lines = trf.lines || [];
+    if (!sourceLocationId || !lines.length) return { ok: true, blockers: [] };
+
+    const neededByItem = new Map();
+    for (const line of lines) {
+        const itemId = line.itemId;
+        if (!itemId) continue;
+        neededByItem.set(itemId, (neededByItem.get(itemId) || 0) + Number(line.requestedQty || 0));
+    }
+
+    const blockers = [];
+    const tenantId = trf.tenantId;
+    for (const [itemId, requested] of neededByItem.entries()) {
+        const stock = await prisma.stockBalance.findUnique({
+            where: {
+                tenantId_itemId_locationId: { tenantId, itemId, locationId: sourceLocationId },
+            },
+            include: { item: { select: { name: true } } },
+        });
+        const available = stock ? Number(stock.qtyOnHand) - Number(stock.qtyBlocked || 0) : 0;
+        if (!stock || available < requested - 1e-9) {
+            blockers.push({
+                itemName: stock?.item?.name || itemId,
+                available,
+                requested,
+            });
+        }
+    }
+    return { ok: blockers.length === 0, blockers };
+};
+
+const assertLocked = (trf) => {
+    if (trf.status !== 'DRAFT') {
+        const message =
+            trf.status === 'REJECTED'
+                ? 'Rejected transfers are read-only. Create a new transfer to repeat the operation (Ch.2.7).'
+                : `Transfer is locked (status: ${trf.status}) and cannot be modified`;
+        throw Object.assign(new Error(message), { status: 423 });
+    }
+};
+
+const transferIncludeCore = {
+    sourceLocation: { select: { name: true } },
+    destLocation: { select: { name: true } },
+    requestedByUser: { select: { firstName: true, lastName: true } },
+    approvedByUser: { select: { firstName: true, lastName: true } },
+    receivedByUser: { select: { firstName: true, lastName: true } },
+    rejectedByUser: { select: { firstName: true, lastName: true } },
+    lines: {
+        include: {
+            item: { select: { name: true, barcode: true } },
+            uom: { select: { abbreviation: true } },
+        },
+    },
+    approvalRequest: {
+        include: {
+            steps: {
+                orderBy: { stepNumber: 'asc' },
+                include: {
+                    requiredRole: { select: { code: true, name: true } },
+                    actedByUser: { select: { firstName: true, lastName: true } },
+                },
+            },
+        },
+    },
+};
+
+/** Full detail include (requires postedBy/postedAt migration). */
+const transferInclude = {
+    ...transferIncludeCore,
+    postedByUser: { select: { firstName: true, lastName: true } },
+};
+
+/** Fallback when postedBy columns are not yet migrated. */
+const transferIncludeWithoutPostedBy = { ...transferIncludeCore };
+
+/** Last-resort detail load (lines without item/uom joins). */
+const transferIncludeMinimal = {
+    sourceLocation: { select: { name: true } },
+    destLocation: { select: { name: true } },
+    requestedByUser: { select: { firstName: true, lastName: true } },
+    approvedByUser: { select: { firstName: true, lastName: true } },
+    receivedByUser: { select: { firstName: true, lastName: true } },
+    rejectedByUser: { select: { firstName: true, lastName: true } },
+    lines: true,
+    approvalRequest: {
+        include: {
+            steps: {
+                orderBy: { stepNumber: 'asc' },
+                include: { requiredRole: { select: { code: true, name: true } } },
+            },
+        },
+    },
 };
 
 // ─── CRUD ─────────────────────────────────────────────────────────────────────
 
-const createTransfer = async ({ tenantId, userId, sourceLocationId, destLocationId, transferDate, requiredBy, reason, notes, lines = [] }) => {
+const createTransfer = async ({
+    tenantId,
+    userId,
+    user = null,
+    sourceLocationId,
+    destLocationId,
+    transferDate,
+    requiredBy,
+    reason,
+    notes,
+    lines = [],
+}) => {
+    if (user) {
+        const { isTransferCreateActorRole } = require('./transferWorkflowContext.util');
+        if (!isTransferCreateActorRole(user.role)) {
+            throw Object.assign(
+                new Error(
+                    'Only Department Manager or Storekeeper (or Org/Super governance) may create transfers.',
+                ),
+                { status: 403 },
+            );
+        }
+    }
     if (!sourceLocationId) throw Object.assign(new Error('sourceLocationId is required'), { status: 400 });
     if (!destLocationId) throw Object.assign(new Error('destLocationId is required'), { status: 400 });
-    if (sourceLocationId === destLocationId) throw Object.assign(new Error('Source and destination must be different locations'), { status: 400 });
+    if (sourceLocationId === destLocationId)
+        throw Object.assign(new Error('Source and destination must be different locations'), { status: 400 });
     if (lines.length === 0) throw Object.assign(new Error('At least one line is required'), { status: 400 });
+
+    if (user) {
+        const scope = await resolveScopeContext(user, tenantId);
+        await assertLocationInScope(sourceLocationId, tenantId, scope, 'create');
+    }
+    await assertTransferDestinationActive(destLocationId, tenantId);
+
+    await assertTransferLinesAtSource(tenantId, sourceLocationId, lines);
 
     const transferNo = await generateTransferNo(tenantId);
 
-    return prisma.storeTransfer.create({
+    const created = await prisma.storeTransfer.create({
         data: {
             tenantId,
             transferNo,
@@ -87,7 +345,7 @@ const createTransfer = async ({ tenantId, userId, sourceLocationId, destLocation
             reason,
             notes,
             lines: {
-                create: lines.map(l => ({
+                create: lines.map((l) => ({
                     itemId: l.itemId,
                     uomId: l.uomId,
                     requestedQty: l.requestedQty,
@@ -97,57 +355,161 @@ const createTransfer = async ({ tenantId, userId, sourceLocationId, destLocation
         },
         include: { lines: true },
     });
+
+    await logAction({
+        tenantId,
+        entityType: EntityType.TRANSFER,
+        entityId: created.id,
+        action: 'CREATE',
+        changedBy: userId,
+        note: `STORE_TRANSFER_CREATE transferNo=${created.transferNo}`,
+        afterValue: { transferNo: created.transferNo, status: created.status },
+    });
+
+    return created;
 };
 
-const updateTransfer = async (id, tenantId, { sourceLocationId, destLocationId, requiredBy, reason, notes, lines }) => {
-    const trf = await findTransfer(id, tenantId);
+const updateTransfer = async (id, tenantId, { sourceLocationId, destLocationId, requiredBy, reason, notes, lines, concurrencyVersion, postingDate, assignedPostingPeriod }, user = null, expectedVersion = null) => {
+    const trf = await findTransfer(id, tenantId, user);
+    if (user && trf.status === 'DRAFT') {
+        const { assertDraftEditable } = require('../platform/draftGovernance.service');
+        await assertDraftEditable({ doc: trf, family: 'transfer', user });
+    }
+    const { assertPostingPeriodFieldsImmutable } = require('../platform/postingPeriod.util');
+    assertPostingPeriodFieldsImmutable(trf, { postingDate, assignedPostingPeriod });
+    const { assertDocumentEditableByLifecycle } = require('../platform/lifecyclePresentation.service');
+    assertDocumentEditableByLifecycle('TRANSFER', trf.status, { notes: trf.notes });
     assertLocked(trf);
     assertStatus(trf, 'DRAFT');
+    assertConcurrencyVersion(
+        expectedVersion ?? concurrencyVersion,
+        trf.concurrencyVersion,
+        { required: true, audit: { tenantId, entityType: EntityType.TRANSFER, entityId: id, changedBy: user?.id ?? trf.requestedBy } },
+    );
+
+    const effectiveSource = sourceLocationId ?? trf.sourceLocationId;
+    if (lines?.length) {
+        await assertTransferLinesAtSource(tenantId, effectiveSource, lines);
+    }
 
     return prisma.$transaction(async (tx) => {
         await tx.storeTransfer.update({
-            where: { id },
-            data: {
+            where: { id, tenantId },
+            data: bumpConcurrencyUpdate({
                 sourceLocationId,
                 destLocationId,
                 requiredBy: requiredBy ? new Date(requiredBy) : undefined,
                 reason,
                 notes,
                 updatedAt: new Date(),
-            },
+            }),
         });
         if (lines) {
             await tx.storeTransferLine.deleteMany({ where: { transferId: id } });
             if (lines.length === 0) throw Object.assign(new Error('At least one line is required'), { status: 400 });
             await tx.storeTransferLine.createMany({
-                data: lines.map(l => ({ transferId: id, itemId: l.itemId, uomId: l.uomId, requestedQty: l.requestedQty, notes: l.notes })),
+                data: lines.map((l) => ({
+                    transferId: id,
+                    itemId: l.itemId,
+                    uomId: l.uomId,
+                    requestedQty: l.requestedQty,
+                    notes: l.notes,
+                })),
             });
         }
-        return tx.storeTransfer.findUnique({ where: { id }, include: { lines: true } });
+        return tx.storeTransfer.findFirst({ where: { id, tenantId }, include: { lines: true } });
     });
 };
 
-const deleteTransfer = async (id, tenantId) => {
-    const trf = await findTransfer(id, tenantId);
+const deleteTransfer = async (id, tenantId, user = null, expectedVersion = null) => {
+    const trf = await findTransfer(id, tenantId, user);
     assertStatus(trf, 'DRAFT');
-    await prisma.storeTransfer.delete({ where: { id } });
+    assertConcurrencyVersion(expectedVersion, trf.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.TRANSFER, entityId: id, changedBy: user?.id ?? trf.requestedBy },
+    });
+    await prisma.storeTransfer.delete({ where: { id, tenantId } });
 };
 
 // ─── State Machine ────────────────────────────────────────────────────────────
 
-const submitTransfer = async (id, tenantId, userId) => {
-    const trf = await findTransfer(id, tenantId);
+const submitTransfer = async (id, tenantId, user, expectedVersion = null) => {
+    const userId = user.id;
+    const trf = await prisma.storeTransfer.findFirst({
+        where: { id, tenantId },
+        include: transferInclude,
+    });
+    if (!trf) throw Object.assign(new Error('Transfer not found'), { status: 404 });
+    if (user) {
+        const scope = await resolveScopeContext(user, tenantId);
+        await assertInScope(SCOPE_MODULE.TRANSFER, trf, scope, 'read');
+    }
     assertStatus(trf, 'DRAFT');
+    assertConcurrencyVersion(expectedVersion, trf.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.TRANSFER, entityId: id, changedBy: userId },
+    });
 
-    const updatedTrf = await prisma.$transaction(async (tx) => {
-        await tx.storeTransfer.update({
-            where: { id },
-            data: { status: transferStatusForActiveStep(1), updatedAt: new Date() },
+    if (trf.approvalRequest && Number(trf.approvalRequest.currentStep) === 0) {
+        if (trf.requestedBy !== userId) {
+            throw Object.assign(new Error('Only the document creator may resubmit after Send Back.'), { status: 403 });
+        }
+        const chain = await resolveWorkflowForDocument({ moduleKey: 'TRANSFER', tenantId });
+        const firstRole = normalizeRole(chain.roleCodes?.[0]);
+        const submitterRole = normalizeRole(user.role);
+        const preApproveFirst =
+            Boolean(firstRole) && Boolean(submitterRole) && firstRole === submitterRole;
+        const enterStatus = preApproveFirst ? 'PENDING_FINANCE' : 'PENDING_DEPT';
+
+        const result = await prisma.$transaction(async (tx) => {
+            await executeCreatorResubmitInTx(tx, {
+                approvalRequest: trf.approvalRequest,
+                userId,
+                tenantId,
+                entityType: EntityType.TRANSFER,
+                entityId: id,
+                documentStatusBefore: trf.status,
+                documentStatusAfter: enterStatus,
+                resubmitNotePrefix: 'STORE_TRANSFER_RESUBMIT',
+            });
+            if (preApproveFirst) {
+                const step1 = trf.approvalRequest.steps?.find((s) => Number(s.stepNumber) === 1);
+                if (step1) {
+                    await tx.approvalStep.update({
+                        where: { id: step1.id },
+                        data: {
+                            status: 'APPROVED',
+                            actedByUser: { connect: { id: userId } },
+                            actedAt: new Date(),
+                        },
+                    });
+                }
+                await tx.approvalRequest.update({
+                    where: { id: trf.approvalRequest.id },
+                    data: { currentStep: 2, status: 'PENDING' },
+                });
+            }
+            await tx.storeTransfer.update({
+                where: { id, tenantId },
+                data: bumpConcurrencyUpdate({ status: enterStatus, updatedAt: new Date() }),
+            });
+            return tx.storeTransfer.findFirst({ where: { id, tenantId }, include: transferInclude });
         });
-        await createStoreTransferApprovalRequest(tx, {
+        return result;
+    }
+
+    let enterStatus = 'PENDING_DEPT';
+    const updatedTrf = await prisma.$transaction(async (tx) => {
+        const created = await createStoreTransferApprovalRequest(tx, {
             tenantId,
             transferId: id,
             createdBy: userId,
+            userRole: user.role,
+        });
+        enterStatus = created.enterStatus;
+        await tx.storeTransfer.update({
+            where: { id, tenantId },
+            data: bumpConcurrencyUpdate({ status: enterStatus, updatedAt: new Date() }),
         });
         return tx.storeTransfer.findFirst({
             where: { id, tenantId },
@@ -160,10 +522,11 @@ const submitTransfer = async (id, tenantId, userId) => {
     });
 
     try {
+        const notifyRole = enterStatus === 'PENDING_FINANCE' ? 'FINANCE_MANAGER' : 'DEPT_MANAGER';
         const approvers = await prisma.tenantMember.findMany({
             where: {
                 tenantId,
-                role: { code: { in: ['DEPT_MANAGER'] } },
+                role: { code: { in: [notifyRole] } },
                 isActive: true,
                 user: { isActive: true },
             },
@@ -182,227 +545,438 @@ const submitTransfer = async (id, tenantId, userId) => {
     } catch (err) {
         console.error('Failed to send transfer approval email:', err);
     }
+
+    await logAction({
+        tenantId,
+        entityType: EntityType.TRANSFER,
+        entityId: id,
+        action: 'SUBMIT',
+        changedBy: userId,
+        note: `STORE_TRANSFER_SUBMIT transferNo=${updatedTrf.transferNo}`,
+        afterValue: { transferNo: updatedTrf.transferNo, status: updatedTrf.status },
+    });
+
     return updatedTrf;
 };
 
-const approveTransfer = async (id, tenantId, userId, userRole) => {
-    const trf = await findTransfer(id, tenantId);
-    assertStatus(trf, 'PENDING_DEPT', 'PENDING_FINANCE', 'PENDING_FINAL', 'SUBMITTED');
-    return processStoreTransferApproval({
-        transferId: id,
-        tenantId,
-        userId,
-        userRole,
-        action: 'APPROVE',
-        comment: null,
+const approveTransfer = async (id, tenantId, user, expectedVersion = null) => {
+    const userId = user.id;
+    const userRole = user.role;
+    const trf = await findTransfer(id, tenantId, user);
+    assertStatus(trf, ...PENDING_APPROVAL_STATUSES);
+    assertConcurrencyVersion(expectedVersion, trf.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.TRANSFER, entityId: id, changedBy: userId },
     });
+
+    // Dept Manager onward: hard-block when source stock cannot cover lines.
+    const stockGate = await buildTransferCheckoutStockGate({ ...trf, tenantId });
+    if (stockGate && !stockGate.ok) {
+        const names = stockGate.blockers.map((b) => b.itemName).join(', ');
+        throw Object.assign(
+            new Error(`Insufficient stock to approve transfer. Review stock for: ${names}`),
+            { status: 422 },
+        );
+    }
+
+    let posted = false;
+
+    const result = await prisma.$transaction(async (tx) => {
+        const outcome = await processStoreTransferApproval({
+            tx,
+            transferId: id,
+            tenantId,
+            userId,
+            user,
+            action: 'APPROVE',
+            comment: null,
+        });
+
+        if (outcome.needsPosting) {
+            await postingEngine.postTransferInTransaction(tx, outcome.transfer, userId);
+            posted = true;
+        }
+
+        return tx.storeTransfer.findFirst({
+            where: { id, tenantId },
+            include: transferInclude,
+        });
+    });
+
+    await logAction({
+        tenantId,
+        entityType: EntityType.TRANSFER,
+        entityId: id,
+        action: posted ? 'POST' : 'APPROVE',
+        changedBy: userId,
+        note: posted
+            ? `STORE_TRANSFER_POSTED transferNo=${result.transferNo}`
+            : `STORE_TRANSFER_APPROVE_STEP transferNo=${result.transferNo} status=${result.status}`,
+        afterValue: { transferNo: result.transferNo, status: result.status },
+    });
+
+    if (posted) {
+        await logGovernedEvent({
+            tenantId,
+            entityType: EntityType.TRANSFER,
+            entityId: id,
+            action: 'POST',
+            changedBy: userId,
+            eventType: 'STORE_TRANSFER_POSTED',
+            note: `STORE_TRANSFER_POSTED transferNo=${result.transferNo}`,
+            afterValue: { transferNo: result.transferNo, status: 'POSTED', referenceType: 'TRANSFER' },
+        });
+    }
+
+    return result;
 };
 
-const rejectTransfer = async (id, tenantId, userId, userRole, reason) => {
+const sendBackTransfer = async (id, tenantId, user, reason, expectedVersion = null, targetStepNumber = null) => {
+    const trimmedReason = normalizeReason(reason);
+    const userId = user.id;
+    const trf = await findTransfer(id, tenantId, user);
+    assertStatus(trf, ...PENDING_APPROVAL_STATUSES);
+    assertConcurrencyVersion(expectedVersion, trf.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.TRANSFER, entityId: id, changedBy: userId },
+    });
+    const approval = trf.approvalRequest;
+    if (!approval) {
+        throw Object.assign(new Error('No approval workflow found for this transfer.'), { status: 404 });
+    }
+    const currentStepNo = Number(approval.currentStep);
+    const step = approval.steps.find((s) => s.stepNumber === currentStepNo);
+    if (!step || step.status !== 'PENDING') {
+        throw Object.assign(new Error('No pending approval step for this transfer.'), { status: 422 });
+    }
+    assertUserHasTransferStepPermission(user, trf.status, step.requiredRole?.code);
+
+    const allowedTargets = buildTransferSendBackTargets(trf, approval);
+    let targetStepNo;
+    if (targetStepNumber == null || targetStepNumber === '') {
+        targetStepNo = currentStepNo <= 1 ? 0 : currentStepNo - 1;
+    } else {
+        targetStepNo = Number(targetStepNumber);
+        if (!Number.isInteger(targetStepNo) || !allowedTargets.some((t) => t.stepNumber === targetStepNo)) {
+            throw Object.assign(new Error('Send Back target must be a prior workflow participant.'), {
+                status: 422,
+            });
+        }
+    }
+
+    const nextStatus = targetStepNo === 0 ? 'DRAFT' : transferStatusForActiveStep(targetStepNo);
+    const result = await prisma.$transaction(async (tx) => {
+        const updateData = bumpConcurrencyUpdate({
+            status: nextStatus,
+            updatedAt: new Date(),
+            ...(nextStatus === 'DRAFT'
+                ? { notes: appendSendBackNotes(trf.notes, trimmedReason) }
+                : {}),
+        });
+        const guarded = await tx.storeTransfer.updateMany({
+            where: { id, tenantId, status: trf.status },
+            data: updateData,
+        });
+        if (guarded.count === 0) {
+            throw Object.assign(new Error('Transfer changed while sending back.'), {
+                status: 409,
+                code: 'TRANSFER_SEND_BACK_CONFLICT',
+            });
+        }
+        await executeWorkflowSendBackInTx(tx, {
+            approvalRequest: approval,
+            sourceStepNumber: currentStepNo,
+            forceTargetStepNumber: targetStepNo,
+            reason: trimmedReason,
+            userId,
+            tenantId,
+            entityType: EntityType.TRANSFER,
+            entityId: id,
+            documentStatusBefore: trf.status,
+            documentStatusAfter: nextStatus,
+        });
+        return tx.storeTransfer.findFirst({ where: { id, tenantId }, include: transferInclude });
+    });
+    return result;
+};
+
+const rejectTransfer = async (id, tenantId, user, reason, expectedVersion = null) => {
     if (!reason) throw Object.assign(new Error('Rejection reason required'), { status: 400 });
-    const trf = await findTransfer(id, tenantId);
-    assertStatus(trf, 'PENDING_DEPT', 'PENDING_FINANCE', 'PENDING_FINAL', 'SUBMITTED');
-    return processStoreTransferApproval({
+    const userId = user.id;
+    const trf = await findTransfer(id, tenantId, user);
+
+    // Creator reject Returned (DRAFT + [Send Back] notes / currentStep 0).
+    const isReturned =
+        isSendBackReturned(trf.status, trf.notes) ||
+        (String(trf.status || '').toUpperCase() === 'DRAFT' &&
+            Number(trf.approvalRequest?.currentStep) === 0);
+    if (isReturned && String(trf.status || '').toUpperCase() === 'DRAFT') {
+        if (trf.requestedBy !== userId) {
+            throw Object.assign(new Error('Only the document creator can reject a returned transfer.'), {
+                status: 403,
+            });
+        }
+        assertConcurrencyVersion(expectedVersion, trf.concurrencyVersion, {
+            required: true,
+            audit: { tenantId, entityType: EntityType.TRANSFER, entityId: id, changedBy: userId },
+        });
+        await prisma.storeTransfer.updateMany({
+            where: { id, tenantId, status: 'DRAFT' },
+            data: bumpConcurrencyUpdate({
+                status: 'REJECTED',
+                rejectedBy: userId,
+                rejectionReason: reason,
+                updatedAt: new Date(),
+            }),
+        });
+        await logAction({
+            tenantId,
+            entityType: EntityType.TRANSFER,
+            entityId: id,
+            action: 'REJECT',
+            changedBy: userId,
+            note: `Creator rejected returned transfer: ${reason}`,
+            beforeValue: { status: trf.status },
+            afterValue: { status: 'REJECTED' },
+        });
+        return prisma.storeTransfer.findFirst({ where: { id, tenantId }, include: transferInclude });
+    }
+
+    assertStatus(trf, ...PENDING_APPROVAL_STATUSES);
+    assertConcurrencyVersion(expectedVersion, trf.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.TRANSFER, entityId: id, changedBy: userId },
+    });
+    const outcome = await processStoreTransferApproval({
         transferId: id,
         tenantId,
         userId,
-        userRole,
+        user,
         action: 'REJECT',
         comment: reason,
     });
-};
-
-/** Dispatch: APPROVED → IN_TRANSIT. Validates source stock before moving OUT. */
-const dispatchTransfer = async (id, tenantId, userId) => {
-    const trf = await findTransfer(id, tenantId);
-    assertStatus(trf, 'APPROVED');
-
-    // Pre-flight stock check
-    for (const line of trf.lines) {
-        const balance = await prisma.stockBalance.findUnique({
-            where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: trf.sourceLocationId } },
-        });
-        const onHand = balance ? Number(balance.qtyOnHand) : 0;
-        if (onHand < Number(line.requestedQty))
-            throw Object.assign(
-                new Error(`Insufficient stock for item ${line.itemId}: available=${onHand}, requested=${Number(line.requestedQty)}`),
-                { status: 422 }
-            );
-    }
-
-    return prisma.storeTransfer.update({
-        where: { id },
-        data: { status: 'IN_TRANSIT', dispatchedAt: new Date(), updatedAt: new Date() },
+    const result = outcome.transfer;
+    await logAction({
+        tenantId,
+        entityType: EntityType.TRANSFER,
+        entityId: id,
+        action: 'REJECT',
+        changedBy: userId,
+        note: `STORE_TRANSFER_REJECT transferNo=${result.transferNo}`,
+        afterValue: { transferNo: result.transferNo, status: result.status },
     });
-};
-
-/**
- * ATOMIC: Destination confirms receipt → post TRANSFER_OUT (source) + TRANSFER_IN (dest).
- * One prisma.$transaction() — full rollback on any failure.
- */
-const receiveTransfer = async (id, tenantId, userId, receivedLines = []) => {
-    const trf = await findTransfer(id, tenantId);
-    assertStatus(trf, 'IN_TRANSIT');
-    await checkPeriodLock(tenantId, trf.transferDate || trf.createdAt || new Date());
-
-    await prisma.$transaction(async (tx) => {
-        for (const line of trf.lines) {
-            // Determine received qty — use supplied override or default to requestedQty
-            const override = receivedLines.find(r => r.lineId === line.id);
-            const receivedQty = override ? Number(override.receivedQty) : Number(line.requestedQty);
-            if (receivedQty <= 0) continue; // Skip zero-qty lines
-
-            // Source balance — must still have enough (checked again inside tx)
-            const srcBalance = await tx.stockBalance.findUnique({
-                where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: trf.sourceLocationId } },
-            });
-            if (!srcBalance || Number(srcBalance.qtyOnHand) < receivedQty)
-                throw new Error(`Insufficient source stock for item ${line.itemId} at posting time.`);
-
-            const wac = Number(srcBalance.wacUnitCost);
-            const value = receivedQty * wac;
-
-            // ── OUT: debit source ──────────────────────────────────────────
-            await tx.stockBalance.update({
-                where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: trf.sourceLocationId } },
-                data: { qtyOnHand: { decrement: receivedQty }, lastUpdated: new Date() },
-            });
-
-            await tx.inventoryLedger.create({
-                data: {
-                    tenantId,
-                    itemId: line.itemId,
-                    locationId: trf.sourceLocationId,
-                    movementType: 'TRANSFER_OUT',
-                    qtyOut: receivedQty,
-                    qtyIn: 0,
-                    unitCost: wac,
-                    totalValue: value,
-                    referenceType: 'TRANSFER',
-                    referenceId: trf.id,
-                    referenceNo: trf.transferNo,
-                    notes: `Transfer OUT to ${trf.destLocation.name}`,
-                    createdBy: userId,
-                },
-            });
-
-            // ── IN: credit destination — recalculate WAC ──────────────────
-            const dstBalance = await tx.stockBalance.findUnique({
-                where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: trf.destLocationId } },
-            });
-            const prevQty = dstBalance ? Number(dstBalance.qtyOnHand) : 0;
-            const prevWac = dstBalance ? Number(dstBalance.wacUnitCost) : 0;
-            const newTotalQty = prevQty + receivedQty;
-            const newWac = newTotalQty > 0
-                ? ((prevQty * prevWac) + (receivedQty * wac)) / newTotalQty
-                : wac;
-
-            await tx.stockBalance.upsert({
-                where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: trf.destLocationId } },
-                create: { tenantId, itemId: line.itemId, locationId: trf.destLocationId, qtyOnHand: receivedQty, wacUnitCost: wac, lastUpdated: new Date() },
-                update: { qtyOnHand: newTotalQty, wacUnitCost: newWac, lastUpdated: new Date() },
-            });
-
-            await tx.inventoryLedger.create({
-                data: {
-                    tenantId,
-                    itemId: line.itemId,
-                    locationId: trf.destLocationId,
-                    movementType: 'TRANSFER_IN',
-                    qtyIn: receivedQty,
-                    qtyOut: 0,
-                    unitCost: wac,
-                    totalValue: value,
-                    referenceType: 'TRANSFER',
-                    referenceId: trf.id,
-                    referenceNo: trf.transferNo,
-                    notes: `Transfer IN from ${trf.sourceLocation.name}`,
-                    createdBy: userId,
-                },
-            });
-
-            // Update line.receivedQty and cost
-            await tx.storeTransferLine.update({
-                where: { id: line.id },
-                data: { receivedQty, unitCost: wac, totalValue: value },
-            });
-        }
-
-        // ── Lock transfer → RECEIVED → CLOSED ──
-        await tx.storeTransfer.update({
-            where: { id },
-            data: { status: 'RECEIVED', receivedBy: userId, receivedAt: new Date(), closedAt: new Date(), updatedAt: new Date() },
-        });
-    });
-
-    // Return closed transfer  
-    return prisma.storeTransfer.findUnique({
-        where: { id },
-        include: { lines: { include: { item: { select: { name: true } }, uom: { select: { abbreviation: true } } } }, sourceLocation: true, destLocation: true },
-    });
+    return result;
 };
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
 
-const listTransfers = async (tenantId, { status, sourceLocationId, destLocationId, dateFrom, dateTo, page = 1, limit = 20 } = {}) => {
-    const where = {
-        tenantId,
-        ...(status ? { status } : {}),
+const listTransfers = async (
+    tenantId,
+    {
+        status,
+        workflowBucket,
+        sourceLocationId,
+        destLocationId,
+        dateFrom,
+        dateTo,
+        page = 1,
+        limit = 20,
+    } = {},
+    user = null,
+) => {
+    const scope = user ? await resolveScopeContext(user, tenantId) : null;
+    const scopeWhere = scope ? scopeWhereFor(SCOPE_MODULE.TRANSFER, scope) : {};
+
+    if (scope && !scope.isTenantWide) {
+        if (sourceLocationId && !scope.allowedLocationIds.includes(sourceLocationId)) {
+            const deptOk =
+                scope.profile === 'DEPARTMENT' &&
+                scope.departmentId &&
+                (await prisma.location.findFirst({
+                    where: { id: sourceLocationId, tenantId, departmentId: scope.departmentId },
+                    select: { id: true },
+                }));
+            if (!deptOk) throw createScopeError('Source location filter outside your scope.', 400);
+        }
+        if (destLocationId && !scope.allowedLocationIds.includes(destLocationId)) {
+            const deptOk =
+                scope.profile === 'DEPARTMENT' &&
+                scope.departmentId &&
+                (await prisma.location.findFirst({
+                    where: { id: destLocationId, tenantId, departmentId: scope.departmentId },
+                    select: { id: true },
+                }));
+            if (!deptOk) throw createScopeError('Destination location filter outside your scope.', 400);
+        }
+    }
+    const dateRange =
+        dateFrom || dateTo
+            ? {
+                  transferDate: {
+                      ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
+                      ...(dateTo ? { lte: new Date(dateTo) } : {}),
+                  },
+              }
+            : {};
+
+    let statusFilter;
+    const bucket = workflowBucket ? String(workflowBucket).trim().toUpperCase() : null;
+
+    if (bucket && !ALLOWED_TRANSFER_WORKFLOW_BUCKETS.has(bucket)) {
+        throw Object.assign(
+            new Error(
+                `Invalid workflowBucket "${workflowBucket}". Allowed: ${[...ALLOWED_TRANSFER_WORKFLOW_BUCKETS].join(', ')}`,
+            ),
+            { status: 400 },
+        );
+    }
+
+    if (status) {
+        const normalized = String(status).trim().toUpperCase();
+        if (!TRANSFER_LIST_STATUSES.includes(normalized)) {
+            throw Object.assign(
+                new Error(
+                    `Invalid status filter "${status}". Allowed: ${TRANSFER_LIST_STATUSES.join(', ')}`,
+                ),
+                { status: 400 },
+            );
+        }
+        statusFilter = normalized;
+    }
+
+    const listLocationDateFilters = {
         ...(sourceLocationId ? { sourceLocationId } : {}),
         ...(destLocationId ? { destLocationId } : {}),
-        ...(dateFrom || dateTo ? {
-            transferDate: {
-                ...(dateFrom ? { gte: new Date(dateFrom) } : {}),
-                ...(dateTo ? { lte: new Date(dateTo) } : {}),
-            },
-        } : {}),
+        ...dateRange,
     };
-    const [total, data] = await Promise.all([
-        prisma.storeTransfer.count({ where }),
-        prisma.storeTransfer.findMany({
-            where,
-            include: {
-                sourceLocation: { select: { name: true } },
-                destLocation: { select: { name: true } },
-                requestedByUser: { select: { firstName: true, lastName: true } },
-                _count: { select: { lines: true } },
-            },
-            orderBy: { createdAt: 'desc' },
-            skip: (page - 1) * limit,
-            take: limit,
-        }),
-    ]);
-    return { total, page, limit, data };
-};
 
-const getTransfer = async (id, tenantId) => {
-    const trf = await prisma.storeTransfer.findFirst({
-        where: { id, tenantId },
-        include: {
-            sourceLocation: { select: { name: true } },
-            destLocation: { select: { name: true } },
-            requestedByUser: { select: { firstName: true, lastName: true } },
-            approvedByUser: { select: { firstName: true, lastName: true } },
-            receivedByUser: { select: { firstName: true, lastName: true } },
-            rejectedByUser: { select: { firstName: true, lastName: true } },
-            lines: {
+    let where;
+    if (bucket === AWAITING_POSTING_BUCKET) {
+        where = {
+            ...awaitingPostingListWhere(tenantId),
+            ...scopeWhere,
+            ...listLocationDateFilters,
+        };
+    } else if (bucket === PENDING_REVIEW_BUCKET) {
+        where = {
+            ...pendingReviewListWhere(tenantId),
+            ...scopeWhere,
+            ...listLocationDateFilters,
+        };
+    } else {
+        where = {
+            tenantId,
+            ...scopeWhere,
+            ...(statusFilter ? { status: statusFilter } : {}),
+            ...listLocationDateFilters,
+        };
+    }
+    try {
+        const [total, data] = await Promise.all([
+            prisma.storeTransfer.count({ where }),
+            prisma.storeTransfer.findMany({
+                where,
                 include: {
-                    item: { select: { name: true } },
-                    uom: { select: { abbreviation: true } },
-                },
-            },
-            approvalRequest: {
-                include: {
-                    steps: {
-                        orderBy: { stepNumber: 'asc' },
-                        include: { requiredRole: { select: { code: true, name: true } } },
+                    sourceLocation: { select: { name: true } },
+                    destLocation: { select: { name: true } },
+                    requestedByUser: { select: { firstName: true, lastName: true } },
+                    _count: { select: { lines: true } },
+                    approvalRequest: {
+                        select: {
+                            currentStep: true,
+                            totalSteps: true,
+                            status: true,
+                            steps: {
+                                orderBy: { stepNumber: 'asc' },
+                                select: {
+                                    stepNumber: true,
+                                    status: true,
+                                    requiredRole: { select: { code: true } },
+                                },
+                            },
+                        },
                     },
                 },
-            },
-        },
-    });
+                orderBy: { createdAt: 'desc' },
+                skip: (page - 1) * limit,
+                take: limit,
+            }),
+        ]);
+        const scopeMeta = scope ? metaFor(scope, { total }) : null;
+        return { total, page, limit, data: data.map(mapTransferListRow), ...scopeMeta };
+    } catch (err) {
+        logger.error('[Transfer] listTransfers failed', {
+            tenantId,
+            status: statusFilter ?? status,
+            code: err.code,
+            message: err.message,
+        });
+        const msg = String(err.message || '');
+        if (
+            err.code === 'P2023' ||
+            msg.includes('enum') ||
+            msg.includes('TransferStatus') ||
+            msg.includes('invalid input value for enum')
+        ) {
+            throw Object.assign(
+                new Error(
+                    'Transfer list failed: database status values are out of sync with the application. Run pending Prisma migrations (POSTED / finance-post workflow).',
+                ),
+                { status: 500 },
+            );
+        }
+        throw err;
+    }
+};
+
+const getTransfer = async (id, tenantId, user = null) => {
+    if (user) {
+        await findTransfer(id, tenantId, user);
+    }
+    let trf = null;
+    try {
+        trf = await prisma.storeTransfer.findFirst({
+            where: { id, tenantId },
+            include: transferInclude,
+        });
+    } catch (err) {
+        logger.warn('[Transfer] getTransfer full include failed; retrying without postedByUser', {
+            transferId: id,
+            tenantId,
+            code: err.code,
+            message: err.message,
+        });
+        try {
+            trf = await prisma.storeTransfer.findFirst({
+                where: { id, tenantId },
+                include: transferIncludeWithoutPostedBy,
+            });
+        } catch (err2) {
+            logger.warn('[Transfer] getTransfer fallback include failed; using minimal include', {
+                transferId: id,
+                tenantId,
+                code: err2.code,
+                message: err2.message,
+            });
+            trf = await prisma.storeTransfer.findFirst({
+                where: { id, tenantId },
+                include: transferIncludeMinimal,
+            });
+        }
+    }
     if (!trf) throw Object.assign(new Error('Transfer not found'), { status: 404 });
-    return trf;
+    const mapped = mapTransferDetailResponse(trf);
+    const approval = mapped.approvalRequest;
+    const sendBackTargets =
+        approval && PENDING_APPROVAL_STATUSES.includes(String(mapped.status || '').toUpperCase())
+            ? buildTransferSendBackTargets(mapped, approval)
+            : [];
+    const checkoutStockGate = await buildTransferCheckoutStockGate({ ...mapped, tenantId });
+    return {
+        ...mapped,
+        sendBackTargets,
+        checkoutStockGate,
+    };
 };
 
 module.exports = {
@@ -412,8 +986,9 @@ module.exports = {
     submitTransfer,
     approveTransfer,
     rejectTransfer,
-    dispatchTransfer,
-    receiveTransfer,
+    sendBackTransfer,
     listTransfers,
     getTransfer,
+    getEvidence: (id, tenantId, user) =>
+        require('./transferEvidence.service').getTransferEvidence(id, tenantId, user),
 };

@@ -1,10 +1,9 @@
 const settingService = require('../services/setting.service');
 const { logAction, EntityType } = require('../services/auditTrail.service');
 const { success } = require('../utils/response');
-const { normalizeRole } = require('../services/rbac.service');
+const { hasPermission } = require('../middleware/authorize');
 
-const canManageTenantOpeningBalance = (role) =>
-    ['SUPER_ADMIN', 'ADMIN', 'ORG_MANAGER'].includes(normalizeRole(role));
+const canManageTenantOpeningBalance = (user) => hasPermission(user, 'SETTINGS_MANAGE');
 
 // ── GET Setting ────────────────────────────────────────────────────────────────
 const getSetting = async (req, res, next) => {
@@ -25,10 +24,10 @@ const setSetting = async (req, res, next) => {
             const e = new Error('Value is required'); e.statusCode = 400; throw e;
         }
 
-        // OB setting requires SUPER_ADMIN or ADMIN + mandatory reason
+        // OB setting requires SUPER_ADMIN or ORG_MANAGER + mandatory reason
         if (key === 'allowOpeningBalance') {
-            if (!canManageTenantOpeningBalance(req.user.role)) {
-                const e = new Error('Only SUPER_ADMIN, ADMIN, or ORG_MANAGER can modify Opening Balance setting');
+            if (!canManageTenantOpeningBalance(req.user)) {
+                const e = new Error('Only SUPER_ADMIN or ORG_MANAGER can modify Opening Balance setting');
                 e.statusCode = 403; throw e;
             }
             if (value === 'OPEN' && !reason) {
@@ -60,14 +59,14 @@ const getInventoryStatus = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-// ── POST /settings/ob-lock — Lock OB import (SUPER_ADMIN / ADMIN) ─────────────
+// ── POST /settings/ob-lock — Lock OB import (SUPER_ADMIN / ADMIN / ORG_MANAGER) ─
 const lockOB = async (req, res, next) => {
     try {
         const { reason } = req.body;
         const { tenantId, id: userId, role } = req.user;
 
         // Defense-in-depth role check (route middleware also enforces this).
-        if (!canManageTenantOpeningBalance(role)) {
+        if (!canManageTenantOpeningBalance(req.user)) {
             const e = new Error('Only tenant administrators can lock or unlock Opening Balance.');
             e.statusCode = 403; throw e;
         }
@@ -101,7 +100,7 @@ const lockOB = async (req, res, next) => {
     } catch (err) { next(err); }
 };
 
-// ── POST /settings/ob-enable — Enable OB import (SUPER_ADMIN / ADMIN) ─────────
+// ── POST /settings/ob-enable — Enable OB import (SUPER_ADMIN / ADMIN / ORG_MANAGER) ─
 const enableOB = async (req, res, next) => {
     try {
         const { reason } = req.body;
@@ -109,7 +108,7 @@ const enableOB = async (req, res, next) => {
         const normalizedReason = (reason && String(reason).trim()) || 'Initial Setup';
 
         // Defense-in-depth role check (route middleware also enforces this).
-        if (!canManageTenantOpeningBalance(role)) {
+        if (!canManageTenantOpeningBalance(req.user)) {
             const e = new Error('Only tenant administrators can lock or unlock Opening Balance.');
             e.statusCode = 403; throw e;
         }
@@ -120,9 +119,9 @@ const enableOB = async (req, res, next) => {
             tenantId,
             entityType: EntityType.SETTINGS,
             entityId: 'allowOpeningBalance',
-            action: 'REOPEN_PERIOD',
+            action: 'UPDATE',
             changedBy: userId,
-            note: `OB import enabled by tenant administrator — reason: ${normalizedReason}`,
+            note: `OB_IMPORT_ENABLED (not fiscal period reopen) — reason: ${normalizedReason}`,
         });
 
         return success(
@@ -137,7 +136,7 @@ const enableOB = async (req, res, next) => {
 const finalizeOpeningBalance = async (req, res, next) => {
     try {
         const { tenantId, id: userId, role } = req.user;
-        if (!canManageTenantOpeningBalance(role)) {
+        if (!canManageTenantOpeningBalance(req.user)) {
             const e = new Error('Only tenant administrators can finalize Opening Balance.');
             e.statusCode = 403; throw e;
         }

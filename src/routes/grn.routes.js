@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const { authenticate } = require('../middleware/authenticate');
-const { authorize, requirePermission } = require('../middleware/authorize');
+const { requirePermission, requireAnyPermission } = require('../middleware/authorize');
 const ctrl = require('../controllers/grn.controller');
 
 router.use(authenticate);
@@ -32,6 +32,10 @@ router.get('/template', requirePermission('GRN_MANAGE'), ctrl.downloadTemplate);
  *                 type: string
  *                 format: binary
  *                 description: .xlsx / .xls / .csv, max 10 MB
+ *               locationId:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Optional destination warehouse — validates rows against RECEIVING catalog
  *     responses:
  *       200:
  *         description: Parsed lines + row-level validation
@@ -122,28 +126,23 @@ router.post('/import/pdf-preview', requirePermission('GRN_MANAGE'), ctrl.uploadP
 router.post('/', requirePermission('GRN_MANAGE'), ctrl.uploadInvoice, ctrl.createGrn);
 
 // ── List & Detail ──
+// List stays VIEW-only. Detail/evidence: VIEW or MANAGE (approve uses GRN_MANAGE — Breakage pattern).
 router.get('/', requirePermission('GRN_VIEW'), ctrl.listGrns);
-router.get('/:id', requirePermission('GRN_VIEW'), ctrl.getGrn);
+router.get('/:id/evidence', requireAnyPermission('GRN_VIEW', 'GRN_MANAGE'), ctrl.getEvidence);
+router.get('/:id/evidence/pdf', requireAnyPermission('GRN_VIEW', 'GRN_MANAGE'), ctrl.getEvidencePDF);
+router.get('/:id', requireAnyPermission('GRN_VIEW', 'GRN_MANAGE'), ctrl.getGrn);
 
 // ── State Machine ──
 router.post('/:id/validate', requirePermission('GRN_MANAGE'), ctrl.validateGrn);
 router.post('/:id/submit', requirePermission('GRN_MANAGE'), ctrl.submitGrn);
 router.post('/:id/approve', requirePermission('GRN_MANAGE'), ctrl.approveGrn);
 router.post('/:id/reject', requirePermission('GRN_MANAGE'), ctrl.rejectGrn);
-router.post('/:id/resubmit', requirePermission('GRN_MANAGE'), ctrl.resubmitGrn);
-router.post(
-    '/:id/post',
-    authorize('FINANCE_MANAGER', 'ADMIN', 'SUPER_ADMIN', 'ORG_MANAGER'),
-    ctrl.postGrn,
-);
+router.post('/:id/send-back', requirePermission('GRN_MANAGE'), ctrl.sendBackGrn);
+// Finance approval auto-posts via POST /grn/:id/approve (ACC workflow).
+router.post('/:id/post', requirePermission('GRN_MANAGE'), ctrl.postGrn);
 
 // ── Mutations (specific PATCH paths before `/:id`) ──
-// VALIDATED → APPROVED | REJECTED (Cost Control / Admin), or APPROVED → REJECTED (Finance Manager).
-router.patch(
-    '/:id/status',
-    authorize('COST_CONTROL', 'ADMIN', 'ORG_MANAGER', 'SUPER_ADMIN', 'FINANCE_MANAGER'),
-    ctrl.updateGrnStatus,
-);
+// Deprecated — use POST /grn/:id/approve or /reject (ACC workflow).
 router.patch('/:id', requirePermission('GRN_MANAGE'), ctrl.updateGrn);
 router.delete('/:id', requirePermission('GRN_MANAGE'), ctrl.deleteGrn);
 

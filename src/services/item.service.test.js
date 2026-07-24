@@ -261,6 +261,56 @@ test('parseImportFile returns row-level validation error for unknown vendor', as
     assert.match(result.preview[0].errors.join(' | '), /Vendor 'Missing Vendor' not found/);
 });
 
+test('P2 #26 — parseImportFile skips template ghost rows (empty name + blank padding)', async () => {
+    const service = loadServiceWithMocks({
+        rows: [
+            // Official template example: lookup-filled, empty Name → must not inflate invalid
+            {
+                Name: '',
+                Department: 'Housekeeping',
+                Category: 'Amenities',
+                Vendor: 'Best Vendor',
+                'Base Unit': 'Bag (bag)',
+                'Unit Price': '',
+                'Main Store': '',
+            },
+            // Blank validation-range padding
+            {
+                Name: '',
+                Department: '',
+                Category: '',
+                Vendor: '',
+                'Base Unit': '',
+                'Unit Price': '',
+                'Main Store': '',
+            },
+            // Real data row
+            {
+                Name: 'Soap Bar',
+                Department: 'Housekeeping',
+                Category: 'Amenities',
+                Vendor: 'Best Vendor',
+                'Base Unit': 'Bag (bag)',
+                'Unit Price': '12.5',
+                'Main Store': '3',
+            },
+        ],
+        categories: [{ id: 'cat-1', name: 'Amenities' }],
+        units: [{ id: 'unit-bag', name: 'Bag', abbreviation: 'bag' }],
+        departments: [{ id: 'dep-1', name: 'Housekeeping' }],
+        locations: [{ id: 'loc-1', name: 'Main Store', departmentId: 'dep-1' }],
+        suppliers: [{ id: 'sup-1', name: 'Best Vendor' }],
+    });
+
+    const result = await service.parseImportFile('/tmp/fake.xlsx', 'tenant-1');
+    assert.equal(result.total, 1, 'ghost/blank rows must not count toward total');
+    assert.equal(result.invalid, 0, 'ghost rows must not count as invalid');
+    assert.equal(result.valid, 1);
+    assert.equal(result.preview.length, 1);
+    assert.equal(result.preview[0].status, 'VALID');
+    assert.equal(result.preview[0].data.name, 'Soap Bar');
+});
+
 test('getItems clamps take to 1000', async () => {
     let capturedTake;
     const service = loadServiceForListQueries({

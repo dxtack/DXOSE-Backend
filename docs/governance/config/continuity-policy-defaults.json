@@ -1,0 +1,24 @@
+{
+  "$schema": "dx-ose/continuity-policy-defaults/v1",
+  "description": "Operational defaults for Session & Draft Continuity (BDR-010). Values are configurable per deployment; changes here do not require a Constitution amendment.",
+  "bdr": "BDR-010",
+  "constitutionChapters": ["7.12", "7.13", "14.10", "30"],
+  "session": {
+    "proactiveRefreshMarginMinutes": 3,
+    "proactiveRefreshMarginMinMinutes": 2,
+    "proactiveRefreshMarginMaxMinutes": 5,
+    "idleTimeoutMinutes": 30,
+    "activitySignals": ["mouse", "keyboard", "touch", "scroll", "navigation"]
+  },
+  "draft": {
+    "localDebounceMs": 2500,
+    "localDebounceMinMs": 2000,
+    "localDebounceMaxMs": 3000,
+    "localSnapshotIntervalSeconds": 30
+  },
+  "attachments": {
+    "temporaryRetentionHours": 48,
+    "temporaryRetentionMinHours": 24,
+    "temporaryRetentionMaxHours": 72
+  }
+}

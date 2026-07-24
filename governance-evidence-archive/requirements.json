@@ -1,0 +1,4164 @@
+[
+  {
+    "reqId": "1.1-01",
+    "chapter": "1",
+    "section": "1.1",
+    "requirement": "The Constitution shall remain valid regardless of changes to frontend, backend, database, or integration technologies.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.1-001"
+  },
+  {
+    "reqId": "1.1-02",
+    "chapter": "1",
+    "section": "1.1",
+    "requirement": "The platform must fulfill governance obligations defined by this Constitution from a governance perspective.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.1-002"
+  },
+  {
+    "reqId": "1.1-03",
+    "chapter": "1",
+    "section": "1.1",
+    "requirement": "All subordinate governance, UX, workflow, access control, and implementation documents shall conform to this Constitution.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.1-003"
+  },
+  {
+    "reqId": "1.2-01",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "When documents conflict, the higher-level document shall always prevail.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-001"
+  },
+  {
+    "reqId": "1.2-02",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "No subordinate document may override or contradict this Constitution.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-002"
+  },
+  {
+    "reqId": "1.2-03",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "The official governance library shall maintain the DX OSE Constitution at minimum.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-003"
+  },
+  {
+    "reqId": "1.2-04",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "The official governance library shall maintain the DX OSE UX Constitution at minimum.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-004"
+  },
+  {
+    "reqId": "1.2-05",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "The official governance library shall maintain Business Decision Records (BDR) at minimum.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-005"
+  },
+  {
+    "reqId": "1.2-06",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "The official governance library shall maintain Workflow Contracts at minimum.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-006"
+  },
+  {
+    "reqId": "1.2-07",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "The official governance library shall maintain the Access Control Catalog (ACC) at minimum.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-007"
+  },
+  {
+    "reqId": "1.2-08",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "The official governance library shall maintain the Architecture Guide at minimum.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-008"
+  },
+  {
+    "reqId": "1.2-09",
+    "chapter": "1",
+    "section": "1.2",
+    "requirement": "The official governance library shall maintain the Implementation Guide at minimum.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.2-009"
+  },
+  {
+    "reqId": "1.4-01",
+    "chapter": "1",
+    "section": "1.4",
+    "requirement": "Normative keywords shall be interpreted exactly as defined in Chapter 1.4.",
+    "scope": "Platform-wide",
+    "requirementId": "C01-1.4-001"
+  },
+  {
+    "reqId": "2.1-01",
+    "chapter": "2",
+    "section": "2.1",
+    "requirement": "DX OSE shall provide one consistent document lifecycle experience across all operational modules.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.1-001"
+  },
+  {
+    "reqId": "2.1-02",
+    "chapter": "2",
+    "section": "2.1",
+    "requirement": "Internal workflow implementation must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.1-002"
+  },
+  {
+    "reqId": "2.1-03",
+    "chapter": "2",
+    "section": "2.1",
+    "requirement": "Internal workflow step names must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.1-003"
+  },
+  {
+    "reqId": "2.1-04",
+    "chapter": "2",
+    "section": "2.1",
+    "requirement": "Internal status codes must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.1-004"
+  },
+  {
+    "reqId": "2.2-01",
+    "chapter": "2",
+    "section": "2.2",
+    "requirement": "Each user-facing lifecycle state shall represent one consistent business meaning across the entire DX OSE ERP Platform.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.2-001"
+  },
+  {
+    "reqId": "2.2-02",
+    "chapter": "2",
+    "section": "2.2",
+    "requirement": "No module may redefine the standardized user-facing lifecycle state meanings.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.2-002"
+  },
+  {
+    "reqId": "2.2-03",
+    "chapter": "2",
+    "section": "2.2",
+    "requirement": "No module may introduce additional user-facing lifecycle states unless first ratified in this Constitution.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.2-003"
+  },
+  {
+    "reqId": "2.2-04",
+    "chapter": "2",
+    "section": "2.2",
+    "requirement": "A separate user-facing state named Cancelled shall not be introduced unless ratified in this Constitution.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.2-004"
+  },
+  {
+    "reqId": "2.3-01",
+    "chapter": "2",
+    "section": "2.3",
+    "requirement": "Each module shall provide a consistent mapping between internal workflow states and standardized user-facing lifecycle states.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.3-001"
+  },
+  {
+    "reqId": "2.3-02",
+    "chapter": "2",
+    "section": "2.3",
+    "requirement": "Internal workflow identifiers must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.3-002"
+  },
+  {
+    "reqId": "2.3-03",
+    "chapter": "2",
+    "section": "2.3",
+    "requirement": "Internal status codes must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.3-003"
+  },
+  {
+    "reqId": "2.3-04",
+    "chapter": "2",
+    "section": "2.3",
+    "requirement": "Internal enum names must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.3-004"
+  },
+  {
+    "reqId": "2.3-05",
+    "chapter": "2",
+    "section": "2.3",
+    "requirement": "Internal workflow step names must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.3-005"
+  },
+  {
+    "reqId": "2.3-06",
+    "chapter": "2",
+    "section": "2.3",
+    "requirement": "Other internal implementation details must never be exposed to end users.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.3-006"
+  },
+  {
+    "reqId": "2.3-07",
+    "chapter": "2",
+    "section": "2.3",
+    "requirement": "Identical business outcomes shall always resolve to the same standardized user-facing lifecycle state across the DX OSE platform.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.3-007"
+  },
+  {
+    "reqId": "2.4.1-01",
+    "chapter": "2",
+    "section": "2.4.1",
+    "requirement": "Posting is the single business commit point for all operational and financial effects within the DX OSE ERP Platform.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.4.1-001"
+  },
+  {
+    "reqId": "2.4.1-02",
+    "chapter": "2",
+    "section": "2.4.1",
+    "requirement": "No operational or financial effect shall be considered official before Posting unless this Constitution explicitly states otherwise.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.4.1-002"
+  },
+  {
+    "reqId": "2.4.2-01",
+    "chapter": "2",
+    "section": "2.4.2",
+    "requirement": "Operational reports shall derive operational and financial results exclusively from Posted documents.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.4.2-001"
+  },
+  {
+    "reqId": "2.5-01",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Editability shall be governed exclusively by document lifecycle state, not by individual screen implementations.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-001"
+  },
+  {
+    "reqId": "2.5-02",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in Draft state shall be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-002"
+  },
+  {
+    "reqId": "2.5-03",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in Returned state shall be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-003"
+  },
+  {
+    "reqId": "2.5-04",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in Submitted state shall not be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-004"
+  },
+  {
+    "reqId": "2.5-05",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in In Review state shall not be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-005"
+  },
+  {
+    "reqId": "2.5-06",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in Posted state shall not be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-006"
+  },
+  {
+    "reqId": "2.5-07",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in Rejected state shall not be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-007"
+  },
+  {
+    "reqId": "2.5-08",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in Void or Cancelled state shall not be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-008"
+  },
+  {
+    "reqId": "2.5-09",
+    "chapter": "2",
+    "section": "2.5",
+    "requirement": "Documents in Closed state shall not be editable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.5-009"
+  },
+  {
+    "reqId": "2.6-01",
+    "chapter": "2",
+    "section": "2.6",
+    "requirement": "Delete is permitted only while the document is in Draft.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.6-001"
+  },
+  {
+    "reqId": "2.6-02",
+    "chapter": "2",
+    "section": "2.6",
+    "requirement": "Once a document leaves Draft, Delete must not be available.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.6-002"
+  },
+  {
+    "reqId": "2.6-03",
+    "chapter": "2",
+    "section": "2.6",
+    "requirement": "Business termination shall use governed lifecycle actions (Cancel, Reject, Void, Close, etc.) instead of Delete after Draft.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.6-003"
+  },
+  {
+    "reqId": "2.6-04",
+    "chapter": "2",
+    "section": "2.6",
+    "requirement": "Once a document enters the governed lifecycle, business termination actions shall replace deletion.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.6-004"
+  },
+  {
+    "reqId": "2.7-01",
+    "chapter": "2",
+    "section": "2.7",
+    "requirement": "After Return, the workflow path shall be Edit then Submit.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.7-001"
+  },
+  {
+    "reqId": "2.7-02",
+    "chapter": "2",
+    "section": "2.7",
+    "requirement": "There shall be no separate action named Re-submit.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.7-002"
+  },
+  {
+    "reqId": "2.7-03",
+    "chapter": "2",
+    "section": "2.7",
+    "requirement": "Submit shall always represent entering the workflow, whether for the first time or after Return.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.7-003"
+  },
+  {
+    "reqId": "2.7-04",
+    "chapter": "2",
+    "section": "2.7",
+    "requirement": "After Reject, the same document must not re-enter workflow.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.7-004"
+  },
+  {
+    "reqId": "2.7-05",
+    "chapter": "2",
+    "section": "2.7",
+    "requirement": "After Reject, a new document is required to repeat the operation.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.7-005"
+  },
+  {
+    "reqId": "2.8-01",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing current state when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-001"
+  },
+  {
+    "reqId": "2.8-02",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing workflow step when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-002"
+  },
+  {
+    "reqId": "2.8-03",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing actor when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-003"
+  },
+  {
+    "reqId": "2.8-04",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing date and time when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-004"
+  },
+  {
+    "reqId": "2.8-05",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing mandatory reasons when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-005"
+  },
+  {
+    "reqId": "2.8-06",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing workflow comments when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-006"
+  },
+  {
+    "reqId": "2.8-07",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing system events when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-007"
+  },
+  {
+    "reqId": "2.8-08",
+    "chapter": "2",
+    "section": "2.8",
+    "requirement": "Every document detail view shall present a unified timeline showing duration when applicable.",
+    "scope": "Document-specific",
+    "requirementId": "C02-2.8-008"
+  },
+  {
+    "reqId": "3.1-01",
+    "chapter": "3",
+    "section": "3.1",
+    "requirement": "Users shall see only the actions they need for their role and document state.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.1-001"
+  },
+  {
+    "reqId": "3.1-02",
+    "chapter": "3",
+    "section": "3.1",
+    "requirement": "Action behavior shall remain consistent across all DX OSE modules regardless of workflow implementation.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.1-002"
+  },
+  {
+    "reqId": "3.1-03",
+    "chapter": "3",
+    "section": "3.1",
+    "requirement": "No module may invent alternative names for standard actions unless ratified in this Constitution.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.1-003"
+  },
+  {
+    "reqId": "3.2-01",
+    "chapter": "3",
+    "section": "3.2",
+    "requirement": "Cancel is an action, not a lifecycle state.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.2-001"
+  },
+  {
+    "reqId": "3.2-02",
+    "chapter": "3",
+    "section": "3.2",
+    "requirement": "Alternative Cancel labels with the same meaning (Abort, Discard, Cancel Document) must not be used.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.2-002"
+  },
+  {
+    "reqId": "3.3-01",
+    "chapter": "3",
+    "section": "3.3",
+    "requirement": "Reviewer actions shall be available only while the document is actively assigned to the current reviewer according to workflow definition and the permission model.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.3-001"
+  },
+  {
+    "reqId": "3.4-01",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Send Back shall not end the document.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-001"
+  },
+  {
+    "reqId": "3.4-02",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Send Back shall allow edit.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-002"
+  },
+  {
+    "reqId": "3.4-03",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Send Back shall require a reason.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-003"
+  },
+  {
+    "reqId": "3.4-04",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Send Back next step shall be Edit then Submit.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-004"
+  },
+  {
+    "reqId": "3.4-05",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Send Back shall continue the business transaction.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-005"
+  },
+  {
+    "reqId": "3.4-06",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Reject shall end the document.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-006"
+  },
+  {
+    "reqId": "3.4-07",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Reject shall not allow edit.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-007"
+  },
+  {
+    "reqId": "3.4-08",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Reject shall require a reason.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-008"
+  },
+  {
+    "reqId": "3.4-09",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Reject next step shall require a new document if the operation repeats.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-009"
+  },
+  {
+    "reqId": "3.4-10",
+    "chapter": "3",
+    "section": "3.4",
+    "requirement": "Reject shall terminate the business transaction.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.4-010"
+  },
+  {
+    "reqId": "3.5-01",
+    "chapter": "3",
+    "section": "3.5",
+    "requirement": "There shall be only one primary action for the current document state.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.5-001"
+  },
+  {
+    "reqId": "3.6-01",
+    "chapter": "3",
+    "section": "3.6",
+    "requirement": "Button order shall be Primary, then Secondary, then Neutral, then Danger.",
+    "scope": "Document-specific",
+    "requirementId": "C03-3.6-001"
+  },
+  {
+    "reqId": "4.1-01",
+    "chapter": "4",
+    "section": "4.1",
+    "requirement": "Operation permissions govern authorization only.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.1-001"
+  },
+  {
+    "reqId": "4.1-02",
+    "chapter": "4",
+    "section": "4.1",
+    "requirement": "Operation permissions shall never replace workflow validation.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.1-002"
+  },
+  {
+    "reqId": "4.1-03",
+    "chapter": "4",
+    "section": "4.1",
+    "requirement": "Operation permissions shall never replace lifecycle validation.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.1-003"
+  },
+  {
+    "reqId": "4.1-04",
+    "chapter": "4",
+    "section": "4.1",
+    "requirement": "Operation permissions shall never replace business rule enforcement.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.1-004"
+  },
+  {
+    "reqId": "4.1-05",
+    "chapter": "4",
+    "section": "4.1",
+    "requirement": "The Access Control Catalog (ACC) is the single source of truth for permissions.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.1-005"
+  },
+  {
+    "reqId": "4.2-01",
+    "chapter": "4",
+    "section": "4.2",
+    "requirement": "Evidence Package does not require a separate permission in the current DX OSE release.",
+    "scope": "Document-specific",
+    "requirementId": "C04-4.2-001"
+  },
+  {
+    "reqId": "4.3-01",
+    "chapter": "4",
+    "section": "4.3",
+    "requirement": "Permissions shall never bypass document lifecycle rules.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.3-001"
+  },
+  {
+    "reqId": "4.3-02",
+    "chapter": "4",
+    "section": "4.3",
+    "requirement": "Permissions grant eligibility, not execution authority.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.3-002"
+  },
+  {
+    "reqId": "4.3-03",
+    "chapter": "4",
+    "section": "4.3",
+    "requirement": "Action Allowed shall equal Permission plus Workflow plus Lifecycle plus Business Rules plus Scope.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.3-003"
+  },
+  {
+    "reqId": "4.3-04",
+    "chapter": "4",
+    "section": "4.3",
+    "requirement": "Modules shall not introduce alternative operation names for standardized operations.",
+    "scope": "Platform-wide",
+    "requirementId": "C04-4.3-004"
+  },
+  {
+    "reqId": "5.1-01",
+    "chapter": "5",
+    "section": "5.1",
+    "requirement": "Posting is the single irreversible business commit point for all operational and financial effects within the DX OSE Platform.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.1-001"
+  },
+  {
+    "reqId": "5.1-02",
+    "chapter": "5",
+    "section": "5.1",
+    "requirement": "Posting is the only operation permitted to create official operational and financial business effects.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.1-002"
+  },
+  {
+    "reqId": "5.1-03",
+    "chapter": "5",
+    "section": "5.1",
+    "requirement": "Documents become business-immutable after Posting except through formally governed reversal or adjustment procedures.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.1-003"
+  },
+  {
+    "reqId": "5.2-01",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Before Posting, the platform shall verify user authority.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-001"
+  },
+  {
+    "reqId": "5.2-02",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Before Posting, the platform shall verify valid workflow state.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-002"
+  },
+  {
+    "reqId": "5.2-03",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Before Posting, the platform shall verify open inventory/financial period for Posting Date.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-003"
+  },
+  {
+    "reqId": "5.2-04",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Before Posting, the platform shall perform full document revalidation.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-004"
+  },
+  {
+    "reqId": "5.2-05",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Before Posting, the platform shall verify stock availability for outbound documents.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-005"
+  },
+  {
+    "reqId": "5.2-06",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Full revalidation shall occur immediately before Posting regardless of prior validation.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-006"
+  },
+  {
+    "reqId": "5.2-07",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Posting shall use a single transactional boundary.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-007"
+  },
+  {
+    "reqId": "5.2-08",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Partial posting is prohibited.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-008"
+  },
+  {
+    "reqId": "5.2-09",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Any posting failure shall leave the document and related business data completely unchanged.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-009"
+  },
+  {
+    "reqId": "5.2-10",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Repeating the same posting request shall never create additional effects.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-010"
+  },
+  {
+    "reqId": "5.2-11",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Posting shall be automatically triggered upon successful final workflow approval unless a document-specific governance policy defines otherwise.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-011"
+  },
+  {
+    "reqId": "5.2-12",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Final Workflow Approval equals business authorization for Posting.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-012"
+  },
+  {
+    "reqId": "5.2-13",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "No additional posting confirmation is required by default.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-013"
+  },
+  {
+    "reqId": "5.2-14",
+    "chapter": "5",
+    "section": "5.2",
+    "requirement": "Posting behavior shall remain deterministic and repeat-safe throughout the platform.",
+    "scope": "Document-specific",
+    "requirementId": "C05-5.2-014"
+  },
+  {
+    "reqId": "6-1-01",
+    "chapter": "6",
+    "section": "6.1",
+    "requirement": "Period Management preserves inventory integrity, financial integrity, audit integrity, and reporting consistency.",
+    "scope": "Platform-wide",
+    "requirementId": "C06A-6.1-001",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-1-02",
+    "chapter": "6",
+    "section": "6.1",
+    "requirement": "Period Management governs when transactions may officially affect inventory and financial records.",
+    "scope": "Platform-wide",
+    "requirementId": "C06A-6.1-002",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-1-03",
+    "chapter": "6",
+    "section": "6.1",
+    "requirement": "The sole operational close mechanism in DX OSE is Monthly Period Close. Annual Close as an independent period, process, snapshot, or lock is prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.1-003",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-1-04",
+    "chapter": "6",
+    "section": "6.1",
+    "requirement": "This chapter applies to all modules that create, modify, or report inventory or ledger truth, including current and future posting entry points.",
+    "scope": "Platform-wide",
+    "requirementId": "C06A-6.1-004",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-1-05",
+    "chapter": "6",
+    "section": "6.1",
+    "requirement": "Period Management integrates with Draft Governance (Chapter 7), Access Control Catalog (Chapter 4 / ACC), and Audit requirements platform-wide.",
+    "scope": "Platform-wide",
+    "requirementId": "C06A-6.1-005",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-2-01",
+    "chapter": "6",
+    "section": "6.2",
+    "requirement": "Each hotel (tenant) shall maintain an explicit Period Registry record for every calendar month (month ∈ {1, 2, …, 12}) and fiscal year.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.2-001",
+    "decisionRef": "D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-2-02",
+    "chapter": "6",
+    "section": "6.2",
+    "requirement": "A period shall not be considered open merely because no registry record exists. Implicit open periods are prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.2-002",
+    "decisionRef": "D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-2-03",
+    "chapter": "6",
+    "section": "6.2",
+    "requirement": "The Period Registry is the Single Source of Truth for posting availability, Manual Close, Reopen, Re-close, Auto Close, period history, and audit references.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.2-003",
+    "decisionRef": "D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-2-04",
+    "chapter": "6",
+    "section": "6.2",
+    "requirement": "Each Period Registry record shall identify tenant (hotel), year, month (1–12; null month values are prohibited), and status (see §6.3).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.2-004",
+    "decisionRef": "D1,D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-2-05",
+    "chapter": "6",
+    "section": "6.2",
+    "requirement": "Period records shall be created and managed sequentially per hotel. Periods shall close sequentially; overlapping closed periods are prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.2-005",
+    "decisionRef": "D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-2-06",
+    "chapter": "6",
+    "section": "6.2",
+    "requirement": "Inventory Period and Financial Period shall be managed through the shared monthly Period Registry unless a future governance decision explicitly separates them.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.2-006",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-3-01",
+    "chapter": "6",
+    "section": "6.3",
+    "requirement": "The official period states are OPEN, CLOSING, and CLOSED. The state Archived is not a period registry state; historical snapshots and reports use SUPERSEDED versioning (§6.11, §6.17).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.3-001",
+    "decisionRef": "D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-3-02",
+    "chapter": "6",
+    "section": "6.3",
+    "requirement": "While a period is OPEN, the platform shall operate normally for all users according to ACC-granted permissions without additional close-related permissions beyond standard operational authority.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.3-002",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-3-03",
+    "chapter": "6",
+    "section": "6.3",
+    "requirement": "Transition OPEN → CLOSING applies to initial Monthly Close and Re-close after Reopen; entry shall immediately run full Close Validation (§6.8) and expose the Close Resolution Workspace (§6.9); entry does not require a clean validation result beforehand.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.3-003",
+    "decisionRef": "D7,D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-3-04",
+    "chapter": "6",
+    "section": "6.3",
+    "requirement": "Transition CLOSING → CLOSED shall occur only when Blockers = 0 (§6.8.3); upon transition the platform shall build the Closing Snapshot (§6.12) and assign snapshot version status per §6.11.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.3-004",
+    "decisionRef": "D3,D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-3-05",
+    "chapter": "6",
+    "section": "6.3",
+    "requirement": "Users holding PERIOD_CLOSE_RESOLUTION or equivalent close-workspace authority may cancel CLOSING → OPEN without completing close.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.3-005",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-3-06",
+    "chapter": "6",
+    "section": "6.3",
+    "requirement": "Reopen transition CLOSED → OPEN is governed by §6.10 and shall not delete or replace existing snapshot versions.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.3-006",
+    "decisionRef": "D2,D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-4-01",
+    "chapter": "6",
+    "section": "6.4",
+    "requirement": "Monthly Period Close shall use one Close Engine, one Validation contract (§6.8), and one ACC permission model (§6.15) for all months.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.4-001",
+    "decisionRef": "D1,D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-4-02",
+    "chapter": "6",
+    "section": "6.4",
+    "requirement": "December (month = 12) shall follow identical close logic as all other months.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.4-002",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-4-03",
+    "chapter": "6",
+    "section": "6.4",
+    "requirement": "The user interface shall display December using the descriptive label \"December - Year End Closing\". This label is presentational only and shall not introduce a separate year-end process, snapshot, lock, or permission.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.4-003",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-4-04",
+    "chapter": "6",
+    "section": "6.4",
+    "requirement": "The CURRENT Snapshot Version produced by closing December shall constitute the Closing Snapshot for that calendar year and the Opening Basis for January (month = 1) of the following calendar year.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.4-004",
+    "decisionRef": "D1,D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-4-05",
+    "chapter": "6",
+    "section": "6.4",
+    "requirement": "No additional annual snapshot shall be created. The platform must not maintain month = null period records.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.4-005",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-4-06",
+    "chapter": "6",
+    "section": "6.4",
+    "requirement": "Annual reporting shall derive from twelve closed monthly periods. A separate Annual Close step is prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.4-006",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-4-07",
+    "chapter": "6",
+    "section": "6.4",
+    "requirement": "If December is reopened and subsequently re-closed, the latest CURRENT Snapshot Version for December shall become the new Opening Basis for the following January.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.4-007",
+    "decisionRef": "D1,D2,D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-01",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Every operation that affects inventory or the Inventory Ledger shall have an explicit Posting Date.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-001",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-02",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Default Posting Date shall be the current calendar date at the time of posting.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-002",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-03",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Users may select any Posting Date within an OPEN period, subject to §6.5.4–§6.5.6.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-003",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-04",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Future Posting Dates are prohibited.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-004",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-05",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Posting Dates falling within a CLOSED period are prohibited, in both user interface and backend enforcement.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-005",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-06",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "After a period closes, the default Posting Date shall advance to a date within the current OPEN period.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-006",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-07",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Document Date represents the business event date. Document Date does not determine financial or inventory period attribution. Posting Date determines official effect.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-007",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-08",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Document Date and Posting Date are independent and must never be treated as interchangeable.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-008",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-09",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "At posting commit, each affected document shall permanently record Posting Date and Assigned Posting Period (YYYY-MM derived from Posting Date).",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-009",
+    "decisionRef": "D5,D6",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-10",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Assigned Posting Period shall be immutable after posting.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-010",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-11",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "Posting Date restrictions apply to Posting Date only, not Document Date.",
+    "scope": "Operational",
+    "requirementId": "C06A-6.5-011",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-5-12",
+    "chapter": "6",
+    "section": "6.5",
+    "requirement": "The platform shall prevent invalid Posting Dates proactively in the user interface wherever date selection is offered.",
+    "scope": "UX",
+    "requirementId": "C06A-6.5-012",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-6-01",
+    "chapter": "6",
+    "section": "6.6",
+    "requirement": "Every Inventory Ledger entry shall contain directly postingDate and assignedPostingPeriod.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.6-001",
+    "decisionRef": "D6",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-6-02",
+    "chapter": "6",
+    "section": "6.6",
+    "requirement": "createdAt shall represent system record creation time only.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.6-002",
+    "decisionRef": "D6",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-6-03",
+    "chapter": "6",
+    "section": "6.6",
+    "requirement": "Use of createdAt to determine financial month, inventory period, report period boundaries, snapshot reconstruction, or reconciliation period attribution is prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.6-003",
+    "decisionRef": "D6",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-6-04",
+    "chapter": "6",
+    "section": "6.6",
+    "requirement": "Reports, Closing Snapshots, reconciliation, and period-scoped analytics shall use Posting Date and Assigned Posting Period.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.6-004",
+    "decisionRef": "D6,D4",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-6-05",
+    "chapter": "6",
+    "section": "6.6",
+    "requirement": "Ledger entries shall receive Posting Date and Assigned Posting Period at creation, consistent with the posting source document or posting operation.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.6-005",
+    "decisionRef": "D6",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-7-01",
+    "chapter": "6",
+    "section": "6.7",
+    "requirement": "Period validation shall be centralized in one Central Period Guard service layer.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.7-001",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-7-02",
+    "chapter": "6",
+    "section": "6.7",
+    "requirement": "All modules that post to inventory or ledger shall invoke the Central Period Guard. Independent period logic within individual modules is prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.7-002",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-7-03",
+    "chapter": "6",
+    "section": "6.7",
+    "requirement": "The Central Period Guard shall enforce Period Registry state, Posting Date rules, prohibition of posting into CLOSED periods, prohibition of future Posting Dates, and Assigned Posting Period derivation and immutability after posting.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.7-003",
+    "decisionRef": "D5,D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-7-04",
+    "chapter": "6",
+    "section": "6.7",
+    "requirement": "Posting shall be permitted only when the Assigned Posting Period corresponds to a registry period in OPEN state (including periods reopened per §6.10).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.7-004",
+    "decisionRef": "D5,D11",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-7-05",
+    "chapter": "6",
+    "section": "6.7",
+    "requirement": "All current and future posting entry points shall register with the governed posting engine and shall not bypass the Central Period Guard.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.7-005",
+    "decisionRef": "D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-8-01",
+    "chapter": "6",
+    "section": "6.8",
+    "requirement": "Period Close is a governed business process, not a mere validation failure response.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.8-001",
+    "decisionRef": "D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-8-02",
+    "chapter": "6",
+    "section": "6.8",
+    "requirement": "Upon transition to CLOSING, the platform shall execute full Close Validation and present all findings to users holding appropriate ACC permissions.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.8-002",
+    "decisionRef": "D7,D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-8-03",
+    "chapter": "6",
+    "section": "6.8",
+    "requirement": "Close and Re-close shall proceed to CLOSED only when Blockers = 0.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.8-003",
+    "decisionRef": "D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-8-04",
+    "chapter": "6",
+    "section": "6.8",
+    "requirement": "Conditions that do not affect close correctness may be classified as WARNING or INFO.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.8-004",
+    "decisionRef": "D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-8-05",
+    "chapter": "6",
+    "section": "6.8",
+    "requirement": "Pending or incomplete documents, unposted pre-posted workflow states, incomplete transfers/GRNs/movements/counts, pending approvals, integrity failures, zero-WAC with on-hand quantity, and Get Pass conditions per §6.13 shall be BLOCKERS unless resolved through the Close Resolution Workspace.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.8-005",
+    "decisionRef": "D7,D8",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-8-06",
+    "chapter": "6",
+    "section": "6.8",
+    "requirement": "Use of environment flags, tenant settings, or administrative overrides to bypass BLOCKERS for Close or Re-close is prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.8-006",
+    "decisionRef": "D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-8-07",
+    "chapter": "6",
+    "section": "6.8",
+    "requirement": "Manual Close and Auto Close shall use the same Validation engine and Blocker catalog.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.8-007",
+    "decisionRef": "D7,D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-9-01",
+    "chapter": "6",
+    "section": "6.9",
+    "requirement": "While a period is in CLOSING, the platform shall provide a Close Resolution Workspace whenever blocking or resolvable conditions exist.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.9-001",
+    "decisionRef": "D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-9-02",
+    "chapter": "6",
+    "section": "6.9",
+    "requirement": "The platform shall provide governed period-close resolution rather than merely rejecting close requests.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.9-002",
+    "decisionRef": "D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-9-03",
+    "chapter": "6",
+    "section": "6.9",
+    "requirement": "Users holding required ACC permissions may Post or Delete pending documents from the workspace when those documents had no prior stock or ledger effect.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.9-003",
+    "decisionRef": "D7,D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-9-04",
+    "chapter": "6",
+    "section": "6.9",
+    "requirement": "Post and Delete actions in the Close Resolution Workspace shall require explicit ACC permission codes. Authority shall not be hardcoded to any role name.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.9-004",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-9-05",
+    "chapter": "6",
+    "section": "6.9",
+    "requirement": "The Close Resolution Workspace shall integrate with Draft Governance (Chapter 7) for draft and pre-posted document handling.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.9-005",
+    "decisionRef": "D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-9-06",
+    "chapter": "6",
+    "section": "6.9",
+    "requirement": "The workspace shall expose Close Validation (blockers, warnings, pending documents, integrity findings) and Closed Periods / Period Details (history, snapshot versions, audit timeline).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.9-006",
+    "decisionRef": "D3,D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-01",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "Reopen shall be permitted only for the latest closed period per hotel.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-001",
+    "decisionRef": "D2",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-02",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "Reopen must follow reverse sequential order. Only the latest closed period may be reopened.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-002",
+    "decisionRef": "D2",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-03",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "Skipping a later closed period to reopen an earlier period is prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-003",
+    "decisionRef": "D2",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-04",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "Reopen shall require a mandatory Reason recorded in audit.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-004",
+    "decisionRef": "D2",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-05",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "Reopen shall transition the period from CLOSED to OPEN. Existing snapshot versions shall remain preserved (§6.11).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-005",
+    "decisionRef": "D2,D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-06",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "While reopened and OPEN, posting into that period shall be permitted subject to Posting Date rules (§6.5) and Central Period Guard (§6.7).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-006",
+    "decisionRef": "D2,D5",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-07",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "After corrections, Re-close shall follow OPEN → CLOSING → CLOSED; entry to CLOSING starts Re-close Validation; transition to CLOSED requires Blockers = 0.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-007",
+    "decisionRef": "D2,D7",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-08",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "Re-close shall create a new Snapshot Version (§6.11) using Closing Snapshot rules (§6.12).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-008",
+    "decisionRef": "D2,D3,D4",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-10-09",
+    "chapter": "6",
+    "section": "6.10",
+    "requirement": "Reopen authority shall be governed by ACC permission PERIOD_REOPEN_EXECUTE. Re-close authority shall use PERIOD_RECLOSE_EXECUTE.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.10-009",
+    "decisionRef": "D2,D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-01",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "Deletion of prior Closing Snapshots is prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-001",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-02",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "Every Close and every Re-close shall create a new independent Snapshot Version.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-002",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-03",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "Snapshot Version status shall be CURRENT (latest approved) or SUPERSEDED (prior version replaced by later Close or Re-close).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-003",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-04",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "Exactly one Snapshot Version per period shall be CURRENT at any time.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-004",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-05",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "All Snapshot Versions and their lines shall be read-only after creation.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-005",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-06",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "Reopen shall not delete or overwrite existing Snapshot Versions.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-006",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-07",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "Re-close shall mark the prior Snapshot Version as SUPERSEDED and the new version as CURRENT.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-007",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-08",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "Each Snapshot Version shall retain version number, closed by, closed at, associated Close or Re-close event, and reopen events linked in period history where applicable.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-008",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-11-09",
+    "chapter": "6",
+    "section": "6.11",
+    "requirement": "The user interface shall expose snapshot history at Closed Periods → Period Details → Snapshot History.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.11-009",
+    "decisionRef": "D3",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-12-01",
+    "chapter": "6",
+    "section": "6.12",
+    "requirement": "Upon Close or Re-close, the Closing Snapshot shall be calculated from Inventory Ledger postings through the last day of the closing period.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.12-001",
+    "decisionRef": "D4",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-12-02",
+    "chapter": "6",
+    "section": "6.12",
+    "requirement": "Snapshot construction shall use postingDate and assignedPostingPeriod (§6.6).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.12-002",
+    "decisionRef": "D4,D6",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-12-03",
+    "chapter": "6",
+    "section": "6.12",
+    "requirement": "Use of current live Stock Balances for Closing Snapshot calculation is prohibited when those balances include postings assigned to later periods.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.12-003",
+    "decisionRef": "D4",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-12-04",
+    "chapter": "6",
+    "section": "6.12",
+    "requirement": "Each Snapshot Version line shall record per item and location at minimum closing quantity, closing value, and WAC unit cost at period close basis.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.12-004",
+    "decisionRef": "D4",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-13-01",
+    "chapter": "6",
+    "section": "6.13",
+    "requirement": "An open Get Pass shall not automatically constitute a Close Validation BLOCKER.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.13-001",
+    "decisionRef": "D8",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-13-02",
+    "chapter": "6",
+    "section": "6.13",
+    "requirement": "Get Pass with checkout in one month and expected return in a later month shall not appear as a BLOCKER for the checkout month close.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.13-002",
+    "decisionRef": "D8",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-13-03",
+    "chapter": "6",
+    "section": "6.13",
+    "requirement": "A Get Pass shall appear in Close Validation when expected return falls within the closing period and is overdue, when no clear expected return date exists, or when status is incomplete and requires a decision before close.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.13-003",
+    "decisionRef": "D8",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-13-04",
+    "chapter": "6",
+    "section": "6.13",
+    "requirement": "Users holding required ACC permissions may resolve appearing Get Pass items by Resolve (complete within period) or Carry Forward (record operation remains open into next period).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.13-004",
+    "decisionRef": "D8,D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-13-05",
+    "chapter": "6",
+    "section": "6.13",
+    "requirement": "Carry Forward shall not create phantom posting, alter the original checkout date, or create Inventory Ledger entries or Stock Balance mutations; it shall record from-period, to-period, reason, user, and timestamp in audit.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.13-005",
+    "decisionRef": "D8",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-13-06",
+    "chapter": "6",
+    "section": "6.13",
+    "requirement": "Get Pass resolution in close context shall require ACC permissions per §6.15.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.13-006",
+    "decisionRef": "D8,D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-14-01",
+    "chapter": "6",
+    "section": "6.14",
+    "requirement": "Auto Close may be enabled per hotel with ON/OFF, day of next month (1–28), execution time, and tenant timezone settings.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.14-001",
+    "decisionRef": "D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-14-02",
+    "chapter": "6",
+    "section": "6.14",
+    "requirement": "At scheduled time, Auto Close shall invoke the same Validation engine (§6.8) and Close Engine as Manual Close.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.14-002",
+    "decisionRef": "D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-14-03",
+    "chapter": "6",
+    "section": "6.14",
+    "requirement": "If Blockers = 0, the platform shall close the period automatically.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.14-003",
+    "decisionRef": "D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-14-04",
+    "chapter": "6",
+    "section": "6.14",
+    "requirement": "If Blockers exist, Auto Close shall not close the period; Auto Post and Auto Delete are prohibited; the platform shall notify users via In-App and Email with period, attempt time, blocker count, and workspace link.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.14-004",
+    "decisionRef": "D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-14-05",
+    "chapter": "6",
+    "section": "6.14",
+    "requirement": "Manual Close shall remain available regardless of Auto Close configuration.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.14-005",
+    "decisionRef": "D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-14-06",
+    "chapter": "6",
+    "section": "6.14",
+    "requirement": "Every Auto Close attempt shall be recorded in audit, whether successful or blocked.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.14-006",
+    "decisionRef": "D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-14-07",
+    "chapter": "6",
+    "section": "6.14",
+    "requirement": "Auto Close configuration changes shall be audited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.14-007",
+    "decisionRef": "D10",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-15-01",
+    "chapter": "6",
+    "section": "6.15",
+    "requirement": "ACC is the Single Source of Truth for all Period Close and Reopen authorities.",
+    "scope": "Governance",
+    "requirementId": "C06A-6.15-001",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-15-02",
+    "chapter": "6",
+    "section": "6.15",
+    "requirement": "Period Close permissions shall be expressed as independent ACC permission codes including PERIOD_CLOSE_EXECUTE, PERIOD_REOPEN_EXECUTE, PERIOD_RECLOSE_EXECUTE, PERIOD_CLOSE_RESOLUTION, PERIOD_CLOSE_DOCUMENT_POST, PERIOD_CLOSE_DOCUMENT_DELETE, PERIOD_CLOSE_GET_PASS_RESOLVE, PERIOD_CLOSE_GET_PASS_CARRY_FORWARD, and PERIOD_AUTO_CLOSE_MANAGE.",
+    "scope": "Governance",
+    "requirementId": "C06A-6.15-002",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-15-03",
+    "chapter": "6",
+    "section": "6.15",
+    "requirement": "Backend enforcement shall verify ACC permission codes. Hardcoding period authority to a specific role name is prohibited.",
+    "scope": "Governance",
+    "requirementId": "C06A-6.15-003",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-15-04",
+    "chapter": "6",
+    "section": "6.15",
+    "requirement": "Default seed configuration may grant the above permissions to Finance Manager. Default grant shall not confer authority by role name at runtime.",
+    "scope": "Governance",
+    "requirementId": "C06A-6.15-004",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-15-05",
+    "chapter": "6",
+    "section": "6.15",
+    "requirement": "ORG_MANAGER and other roles shall not receive period close permissions by default. Future grants or revocations shall occur through ACC only without code changes.",
+    "scope": "Governance",
+    "requirementId": "C06A-6.15-005",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-15-06",
+    "chapter": "6",
+    "section": "6.15",
+    "requirement": "Legacy consolidated permissions (e.g. PERIOD_CLOSE_MANAGE) shall be decomposed into the granular codes above.",
+    "scope": "Governance",
+    "requirementId": "C06A-6.15-006",
+    "decisionRef": "D9",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-16-01",
+    "chapter": "6",
+    "section": "6.16",
+    "requirement": "The platform shall audit Start Close, Close, Reopen, Re-close, Post/Delete in Close Resolution Workspace, Get Pass Resolve, Get Pass Carry Forward, Auto Close settings changes, Auto Close attempts and results, and snapshot version superseding.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.16-001",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-16-02",
+    "chapter": "6",
+    "section": "6.16",
+    "requirement": "Each period audit record shall include acting user, timestamp, affected period (year, month), reason where applicable, outcome, and reference to affected entity.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.16-002",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-16-03",
+    "chapter": "6",
+    "section": "6.16",
+    "requirement": "Period history shall be reconstructible from audit events and Period Close events.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.16-003",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-17-01",
+    "chapter": "6",
+    "section": "6.17",
+    "requirement": "Official issued reports shall not be deleted or silently replaced.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.17-001",
+    "decisionRef": "D12",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-17-02",
+    "chapter": "6",
+    "section": "6.17",
+    "requirement": "Each official report shall retain a reference to the Snapshot Version used at issuance (snapshotVersionId).",
+    "scope": "Financial",
+    "requirementId": "C06A-6.17-002",
+    "decisionRef": "D12",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-17-03",
+    "chapter": "6",
+    "section": "6.17",
+    "requirement": "After Reopen followed by Re-close, reports based on superseded snapshot versions shall be marked SUPERSEDED and reports based on the new CURRENT Snapshot Version shall be marked CURRENT.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.17-003",
+    "decisionRef": "D12",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-17-04",
+    "chapter": "6",
+    "section": "6.17",
+    "requirement": "SUPERSEDED reports shall remain read-only and available for review.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.17-004",
+    "decisionRef": "D12",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-17-05",
+    "chapter": "6",
+    "section": "6.17",
+    "requirement": "SUPERSEDED reports shall be clearly labeled as not the current version.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.17-005",
+    "decisionRef": "D12",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-18-01",
+    "chapter": "6",
+    "section": "6.18",
+    "requirement": "Legacy period records with month = null (historical Annual Close) shall not persist in the operational Period Registry after migration.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.18-001",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-18-02",
+    "chapter": "6",
+    "section": "6.18",
+    "requirement": "If a legacy month = null record exists for the same tenant and year and a December record already exists, automatic merge or replacement is prohibited; the condition shall be flagged for mandatory review and deterministic remediation.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.18-002",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-18-03",
+    "chapter": "6",
+    "section": "6.18",
+    "requirement": "Migration procedures shall preserve auditability and shall not delete historical snapshot or report artifacts without explicit governed archival rules.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.18-003",
+    "decisionRef": "D3,D12",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-19-01",
+    "chapter": "6",
+    "section": "6.19",
+    "requirement": "Technology stack details, general ledger/AP modules outside inventory ledger scope, external ERP fiscal calendar configuration not required for inventory period registry, and accounting policies beyond inventory posting and snapshot rules defined herein remain out of scope.",
+    "scope": "Platform-wide",
+    "requirementId": "C06A-6.19-001",
+    "decisionRef": null,
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "6-19-02",
+    "chapter": "6",
+    "section": "6.19",
+    "requirement": "Year-end inventory closing is in scope exclusively as December Monthly Close (§6.4). Separate annual close processes remain prohibited.",
+    "scope": "Financial",
+    "requirementId": "C06A-6.19-002",
+    "decisionRef": "D1",
+    "constitutionalStatus": "CONSTITUTIONALLY APPROVED — IMPLEMENTATION PENDING — NOT YET VERIFIED"
+  },
+  {
+    "reqId": "7.1-01",
+    "chapter": "7",
+    "section": "7.1",
+    "requirement": "Document State Protection and Draft and Recovery must remain separate policies.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.1-001"
+  },
+  {
+    "reqId": "7.2-01",
+    "chapter": "7",
+    "section": "7.2",
+    "requirement": "Every operational document shall begin as a server-recognized draft unless Workflow Contracts define otherwise.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.2-001"
+  },
+  {
+    "reqId": "7.4-01",
+    "chapter": "7",
+    "section": "7.4",
+    "requirement": "The platform shall define draft owner.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.4-001"
+  },
+  {
+    "reqId": "7.4-02",
+    "chapter": "7",
+    "section": "7.4",
+    "requirement": "The platform shall define draft access rights.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.4-002"
+  },
+  {
+    "reqId": "7.4-03",
+    "chapter": "7",
+    "section": "7.4",
+    "requirement": "The platform shall define draft ownership transfer rules if permitted.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.4-003"
+  },
+  {
+    "reqId": "7.4-04",
+    "chapter": "7",
+    "section": "7.4",
+    "requirement": "The platform shall define handling of drafts for inactive or departed users.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.4-004"
+  },
+  {
+    "reqId": "7.5-01",
+    "chapter": "7",
+    "section": "7.5",
+    "requirement": "Rules for opening the same draft from multiple sessions or devices shall align with Chapter 8 (Concurrency).",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.5-001"
+  },
+  {
+    "reqId": "7.7-01",
+    "chapter": "7",
+    "section": "7.7",
+    "requirement": "Auto-save shall occur on meaningful business events.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.7-001"
+  },
+  {
+    "reqId": "7.7-02",
+    "chapter": "7",
+    "section": "7.7",
+    "requirement": "Auto-save shall occur on add or delete row.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.7-002"
+  },
+  {
+    "reqId": "7.7-03",
+    "chapter": "7",
+    "section": "7.7",
+    "requirement": "Auto-save shall occur on quantity or price change.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.7-003"
+  },
+  {
+    "reqId": "7.7-04",
+    "chapter": "7",
+    "section": "7.7",
+    "requirement": "Auto-save shall occur on supplier or warehouse change.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.7-004"
+  },
+  {
+    "reqId": "7.7-05",
+    "chapter": "7",
+    "section": "7.7",
+    "requirement": "Auto-save shall occur on attachment change.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.7-005"
+  },
+  {
+    "reqId": "7.7-06",
+    "chapter": "7",
+    "section": "7.7",
+    "requirement": "Auto-save shall occur on notes change.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.7-006"
+  },
+  {
+    "reqId": "7.7-07",
+    "chapter": "7",
+    "section": "7.7",
+    "requirement": "Auto-save shall occur before navigation.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.7-007"
+  },
+  {
+    "reqId": "7.8-01",
+    "chapter": "7",
+    "section": "7.8",
+    "requirement": "Recovered drafts shall not bypass current validation.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.8-001"
+  },
+  {
+    "reqId": "7.8-02",
+    "chapter": "7",
+    "section": "7.8",
+    "requirement": "Restored documents must be revalidated before continue or submit.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.8-002"
+  },
+  {
+    "reqId": "7.9-01",
+    "chapter": "7",
+    "section": "7.9",
+    "requirement": "A draft registry is required per document family.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.9-001"
+  },
+  {
+    "reqId": "7.9-02",
+    "chapter": "7",
+    "section": "7.9",
+    "requirement": "Default draft retention shall be 30 days.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.9-002"
+  },
+  {
+    "reqId": "7.9-03",
+    "chapter": "7",
+    "section": "7.9",
+    "requirement": "Draft expiration policy (delete, archive, expired state) shall be defined by platform policy.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.9-003"
+  },
+  {
+    "reqId": "7.10-01",
+    "chapter": "7",
+    "section": "7.10",
+    "requirement": "Document State Protection shall apply to route navigation.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.10-001"
+  },
+  {
+    "reqId": "7.10-02",
+    "chapter": "7",
+    "section": "7.10",
+    "requirement": "Document State Protection shall apply to browser refresh.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.10-002"
+  },
+  {
+    "reqId": "7.10-03",
+    "chapter": "7",
+    "section": "7.10",
+    "requirement": "Document State Protection shall apply to browser or tab close.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.10-003"
+  },
+  {
+    "reqId": "7.10-04",
+    "chapter": "7",
+    "section": "7.10",
+    "requirement": "Document State Protection shall apply to back navigation.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.10-004"
+  },
+  {
+    "reqId": "7.10-05",
+    "chapter": "7",
+    "section": "7.10",
+    "requirement": "Document State Protection shall apply to session expiration with unsaved changes.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.10-005"
+  },
+  {
+    "reqId": "7.10-06",
+    "chapter": "7",
+    "section": "7.10",
+    "requirement": "Successful Save Draft or Submit shall return the document to a clean state.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.10-006"
+  },
+  {
+    "reqId": "7.11-01",
+    "chapter": "7",
+    "section": "7.11",
+    "requirement": "Upon successful creation of the first Server Draft, the System Document Number becomes permanently reserved per Chapter 9.",
+    "scope": "Document-specific",
+    "requirementId": "C07-7.11-001"
+  },
+  {
+    "reqId": "8.2-01",
+    "chapter": "8",
+    "section": "8.2",
+    "requirement": "Every editable document shall maintain a Concurrency Version for conflict detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.2-001"
+  },
+  {
+    "reqId": "8.3-01",
+    "chapter": "8",
+    "section": "8.3",
+    "requirement": "Concurrency shall apply to the entire governed document, not isolated fields only.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.3-001"
+  },
+  {
+    "reqId": "8.4-01",
+    "chapter": "8",
+    "section": "8.4",
+    "requirement": "Concurrent edits must be detected at the Draft stage.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.4-001"
+  },
+  {
+    "reqId": "8.4-02",
+    "chapter": "8",
+    "section": "8.4",
+    "requirement": "Last write wins is prohibited for concurrent draft edits.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.4-002"
+  },
+  {
+    "reqId": "8.4-03",
+    "chapter": "8",
+    "section": "8.4",
+    "requirement": "Conflicting draft operations shall be rejected.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.4-003"
+  },
+  {
+    "reqId": "8.4-04",
+    "chapter": "8",
+    "section": "8.4",
+    "requirement": "Users shall reload the latest version after a conflicting draft operation.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.4-004"
+  },
+  {
+    "reqId": "8.5-01",
+    "chapter": "8",
+    "section": "8.5",
+    "requirement": "After Submit, the document shall be read-only except via Return workflow.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.5-001"
+  },
+  {
+    "reqId": "8.6-01",
+    "chapter": "8",
+    "section": "8.6",
+    "requirement": "Save Draft must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.6-001"
+  },
+  {
+    "reqId": "8.6-02",
+    "chapter": "8",
+    "section": "8.6",
+    "requirement": "Submit must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.6-002"
+  },
+  {
+    "reqId": "8.6-03",
+    "chapter": "8",
+    "section": "8.6",
+    "requirement": "Approve must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.6-003"
+  },
+  {
+    "reqId": "8.6-04",
+    "chapter": "8",
+    "section": "8.6",
+    "requirement": "Reject must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.6-004"
+  },
+  {
+    "reqId": "8.6-05",
+    "chapter": "8",
+    "section": "8.6",
+    "requirement": "Send Back must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.6-005"
+  },
+  {
+    "reqId": "8.6-06",
+    "chapter": "8",
+    "section": "8.6",
+    "requirement": "Cancel must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.6-006"
+  },
+  {
+    "reqId": "8.6-07",
+    "chapter": "8",
+    "section": "8.6",
+    "requirement": "Post must not execute twice on the same version without detection.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.6-007"
+  },
+  {
+    "reqId": "8.7-01",
+    "chapter": "8",
+    "section": "8.7",
+    "requirement": "Posting must not execute except on the latest valid document version after concurrency verification.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.7-001"
+  },
+  {
+    "reqId": "8.8-01",
+    "chapter": "8",
+    "section": "8.8",
+    "requirement": "The platform shall reject conflicting updates.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.8-001"
+  },
+  {
+    "reqId": "8.8-02",
+    "chapter": "8",
+    "section": "8.8",
+    "requirement": "The platform shall not overwrite another user's changes during conflict.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.8-002"
+  },
+  {
+    "reqId": "8.8-03",
+    "chapter": "8",
+    "section": "8.8",
+    "requirement": "The platform shall require reload before retry after a conflicting update.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.8-003"
+  },
+  {
+    "reqId": "8.10-01",
+    "chapter": "8",
+    "section": "8.10",
+    "requirement": "Concurrency conflicts shall be recorded in audit when appropriate.",
+    "scope": "Document-specific",
+    "requirementId": "C08-8.10-001"
+  },
+  {
+    "reqId": "9.2-01",
+    "chapter": "9",
+    "section": "9.2",
+    "requirement": "System Document Numbers shall be assigned by the platform only.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.2-001"
+  },
+  {
+    "reqId": "9.2-02",
+    "chapter": "9",
+    "section": "9.2",
+    "requirement": "Users must not enter System Document Numbers.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.2-002"
+  },
+  {
+    "reqId": "9.2-03",
+    "chapter": "9",
+    "section": "9.2",
+    "requirement": "Users must not edit System Document Numbers.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.2-003"
+  },
+  {
+    "reqId": "9.2-04",
+    "chapter": "9",
+    "section": "9.2",
+    "requirement": "System Document Numbers shall be assigned at first Server Draft Save.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.2-004"
+  },
+  {
+    "reqId": "9.2-05",
+    "chapter": "9",
+    "section": "9.2",
+    "requirement": "System Document Number format shall be {Type Prefix}-{Year}-{Sequence}.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.2-005"
+  },
+  {
+    "reqId": "9.2-06",
+    "chapter": "9",
+    "section": "9.2",
+    "requirement": "External references such as supplier invoice numbers shall be separate fields from System Document Numbers.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.2-006"
+  },
+  {
+    "reqId": "9.3-01",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "System Document Numbers shall be unique within governed numbering scope.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-001"
+  },
+  {
+    "reqId": "9.3-02",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Upon first Server Draft, the System Document Number shall be permanently reserved.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-002"
+  },
+  {
+    "reqId": "9.3-03",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Numbers from deleted drafts shall never be released or recycled.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-003"
+  },
+  {
+    "reqId": "9.3-04",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Number gaps are acceptable but numbers must not be reused.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-004"
+  },
+  {
+    "reqId": "9.3-05",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "All creation channels (manual, import, integration, future) shall use the same numbering governance.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-005"
+  },
+  {
+    "reqId": "9.3-06",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Document number prefixes shall be governed centrally.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-006"
+  },
+  {
+    "reqId": "9.3-07",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Modules must not configure document number prefixes independently unless authorized.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-007"
+  },
+  {
+    "reqId": "9.3-08",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Gaps from failed or rolled-back number allocation operations are acceptable.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-008"
+  },
+  {
+    "reqId": "9.3-09",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Once assigned, a System Document Number shall be immutable for the entire document lifecycle.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-009"
+  },
+  {
+    "reqId": "9.3-10",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "System Document Number allocation shall be traceable through platform audit mechanisms.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-010"
+  },
+  {
+    "reqId": "9.3-11",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "Manual override of System Document Numbers is prohibited.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-011"
+  },
+  {
+    "reqId": "9.3-12",
+    "chapter": "9",
+    "section": "9.3",
+    "requirement": "System Document Number sequences shall reset annually per prefix per year or fiscal year per platform policy.",
+    "scope": "Document-specific",
+    "requirementId": "C09-9.3-012"
+  },
+  {
+    "reqId": "10.1-01",
+    "chapter": "10",
+    "section": "10.1",
+    "requirement": "Inbound movement documents shall not require stock check at posting.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.1-001"
+  },
+  {
+    "reqId": "10.1-02",
+    "chapter": "10",
+    "section": "10.1",
+    "requirement": "Outbound movement documents shall require stock check at posting.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.1-002"
+  },
+  {
+    "reqId": "10.2-01",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Stock availability shall be validated against the latest committed inventory state at Posting.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-001"
+  },
+  {
+    "reqId": "10.2-02",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Negative inventory is prohibited in DX OSE v2.0.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-002"
+  },
+  {
+    "reqId": "10.2-03",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Quantity must be greater than zero.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-003"
+  },
+  {
+    "reqId": "10.2-04",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Zero-quantity lines are prohibited.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-004"
+  },
+  {
+    "reqId": "10.2-05",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Quantity precision shall follow platform settings and validation shall use precise values.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-005"
+  },
+  {
+    "reqId": "10.2-06",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Stock validation shall be against the source inventory location defined by the transaction.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-006"
+  },
+  {
+    "reqId": "10.2-07",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "All inventory calculations shall use the base unit.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-007"
+  },
+  {
+    "reqId": "10.2-08",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "No transaction shall violate constitutional stock integrity rules.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-008"
+  },
+  {
+    "reqId": "10.2-09",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Inventory movements shall be generated exclusively by Posted transactions.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-009"
+  },
+  {
+    "reqId": "10.2-10",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Posted inventory movements shall never be edited.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-010"
+  },
+  {
+    "reqId": "10.2-11",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Posted inventory movement corrections shall be made via new governed transactions.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-011"
+  },
+  {
+    "reqId": "10.2-12",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Inbound documents shall not require stock check at posting.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-012"
+  },
+  {
+    "reqId": "10.2-13",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Outbound stock validation shall be authoritative on the platform.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-013"
+  },
+  {
+    "reqId": "10.2-14",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Client-side outbound stock checks may warn only and shall not be authoritative.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-014"
+  },
+  {
+    "reqId": "10.2-15",
+    "chapter": "10",
+    "section": "10.2",
+    "requirement": "Valuation at Posting shall follow Chapter 5 posting rules.",
+    "scope": "Inventory",
+    "requirementId": "C10-10.2-015"
+  },
+  {
+    "reqId": "11.3-01",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Changing display currency shall change symbol and format only.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-001"
+  },
+  {
+    "reqId": "11.3-02",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not convert amounts.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-002"
+  },
+  {
+    "reqId": "11.3-03",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not alter stored values.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-003"
+  },
+  {
+    "reqId": "11.3-04",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not alter ledger data.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-004"
+  },
+  {
+    "reqId": "11.3-05",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not alter valuation.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-005"
+  },
+  {
+    "reqId": "11.3-06",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not alter historical posted documents.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-006"
+  },
+  {
+    "reqId": "11.3-07",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not participate in financial calculations.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-007"
+  },
+  {
+    "reqId": "11.3-08",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not participate in inventory valuation.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-008"
+  },
+  {
+    "reqId": "11.3-09",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not participate in posting logic.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-009"
+  },
+  {
+    "reqId": "11.3-10",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not participate in taxation.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-010"
+  },
+  {
+    "reqId": "11.3-11",
+    "chapter": "11",
+    "section": "11.3",
+    "requirement": "Display currency must not participate in accounting transactions.",
+    "scope": "Financial",
+    "requirementId": "C11-11.3-011"
+  },
+  {
+    "reqId": "11.4-01",
+    "chapter": "11",
+    "section": "11.4",
+    "requirement": "Display Currency shall apply consistently across all user interfaces unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "requirementId": "C11-11.4-001"
+  },
+  {
+    "reqId": "11.4-02",
+    "chapter": "11",
+    "section": "11.4",
+    "requirement": "Display Currency shall apply consistently across reports unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "requirementId": "C11-11.4-002"
+  },
+  {
+    "reqId": "11.4-03",
+    "chapter": "11",
+    "section": "11.4",
+    "requirement": "Display Currency shall apply consistently across dashboards unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "requirementId": "C11-11.4-003"
+  },
+  {
+    "reqId": "11.4-04",
+    "chapter": "11",
+    "section": "11.4",
+    "requirement": "Display Currency shall apply consistently across exported documents unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "requirementId": "C11-11.4-004"
+  },
+  {
+    "reqId": "11.4-05",
+    "chapter": "11",
+    "section": "11.4",
+    "requirement": "Display Currency shall apply consistently across printed outputs unless explicitly governed otherwise.",
+    "scope": "Financial",
+    "requirementId": "C11-11.4-005"
+  },
+  {
+    "reqId": "11.4-06",
+    "chapter": "11",
+    "section": "11.4",
+    "requirement": "Reports and PDF shall use property display currency as each channel is brought under this standard.",
+    "scope": "Financial",
+    "requirementId": "C11-11.4-006"
+  },
+  {
+    "reqId": "11.6-01",
+    "chapter": "11",
+    "section": "11.6",
+    "requirement": "Changing Property Display Currency must not modify historical posted documents.",
+    "scope": "Financial",
+    "requirementId": "C11-11.6-001"
+  },
+  {
+    "reqId": "11.6-02",
+    "chapter": "11",
+    "section": "11.6",
+    "requirement": "Changing Property Display Currency must not modify stored business data.",
+    "scope": "Financial",
+    "requirementId": "C11-11.6-002"
+  },
+  {
+    "reqId": "12.2-01",
+    "chapter": "12",
+    "section": "12.2",
+    "requirement": "Optional header fields omitted when not applicable shall not cause positions to shift arbitrarily.",
+    "scope": "Document-specific",
+    "requirementId": "C12-12.2-001"
+  },
+  {
+    "reqId": "12.3-01",
+    "chapter": "12",
+    "section": "12.3",
+    "requirement": "System header fields including document number, status, created by/at, and posted by/at must not be user-editable.",
+    "scope": "Document-specific",
+    "requirementId": "C12-12.3-001"
+  },
+  {
+    "reqId": "12.4-01",
+    "chapter": "12",
+    "section": "12.4",
+    "requirement": "Header fields shall become read-only once the document enters a non-editable lifecycle state unless explicitly governed otherwise.",
+    "scope": "Document-specific",
+    "requirementId": "C12-12.4-001"
+  },
+  {
+    "reqId": "12.5-01",
+    "chapter": "12",
+    "section": "12.5",
+    "requirement": "Changes to property, department, or warehouse after lines exist or after workflow progress must require confirmation.",
+    "scope": "Document-specific",
+    "requirementId": "C12-12.5-001"
+  },
+  {
+    "reqId": "12.5-02",
+    "chapter": "12",
+    "section": "12.5",
+    "requirement": "Changes to property, department, or warehouse after lines exist or after workflow progress shall follow document business rules.",
+    "scope": "Document-specific",
+    "requirementId": "C12-12.5-002"
+  },
+  {
+    "reqId": "12.6-01",
+    "chapter": "12",
+    "section": "12.6",
+    "requirement": "Header information and document lines shall remain logically consistent throughout the lifecycle unless explicitly governed otherwise.",
+    "scope": "Document-specific",
+    "requirementId": "C12-12.6-001"
+  },
+  {
+    "reqId": "12.7-01",
+    "chapter": "12",
+    "section": "12.7",
+    "requirement": "Modules adding header fields shall preserve standard header order and positions.",
+    "scope": "Document-specific",
+    "requirementId": "C12-12.7-001"
+  },
+  {
+    "reqId": "13.2-01",
+    "chapter": "13",
+    "section": "13.2",
+    "requirement": "Each document line shall maintain a unique internal identity independent of display order or row number.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.2-001"
+  },
+  {
+    "reqId": "13.4-01",
+    "chapter": "13",
+    "section": "13.4",
+    "requirement": "Posted document lines shall be immutable.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.4-001"
+  },
+  {
+    "reqId": "13.4-02",
+    "chapter": "13",
+    "section": "13.4",
+    "requirement": "Posted document line corrections shall be made via new governed business transactions.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.4-002"
+  },
+  {
+    "reqId": "13.5-01",
+    "chapter": "13",
+    "section": "13.5",
+    "requirement": "Line values and calculated fields shall recalculate automatically per governed business rules when relevant data changes.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.5-001"
+  },
+  {
+    "reqId": "13.6-01",
+    "chapter": "13",
+    "section": "13.6",
+    "requirement": "All document lines shall remain consistent with governing business context in the header unless explicitly governed otherwise.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.6-001"
+  },
+  {
+    "reqId": "13.7-01",
+    "chapter": "13",
+    "section": "13.7",
+    "requirement": "Document totals must not be directly user-editable.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.7-001"
+  },
+  {
+    "reqId": "13.7-02",
+    "chapter": "13",
+    "section": "13.7",
+    "requirement": "Line totals must not be directly user-editable.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.7-002"
+  },
+  {
+    "reqId": "13.8-01",
+    "chapter": "13",
+    "section": "13.8",
+    "requirement": "Duplicate line behavior shall be defined by each business document according to functional requirements.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.8-001"
+  },
+  {
+    "reqId": "13.9-01",
+    "chapter": "13",
+    "section": "13.9",
+    "requirement": "Significant line-level business changes shall be auditable per platform audit policy.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.9-001"
+  },
+  {
+    "reqId": "13.10-01",
+    "chapter": "13",
+    "section": "13.10",
+    "requirement": "Large document line datasets shall not degrade usability per Chapter 27.",
+    "scope": "Document-specific",
+    "requirementId": "C13-13.10-001"
+  },
+  {
+    "reqId": "14.3-01",
+    "chapter": "14",
+    "section": "14.3",
+    "requirement": "Posted attachments shall not be modified except by explicit admin governance.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.3-001"
+  },
+  {
+    "reqId": "14.3-02",
+    "chapter": "14",
+    "section": "14.3",
+    "requirement": "Posted attachments shall not be replaced except by explicit admin governance.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.3-002"
+  },
+  {
+    "reqId": "14.3-03",
+    "chapter": "14",
+    "section": "14.3",
+    "requirement": "Posted attachments shall not be deleted except by explicit admin governance.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.3-003"
+  },
+  {
+    "reqId": "14.3-04",
+    "chapter": "14",
+    "section": "14.3",
+    "requirement": "Required attachments must block submit when missing.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.3-004"
+  },
+  {
+    "reqId": "14.4-01",
+    "chapter": "14",
+    "section": "14.4",
+    "requirement": "The platform shall enforce allowed attachment file types per platform policy.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.4-001"
+  },
+  {
+    "reqId": "14.4-02",
+    "chapter": "14",
+    "section": "14.4",
+    "requirement": "The platform shall enforce maximum attachment file size per platform policy.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.4-002"
+  },
+  {
+    "reqId": "14.4-03",
+    "chapter": "14",
+    "section": "14.4",
+    "requirement": "The platform shall enforce maximum attachment count per platform policy.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.4-003"
+  },
+  {
+    "reqId": "14.5-01",
+    "chapter": "14",
+    "section": "14.5",
+    "requirement": "Uploaded attachment files shall comply with platform security validation policy.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.5-001"
+  },
+  {
+    "reqId": "14.6-01",
+    "chapter": "14",
+    "section": "14.6",
+    "requirement": "Attachment download shall be subject to the same authorization as document view.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.6-001"
+  },
+  {
+    "reqId": "14.8-01",
+    "chapter": "14",
+    "section": "14.8",
+    "requirement": "Attachment filenames must not serve as internal identifiers.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.8-001"
+  },
+  {
+    "reqId": "14.9-01",
+    "chapter": "14",
+    "section": "14.9",
+    "requirement": "All attachment operations shall be auditable.",
+    "scope": "Document-specific",
+    "requirementId": "C14-14.9-001"
+  },
+  {
+    "reqId": "15.2-01",
+    "chapter": "15",
+    "section": "15.2",
+    "requirement": "Reject shall require a reason where defined.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.2-001"
+  },
+  {
+    "reqId": "15.2-02",
+    "chapter": "15",
+    "section": "15.2",
+    "requirement": "Send Back shall require a reason where defined.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.2-002"
+  },
+  {
+    "reqId": "15.2-03",
+    "chapter": "15",
+    "section": "15.2",
+    "requirement": "Cancel shall require a reason where defined.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.2-003"
+  },
+  {
+    "reqId": "15.3-01",
+    "chapter": "15",
+    "section": "15.3",
+    "requirement": "Workflow comments shall become immutable once recorded.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.3-001"
+  },
+  {
+    "reqId": "15.3-02",
+    "chapter": "15",
+    "section": "15.3",
+    "requirement": "System notes shall become immutable once recorded.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.3-002"
+  },
+  {
+    "reqId": "15.3-03",
+    "chapter": "15",
+    "section": "15.3",
+    "requirement": "Audit comments shall become immutable once recorded.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.3-003"
+  },
+  {
+    "reqId": "15.4-01",
+    "chapter": "15",
+    "section": "15.4",
+    "requirement": "System notes shall be generated exclusively by the platform.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.4-001"
+  },
+  {
+    "reqId": "15.4-02",
+    "chapter": "15",
+    "section": "15.4",
+    "requirement": "Users must not manually create system notes.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.4-002"
+  },
+  {
+    "reqId": "15.4-03",
+    "chapter": "15",
+    "section": "15.4",
+    "requirement": "Users must not manually modify system notes.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.4-003"
+  },
+  {
+    "reqId": "15.5-01",
+    "chapter": "15",
+    "section": "15.5",
+    "requirement": "Notes and comments shall appear in chronological order within the unified timeline.",
+    "scope": "Document-specific",
+    "requirementId": "C15-15.5-001"
+  },
+  {
+    "reqId": "16.2-01",
+    "chapter": "16",
+    "section": "16.2",
+    "requirement": "Item images are Item Master data.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.2-001"
+  },
+  {
+    "reqId": "16.2-02",
+    "chapter": "16",
+    "section": "16.2",
+    "requirement": "Item images must not be created through transactional documents.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.2-002"
+  },
+  {
+    "reqId": "16.2-03",
+    "chapter": "16",
+    "section": "16.2",
+    "requirement": "Item images must not be modified through transactional documents.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.2-003"
+  },
+  {
+    "reqId": "16.3-01",
+    "chapter": "16",
+    "section": "16.3",
+    "requirement": "Item images shall have a single source in Item Master.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.3-001"
+  },
+  {
+    "reqId": "16.3-02",
+    "chapter": "16",
+    "section": "16.3",
+    "requirement": "A standardized placeholder shall be shown when no item image exists.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.3-002"
+  },
+  {
+    "reqId": "16.3-03",
+    "chapter": "16",
+    "section": "16.3",
+    "requirement": "Item images in grids shall use thumbnails, not full resolution.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.3-003"
+  },
+  {
+    "reqId": "16.3-04",
+    "chapter": "16",
+    "section": "16.3",
+    "requirement": "Maximum item image size shall be 1 MB per image.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.3-004"
+  },
+  {
+    "reqId": "16.3-05",
+    "chapter": "16",
+    "section": "16.3",
+    "requirement": "Supported item image formats and dimensions shall follow platform media policy.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.3-005"
+  },
+  {
+    "reqId": "16.3-06",
+    "chapter": "16",
+    "section": "16.3",
+    "requirement": "Unified export behavior shall apply when an item image is absent.",
+    "scope": "Platform-wide",
+    "requirementId": "C16-16.3-006"
+  },
+  {
+    "reqId": "17.2-01",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Keyboard navigation shall be keyboard-first across governed experiences.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-001"
+  },
+  {
+    "reqId": "17.2-02",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Enter shall move to the next field and shall not submit, post, or delete.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-002"
+  },
+  {
+    "reqId": "17.2-03",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Enter at row end shall move to the next row or add a row.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-003"
+  },
+  {
+    "reqId": "17.2-04",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Shift+Enter shall move to the previous field.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-004"
+  },
+  {
+    "reqId": "17.2-05",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Enter in a textarea shall insert a new line.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-005"
+  },
+  {
+    "reqId": "17.2-06",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Esc shall close lookup, calendar, or small overlay components.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-006"
+  },
+  {
+    "reqId": "17.2-07",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Tab shall follow standard browser focus order.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-007"
+  },
+  {
+    "reqId": "17.2-08",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "Invalid fields shall retain focus.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-008"
+  },
+  {
+    "reqId": "17.2-09",
+    "chapter": "17",
+    "section": "17.2",
+    "requirement": "After item pick in line entry, focus shall move to quantity.",
+    "scope": "UX",
+    "requirementId": "C17-17.2-009"
+  },
+  {
+    "reqId": "17.3-01",
+    "chapter": "17",
+    "section": "17.3",
+    "requirement": "Keyboard behavior shall be consistent across all modules.",
+    "scope": "UX",
+    "requirementId": "C17-17.3-001"
+  },
+  {
+    "reqId": "17.3-02",
+    "chapter": "17",
+    "section": "17.3",
+    "requirement": "Focus shall be visually distinguishable.",
+    "scope": "UX",
+    "requirementId": "C17-17.3-002"
+  },
+  {
+    "reqId": "17.3-03",
+    "chapter": "17",
+    "section": "17.3",
+    "requirement": "Keyboard navigation shall skip disabled controls.",
+    "scope": "UX",
+    "requirementId": "C17-17.3-003"
+  },
+  {
+    "reqId": "17.3-04",
+    "chapter": "17",
+    "section": "17.3",
+    "requirement": "Keyboard navigation shall skip hidden controls.",
+    "scope": "UX",
+    "requirementId": "C17-17.3-004"
+  },
+  {
+    "reqId": "17.3-05",
+    "chapter": "17",
+    "section": "17.3",
+    "requirement": "Dialogs shall assign initial focus to the primary interactive element.",
+    "scope": "UX",
+    "requirementId": "C17-17.3-005"
+  },
+  {
+    "reqId": "17.3-06",
+    "chapter": "17",
+    "section": "17.3",
+    "requirement": "Global shortcuts shall be centrally governed.",
+    "scope": "UX",
+    "requirementId": "C17-17.3-006"
+  },
+  {
+    "reqId": "17.3-07",
+    "chapter": "17",
+    "section": "17.3",
+    "requirement": "Modules must not introduce independent global shortcuts.",
+    "scope": "UX",
+    "requirementId": "C17-17.3-007"
+  },
+  {
+    "reqId": "18.1-01",
+    "chapter": "18",
+    "section": "18.1",
+    "requirement": "Each error type shall use exactly one display channel.",
+    "scope": "UX",
+    "requirementId": "C18-18.1-001"
+  },
+  {
+    "reqId": "18.2-01",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Validation errors shall disappear when fixed.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-001"
+  },
+  {
+    "reqId": "18.2-02",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "On submit, focus shall move to the first validation error.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-002"
+  },
+  {
+    "reqId": "18.2-03",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "When many errors exist, the summary banner shall show the error count.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-003"
+  },
+  {
+    "reqId": "18.2-04",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "When many errors exist, error details shall appear at fields or rows.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-004"
+  },
+  {
+    "reqId": "18.2-05",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "All validation and error messages shall support localization.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-005"
+  },
+  {
+    "reqId": "18.2-06",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Backend validation shall return codes.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-006"
+  },
+  {
+    "reqId": "18.2-07",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "The platform shall present translated text for backend validation codes.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-007"
+  },
+  {
+    "reqId": "18.2-08",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Validation shall be deterministic: same input and conditions shall produce the same result.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-008"
+  },
+  {
+    "reqId": "18.2-09",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Validation shall occur at data entry per business rules.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-009"
+  },
+  {
+    "reqId": "18.2-10",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Validation shall occur at workflow actions per business rules.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-010"
+  },
+  {
+    "reqId": "18.2-11",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Validation shall occur at posting per business rules.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-011"
+  },
+  {
+    "reqId": "18.2-12",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Client-side validation shall assist only.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-012"
+  },
+  {
+    "reqId": "18.2-13",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Server-side validation shall be authoritative.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-013"
+  },
+  {
+    "reqId": "18.2-14",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Validation messages shall be presented in logical order: header, then lines, then document.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-014"
+  },
+  {
+    "reqId": "18.2-15",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Warnings shall be informational unless governed otherwise.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-015"
+  },
+  {
+    "reqId": "18.2-16",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "Validation errors shall block the operation.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-016"
+  },
+  {
+    "reqId": "18.2-17",
+    "chapter": "18",
+    "section": "18.2",
+    "requirement": "The same error must not be duplicated across display channels.",
+    "scope": "UX",
+    "requirementId": "C18-18.2-017"
+  },
+  {
+    "reqId": "19.2-01",
+    "chapter": "19",
+    "section": "19.2",
+    "requirement": "Error placement shall match severity.",
+    "scope": "UX",
+    "requirementId": "C19-19.2-001"
+  },
+  {
+    "reqId": "19.2-02",
+    "chapter": "19",
+    "section": "19.2",
+    "requirement": "Errors must not use duplicate display channels.",
+    "scope": "UX",
+    "requirementId": "C19-19.2-002"
+  },
+  {
+    "reqId": "19.3-01",
+    "chapter": "19",
+    "section": "19.3",
+    "requirement": "User-facing error messages shall be clear and actionable.",
+    "scope": "UX",
+    "requirementId": "C19-19.3-001"
+  },
+  {
+    "reqId": "19.3-02",
+    "chapter": "19",
+    "section": "19.3",
+    "requirement": "User-facing error messages shall be free of technical implementation details.",
+    "scope": "UX",
+    "requirementId": "C19-19.3-002"
+  },
+  {
+    "reqId": "19.3-03",
+    "chapter": "19",
+    "section": "19.3",
+    "requirement": "Stack traces must never be exposed to end users.",
+    "scope": "Security",
+    "requirementId": "C19-19.3-003"
+  },
+  {
+    "reqId": "19.3-04",
+    "chapter": "19",
+    "section": "19.3",
+    "requirement": "SQL details must never be exposed to end users.",
+    "scope": "Security",
+    "requirementId": "C19-19.3-004"
+  },
+  {
+    "reqId": "19.3-05",
+    "chapter": "19",
+    "section": "19.3",
+    "requirement": "Internal IDs must never be exposed to end users in error messages.",
+    "scope": "Security",
+    "requirementId": "C19-19.3-005"
+  },
+  {
+    "reqId": "19.5-01",
+    "chapter": "19",
+    "section": "19.5",
+    "requirement": "Equivalent error conditions shall produce consistent error codes and user experience.",
+    "scope": "UX",
+    "requirementId": "C19-19.5-001"
+  },
+  {
+    "reqId": "19.7-01",
+    "chapter": "19",
+    "section": "19.7",
+    "requirement": "The first validation error shall be focusable.",
+    "scope": "Accessibility",
+    "requirementId": "C19-19.7-001"
+  },
+  {
+    "reqId": "19.7-02",
+    "chapter": "19",
+    "section": "19.7",
+    "requirement": "The first validation error shall be announced to assistive technology.",
+    "scope": "Accessibility",
+    "requirementId": "C19-19.7-002"
+  },
+  {
+    "reqId": "20.2-01",
+    "chapter": "20",
+    "section": "20.2",
+    "requirement": "Notifications shall use a unified dictionary.",
+    "scope": "UX",
+    "requirementId": "C20-20.2-001"
+  },
+  {
+    "reqId": "20.2-02",
+    "chapter": "20",
+    "section": "20.2",
+    "requirement": "Notifications for the same event shall be deduplicated.",
+    "scope": "UX",
+    "requirementId": "C20-20.2-002"
+  },
+  {
+    "reqId": "20.2-03",
+    "chapter": "20",
+    "section": "20.2",
+    "requirement": "Notifications must not rely on color alone.",
+    "scope": "UX",
+    "requirementId": "C20-20.2-003"
+  },
+  {
+    "reqId": "20.5-01",
+    "chapter": "20",
+    "section": "20.5",
+    "requirement": "The platform must not notify a user to open a document they cannot access.",
+    "scope": "UX",
+    "requirementId": "C20-20.5-001"
+  },
+  {
+    "reqId": "21.1-01",
+    "chapter": "21",
+    "section": "21.1",
+    "requirement": "Loading scope shall match the operation scope.",
+    "scope": "UX",
+    "requirementId": "C21-21.1-001"
+  },
+  {
+    "reqId": "21.1-02",
+    "chapter": "21",
+    "section": "21.1",
+    "requirement": "Long operations shall show progress or status.",
+    "scope": "UX",
+    "requirementId": "C21-21.1-002"
+  },
+  {
+    "reqId": "21.1-03",
+    "chapter": "21",
+    "section": "21.1",
+    "requirement": "Action buttons shall be disabled during the action.",
+    "scope": "UX",
+    "requirementId": "C21-21.1-003"
+  },
+  {
+    "reqId": "21.1-04",
+    "chapter": "21",
+    "section": "21.1",
+    "requirement": "Double submission is prohibited.",
+    "scope": "UX",
+    "requirementId": "C21-21.1-004"
+  },
+  {
+    "reqId": "21.2-01",
+    "chapter": "21",
+    "section": "21.2",
+    "requirement": "Partial operations must not block the entire application.",
+    "scope": "UX",
+    "requirementId": "C21-21.2-001"
+  },
+  {
+    "reqId": "21.3-01",
+    "chapter": "21",
+    "section": "21.3",
+    "requirement": "If loading exceeds a reasonable duration, the user shall be informed the operation continues.",
+    "scope": "UX",
+    "requirementId": "C21-21.3-001"
+  },
+  {
+    "reqId": "22.2-01",
+    "chapter": "22",
+    "section": "22.2",
+    "requirement": "Every workflow action must generate an audit record.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.2-001"
+  },
+  {
+    "reqId": "22.2-02",
+    "chapter": "22",
+    "section": "22.2",
+    "requirement": "Every significant attachment change must generate an audit record.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.2-002"
+  },
+  {
+    "reqId": "22.2-03",
+    "chapter": "22",
+    "section": "22.2",
+    "requirement": "Every significant line change must generate an audit record.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.2-003"
+  },
+  {
+    "reqId": "22.3-01",
+    "chapter": "22",
+    "section": "22.3",
+    "requirement": "The document timeline shall be a single chronological Workflow Timeline. Order contract (platform SSOT; Get Pass is the reference implementation): HISTORY by actedAt as Submit → Approvals → Send Back → Resubmit → Approvals…; then CURRENT; then FUTURE pending steps by stepNumber. Module builders emit audits/entries; assignGlobalOrder is the only ordering authority.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.3-001"
+  },
+  {
+    "reqId": "22.3-02",
+    "chapter": "22",
+    "section": "22.3",
+    "requirement": "Audit records shall be immutable.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.3-002"
+  },
+  {
+    "reqId": "22.3-03",
+    "chapter": "22",
+    "section": "22.3",
+    "requirement": "Audit timestamps shall be stored internally in UTC.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.3-003"
+  },
+  {
+    "reqId": "22.3-04",
+    "chapter": "22",
+    "section": "22.3",
+    "requirement": "Audit timestamps shall be displayed per user time zone.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.3-004"
+  },
+  {
+    "reqId": "22.3-05",
+    "chapter": "22",
+    "section": "22.3",
+    "requirement": "Timeline filtering is permitted without altering audit records.",
+    "scope": "Document-specific",
+    "requirementId": "C22-22.3-005"
+  },
+  {
+    "reqId": "23.1-01",
+    "chapter": "23",
+    "section": "23.1",
+    "requirement": "Lookup behavior shall be unified for items, parties, locations, and references.",
+    "scope": "UX",
+    "requirementId": "C23-23.1-001"
+  },
+  {
+    "reqId": "23.2-01",
+    "chapter": "23",
+    "section": "23.2",
+    "requirement": "Lookup profiles (Receiving, stock-based, catalog, issue) shall use the same UX with differing data scope only.",
+    "scope": "UX",
+    "requirementId": "C23-23.2-001"
+  },
+  {
+    "reqId": "23.3-01",
+    "chapter": "23",
+    "section": "23.3",
+    "requirement": "Lookup search shall support code, name, and barcode.",
+    "scope": "UX",
+    "requirementId": "C23-23.3-001"
+  },
+  {
+    "reqId": "23.3-02",
+    "chapter": "23",
+    "section": "23.3",
+    "requirement": "Lookup search ranking shall be exact code, then exact barcode, then prefix, then contains.",
+    "scope": "UX",
+    "requirementId": "C23-23.3-002"
+  },
+  {
+    "reqId": "23.3-03",
+    "chapter": "23",
+    "section": "23.3",
+    "requirement": "Lookup search shall debounce before executing search.",
+    "scope": "UX",
+    "requirementId": "C23-23.3-003"
+  },
+  {
+    "reqId": "23.3-04",
+    "chapter": "23",
+    "section": "23.3",
+    "requirement": "Lookup search shall normalize case and spaces insensitively.",
+    "scope": "UX",
+    "requirementId": "C23-23.3-004"
+  },
+  {
+    "reqId": "23.4-01",
+    "chapter": "23",
+    "section": "23.4",
+    "requirement": "Lookup keyboard navigation shall support arrow up and arrow down.",
+    "scope": "UX",
+    "requirementId": "C23-23.4-001"
+  },
+  {
+    "reqId": "23.4-02",
+    "chapter": "23",
+    "section": "23.4",
+    "requirement": "Lookup keyboard navigation shall support Enter, Esc, and Tab.",
+    "scope": "UX",
+    "requirementId": "C23-23.4-002"
+  },
+  {
+    "reqId": "23.4-03",
+    "chapter": "23",
+    "section": "23.4",
+    "requirement": "Lookup shall close on select.",
+    "scope": "UX",
+    "requirementId": "C23-23.4-003"
+  },
+  {
+    "reqId": "23.4-04",
+    "chapter": "23",
+    "section": "23.4",
+    "requirement": "Lookup shall close on outside click.",
+    "scope": "UX",
+    "requirementId": "C23-23.4-004"
+  },
+  {
+    "reqId": "23.4-05",
+    "chapter": "23",
+    "section": "23.4",
+    "requirement": "Lookup shall close on field exit.",
+    "scope": "UX",
+    "requirementId": "C23-23.4-005"
+  },
+  {
+    "reqId": "23.4-06",
+    "chapter": "23",
+    "section": "23.4",
+    "requirement": "Only one lookup shall be open at a time.",
+    "scope": "UX",
+    "requirementId": "C23-23.4-006"
+  },
+  {
+    "reqId": "23.4-07",
+    "chapter": "23",
+    "section": "23.4",
+    "requirement": "After item pick in line entry, focus shall move to quantity.",
+    "scope": "UX",
+    "requirementId": "C23-23.4-007"
+  },
+  {
+    "reqId": "23.5-01",
+    "chapter": "23",
+    "section": "23.5",
+    "requirement": "Lookup loading, no-results, and error-with-retry states shall use unified messaging.",
+    "scope": "UX",
+    "requirementId": "C23-23.5-001"
+  },
+  {
+    "reqId": "23.5-02",
+    "chapter": "23",
+    "section": "23.5",
+    "requirement": "Lookup shall use unified empty states.",
+    "scope": "UX",
+    "requirementId": "C23-23.5-002"
+  },
+  {
+    "reqId": "23.6-01",
+    "chapter": "23",
+    "section": "23.6",
+    "requirement": "Lookup results shall be filtered by permission to show only authorized data.",
+    "scope": "UX",
+    "requirementId": "C23-23.6-001"
+  },
+  {
+    "reqId": "23.6-02",
+    "chapter": "23",
+    "section": "23.6",
+    "requirement": "Lookup shall enforce tenant isolation with no cross-tenant data.",
+    "scope": "UX",
+    "requirementId": "C23-23.6-002"
+  },
+  {
+    "reqId": "23.6-03",
+    "chapter": "23",
+    "section": "23.6",
+    "requirement": "Large lookup result sets shall use paging or infinite scroll per platform policy.",
+    "scope": "UX",
+    "requirementId": "C23-23.6-003"
+  },
+  {
+    "reqId": "23.6-04",
+    "chapter": "23",
+    "section": "23.6",
+    "requirement": "Large catalogs shall use server-side search.",
+    "scope": "UX",
+    "requirementId": "C23-23.6-004"
+  },
+  {
+    "reqId": "23.6-05",
+    "chapter": "23",
+    "section": "23.6",
+    "requirement": "Loading entire large catalogs into the client is prohibited.",
+    "scope": "UX",
+    "requirementId": "C23-23.6-005"
+  },
+  {
+    "reqId": "24.1-01",
+    "chapter": "24",
+    "section": "24.1",
+    "requirement": "Operational data entry shall be desktop only for v2.0.",
+    "scope": "UX",
+    "requirementId": "C24-24.1-001"
+  },
+  {
+    "reqId": "24.2-01",
+    "chapter": "24",
+    "section": "24.2",
+    "requirement": "Minimum supported resolution shall be 1366x768.",
+    "scope": "UX",
+    "requirementId": "C24-24.2-001"
+  },
+  {
+    "reqId": "24.3-01",
+    "chapter": "24",
+    "section": "24.3",
+    "requirement": "Zoom support from 80% to 125% is required for release acceptance.",
+    "scope": "UX",
+    "requirementId": "C24-24.3-001"
+  },
+  {
+    "reqId": "24.4-01",
+    "chapter": "24",
+    "section": "24.4",
+    "requirement": "Pages shall not require horizontal page scroll except inside grids.",
+    "scope": "UX",
+    "requirementId": "C24-24.4-001"
+  },
+  {
+    "reqId": "24.4-02",
+    "chapter": "24",
+    "section": "24.4",
+    "requirement": "Titles shall not be clipped.",
+    "scope": "UX",
+    "requirementId": "C24-24.4-002"
+  },
+  {
+    "reqId": "24.4-03",
+    "chapter": "24",
+    "section": "24.4",
+    "requirement": "Buttons shall not overlap.",
+    "scope": "UX",
+    "requirementId": "C24-24.4-003"
+  },
+  {
+    "reqId": "24.4-04",
+    "chapter": "24",
+    "section": "24.4",
+    "requirement": "Create screen primary actions shall be visible at 1366x768 and 100% zoom.",
+    "scope": "UX",
+    "requirementId": "C24-24.4-004"
+  },
+  {
+    "reqId": "24.4-05",
+    "chapter": "24",
+    "section": "24.4",
+    "requirement": "Dialogs shall fit the viewport with internal scroll.",
+    "scope": "UX",
+    "requirementId": "C24-24.4-005"
+  },
+  {
+    "reqId": "24.4-06",
+    "chapter": "24",
+    "section": "24.4",
+    "requirement": "Tables shall scroll internally.",
+    "scope": "UX",
+    "requirementId": "C24-24.4-006"
+  },
+  {
+    "reqId": "24.5-01",
+    "chapter": "24",
+    "section": "24.5",
+    "requirement": "Supported browsers shall follow the platform browser support matrix.",
+    "scope": "UX",
+    "requirementId": "C24-24.5-001"
+  },
+  {
+    "reqId": "24.5-02",
+    "chapter": "24",
+    "section": "24.5",
+    "requirement": "High DPI displays (2K/4K) shall be supported.",
+    "scope": "UX",
+    "requirementId": "C24-24.5-002"
+  },
+  {
+    "reqId": "24.5-03",
+    "chapter": "24",
+    "section": "24.5",
+    "requirement": "Multi-monitor presentation shall be consistent.",
+    "scope": "UX",
+    "requirementId": "C24-24.5-003"
+  },
+  {
+    "reqId": "24.6-01",
+    "chapter": "24",
+    "section": "24.6",
+    "requirement": "Responsive test matrix 1366x768 at 80/90/100/110/125% zoom is required for Definition of Done.",
+    "scope": "UX",
+    "requirementId": "C24-24.6-001"
+  },
+  {
+    "reqId": "24.6-02",
+    "chapter": "24",
+    "section": "24.6",
+    "requirement": "Responsive test matrix 1440/1600/1920 at 100% zoom is required for Definition of Done.",
+    "scope": "UX",
+    "requirementId": "C24-24.6-002"
+  },
+  {
+    "reqId": "25.2-01",
+    "chapter": "25",
+    "section": "25.2",
+    "requirement": "Modules must not invent unrelated document layouts.",
+    "scope": "UX",
+    "requirementId": "C25-25.2-001"
+  },
+  {
+    "reqId": "25.2-02",
+    "chapter": "25",
+    "section": "25.2",
+    "requirement": "All modules must declare and follow one document layout archetype.",
+    "scope": "UX",
+    "requirementId": "C25-25.2-002"
+  },
+  {
+    "reqId": "25.3-01",
+    "chapter": "25",
+    "section": "25.3",
+    "requirement": "Primary scroll owner shall be defined per document layout archetype.",
+    "scope": "UX",
+    "requirementId": "C25-25.3-001"
+  },
+  {
+    "reqId": "25.3-02",
+    "chapter": "25",
+    "section": "25.3",
+    "requirement": "Primary scroll owner shall be consistent per archetype.",
+    "scope": "UX",
+    "requirementId": "C25-25.3-002"
+  },
+  {
+    "reqId": "26.1-01",
+    "chapter": "26",
+    "section": "26.1",
+    "requirement": "Print and PDF export must match.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.1-001"
+  },
+  {
+    "reqId": "26.1-02",
+    "chapter": "26",
+    "section": "26.1",
+    "requirement": "Printed and exported documents shall include status watermarks such as draft, posted, and void.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.1-002"
+  },
+  {
+    "reqId": "26.1-03",
+    "chapter": "26",
+    "section": "26.1",
+    "requirement": "Printed and exported documents shall include header and footer with organization identity.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.1-003"
+  },
+  {
+    "reqId": "26.1-04",
+    "chapter": "26",
+    "section": "26.1",
+    "requirement": "Printed and exported documents shall include page numbers and print metadata.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.1-004"
+  },
+  {
+    "reqId": "26.2-01",
+    "chapter": "26",
+    "section": "26.2",
+    "requirement": "The platform electronic record is authoritative over printed or exported copies.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.2-001"
+  },
+  {
+    "reqId": "26.3-01",
+    "chapter": "26",
+    "section": "26.3",
+    "requirement": "Print shall be subject to the same permission model as document view.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.3-001"
+  },
+  {
+    "reqId": "26.3-02",
+    "chapter": "26",
+    "section": "26.3",
+    "requirement": "Export shall be subject to the same permission model as document view.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.3-002"
+  },
+  {
+    "reqId": "26.3-03",
+    "chapter": "26",
+    "section": "26.3",
+    "requirement": "Export authorization shall be explicit.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.3-003"
+  },
+  {
+    "reqId": "26.4-01",
+    "chapter": "26",
+    "section": "26.4",
+    "requirement": "Sensitive data shall be masked per authorization on export and print.",
+    "scope": "Document-specific",
+    "requirementId": "C26-26.4-001"
+  },
+  {
+    "reqId": "27.1-01",
+    "chapter": "27",
+    "section": "27.1",
+    "requirement": "Large lists shall use paging or virtual presentation.",
+    "scope": "Platform-wide",
+    "requirementId": "C27-27.1-001"
+  },
+  {
+    "reqId": "27.1-02",
+    "chapter": "27",
+    "section": "27.1",
+    "requirement": "Server-assisted search shall be used when warranted for large lists.",
+    "scope": "Platform-wide",
+    "requirementId": "C27-27.1-002"
+  },
+  {
+    "reqId": "27.1-03",
+    "chapter": "27",
+    "section": "27.1",
+    "requirement": "Search requests shall use debounce and cancel in-flight requests.",
+    "scope": "Platform-wide",
+    "requirementId": "C27-27.1-003"
+  },
+  {
+    "reqId": "27.1-04",
+    "chapter": "27",
+    "section": "27.1",
+    "requirement": "Heavy export and print operations shall be asynchronous with user feedback.",
+    "scope": "Platform-wide",
+    "requirementId": "C27-27.1-004"
+  },
+  {
+    "reqId": "28.1-01",
+    "chapter": "28",
+    "section": "28.1",
+    "requirement": "Interactive elements shall be labeled.",
+    "scope": "Accessibility",
+    "requirementId": "C28-28.1-001"
+  },
+  {
+    "reqId": "28.1-02",
+    "chapter": "28",
+    "section": "28.1",
+    "requirement": "Color shall not be the sole state indicator.",
+    "scope": "Accessibility",
+    "requirementId": "C28-28.1-002"
+  },
+  {
+    "reqId": "28.1-03",
+    "chapter": "28",
+    "section": "28.1",
+    "requirement": "Contrast shall meet agreed accessibility targets.",
+    "scope": "Accessibility",
+    "requirementId": "C28-28.1-003"
+  },
+  {
+    "reqId": "28.2-01",
+    "chapter": "28",
+    "section": "28.2",
+    "requirement": "The platform shall support screen reader compatibility for governed interactions.",
+    "scope": "Accessibility",
+    "requirementId": "C28-28.2-001"
+  },
+  {
+    "reqId": "28.3-01",
+    "chapter": "28",
+    "section": "28.3",
+    "requirement": "Validation messages shall be accessible to assistive technology.",
+    "scope": "Accessibility",
+    "requirementId": "C28-28.3-001"
+  },
+  {
+    "reqId": "28.3-02",
+    "chapter": "28",
+    "section": "28.3",
+    "requirement": "Error messages shall be accessible to assistive technology.",
+    "scope": "Accessibility",
+    "requirementId": "C28-28.3-002"
+  },
+  {
+    "reqId": "29.1-01",
+    "chapter": "29",
+    "section": "29.1",
+    "requirement": "New capabilities must declare applicable Constitution chapters before release.",
+    "scope": "Governance",
+    "requirementId": "C29-29.1-001"
+  },
+  {
+    "reqId": "29.1-02",
+    "chapter": "29",
+    "section": "29.1",
+    "requirement": "Revised capabilities must declare applicable Constitution chapters before release.",
+    "scope": "Governance",
+    "requirementId": "C29-29.1-002"
+  },
+  {
+    "reqId": "29.1-03",
+    "chapter": "29",
+    "section": "29.1",
+    "requirement": "New and revised capabilities must demonstrate Constitution compliance before release.",
+    "scope": "Governance",
+    "requirementId": "C29-29.1-003"
+  },
+  {
+    "reqId": "29.3-01",
+    "chapter": "29",
+    "section": "29.3",
+    "requirement": "A screen or capability is compliant only when all mandatory rules in applicable chapters are satisfied.",
+    "scope": "Governance",
+    "requirementId": "C29-29.3-001"
+  },
+  {
+    "reqId": "29.3-02",
+    "chapter": "29",
+    "section": "29.3",
+    "requirement": "Compliance Definition of Done shall include the responsive test matrix where applicable.",
+    "scope": "Governance",
+    "requirementId": "C29-29.3-002"
+  },
+  {
+    "reqId": "29.4-01",
+    "chapter": "29",
+    "section": "29.4",
+    "requirement": "Exceptions require documented approval, scope, expiry, and registration.",
+    "scope": "Governance",
+    "requirementId": "C29-29.4-001"
+  },
+  {
+    "reqId": "29.4-02",
+    "chapter": "29",
+    "section": "29.4",
+    "requirement": "Exceptions must not weaken audit rules.",
+    "scope": "Governance",
+    "requirementId": "C29-29.4-002"
+  },
+  {
+    "reqId": "29.4-03",
+    "chapter": "29",
+    "section": "29.4",
+    "requirement": "Exceptions must not weaken posting rules.",
+    "scope": "Governance",
+    "requirementId": "C29-29.4-003"
+  },
+  {
+    "reqId": "29.4-04",
+    "chapter": "29",
+    "section": "29.4",
+    "requirement": "Exceptions must not weaken period rules.",
+    "scope": "Governance",
+    "requirementId": "C29-29.4-004"
+  },
+  {
+    "reqId": "29.5-01",
+    "chapter": "29",
+    "section": "29.5",
+    "requirement": "New operational modules must undergo constitutional review before production approval.",
+    "scope": "Governance",
+    "requirementId": "C29-29.5-001"
+  },
+  {
+    "reqId": "29.6-01",
+    "chapter": "29",
+    "section": "29.6",
+    "requirement": "QA shall validate against this Constitution and the UX Constitution.",
+    "scope": "Governance",
+    "requirementId": "C29-29.6-001"
+  },
+  {
+    "reqId": "29.7-01",
+    "chapter": "29",
+    "section": "29.7",
+    "requirement": "A conformance backlog shall not override the Constitution.",
+    "scope": "Governance",
+    "requirementId": "C29-29.7-001"
+  }
+]

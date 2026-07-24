@@ -1,31 +1,69 @@
 const breakageService = require('../services/breakage.service');
 const { generateBreakageEvidencePDF } = require('../services/pdf.service');
 const { success } = require('../utils/response');
+const {
+    buildEnrichedEvidence,
+    logEvidenceExport,
+    resolveEvidencePdfFilename,
+} = require('../utils/evidenceExport.util');
 const { formatMovementDocumentNotes } = require('../utils/formatMovementNotes');
 const { putBuffer, buildAttachmentKey } = require('../middleware/upload.middleware');
+const { parseVersionFromRequest } = require('../platform/concurrency.service');
 
 /** POST /api/breakage */
+const ALLOWED_BREAKAGE_PHOTO_MIMES = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const MAX_LINE_PHOTOS = 10;
+
+const flattenUploadedFiles = (req) => {
+    if (!req.files) return [];
+    if (Array.isArray(req.files)) return req.files;
+    if (typeof req.files === 'object') {
+        return Object.values(req.files).flat();
+    }
+    return [];
+};
+
+const collectLinePhotoFiles = (req, lineCount) => {
+    const byIndex = Array.from({ length: lineCount }, () => []);
+    for (const file of flattenUploadedFiles(req)) {
+        const match = /^linePhotos_(\d+)$/.exec(file.fieldname || '');
+        if (!match) continue;
+        const idx = Number.parseInt(match[1], 10);
+        if (!Number.isFinite(idx) || idx < 0 || idx >= lineCount) continue;
+        if (!ALLOWED_BREAKAGE_PHOTO_MIMES.has(file.mimetype)) continue;
+        if (byIndex[idx].length >= MAX_LINE_PHOTOS) continue;
+        byIndex[idx].push(file);
+    }
+    return byIndex;
+};
+
 const createBreakage = async (req, res, next) => {
     try {
-        if (req.file) {
-            const allowedMimes = new Set(['image/jpeg', 'image/png']);
-            if (!allowedMimes.has(req.file.mimetype)) {
-                return res.status(400).json({
-                    success: false,
-                    message: 'Breakage photo must be JPEG or PNG.',
-                });
-            }
-        }
         const payload = {
             ...req.body,
-            lines: typeof req.body.lines === 'string' ? JSON.parse(req.body.lines) : req.body.lines,
+            lines:
+                typeof req.body.lines === 'string'
+                    ? (() => {
+                        try {
+                            return JSON.parse(req.body.lines);
+                        } catch {
+                            return null;
+                        }
+                    })()
+                    : req.body.lines,
         };
+        if (!payload.lines || !Array.isArray(payload.lines)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid lines payload. Please re-upload or try again.',
+            });
+        }
+        const linePhotosByIndex = collectLinePhotoFiles(req, payload.lines.length);
         const doc = await breakageService.createBreakage(
             payload,
             req.user.tenantId,
-            req.user.id,
-            req.user.role,
-            req.file || null,
+            req.user,
+            linePhotosByIndex,
         );
         return success(res, doc, 'Breakage document created.', 201);
     } catch (e) { next(e); }
@@ -34,9 +72,29 @@ const createBreakage = async (req, res, next) => {
 /** GET /api/breakage */
 const getBreakages = async (req, res, next) => {
     try {
-        const { documents, total } = await breakageService.getBreakages(req.user.tenantId, req.query, req.user);
+        const result = await breakageService.getBreakages(req.user.tenantId, req.query, req.user);
+        const {
+            documents,
+            total,
+            scope,
+            scopeApplied,
+            scopeLabel,
+            reason,
+            totalUnscoped,
+            totalAfterScope,
+            scopeDebug,
+        } = result;
         return success(res, documents, 'Breakage documents fetched.', 200, {
-            total, skip: parseInt(req.query.skip) || 0, take: parseInt(req.query.take) || 20,
+            total,
+            skip: parseInt(req.query.skip) || 0,
+            take: parseInt(req.query.take) || 20,
+            scope,
+            scopeApplied,
+            scopeLabel,
+            reason,
+            totalUnscoped,
+            totalAfterScope,
+            ...(scopeDebug ? { scopeDebug } : {}),
         });
     } catch (e) { next(e); }
 };
@@ -44,7 +102,7 @@ const getBreakages = async (req, res, next) => {
 /** GET /api/breakage/:id */
 const getBreakage = async (req, res, next) => {
     try {
-        const doc = await breakageService.getBreakageById(req.params.id, req.user.tenantId);
+        const doc = await breakageService.getBreakageById(req.params.id, req.user.tenantId, req.user);
         return success(res, formatMovementDocumentNotes(doc), 'Breakage document fetched.');
     } catch (e) { next(e); }
 };
@@ -52,65 +110,13 @@ const getBreakage = async (req, res, next) => {
 /** POST /api/breakage/:id/submit */
 const submitBreakage = async (req, res, next) => {
     try {
-        const doc = await breakageService.submitBreakage(req.params.id, req.user.tenantId, req.user.id);
+        const doc = await breakageService.submitBreakage(
+            req.params.id,
+            req.user.tenantId,
+            req.user,
+            parseVersionFromRequest(req),
+        );
         return success(res, doc, 'Breakage submitted for approval.');
-    } catch (e) { next(e); }
-};
-
-/** POST /api/breakage/:id/approve-dept — legacy step; delegates to unified workflow when required. */
-const approveDept = async (req, res, next) => {
-    try {
-        const doc = await breakageService.approveBreakageAtLevel(
-            req.params.id,
-            req.user.tenantId,
-            req.user.id,
-            req.user.role,
-            'DRAFT',
-            req.body,
-        );
-        return success(res, doc, 'Breakage document approved by department manager.');
-    } catch (e) { next(e); }
-};
-
-const approveCost = async (req, res, next) => {
-    try {
-        const doc = await breakageService.approveBreakageAtLevel(
-            req.params.id,
-            req.user.tenantId,
-            req.user.id,
-            req.user.role,
-            'DEPT_APPROVED',
-            req.body,
-        );
-        return success(res, doc, 'Breakage document approved by cost control.');
-    } catch (e) { next(e); }
-};
-
-const approveFinance = async (req, res, next) => {
-    try {
-        const doc = await breakageService.approveBreakageAtLevel(
-            req.params.id,
-            req.user.tenantId,
-            req.user.id,
-            req.user.role,
-            'COST_CONTROL_APPROVED',
-            req.body,
-        );
-        return success(res, doc, 'Breakage document approved by finance.');
-    } catch (e) { next(e); }
-};
-
-const approveGm = async (req, res, next) => {
-    try {
-        const doc = await breakageService.approveBreakageAtLevel(
-            req.params.id,
-            req.user.tenantId,
-            req.user.id,
-            req.user.role,
-            'FINANCE_APPROVED',
-            req.body,
-        );
-        return success(res, doc, 'Breakage document approved by general manager.');
     } catch (e) { next(e); }
 };
 
@@ -121,11 +127,11 @@ const approveBreakage = async (req, res, next) => {
         const doc = await breakageService.processApprovalStep(
             req.params.id,
             req.user.tenantId,
-            req.user.id,
-            req.user.role,
+            req.user,
             'APPROVE',
             comment,
             accountability,
+            parseVersionFromRequest(req),
         );
         return success(res, doc, 'Step approved.');
     } catch (e) { next(e); }
@@ -138,10 +144,40 @@ const rejectBreakage = async (req, res, next) => {
         if (!comment?.trim()) {
             return res.status(400).json({ success: false, message: 'Rejection comment is required.' });
         }
-        const doc = await breakageService.processApprovalStep(
-            req.params.id, req.user.tenantId, req.user.id, req.user.role, 'REJECT', comment
+        const doc = await breakageService.rejectBreakage(
+            req.params.id, req.user.tenantId, req.user, comment,
+            parseVersionFromRequest(req),
         );
-        return success(res, doc, 'Step rejected. Document returned to DRAFT.');
+        return success(res, doc, 'Document rejected.');
+    } catch (e) { next(e); }
+};
+
+/** POST /api/breakage/:id/send-back */
+const sendBackBreakage = async (req, res, next) => {
+    try {
+        const doc = await breakageService.sendBackBreakage(
+            req.params.id,
+            req.user.tenantId,
+            req.user,
+            req.body?.reason,
+            parseVersionFromRequest(req),
+            req.body?.targetStepNumber != null ? Number(req.body.targetStepNumber) : null,
+        );
+        return success(res, doc, 'Breakage document sent back.');
+    } catch (e) { next(e); }
+};
+
+/** PUT /api/breakage/:id */
+const updateBreakage = async (req, res, next) => {
+    try {
+        const doc = await breakageService.updateBreakage(
+            req.params.id,
+            req.user.tenantId,
+            req.user,
+            req.body,
+            parseVersionFromRequest(req),
+        );
+        return success(res, doc, 'Breakage document updated.');
     } catch (e) { next(e); }
 };
 
@@ -163,7 +199,7 @@ const uploadAttachment = async (req, res, next) => {
             uploadedById: req.user.id,
         };
 
-        const doc = await breakageService.addAttachment(req.params.id, req.user.tenantId, attachmentMeta);
+        const doc = await breakageService.addAttachment(req.params.id, req.user.tenantId, attachmentMeta, req.user);
         return success(res, doc, 'Attachment added.');
     } catch (e) { next(e); }
 };
@@ -171,7 +207,10 @@ const uploadAttachment = async (req, res, next) => {
 /** GET /api/breakage/:id/evidence */
 const getEvidence = async (req, res, next) => {
     try {
-        const evidence = await breakageService.getEvidence(req.params.id, req.user.tenantId);
+        const evidence = await buildEnrichedEvidence(req, 'BREAKAGE', () =>
+            breakageService.getEvidence(req.params.id, req.user.tenantId, req.user),
+        );
+        await logEvidenceExport(req, 'BREAKAGE', evidence, 'JSON');
         return success(res, evidence, 'Evidence pack generated.');
     } catch (e) { next(e); }
 };
@@ -179,7 +218,10 @@ const getEvidence = async (req, res, next) => {
 /** GET /api/breakage/:id/evidence/pdf */
 const getEvidencePDF = async (req, res, next) => {
     try {
-        const evidence = await breakageService.getEvidence(req.params.id, req.user.tenantId);
+        const evidence = await buildEnrichedEvidence(req, 'BREAKAGE', () =>
+            breakageService.getEvidence(req.params.id, req.user.tenantId, req.user),
+        );
+        await logEvidenceExport(req, 'BREAKAGE', evidence, 'PDF');
         const pdfBuffer = await generateBreakageEvidencePDF(evidence);
 
         if (!pdfBuffer || pdfBuffer.length === 0) {
@@ -189,9 +231,10 @@ const getEvidencePDF = async (req, res, next) => {
             });
         }
 
+        const filename = resolveEvidencePdfFilename(evidence, 'Breakage-Report');
         res.status(200)
             .set('Content-Type', 'application/pdf')
-            .set('Content-Disposition', `attachment; filename="Evidence-${evidence.header.documentNo}.pdf"`)
+            .set('Content-Disposition', `attachment; filename="${filename}"`)
             .set('Content-Length', String(pdfBuffer.length))
             .end(pdfBuffer);
     } catch (e) {
@@ -203,14 +246,19 @@ const getEvidencePDF = async (req, res, next) => {
 /** POST /api/breakage/:id/void */
 const voidBreakage = async (req, res, next) => {
     try {
-        const doc = await breakageService.voidBreakage(req.params.id, req.user.tenantId, req.user.id);
+        const doc = await breakageService.voidBreakage(
+            req.params.id,
+            req.user.tenantId,
+            req.user,
+            req.body?.reason,
+            parseVersionFromRequest(req),
+        );
         return success(res, doc, 'Breakage document voided.');
     } catch (e) { next(e); }
 };
 
 module.exports = {
     createBreakage, getBreakages, getBreakage, submitBreakage,
-    approveDept, approveCost, approveFinance, approveGm,
-    approveBreakage, rejectBreakage, uploadAttachment,
+    approveBreakage, rejectBreakage, sendBackBreakage, updateBreakage, uploadAttachment,
     getEvidence, getEvidencePDF, voidBreakage,
 };

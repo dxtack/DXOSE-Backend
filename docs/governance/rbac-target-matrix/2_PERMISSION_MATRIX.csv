@@ -1,0 +1,45 @@
+PermissionCode,Category,FINANCE_MANAGER,ORG_MANAGER,ADMIN_Legacy,STOREKEEPER,DEPT_MANAGER,COST_CONTROL,GENERAL_MANAGER,AUDITOR,SECURITY,SUPER_ADMIN,UI_Assignable_Impact,API_Enforcement,CURRENT_FINANCE,TARGET_CHANGE
+BASIC_DATA_VIEW,Master Data,Y,A,L,Y,Y,Y,Y,Y,N,A,N,requirePermission,Y,Unchanged
+BASIC_DATA_EDIT,Master Data,Y,A,L,N,N,N,N,N,N,A,N,requirePermission,N,Add FINANCE
+INVENTORY_VIEW,Inventory,Y,A,L,Y,Y,Y,Y,Y,N,A,N,requirePermission,Y,Unchanged
+MOVEMENT_CREATE,Inventory,Y,A,L,Y,N,N,N,N,N,A,N,requirePermission / authorize,N,Add FINANCE
+STOCK_MANAGE,Inventory,Y,A,L,Y,N,N,N,N,N,A,N,alias to MOVEMENT_CREATE,N,Add FINANCE via alias
+ISSUE_CREATE,Operations,Y,A,L,Y,Y,N,N,N,N,A,N,requirePermission,N,Add FINANCE
+ISSUE_APPROVE,Operations,Y,A,L,N,Y,Y,N,N,N,A,N,requirePermission,Y,Unchanged
+TRANSFER_VIEW,Transfers,Y,A,L,Y,Y,Y,Y,Y,N,A,N,Nav + read,Y,Unchanged
+TRANSFER_CREATE,Transfers,Y,A,L,Y,Y,N,N,N,N,A,N,requirePermission,N,Add FINANCE
+TRANSFER_APPROVE,Transfers,Y,A,L,N,Y,N,Y,N,N,A,N,requirePermission,Y,Unchanged
+TRANSFER_DISPATCH_RECEIVE,Transfers,L,A,L,Y,N,N,N,N,N,A,N,requirePermission,N,Legacy only L
+GRN_VIEW,GRN,Y,A,L,Y,Y,Y,Y,Y,N,A,N,requirePermission,Y,Unchanged
+GRN_MANAGE,GRN,Y,A,L,Y,N,Y,N,N,N,A,N,requirePermission,N,Add FINANCE
+BREAKAGE_VIEW,Breakage,Y,A,L,N,Y,N,N,N,N,A,N,Nav requireAny,Y,Explicit Y (was via READ alias)
+BREAKAGE_CREATE,Breakage,Y,A,L,Y,Y,N,N,N,N,A,N,requirePermission,N,Add FINANCE
+APPROVE_BREAKAGE,Breakage,Y,A,L,N,Y,Y,Y,N,N,A,N,requirePermission,Y,Remove ADMIN bypass in code later
+ADJUSTMENT_CREATE,Adjustments,Y,A,L,Y,N,N,N,N,N,A,N,requirePermission,N,Add FINANCE
+STOCK_COUNT_VIEW,Inventory Count,Y,A,L,Y,N,Y,Y,Y,N,A,N,Nav STOCK_COUNT_VIEW,Y,Unchanged
+STOCK_COUNT_MANAGE,Inventory Count,Y,A,L,Y,N,N,N,N,N,A,N,authorize COUNT_MANAGE,N,Add FINANCE to routes
+REPORTS_VIEW,Reports,Y,A,L,Y,Y,Y,Y,Y,N,A,N,requirePermission,Y,Unchanged
+REPORTS_EXPORT,Reports,Y,A,L,N,Y,Y,Y,Y,N,A,N,requirePermission,Y,Unchanged
+READ_BREAKAGE,Breakage,Y,A,L,N,N,Y,Y,N,N,A,N,alias to INVENTORY_VIEW,Y,Keep JWT compat
+READ_LOST,Lost,Y,A,L,N,N,Y,Y,N,N,A,N,alias to INVENTORY_VIEW,Y,Keep JWT compat
+LOST_ITEMS_VIEW,Lost,Y,A,L,N,Y,N,Y,N,N,A,N,Nav requireAny,N,Add FINANCE
+APPROVE_LOST,Lost,Y,A,L,N,Y,Y,Y,N,N,A,N,requirePermission,Y,Remove ADMIN bypass in code later
+VIEW_DASHBOARD,Dashboard,Y,A,L,Y,Y,Y,Y,Y,Y,A,N,permissionGuard,Y,Unchanged
+DASHBOARD_VIEW,Dashboard,Y,A,L,N,N,Y,Y,Y,N,A,N,requirePermission,Y,Unchanged
+GET_PASS_VIEW,Get Pass,Y,A,L,Y,Y,Y,Y,Y,Y,A,N,requirePermission,Y,Unchanged
+GET_PASS_CREATE,Get Pass,Y,A,L,Y,Y,N,N,N,Y,A,N,requirePermission,N,Add FINANCE
+GET_PASS_APPROVE,Get Pass,Y,A,L,N,N,N,N,N,N,A,N,requirePermission,N,Add FINANCE
+GET_PASS_APPROVE_FINAL,Get Pass,N,A,L,N,N,N,Y,N,Y,A,N,requirePermission,N,GM SECURITY ORG only
+GET_PASS_APPROVE_EXIT,Get Pass,Y,A,L,N,N,N,N,N,Y,A,N,requirePermission,N,Add FINANCE
+GET_PASS_APPROVE_RETURN,Get Pass,Y,A,L,N,N,N,N,N,Y,A,N,requirePermission,N,Add FINANCE
+GET_PASS_CONFIRM_DESTINATION,Get Pass,Y,A,L,N,N,N,Y,N,Y,A,N,requirePermission,N,Add FINANCE
+IMPORT_EXCEL,Import,Y,A,L,Y,N,N,N,N,N,A,N,requirePermission,N,Add FINANCE
+IMPORT_CREATE,Import,Y,A,L,Y,N,N,N,N,N,A,N,alias IMPORT_EXCEL,N,Add FINANCE via alias
+AUDIT_LOG_VIEW,Admin,Y,A,L,N,N,N,Y,Y,N,A,N,requirePermission,Y,Unchanged
+HOTEL_USERS_MANAGE,Hotel Users tenant-scoped,Y,N,L,N,N,N,N,N,N,A,Y,requirePermission,NEW,FINANCE hotel users only P6
+USERS_COMPANY_MANAGE,Org users multi-property,N,A,L,N,N,N,N,N,N,A,Y,requirePermission,TARGET,ORG only not FINANCE P6
+SETTINGS_MANAGE,Org Settings,N,A,L,N,N,N,N,N,N,A,Y,requirePermission,N,ORG SUPER only P2
+TENANT_MANAGE,Org Settings,N,A,L,N,N,N,N,N,N,A,Y,alias SETTINGS,N,ORG SUPER only
+USER_MANAGE,Hotel Users alias,Y,N,L,N,N,N,N,N,N,A,Y,alias HOTEL_USERS_MANAGE,TARGET,P6 rename clarity
+ITEM_MANAGE,Master Data,Y,A,L,N,N,N,N,N,N,A,N,alias BASIC_DATA_EDIT,N,Add FINANCE via BASIC_DATA_EDIT
+TENANT_OPS_DIAGNOSE,Diagnostics,Y,A,L,N,N,N,N,N,N,A,N,NEW endpoint,N,New permission Finance+ORG on tenant

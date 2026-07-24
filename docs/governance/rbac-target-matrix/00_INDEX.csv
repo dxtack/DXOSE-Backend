@@ -1,0 +1,18 @@
+File,Description,Rows_Approx,Status,Phase_Order
+00_README.txt,Instructions and freeze reference,1,FROZEN v1,0
+00_INDEX.csv,This index,1,FROZEN v1,0
+GOVERNANCE_FREEZE_v1.txt,Freeze rules sign-off phases,1,FROZEN v1,0
+SCOPE_ENGINE_PRINCIPLE.txt,RBAC vs Scope assertInScope exports,1,FROZEN v1,0
+DECISIONS.csv,Decisions P1-P6 S1-S15,17,FROZEN v1,0
+7_USER_SCOPE_MODEL.csv,Scope fields and scopeSource,16,FROZEN v1,1
+8_SCOPE_RULES_BY_ROLE.csv,Scope by role,11,FROZEN v1,1
+9_MODULE_SCOPE_APPLICATION.csv,Per-module scope rules,15,FROZEN v1,1
+11_MODULE_SCOPE_BASIS.csv,Primary scope basis not creator,13,FROZEN v1,1
+1_ROLE_CATALOG.csv,Role tiers,10,FROZEN v1,2
+2_PERMISSION_MATRIX.csv,Permissions incl HOTEL_USERS_MANAGE,45,FROZEN v1,3
+3_MODULE_MATRIX.csv,Module routes API,28,FROZEN v1,3
+4_ADMIN_REPLACEMENT.csv,ADMIN deprecation,22,FROZEN v1,4
+5_ROLE_TIER_RULES.csv,Finance vs ORG vs Super,20,FROZEN v1,4
+6_UAT_FINANCE.csv,UAT RBAC,16,FROZEN v1,5
+10_SCOPE_UAT_ACCEPTANCE.csv,UAT scope,12,FROZEN v1,5
+docs/governance/phase1/PHASE1_IMPLEMENTATION_NOTES.md,Build smoke migration rollback,1,Phase 1,6

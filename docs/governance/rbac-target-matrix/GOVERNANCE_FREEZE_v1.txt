@@ -1,0 +1,55 @@
+OSE — RBAC + Scope Governance Freeze v1.0
+Status: FROZEN — IMPLEMENTATION IN PROGRESS
+Frozen date: 2026-05-19
+Location: docs/governance/rbac-target-matrix/
+
+FREEZE RULES
+  - Governance philosophy must not change during implementation without explicit amendment.
+  - No new features beyond this pack.
+  - No hard delete of legacy DB data (ADMIN role row, legacy memberships).
+  - Implementation order locked: Phase 1 Scope → Phase 2 RBAC → Phase 3 UAT → Phase 4 Cleanup.
+  - Do not start Phase 2 until Phase 1 acceptance passes.
+
+INCLUDED ARTIFACTS (v1.0)
+  00_README.txt
+  00_INDEX.csv
+  GOVERNANCE_FREEZE_v1.txt (this file)
+  SCOPE_ENGINE_PRINCIPLE.txt
+  DECISIONS.csv (P1-P6, S1-S15)
+  1_ROLE_CATALOG.csv
+  2_PERMISSION_MATRIX.csv
+  3_MODULE_MATRIX.csv
+  4_ADMIN_REPLACEMENT.csv
+  5_ROLE_TIER_RULES.csv
+  6_UAT_FINANCE.csv
+  7_USER_SCOPE_MODEL.csv
+  8_SCOPE_RULES_BY_ROLE.csv
+  9_MODULE_SCOPE_APPLICATION.csv
+  10_SCOPE_UAT_ACCEPTANCE.csv
+  11_MODULE_SCOPE_BASIS.csv
+
+APPROVED DIRECTIONS (summary)
+  - Scope before RBAC
+  - Finance = tenant operational super-user (hotel)
+  - ORG = org multi-property; HOTEL_USERS_MANAGE vs USERS_COMPANY_MANAGE (P6)
+  - ADMIN deprecated in UI/API not DB delete
+  - Department/location scope — not permissions alone
+  - Location/department basis — not creator-primary
+  - assertInScope on all actions and exports
+  - scopeSource on scope meta for diagnostics
+  - No export bypasses Scope Engine
+
+SIGN-OFF
+  [x] Governance Freeze v1 approved — implementation authorized
+  [ ] Phase 1 Scope acceptance
+  [ ] Phase 2 RBAC acceptance
+  [ ] Phase 3 UAT sign-off
+
+POST-FREEZE IMPLEMENTATION PHASES
+  Phase 1 — Scope: schema flags, scope.service, wire modules, meta, UX messages
+  Phase 2 — RBAC: matrix, HOTEL_USERS_MANAGE, ADMIN deprecation, Finance parity
+  Phase 3 — UAT: SC01-SC12 + U01-U16
+  Phase 4 — Controlled cleanup (after UAT only)
+
+SOURCE OF TRUTH
+  If ambiguity arises during implementation, use CSV files in this folder — do not invent behavior.

@@ -1,0 +1,58 @@
+OSE — Scope Engine Principle (Governance Freeze v1 — IMPLEMENTATION)
+
+Status: FROZEN
+Frozen: 2026-05-19
+Reference: GOVERNANCE_FREEZE_v1.txt
+
+CORE RULE
+  RBAC permissions answer: "May this user perform this action?"
+  Scope Engine answers: "Which rows may this user see or touch?"
+
+  RBAC permissions alone are NOT sufficient.
+  Every List, Detail, Export, and Workflow Action MUST pass through Scope Engine:
+    resolveUserScope → buildScopeWhere / assertInScope
+
+SCOPE ENFORCEMENT — NOT VISIBILITY ONLY
+  Scope applies to:
+    - Read paths:  List, Detail, Search, Dashboard aggregates
+    - Write paths: Create, Update, Delete (draft where applicable)
+    - Workflow:    approve, reject, post, close, reopen, submit, receive, dispatch (legacy)
+    - Exports:     Excel, PDF, CSV, analytics exports, dashboard export datasets
+
+  Every mutating or workflow endpoint MUST call assertInScope(entity, action) BEFORE business logic.
+  Permission check (RBAC) alone is insufficient.
+
+EXPORT RULE (EXPLICIT)
+  No export may bypass Scope Engine.
+
+  Applies to: Excel, PDF, CSV, report engine, analytics, dashboard datasets, ledger export.
+
+  Rule: export query MUST use the same scope filters as the equivalent list view.
+  Forbidden: export full tenant while list is department-scoped.
+
+scopeSource (diagnostics) — precedence when resolving:
+  1. ORG_BYPASS
+  2. CUSTOM_OVERRIDE
+  3. LOCATION_ASSIGNMENT
+  4. DEPARTMENT
+  5. ROLE_DEFAULT
+
+  See 7_USER_SCOPE_MODEL.csv
+
+SCOPE BASIS (not creator-primary)
+  Primary enforcement uses Location.departmentId and allowedLocationIds.
+  createdBy is NOT primary scope — draft ownership / UI hint only.
+  See 11_MODULE_SCOPE_BASIS.csv
+
+API scope meta (TARGET shape)
+  scope: { profile, scopeSource, scopeLabel, departmentId?, allowedLocationCount? }
+  scopeApplied: boolean
+  reason: e.g. SCOPE_NO_VISIBLE_RECORDS | null
+
+ROLE SCOPE SUMMARY — see 8_SCOPE_RULES_BY_ROLE.csv
+
+IMPLEMENTATION ORDER
+  Phase 1: Scope (this document) — MUST complete before Phase 2 RBAC
+  Phase 2: RBAC alignment
+  Phase 3: UAT
+  Phase 4: Cleanup (after UAT only)

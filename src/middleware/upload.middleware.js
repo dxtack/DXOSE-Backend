@@ -19,6 +19,12 @@ const crypto = require('crypto');
 const path = require('path');
 const multer = require('multer');
 const { getStorage, isLocalDriver } = require('../config/storage');
+const {
+    ATTACHMENT_MAX_FILE_SIZE_BYTES,
+    ATTACHMENT_ALLOWED_EXTENSIONS,
+} = require('../platform/attachmentPolicy.platform');
+const { ITEM_IMAGE_MAX_FILE_SIZE_BYTES } = require('../platform/mediaPolicy.platform');
+const { BULK_IMAGE_ZIP_MAX_BYTES } = require('../platform/bulkItemImageUpload.platform');
 
 const memoryStorage = multer.memoryStorage();
 
@@ -38,9 +44,8 @@ const importFilter = (_req, file, cb) => {
 };
 
 const attachmentFilter = (_req, file, cb) => {
-    const allowed = ['.jpg', '.jpeg', '.png', '.webp', '.pdf', '.docx', '.doc', '.xlsx', '.xls'];
     const ext = path.extname(file.originalname).toLowerCase();
-    if (allowed.includes(ext)) cb(null, true);
+    if (ATTACHMENT_ALLOWED_EXTENSIONS.includes(ext)) cb(null, true);
     else cb(new Error('Attachment must be an image, PDF, Word, or Excel file.'));
 };
 
@@ -53,7 +58,7 @@ const zipFilter = (_req, file, cb) => {
 const uploadImage = multer({
     storage: memoryStorage,
     fileFilter: imageFilter,
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB
+    limits: { fileSize: ITEM_IMAGE_MAX_FILE_SIZE_BYTES },
 });
 
 const uploadImport = multer({
@@ -65,13 +70,13 @@ const uploadImport = multer({
 const uploadAttachment = multer({
     storage: memoryStorage,
     fileFilter: attachmentFilter,
-    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+    limits: { fileSize: ATTACHMENT_MAX_FILE_SIZE_BYTES },
 });
 
 const uploadZip = multer({
     storage: memoryStorage,
     fileFilter: zipFilter,
-    limits: { fileSize: 50 * 1024 * 1024 }, // 50 MB
+    limits: { fileSize: BULK_IMAGE_ZIP_MAX_BYTES },
 });
 
 // ── Key builders ─────────────────────────────────────────────────────────────
@@ -126,6 +131,15 @@ const buildZipTempKey = (tenantId, originalName) => {
     return `tenants/${tenantId}/tmp/zip-${Date.now()}${extOf(originalName)}`;
 };
 
+/** Temp processed WebP between bulk image preview and confirm. */
+const buildBulkItemImageTempKey = (tenantId, token, safeName) => {
+    const base = String(safeName || 'image').replace(/[^a-zA-Z0-9._-]+/g, '_').slice(0, 120);
+    if (isLocalDriver()) {
+        return `/uploads/temp/item-images/${tenantId}/${token}/${base}.webp`;
+    }
+    return `tenants/${tenantId}/temp/item-images/${token}/${base}.webp`;
+};
+
 const buildLogoKey = (tenantId, originalName) => {
     if (isLocalDriver()) {
         return `/uploads/branding/logo-${tenantId}-${Date.now()}${extOf(originalName)}`;
@@ -142,16 +156,29 @@ const buildLogoKey = (tenantId, originalName) => {
  * @returns {Promise<{key: string, size: number, mime: string, originalName: string}>}
  */
 const putBuffer = async (key, file) => {
-    const storage = getStorage();
-    await storage.put(key, file.buffer, {
+    return putRawBuffer(key, file.buffer, {
         contentType: file.mimetype,
         originalName: file.originalname,
     });
+};
+
+/**
+ * Persist a raw Buffer via the configured storage provider.
+ * @param {string} key
+ * @param {Buffer} buffer
+ * @param {{ contentType?: string, originalName?: string }} [opts]
+ */
+const putRawBuffer = async (key, buffer, opts = {}) => {
+    const storage = getStorage();
+    await storage.put(key, buffer, {
+        contentType: opts.contentType || 'application/octet-stream',
+        originalName: opts.originalName,
+    });
     return {
         key,
-        size: file.size,
-        mime: file.mimetype,
-        originalName: file.originalname,
+        size: buffer.length,
+        mime: opts.contentType || 'application/octet-stream',
+        originalName: opts.originalName,
     };
 };
 
@@ -176,11 +203,13 @@ module.exports = {
     uploadZip,
     deleteFile,
     putBuffer,
+    putRawBuffer,
     buildItemImageKey,
     buildAttachmentKey,
     buildImportKey,
     buildGrnPdfKey,
     buildDamagePhotoKey,
     buildZipTempKey,
+    buildBulkItemImageTempKey,
     buildLogoKey,
 };

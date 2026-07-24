@@ -1,0 +1,33 @@
+Module,Screen,Route,Action,Nav_Permission,Route_Guard_TARGET,API_Method,API_Permission_or_Roles_TARGET,Data_Scope,FINANCE,ORG_MANAGER,ADMIN_Legacy,Gap_CURRENT
+Transfers,List,/transfers,View,TRANSFER_VIEW,TRANSFER_VIEW or INVENTORY_VIEW,GET /transfers,INVENTORY_VIEW,Tenant-wide,Y,A,L,No route guard today
+Transfers,Create,/transfers/new,Create,TRANSFER_VIEW,TRANSFER_CREATE,POST /transfers,TRANSFER_CREATE,Tenant-wide,Y,A,L,No route guard
+Transfers,Detail,/transfers/:id,View Approve Reject,TRANSFER_VIEW,TRANSFER_VIEW,GET POST approve,INVENTORY_VIEW TRANSFER_APPROVE,Tenant-wide,Y,A,L,No ADMIN in chain TARGET
+GRN,List,/grn,View,GRN_VIEW,GRN_VIEW,GET /grn,GRN_VIEW,Tenant-wide,Y,A,L,
+GRN,Create,/inventory/grn/new,Create,GRN_VIEW,GRN_MANAGE,POST /grn,GRN_MANAGE,Tenant-wide,Y,A,L,
+GRN,Detail Post,/grn/:id,Post,N/A,N/A,POST /grn/:id/post,FINANCE_MANAGER,Tenant-wide,Y,A,L,CURRENT includes ADMIN
+Breakage,List,/breakage,View,BREAKAGE_VIEW any,permissionsAny,GET /breakage,VIEW_INVENTORY BREAKAGE_VIEW READ_BREAKAGE,Finance tenant-wide Dept creator-scoped,Y,A,L,createdById not in API
+Breakage,Create,/breakage/new,Create,BREAKAGE_VIEW,BREAKAGE_CREATE,POST /breakage,BREAKAGE_CREATE,Mixed,Y,A,L,
+Breakage,Detail Approve,/breakage/:id,Approve,APPROVE_BREAKAGE,APPROVE_BREAKAGE,POST approve-*,APPROVE_BREAKAGE,Tenant-wide,Y,A,L,ADMIN bypass in service
+Lost Items,List,/lost-items,View,LOST_ITEMS_VIEW any,permissionsAny,GET /lost-items,LOST_ITEMS_VIEW READ_LOST,Tenant-wide,Y,A,L,Same as breakage
+Lost Items,Create,/lost-items/new,Create,LOST_ITEMS_VIEW,BREAKAGE_CREATE,POST /lost-items,BREAKAGE_CREATE,Mixed,Y,A,L,
+Lost Items,Detail,/lost-items/:id,Approve,APPROVE_LOST,APPROVE_LOST,POST approve-*,APPROVE_LOST,Tenant-wide,Y,A,L,
+Inventory Count,List,/inventory-count,View,STOCK_COUNT_VIEW,STOCK_COUNT_VIEW,GET /inventory-count/sessions,COUNT_VIEW roles,Tenant-wide,Y,A,L,FINANCE view only CURRENT
+Inventory Count,Manage,/inventory-count/:id,Create Start Count,STOCK_COUNT_VIEW,STOCK_COUNT_MANAGE,POST PUT sessions,COUNT_MANAGE roles,Tenant-wide,Y,A,L,FINANCE not in COUNT_MANAGE CURRENT
+Inventory Count,Approve,/inventory-count/:id,Approve Reject,STOCK_COUNT_VIEW,N/A,POST approve reject,FINANCE_MANAGER,Tenant-wide,Y,A,L,CURRENT ADMIN FINANCE
+Get Pass,List,/get-passes,View,GET_PASS_VIEW,GET_PASS_VIEW,GET /get-passes,GET_PASS_VIEW,Tenant-wide,Y,A,L,Nav has no permission today
+Get Pass,Form,/get-passes/new,Create,GET_PASS_VIEW,GET_PASS_CREATE,POST /get-passes,GET_PASS_CREATE,Tenant-wide,Y,A,L,
+Get Pass,Detail,/get-passes/:id,Return Close Exit,GET_PASS_VIEW,GET_PASS_*,POST return close,GET_PASS_APPROVE_* TARGET,Tenant-wide,Y,A,L,hasRole ADMIN in UI
+Reports,Workspace,/reports/*,View Export,REPORTS_VIEW,REPORTS_VIEW,GET POST reports,REPORTS_VIEW EXPORT,Tenant-wide,Y,A,L,Weak route guard on parent
+Ledger,Viewer,/ledger,View,INVENTORY_VIEW section,INVENTORY_VIEW,GET /ledger,INVENTORY_VIEW TARGET,Tenant-wide,Y,A,L,API auth only today
+Dashboard,Home,/dashboard,View,VIEW_DASHBOARD,VIEW_DASHBOARD,GET /dashboard/*,DASHBOARD_VIEW,Role analytics,Y,A,L,
+Workflow Pipeline,/workflow-pipeline,View,any pipeline perm,permissionsAny,GET /workflow-pipeline,PIPELINE_ACCESS any,Tenant-wide,Y,A,L,
+Users Admin,/users,List Create Edit,USERS_COMPANY_MANAGE,USERS_COMPANY_MANAGE,CRUD /users,USERS_COMPANY_MANAGE,Tenant hotel users,Y,A,L,FINANCE N in matrix CURRENT
+Settings,/settings,Hotel settings subset,N/A,SETTINGS or USERS,GET PUT /settings,SETTINGS_MANAGE org only,Org vs tenant,N,A,L,FINANCE no OB P2
+Period Close,/period-close,Close Reopen,N/A,auth only,POST /period-close,FINANCE_MANAGER ORG reopen rules,Tenant-wide,Y,A,L,Reopen ADMIN only CURRENT
+Integrity,/integrity,View,N/A,auth only,GET /integrity,ADMIN FINANCE AUDITOR COST,Tenant-wide,Y,A,L,No nav permission
+Master Data,/master-data/*,CRUD,INVENTORY_VIEW section,BASIC_DATA_EDIT,CRUD master,BASIC_DATA_EDIT,Tenant-wide,Y,A,L,
+Items,/items/*,CRUD,INVENTORY_VIEW section,BASIC_DATA_EDIT,CRUD items,MANAGE_MASTER_DATA,Tenant-wide,Y,A,L,
+Movements,/movements,Create Post,INVENTORY_VIEW,MOVEMENT_CREATE,POST movements,FINANCE STOREKEEPER,Tenant-wide,Y,A,L,FINANCE not in authorize CURRENT
+Stock Balances,/stock,View,INVENTORY_VIEW,INVENTORY_VIEW,GET /stock,INVENTORY_VIEW,Tenant-wide,Y,A,L,
+Par Levels,/par-levels,Edit,INVENTORY_VIEW,MOVEMENT_CREATE or role,PUT /par-levels,FINANCE STOREKEEPER,Tenant-wide,Y,A,L,ADMIN only CURRENT
+RBAC Diagnostics,Any list,Explain empty scope,TENANT_OPS_DIAGNOSE,TENANT_OPS_DIAGNOSE,GET with debug header,TENANT_OPS_DIAGNOSE,Tenant meta,Y,A,L,Not built yet

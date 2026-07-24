@@ -20,8 +20,17 @@ const {
 } = require('./pdf/report-pdf-signatures.util');
 const { replayOfficialLedgerBalances, parseBalanceMapKey } = require('./ledgerReplay.service');
 const { generateStockBackedValuationReport, describeValuationBasis } = require('./inventoryValuation.service');
+const { toInclusiveUtcEndOfDay, toUtcPeriodYearMonth } = require('../utils/report-date-range.util');
+const {
+    reportPostingPeriodWhere,
+    reportPostingBeforeWhere,
+} = require('./report-posting-period.util');
+const { tenantDateKey } = require('../utils/tenant-calendar.util');
+const { getTenantTimezone } = require('./tenantTimezone.service');
 
 const BREAKAGE_FINANCIAL_STATUSES = ['POSTED', 'APPROVED'];
+/** Official financial totals: POSTED, or APPROVED only when postedAt/ledger evidence exists (P2 #27). */
+const BREAKAGE_OFFICIAL_STATUS = 'POSTED';
 const BREAKAGE_PENDING_STATUSES = [
     'DRAFT',
     'PENDING_APPROVAL',
@@ -36,12 +45,12 @@ const BREAKAGE_PENDING_STATUSES = [
 const OFFICIAL_LEDGER_WHERE = { affectsValuation: true };
 
 /**
- * Resolve CURRENT snapshot version for report end date (Ch.6.17 / D12).
+ * Resolve CURRENT snapshot version for report end date
+ * (deferred Snapshot/Report Versioning — not the ratified Path A §6.17 Reopen clause; see merge-report D11 note).
  */
 async function resolveSnapshotVersionForReport(tenantId, endDate) {
     const end = endDate instanceof Date ? endDate : new Date(endDate);
-    const year = end.getFullYear();
-    const month = end.getMonth() + 1;
+    const { year, month } = toUtcPeriodYearMonth(end);
     const period = await prisma.periodClose.findFirst({
         where: { tenantId, year, month, status: 'CLOSED' },
         include: {
@@ -88,23 +97,23 @@ const optimizeReportPayload = (data, { includeSupplier = false, includeLocationQ
 };
 
 /**
- * Helper to get the starting date and ending date ISO strings.
- * Validates that dates are within a reasonable range.
+ * Helper to get the starting date and ending date for report windows.
+ * End uses inclusive UTC end-of-day for date-only inputs (UTC+ safe).
  */
 const getDateRange = (startDate, endDate) => {
     const start = startDate ? new Date(startDate) : new Date(0);
-    const end = endDate ? new Date(endDate) : new Date();
 
-    // Validate dates are not NaN and year is in a sane range
     if (isNaN(start.getTime()) || start.getFullYear() > 9999) {
         throw Object.assign(new Error('Invalid start date. Please provide a valid date.'), { status: 400 });
     }
+
+    const end = toInclusiveUtcEndOfDay(
+        endDate != null && endDate !== '' ? endDate : new Date().toISOString().slice(0, 10),
+    );
     if (isNaN(end.getTime()) || end.getFullYear() > 9999) {
         throw Object.assign(new Error('Invalid end date. Please provide a valid date.'), { status: 400 });
     }
 
-    // Set end to end of day
-    end.setHours(23, 59, 59, 999);
     return { start, end };
 };
 
@@ -289,7 +298,8 @@ const generateReport = async (
             break;
         }
         case 'AGING':
-            data = await generateAgingReport(tenantId, locationIds, end, categoryId, {
+            // Prefer original endDate string so date-only days are not distorted by getDateRange local EOD.
+            data = await generateAgingReport(tenantId, locationIds, endDate || end, categoryId, {
                 includeSupplier,
                 includeLocationQtys
             });
@@ -384,7 +394,12 @@ const generateVarianceReport = async (
     // 2. Fetch Period Movements (In / Out / Tfr)
     const periodLedger = await prisma.inventoryLedger.groupBy({
         by: ['itemId', 'locationId', 'movementType'],
-        where: { tenantId, ...OFFICIAL_LEDGER_WHERE, locationId: { in: locationIds }, createdAt: { gte: start, lte: end } },
+        where: {
+            tenantId,
+            ...OFFICIAL_LEDGER_WHERE,
+            locationId: { in: locationIds },
+            ...reportPostingPeriodWhere(start, end),
+        },
         _sum: { qtyIn: true, qtyOut: true, totalValue: true }
     });
 
@@ -632,12 +647,12 @@ function resolveBreakageApprover(doc) {
 }
 
 function breakageDocInPeriodWhere(start, end, locationIds) {
+    // documentDate is required on MovementDocument — never pass it (or follow it) as a null
+    // legacy gate; that makes Prisma reject the query ("Argument documentDate is missing").
     return {
-        OR: [
-            { postedAt: { gte: start, lte: end } },
-            { postedAt: null, documentDate: { gte: start, lte: end } },
-            { createdAt: { gte: start, lte: end } },
-        ],
+        ...reportPostingPeriodWhere(start, end, {
+            legacyDateFields: ['postedAt', 'documentDate'],
+        }),
         ...(locationIds.length > 0
             ? { lines: { some: { locationId: { in: locationIds } } } }
             : {}),
@@ -688,7 +703,11 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
                     },
                 },
             },
-            orderBy: [{ postedAt: 'asc' }, { documentDate: 'asc' }],
+            orderBy: [
+                { postingDate: { sort: 'asc', nulls: 'last' } },
+                { postedAt: { sort: 'asc', nulls: 'last' } },
+                { documentDate: 'asc' },
+            ],
         }),
         prisma.movementDocument.findMany({
             where: {
@@ -705,6 +724,8 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
             select: { id: true, documentNo: true },
         }),
     ]);
+
+    const tenantTimezone = await getTenantTimezone(tenantId);
 
     // Get location and department names separately
     const locationMap = {};
@@ -748,8 +769,41 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
         });
     }
 
+    // P2 #27 — reconcile APPROVED vs ledger/postedAt; keep anomalies out of official totals.
+    const breakageIds = breakages.map((d) => d.id);
+    const ledgerRefs = breakageIds.length
+        ? await prisma.inventoryLedger.findMany({
+            where: {
+                tenantId,
+                affectsValuation: true,
+                referenceId: { in: breakageIds },
+                movementType: { in: movementTypes },
+            },
+            select: { referenceId: true },
+            distinct: ['referenceId'],
+        })
+        : [];
+    const ledgerDocIds = new Set(ledgerRefs.map((r) => r.referenceId).filter(Boolean));
+    const isOfficialFinancialDoc = (doc) => {
+        if (doc.status === BREAKAGE_OFFICIAL_STATUS) return true;
+        if (doc.status !== 'APPROVED') return false;
+        return Boolean(doc.postedAt || doc.postingDate || ledgerDocIds.has(doc.id));
+    };
+    const officialDocs = breakages.filter(isOfficialFinancialDoc);
+    const excludedLegacyApproved = breakages
+        .filter((d) => d.status === 'APPROVED' && !isOfficialFinancialDoc(d))
+        .map((d) => ({
+            id: d.id,
+            documentNo: d.documentNo,
+            status: d.status,
+            postedAt: d.postedAt || null,
+            postingDate: d.postingDate || null,
+            hasLedgerEffect: ledgerDocIds.has(d.id),
+            reason: 'APPROVED_WITHOUT_POSTING_OR_LEDGER',
+        }));
+
     const rows = [];
-    for (const doc of breakages) {
+    for (const doc of officialDocs) {
         let photoUrl = null;
         if (doc.photoKey) {
             try {
@@ -774,7 +828,7 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
         doc.lines.forEach((line) => {
             if (categoryId && line.item.categoryId !== categoryId) return;
             if (locationIds.length > 0 && !locationIds.includes(line.locationId)) return;
-            const effectiveDate = doc.postedAt || doc.documentDate;
+            const effectiveDate = doc.postingDate || doc.postedAt || doc.documentDate;
             const qty = Number(line.qtyInBaseUnit) || 0;
             const wacKey = `${line.itemId}_${line.locationId}`;
             const wacFallback = wacMap[wacKey] || 0;
@@ -786,7 +840,7 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
                 '—';
 
             rows.push({
-                date: effectiveDate.toISOString().split('T')[0],
+                date: tenantDateKey(effectiveDate, tenantTimezone),
                 documentNo: doc.documentNo,
                 documentKey: doc.documentNo,
                 movementType: doc.movementType,
@@ -813,7 +867,7 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
                 chargeTo: finalTreatment.chargeTo,
                 chargeToLabel: finalTreatment.chargeToLabel,
                 finalResponsibleParty: finalTreatment.responsibleParty,
-                postedAt: doc.postedAt || null,
+                postedAt: doc.postingDate || doc.postedAt || null,
                 responsibleUserId: doc.createdBy || null,
                 responsibleUserName: doc.responsibleEmployeeName || null,
             });
@@ -839,12 +893,14 @@ const generateBreakageReport = async (tenantId, locationIds, start, end, categor
 
     return {
         rows,
+        excludedLegacyApproved,
         totals: {
             totalQty: parseFloat(totalQty.toFixed(4)),
             totalValue: parseFloat(totalValue.toFixed(2)),
             rowCount: rows.length,
             postedDocumentCount: new Set(postedDocs.map((d) => d.documentNo)).size,
             pendingDocumentCount: new Set(pendingDocs.map((d) => d.documentNo)).size,
+            excludedLegacyApprovedCount: excludedLegacyApproved.length,
             highestLossCategory,
             highestLossValue: parseFloat(highestLossValue.toFixed(2)),
         },
@@ -911,16 +967,37 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
     });
 
     const snapshotMap = {};
+    let snapshotBaselineAt = null;
     if (bestClose) {
-        const snapshots = await prisma.periodSnapshot.findMany({
-            where: { periodCloseId: bestClose.id, ...(locFilter ? { locationId: locFilter } : {}) },
+        const currentVersion = await prisma.periodSnapshotVersion.findFirst({
+            where: { periodCloseId: bestClose.id, status: 'CURRENT' },
+            select: { id: true },
         });
-        for (const s of snapshots) {
-            snapshotMap[`${s.itemId}_${s.locationId}`] = {
-                qty: Number(s.closingQty),
-                wac: Number(s.wacUnitCost),
-                value: Number(s.closingValue),
-            };
+        if (currentVersion) {
+            const snapshots = await prisma.periodSnapshotLine.findMany({
+                where: {
+                    snapshotVersionId: currentVersion.id,
+                    ...(locFilter ? { locationId: locFilter } : {}),
+                },
+                select: {
+                    itemId: true,
+                    locationId: true,
+                    closingQty: true,
+                    closingValue: true,
+                    wacUnitCost: true,
+                },
+            });
+            for (const s of snapshots) {
+                snapshotMap[`${s.itemId}_${s.locationId}`] = {
+                    qty: Number(s.closingQty),
+                    wac: Number(s.wacUnitCost),
+                    value: Number(s.closingValue),
+                };
+            }
+            // Incomplete/harness closes: do not advance ledger floor without CURRENT lines
+            if (snapshots.length > 0) {
+                snapshotBaselineAt = bestClose.closedAt ?? new Date(0);
+            }
         }
     }
 
@@ -928,10 +1005,7 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
     const fallbackWhere = {
         tenantId,
         locationId: locFilter,
-        createdAt: {
-            gte: bestClose?.closedAt ?? new Date(0),
-            lt: start,
-        },
+        ...reportPostingPeriodWhere(snapshotBaselineAt ?? new Date(0), start, { endExclusive: true }),
     };
     const ledgerBefore = await prisma.inventoryLedger.groupBy({
         by: ['itemId', 'locationId'],
@@ -956,7 +1030,12 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
 
     // ── Step 3: Period movements (raw, to separate by type) ──────────────────
     const periodEntries = await prisma.inventoryLedger.findMany({
-        where: { tenantId, ...OFFICIAL_LEDGER_WHERE, locationId: locFilter, createdAt: { gte: start, lte: end } },
+        where: {
+            tenantId,
+            ...OFFICIAL_LEDGER_WHERE,
+            locationId: locFilter,
+            ...reportPostingPeriodWhere(start, end),
+        },
         select: { itemId: true, locationId: true, movementType: true, qtyIn: true, qtyOut: true, totalValue: true, unitCost: true },
     });
 
@@ -967,7 +1046,7 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
             movementType: 'GET_PASS_OUT',
             affectsValuation: false,
             locationId: locFilter,
-            createdAt: { gte: start, lte: end },
+            ...reportPostingPeriodWhere(start, end),
         },
         select: { itemId: true, locationId: true, qtyOut: true },
     });
@@ -1150,11 +1229,12 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
             // Outbound breakdown
             outQty:       Number(totalOutQty.toFixed(4)),
             outValue:     Number(totalOutValue.toFixed(2)),
-            issueQty:     Number((m.issueQty + m.getPassOutQty).toFixed(4)),
+            // Consumption = true ISSUE only. Custody Get Pass Out is exposed separately.
+            issueQty:     Number(m.issueQty.toFixed(4)),
             tfrOutQty:    Number(m.tfrOutQty.toFixed(4)),
             breakageQty:  Number(m.breakageQty.toFixed(4)),
             lostQty:      Number((m.lostQty + m.loanWriteOffQty).toFixed(4)),
-            getPassOutQty: 0,
+            getPassOutQty: Number(m.getPassOutQty.toFixed(4)),
             loanWriteOffQty: 0,
             // Adjustment
             adjQty:       Number(m.adjQty.toFixed(4)),
@@ -1188,6 +1268,7 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
         totalTfrInQty:     Number(sum('tfrInQty').toFixed(4)),
         totalOutQty:       Number(sum('outQty').toFixed(4)),
         totalIssueQty:     Number(sum('issueQty').toFixed(4)),
+        totalGetPassOutQty: Number(sum('getPassOutQty').toFixed(4)),
         totalTfrOutQty:    Number(sum('tfrOutQty').toFixed(4)),
         totalBreakageQty:  Number(sum('breakageQty').toFixed(4)),
         totalLostQty:      Number(sum('lostQty').toFixed(4)),
@@ -1214,19 +1295,15 @@ const generateOMCReport = async (tenantId, locationIds, start, end, categoryId, 
 const generateTransfersReport = async (tenantId, locationIds, start, end, categoryId, options = {}) => {
     const includeSupplier = Boolean(options.includeSupplier);
     const includeLocationQtys = Boolean(options.includeLocationQtys);
-    // Determine if the selected locations were source OR dest
+    // EX-010: period membership uses receive or post stamp only — never transferDate fallback.
     const transfers = await prisma.storeTransfer.findMany({
         where: {
             tenantId,
             status: { in: ['POSTED', 'RECEIVED', 'CLOSED'] },
             AND: [
-                {
-                    OR: [
-                        { receivedAt: { gte: start, lte: end } },
-                        // Legacy fallback: some historical rows were not stamped with receivedAt.
-                        { receivedAt: null, transferDate: { gte: start, lte: end } },
-                    ],
-                },
+                reportPostingPeriodWhere(start, end, {
+                    legacyDateFields: ['receivedAt', 'postedAt'],
+                }),
                 {
                     OR: [
                         { sourceLocationId: { in: locationIds } },
@@ -1241,7 +1318,12 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
             requestedByUser: true,
             lines: { include: { item: { include: { ...(includeSupplier ? { supplier: true } : {}) } } } }
         },
-        orderBy: [{ receivedAt: 'asc' }, { transferDate: 'asc' }]
+        orderBy: [
+            { postingDate: { sort: 'asc', nulls: 'last' } },
+            { receivedAt: { sort: 'asc', nulls: 'last' } },
+            { postedAt: { sort: 'asc', nulls: 'last' } },
+            { transferDate: 'asc' },
+        ]
     });
 
     let rows = [];
@@ -1250,7 +1332,8 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
             if (categoryId && line.item.categoryId !== categoryId) return;
             const isOut = locationIds.includes(doc.sourceLocationId);
             const isIn = locationIds.includes(doc.destLocationId);
-            const effectiveDate = doc.receivedAt || doc.transferDate;
+            const periodDate = doc.postingDate || doc.receivedAt || doc.postedAt;
+            if (!periodDate) return;
             const receivedAtStr = doc.receivedAt
                 ? doc.receivedAt.toISOString().split('T')[0]
                 : '';
@@ -1260,12 +1343,12 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
             if (!isOut && isIn) type = 'Transfer In';
 
             rows.push({
-                date: effectiveDate.toISOString().split('T')[0],
+                date: periodDate.toISOString().split('T')[0],
                 transferNo: doc.transferNo,
                 documentNo: doc.transferNo,
                 documentKey: doc.transferNo,
                 status: doc.status,
-                transferDate: effectiveDate.toISOString().split('T')[0],
+                transferDate: periodDate.toISOString().split('T')[0],
                 receivedAt: receivedAtStr,
                 type,
                 fromLocation: doc.sourceLocation?.name || '',
@@ -1279,7 +1362,7 @@ const generateTransfersReport = async (tenantId, locationIds, start, end, catego
                 qty: Number(line.receivedQty || line.requestedQty),
                 value: Number(line.totalValue),
                 requestedBy: doc.requestedByUser?.firstName + ' ' + doc.requestedByUser?.lastName,
-                postedAt: doc.receivedAt || null,
+                postedAt: doc.postingDate || doc.postedAt || doc.receivedAt || null,
                 ...(includeLocationQtys
                     ? {
                         locationQtys: {
@@ -1321,9 +1404,8 @@ const generateAgingReport = async (tenantId, locationIds, endDate, categoryId, o
 
     let rows = [];
 
-    // Prefer report end date for deterministic aging snapshots.
-    const asOfDate = endDate ? new Date(endDate) : new Date();
-    asOfDate.setHours(23, 59, 59, 999);
+    // Inclusive UTC end-of-day for date-only endDate (UTC+ safe). See toInclusiveUtcEndOfDay.
+    const asOfDate = toInclusiveUtcEndOfDay(endDate);
     for (const b of balances) {
         // Last official ledger movement for this item/location up to the report as-of date.
         const lastMovement = await prisma.inventoryLedger.findFirst({
@@ -1332,12 +1414,15 @@ const generateAgingReport = async (tenantId, locationIds, endDate, categoryId, o
                 ...OFFICIAL_LEDGER_WHERE,
                 itemId: b.itemId,
                 locationId: b.locationId,
-                createdAt: { lte: asOfDate }
+                ...reportPostingBeforeWhere(asOfDate, { inclusive: true }),
             },
-            orderBy: { createdAt: 'desc' }
+            orderBy: [
+                { postingDate: { sort: 'desc', nulls: 'last' } },
+                { createdAt: 'desc' },
+            ],
         });
 
-        const lastDate = lastMovement ? lastMovement.createdAt : null;
+        const lastDate = lastMovement ? (lastMovement.postingDate || lastMovement.createdAt) : null;
         let diffDays = 0;
         if (lastDate) {
             diffDays = Math.max(0, Math.floor((asOfDate - lastDate) / (1000 * 60 * 60 * 24)));
@@ -1357,7 +1442,9 @@ const generateAgingReport = async (tenantId, locationIds, endDate, categoryId, o
             itemName: b.item.name,
             ...(includeSupplier ? { supplier: b.item.supplier?.name || '' } : {}),
             qtyOnHand: Number(b.qtyOnHand),
-            value: Number((Number(b.qtyOnHand || 0) * Number(b.item.unitPrice || 0)).toFixed(2)),
+            // EX-009: valuation uses stock WAC (same basis as other inventory reports), not catalog unitPrice.
+            value: Number((Number(b.qtyOnHand || 0) * Number(b.wacUnitCost || 0)).toFixed(2)),
+            unitCost: Number(b.wacUnitCost || 0),
             lastReceiveDate: lastDate ? lastDate.toISOString().split('T')[0] : 'Never',
             daysOld: diffDays,
             bucket,
@@ -1591,7 +1678,9 @@ async function exportEngineGroupedExcel(report, options = {}) {
         formatCells: false,
         ...(options.visibleGroupIds !== undefined && { visibleGroupIds: options.visibleGroupIds }),
     });
-    const maskedRows = maskExportRows(rows, options.user);
+    // Same gate as PDF: mask only when caller supplies the acting user.
+    // Omitting user previously fail-closed to "***" on every financial cell (Excel bug).
+    const maskedRows = options.user ? maskExportRows(rows, options.user) : rows;
     const exportColumns = relabelCurrencyHeaders(columns, options.displayCurrency);
 
     return excelService.generateExcelBuffer(
@@ -1697,7 +1786,7 @@ const exportPdf = async (tenantId, reportId, options = {}) => {
         formatCells: false,
         visibleGroupIds,
     });
-    const maskedRows = maskExportRows(rows, options.user);
+    const maskedRows = options.user ? maskExportRows(rows, options.user) : rows;
     const exportColumns = relabelCurrencyHeaders(columns, displayCurrency);
     const generatedBy = report.generatedByUser
         ? `${report.generatedByUser.firstName || ''} ${report.generatedByUser.lastName || ''}`.trim() || report.generatedByUser.email || 'System'

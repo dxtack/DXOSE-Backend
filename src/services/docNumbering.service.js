@@ -1,5 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../config/database');
+const { toUtcPeriodYearMonth } = require('../utils/report-date-range.util');
+const { getTenantTimezone } = require('./tenantTimezone.service');
 
 /**
  * Document Prefix constants
@@ -9,13 +10,16 @@ const DocPrefix = {
     RECEIVE:         'GRN',
     ISSUE:           'ISS',
     TRANSFER:        'TRF',
+    TRANSFER_OUT:    'TRO',
+    TRANSFER_IN:     'TRI',
+    RETURN:          'RET',
     BREAKAGE:        'BRK',
     ADJUSTMENT:      'ADJ',
     COUNT_ADJUSTMENT:'ADJ',
     STOCK_COUNT:     'CNT',
     PERIOD_CLOSE:    'CLS',
     GET_PASS_OUT:    'GP',
-    GET_PASS_RETURN: 'GPR'
+    GET_PASS_RETURN: 'GPR',
 };
 
 /**
@@ -23,6 +27,7 @@ const DocPrefix = {
  * Uses a "last writer wins" pattern with $queryRawUnsafe for atomic increment.
  *
  * Format: {PREFIX}-{YEAR}-{NNNNN}  e.g. GRN-2026-00001
+ * Year follows the tenant-local calendar year of the reference date.
  *
  * @param {string}  tenantId
  * @param {string}  prefix     — one of DocPrefix values, e.g. 'GRN'
@@ -31,11 +36,11 @@ const DocPrefix = {
  * @returns {Promise<string>}  — e.g. "GRN-2026-00042"
  */
 const generateDocNumber = async (tenantId, prefix, date = new Date(), tx = null) => {
-    const year = new Date(date).getFullYear();
+    const db = tx || prisma;
+    const timezone = await getTenantTimezone(tenantId, db);
+    const { year } = toUtcPeriodYearMonth(date, timezone);
 
-    // Atomic upsert + increment using raw SQL to avoid race conditions
-    // Works on PostgreSQL — increments lastSeq and returns new value in one query
-    const result = await prisma.$queryRawUnsafe(
+    const result = await db.$queryRawUnsafe(
         `INSERT INTO doc_sequence ("id","tenantId","prefix","year","lastSeq")
          VALUES (gen_random_uuid(), $1::uuid, $2, $3, 1)
          ON CONFLICT ("tenantId","prefix","year")

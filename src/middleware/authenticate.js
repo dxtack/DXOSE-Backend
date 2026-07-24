@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken');
 const prisma = require('../config/database');
 const logger = require('../utils/logger');
-const { membershipRoleCode, getPermissionsForMembership } = require('../services/rbac.service');
+const { membershipRoleCode } = require('../services/rbac.service');
+const accRuntime = require('../acc-runtime');
 const { enforcetenantScope } = require('./tenantScope');
 const { enforceSubscription } = require('./subscription');
+const { resolveTenantMembership } = require('../utils/resolveTenantMembership');
+const { scopeEnforcementMiddleware } = require('./scope-enforcement.middleware');
 
 const getTenantSuspensionFromTokenContext = async (tenantId) => {
     if (!tenantId) return null;
@@ -16,6 +19,7 @@ const getTenantSuspensionFromTokenContext = async (tenantId) => {
             isActive: true,
             subStatus: true,
             adminStatus: true,
+            timezone: true,
             parentId: true,
             parent: {
                 select: {
@@ -65,16 +69,15 @@ const authenticate = async (req, res, next) => {
             where: { id: decoded.userId },
             select: { permissionVersion: true },
         });
-        if (
-            userRow &&
-            decoded.permissionVersion !== undefined &&
-            userRow.permissionVersion !== decoded.permissionVersion
-        ) {
-            return res.status(401).json({
-                success: false,
-                message: 'Session expired. Please login again.',
-                code: 'PERMISSIONS_STALE',
-            });
+        if (userRow) {
+            const tokenVersion = decoded.permissionVersion;
+            if (tokenVersion === undefined || tokenVersion !== userRow.permissionVersion) {
+                return res.status(401).json({
+                    success: false,
+                    message: 'Session expired. Please login again.',
+                    code: 'PERMISSIONS_STALE',
+                });
+            }
         }
 
         const suspension = await getTenantSuspensionFromTokenContext(decoded.tenantId);
@@ -99,69 +102,42 @@ const authenticate = async (req, res, next) => {
             });
         }
 
-        let membership = await prisma.tenantMember.findFirst({
-            where: {
-                userId: decoded.userId,
-                tenantId: decoded.tenantId || null,
-            },
-            select: { isActive: true, role: true, roleId: true, tenantId: true, departmentId: true },
-        });
-
-        // If there is no direct membership for this tenant context, allow ORG_MANAGER
-        // inheritance: parent org manager can access child hotels.
-        if (!membership && decoded.tenantId) {
-            const targetTenant = await prisma.tenant.findUnique({
-                where: { id: decoded.tenantId },
-                select: { id: true, parentId: true, isActive: true },
+        let membership = null;
+        if (decoded.tenantId) {
+            const resolved = await resolveTenantMembership(prisma, decoded.userId, decoded.tenantId, {
+                include: { role: true },
             });
-
-            if (!targetTenant || !targetTenant.isActive) {
-                return res.status(401).json({
-                    success: false,
-                    message: 'Invalid token context.',
-                });
-            }
-
-            if (targetTenant.parentId) {
-                const parentOrgMembership = await prisma.tenantMember.findFirst({
-                    where: {
-                        userId: decoded.userId,
-                        tenantId: targetTenant.parentId,
-                        role: { code: 'ORG_MANAGER' },
-                        isActive: true,
-                        tenant: { is: { isActive: true, parentId: null } },
-                    },
-                    select: { isActive: true, role: true, roleId: true, tenantId: true, departmentId: true },
-                });
-
-                if (parentOrgMembership) {
-                    membership = {
-                        tenantId: targetTenant.id,
-                        role: parentOrgMembership.role,
-                        roleId: parentOrgMembership.roleId,
-                        isActive: true,
-                        isInherited: true,
-                        departmentId: parentOrgMembership.departmentId ?? null,
-                    };
+            if (!resolved.membership) {
+                if (resolved.inactiveDirect) {
+                    return res.status(401).json({
+                        error: 'ACCOUNT_INACTIVE',
+                        message: 'Your account has been deactivated by the admin.',
+                    });
                 }
-            }
-
-            if (!membership) {
                 return res.status(401).json({
                     success: false,
                     message: 'Invalid token context.',
                 });
             }
-        }
-
-        if (membership && membership.isActive === false) {
-            return res.status(401).json({
-                error: 'ACCOUNT_INACTIVE',
-                message: 'Your account has been deactivated by the admin.',
+            membership = resolved.membership;
+        } else {
+            membership = await prisma.tenantMember.findFirst({
+                where: {
+                    userId: decoded.userId,
+                    tenantId: null,
+                },
+                select: { isActive: true, role: true, roleId: true, tenantId: true, departmentId: true },
             });
+            if (membership && membership.isActive === false) {
+                return res.status(401).json({
+                    error: 'ACCOUNT_INACTIVE',
+                    message: 'Your account has been deactivated by the admin.',
+                });
+            }
         }
 
         let scopedTenantId = decoded.tenantId;
+        let scopedTenantTimezone = suspension?.tenant?.timezone || null;
         const isOrgManager = membership && membershipRoleCode(membership) === 'ORG_MANAGER';
         const requestedTenantIdHeader = typeof req.headers['x-tenant-id'] === 'string'
             ? req.headers['x-tenant-id'].trim()
@@ -176,7 +152,7 @@ const authenticate = async (req, res, next) => {
                         { parentId: decoded.tenantId },
                     ],
                 },
-                select: { id: true },
+                select: { id: true, timezone: true },
             });
 
             if (!allowedTenant) {
@@ -187,28 +163,33 @@ const authenticate = async (req, res, next) => {
             }
 
             scopedTenantId = allowedTenant.id;
+            scopedTenantTimezone = allowedTenant.timezone;
         }
 
-        const roleCode = membership ? membershipRoleCode(membership) : decoded.role;
-        let permissions = Array.isArray(decoded.permissions) ? decoded.permissions : [];
-        if (permissions.length === 0 && membership) {
-            permissions = await getPermissionsForMembership({
-                roleId: membership.roleId,
-                roleCode,
-            });
-        }
+        const session = await accRuntime.resolveSession({
+            userId:    decoded.userId,
+            membership,
+            decoded,
+            tenantId:  scopedTenantId,
+        });
 
         req.user = {
             id: decoded.userId,
             tenantId: scopedTenantId,
-            role: roleCode,
-            roleId: membership?.roleId ?? decoded.roleId,
-            permissions,
+            tenantTimezone: scopedTenantTimezone,
+            role: session.role,
+            roleId: session.roleId,
+            permissions: session.permissions,
             email: decoded.email,
-            departmentId: membership?.departmentId ?? null,
+            departmentId: session.departmentId,
             readOnly: decoded.readOnly || false,
             impersonatedBy: decoded.impersonatedBy || null,
         };
+
+        // ACC P2 — optional scope enforcement pilot (fail-open; default OFF).
+        await new Promise((resolve) => {
+            scopeEnforcementMiddleware(req, res, resolve);
+        });
 
         // Chain: authenticate → tenantScope → subscription → next
         enforcetenantScope(req, res, (err) => {

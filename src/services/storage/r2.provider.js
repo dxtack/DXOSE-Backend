@@ -88,6 +88,17 @@ const createR2Provider = () => {
                 throw err;
             }
         },
+
+        async getBuffer(key) {
+            const response = await client.send(
+                new GetObjectCommand({ Bucket: bucket, Key: key })
+            );
+            const chunks = [];
+            for await (const chunk of response.Body) {
+                chunks.push(chunk);
+            }
+            return Buffer.concat(chunks);
+        },
     };
 };
 

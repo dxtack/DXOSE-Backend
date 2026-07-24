@@ -1,6 +1,6 @@
 'use strict';
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const prisma = require('../config/database');
+const { writeAuditLog } = require('./auditWriter.service');
 
 const normalizeVendorName = (name = '') => name.trim().toLowerCase().replace(/\s+/g, ' ');
 
@@ -21,17 +21,14 @@ const upsertItemMapping = async ({ tenantId, futurelogItemCode, futurelogItemNam
         update: { futurelogItemName, internalItemId, updatedBy: userId, updatedAt: new Date() },
     });
 
-    // Audit log
-    await prisma.auditLog.create({
-        data: {
-            tenantId,
-            entityType: 'ItemMapping',
-            entityId: result.id,
-            action: existing ? 'UPDATE' : 'CREATE',
-            changedBy: userId,
-            beforeValue: existing ? { internalItemId: existing.internalItemId } : null,
-            afterValue: { internalItemId },
-        },
+    await writeAuditLog({
+        tenantId,
+        entityType: 'ItemMapping',
+        entityId: result.id,
+        action: existing ? 'UPDATE' : 'CREATE',
+        changedBy: userId,
+        beforeValue: existing ? { internalItemId: existing.internalItemId } : null,
+        afterValue: { internalItemId },
     });
 
     // Re-apply to any DRAFT GRN lines that reference this FutureLog item code
@@ -92,16 +89,14 @@ const upsertUomMapping = async ({ tenantId, futurelogUom, internalUomId, convers
         update: { internalUomId, conversionFactor, updatedBy: userId, updatedAt: new Date() },
     });
 
-    await prisma.auditLog.create({
-        data: {
-            tenantId,
-            entityType: 'UomMapping',
-            entityId: result.id,
-            action: existing ? 'UPDATE' : 'CREATE',
-            changedBy: userId,
-            beforeValue: existing ? { internalUomId: existing.internalUomId, conversionFactor: existing.conversionFactor } : null,
-            afterValue: { internalUomId, conversionFactor },
-        },
+    await writeAuditLog({
+        tenantId,
+        entityType: 'UomMapping',
+        entityId: result.id,
+        action: existing ? 'UPDATE' : 'CREATE',
+        changedBy: userId,
+        beforeValue: existing ? { internalUomId: existing.internalUomId, conversionFactor: existing.conversionFactor } : null,
+        afterValue: { internalUomId, conversionFactor },
     });
 
     return result;
@@ -132,16 +127,14 @@ const upsertVendorMapping = async ({ tenantId, futurelogVendorName, internalSupp
         update: { internalSupplierId, updatedBy: userId, updatedAt: new Date() },
     });
 
-    await prisma.auditLog.create({
-        data: {
-            tenantId,
-            entityType: 'VendorMapping',
-            entityId: result.id,
-            action: existing ? 'UPDATE' : 'CREATE',
-            changedBy: userId,
-            beforeValue: existing ? { internalSupplierId: existing.internalSupplierId } : null,
-            afterValue: { internalSupplierId },
-        },
+    await writeAuditLog({
+        tenantId,
+        entityType: 'VendorMapping',
+        entityId: result.id,
+        action: existing ? 'UPDATE' : 'CREATE',
+        changedBy: userId,
+        beforeValue: existing ? { internalSupplierId: existing.internalSupplierId } : null,
+        afterValue: { internalSupplierId },
     });
 
     // Re-apply vendor match to any DRAFT GRNs with this unmatched vendor name

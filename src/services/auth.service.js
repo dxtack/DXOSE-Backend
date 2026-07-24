@@ -2,14 +2,21 @@ const crypto = require('crypto');
 const prisma = require('../config/database');
 const { hashPassword, comparePassword } = require('../utils/password');
 const { sendPasswordResetOtpEmail } = require('../utils/mailer');
+const { normalizeEmailForLookup } = require('../utils/emailNormalize');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken, getRefreshTokenExpiry } = require('../utils/jwt');
 const logger = require('../utils/logger');
 const {
-    getPermissionsForMembership,
     membershipRoleCode,
     getRoleIdByCode,
-    normalizeRole,
+    resolveUserBestRole,
+    resolveMembershipBusinessRole,
+    userHasOrgManagerMembership,
+    connectRole,
 } = require('./rbac.service');
+const accRuntime = require('../acc-runtime');
+const { resolveTenantMembership } = require('../utils/resolveTenantMembership');
+const { findActiveTenantBySlug } = require('../utils/tenantSlugResolve');
+const { ensureTenantSwitchable } = require('../utils/tenantSwitchValidation');
 
 /**
  * M01 — Auth Service
@@ -21,15 +28,50 @@ const PASSWORD_RESET_EXPIRES_MINUTES = 15;
 
 const generateSixDigitOtp = () => String(crypto.randomInt(100000, 1000000));
 
-const formatMembershipOption = (membership) => ({
+const formatMembershipOption = (membership, businessRole) => ({
     tenantId: membership.tenantId,
     tenantSlug: membership.tenant?.slug || null,
     tenantName: membership.tenant?.name || null,
+    timezone: membership.tenant?.timezone || null,
     parentId: membership.tenant?.parentId || null,
-    role: membershipRoleCode(membership),
+    role: businessRole ?? membershipRoleCode(membership),
     isInherited: Boolean(membership.isInherited),
     isSuperAdmin: membership.tenantId === null,
 });
+
+const formatMembershipOptionsForUser = async (memberships, userId) => {
+    const hasOrgManagerMembership = await userHasOrgManagerMembership(userId);
+    return (memberships || []).map((membership) =>
+        formatMembershipOption(
+            membership,
+            resolveMembershipBusinessRole(membershipRoleCode(membership), hasOrgManagerMembership),
+        ),
+    );
+};
+
+/**
+ * Login-time tenant choices: org roots only for ORG_MANAGER (branch hotels are chosen on dashboard).
+ * Other roles: exclude inherited branch rows from the selection count.
+ */
+const getLoginSelectableMemberships = (memberships) => {
+    const hasRootOrgManager = memberships.some(
+        (m) =>
+            membershipRoleCode(m) === 'ORG_MANAGER' &&
+            m.tenant &&
+            m.tenant.parentId === null
+    );
+
+    if (hasRootOrgManager) {
+        return memberships.filter(
+            (m) =>
+                m.tenant &&
+                m.tenant.parentId === null &&
+                membershipRoleCode(m) === 'ORG_MANAGER'
+        );
+    }
+
+    return memberships.filter((m) => !m.isInherited);
+};
 
 const buildAccountInactiveError = () => Object.assign(
     new Error('Your account has been deactivated by the admin.'),
@@ -38,6 +80,42 @@ const buildAccountInactiveError = () => Object.assign(
         code: 'ACCOUNT_INACTIVE',
     }
 );
+
+/** Org manager with legacy inactive branch row: grant active ORG_MANAGER on that hotel. */
+const healOrgManagerBranchAccess = async (userId, branchTenantId, parentOrgId) => {
+    if (!userId || !branchTenantId || !parentOrgId) {
+        return false;
+    }
+
+    const parentOm = await prisma.tenantMember.findFirst({
+        where: {
+            userId,
+            tenantId: parentOrgId,
+            role: { code: 'ORG_MANAGER' },
+            isActive: true,
+        },
+        select: { id: true },
+    });
+    if (!parentOm) {
+        return false;
+    }
+
+    await prisma.tenantMember.upsert({
+        where: { tenantId_userId: { tenantId: branchTenantId, userId } },
+        create: {
+            tenant: { connect: { id: branchTenantId } },
+            user: { connect: { id: userId } },
+            role: connectRole('ORG_MANAGER'),
+            isActive: true,
+        },
+        update: {
+            role: connectRole('ORG_MANAGER'),
+            isActive: true,
+        },
+    });
+
+    return true;
+};
 
 const buildInheritedOrgManagerMemberships = async (activeMemberships) => {
     const orgManagerRoleId = await getRoleIdByCode('ORG_MANAGER');
@@ -65,6 +143,7 @@ const buildInheritedOrgManagerMemberships = async (activeMemberships) => {
                 name: true,
                 slug: true,
                 parentId: true,
+                timezone: true,
                 isActive: true,
                 subStatus: true,
             },
@@ -139,37 +218,6 @@ const ensureTenantNotSuspended = async (tenantId) => {
     }
 };
 
-/**
- * Effective session role: keep SUPER_ADMIN / ORG_MANAGER from the membership row; if the
- * current row has no/lower role, promote to ORG_MANAGER when the user has any active ORG_MANAGER membership.
- */
-const resolveUserBestRole = async (userId, currentMembershipRole) => {
-    if (currentMembershipRole != null && String(currentMembershipRole).trim() !== '') {
-        const n = normalizeRole(currentMembershipRole);
-        if (n === 'SUPER_ADMIN') return 'SUPER_ADMIN';
-        if (n === 'ORG_MANAGER') return 'ORG_MANAGER';
-    }
-
-    const hasOrgManagerMembership = await prisma.tenantMember.findFirst({
-        where: {
-            userId,
-            isActive: true,
-            role: { code: 'ORG_MANAGER' },
-        },
-        select: { id: true },
-    });
-
-    if (hasOrgManagerMembership) {
-        return 'ORG_MANAGER';
-    }
-
-    if (currentMembershipRole != null && String(currentMembershipRole).trim() !== '') {
-        return normalizeRole(currentMembershipRole);
-    }
-
-    return null;
-};
-
 const issueSessionForMembership = async ({
     user,
     membership,
@@ -185,7 +233,20 @@ const issueSessionForMembership = async ({
     } else if (!roleId && roleCodeRaw) {
         roleId = await getRoleIdByCode(roleCodeRaw);
     }
-    const permissions = await getPermissionsForMembership({ roleId, roleCode: bestRole });
+    const permissions = await accRuntime.resolvePermissionsForMembership({
+        userId: user.id,
+        membership,
+        roleId,
+        roleCode: bestRole,
+    });
+    let permissionVersion = user.permissionVersion;
+    if (permissionVersion === undefined || permissionVersion === null) {
+        const versionRow = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { permissionVersion: true },
+        });
+        permissionVersion = versionRow?.permissionVersion ?? 0;
+    }
     const tokenPayload = {
         userId: user.id,
         tenantId: membership.tenantId,
@@ -193,7 +254,7 @@ const issueSessionForMembership = async ({
         email: user.email,
         ...(roleId ? { roleId } : {}),
         permissions,
-        permissionVersion: user.permissionVersion ?? 0,
+        permissionVersion,
     };
     const accessToken = generateAccessToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
@@ -218,7 +279,7 @@ const issueSessionForMembership = async ({
         membership.tenantId != null
             ? await prisma.tenant.findUnique({
                   where: { id: membership.tenantId },
-                  select: { id: true, name: true, slug: true, parentId: true },
+                  select: { id: true, name: true, slug: true, parentId: true, timezone: true },
               })
             : null;
 
@@ -236,6 +297,7 @@ const issueSessionForMembership = async ({
             departmentId: membership.departmentId ?? null,
             tenantId: membership.tenantId,
             tenantName: tenantSnapshot?.name || membership.tenant?.name || null,
+            tenantTimezone: tenantSnapshot?.timezone || membership.tenant?.timezone || null,
             ...(tenantSnapshot
                 ? {
                       tenant: {
@@ -243,6 +305,7 @@ const issueSessionForMembership = async ({
                           name: tenantSnapshot.name,
                           slug: tenantSnapshot.slug,
                           parentId: tenantSnapshot.parentId,
+                          timezone: tenantSnapshot.timezone,
                       },
                   }
                 : {}),
@@ -250,11 +313,26 @@ const issueSessionForMembership = async ({
     };
 };
 
+/** Attach switchable tenants (org roots + branch hotels) for header switcher / org dashboard. */
+const attachSessionMemberships = async (sessionResult, userId, membershipsWithInheritance) => {
+    let list = membershipsWithInheritance;
+    if (!Array.isArray(list) || list.length === 0) {
+        const activeMemberships = await prisma.tenantMember.findMany({
+            where: { userId, isActive: true },
+            include: { tenant: true, role: true },
+        });
+        const inherited = await buildInheritedOrgManagerMemberships(activeMemberships);
+        list = inherited.length > 0 ? inherited : activeMemberships;
+    }
+    sessionResult.user.memberships = await formatMembershipOptionsForUser(list, userId);
+    return sessionResult;
+};
+
 /**
  * Login: verify credentials, then either issue session or return tenant choices
  */
 const login = async ({ email, password, tenantSlug, ipAddress, userAgent }) => {
-    const normalizedEmail = email.toLowerCase();
+    const normalizedEmail = normalizeEmailForLookup(email);
     const user = await prisma.user.findUnique({
         where: { email: normalizedEmail },
     });
@@ -362,23 +440,53 @@ const login = async ({ email, password, tenantSlug, ipAddress, userAgent }) => {
 
     const normalizedTenantSlug = typeof tenantSlug === 'string' ? tenantSlug.trim() : '';
     const totalMemberships = activeMembershipsWithInheritance.length;
+    const loginSelectableMemberships = getLoginSelectableMemberships(activeMembershipsWithInheritance);
+    const loginSelectableCount = loginSelectableMemberships.length;
 
     if (totalMemberships === 0 && suspensionFailureCode) {
         throw buildSuspensionError(suspensionFailureCode);
     }
 
-    if (totalMemberships > 1 && !normalizedTenantSlug) {
+    if (loginSelectableCount > 1 && !normalizedTenantSlug) {
         console.log('DEBUG: Triggering Tenant Selection Response');
         return {
             success: true,
             requiresTenantSelection: true,
             data: {
-                memberships: activeMembershipsWithInheritance.map(formatMembershipOption),
+                memberships: await formatMembershipOptionsForUser(loginSelectableMemberships, user.id),
             },
         };
     }
 
-    if (activeMemberships.length === 0) {
+    if (activeMembershipsWithInheritance.length === 0) {
+        if (normalizedTenantSlug) {
+            const attemptedTenant = await prisma.tenant.findFirst({
+                where: { slug: normalizedTenantSlug },
+                select: { id: true },
+            });
+            if (attemptedTenant?.id) {
+                const resolved = await resolveTenantMembership(prisma, user.id, attemptedTenant.id, {
+                    include: { tenant: true, role: true },
+                    attachTenant: true,
+                });
+                if (resolved.membership) {
+                    await ensureTenantNotSuspended(resolved.membership.tenantId);
+                    const result = await issueSessionForMembership({
+                        user,
+                        membership: resolved.membership,
+                        ipAddress,
+                        userAgent,
+                    });
+                    logger.info(
+                        `User logged in via inherited access: ${user.email} [tenant: ${normalizedTenantSlug}]`
+                    );
+                    return attachSessionMemberships(result, user.id, activeMembershipsWithInheritance);
+                }
+                if (resolved.inactiveDirect) {
+                    throw buildAccountInactiveError();
+                }
+            }
+        }
         if (memberships.length > 0) {
             throw buildAccountInactiveError();
         }
@@ -419,15 +527,20 @@ const login = async ({ email, password, tenantSlug, ipAddress, userAgent }) => {
             }
         }
 
-        const selectedMembership = activeMembershipsWithInheritance
+        let selectedMembership = activeMembershipsWithInheritance
             .find((membership) => membership.tenant?.slug === normalizedTenantSlug);
-        if (!selectedMembership) {
-            const inactiveDirectMembership = memberships.find(
-                (membership) => membership.tenant?.slug === normalizedTenantSlug && !membership.isActive
-            );
-            if (inactiveDirectMembership) {
+        if (!selectedMembership && attemptedTenant?.id) {
+            const resolved = await resolveTenantMembership(prisma, user.id, attemptedTenant.id, {
+                include: { tenant: true, role: true },
+                attachTenant: true,
+            });
+            if (resolved.membership) {
+                selectedMembership = resolved.membership;
+            } else if (resolved.inactiveDirect) {
                 throw buildAccountInactiveError();
             }
+        }
+        if (!selectedMembership) {
             throw Object.assign(new Error('You are not authorized for this tenant.'), {
                 statusCode: 403,
                 code: 'TENANT_ACCESS_DENIED',
@@ -446,7 +559,29 @@ const login = async ({ email, password, tenantSlug, ipAddress, userAgent }) => {
             userAgent,
         });
         logger.info(`User logged in: ${user.email} [tenant: ${normalizedTenantSlug}]`);
-        return result;
+        return attachSessionMemberships(result, user.id, activeMembershipsWithInheritance);
+    }
+
+    if (loginSelectableCount === 1) {
+        const selected = loginSelectableMemberships[0];
+        if (selected?.tenantId) {
+            const selectedTenant = await prisma.tenant.findUnique({
+                where: { id: selected.tenantId },
+                select: {
+                    id: true,
+                    slug: true,
+                    parentId: true,
+                    subStatus: true,
+                    adminStatus: true,
+                    parent: { select: { id: true, subStatus: true, adminStatus: true } },
+                },
+            });
+            logAuthCheck({ email: user.email, tenant: selectedTenant });
+        }
+        await ensureTenantNotSuspended(selected.tenantId);
+        const result = await issueSessionForMembership({ user, membership: selected, ipAddress, userAgent });
+        logger.info(`User logged in: ${user.email} [tenant: ${selected.tenant?.slug || 'super-admin'}]`);
+        return attachSessionMemberships(result, user.id, activeMembershipsWithInheritance);
     }
 
     if (totalMemberships === 1) {
@@ -468,15 +603,15 @@ const login = async ({ email, password, tenantSlug, ipAddress, userAgent }) => {
         await ensureTenantNotSuspended(selected.tenantId);
         const result = await issueSessionForMembership({ user, membership: selected, ipAddress, userAgent });
         logger.info(`User logged in: ${user.email} [tenant: ${selected.tenant?.slug || 'super-admin'}]`);
-        return result;
+        return attachSessionMemberships(result, user.id, activeMembershipsWithInheritance);
     }
 
-    if (totalMemberships > 1) {
+    if (loginSelectableCount > 1) {
         return {
             success: true,
             requiresTenantSelection: true,
             data: {
-                memberships: activeMembershipsWithInheritance.map(formatMembershipOption),
+                memberships: await formatMembershipOptionsForUser(loginSelectableMemberships, user.id),
             },
         };
     }
@@ -515,42 +650,33 @@ const refresh = async (refreshToken) => {
 
     let membership;
     if (decoded.tenantId) {
-        membership = await prisma.tenantMember.findFirst({
-            where: {
-                userId: user.id,
-                tenantId: decoded.tenantId,
-                isActive: true,
-                tenant: { is: { isActive: true } },
-            },
+        const resolved = await resolveTenantMembership(prisma, user.id, decoded.tenantId, {
             include: { tenant: { select: { id: true } }, role: true },
         });
-
-        if (!membership) {
-            const targetTenant = await prisma.tenant.findUnique({
+        if (resolved.membership) {
+            membership = resolved.membership;
+        } else if (resolved.inactiveDirect) {
+            const branchTenant = await prisma.tenant.findUnique({
                 where: { id: decoded.tenantId },
-                select: { id: true, parentId: true, isActive: true },
+                select: { id: true, parentId: true },
             });
-
-            if (targetTenant?.isActive && targetTenant.parentId) {
-                const parentOrgMembership = await prisma.tenantMember.findFirst({
-                    where: {
-                        userId: user.id,
-                        tenantId: targetTenant.parentId,
-                        role: { code: 'ORG_MANAGER' },
-                        isActive: true,
-                        tenant: { is: { isActive: true, parentId: null } },
-                    },
-                    include: { role: true },
+            if (
+                branchTenant?.parentId &&
+                (await healOrgManagerBranchAccess(user.id, branchTenant.id, branchTenant.parentId))
+            ) {
+                const retry = await resolveTenantMembership(prisma, user.id, decoded.tenantId, {
+                    include: { tenant: { select: { id: true } }, role: true },
                 });
-
-                if (parentOrgMembership) {
-                    membership = {
-                        tenantId: targetTenant.id,
-                        role: parentOrgMembership.role,
-                        roleId: parentOrgMembership.roleId,
-                        tenant: { id: targetTenant.id },
-                    };
+                if (retry.membership) {
+                    membership = retry.membership;
                 }
+            }
+            if (!membership) {
+                await prisma.refreshToken.updateMany({
+                    where: { token: refreshToken, revokedAt: null },
+                    data: { revokedAt: new Date() },
+                });
+                throw buildAccountInactiveError();
             }
         }
     } else {
@@ -595,7 +721,12 @@ const refresh = async (refreshToken) => {
     } else if (!roleId && roleCodeRaw) {
         roleId = await getRoleIdByCode(roleCodeRaw);
     }
-    const permissions = await getPermissionsForMembership({ roleId, roleCode: bestRole });
+    const permissions = await accRuntime.resolvePermissionsForMembership({
+        userId: user.id,
+        membership,
+        roleId,
+        roleCode: bestRole,
+    });
 
     const newAccessToken = generateAccessToken({
         userId: user.id,
@@ -644,17 +775,29 @@ const getMe = async (userId, tenantId) => {
         throw Object.assign(new Error('User not found.'), { statusCode: 404, code: 'USER_NOT_FOUND' });
     }
 
-    const membership = await prisma.tenantMember.findFirst({
-        where: {
-            userId,
-            tenantId: tenantId || null,
-            isActive: true,
-        },
-        include: {
-            tenant: { select: { id: true, name: true, slug: true, logoUrl: true, parentId: true } },
-            role: { select: { id: true, code: true } },
-        },
-    });
+    let membership;
+    if (tenantId) {
+        const resolved = await resolveTenantMembership(prisma, userId, tenantId, {
+            include: {
+                tenant: { select: { id: true, name: true, slug: true, logoUrl: true, parentId: true, timezone: true } },
+                role: { select: { id: true, code: true } },
+            },
+            attachTenant: true,
+        });
+        membership = resolved.membership;
+    } else {
+        membership = await prisma.tenantMember.findFirst({
+            where: {
+                userId,
+                tenantId: null,
+                isActive: true,
+            },
+            include: {
+                tenant: { select: { id: true, name: true, slug: true, logoUrl: true, parentId: true, timezone: true } },
+                role: { select: { id: true, code: true } },
+            },
+        });
+    }
     if (!membership) {
         throw Object.assign(new Error('Membership not found for this context.'), {
             statusCode: 404,
@@ -669,7 +812,9 @@ const getMe = async (userId, tenantId) => {
         const bestRoleId = await getRoleIdByCode(bestRole);
         if (bestRoleId) roleIdForPerm = bestRoleId;
     }
-    const permissions = await getPermissionsForMembership({
+    const permissions = await accRuntime.resolvePermissionsForMembership({
+        userId,
+        membership,
         roleId: roleIdForPerm,
         roleCode: bestRole,
     });
@@ -756,6 +901,7 @@ const switchTenant = async ({ userId, tenantSlug, ipAddress, userAgent }) => {
             lastName: true,
             department: true,
             isActive: true,
+            permissionVersion: true,
         },
     });
     if (!user || !user.isActive) {
@@ -765,13 +911,7 @@ const switchTenant = async ({ userId, tenantSlug, ipAddress, userAgent }) => {
         });
     }
 
-    const targetTenant = await prisma.tenant.findFirst({
-        where: {
-            slug: normalizedTenantSlug,
-            isActive: true,
-        },
-        select: { id: true, slug: true, name: true, parentId: true, subStatus: true },
-    });
+    const targetTenant = await findActiveTenantBySlug(prisma, normalizedTenantSlug);
 
     if (!targetTenant) {
         throw Object.assign(new Error('You are not authorized for this tenant.'), {
@@ -780,8 +920,8 @@ const switchTenant = async ({ userId, tenantSlug, ipAddress, userAgent }) => {
         });
     }
 
-    // Block switching to suspended tenant/org hierarchy with distinct codes.
-    await ensureTenantNotSuspended(targetTenant.id);
+    // Block switching to suspended / inactive / expired tenant before replacing session.
+    await ensureTenantSwitchable(targetTenant.id, { buildSuspensionError });
 
     // Strict switch guard:
     // If user is an ORG_MANAGER of any root org, they may only switch to that org
@@ -812,51 +952,49 @@ const switchTenant = async ({ userId, tenantSlug, ipAddress, userAgent }) => {
         }
     }
 
-    const directMembership = await prisma.tenantMember.findFirst({
-        where: { userId, tenantId: targetTenant.id },
+    let resolved = await resolveTenantMembership(prisma, userId, targetTenant.id, {
         include: {
-            tenant: { select: { id: true, slug: true, name: true, parentId: true } },
+            tenant: { select: { id: true, slug: true, name: true, parentId: true, timezone: true } },
             role: { select: { id: true, code: true } },
         },
+        attachTenant: true,
     });
 
-    if (directMembership && !directMembership.isActive) {
-        throw buildAccountInactiveError();
-    }
-
-    let membership = directMembership;
-
-    // Only inherit ORG_MANAGER role when there is no direct active membership in target tenant.
-    if (!membership && targetTenant.parentId) {
-        const parentOrgMembership = await prisma.tenantMember.findFirst({
-            where: {
-                userId,
-                tenantId: targetTenant.parentId,
-            role: { code: 'ORG_MANAGER' },
-                isActive: true,
-                tenant: { is: { isActive: true, parentId: null } },
-            },
-            include: { role: true },
-        });
-
-        if (parentOrgMembership) {
-            membership = {
-                tenantId: targetTenant.id,
-                role: parentOrgMembership.role,
-                roleId: parentOrgMembership.roleId,
-                tenant: targetTenant,
-                isActive: true,
-                isInherited: true,
-            };
+    if (!resolved.membership && resolved.inactiveDirect && targetTenant.parentId) {
+        const healed = await healOrgManagerBranchAccess(userId, targetTenant.id, targetTenant.parentId);
+        if (healed) {
+            resolved = await resolveTenantMembership(prisma, userId, targetTenant.id, {
+                include: {
+                    tenant: { select: { id: true, slug: true, name: true, parentId: true, timezone: true } },
+                    role: { select: { id: true, code: true } },
+                },
+                attachTenant: true,
+            });
         }
     }
 
-    if (!membership) {
+    if (!resolved.membership) {
+        if (resolved.inactiveDirect) {
+            throw buildAccountInactiveError();
+        }
         throw Object.assign(new Error('You are not authorized for this tenant.'), {
             statusCode: 403,
             code: 'TENANT_ACCESS_DENIED',
         });
     }
+
+    const membership = {
+        ...resolved.membership,
+        tenant: resolved.membership.tenant || targetTenant,
+    };
+
+    await ensureTenantSwitchable(membership.tenantId, { buildSuspensionError });
+
+    const activeMemberships = await prisma.tenantMember.findMany({
+        where: { userId, isActive: true },
+        include: { tenant: true, role: true },
+    });
+    const membershipsWithInheritance = await buildInheritedOrgManagerMemberships(activeMemberships);
 
     const result = await issueSessionForMembership({
         user,
@@ -864,6 +1002,8 @@ const switchTenant = async ({ userId, tenantSlug, ipAddress, userAgent }) => {
         ipAddress,
         userAgent,
     });
+
+    await attachSessionMemberships(result, userId, membershipsWithInheritance);
 
     logger.info(`User switched tenant: ${user.email} [tenant: ${normalizedTenantSlug}]`);
     return result;
@@ -873,7 +1013,7 @@ const switchTenant = async ({ userId, tenantSlug, ipAddress, userAgent }) => {
  * Request password reset: save 6-digit OTP on PasswordReset, email via mailer (active users only).
  */
 const requestPasswordReset = async ({ email }) => {
-    const normalizedEmail = String(email || '').trim().toLowerCase();
+    const normalizedEmail = normalizeEmailForLookup(email);
     const user = await prisma.user.findUnique({
         where: { email: normalizedEmail },
         select: { id: true, email: true, isActive: true },
@@ -917,7 +1057,7 @@ const requestPasswordReset = async ({ email }) => {
  * Complete password reset: match email + OTP + expiry, hash new password, remove reset row.
  */
 const resetPasswordWithOtp = async ({ email, otp, newPassword }) => {
-    const normalizedEmail = String(email || '').trim().toLowerCase();
+    const normalizedEmail = normalizeEmailForLookup(email);
     const plainOtp = String(otp || '').trim();
 
     const row = await prisma.passwordReset.findFirst({

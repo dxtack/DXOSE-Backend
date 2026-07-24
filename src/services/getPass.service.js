@@ -1,30 +1,81 @@
+const crypto = require('crypto');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
+
+/** Canonical 404 for missing or cross-tenant Get Pass reads (Ch.23 tenant boundary). */
+const passNotFoundErr = () => Object.assign(new Error('Get Pass not found.'), { status: 404 });
+
 const { generateDocNumber, DocPrefix } = require('./docNumbering.service');
 const { logAction, EntityType } = require('./auditTrail.service');
-const { checkPeriodLock } = require('./periodGuard.service');
-const { normalizeRole } = require('./rbac.service');
-const { createMovementApprovalRequest } = require('./breakage.service');
+const { logGovernedEvent } = require('./auditGoverned.service');
+const postingEngine = require('./postingEngine.service');
+const { validatePostingDate } = require('./periodGuard.service');
+const { assertIntegerQuantity } = require('./integerQuantityGuard.service');
+const { connectRole, normalizeRole } = require('./rbac.service');
+const {
+    resolveScopeContext,
+    scopeWhereFor,
+    metaFor,
+    assertInScope,
+    assertLocationInScope,
+    SCOPE_MODULE,
+} = require('./scope/scopeContext');
+const { assertActiveAssignmentForMutation } = require('./scope/assignment-mutation.guard');
+const { createMovementApprovalRequest, persistBreakagePhotos } = require('./breakage.service');
+const { withUserFacingState, SEND_BACK_NOTES_MARKER } = require('../platform/lifecyclePresentation.service');
+const { assertConcurrencyVersion, bumpConcurrencyUpdate, concurrencyConflictError } = require('../platform/concurrency.service');
+const {
+    createGetPassReturnDispositionBatch,
+    queueGetPassReturnDispositionLine,
+    flushGetPassReturnDispositionBatch,
+    stripExistingGetPassReturnDispositionsFromBatch,
+} = require('./getPassReturnDisposition.util');
 const { organizationRootId } = require('./organization.service');
 const {
     notifyIncomingInternalGetPass,
     notifySourceTenantAdminsOfPermanentReceipt,
     notifyTenantRoles,
 } = require('./systemNotification.service');
+const {
+    GET_PASS_OUTGOING_OPEN_STATUSES,
+    GET_PASS_INCOMING_OPERATIONAL_STATUSES,
+    buildGetPassReturnsListWhere,
+} = require('./get-pass-workflow-tabs.util');
+const {
+    assertForceCloseEligible,
+    assertSimpleCloseOutstandingZero,
+    assertNotPendingForceCloseSettlement,
+    assertSettlementSubmitEligible,
+    validateSettlementPayload,
+    lineOutstandingQty,
+    hasOutstandingQty,
+} = require('./get-pass-force-close.util');
+const {
+    assertUserHasGetPassStepPermission,
+    assertUserHasPermission,
+    userHasPermission,
+} = require('../acc-authority/step-permission-enforcement');
+const {
+  resolveGetPassWorkflowContext,
+  resolveStepRole,
+  resolveStepPermission,
+  getSubmitInitialWorkflowFromContext,
+  getApproveTransitionData,
+  getPassVersionPin,
+} = require('./acc-workflow-get-pass.runtime');
+const { resolveWorkflowForDocument, resolveWorkflowByVersionId } = require('./acc-workflow-runtime.service');
+const { resolveGetPassPermission } = require('../acc-authority/workflow-step-permissions');
+const {
+    executeWorkflowSendBackInTx,
+    executeCreatorResubmitInTx,
+    normalizeReason,
+} = require('../platform/workflowSendBack.service');
 
 /**
- * ORG_MANAGER: aggregate lists across all branch hotels under the same organization root.
- * Uses active tenant (root or switched child) — same as organizationRootId() elsewhere.
+ * Operational Get Pass lists are tenant-specific only.
+ * Org-wide aggregation belongs on dedicated org-level screens (not the operational list).
  */
-const resolveOrgWideGetPassListContext = async (tenantId, role) => {
-    if (normalizeRole(role) !== 'ORG_MANAGER') return null;
-    const tenant = await prisma.tenant.findUnique({
-        where: { id: tenantId },
-        select: { id: true, parentId: true },
-    });
-    if (!tenant) return null;
-    return { organizationRootId: organizationRootId(tenant) };
-};
+const resolveOrgWideGetPassListContext = async (_tenantId, _role) => null;
 
 /** Prisma include graph for Get Pass detail (issuer + reader). */
 const getPassDetailInclude = {
@@ -192,7 +243,7 @@ const resolveDestinationItemForPermanentTransfer = async (
  */
 const getIssuerGetPassById = async (id, issuerTenantId) => {
     const getPass = await findIssuerPass(prisma, id, issuerTenantId);
-    if (!getPass) throw new Error('Get Pass not found');
+    if (!getPass) throw passNotFoundErr();
     return getPass;
 };
 
@@ -250,68 +301,272 @@ const PENDING_APPROVAL_STATUSES = [
     'PENDING_GM',
     'PENDING_SECURITY',
 ];
+
+const GET_PASS_APPROVAL_STAMP_FIELDS = {
+    PENDING_DEPT: { by: 'deptApprovedBy', at: 'deptApprovedAt' },
+    PENDING_COST_CONTROL: { by: 'costControlApprovedBy', at: 'costControlApprovedAt' },
+    PENDING_FINANCE: { by: 'financeApprovedBy', at: 'financeApprovedAt' },
+    PENDING_GM: { by: 'gmApprovedBy', at: 'gmApprovedAt' },
+    PENDING_SECURITY: { by: 'securityApprovedBy', at: 'securityApprovedAt' },
+};
+
+const APPROVER_RELATION_BY_STATUS = Object.freeze({
+    PENDING_DEPT: 'deptApprover',
+    PENDING_COST_CONTROL: 'costControlApprover',
+    PENDING_FINANCE: 'financeApprover',
+    PENDING_GM: 'gmApprover',
+    PENDING_SECURITY: 'securityApprover',
+});
+
+const getPassPendingStatusesForChain = (chain) => {
+    const fromChain = (chain.steps || []).map((s) => String(s.statusKey || '').toUpperCase()).filter(Boolean);
+    return fromChain.length ? fromChain : PENDING_APPROVAL_STATUSES;
+};
+
+const getPassStatusForPendingStep = (chain, stepNumber) => {
+    if (stepNumber <= 0) return 'DRAFT';
+    const statuses = getPassPendingStatusesForChain(chain);
+    return statuses[stepNumber - 1] || statuses[0] || 'PENDING_DEPT';
+};
+
+const getPassCurrentStepFromStatus = (chain, status) => {
+    const statuses = getPassPendingStatusesForChain(chain);
+    const idx = statuses.findIndex((s) => s === String(status || '').toUpperCase());
+    return idx >= 0 ? idx + 1 : 1;
+};
+
+const getPassApprovedStampForStep = (getPass, chain, stepNumber) => {
+    const statusKey = getPassStatusForPendingStep(chain, stepNumber);
+    const fields = GET_PASS_APPROVAL_STAMP_FIELDS[statusKey];
+    if (!fields) return null;
+    const actedBy = getPass[fields.by] || null;
+    const actedAt = getPass[fields.at] || null;
+    return actedBy || actedAt ? { actedBy, actedAt } : null;
+};
+
+/** Prior workflow actors only: Creator + steps before current (C → A,B ; B → A). */
+function buildGetPassSendBackTargets(getPass, chain) {
+    if (!getPass || !chain) return [];
+    const status = String(getPass.status || '').toUpperCase();
+    const pending = getPassPendingStatusesForChain(chain);
+    if (!pending.includes(status)) return [];
+
+    const currentStepNo = getPassCurrentStepFromStatus(chain, status);
+    if (currentStepNo <= 0) return [];
+
+    const { userDisplayName } = require('../utils/timeline-present.util');
+    const creatorId = getPass.createdBy || getPass.createdByUser?.id || null;
+    const targets = [
+        {
+            stepNumber: 0,
+            targetType: 'CREATOR',
+            roleCode: null,
+            statusKey: null,
+            actorName: userDisplayName(getPass.createdByUser) || null,
+        },
+    ];
+
+    const steps = Array.isArray(chain.steps) ? chain.steps : [];
+    const roleCodes = chain.roleCodes || steps.map((s) => s.roleCode).filter(Boolean);
+
+    for (let i = 0; i < currentStepNo - 1; i++) {
+        const step = steps[i] || {};
+        const stepNumber = i + 1;
+        const statusKey = String(step.statusKey || pending[i] || '').toUpperCase();
+        const stampFields = GET_PASS_APPROVAL_STAMP_FIELDS[statusKey];
+        const actedById = stampFields ? getPass[stampFields.by] || null : null;
+        // Skip steps the document creator already acted (same rule as Breakage / GRN / Transfer).
+        if (creatorId && actedById && String(actedById) === String(creatorId)) {
+            continue;
+        }
+        const roleCode = step.roleCode || roleCodes[i] || null;
+        const rel = APPROVER_RELATION_BY_STATUS[statusKey];
+        const actorName = rel ? userDisplayName(getPass[rel]) || null : null;
+        targets.push({
+            stepNumber,
+            targetType: 'STEP',
+            roleCode: roleCode ? String(roleCode).toUpperCase() : null,
+            statusKey: statusKey || null,
+            actorName,
+        });
+    }
+    return targets;
+}
+
+/** Clear approval stamps from target step onward (or all when Returned to creator). */
+function stampClearDataForSendBackTarget(chain, targetStepNo) {
+    const data = {};
+    const statuses = getPassPendingStatusesForChain(chain);
+    for (let i = 0; i < statuses.length; i++) {
+        const stepNo = i + 1;
+        if (targetStepNo > 0 && stepNo < targetStepNo) continue;
+        const fields = GET_PASS_APPROVAL_STAMP_FIELDS[statuses[i]];
+        if (!fields) continue;
+        data[fields.by] = null;
+        data[fields.at] = null;
+    }
+    return data;
+}
+
+async function ensureGetPassApprovalRequestInTx(tx, getPass, tenantId) {
+    if (getPass.approvalRequest) return getPass.approvalRequest;
+
+    const existing = await tx.approvalRequest.findFirst({
+        where: { getPassId: getPass.id },
+        include: {
+            steps: {
+                orderBy: { stepNumber: 'asc' },
+                include: { requiredRole: { select: { code: true } } },
+            },
+        },
+    });
+    if (existing) return existing;
+
+    const chain = getPass.accWorkflowVersionId
+        ? await resolveWorkflowByVersionId(getPass.accWorkflowVersionId)
+        : await resolveWorkflowForDocument({ moduleKey: 'GET_PASS', tenantId });
+    const roleCodes = chain.roleCodes || (chain.steps || []).map((s) => s.roleCode).filter(Boolean);
+    if (!roleCodes.length) {
+        throw Object.assign(new Error('ACC published workflow is required for Get Pass.'), { status: 422 });
+    }
+    const currentStep = PENDING_APPROVAL_STATUSES.includes(String(getPass.status || '').toUpperCase())
+        ? getPassCurrentStepFromStatus(chain, getPass.status)
+        : 1;
+    const request = await tx.approvalRequest.create({
+        data: {
+            tenantId,
+            requestType: 'GET_PASS',
+            status: 'PENDING',
+            getPassId: getPass.id,
+            currentStep,
+            totalSteps: roleCodes.length,
+            createdBy: getPass.createdBy,
+            // Scalar pin only — matches Breakage/Transfer; nested connect can fail on some clients.
+            ...(getPass.accWorkflowVersionId
+                ? { accWorkflowVersionId: getPass.accWorkflowVersionId }
+                : getPassVersionPin(chain)),
+            steps: {
+                create: roleCodes.map((roleCode, index) => {
+                    const stepNumber = index + 1;
+                    const stamp = stepNumber < currentStep ? getPassApprovedStampForStep(getPass, chain, stepNumber) : null;
+                    return {
+                        stepNumber,
+                        requiredRole: connectRole(roleCode),
+                        status: stamp ? 'APPROVED' : 'PENDING',
+                        ...(stamp?.actedBy ? { actedByUser: { connect: { id: stamp.actedBy } } } : {}),
+                        ...(stamp?.actedAt ? { actedAt: stamp.actedAt } : {}),
+                    };
+                }),
+            },
+        },
+        include: {
+            steps: {
+                orderBy: { stepNumber: 'asc' },
+                include: { requiredRole: { select: { code: true } } },
+            },
+        },
+    });
+    if (!getPass.accWorkflowVersionId && chain.versionId) {
+        await tx.getPass.update({
+            where: { id: getPass.id },
+            data: getPassVersionPin(chain),
+        });
+        request.accWorkflowVersionId = chain.versionId;
+    }
+    return request;
+}
+
+/**
+ * Keep ApprovalRequest aligned with Get Pass status/stamps.
+ * Stale AR.currentStep was throwing false "modified by another user" on Send Back.
+ */
+async function syncGetPassApprovalRequestToDocumentInTx(tx, approvalRequest, getPass, chain) {
+    const expectedStep = PENDING_APPROVAL_STATUSES.includes(String(getPass.status || '').toUpperCase())
+        ? getPassCurrentStepFromStatus(chain, getPass.status)
+        : Number(approvalRequest.currentStep) || 1;
+
+    const steps = [...(approvalRequest.steps || [])].sort((a, b) => a.stepNumber - b.stepNumber);
+    if (!steps.length) {
+        throw Object.assign(new Error('Approval chain has no steps for this Get Pass.'), { status: 422 });
+    }
+    if (expectedStep < 0 || expectedStep > steps.length) {
+        throw Object.assign(new Error('Get Pass approval step is out of range for the pinned workflow.'), {
+            status: 422,
+        });
+    }
+
+    const needsHeaderSync =
+        Number(approvalRequest.currentStep) !== expectedStep ||
+        String(approvalRequest.status || '').toUpperCase() !== 'PENDING';
+
+    if (needsHeaderSync) {
+        await tx.approvalRequest.update({
+            where: { id: approvalRequest.id },
+            data: { currentStep: expectedStep, status: 'PENDING', resolvedAt: null },
+        });
+    }
+
+    for (const st of steps) {
+        if (st.stepNumber < expectedStep) {
+            const stamp = getPassApprovedStampForStep(getPass, chain, st.stepNumber);
+            const data = {
+                status: 'APPROVED',
+                actedAt: stamp?.actedAt || st.actedAt || new Date(),
+            };
+            if (stamp?.actedBy) {
+                data.actedByUser = { connect: { id: stamp.actedBy } };
+            } else if (!st.actedBy) {
+                data.actedByUser = { disconnect: true };
+            }
+            await tx.approvalStep.update({ where: { id: st.id }, data });
+        } else {
+            await tx.approvalStep.update({
+                where: { id: st.id },
+                data: {
+                    status: 'PENDING',
+                    actedByUser: { disconnect: true },
+                    actedAt: null,
+                },
+            });
+        }
+    }
+
+    const refreshed = await tx.approvalRequest.findFirst({
+        where: { id: approvalRequest.id },
+        include: {
+            steps: {
+                orderBy: { stepNumber: 'asc' },
+                include: { requiredRole: { select: { code: true } } },
+            },
+        },
+    });
+    return refreshed || { ...approvalRequest, currentStep: expectedStep, status: 'PENDING' };
+}
+
+const buildActOnStatusOptions = (status, getPass, workflowContext, extra = {}) => ({
+    ...extra,
+    stepRole: resolveStepRole(status, workflowContext),
+    stepPermission: resolveStepPermission(status, workflowContext),
+});
+
+const assertCanActOnStatus = (status, user, options = {}) => {
+    assertUserHasGetPassStepPermission(user, status, options);
+};
+
 const REVERSIBLE_TYPES = ['TEMPORARY', 'CATERING', 'OUTSIDE_CATERING'];
 const BLOCKING_TRANSFER_TYPES = new Set(REVERSIBLE_TYPES);
 const OVERDUE_TRANSFER_TYPES = new Set(['TEMPORARY', 'CATERING', 'OUTSIDE_CATERING']);
 const OVERDUE_STATUSES = new Set(['OUT', 'PARTIALLY_RETURNED']);
 const RETURN_REQUIRED_TRANSFER_TYPES = new Set(REVERSIBLE_TYPES);
 
-const STEP_ROLE = {
-    PENDING_DEPT: 'DEPT_MANAGER',
-    PENDING_COST_CONTROL: 'COST_CONTROL',
-    PENDING_FINANCE: 'FINANCE_MANAGER',
-    PENDING_GM: 'GENERAL_MANAGER',
-    PENDING_SECURITY: 'SECURITY',
-};
-
-const isAdminBypass = (role) => {
+const isOrgWorkflowBypass = (role) => {
     const r = normalizeRole(role);
-    return r === 'ADMIN' || r === 'SUPER_ADMIN';
+    return r === 'ORG_MANAGER' || r === 'SUPER_ADMIN';
 };
 
-/**
- * First workflow step after submit: skip stages the submitter role already represents.
- * DEPT_MANAGER → Cost Control queue (HOD step recorded as self on submit).
- * COST_CONTROL → Finance queue (CC step recorded as self on submit).
- */
-const getSubmitInitialWorkflow = (role, userId) => {
-    const r = normalizeRole(role);
-    const now = new Date();
-    if (r === 'ADMIN' || r === 'SUPER_ADMIN') {
-        return {
-            status: 'PENDING_SECURITY',
-            deptApprovedBy: userId,
-            deptApprovedAt: now,
-            costControlApprovedBy: userId,
-            costControlApprovedAt: now,
-            financeApprovedBy: userId,
-            financeApprovedAt: now,
-            gmApprovedBy: userId,
-            gmApprovedAt: now,
-        };
-    }
-    if (r === 'DEPT_MANAGER') {
-        return {
-            status: 'PENDING_COST_CONTROL',
-            deptApprovedBy: userId,
-            deptApprovedAt: now,
-        };
-    }
-    if (r === 'COST_CONTROL') {
-        return {
-            status: 'PENDING_FINANCE',
-            costControlApprovedBy: userId,
-            costControlApprovedAt: now,
-        };
-    }
-    return { status: 'PENDING_DEPT' };
-};
-
-const assertCanActOnStatus = (status, role) => {
-    const required = STEP_ROLE[status];
-    if (!required) return;
-    if (isAdminBypass(role) || role === required) return;
-    throw new Error(`Unauthorized for this approval step (requires ${required})`);
+const assertGetPassOperationalPermission = (user, status, options = {}) => {
+    const perm = resolveGetPassPermission(status, options.waitingForRole, options);
+    assertUserHasPermission(user, perm);
 };
 
 const resolveTemporaryDatesForCreate = (data) => {
@@ -377,31 +632,9 @@ const resolveTemporaryDatesForUpdate = (data, existing) => {
     return { returnDate, expectedReturnDate };
 };
 
-const isBlockingTransferType = (transferType) => BLOCKING_TRANSFER_TYPES.has(transferType);
-const isReversibleTransferType = (transferType) => REVERSIBLE_TYPES.includes(transferType);
-const createTrackingLedgerEntry = async (
-    tx,
-    { tenantId, itemId, locationId, movementType, qtyIn = 0, qtyOut = 0, referenceId, referenceNo, createdBy, notes }
-) => {
-    await tx.inventoryLedger.create({
-        data: {
-            tenantId,
-            itemId,
-            locationId,
-            movementType,
-            affectsValuation: false,
-            qtyIn,
-            qtyOut,
-            unitCost: 0,
-            totalValue: 0,
-            referenceType: 'GET_PASS',
-            referenceId,
-            referenceNo,
-            createdBy,
-            notes,
-        },
-    });
-};
+const isBlockingTransferType = (transferType) => postingEngine.isBlockingTransferType(transferType);
+const isReversibleTransferType = (transferType) => postingEngine.isReversibleTransferType(transferType);
+const createTrackingLedgerEntry = (tx, params) => postingEngine.createTrackingLedgerEntry(tx, params);
 const isGetPassOverdue = (getPass, now = new Date()) => {
     if (!getPass?.expectedReturnDate) return false;
     if (!OVERDUE_TRANSFER_TYPES.has(getPass.transferType)) return false;
@@ -454,8 +687,98 @@ const assertInternalTransferAllowed = async (tx, sourceTenantId, targetTenantId)
     }
 };
 
-const createGetPass = async (tenantId, data, userId) => {
+const { assertLinesHaveStockAtLocation } = require('./location-item-resolution.service');
+const { buildGetPassWorkflowContext, isGetPassCreateActorRole } = require('./getPassWorkflowContext.util');
+
+const assertGetPassLinesAtSourceLocations = async (tx, tenantId, lines) => {
+    if (!Array.isArray(lines) || lines.length === 0) return;
+    for (const line of lines) {
+        const qty = Number(line.qty);
+        if (!line.itemId || !line.locationId || !Number.isFinite(qty) || qty <= 0) {
+            throw Object.assign(new Error('Each line requires item, source location, and quantity.'), {
+                statusCode: 400,
+            });
+        }
+        assertIntegerQuantity({
+            qty,
+            field: 'qty',
+            message: 'Quantity must be a whole number (integer). Fractional quantities are not allowed.',
+            details: { itemId: line.itemId, locationId: line.locationId, qty },
+        });
+    }
+
+    // Aggregate duplicate item+location rows so creator/submit matches checkout reality.
+    const byKey = new Map();
+    for (const line of lines) {
+        const key = `${line.itemId}::${line.locationId}`;
+        const prev = byKey.get(key);
+        const qty = Number(line.qty);
+        if (prev) {
+            prev.qty += qty;
+        } else {
+            byKey.set(key, {
+                itemId: line.itemId,
+                locationId: line.locationId,
+                qty,
+            });
+        }
+    }
+
+    await assertLinesHaveStockAtLocation(tx, tenantId, [...byKey.values()], {
+        requireAvailableQty: true,
+    });
+};
+
+const createGetPass = async (tenantId, data, user) => {
+    const userId = typeof user === 'object' ? user.id : user;
+    const userObj = typeof user === 'object' ? user : { id: userId, role: null, tenantId };
+    if (!isGetPassCreateActorRole(userObj.role)) {
+        throw Object.assign(
+            new Error(
+                'Only Department Manager or Storekeeper (or Org/Super governance) may create get passes.',
+            ),
+            { statusCode: 403, status: 403 },
+        );
+    }
+
+    const GET_PASS_TYPES = new Set(['TEMPORARY', 'CATERING', 'OUTSIDE_CATERING', 'PERMANENT']);
+    const transferType = data?.transferType != null ? String(data.transferType).trim().toUpperCase() : '';
+    if (!transferType || !GET_PASS_TYPES.has(transferType)) {
+        throw Object.assign(
+            new Error(
+                `transferType is required and must be one of: ${[...GET_PASS_TYPES].join(', ')}.`,
+            ),
+            { statusCode: 400, status: 400 },
+        );
+    }
+    const borrowingEntity =
+        data?.borrowingEntity != null ? String(data.borrowingEntity).trim() : '';
+    if (!borrowingEntity) {
+        throw Object.assign(new Error('borrowingEntity is required.'), {
+            statusCode: 400,
+            status: 400,
+        });
+    }
+    // Normalize for downstream create / date rules
+    data = { ...data, transferType, borrowingEntity };
+
+    if (!Array.isArray(data.lines) || data.lines.length === 0) {
+        throw Object.assign(new Error('At least one line is required.'), {
+            statusCode: 400,
+            status: 400,
+            code: 'GET_PASS_LINES_REQUIRED',
+        });
+    }
+
+    await assertActiveAssignmentForMutation(userObj, tenantId, 'create');
+    const scope = await resolveScopeContext(userObj, tenantId, { assignmentOnly: true });
+    for (const line of data.lines) {
+        if (line.locationId) {
+            await assertLocationInScope(line.locationId, tenantId, scope, 'create');
+        }
+    }
     return prisma.$transaction(async (tx) => {
+        await assertGetPassLinesAtSourceLocations(tx, tenantId, data.lines);
         const isInternalTransfer = Boolean(data.isInternalTransfer);
         let targetTenantId = null;
         if (isInternalTransfer) {
@@ -470,7 +793,8 @@ const createGetPass = async (tenantId, data, userId) => {
 
         const { returnDate, expectedReturnDate } = resolveTemporaryDatesForCreate(data);
 
-        const passNo = await generateDocNumber(tenantId, 'GP', new Date(), tx);
+        // Allocate pass number only after empty-lines guard (no wasted GP numbers).
+        const passNo = await generateDocNumber(tenantId, DocPrefix.GET_PASS_OUT, new Date(), tx);
 
         const getPass = await tx.getPass.create({
             data: {
@@ -513,7 +837,7 @@ const createGetPass = async (tenantId, data, userId) => {
             });
         }
 
-        await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: getPass.id, action: 'CREATE', changedBy: userId });
+        await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: getPass.id, action: 'CREATE', changedBy: userId, afterValue: { passNo: getPass.passNo, status: getPass.status } });
         return getPass;
     });
 };
@@ -532,8 +856,18 @@ const getGetPasses = async (tenantId, params = {}, user) => {
     } else {
         where = { tenantId };
     }
-    if (status) where.status = status;
+    if (status) {
+        where.status = status;
+    } else {
+        where.status = { in: [...GET_PASS_OUTGOING_OPEN_STATUSES] };
+    }
     if (transferType) where.transferType = transferType;
+
+    if (user && !listContext?.organizationRootId) {
+        const scope = await resolveScopeContext(user, tenantId);
+        const scopeWhere = scopeWhereFor(SCOPE_MODULE.GET_PASS, scope);
+        where = { AND: [where, scopeWhere] };
+    }
 
     const include = {
         department: true,
@@ -556,14 +890,23 @@ const getGetPasses = async (tenantId, params = {}, user) => {
     ]);
 
     const now = new Date();
-    const data = rows.map((row) => ({ ...row, isOverdue: isGetPassOverdue(row, now) }));
+    const data = rows.map((row) =>
+        withUserFacingState(
+            'GET_PASS',
+            { ...row, isOverdue: isGetPassOverdue(row, now) },
+            { notes: row.notes },
+        ),
+    );
 
-    return { data, total, page: Number(page), limit: Number(limit) };
+    const scopeMeta =
+        user && !listContext?.organizationRootId
+            ? metaFor(await resolveScopeContext(user, tenantId), { total })
+            : null;
+    return { data, total, page: Number(page), limit: Number(limit), ...(scopeMeta || {}) };
 };
 
 /**
- * Target hotel — full history of internal transfers addressed to this property after dispatch (OUT+).
- * Includes finished transfers (CLOSED, RETURNED, etc.) so the list is not only “pending”.
+ * Target hotel — operational queue for internal transfers awaiting receipt action.
  * APPROVED (not yet dispatched from source) is excluded until checkout.
  */
 const getIncomingGetPasses = async (targetTenantId, params = {}, user) => {
@@ -573,15 +916,7 @@ const getIncomingGetPasses = async (targetTenantId, params = {}, user) => {
 
     const listContext = user ? await resolveOrgWideGetPassListContext(targetTenantId, user.role) : null;
 
-    const incomingStatuses = [
-        'OUT',
-        'RECEIVED_AT_DESTINATION',
-        'RETURNING',
-        'RETURN_RECEIVED_AT_GATE',
-        'PARTIALLY_RETURNED',
-        'RETURNED',
-        'CLOSED',
-    ];
+    const incomingStatuses = [...GET_PASS_INCOMING_OPERATIONAL_STATUSES];
 
     let where;
     if (listContext?.organizationRootId) {
@@ -619,49 +954,32 @@ const getIncomingGetPasses = async (targetTenantId, params = {}, user) => {
     ]);
 
     const now = new Date();
-    const data = rows.map(({ tenant, ...rest }) => ({
-        ...rest,
-        sourceTenant: tenant,
-        isOverdue: isGetPassOverdue(rest, now),
-    }));
+    const data = rows.map(({ tenant, ...rest }) =>
+        withUserFacingState(
+            'GET_PASS',
+            {
+                ...rest,
+                sourceTenant: tenant,
+                isOverdue: isGetPassOverdue(rest, now),
+            },
+            { notes: rest.notes },
+        ),
+    );
 
     return { data, total, page: Number(page), limit: Number(limit) };
 };
 
 /**
- * Source hotel reverse-logistics queue:
- * internal temporary/catering passes currently returning back to issuer.
+ * Any pass with recorded return activity (standard or internal): partial/full/good/damaged/lost.
  */
 const getReturningGetPasses = async (sourceTenantId, params = {}, user) => {
     const page = parsePositiveInt(params.page, 1);
     const limit = parsePositiveInt(params.limit, 50);
     const skip = (page - 1) * limit;
-    const returnStatuses = normalizeStatusList(params.status, [
-        'RETURNING',
-        'RETURN_RECEIVED_AT_GATE',
-        'PARTIALLY_RETURNED',
-        'RETURNED',
-    ]);
 
     const listContext = user ? await resolveOrgWideGetPassListContext(sourceTenantId, user.role) : null;
 
-    let where;
-    if (listContext?.organizationRootId) {
-        where = {
-            isInternalTransfer: true,
-            status: { in: returnStatuses },
-            OR: [
-                { tenant: { parentId: listContext.organizationRootId } },
-                { targetTenant: { parentId: listContext.organizationRootId } },
-            ],
-        };
-    } else {
-        where = {
-            isInternalTransfer: true,
-            status: { in: returnStatuses },
-            OR: [{ tenantId: sourceTenantId }, { targetTenantId: sourceTenantId }],
-        };
-    }
+    const where = buildGetPassReturnsListWhere(sourceTenantId, listContext);
 
     const include = {
         tenant: { select: { id: true, name: true, slug: true, email: true } },
@@ -682,7 +1000,13 @@ const getReturningGetPasses = async (sourceTenantId, params = {}, user) => {
     ]);
 
     const now = new Date();
-    const data = rows.map((row) => ({ ...row, isOverdue: isGetPassOverdue(row, now) }));
+    const data = rows.map((row) =>
+        withUserFacingState(
+            'GET_PASS',
+            { ...row, isOverdue: isGetPassOverdue(row, now) },
+            { notes: row.notes },
+        ),
+    );
 
     return { data, total, page: Number(page), limit: Number(limit) };
 };
@@ -800,6 +1124,12 @@ const confirmDestinationReceipt = async (id, targetTenantId, userId, body) => {
         if (!Number.isFinite(receivedQty) || receivedQty < 0 || receivedQty > shippedQty) {
             throw Object.assign(new Error(`Invalid receivedQty for line ${line.id}.`), { statusCode: 400 });
         }
+        assertIntegerQuantity({
+            qty: receivedQty,
+            field: 'receivedQty',
+            message: 'Quantity must be a whole number (integer). Fractional quantities are not allowed.',
+            details: { lineId: line.id, receivedQty },
+        });
         const discrepancyQty = Math.max(0, shippedQty - receivedQty);
         receiptRows.push({
             lineId: line.id,
@@ -808,6 +1138,7 @@ const confirmDestinationReceipt = async (id, targetTenantId, userId, body) => {
             shippedQty,
             receivedQty,
             discrepancyQty,
+            checkoutUnitCost: Number(line.unitCost || 0),
             condition: typeof input.condition === 'string' ? input.condition.trim() : '',
             discrepancyReason: typeof input.discrepancyReason === 'string' ? input.discrepancyReason.trim() : '',
         });
@@ -822,6 +1153,7 @@ const confirmDestinationReceipt = async (id, targetTenantId, userId, body) => {
                 shippedQty,
                 receivedQty: shippedQty,
                 discrepancyQty: 0,
+                checkoutUnitCost: Number(line.unitCost || 0),
                 condition: '',
                 discrepancyReason: '',
             });
@@ -833,34 +1165,18 @@ const confirmDestinationReceipt = async (id, targetTenantId, userId, body) => {
     await prisma.$transaction(async (tx) => {
         if (existing.transferType === 'PERMANENT') {
             for (const row of receiptRows) {
-                const sourceStock = await tx.stockBalance.findUnique({
-                    where: {
-                        tenantId_itemId_locationId: {
-                            tenantId: existing.tenantId,
-                            itemId: row.itemId,
-                            locationId: row.locationId,
-                        },
-                    },
-                });
-                const sourceWac = Number(sourceStock?.wacUnitCost || 0);
-
                 if (row.discrepancyQty > 0) {
-                    await tx.inventoryLedger.create({
-                        data: {
-                            tenantId: targetTenantId,
-                            itemId: row.itemId,
-                            locationId: row.locationId,
-                            movementType: 'LOAN_WRITE_OFF',
-                            qtyIn: 0,
-                            qtyOut: row.discrepancyQty,
-                            unitCost: sourceWac,
-                            totalValue: row.discrepancyQty * sourceWac,
-                            referenceType: 'GET_PASS',
-                            referenceId: id,
-                            referenceNo: existing.passNo,
-                            notes: row.discrepancyReason || 'Incoming discrepancy at destination receipt',
-                            createdBy: userId,
-                        },
+                    await postingEngine.postPermanentDiscrepancyWriteOff(tx, {
+                        tenantId: targetTenantId,
+                        itemId: row.itemId,
+                        locationId: row.locationId,
+                        discrepancyQty: row.discrepancyQty,
+                        sourceWac: row.checkoutUnitCost,
+                        getPassId: id,
+                        getPassLineId: row.lineId,
+                        passNo: existing.passNo,
+                        userId,
+                        notes: row.discrepancyReason,
                     });
                 }
             }
@@ -902,8 +1218,9 @@ const confirmDestinationReceipt = async (id, targetTenantId, userId, body) => {
             tenantId: existing.tenantId,
             entityType: EntityType.GET_PASS,
             entityId: id,
-            action: 'CONFIRM_RECEIPT_DESTINATION',
+            action: 'UPDATE',
             changedBy: userId,
+            note: 'GET_PASS_CONFIRM_RECEIPT_DESTINATION',
         });
     });
 
@@ -944,25 +1261,9 @@ const acceptDestinationDepartment = async (id, viewerTenantId, user, payload = {
         });
     }
 
-    const role = normalizeRole(user.role);
-    if (isAdminBypass(role) || role === 'ORG_MANAGER') {
-        // Authorized manager at destination hotel level.
-    } else if (role === 'DEPT_MANAGER') {
-        // Destination acceptance is performed by the receiving hotel manager.
-        // Do not compare with source pass department, because destination department
-        // is selected during this acceptance step.
-        if (user.tenantId !== getPass.targetTenantId) {
-            throw Object.assign(
-                new Error('You must be an authorized manager at the destination hotel to accept these items.'),
-                { statusCode: 403 },
-            );
-        }
-    } else {
-        throw Object.assign(
-            new Error('You must be an authorized manager at the destination hotel to accept these items.'),
-            { statusCode: 403 },
-        );
-    }
+    assertGetPassOperationalPermission(user, 'RECEIVED_AT_DESTINATION', {
+        isInternalTransfer: true,
+    });
 
     await prisma.$transaction(async (tx) => {
         const targetDepartment = await tx.department.findFirst({
@@ -1010,51 +1311,19 @@ const acceptDestinationDepartment = async (id, viewerTenantId, user, payload = {
                     targetDepartmentId,
                     targetLocationId,
                 });
-                const sourceStock = await tx.stockBalance.findUnique({
-                    where: {
-                        tenantId_itemId_locationId: {
-                            tenantId: getPass.tenantId,
-                            itemId: line.itemId,
-                            locationId: line.locationId,
-                        },
-                    },
-                });
-                const sourceWac = Number(sourceStock?.wacUnitCost || 0);
-                await tx.inventoryLedger.create({
-                    data: {
-                        tenantId: viewerTenantId,
-                        itemId: destinationItemId,
-                        locationId: targetLocationId,
-                        movementType: 'RECEIVE',
-                        qtyIn: receivedQty,
-                        qtyOut: 0,
-                        unitCost: sourceWac,
-                        totalValue: receivedQty * sourceWac,
-                        referenceType: 'GET_PASS',
-                        referenceId: id,
-                        referenceNo: getPass.passNo,
-                        createdBy: user.id,
-                    },
-                });
-                await tx.stockBalance.upsert({
-                    where: {
-                        tenantId_itemId_locationId: {
-                            tenantId: viewerTenantId,
-                            itemId: destinationItemId,
-                            locationId: targetLocationId,
-                        },
-                    },
-                    update: {
-                        qtyOnHand: { increment: receivedQty },
-                    },
-                    create: {
-                        tenantId: viewerTenantId,
-                        itemId: destinationItemId,
-                        locationId: targetLocationId,
-                        qtyOnHand: receivedQty,
-                        qtyBlocked: 0,
-                        wacUnitCost: sourceWac,
-                    },
+                // Permanent checkout fixes the shipped unit cost on the line.
+                // Do not re-read a later source WAC when destination custody is accepted.
+                const sourceWac = Number(line.unitCost || 0);
+                await postingEngine.postPermanentDestinationReceiveLine(tx, {
+                    tenantId: viewerTenantId,
+                    destinationItemId,
+                    locationId: targetLocationId,
+                    receivedQty,
+                    sourceWac,
+                    getPassId: id,
+                    getPassLineId: line.id,
+                    passNo: getPass.passNo,
+                    userId: user.id,
                 });
             }
         } else if (isReversibleTransferType(getPass.transferType)) {
@@ -1070,6 +1339,7 @@ const acceptDestinationDepartment = async (id, viewerTenantId, user, payload = {
                     qtyIn: receivedQty,
                     qtyOut: 0,
                     referenceId: id,
+                    getPassLineId: line.id,
                     referenceNo: getPass.passNo,
                     createdBy: user.id,
                     notes: 'Temporary custody received at destination; stock and valuation unchanged.',
@@ -1099,8 +1369,9 @@ const acceptDestinationDepartment = async (id, viewerTenantId, user, payload = {
         tenantId: viewerTenantId,
         entityType: EntityType.GET_PASS,
         entityId: id,
-        action: 'ACCEPT_DESTINATION_DEPARTMENT',
+        action: 'UPDATE',
         changedBy: user.id,
+        note: 'GET_PASS_ACCEPT_DESTINATION_DEPARTMENT',
     });
 
     return getGetPassById(id, viewerTenantId);
@@ -1132,12 +1403,9 @@ const shipBackGetPass = async (id, viewerTenantId, user) => {
         });
     }
 
-    const role = normalizeRole(user.role);
-    if (!['SECURITY', 'DEPT_MANAGER', 'ORG_MANAGER'].includes(role) && !isAdminBypass(role)) {
-        throw Object.assign(new Error('Only destination security/manager can start return shipping.'), {
-            statusCode: 403,
-        });
-    }
+    assertGetPassOperationalPermission(user, 'RECEIVED_AT_DESTINATION', {
+        isInternalTransfer: true,
+    });
 
     await prisma.$transaction(async (tx) => {
         await tx.getPass.update({
@@ -1200,12 +1468,7 @@ const confirmReturnExit = async (id, destinationTenantId, user) => {
         throw Object.assign(new Error('Return exit already confirmed by destination security.'), { statusCode: 400 });
     }
 
-    const role = normalizeRole(user.role);
-    if (role !== 'SECURITY' && !isAdminBypass(role)) {
-        throw Object.assign(new Error('Only destination security can confirm return exit.'), {
-            statusCode: 403,
-        });
-    }
+    assertGetPassOperationalPermission(user, 'RETURNING', { isInternalTransfer: true });
 
     const now = new Date();
     await prisma.$transaction(async (tx) => {
@@ -1230,6 +1493,7 @@ const confirmReturnExit = async (id, destinationTenantId, user) => {
                 qtyIn: 0,
                 qtyOut: releasedQty,
                 referenceId: id,
+                getPassLineId: line.id,
                 referenceNo: getPass.passNo,
                 createdBy: user.id,
                 notes: 'Temporary custody released back to source; stock and valuation unchanged.',
@@ -1253,6 +1517,22 @@ const confirmReturnExit = async (id, destinationTenantId, user) => {
  * Source hotel security confirms returned shipment arrival (gate inspection).
  * Updates pass/lines only — no stock or inventory ledger here (posting happens at department acceptance).
  */
+const assertIntegerInterhotelReturnQuantities = (lines) => {
+    for (const [index, row] of (lines ?? []).entries()) {
+        const lineId = row?.lineId || row?.id || null;
+        for (const field of ['goodQty', 'damagedQty', 'lostQty']) {
+            assertIntegerQuantity({
+                qty: row?.[field] ?? 0,
+                field,
+                message:
+                    'Inter-hotel return quantities must be whole numbers (integers). ' +
+                    'Fractional quantities are not allowed.',
+                details: { lineId, lineIndex: index, field, qty: row?.[field] ?? 0 },
+            });
+        }
+    }
+};
+
 const confirmReturnArrival = async (id, sourceTenantId, user, payload = {}) => {
     const getPass = await findIssuerPass(prisma, id, sourceTenantId);
     if (!getPass) {
@@ -1278,17 +1558,13 @@ const confirmReturnArrival = async (id, sourceTenantId, user, payload = {}) => {
         );
     }
 
-    const role = normalizeRole(user.role);
-    if (role !== 'SECURITY' && !isAdminBypass(role)) {
-        throw Object.assign(new Error('Only source security can confirm return arrival.'), {
-            statusCode: 403,
-        });
-    }
+    assertGetPassOperationalPermission(user, 'RETURNING', { isInternalTransfer: true });
 
     const linesPayload = Array.isArray(payload.lines) ? payload.lines : [];
     if (linesPayload.length === 0) {
         throw Object.assign(new Error('lines are required to confirm return arrival.'), { statusCode: 400 });
     }
+    assertIntegerInterhotelReturnQuantities(linesPayload);
     const expectedLineIds = new Set((getPass.lines ?? []).map((line) => line.id));
     const linePayloadMap = new Map();
     for (const row of linesPayload) {
@@ -1307,6 +1583,7 @@ const confirmReturnArrival = async (id, sourceTenantId, user, payload = {}) => {
 
     const now = new Date();
     await prisma.$transaction(async (tx) => {
+        const dispositionBatch = createGetPassReturnDispositionBatch();
         let hasReceivedQty = false;
         for (const line of getPass.lines ?? []) {
             const totalQty = Number(line.qty || 0);
@@ -1352,7 +1629,30 @@ const confirmReturnArrival = async (id, sourceTenantId, user, payload = {}) => {
                     status: alreadyReturned + receivedQty >= totalQty - 1e-9 ? 'RETURNED' : 'PARTIALLY_RETURNED',
                 },
             });
+
+            if (damagedQty > 0 || lostQty > 0) {
+                const gateAccountability =
+                    linePayload.accountability ||
+                    linePayload.damagedAccountability ||
+                    linePayload.lostAccountability ||
+                    null;
+                queueGetPassReturnDispositionLine(dispositionBatch, {
+                    line,
+                    damagedQty,
+                    lostQty,
+                    accountability: gateAccountability,
+                    managerNotes: null,
+                });
+            }
         }
+        await flushGetPassReturnDispositionBatchInTx(tx, dispositionBatch, {
+            tenantId: sourceTenantId,
+            getPassId: id,
+            passNo: getPass.passNo,
+            userId: user.id,
+            now,
+            firstStepComment: 'Registered at source gate return inspection',
+        });
         if (!hasReceivedQty) {
             throw Object.assign(new Error('At least one line must have a positive returned quantity.'), { statusCode: 400 });
         }
@@ -1406,19 +1706,16 @@ const acceptReturnIntoDepartment = async (id, sourceTenantId, user, payload = {}
             statusCode: 400,
         });
     }
-    const role = normalizeRole(user.role);
-    if (role !== 'DEPT_MANAGER' && !isAdminBypass(role)) {
-        throw Object.assign(new Error('Only source department manager can accept return into department.'), {
-            statusCode: 403,
-        });
-    }
+    assertGetPassOperationalPermission(user, 'RETURN_RECEIVED_AT_GATE', { isInternalTransfer: true });
 
     const payloadLines = Array.isArray(payload.lines) ? payload.lines : [];
     const managerNotes = typeof payload.managerNotes === 'string' ? payload.managerNotes.trim() : '';
+    assertIntegerInterhotelReturnQuantities(payloadLines);
     const payloadByLineId = new Map(payloadLines.map((row) => [row?.lineId, row]));
-    const validAccountability = new Set(['EMPLOYEE_DEDUCTION', 'COMPANY_LOSS', 'TARGET_HOTEL_COMPENSATION']);
+    const validAccountability = new Set(['EMPLOYEE_DEDUCTION', 'COMPANY_LOSS']);
     const now = new Date();
     await prisma.$transaction(async (tx) => {
+        const dispositionBatch = createGetPassReturnDispositionBatch();
         for (const line of getPass.lines ?? []) {
             const linePayload = payloadByLineId.get(line.id);
             if (!linePayload) continue;
@@ -1464,174 +1761,82 @@ const acceptReturnIntoDepartment = async (id, sourceTenantId, user, payload = {}
                     { statusCode: 400 },
                 );
             }
-            const releaseFromBlocked = totalAccepted;
-            // Reversible checkout only increased qtyBlocked; qtyOnHand still includes custodied qty.
-            // Release the full shipment from blocked; reduce on-hand only for lost/damaged (pending
-            // disposition — not sellable). Net available increases by goodQty only.
-            const nonGood = damagedQty + lostQty;
-            if (!stock && releaseFromBlocked > 0) {
-                throw Object.assign(new Error(`Stock balance not found for line ${line.id}.`), { statusCode: 400 });
-            }
-            if (stock && releaseFromBlocked > 0) {
-                await tx.stockBalance.update({
-                    where: {
-                        tenantId_itemId_locationId: {
-                            tenantId: sourceTenantId,
-                            itemId: line.itemId,
-                            locationId: line.locationId,
-                        },
-                    },
-                    data: {
-                        qtyBlocked: { decrement: releaseFromBlocked },
-                        ...(nonGood > 0 ? { qtyOnHand: { decrement: nonGood } } : {}),
-                    },
+            const releaseFromBlocked = goodQty;
+            // Good: release blocked → available. Damaged/Lost stay blocked until BRK/LST GM post.
+            const stockKey = {
+                tenantId_itemId_locationId: {
+                    tenantId: sourceTenantId,
+                    itemId: line.itemId,
+                    locationId: line.locationId,
+                },
+            };
+            if (releaseFromBlocked > 0) {
+                if (!stock) {
+                    throw Object.assign(new Error(`Stock balance not found for line ${line.id}.`), { statusCode: 400 });
+                }
+                await postingEngine.releaseBlockedOnReturn(tx, {
+                    stockKey,
+                    releaseQty: releaseFromBlocked,
+                    nonGoodQty: 0,
                 });
             }
 
             if (goodQty > 0) {
-                await tx.inventoryLedger.create({
-                    data: {
-                        tenantId: sourceTenantId,
-                        itemId: line.itemId,
-                        locationId: line.locationId,
-                        movementType: 'RETURN',
-                        qtyIn: goodQty,
-                        qtyOut: 0,
-                        unitCost: wac,
-                        totalValue: goodQty * wac,
-                        referenceType: 'GET_PASS_RETURN',
-                        referenceId: line.id,
-                        referenceNo: getPass.passNo,
-                        createdBy: user.id,
-                        notes: 'Manager accepted good quantity from return inspection (RETURN to available).',
-                    },
+                await postingEngine.postReturnGoodLedger(tx, {
+                    tenantId: sourceTenantId,
+                    itemId: line.itemId,
+                    locationId: line.locationId,
+                    goodQty,
+                    wac,
+                    referenceId: line.id,
+                    referenceNo: getPass.passNo,
+                    userId: user.id,
+                    notes: 'Manager accepted good quantity from return inspection (RETURN to available).',
+                    affectsValuation: false,
                 });
             }
 
-            if (damagedQty > 0) {
+            if (damagedQty > 0 || lostQty > 0) {
                 try {
-                    await tx.getPassReturn.create({
-                        data: {
-                            getPassLineId: line.id,
-                            qtyReturned: damagedQty,
-                            qtyGood: 0,
-                            qtyLost: 0,
-                            qtyDamaged: damagedQty,
-                            isLost: false,
-                            isDamaged: true,
-                            notes: `ACCOUNTABILITY:${accountability}${managerNotes ? ` | MANAGER_NOTES:${managerNotes}` : ''}`,
-                            registeredBy: user.id,
-                        },
+                    queueGetPassReturnDispositionLine(dispositionBatch, {
+                        line,
+                        damagedQty,
+                        lostQty,
+                        accountability,
+                        managerNotes,
                     });
-                    const documentNo = await generateDocNumber(sourceTenantId, DocPrefix.BREAKAGE, now, tx);
-                    const brkDoc = await tx.movementDocument.create({
-                        data: {
-                            tenantId: sourceTenantId,
-                            documentNo,
-                            movementType: 'BREAKAGE',
-                            sourceType: 'GET_PASS_RETURN',
-                            getPassId: id,
-                            status: 'DEPT_APPROVED',
-                            sourceLocationId: line.locationId,
-                            reason: `Damaged on get pass return ${getPass.passNo}`,
-                            notes: managerNotes || null,
-                            documentDate: now,
-                            createdBy: user.id,
-                            lines: {
-                                create: [
-                                    {
-                                        itemId: line.itemId,
-                                        locationId: line.locationId,
-                                        qtyRequested: damagedQty,
-                                        qtyInBaseUnit: damagedQty,
-                                        unitCost: wac,
-                                        totalValue: damagedQty * wac,
-                                        notes: `ACCOUNTABILITY:${accountability}`,
-                                    },
-                                ],
+                    if (damagedQty > 0) {
+                        await tx.getPassReturn.create({
+                            data: {
+                                getPassLineId: line.id,
+                                qtyReturned: damagedQty,
+                                qtyGood: 0,
+                                qtyLost: 0,
+                                qtyDamaged: damagedQty,
+                                isLost: false,
+                                isDamaged: true,
+                                notes: `ACCOUNTABILITY:${accountability}${managerNotes ? ` | MANAGER_NOTES:${managerNotes}` : ''}`,
+                                registeredBy: user.id,
                             },
-                        },
-                    });
-                    await createMovementApprovalRequest(tx, {
-                        tenantId: sourceTenantId,
-                        documentId: brkDoc.id,
-                        createdBy: user.id,
-                        requestType: 'BREAKAGE',
-                        deptApproverUserId: user.id,
-                        firstStepComment: 'Department manager approved via get pass return acceptance',
-                        firstStepAccountabilityType: accountability,
-                    });
-                } catch (error) {
-                    console.error('[getPass.service] acceptReturnIntoDepartment damaged posting failed', {
-                        getPassId: id,
-                        lineId: line.id,
-                        itemId: line.itemId,
-                        sourceTenantId,
-                        errorMessage: error?.message,
-                        errorCode: error?.code,
-                        errorMeta: error?.meta,
-                        error,
-                    });
-                    throw error;
-                }
-            }
-
-            if (lostQty > 0) {
-                try {
-                    const documentNo = await generateDocNumber(sourceTenantId, 'LST', now, tx);
-                    const lostReason = `Lost return — Get Pass ${getPass.passNo}`;
-                    const lostDoc = await tx.movementDocument.create({
-                        data: {
-                            tenantId: sourceTenantId,
-                            documentNo,
-                            movementType: 'LOST',
-                            sourceType: 'GET_PASS_RETURN',
-                            getPassId: id,
-                            status: 'DEPT_APPROVED',
-                            sourceLocationId: line.locationId,
-                            reason: lostReason,
-                            notes: `Auto from get pass return (accept return into department)`,
-                            documentDate: now,
-                            createdBy: user.id,
-                            lines: {
-                                create: [
-                                    {
-                                        itemId: line.itemId,
-                                        locationId: line.locationId,
-                                        qtyRequested: lostQty,
-                                        qtyInBaseUnit: lostQty,
-                                        unitCost: wac,
-                                        totalValue: lostQty * wac,
-                                        notes: managerNotes?.trim() || null,
-                                    },
-                                ],
+                        });
+                    }
+                    if (lostQty > 0) {
+                        await tx.getPassReturn.create({
+                            data: {
+                                getPassLineId: line.id,
+                                qtyReturned: lostQty,
+                                qtyGood: 0,
+                                qtyLost: lostQty,
+                                qtyDamaged: 0,
+                                isLost: true,
+                                isDamaged: false,
+                                notes: `ACCOUNTABILITY:${accountability}${managerNotes ? ` | MANAGER_NOTES:${managerNotes}` : ''}`,
+                                registeredBy: user.id,
                             },
-                        },
-                    });
-                    await createMovementApprovalRequest(tx, {
-                        tenantId: sourceTenantId,
-                        documentId: lostDoc.id,
-                        createdBy: user.id,
-                        requestType: 'LOST',
-                        deptApproverUserId: user.id,
-                        firstStepComment: 'Department manager approved via get pass return acceptance',
-                        firstStepAccountabilityType: accountability,
-                    });
-                    await tx.getPassReturn.create({
-                        data: {
-                            getPassLineId: line.id,
-                            qtyReturned: lostQty,
-                            qtyGood: 0,
-                            qtyLost: lostQty,
-                            qtyDamaged: 0,
-                            isLost: true,
-                            isDamaged: false,
-                            notes: `ACCOUNTABILITY:${accountability}${managerNotes ? ` | MANAGER_NOTES:${managerNotes}` : ''}`,
-                            registeredBy: user.id,
-                        },
-                    });
+                        });
+                    }
                 } catch (error) {
-                    console.error('[getPass.service] acceptReturnIntoDepartment lost posting failed', {
+                    console.error('[getPass.service] acceptReturnIntoDepartment disposition posting failed', {
                         getPassId: id,
                         lineId: line.id,
                         itemId: line.itemId,
@@ -1646,15 +1851,30 @@ const acceptReturnIntoDepartment = async (id, sourceTenantId, user, payload = {}
             }
         }
 
+        // STATE_MATRIX: Dept accept return Creates (skip if exists) — gate may already
+        // have flushed BREAKAGE/LOST for this getPassId; do not create a second pair.
+        await stripExistingGetPassReturnDispositionsFromBatch(tx, dispositionBatch, {
+            tenantId: sourceTenantId,
+            getPassId: id,
+        });
+
+        await flushGetPassReturnDispositionBatchInTx(tx, dispositionBatch, {
+            tenantId: sourceTenantId,
+            getPassId: id,
+            passNo: getPass.passNo,
+            userId: user.id,
+            now,
+            firstStepComment: 'Department manager approved via get pass return acceptance',
+        });
+
         await tx.getPass.update({
             where: { id },
             data: {
                 status: 'RETURNED',
                 closedBy: user.id,
                 closedAt: now,
-                notes: managerNotes
-                    ? `${getPass.notes || ''}\nManager Acceptance Notes: ${managerNotes}`.trim()
-                    : getPass.notes,
+                // P2 #28 — keep creator GetPass.notes intact; manager notes live on return/audit only.
+                notes: getPass.notes,
             },
         });
     });
@@ -1665,7 +1885,9 @@ const acceptReturnIntoDepartment = async (id, sourceTenantId, user, payload = {}
         entityId: id,
         action: 'UPDATE',
         changedBy: user.id,
-        note: 'GET_PASS_ACCEPT_RETURN_DEPARTMENT',
+        note: managerNotes
+            ? `GET_PASS_ACCEPT_RETURN_DEPARTMENT | MANAGER_ACCEPTANCE_NOTES: ${managerNotes}`
+            : 'GET_PASS_ACCEPT_RETURN_DEPARTMENT',
     });
 
     return getGetPassById(id, sourceTenantId);
@@ -1674,20 +1896,144 @@ const acceptReturnIntoDepartment = async (id, sourceTenantId, user, payload = {}
 /**
  * Issuer or internal target hotel — read-only API / PDF.
  */
-const getGetPassById = async (id, tenantId) => {
-    const getPass = await findReadablePass(prisma, id, tenantId);
-    if (!getPass) throw new Error('Get Pass not found');
-    const reverseAuditTrail = await getGetPassReverseAuditTrail(getPass);
-    return { ...getPass, reverseAuditTrail };
-};
-
-const updateGetPass = async (id, tenantId, data, userId) => {
-    const existing = await getIssuerGetPassById(id, tenantId);
-    if (existing.status !== 'DRAFT') {
-        throw new Error('Can only update DRAFT Get Passes');
+const getGetPassById = async (id, tenantId, user = null) => {
+    let getPass = await findReadablePass(prisma, id, tenantId);
+    if (!getPass) throw passNotFoundErr();
+    if (user) {
+        const scope = await resolveScopeContext(user, tenantId);
+        await assertInScope(SCOPE_MODULE.GET_PASS, getPass, scope, 'read');
     }
 
-    return prisma.$transaction(async (tx) => {
+    // Legacy park: Send Back used to land on PENDING_DEPT. Creator desk is Returned/DRAFT only.
+    getPass = await healGetPassSendBackParkedAtDept(getPass);
+
+    const reverseAuditTrail = await getGetPassReverseAuditTrail(getPass);
+    const checkoutStockGate = await buildGetPassCheckoutStockGate(getPass);
+
+    let chain = null;
+    try {
+        if (getPass.accWorkflowVersionId) {
+            chain = await resolveWorkflowByVersionId(getPass.accWorkflowVersionId);
+        } else {
+            chain = await resolveWorkflowForDocument({ moduleKey: 'GET_PASS', tenantId: getPass.tenantId });
+        }
+    } catch {
+        chain = null;
+    }
+    const workflow = buildGetPassWorkflowContext(getPass, chain);
+    const sendBackTargets = chain ? buildGetPassSendBackTargets(getPass, chain) : [];
+
+    return withUserFacingState(
+        'GET_PASS',
+        { ...getPass, reverseAuditTrail, workflow, checkoutStockGate, sendBackTargets },
+        { notes: getPass.notes },
+    );
+};
+
+/** Preflight for Security exit — blockers mean Approve must not run; Send Back to creator instead. */
+const buildGetPassCheckoutStockGate = async (getPass) => {
+    if (String(getPass?.status || '').toUpperCase() !== 'PENDING_SECURITY') return null;
+    const lines = getPass.lines || [];
+    if (!lines.length) return { ok: true, blockers: [] };
+
+    const neededByKey = new Map();
+    for (const line of lines) {
+        const key = `${line.itemId}::${line.locationId}`;
+        neededByKey.set(key, (neededByKey.get(key) || 0) + Number(line.qty));
+    }
+
+    const blockers = [];
+    const tenantId = getPass.tenantId;
+    for (const [key, requested] of neededByKey.entries()) {
+        const [itemId, locationId] = key.split('::');
+        const stock = await prisma.stockBalance.findUnique({
+            where: { tenantId_itemId_locationId: { tenantId, itemId, locationId } },
+            include: { item: { select: { name: true } } },
+        });
+        const available = stock ? Number(stock.qtyOnHand) - Number(stock.qtyBlocked || 0) : 0;
+        if (!stock || available < requested - 1e-9) {
+            blockers.push({
+                itemName: stock?.item?.name || itemId,
+                available,
+                requested,
+            });
+        }
+    }
+    return { ok: blockers.length === 0, blockers };
+};
+
+/** Strip [Send Back] note lines after creator resubmit so Returned detection stays accurate. */
+const stripGetPassSendBackNotes = (notes) => {
+    const cleaned = String(notes || '')
+        .split(/\r?\n/)
+        .filter((line) => !line.trim().startsWith(SEND_BACK_NOTES_MARKER))
+        .join('\n')
+        .trim();
+    return cleaned || null;
+};
+
+/**
+ * Heal documents previously sent back onto PENDING_DEPT — move to DRAFT (Returned) for creator edit.
+ */
+const healGetPassSendBackParkedAtDept = async (getPass) => {
+    if (!getPass?.id) return getPass;
+    const status = String(getPass.status || '').toUpperCase();
+    if (status !== 'PENDING_DEPT') return getPass;
+    if (!String(getPass.notes || '').includes(SEND_BACK_NOTES_MARKER)) return getPass;
+
+    await prisma.$transaction(async (tx) => {
+        const updated = await tx.getPass.update({
+            where: { id: getPass.id },
+            data: { status: 'DRAFT' },
+        });
+        const ar = await tx.approvalRequest.findFirst({
+            where: { getPassId: getPass.id },
+            select: { id: true },
+        });
+        if (ar?.id) {
+            await tx.approvalRequest.update({
+                where: { id: ar.id },
+                data: { currentStep: 0, status: 'PENDING' },
+            });
+        }
+        return updated;
+    });
+
+    const fresh = await prisma.getPass.findFirst({ where: { id: getPass.id } });
+    return fresh ? { ...getPass, ...fresh, status: 'DRAFT' } : { ...getPass, status: 'DRAFT' };
+};
+
+const assertGetPassSentBackCreator = (getPass, userId) => {
+    if (getPass.createdBy !== userId) {
+        throw Object.assign(new Error('Only the document creator may edit or resubmit after Send Back.'), {
+            status: 403,
+        });
+    }
+};
+
+const isGetPassSentBackDraft = (getPass) =>
+    String(getPass?.status || '').toUpperCase() === 'DRAFT' &&
+    String(getPass?.notes || '').includes(SEND_BACK_NOTES_MARKER);
+
+const updateGetPass = async (id, tenantId, data, user, expectedVersion = null) => {
+    const userId = user.id;
+    const existing = await getIssuerGetPassById(id, tenantId);
+    if (isGetPassSentBackDraft(existing)) {
+        assertGetPassSentBackCreator(existing, userId);
+    } else if (existing.status === 'DRAFT') {
+        const { assertDraftEditable } = require('../platform/draftGovernance.service');
+        await assertDraftEditable({ doc: existing, family: 'getPass', user });
+    }
+    const { assertPostingPeriodFieldsImmutable } = require('../platform/postingPeriod.util');
+    assertPostingPeriodFieldsImmutable(existing, data);
+    const { assertDocumentEditableByLifecycle } = require('../platform/lifecyclePresentation.service');
+    assertDocumentEditableByLifecycle('GET_PASS', existing.status, { notes: existing.notes });
+    assertConcurrencyVersion(expectedVersion ?? data.concurrencyVersion, existing.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: userId },
+    });
+
+    await prisma.$transaction(async (tx) => {
         const isInternalTransfer =
             data.isInternalTransfer !== undefined ? Boolean(data.isInternalTransfer) : existing.isInternalTransfer;
         let targetTenantId = existing.targetTenantId;
@@ -1709,7 +2055,7 @@ const updateGetPass = async (id, tenantId, data, userId) => {
         // Update header
         await tx.getPass.update({
             where: { id },
-            data: {
+            data: bumpConcurrencyUpdate({
                 transferType: data.transferType,
                 isInternalTransfer,
                 targetTenantId,
@@ -1718,12 +2064,13 @@ const updateGetPass = async (id, tenantId, data, userId) => {
                 borrowingEntity: data.borrowingEntity,
                 expectedReturnDate,
                 reason: data.reason,
-                notes: data.notes
-            }
+                notes: data.notes,
+            }),
         });
 
         // Hard replace lines for simplicity if provided
         if (data.lines) {
+            await assertGetPassLinesAtSourceLocations(tx, tenantId, data.lines);
             await tx.getPassLine.deleteMany({ where: { getPassId: id } });
             await tx.getPassLine.createMany({
                 data: data.lines.map(line => ({
@@ -1738,88 +2085,141 @@ const updateGetPass = async (id, tenantId, data, userId) => {
         }
 
         await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'UPDATE', changedBy: userId });
-        return getGetPassById(id, tenantId);
     });
+
+    return getGetPassById(id, tenantId);
 };
 
-const deleteGetPass = async (id, tenantId, userId) => {
+const deleteGetPass = async (id, tenantId, userId, expectedVersion = null) => {
     const existing = await prisma.getPass.findFirst({ where: { id, tenantId } });
-    if (!existing) throw new Error('Get Pass not found');
-    if (!['DRAFT', 'REJECTED'].includes(existing.status)) {
-        throw new Error('Can only delete DRAFT or REJECTED passes');
+    if (!existing) throw passNotFoundErr();
+    if (existing.status !== 'DRAFT') {
+        throw new Error('Can only delete DRAFT Get Passes');
     }
+    if (isGetPassSentBackDraft(existing)) {
+        throw Object.assign(
+            new Error('Returned get passes cannot be deleted. Reject them instead.'),
+            { status: 422, statusCode: 422 },
+        );
+    }
+    assertConcurrencyVersion(expectedVersion, existing.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: userId },
+    });
 
     await prisma.getPass.delete({ where: { id } });
     await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'DELETE', changedBy: userId });
     return true;
 };
 
-const submitGetPass = async (id, tenantId, user) => {
+const submitGetPass = async (id, tenantId, user, expectedVersion = null) => {
     const userId = user.id;
-    const getPass = await prisma.getPass.findFirst({ where: { id, tenantId } });
-    if (!getPass) throw new Error('Get Pass not found');
-    if (getPass.status !== 'DRAFT') throw new Error('Only DRAFT can be submitted');
-
-    const workflow = getSubmitInitialWorkflow(user.role, userId);
-
-    await prisma.getPass.update({
-        where: { id },
-        data: workflow,
+    await assertActiveAssignmentForMutation(user, tenantId, 'submit');
+    const getPass = await prisma.getPass.findFirst({
+        where: { id, tenantId },
+        include: {
+            lines: true,
+            approvalRequest: {
+                include: {
+                    steps: {
+                        orderBy: { stepNumber: 'asc' },
+                        include: { requiredRole: { select: { code: true } } },
+                    },
+                },
+            },
+        },
     });
-    await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'SUBMIT', changedBy: userId });
+    if (!getPass) throw passNotFoundErr();
+    const scope = await resolveScopeContext(user, tenantId, { assignmentOnly: true });
+    await assertInScope(SCOPE_MODULE.GET_PASS, getPass, scope, 'submit');
+    if (getPass.status !== 'DRAFT') throw new Error('Only DRAFT can be submitted');
+    const isResubmit = isGetPassSentBackDraft(getPass);
+    if (isResubmit) {
+        assertGetPassSentBackCreator(getPass, userId);
+    }
+    assertConcurrencyVersion(expectedVersion, getPass.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: user.id },
+    });
+
+    const chain = getPass.accWorkflowVersionId
+        ? await resolveWorkflowByVersionId(getPass.accWorkflowVersionId)
+        : await resolveWorkflowForDocument({ moduleKey: 'GET_PASS', tenantId });
+    const { buildGetPassWorkflowMaps } = require('./acc-workflow-get-pass.runtime');
+    const maps = buildGetPassWorkflowMaps(chain.steps);
+    const workflow = getSubmitInitialWorkflowFromContext(
+        { ...maps, steps: chain.steps },
+        user.role,
+        userId,
+    );
+
+    const reusedApprovalRequest = getPass.approvalRequest && Number(getPass.approvalRequest.currentStep) === 0;
+    await prisma.$transaction(async (tx) => {
+        await assertGetPassLinesAtSourceLocations(tx, tenantId, getPass.lines);
+        if (reusedApprovalRequest) {
+            await executeCreatorResubmitInTx(tx, {
+                approvalRequest: getPass.approvalRequest,
+                userId,
+                tenantId,
+                entityType: EntityType.GET_PASS,
+                entityId: id,
+                documentStatusBefore: getPass.status,
+                documentStatusAfter: workflow.status,
+                resubmitNotePrefix: 'GET_PASS_RESUBMIT',
+            });
+            // Dept Manager submit auto-stamps step 1 — keep ApprovalRequest on the same live step.
+            const livePendingIdx = maps.pendingStatuses.indexOf(String(workflow.status || '').toUpperCase());
+            const liveStepNo = livePendingIdx >= 0 ? livePendingIdx + 1 : 1;
+            if (liveStepNo > 1) {
+                const steps = [...(getPass.approvalRequest.steps || [])].sort(
+                    (a, b) => a.stepNumber - b.stepNumber,
+                );
+                for (const st of steps) {
+                    if (st.stepNumber >= liveStepNo) break;
+                    await tx.approvalStep.update({
+                        where: { id: st.id },
+                        data: {
+                            status: 'APPROVED',
+                            actedByUser: { connect: { id: userId } },
+                            actedAt: workflow.deptApprovedAt || workflow.costControlApprovedAt || new Date(),
+                        },
+                    });
+                }
+                await tx.approvalRequest.update({
+                    where: { id: getPass.approvalRequest.id },
+                    data: { currentStep: liveStepNo, status: 'PENDING', resolvedAt: null },
+                });
+            }
+        }
+        await tx.getPass.update({
+            where: { id },
+            data: bumpConcurrencyUpdate({
+                ...workflow,
+                ...(getPass.accWorkflowVersionId ? {} : getPassVersionPin(chain)),
+                ...(isResubmit ? { notes: stripGetPassSendBackNotes(getPass.notes) } : {}),
+            }),
+        });
+        if (!getPass.approvalRequest) {
+            await ensureGetPassApprovalRequestInTx(tx, { ...getPass, status: workflow.status }, tenantId);
+        }
+    });
+    if (isResubmit && !reusedApprovalRequest) {
+        await logGovernedEvent({
+            tenantId,
+            entityType: EntityType.GET_PASS,
+            entityId: id,
+            action: 'SUBMIT',
+            changedBy: userId,
+            eventType: 'GET_PASS_RESUBMIT',
+        });
+    } else {
+        await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'SUBMIT', changedBy: userId });
+    }
     return getGetPassById(id, tenantId);
 };
 
 const checkoutAndStampExitInTx = async (tx, getPass, tenantId, user, linesOut = [], exitAt = new Date()) => {
-    for (const line of getPass.lines) {
-        const stock = await tx.stockBalance.findUnique({
-            where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: line.locationId } },
-        });
-
-        const qtyReq = Number(line.qty);
-        const availableQty = stock ? Number(stock.qtyOnHand) - Number(stock.qtyBlocked || 0) : 0;
-        if (!stock || availableQty < qtyReq) {
-            throw new Error(`Insufficient stock for ${line.item?.name || 'item'}. Available: ${availableQty}`);
-        }
-
-        const wac = Number(stock.wacUnitCost);
-        if (isReversibleTransferType(getPass.transferType)) {
-            await tx.stockBalance.update({
-                where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: line.locationId } },
-                data: { qtyBlocked: { increment: qtyReq } },
-            });
-        } else {
-            await tx.stockBalance.update({
-                where: { tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: line.locationId } },
-                data: { qtyOnHand: { decrement: qtyReq } },
-            });
-        }
-
-        const movementType = getPass.transferType === 'PERMANENT' ? 'ISSUE' : 'GET_PASS_OUT';
-        await tx.inventoryLedger.create({
-            data: {
-                tenantId,
-                itemId: line.itemId,
-                locationId: line.locationId,
-                movementType,
-                qtyIn: 0,
-                qtyOut: qtyReq,
-                unitCost: wac,
-                totalValue: qtyReq * wac,
-                referenceType: 'GET_PASS',
-                referenceId: getPass.id,
-                referenceNo: getPass.passNo,
-                createdBy: user.id,
-            },
-        });
-
-        const linePayload = linesOut?.find((l) => l.lineId === line.id);
-        const conditionOut = linePayload?.conditionOut || line.conditionOut;
-        await tx.getPassLine.update({
-            where: { id: line.id },
-            data: { status: 'OUT', unitCost: wac, conditionOut },
-        });
-    }
+    const period = await postingEngine.postGetPassCheckoutInTransaction(tx, { getPass, tenantId, user, linesOut });
 
     const internalToDestination = Boolean(getPass.isInternalTransfer && getPass.targetTenantId);
     const permanentCloseAtSource = getPass.transferType === 'PERMANENT' && !internalToDestination;
@@ -1834,6 +2234,8 @@ const checkoutAndStampExitInTx = async (tx, getPass, tenantId, user, linesOut = 
             securityApprovedAt: exitAt,
             closedBy: permanentCloseAtSource ? user.id : null,
             closedAt: permanentCloseAtSource ? exitAt : null,
+            postingDate: period.postingDate,
+            assignedPostingPeriod: period.assignedPostingPeriod,
         },
     });
 };
@@ -1843,119 +2245,336 @@ const checkoutAndStampExitInTx = async (tx, getPass, tenantId, user, linesOut = 
  * PENDING_DEPT → … → PENDING_GM → PENDING_SECURITY.
  * Security approval now executes exit/stock movement immediately (status OUT or CLOSED).
  */
-const approveGetPass = async (id, tenantId, user) => {
-    const getPass = await prisma.getPass.findFirst({ where: { id, tenantId } });
-    if (!getPass) throw new Error('Get Pass not found');
-    if (!PENDING_APPROVAL_STATUSES.includes(getPass.status)) {
-        throw new Error('Get Pass is not pending any approval');
-    }
-    assertCanActOnStatus(getPass.status, user.role);
+const approveGetPass = async (id, tenantId, user, expectedVersion = null) => {
+    let step = 'LOAD';
+    let status;
+    try {
+        const getPass = await prisma.getPass.findFirst({
+            where: { id, tenantId },
+            include: {
+                approvalRequest: {
+                    include: {
+                        steps: {
+                            orderBy: { stepNumber: 'asc' },
+                            include: { requiredRole: { select: { code: true } } },
+                        },
+                    },
+                },
+            },
+        });
+        if (!getPass) throw passNotFoundErr();
+        status = getPass.status;
+        step = status;
+        assertConcurrencyVersion(expectedVersion, getPass.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: user.id },
+    });
 
-    if (getPass.status === 'PENDING_SECURITY') {
-        await checkPeriodLock(tenantId, new Date());
-        await prisma.$transaction(async (tx) => {
-            const passWithLines = await tx.getPass.findFirst({
-                where: { id, tenantId, status: 'PENDING_SECURITY' },
-                include: { lines: { include: { item: true } } },
+        const wf = await resolveGetPassWorkflowContext(getPass);
+        const pendingStatuses = wf.pendingStatuses.length ? wf.pendingStatuses : PENDING_APPROVAL_STATUSES;
+        const securityStatus = pendingStatuses[pendingStatuses.length - 1] || 'PENDING_SECURITY';
+
+        if (!pendingStatuses.includes(getPass.status)) {
+            throw Object.assign(new Error('Get Pass is not pending any approval'), { statusCode: 400 });
+        }
+        assertCanActOnStatus(
+            getPass.status,
+            user,
+            buildActOnStatusOptions(getPass.status, getPass, wf, {
+                isInternalTransfer: getPass.isInternalTransfer,
+            }),
+        );
+
+        if (getPass.status === securityStatus) {
+            step = 'PENDING_SECURITY_CHECKOUT';
+            await validatePostingDate(tenantId, new Date());
+            await prisma.$transaction(async (tx) => {
+                const approvalRequest = await ensureGetPassApprovalRequestInTx(tx, getPass, tenantId);
+                const currentStepNo = Number(approvalRequest.currentStep);
+                const approvalStep = approvalRequest.steps.find((s) => s.stepNumber === currentStepNo);
+                if (approvalStep) {
+                    await tx.approvalStep.update({
+                        where: { id: approvalStep.id },
+                        data: {
+                            status: 'APPROVED',
+                            actedByUser: { connect: { id: user.id } },
+                            actedAt: new Date(),
+                        },
+                    });
+                }
+                await tx.approvalRequest.update({
+                    where: { id: approvalRequest.id },
+                    data: { status: 'APPROVED', currentStep: currentStepNo, resolvedAt: new Date() },
+                });
+                const passWithLines = await tx.getPass.findFirst({
+                    where: { id, tenantId, status: securityStatus },
+                    include: { lines: { include: { item: true } } },
+                });
+                if (!passWithLines) {
+                    throw Object.assign(new Error('Get Pass is not pending security approval'), {
+                        statusCode: 409,
+                    });
+                }
+                await checkoutAndStampExitInTx(tx, passWithLines, tenantId, user, [], new Date());
             });
-            if (!passWithLines) {
-                throw new Error('Get Pass is not pending security approval');
+            step = 'PENDING_SECURITY_AUDIT';
+            await logAction({
+                tenantId,
+                entityType: EntityType.GET_PASS,
+                entityId: id,
+                action: 'APPROVE',
+                changedBy: user.id,
+                note: 'GET_PASS_APPROVE_PENDING_SECURITY',
+            });
+            return getGetPassById(id, tenantId);
+        }
+
+        const updateData = getApproveTransitionData(getPass.status, wf, user.id);
+        if (!updateData) {
+            throw Object.assign(new Error('Get Pass is not pending any approval'), { statusCode: 400 });
+        }
+
+        step = `APPROVE_STEP:${getPass.status}`;
+        await prisma.$transaction(async (tx) => {
+            const approvalRequest = await ensureGetPassApprovalRequestInTx(tx, getPass, tenantId);
+            const currentStepNo = Number(approvalRequest.currentStep);
+            const approvalStep = approvalRequest.steps.find((s) => s.stepNumber === currentStepNo);
+            if (!approvalStep || String(approvalStep.status || '').toUpperCase() !== 'PENDING') {
+                throw Object.assign(new Error('No pending approval step found for Get Pass.'), { status: 422 });
             }
-            await checkoutAndStampExitInTx(tx, passWithLines, tenantId, user, [], new Date());
+            await tx.approvalStep.update({
+                where: { id: approvalStep.id },
+                data: {
+                    status: 'APPROVED',
+                    actedByUser: { connect: { id: user.id } },
+                    actedAt: new Date(),
+                },
+            });
+            if (currentStepNo >= approvalRequest.totalSteps) {
+                await tx.approvalRequest.update({
+                    where: { id: approvalRequest.id },
+                    data: { status: 'APPROVED', currentStep: currentStepNo, resolvedAt: new Date() },
+                });
+            } else {
+                await tx.approvalRequest.update({
+                    where: { id: approvalRequest.id },
+                    data: { currentStep: currentStepNo + 1 },
+                });
+            }
+            await tx.getPass.update({ where: { id }, data: updateData });
         });
         await logAction({
             tenantId,
             entityType: EntityType.GET_PASS,
             entityId: id,
-            action: 'APPROVE_PENDING_SECURITY',
+            action: 'APPROVE',
             changedBy: user.id,
+            note: `GET_PASS_APPROVE_STEP:${getPass.status}`,
         });
         return getGetPassById(id, tenantId);
+    } catch (error) {
+        console.error('[GET_PASS_APPROVAL_ERROR]', {
+            getPassId: id,
+            status,
+            userId: user?.id,
+            step,
+            error: error?.message,
+            stack: error?.stack,
+        });
+        if (error?.statusCode == null && error?.status != null) {
+            error.statusCode = error.status;
+        }
+        throw error;
     }
-
-    const now = new Date();
-    let updateData;
-    switch (getPass.status) {
-        case 'PENDING_DEPT':
-            updateData = {
-                status: 'PENDING_COST_CONTROL',
-                deptApprovedBy: user.id,
-                deptApprovedAt: now,
-            };
-            break;
-        case 'PENDING_COST_CONTROL':
-            updateData = {
-                status: 'PENDING_FINANCE',
-                costControlApprovedBy: user.id,
-                costControlApprovedAt: now,
-            };
-            break;
-        case 'PENDING_FINANCE':
-            updateData = {
-                status: 'PENDING_GM',
-                financeApprovedBy: user.id,
-                financeApprovedAt: now,
-            };
-            break;
-        case 'PENDING_GM':
-            updateData = {
-                status: 'PENDING_SECURITY',
-                gmApprovedBy: user.id,
-                gmApprovedAt: now,
-            };
-            break;
-        default:
-            throw new Error('Get Pass is not pending any approval');
-    }
-
-    await prisma.getPass.update({ where: { id }, data: updateData });
-    await logAction({
-        tenantId,
-        entityType: EntityType.GET_PASS,
-        entityId: id,
-        action: `APPROVE_${getPass.status}`,
-        changedBy: user.id,
-    });
-    return getGetPassById(id, tenantId);
 };
 
-const rejectGetPass = async (id, tenantId, user, rejectionReason) => {
+const rejectGetPass = async (id, tenantId, user, rejectionReason, expectedVersion = null) => {
     const reason = typeof rejectionReason === 'string' ? rejectionReason.trim() : '';
     if (!reason) throw new Error('rejectionReason is required');
 
     const getPass = await prisma.getPass.findFirst({ where: { id, tenantId } });
-    if (!getPass) throw new Error('Get Pass not found');
-    if (!PENDING_APPROVAL_STATUSES.includes(getPass.status)) {
-        throw new Error('Get Pass is not pending any approval');
+    if (!getPass) throw passNotFoundErr();
+
+    // Returned-to-creator (DRAFT + Send Back marker): creator abandons the pass as REJECTED.
+    if (isGetPassSentBackDraft(getPass)) {
+        assertGetPassSentBackCreator(getPass, user.id);
+        assertConcurrencyVersion(expectedVersion, getPass.concurrencyVersion, {
+            required: true,
+            audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: user.id },
+        });
+        const updated = await prisma.getPass.update({
+            where: { id },
+            data: bumpConcurrencyUpdate({
+                status: 'REJECTED',
+                rejectionReason: reason,
+            }),
+        });
+        await logAction({
+            tenantId,
+            entityType: EntityType.GET_PASS,
+            entityId: id,
+            action: 'REJECT',
+            changedBy: user.id,
+            note: 'GET_PASS_CREATOR_REJECT_RETURNED',
+        });
+        return updated;
     }
 
-    assertCanActOnStatus(getPass.status, user.role);
+    const wf = await resolveGetPassWorkflowContext(getPass);
+    const pendingStatuses = wf.pendingStatuses.length ? wf.pendingStatuses : PENDING_APPROVAL_STATUSES;
+    if (!pendingStatuses.includes(getPass.status)) {
+        throw new Error('Get Pass is not pending any approval');
+    }
+    assertConcurrencyVersion(expectedVersion, getPass.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: user.id },
+    });
+
+    assertCanActOnStatus(
+        getPass.status,
+        user,
+        buildActOnStatusOptions(getPass.status, getPass, wf, {
+            isInternalTransfer: getPass.isInternalTransfer,
+        }),
+    );
 
     const updated = await prisma.getPass.update({
         where: { id },
-        data: {
+        data: bumpConcurrencyUpdate({
             status: 'REJECTED',
             rejectionReason: reason,
-            deptApprovedBy: null,
-            deptApprovedAt: null,
-            costControlApprovedBy: null,
-            costControlApprovedAt: null,
-            financeApprovedBy: null,
-            financeApprovedAt: null,
-            gmApprovedBy: null,
-            gmApprovedAt: null,
-            securityApprovedBy: null,
-            securityApprovedAt: null,
-            destinationSecurityApprovedBy: null,
-            destinationSecurityApprovedAt: null,
-            destinationSecurityExitBy: null,
-            destinationSecurityExitAt: null,
-        }
+        }),
     });
     await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'REJECT', changedBy: user.id });
     return updated;
 };
 
+/**
+ * Send Back — prior chain targets only (Creator + steps before current).
+ * @param {number|null} [targetStepNumber] — 0 = creator; omit = one-step default (step1→creator)
+ */
+const sendBackGetPass = async (id, tenantId, user, reason, expectedVersion = null, targetStepNumber = null) => {
+    const trimmedReason = normalizeReason(reason);
+
+    await assertActiveAssignmentForMutation(user, tenantId, 'send-back');
+
+    const getPass = await prisma.getPass.findFirst({
+        where: { id, tenantId },
+        include: {
+            createdByUser: true,
+            deptApprover: true,
+            costControlApprover: true,
+            financeApprover: true,
+            gmApprover: true,
+            securityApprover: true,
+            approvalRequest: {
+                include: {
+                    steps: {
+                        orderBy: { stepNumber: 'asc' },
+                        include: { requiredRole: { select: { code: true } } },
+                    },
+                },
+            },
+        },
+    });
+    if (!getPass) throw passNotFoundErr();
+
+    const wf = await resolveGetPassWorkflowContext(getPass);
+    const pendingStatuses = wf.pendingStatuses.length ? wf.pendingStatuses : PENDING_APPROVAL_STATUSES;
+    if (!pendingStatuses.includes(getPass.status)) {
+        throw Object.assign(new Error('Get Pass cannot be sent back from its current status.'), { status: 422 });
+    }
+
+    assertConcurrencyVersion(expectedVersion, getPass.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: user.id },
+    });
+
+    assertCanActOnStatus(
+        getPass.status,
+        user,
+        buildActOnStatusOptions(getPass.status, getPass, wf, {
+            isInternalTransfer: getPass.isInternalTransfer,
+        }),
+    );
+
+    const chain = getPass.accWorkflowVersionId
+        ? await resolveWorkflowByVersionId(getPass.accWorkflowVersionId)
+        : await resolveWorkflowForDocument({ moduleKey: 'GET_PASS', tenantId });
+    const currentStepNo = getPassCurrentStepFromStatus(chain, getPass.status);
+    const allowedTargets = buildGetPassSendBackTargets(getPass, chain);
+
+    let targetStepNo;
+    if (targetStepNumber == null || targetStepNumber === '') {
+        // Backward-compatible default: one step back; never park on first approval alone.
+        targetStepNo = currentStepNo <= 1 ? 0 : currentStepNo - 1;
+        if (targetStepNo === 1) targetStepNo = 0;
+    } else {
+        targetStepNo = Number(targetStepNumber);
+        if (!Number.isInteger(targetStepNo) || !allowedTargets.some((t) => t.stepNumber === targetStepNo)) {
+            throw Object.assign(new Error('Send Back target must be a prior workflow participant.'), {
+                status: 422,
+                code: 'GET_PASS_SEND_BACK_INVALID_TARGET',
+            });
+        }
+    }
+
+    const nextStatus = getPassStatusForPendingStep(chain, targetStepNo);
+    const toCreator = targetStepNo === 0;
+    const notesAppend = toCreator
+        ? getPass.notes
+            ? `${getPass.notes}\n${SEND_BACK_NOTES_MARKER} ${trimmedReason}`
+            : `${SEND_BACK_NOTES_MARKER} ${trimmedReason}`
+        : getPass.notes;
+    const stampClear = stampClearDataForSendBackTarget(chain, targetStepNo);
+
+    await prisma.$transaction(async (tx) => {
+        let approvalRequest = await ensureGetPassApprovalRequestInTx(tx, getPass, tenantId);
+        approvalRequest = await syncGetPassApprovalRequestToDocumentInTx(
+            tx,
+            approvalRequest,
+            getPass,
+            chain,
+        );
+        const sourceStepNo = Number(approvalRequest.currentStep);
+        const guarded = await tx.getPass.updateMany({
+            where: { id, tenantId, status: getPass.status, concurrencyVersion: getPass.concurrencyVersion },
+            data: bumpConcurrencyUpdate({
+                status: nextStatus,
+                rejectionReason: null,
+                ...(notesAppend !== getPass.notes ? { notes: notesAppend } : {}),
+                ...stampClear,
+            }),
+        });
+        if (guarded.count === 0) {
+            throw concurrencyConflictError();
+        }
+        await executeWorkflowSendBackInTx(tx, {
+            approvalRequest,
+            sourceStepNumber: sourceStepNo,
+            forceTargetStepNumber: targetStepNo,
+            reason: trimmedReason,
+            userId: user.id,
+            tenantId,
+            entityType: EntityType.GET_PASS,
+            entityId: id,
+            documentStatusBefore: getPass.status,
+            documentStatusAfter: nextStatus,
+        });
+    });
+
+    return getGetPassById(id, tenantId);
+};
+
+
+const flushGetPassReturnDispositionBatchInTx = (tx, batch, params) =>
+    flushGetPassReturnDispositionBatch(tx, batch, {
+        ...params,
+        generateDocNumber,
+        DocPrefix,
+        createMovementApprovalRequest,
+        persistBreakagePhotos,
+    });
 
 /**
  * Parse return line payload: supports qtyGood + lostQty | damagedQty, or legacy qtyReturned + isLost/isDamaged.
@@ -1985,29 +2604,63 @@ const parseReturnQuantities = (input, remainingQty, itemName) => {
         else qtyGood = legacyTotal;
     }
 
-    if (qtyLost > 0 && qtyDamaged > 0) {
-        throw new Error(`Cannot report both lost and damaged quantities for ${itemName}`);
-    }
     const total = qtyGood + qtyLost + qtyDamaged;
     if (total <= 0) return null;
     if (total > remainingQty + 1e-9) {
-        throw new Error(`Cannot return more than remaining qty for ${itemName}`);
+        throw Object.assign(
+            new Error(
+                `Good plus lost/damaged quantity exceeds remaining return qty for ${itemName} (max ${remainingQty}).`,
+            ),
+            { statusCode: 422 },
+        );
+    }
+    for (const [field, qty] of [
+        ['qtyGood', qtyGood],
+        ['lostQty', qtyLost],
+        ['damagedQty', qtyDamaged],
+    ]) {
+        if (qty > 0) {
+            assertIntegerQuantity({
+                qty,
+                field,
+                message: 'Quantity must be a whole number (integer). Fractional quantities are not allowed.',
+                details: { itemName, field, qty },
+            });
+        }
     }
     return { qtyGood, qtyLost, qtyDamaged, total };
 };
 
 /**
  * Process incoming returned items for Temporary / Catering passes
+ * @param {object} [options]
+ * @param {Array<Array>} [options.linePhotosByIndex] — multer files per payload line (Damaged photos → BRK)
+ * @param {object} [options.user] — actor for photo upload metadata
  */
-const processReturns = async (id, tenantId, userId, linesPayload, notes) => {
+const processReturns = async (id, tenantId, userId, linesPayload, notes, options = {}) => {
     const getPass = await getIssuerGetPassById(id, tenantId);
+    assertNotPendingForceCloseSettlement(getPass);
+    if (getPass.isInternalTransfer === true) {
+        throw Object.assign(
+            new Error(
+                'Process return is not available for inter-hotel transfers. Complete the internal return logistics flow instead (ship back -> gate arrival -> department acceptance).',
+            ),
+            { statusCode: 400 },
+        );
+    }
     if (!['OUT', 'PARTIALLY_RETURNED'].includes(getPass.status)) throw new Error('Get Pass is not currently checked out');
     if (getPass.transferType === 'PERMANENT') throw new Error('Cannot return items on a PERMANENT pass');
 
-    await checkPeriodLock(tenantId, new Date());
+    await validatePostingDate(tenantId, new Date());
+
+    const linePhotosByIndex = Array.isArray(options.linePhotosByIndex) ? options.linePhotosByIndex : [];
+    const actorUser = options.user || null;
 
     const result = await prisma.$transaction(async (tx) => {
-        for (const input of linesPayload) {
+        const now = new Date();
+        const dispositionBatch = createGetPassReturnDispositionBatch();
+        for (let payloadIndex = 0; payloadIndex < linesPayload.length; payloadIndex += 1) {
+            const input = linesPayload[payloadIndex];
             const line = await tx.getPassLine.findFirst({
                 where: { id: input.lineId, getPassId: id },
                 include: { item: true },
@@ -2022,6 +2675,30 @@ const processReturns = async (id, tenantId, userId, linesPayload, notes) => {
             const { qtyGood, qtyLost, qtyDamaged, total } = parsed;
             const isLost = qtyLost > 0;
             const isDamaged = qtyDamaged > 0;
+
+            const claimedRows = await tx.$queryRaw`
+                UPDATE "get_pass_lines"
+                SET "qtyReturned" = "qtyReturned" + ${total},
+                    "returnedGoodQty" = "returnedGoodQty" + ${qtyGood},
+                    "returnedDamagedQty" = "returnedDamagedQty" + ${qtyDamaged},
+                    "returnedLostQty" = "returnedLostQty" + ${qtyLost}
+                WHERE "id" = ${line.id}::uuid
+                  AND "getPassId" = ${id}::uuid
+                  AND "qty" - "qtyReturned" >= ${total}
+                RETURNING
+                    "qty",
+                    "qtyReturned",
+                    "returnedGoodQty",
+                    "returnedDamagedQty",
+                    "returnedLostQty"
+            `;
+            const claimedLine = claimedRows[0];
+            if (!claimedLine) {
+                throw Object.assign(
+                    new Error('Return quantity changed while this request was being processed. Reload and try again.'),
+                    { statusCode: 409, code: 'GET_PASS_RETURN_QUANTITY_CHANGED' },
+                );
+            }
 
             const returnRecord = await tx.getPassReturn.create({
                 data: {
@@ -2044,83 +2721,54 @@ const processReturns = async (id, tenantId, userId, linesPayload, notes) => {
                 tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: line.locationId },
             };
 
-            // Blocking transfer checkout only increased qtyBlocked; qtyOnHand was not reduced.
-            // Do not increment qtyOnHand for good qty (that double-counts). Release blocked by the
-            // full returned shipment; reduce on-hand by lost+damaged (not sellable until GM path).
+            // Good qty: release custody block → available again (immediate).
+            // Damaged/Lost: keep qtyBlocked until BRK/LST GM posts (same as internal write-off gate).
             if (isBlockingTransferType(getPass.transferType) && total > 0) {
-                const row = await tx.stockBalance.findUnique({ where: stockKey });
-                const blocked = row ? Number(row.qtyBlocked || 0) : 0;
-                if (!row || blocked + 1e-9 < total) {
-                    throw Object.assign(
-                        new Error(`Insufficient blocked quantity for ${itemName} (get pass return).`),
-                        { statusCode: 400 },
-                    );
-                }
-                const nonGood = qtyLost + qtyDamaged;
-                await tx.stockBalance.update({
-                    where: stockKey,
-                    data: {
-                        qtyBlocked: { decrement: total },
-                        ...(nonGood > 0 ? { qtyOnHand: { decrement: nonGood } } : {}),
-                    },
-                });
                 if (qtyGood > 0) {
-                    await tx.inventoryLedger.create({
-                        data: {
-                            tenantId,
-                            itemId: line.itemId,
-                            locationId: line.locationId,
-                            movementType: 'RETURN',
-                            qtyIn: qtyGood,
-                            qtyOut: 0,
-                            unitCost: wac,
-                            totalValue: qtyGood * wac,
-                            referenceType: 'GET_PASS_RETURN',
-                            referenceId: returnRecord.id,
-                            referenceNo: getPass.passNo,
-                            createdBy: userId,
-                            notes: `Get pass return — good qty back to available (${qtyGood}).`,
-                        },
+                    await postingEngine.releaseBlockedOnReturn(tx, {
+                        stockKey,
+                        releaseQty: qtyGood,
+                        nonGoodQty: 0,
+                    });
+                    await postingEngine.postReturnGoodLedger(tx, {
+                        tenantId,
+                        itemId: line.itemId,
+                        locationId: line.locationId,
+                        goodQty: qtyGood,
+                        wac,
+                        referenceId: returnRecord.id,
+                        referenceNo: getPass.passNo,
+                        userId,
+                        notes: `Get pass return — good qty back to available (${qtyGood}).`,
+                        affectsValuation: false,
                     });
                 }
-            } else if (total > 0) {
-                const postGoodToStock = async (qty) => {
-                    if (qty <= 0) return;
-                    await tx.inventoryLedger.create({
-                        data: {
-                            tenantId,
-                            itemId: line.itemId,
-                            locationId: line.locationId,
-                            movementType: 'RETURN',
-                            qtyIn: qty,
-                            qtyOut: 0,
-                            unitCost: wac,
-                            totalValue: qty * wac,
-                            referenceType: 'GET_PASS_RETURN',
-                            referenceId: returnRecord.id,
-                            referenceNo: getPass.passNo,
-                            createdBy: userId,
-                        },
-                    });
-                    const currentStock = await tx.stockBalance.findUnique({
-                        where: stockKey,
-                    });
-                    const curQty = currentStock ? Number(currentStock.qtyOnHand) : 0;
-                    const curWac = currentStock ? Number(currentStock.wacUnitCost) : 0;
-                    const totalValBefore = curQty * curWac;
-                    const newVal = totalValBefore + qty * wac;
-                    const newWac = curQty + qty > 0 ? newVal / (curQty + qty) : 0;
-                    await tx.stockBalance.upsert({
-                        where: stockKey,
-                        update: { qtyOnHand: { increment: qty }, wacUnitCost: newWac },
-                        create: { tenantId, itemId: line.itemId, locationId: line.locationId, qtyOnHand: qty, wacUnitCost: wac },
-                    });
-                };
-                await postGoodToStock(qtyGood);
+            } else if (qtyGood > 0) {
+                await postingEngine.postReturnGoodWithStockIncrease(tx, {
+                    tenantId,
+                    itemId: line.itemId,
+                    locationId: line.locationId,
+                    qtyGood,
+                    wac,
+                    referenceId: returnRecord.id,
+                    referenceNo: getPass.passNo,
+                    userId,
+                });
             }
 
-            const newReturned = Number(line.qtyReturned) + total;
-            const lineQty = Number(line.qty);
+            if (qtyLost > 0 || qtyDamaged > 0) {
+                queueGetPassReturnDispositionLine(dispositionBatch, {
+                    line,
+                    damagedQty: qtyDamaged,
+                    lostQty: qtyLost,
+                    accountability: input.accountability || input.lostAccountability || input.damagedAccountability,
+                    managerNotes: input.notes || notes || null,
+                    photoFiles: qtyDamaged > 0 ? linePhotosByIndex[payloadIndex] || [] : [],
+                });
+            }
+
+            const newReturned = Number(claimedLine.qtyReturned);
+            const lineQty = Number(claimedLine.qty);
             let lineStatus = 'PARTIALLY_RETURNED';
             if (newReturned >= lineQty - 1e-9) {
                 const agg = await tx.getPassReturn.aggregate({
@@ -2136,9 +2784,21 @@ const processReturns = async (id, tenantId, userId, linesPayload, notes) => {
 
             await tx.getPassLine.update({
                 where: { id: line.id },
-                data: { qtyReturned: newReturned, status: lineStatus },
+                data: {
+                    status: lineStatus,
+                },
             });
         }
+
+        await flushGetPassReturnDispositionBatchInTx(tx, dispositionBatch, {
+            tenantId,
+            getPassId: id,
+            passNo: getPass.passNo,
+            userId,
+            now,
+            firstStepComment: 'Registered via get pass return',
+            user: actorUser,
+        });
 
         const allLines = await tx.getPassLine.findMany({ where: { getPassId: id } });
         const allReturned = allLines.every((l) => Number(l.qtyReturned) >= Number(l.qty));
@@ -2148,42 +2808,480 @@ const processReturns = async (id, tenantId, userId, linesPayload, notes) => {
         if (allReturned) newStatus = 'RETURNED';
         else if (someReturned) newStatus = 'PARTIALLY_RETURNED';
 
-        if (notes && notes.trim() !== '') {
-            await tx.getPass.update({
-                where: { id },
-                data: { notes: `${getPass.notes || ''}\nReturn Note: ${notes}` },
-            });
-        }
-
         if (newStatus !== getPass.status) {
             await tx.getPass.update({
                 where: { id },
                 data: { status: newStatus },
             });
         }
+        // Return notes stay on audit/evidence — do not append to Get Pass.notes.
+        return { newStatus };
     });
 
-    await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'PROCESS_RETURN', changedBy: userId });
+    await logAction({
+        tenantId,
+        entityType: EntityType.GET_PASS,
+        entityId: id,
+        action: 'UPDATE',
+        changedBy: userId,
+        note: 'GET_PASS_PROCESS_RETURN',
+        afterValue: {
+            status: result?.newStatus || null,
+            ...(notes && String(notes).trim() ? { returnNotes: String(notes).trim() } : {}),
+        },
+    });
     return getGetPassById(id, tenantId);
 };
 
+/**
+ * FC-02 Simple Close — outstanding must be zero; no inventory posting.
+ */
 const closeGetPass = async (id, tenantId, userId) => {
-    const getPass = await prisma.getPass.findFirst({ where: { id, tenantId } });
-    if (!getPass) throw new Error('Get Pass not found');
-    if (!['OUT', 'PARTIALLY_RETURNED', 'RETURNED'].includes(getPass.status)) {
-        throw new Error('Can only close active Get Passes.');
-    }
+    const getPass = await getIssuerGetPassById(id, tenantId);
+    assertNotPendingForceCloseSettlement(getPass);
+    assertForceCloseEligible(getPass, { tenantId });
+    assertSimpleCloseOutstandingZero(getPass);
 
-    const updated = await prisma.getPass.update({
+    await prisma.getPass.update({
         where: { id },
-        data: { status: 'CLOSED', closedBy: userId, closedAt: new Date() }
+        data: {
+            status: 'CLOSED',
+            closedBy: userId,
+            closedAt: new Date(),
+            closedVia: 'SIMPLE',
+            closeReason: null,
+        },
     });
 
-    await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'CLOSE', changedBy: userId });
-    return updated;
+    await logAction({
+        tenantId,
+        entityType: EntityType.GET_PASS,
+        entityId: id,
+        action: 'UPDATE',
+        changedBy: userId,
+        note: 'GET_PASS_CLOSE',
+    });
+    return getGetPassById(id, tenantId);
+};
+
+const parseSettlementPayload = (raw) => {
+    if (!raw || typeof raw !== 'object') return null;
+    const lines = Array.isArray(raw.lines) ? raw.lines : [];
+    return {
+        settlementCycleId: raw.settlementCycleId ?? null,
+        closeReason: raw.closeReason ?? null,
+        accountability: raw.accountability ?? null,
+        lines: lines.map((row) => ({
+            lineId: row.lineId,
+            disposition: String(row.disposition ?? '').toUpperCase(),
+            accountability: row.accountability ?? null,
+        })),
+    };
+};
+
+const assertSettlementBlockedQty = async (tx, getPass, tenantId, settlementLines) => {
+    if (!isBlockingTransferType(getPass.transferType)) return;
+    for (const row of settlementLines) {
+        const line = (getPass.lines ?? []).find((l) => l.id === row.lineId);
+        if (!line) continue;
+        const outstanding = lineOutstandingQty(line);
+        if (outstanding <= 1e-9) continue;
+        const stockKey = {
+            tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: line.locationId },
+        };
+        const stock = await tx.stockBalance.findUnique({ where: stockKey });
+        const blocked = Number(stock?.qtyBlocked || 0);
+        if (blocked + 1e-9 < outstanding) {
+            throw Object.assign(new Error('Insufficient blocked quantity for force-close settlement.'), {
+                statusCode: 400,
+            });
+        }
+    }
+};
+
+/**
+ * Apply one settlement line posting — mirrors processReturns for a single full-outstanding disposition.
+ */
+const applySettlementLinePosting = async (
+    tx,
+    {
+        getPass,
+        id,
+        tenantId,
+        userId,
+        line,
+        row,
+        now,
+        closeReason,
+        dispositionBatch,
+        execution,
+    },
+) => {
+    const outstanding = lineOutstandingQty(line);
+    const disposition = row.disposition;
+    let qtyGood = 0;
+    let qtyLost = 0;
+    let qtyDamaged = 0;
+    if (disposition === 'GOOD') qtyGood = outstanding;
+    else if (disposition === 'DAMAGED') qtyDamaged = outstanding;
+    else qtyLost = outstanding;
+
+    const total = outstanding;
+    const isLost = qtyLost > 0;
+    const isDamaged = qtyDamaged > 0;
+
+    const returnRecord = await tx.getPassReturn.create({
+        data: {
+            getPassLineId: line.id,
+            qtyReturned: total,
+            qtyGood,
+            qtyLost,
+            qtyDamaged,
+            isLost,
+            isDamaged,
+            accountability: row.accountability,
+            notes: `Force-close settlement (${disposition})`,
+            registeredBy: userId,
+        },
+    });
+
+    const wac = Number(line.unitCost);
+    const stockKey = {
+        tenantId_itemId_locationId: { tenantId, itemId: line.itemId, locationId: line.locationId },
+    };
+
+    if (isBlockingTransferType(getPass.transferType) && total > 0) {
+        // Good only releases custody immediately; Damaged/Lost stay blocked until GM posts BRK/LST.
+        if (qtyGood > 0) {
+            await postingEngine.releaseBlockedOnReturn(tx, {
+                stockKey,
+                releaseQty: qtyGood,
+                nonGoodQty: 0,
+            });
+            const effectKey = `${execution.executionKey}|${line.id}|GOOD_RETURN`;
+            const ledger = await postingEngine.postReturnGoodLedger(tx, {
+                tenantId,
+                itemId: line.itemId,
+                locationId: line.locationId,
+                goodQty: qtyGood,
+                wac,
+                referenceId: returnRecord.id,
+                referenceNo: getPass.passNo,
+                userId,
+                notes: `Force-close settlement — good qty back to available (${qtyGood}).`,
+                affectsValuation: false,
+                postingEffectKey: effectKey,
+            });
+            await tx.postingEffect.create({
+                data: {
+                    tenantId,
+                    executionId: execution.id,
+                    effectKey,
+                    sourceLineId: line.id,
+                    effectType: 'GOOD_RETURN',
+                    ledgerId: ledger.id,
+                },
+            });
+        }
+    } else if (qtyGood > 0) {
+        await postingEngine.postReturnGoodWithStockIncrease(tx, {
+            tenantId,
+            itemId: line.itemId,
+            locationId: line.locationId,
+            qtyGood,
+            wac,
+            referenceId: returnRecord.id,
+            referenceNo: getPass.passNo,
+            userId,
+        });
+    }
+
+    if (qtyLost > 0 || qtyDamaged > 0) {
+        queueGetPassReturnDispositionLine(dispositionBatch, {
+            line,
+            damagedQty: qtyDamaged,
+            lostQty: qtyLost,
+            accountability: row.accountability,
+            managerNotes: closeReason || null,
+        });
+    }
+
+    const newReturned = Number(line.qtyReturned) + total;
+    const lineQty = Number(line.qty);
+    let lineStatus = 'PARTIALLY_RETURNED';
+    if (newReturned >= lineQty - 1e-9) {
+        const agg = await tx.getPassReturn.aggregate({
+            where: { getPassLineId: line.id },
+            _sum: { qtyGood: true, qtyLost: true, qtyDamaged: true },
+        });
+        const sumG = Number(agg._sum.qtyGood || 0);
+        const sumL = Number(agg._sum.qtyLost || 0);
+        const sumD = Number(agg._sum.qtyDamaged || 0);
+        const allLost = sumL >= lineQty - 1e-9 && sumG < 1e-9 && sumD < 1e-9;
+        lineStatus = allLost ? 'LOST' : 'RETURNED';
+    }
+
+    await tx.getPassLine.update({
+        where: { id: line.id },
+        data: {
+            qtyReturned: newReturned,
+            status: lineStatus,
+            returnedGoodQty: { increment: qtyGood },
+            returnedDamagedQty: { increment: qtyDamaged },
+            returnedLostQty: { increment: qtyLost },
+        },
+    });
+};
+
+const submitForceCloseSettlement = async (id, tenantId, userId, payload) => {
+    const getPass = await getIssuerGetPassById(id, tenantId);
+    assertSettlementSubmitEligible(getPass, { tenantId });
+    const validated = validateSettlementPayload(getPass, payload);
+
+    const settlementCycleId = crypto.randomUUID();
+    const submittedAt = new Date();
+    const settlementPayload = {
+        settlementCycleId,
+        closeReason: validated.closeReason,
+        accountability: validated.accountability,
+        lines: validated.lines.map(({ lineId, disposition, accountability }) => ({
+            lineId,
+            disposition,
+            accountability,
+        })),
+    };
+
+    await prisma.getPass.update({
+        where: { id },
+        data: {
+            status: 'PENDING_FORCE_CLOSE_SETTLEMENT',
+            settlementPriorStatus: getPass.status,
+            settlementPayload,
+            settlementSubmittedBy: userId,
+            settlementSubmittedAt: submittedAt,
+            closeReason: validated.closeReason,
+            settlementRejectionReason: null,
+            settlementRejectedBy: null,
+            settlementRejectedAt: null,
+            settlementCancelledBy: null,
+            settlementCancelledAt: null,
+        },
+    });
+
+    await logGovernedEvent({
+        tenantId,
+        entityType: EntityType.GET_PASS,
+        entityId: id,
+        action: 'UPDATE',
+        changedBy: userId,
+        eventType: 'GET_PASS_FORCE_CLOSE_SUBMITTED',
+        note: JSON.stringify({
+            lineCount: validated.lines.length,
+            accountability: validated.accountability,
+        }),
+        afterValue: { status: 'PENDING_FORCE_CLOSE_SETTLEMENT', settlementPayload },
+    });
+
+    return getGetPassById(id, tenantId);
+};
+
+const approveForceCloseSettlement = async (id, tenantId, userId) => {
+    const getPass = await getIssuerGetPassById(id, tenantId);
+    if (getPass.status !== 'PENDING_FORCE_CLOSE_SETTLEMENT') {
+        throw Object.assign(new Error('No pending force-close settlement to approve.'), { statusCode: 400 });
+    }
+    const settlement = parseSettlementPayload(getPass.settlementPayload);
+    if (!settlement?.lines?.length) {
+        throw Object.assign(new Error('Settlement payload is missing or invalid.'), { statusCode: 400 });
+    }
+
+    assertForceCloseEligible(
+        { ...getPass, status: getPass.settlementPriorStatus || 'OUT' },
+        { tenantId },
+    );
+    if (!hasOutstandingQty(getPass)) {
+        throw Object.assign(new Error('No outstanding quantities remain on this pass.'), { statusCode: 400 });
+    }
+
+    const now = new Date();
+    await validatePostingDate(tenantId, now);
+    const settlementCycleId =
+        settlement.settlementCycleId ||
+        (getPass.settlementSubmittedAt ? new Date(getPass.settlementSubmittedAt).toISOString() : null);
+    if (!settlementCycleId) {
+        throw Object.assign(
+            new Error('Force-close settlement cycle identity is missing. Cancel and resubmit the settlement.'),
+            { statusCode: 409, code: 'FORCE_CLOSE_SETTLEMENT_CYCLE_REQUIRED' },
+        );
+    }
+    const executionKey = `v1|GET_PASS_FORCE_CLOSE|${tenantId}|${id}|${settlementCycleId}`;
+
+    await prisma.$transaction(async (tx) => {
+        let execution;
+        try {
+            execution = await tx.postingExecution.create({
+                data: {
+                    tenantId,
+                    executionKey,
+                    sourceType: 'GET_PASS_FORCE_CLOSE',
+                    sourceId: id,
+                    status: 'IN_PROGRESS',
+                },
+            });
+        } catch (error) {
+            const target = Array.isArray(error?.meta?.target)
+                ? error.meta.target.join(',')
+                : String(error?.meta?.target || '');
+            if (error?.code === 'P2002' && target.includes('executionKey')) {
+                throw Object.assign(
+                    new Error('This force-close settlement has already been executed.'),
+                    {
+                        statusCode: 409,
+                        code: 'POSTING_EXECUTION_ALREADY_APPLIED',
+                        details: { executionKey },
+                    },
+                );
+            }
+            throw error;
+        }
+        await assertSettlementBlockedQty(tx, getPass, tenantId, settlement.lines);
+
+        const dispositionBatch = createGetPassReturnDispositionBatch();
+        for (const row of settlement.lines) {
+            const line = await tx.getPassLine.findFirst({
+                where: { id: row.lineId, getPassId: id },
+                include: { item: true },
+            });
+            if (!line) {
+                throw Object.assign(new Error(`Settlement line ${row.lineId} not found.`), { statusCode: 400 });
+            }
+            const outstanding = lineOutstandingQty(line);
+            if (outstanding <= 1e-9) continue;
+
+            await applySettlementLinePosting(tx, {
+                getPass,
+                id,
+                tenantId,
+                userId,
+                line,
+                row,
+                now,
+                closeReason: settlement.closeReason,
+                dispositionBatch,
+                execution,
+            });
+        }
+
+        await flushGetPassReturnDispositionBatchInTx(tx, dispositionBatch, {
+            tenantId,
+            getPassId: id,
+            passNo: getPass.passNo,
+            userId,
+            now,
+            firstStepComment: 'Registered via force-close settlement',
+        });
+
+        await tx.getPass.update({
+            where: { id },
+            data: {
+                status: 'CLOSED',
+                closedVia: 'FORCE_SETTLEMENT',
+                closedBy: userId,
+                closedAt: now,
+                settlementApprovedBy: userId,
+                settlementApprovedAt: now,
+            },
+        });
+        await tx.postingExecution.update({
+            where: { id: execution.id },
+            data: { status: 'COMPLETED', completedAt: now },
+        });
+    });
+
+    await logGovernedEvent({
+        tenantId,
+        entityType: EntityType.GET_PASS,
+        entityId: id,
+        action: 'UPDATE',
+        changedBy: userId,
+        eventType: 'GET_PASS_FORCE_CLOSE_APPROVED',
+        note: JSON.stringify({
+            lineCount: settlement.lines.length,
+            closedVia: 'FORCE_SETTLEMENT',
+        }),
+        afterValue: { status: 'CLOSED', closedVia: 'FORCE_SETTLEMENT' },
+    });
+
+    return getGetPassById(id, tenantId);
+};
+
+const rejectForceCloseSettlement = async (id, tenantId, userId, rejectionReason) => {
+    const reason = String(rejectionReason ?? '').trim();
+    if (!reason) {
+        throw Object.assign(new Error('settlementRejectionReason is required.'), { statusCode: 400 });
+    }
+
+    const getPass = await getIssuerGetPassById(id, tenantId);
+    if (getPass.status !== 'PENDING_FORCE_CLOSE_SETTLEMENT') {
+        throw Object.assign(new Error('No pending force-close settlement to reject.'), { statusCode: 400 });
+    }
+
+    const priorStatus = getPass.settlementPriorStatus || 'OUT';
+    await prisma.getPass.update({
+        where: { id },
+        data: {
+            status: priorStatus,
+            settlementRejectionReason: reason,
+            settlementRejectedBy: userId,
+            settlementRejectedAt: new Date(),
+        },
+    });
+
+    await logGovernedEvent({
+        tenantId,
+        entityType: EntityType.GET_PASS,
+        entityId: id,
+        action: 'UPDATE',
+        changedBy: userId,
+        eventType: 'GET_PASS_FORCE_CLOSE_REJECTED',
+        note: reason,
+        afterValue: { status: priorStatus },
+    });
+
+    return getGetPassById(id, tenantId);
+};
+
+const cancelForceCloseSettlement = async (id, tenantId, userId) => {
+    const getPass = await getIssuerGetPassById(id, tenantId);
+    if (getPass.status !== 'PENDING_FORCE_CLOSE_SETTLEMENT') {
+        throw Object.assign(new Error('No pending force-close settlement to cancel.'), { statusCode: 400 });
+    }
+
+    const priorStatus = getPass.settlementPriorStatus || 'OUT';
+    await prisma.getPass.update({
+        where: { id },
+        data: {
+            status: priorStatus,
+            settlementCancelledBy: userId,
+            settlementCancelledAt: new Date(),
+        },
+    });
+
+    await logGovernedEvent({
+        tenantId,
+        entityType: EntityType.GET_PASS,
+        entityId: id,
+        action: 'UPDATE',
+        changedBy: userId,
+        eventType: 'GET_PASS_FORCE_CLOSE_CANCELLED',
+        afterValue: { status: priorStatus },
+    });
+
+    return getGetPassById(id, tenantId);
 };
 
 module.exports = {
+    resolveOrgWideGetPassListContext,
     createGetPass,
     getGetPasses,
     getIncomingGetPasses,
@@ -2202,6 +3300,12 @@ module.exports = {
     submitGetPass,
     approveGetPass,
     rejectGetPass,
+    sendBackGetPass,
     processReturns,
     closeGetPass,
+    submitForceCloseSettlement,
+    approveForceCloseSettlement,
+    rejectForceCloseSettlement,
+    cancelForceCloseSettlement,
+    assertForceCloseEligible,
 };

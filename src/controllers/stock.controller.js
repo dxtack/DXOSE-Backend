@@ -4,11 +4,16 @@ const { success } = require('../utils/response');
 // GET /api/stock-balances
 const getStockBalances = async (req, res, next) => {
     try {
-        const result = await stockService.getStockBalances(req.user.tenantId, req.query);
-        return success(res, result.balances, 'Stock balances fetched successfully', 200, {
-            total: result.total,
+        const result = await stockService.getStockBalances(req.user.tenantId, req.query, req.user);
+        const { balances, total, scope, scopeApplied, scopeLabel, reason } = result;
+        return success(res, balances, 'Stock balances fetched successfully', 200, {
+            total,
             skip: parseInt(req.query.skip) || 0,
             take: parseInt(req.query.take) || 50,
+            scope,
+            scopeApplied,
+            scopeLabel,
+            reason,
         });
     } catch (err) { next(err); }
 };
@@ -16,7 +21,7 @@ const getStockBalances = async (req, res, next) => {
 // GET /api/stock-balances/summary
 const getStockSummary = async (req, res, next) => {
     try {
-        const result = await stockService.getStockSummary(req.user.tenantId, req.query);
+        const result = await stockService.getStockSummary(req.user.tenantId, req.query, req.user);
         return success(res, result, 'Stock summary fetched successfully');
     } catch (err) { next(err); }
 };
@@ -24,7 +29,7 @@ const getStockSummary = async (req, res, next) => {
 // GET /api/stock-balances/export
 const exportStockBalances = async (req, res, next) => {
     try {
-        const wb = await stockService.exportStockBalances(req.user.tenantId, req.query);
+        const wb = await stockService.exportStockBalances(req.user.tenantId, req.query, req.user);
         const buf = await wb.xlsx.writeBuffer();
         const now = new Date().toISOString().split('T')[0];
         res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');

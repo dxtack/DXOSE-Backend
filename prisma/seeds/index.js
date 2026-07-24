@@ -38,7 +38,7 @@ async function main() {
     const passwordHash = await bcrypt.hash('Admin@123', 12);
 
     const users = [
-        { email: 'admin@grandhorizon.com', firstName: 'Sarah', lastName: 'Ahmed', role: 'ADMIN' },
+        { email: 'admin@grandhorizon.com', firstName: 'Sarah', lastName: 'Ahmed', role: 'GENERAL_MANAGER' },
         { email: 'store@grandhorizon.com', firstName: 'Khalid', lastName: 'Hassan', role: 'STOREKEEPER' },
         { email: 'fb.manager@grandhorizon.com', firstName: 'Layla', lastName: 'Mansour', role: 'DEPT_MANAGER', department: 'F&B' },
         { email: 'hk.manager@grandhorizon.com', firstName: 'Omar', lastName: 'Al-Said', role: 'DEPT_MANAGER', department: 'Housekeeping' },

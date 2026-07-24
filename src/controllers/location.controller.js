@@ -22,7 +22,7 @@ const createLocation = async (req, res, next) => {
  */
 const getLocations = async (req, res, next) => {
     try {
-        const result = await locationService.getLocations(req.user.tenantId, req.query);
+        const result = await locationService.getLocations(req.user.tenantId, req.query, req.user);
         if (result.slim) {
             return success(res, result.locations, 'Locations fetched successfully', 200);
         }
@@ -43,7 +43,7 @@ const getLocations = async (req, res, next) => {
  */
 const getLocation = async (req, res, next) => {
     try {
-        const location = await locationService.getLocationById(req.params.id, req.user.tenantId);
+        const location = await locationService.getLocationById(req.params.id, req.user.tenantId, req.user);
         return success(res, location, 'Location fetched successfully');
     } catch (error) {
         next(error);

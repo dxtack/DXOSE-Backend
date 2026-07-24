@@ -5,9 +5,11 @@ const itemController = require('../controllers/item.controller');
 const { authenticate: protect } = require('../middleware/authenticate');
 const { requireAnyPermission, requirePermission } = require('../middleware/authorize');
 const { uploadImage, uploadImport, uploadZip } = require('../middleware/upload.middleware');
+const { requireBranchPropertyForMutation } = require('../middleware/requireBranchPropertyContext');
 
 // All item routes require authentication
 router.use(protect);
+router.use(requireBranchPropertyForMutation);
 
 // Reject non-UUID :id before Prisma (avoids P2000 on e.g. GET /items/check-requirements if routed as /:id)
 router.param('id', (req, res, next, id) => {
@@ -82,15 +84,44 @@ router.post(
 
 /**
  * @openapi
+ * /items/bulk-upload-images/preview:
+ *   post:
+ *     tags: [Items]
+ *     summary: Preview a ZIP of item images matched by Item.code
+ *     deprecated: false
+ *     security: [ { bearerAuth: [] } ]
+ */
+router.post(
+    '/bulk-upload-images/preview',
+    requirePermission('MANAGE_MASTER_DATA'),
+    uploadZip.single('file'),
+    itemController.bulkUploadImagesPreview
+);
+
+/**
+ * @openapi
+ * /items/bulk-upload-images/confirm:
+ *   post:
+ *     tags: [Items]
+ *     summary: Confirm bulk image upload from preview token
+ */
+router.post(
+    '/bulk-upload-images/confirm',
+    requirePermission('MANAGE_MASTER_DATA'),
+    itemController.bulkUploadImagesConfirm
+);
+
+/**
+ * @openapi
  * /items/bulk-upload-images:
  *   post:
  *     tags: [Items]
- *     summary: Upload a ZIP of images and match them to items by barcode
+ *     summary: "[Legacy] Upload a ZIP of images matched by Item.code"
+ *     deprecated: true
  *     description: >
- *       Each file inside the ZIP is matched against `Item.barcode` (filename
- *       without extension = barcode). Matched images are persisted through the
- *       storage provider (R2 under `tenants/{tenantId}/items/...` or local
- *       `/uploads/items/...`). Unmatched files are returned in the response.
+ *       Deprecated — use `/items/bulk-upload-images/preview` and `/confirm`.
+ *       Each filename (without extension) must equal `Item.code`.
+ *       Max 200 images, 1 MB each, 25 MB ZIP, 100 MB uncompressed.
  *     security: [ { bearerAuth: [] } ]
  *     requestBody:
  *       required: true
@@ -103,24 +134,10 @@ router.post(
  *               file:
  *                 type: string
  *                 format: binary
- *                 description: ZIP archive (max 50 MB) containing .jpg/.png/.webp/.gif files named after item barcodes
+ *                 description: ZIP archive (max 25 MB) with .jpg/.jpeg/.png/.webp files named after item codes
  *     responses:
  *       200:
  *         description: Bulk upload summary
- *         content:
- *           application/json:
- *             schema:
- *               allOf:
- *                 - $ref: '#/components/schemas/ApiSuccess'
- *                 - type: object
- *                   properties:
- *                     data:
- *                       type: object
- *                       properties:
- *                         matched: { type: integer }
- *                         skipped: { type: integer }
- *                         errors:  { type: array, items: { type: object } }
- *                         details: { type: array, items: { type: object } }
  *       400: { $ref: '#/components/responses/BadRequest' }
  *       401: { $ref: '#/components/responses/Unauthorized' }
  *       403: { $ref: '#/components/responses/Forbidden' }

@@ -59,6 +59,7 @@ const createUser = async (req, res) => {
         role,
         phone,
         departmentId,
+        existingUserId,
     } = req.body;
 
     const user = await usersService.createUser(
@@ -71,6 +72,7 @@ const createUser = async (req, res) => {
             role,
             phone,
             departmentId,
+            existingUserId,
         },
         req.user.id
     );

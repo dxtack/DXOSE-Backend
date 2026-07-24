@@ -2,21 +2,21 @@ const itemService = require('../services/item.service');
 const settingService = require('../services/setting.service');
 const { logAction, EntityType } = require('../services/auditTrail.service');
 const { success } = require('../utils/response');
-const { normalizeRole } = require('../services/rbac.service');
+const { hasPermission } = require('../middleware/authorize');
+const { isScopeEngineEnabled, resolveUserScope, assertLocationInScope } = require('../services/scope/scope.service');
 
-const canManageTenantOpeningBalance = (role) =>
-    ['SUPER_ADMIN', 'ADMIN', 'ORG_MANAGER'].includes(normalizeRole(role));
+const canManageTenantOpeningBalance = (user) => hasPermission(user, 'SETTINGS_MANAGE');
 
 /**
  * PATCH /inventory/status — align tenant OB phase with `isOpeningBalanceAllowed` (API contract).
- * When true: same as POST /settings/ob-enable (OPEN + DB flag + clear snapshot).
+ * When true: same as POST /settings/ob-enable (OPEN + DB flag; snapshot preserved).
  */
 const patchInventoryStatus = async (req, res, next) => {
     try {
         const { isOpeningBalanceAllowed, reason } = req.body;
         const { tenantId, id: userId, role } = req.user;
 
-        if (!canManageTenantOpeningBalance(role)) {
+        if (!canManageTenantOpeningBalance(req.user)) {
             const e = new Error('Only tenant administrators can update inventory status.');
             e.statusCode = 403;
             throw e;
@@ -42,9 +42,9 @@ const patchInventoryStatus = async (req, res, next) => {
             tenantId,
             entityType: EntityType.SETTINGS,
             entityId: 'allowOpeningBalance',
-            action: 'REOPEN_PERIOD',
+            action: 'UPDATE',
             changedBy: userId,
-            note: `OB stage enabled via PATCH /inventory/status — reason: ${normalizedReason}`,
+            note: `OB_IMPORT_ENABLED via PATCH /inventory/status (not fiscal period reopen) — reason: ${normalizedReason}`,
         });
 
         const data = await settingService.getInventoryStatus(tenantId);
@@ -55,12 +55,18 @@ const patchInventoryStatus = async (req, res, next) => {
 };
 
 /**
- * GET /inventory/items-by-locations/:locationId — catalog for GRN / receiving at this warehouse.
+ * GET /inventory/items-by-locations/:locationId
+ * Query: mode=receiving (default, GRN) | mode=operational (StockBalance only)
  */
 const getItemsByLocation = async (req, res, next) => {
     try {
         const { locationId } = req.params;
-        const data = await itemService.getItemsByLocationId(req.user.tenantId, locationId, req.query);
+        if (isScopeEngineEnabled()) {
+            const scope = await resolveUserScope(req.user, req.user.tenantId);
+            await assertLocationInScope(locationId, req.user.tenantId, scope, 'list');
+        }
+        const query = { ...req.query, mode: req.query.mode || 'receiving' };
+        const data = await itemService.getItemsByLocationId(req.user.tenantId, locationId, query);
         return success(res, data, 'Items fetched successfully');
     } catch (err) {
         next(err);
@@ -68,12 +74,18 @@ const getItemsByLocation = async (req, res, next) => {
 };
 
 /**
- * GET /inventory/items-by-locations/:locationId/select — list-select source (no pagination).
+ * GET /inventory/items-by-locations/:locationId/select
+ * Query: mode=operational (default) | mode=receiving (GRN expanded catalog)
  */
 const getItemsByLocationSelect = async (req, res, next) => {
     try {
         const { locationId } = req.params;
-        const data = await itemService.getAllItemsByLocationId(req.user.tenantId, locationId, req.query);
+        if (isScopeEngineEnabled()) {
+            const scope = await resolveUserScope(req.user, req.user.tenantId);
+            await assertLocationInScope(locationId, req.user.tenantId, scope, 'list');
+        }
+        const query = { ...req.query, mode: req.query.mode || 'operational' };
+        const data = await itemService.getAllItemsByLocationId(req.user.tenantId, locationId, query);
         return success(res, data, 'Items fetched successfully');
     } catch (err) {
         next(err);

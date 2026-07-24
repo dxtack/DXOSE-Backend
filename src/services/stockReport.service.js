@@ -3,15 +3,44 @@ const prisma = new PrismaClient();
 const XLSX = require('xlsx');
 const emailService = require('./email.service');
 const { connectRole } = require('./rbac.service');
-
+const { logAction, EntityType } = require('./auditTrail.service');
+const {
+  resolveWorkflowForDocument,
+  approvalRequestVersionPin,
+} = require('./acc-workflow-runtime.service');
+const { toUtcPeriodYearMonth } = require('../utils/report-date-range.util');
+const {
+    reportPostingPeriodWhere,
+    reportPostingBeforeWhere,
+} = require('./report-posting-period.util');
 const OFFICIAL_LEDGER_WHERE = { affectsValuation: true };
 const n = (v) => Number(v || 0);
+
+/**
+ * Latest StockCountLocationQty per (itemId, locationId) by highest roundNo.
+ * When filterLocationId is set, only cells for that location are considered.
+ * (Aligned with reports.service.js pickLatestCountedCells — slice 1.)
+ */
+const pickLatestCountedCells = (locationQtys, filterLocationId) => {
+    const sorted = [...(locationQtys || [])].sort((a, b) => b.roundNo - a.roundNo);
+    const map = new Map();
+    for (const c of sorted) {
+        if (filterLocationId && c.locationId !== filterLocationId) continue;
+        const key = `${c.itemId}:${c.locationId}`;
+        if (!map.has(key)) map.set(key, c);
+    }
+    return [...map.values()].filter((c) => c.countedQty !== null);
+};
+
+/** True if session has any counted StockCountLocationQty (canonical path). */
+const sessionHasAnyCountedCells = (locationQtys) =>
+    pickLatestCountedCells(locationQtys, null).length > 0;
 
 // ── GET STOCK REPORT ──────────────────────────────────────────────────────────
 const getStockReport = async (tenantId, { departmentId, categoryId, year, isBlind = false }) => {
     if (!departmentId) throw Object.assign(new Error('Department is required'), { status: 400 });
 
-    const periodYear = parseInt(year) || new Date().getFullYear();
+    const periodYear = parseInt(year) || toUtcPeriodYearMonth().year;
     const periodStart = new Date(`${periodYear}-01-01T00:00:00.000Z`);
     const periodEnd = new Date(`${periodYear + 1}-01-01T00:00:00.000Z`);
 
@@ -79,33 +108,50 @@ const getStockReport = async (tenantId, { departmentId, categoryId, year, isBlin
     }
 
     // 4. Calculate OPENING BALANCE per item
-    //    Priority: PeriodSnapshot (from year-end close) > Ledger calculation
+    //    Priority: PeriodSnapshot (prior CLOSED period) > Ledger calculation
     const openingMap = {};
 
-    // Try PeriodSnapshot first (from previous year's close)
-    const prevYearClose = await prisma.periodClose.findFirst({
-        where: { tenantId, year: periodYear - 1, month: null, status: 'CLOSED' },
+    // Most recent CLOSED period strictly before the report year (PeriodClose.month is 1–12).
+    // Annual stock report starts Jan 1 UTC → same prior-close pattern as summaryReport (#5).
+    const startYear = periodYear;
+    const startMonth = 1;
+    const prevClose = await prisma.periodClose.findFirst({
+        where: {
+            tenantId,
+            status: 'CLOSED',
+            OR: [
+                { year: { lt: startYear } },
+                { year: startYear, month: { lt: startMonth } },
+            ],
+        },
+        orderBy: [{ year: 'desc' }, { month: 'desc' }],
     });
-    const decClose = !prevYearClose ? await prisma.periodClose.findFirst({
-        where: { tenantId, year: periodYear - 1, month: 12, status: 'CLOSED' },
-    }) : null;
-    const closeId = prevYearClose?.id || decClose?.id;
 
-    if (closeId) {
-        // Use period snapshot for opening balance
-        const snapshots = await prisma.periodSnapshot.findMany({
-            where: {
-                periodCloseId: closeId,
-                itemId: { in: itemIds },
-                locationId: { in: locationIds },
-            },
+    if (prevClose) {
+        // Use CURRENT PeriodSnapshotVersion lines for opening balance
+        const currentVersion = await prisma.periodSnapshotVersion.findFirst({
+            where: { periodCloseId: prevClose.id, status: 'CURRENT' },
+            select: { id: true },
         });
-        for (const snap of snapshots) {
-            openingMap[snap.itemId] = (openingMap[snap.itemId] || 0) + Number(snap.closingQty);
+        if (currentVersion) {
+            const snapshots = await prisma.periodSnapshotLine.findMany({
+                where: {
+                    snapshotVersionId: currentVersion.id,
+                    itemId: { in: itemIds },
+                    locationId: { in: locationIds },
+                },
+                select: { itemId: true, closingQty: true },
+            });
+            for (const snap of snapshots) {
+                openingMap[snap.itemId] = (openingMap[snap.itemId] || 0) + Number(snap.closingQty);
+            }
         }
-    } else {
+    }
+
+    // Incomplete/missing CURRENT snapshot lines → ledger opening (same incomplete-close protection as #6)
+    if (Object.keys(openingMap).length === 0) {
         // Fallback: calculate from ledger entries before period start,
-        // PLUS any 'OPENING_BALANCE' entries created during this year
+        // PLUS any 'OPENING_BALANCE' entries posted during this year
         // (to handle mid-year go-lives where OB is imported after Jan 1).
         const openingRaw = await prisma.inventoryLedger.groupBy({
             by: ['itemId'],
@@ -115,10 +161,10 @@ const getStockReport = async (tenantId, { departmentId, categoryId, year, isBlin
                 itemId: { in: itemIds },
                 locationId: { in: locationIds },
                 OR: [
-                    { createdAt: { lt: periodStart } },
+                    reportPostingBeforeWhere(periodStart),
                     {
                         movementType: 'OPENING_BALANCE',
-                        createdAt: { gte: periodStart, lt: periodEnd }
+                        ...reportPostingPeriodWhere(periodStart, periodEnd, { endExclusive: true }),
                     }
                 ]
             },
@@ -139,7 +185,7 @@ const getStockReport = async (tenantId, { departmentId, categoryId, year, isBlin
                 itemId: { in: itemIds },
                 locationId: { in: locationIds },
                 movementType: { in: ['BREAKAGE', 'LOST', 'LOAN_WRITE_OFF'] },
-                createdAt: { gte: periodStart, lt: periodEnd },
+                ...reportPostingPeriodWhere(periodStart, periodEnd, { endExclusive: true }),
             },
             _sum: { qtyOut: true, totalValue: true },
         }),
@@ -151,7 +197,7 @@ const getStockReport = async (tenantId, { departmentId, categoryId, year, isBlin
                 itemId: { in: itemIds },
                 locationId: { in: locationIds },
                 movementType: 'RECEIVE',
-                createdAt: { gte: periodStart, lt: periodEnd },
+                ...reportPostingPeriodWhere(periodStart, periodEnd, { endExclusive: true }),
             },
             _sum: { qtyIn: true, totalValue: true },
         }),
@@ -189,32 +235,81 @@ const getStockReport = async (tenantId, { departmentId, categoryId, year, isBlin
         getPassMap[row.itemId][row.locationId] = outstanding;
     }
 
-    // 6. Get PHYSICAL COUNT — latest POSTED session per location, then aggregate
-    //    We get one session per location so that all locations are covered fairly.
-    const physicalCountMap = {}; // itemId -> totalCountedQty (across all matching locations)
+    // 6. Get PHYSICAL COUNT — latest POSTED session per report location (primary OR scoped),
+    //    then aggregate per item. Canonical: StockCountLocationQty (latest round per item×location);
+    //    legacy: StockCountLine when the session has no counted cells (session-level fallback).
+    //    Do not sum lines and cells for the same session; line fallback only when no counted cells exist.
+    const physicalCountMap = {}; // itemId -> total counted qty across report locations
 
     const latestSessionsRaw = await Promise.all(
-        locationIds.map(lid =>
+        locationIds.map((lid) =>
             prisma.stockCountSession.findFirst({
-                where: { tenantId, locationId: lid, status: 'POSTED' },
-                orderBy: { postedAt: 'desc' },
-                select: { id: true },
+                where: {
+                    tenantId,
+                    status: 'POSTED',
+                    OR: [{ locationId: lid }, { scopedLocations: { some: { locationId: lid } } }],
+                },
+                orderBy: [
+                    { postingDate: { sort: 'desc', nulls: 'last' } },
+                    { postedAt: { sort: 'desc', nulls: 'last' } },
+                ],
+                select: { id: true, locationId: true },
             })
         )
     );
-    const sessionIds = latestSessionsRaw.filter(Boolean).map(s => s.id);
 
-    if (sessionIds.length > 0) {
-        const countLines = await prisma.stockCountLine.findMany({
-            where: {
-                sessionId: { in: sessionIds },
-                itemId: { in: itemIds },
-                countedQty: { not: null },
-            },
-            select: { itemId: true, countedQty: true },
-        });
-        for (const cl of countLines) {
-            physicalCountMap[cl.itemId] = (physicalCountMap[cl.itemId] || 0) + Number(cl.countedQty);
+    const sessionIds = [...new Set(latestSessionsRaw.filter(Boolean).map((s) => s.id))];
+    const sessionsById =
+        sessionIds.length === 0
+            ? []
+            : await prisma.stockCountSession.findMany({
+                  where: { id: { in: sessionIds } },
+                  select: {
+                      id: true,
+                      locationId: true,
+                      lines: {
+                          where: { itemId: { in: itemIds }, countedQty: { not: null } },
+                          select: { itemId: true, countedQty: true },
+                      },
+                      locationQtys: {
+                          where: { itemId: { in: itemIds } },
+                          select: {
+                              itemId: true,
+                              locationId: true,
+                              roundNo: true,
+                              countedQty: true,
+                          },
+                      },
+                  },
+              });
+    const sessionMap = new Map(sessionsById.map((s) => [s.id, s]));
+
+    for (let i = 0; i < locationIds.length; i++) {
+        const lid = locationIds[i];
+        const latestRef = latestSessionsRaw[i];
+        if (!latestRef) continue;
+
+        const session = sessionMap.get(latestRef.id);
+        if (!session) continue;
+
+        const useCells = sessionHasAnyCountedCells(session.locationQtys);
+
+        if (useCells) {
+            const cellsAtLoc = pickLatestCountedCells(session.locationQtys, lid);
+            for (const cell of cellsAtLoc) {
+                if (!itemIds.includes(cell.itemId)) continue;
+                physicalCountMap[cell.itemId] =
+                    (physicalCountMap[cell.itemId] || 0) + Number(cell.countedQty);
+            }
+        } else {
+            // Legacy line path: lines are session-wide — attribute once per session at primary location only
+            // so the same session is not double-counted when it appears under multiple scoped locations.
+            if (lid !== session.locationId) continue;
+            for (const line of session.lines) {
+                if (line.countedQty == null || !itemIds.includes(line.itemId)) continue;
+                physicalCountMap[line.itemId] =
+                    (physicalCountMap[line.itemId] || 0) + Number(line.countedQty);
+            }
         }
     }
 
@@ -771,6 +866,9 @@ const saveStockReport = async (tenantId, userId, data) => {
     const seq = lastDoc ? (parseInt(lastDoc.reportNo.split('-').pop()) + 1) : 1;
     const reportNo = `${prefix}${seq.toString().padStart(4, '0')}`;
 
+    const chain = await resolveWorkflowForDocument({ moduleKey: 'STOCK_REPORT', tenantId });
+    const roleCodes = chain.roleCodes;
+
     return prisma.$transaction(async (tx) => {
         const report = await tx.savedStockReport.create({
             data: {
@@ -830,14 +928,17 @@ const saveStockReport = async (tenantId, userId, data) => {
                 documentId: null, // we use relation
                 SavedStockReport: { connect: { id: report.id } },
                 currentStep: 0,
-                totalSteps: 1, // 1 step approval (e.g. Finance)
+                totalSteps: roleCodes.length,
                 createdBy: userId,
+                ...approvalRequestVersionPin(chain),
                 steps: {
-                    create: [
-                        { stepNumber: 1, requiredRole: connectRole('FINANCE_MANAGER'), status: 'PENDING' }
-                    ]
-                }
-            }
+                    create: roleCodes.map((roleCode, index) => ({
+                        stepNumber: index + 1,
+                        requiredRole: connectRole(roleCode),
+                        status: 'PENDING',
+                    })),
+                },
+            },
         });
 
         return report;
@@ -855,6 +956,17 @@ const submitStockReport = async (id, tenantId, userId) => {
     const updated = await prisma.savedStockReport.update({
         where: { id },
         data: { status: 'PENDING_APPROVAL', updatedAt: new Date() }
+    });
+
+    await logAction({
+        tenantId,
+        entityType: EntityType.STOCK_REPORT,
+        entityId: id,
+        action: 'SUBMIT',
+        changedBy: userId,
+        note: `STOCK_REPORT_SUBMIT reportNo=${updated.reportNo}`,
+        beforeValue: { status: 'DRAFT' },
+        afterValue: { status: 'PENDING_APPROVAL', reportNo: updated.reportNo },
     });
 
     if (report.approvalRequest) {
@@ -928,6 +1040,15 @@ const processApproval = async (id, tenantId, userId, action, reason) => {
         }
     }).then(async (res) => {
         if (action === 'APPROVE') {
+            await logAction({
+                tenantId,
+                entityType: EntityType.STOCK_REPORT,
+                entityId: id,
+                action: 'APPROVE',
+                changedBy: userId,
+                note: `STOCK_REPORT_APPROVE reportNo=${report.reportNo}`,
+                afterValue: { reportNo: report.reportNo },
+            });
             // Post to ledger outside the first transaction
             await postingService.postStockReport(id, tenantId, userId);
 
@@ -945,6 +1066,17 @@ const processApproval = async (id, tenantId, userId, action, reason) => {
             }
 
             return { message: 'Report approved and posted successfully' };
+        }
+        if (action === 'REJECT') {
+            await logAction({
+                tenantId,
+                entityType: EntityType.STOCK_REPORT,
+                entityId: id,
+                action: 'REJECT',
+                changedBy: userId,
+                note: `STOCK_REPORT_REJECT reportNo=${report.reportNo}`,
+                afterValue: { reportNo: report.reportNo, reason: reason || null },
+            });
         }
         return res;
     });

@@ -1,4 +1,26 @@
 const logger = require('../utils/logger');
+const { classifyCode } = require('../platform/errorRegistry');
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function sanitizeClientValidationErrors(errors) {
+    if (!Array.isArray(errors)) return errors;
+    return errors.map((entry) => {
+        if (!entry || typeof entry !== 'object') return entry;
+        const { field, message, ...rest } = entry;
+        const safe = { ...rest };
+        if (message != null) safe.message = String(message);
+        if (field != null && !UUID_RE.test(String(field))) {
+            safe.field = String(field);
+        }
+        return safe;
+    });
+}
+
+function omitInternalClientFields(body) {
+    const { existingTenantId, prismaCode, prismaMeta, stack, ...safe } = body;
+    return safe;
+}
 
 /**
  * Global error handler middleware
@@ -20,7 +42,6 @@ const errorHandler = (err, req, res, next) => {
         const body = {
             success: false,
             message: 'A record with this value already exists.',
-            field: target,
         };
         if (Array.isArray(target) && target.includes('slug')) {
             body.code = 'DUPLICATE_TENANT_SLUG';
@@ -42,17 +63,18 @@ const errorHandler = (err, req, res, next) => {
         return res.status(400).json({
             success: false,
             message: 'Referenced record does not exist.',
-            field: err.meta?.field_name,
         });
     }
 
     // Validation error (custom)
     if (err.name === 'ValidationError') {
-        return res.status(400).json({
-            success: false,
-            message: err.message,
-            errors: err.errors,
-        });
+        return res.status(400).json(
+            omitInternalClientFields({
+                success: false,
+                message: err.message,
+                errors: sanitizeClientValidationErrors(err.errors),
+            }),
+        );
     }
 
     // JWT errors
@@ -84,18 +106,20 @@ const errorHandler = (err, req, res, next) => {
     if (err.code) {
         responseBody.code = err.code;
         responseBody.error = err.code;
+        responseBody.errorFamily = classifyCode(err.code);
     }
-    if (err.field !== undefined) responseBody.field = err.field;
+    if (err.field !== undefined && !UUID_RE.test(String(err.field))) {
+        responseBody.field = err.field;
+    }
     if (err.conflictingSlug !== undefined) responseBody.conflictingSlug = err.conflictingSlug;
-    if (err.existingTenantId !== undefined) responseBody.existingTenantId = err.existingTenantId;
 
-    res.status(statusCode).json(responseBody);
+    res.status(statusCode).json(omitInternalClientFields(responseBody));
 };
 
 const notFound = (req, res, next) => {
     res.status(404).json({
         success: false,
-        message: `Route not found: ${req.method} ${req.originalUrl}`,
+        message: 'The requested resource was not found.',
     });
 };
 

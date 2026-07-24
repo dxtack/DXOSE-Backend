@@ -1,13 +1,19 @@
 'use strict';
 const multer = require('multer');
 const grnService = require('../services/grn.service');
+const { generateGrnEvidencePDF } = require('../services/pdf.service');
+const {
+    buildEnrichedEvidence,
+    logEvidenceExport,
+    resolveEvidencePdfFilename,
+} = require('../utils/evidenceExport.util');
 const periodGuard = require('../services/periodGuard.service');
 const { normalizeRole } = require('../services/rbac.service');
+const { hasPermission } = require('../middleware/authorize');
 const { putBuffer, buildGrnPdfKey } = require('../middleware/upload.middleware');
+const { parseVersionFromRequest } = require('../platform/concurrency.service');
 
-/** Roles allowed to create GRNs (POST /api/grn). */
-const GRN_CREATE_ROLES = ['COST_CONTROL', 'STOREKEEPER', 'ADMIN', 'SUPER_ADMIN', 'ORG_MANAGER'];
-
+/** Roles allowed to create GRNs (POST /api/grn) — enforced via GRN_MANAGE at controller. */
 // ─── Multer (memory-backed; bytes are forwarded to storage.put below) ────────
 const memoryStorage = multer.memoryStorage();
 
@@ -53,42 +59,38 @@ const sendError = (res, err) => {
 
 const assertFinance = (req) => {
     const role = req.user?.role;
-    if (!['FINANCE_MANAGER', 'COST_CONTROL', 'ADMIN'].includes(role))
+    if (!['FINANCE_MANAGER', 'COST_CONTROL'].includes(role))
         throw Object.assign(
             new Error('Insufficient permissions. Finance role required.'),
             { status: 403 }
         );
 };
 
-/** POST /api/grn/:id/post — Finance Manager or Admin only (not Cost Control). */
-const assertPostGrnRole = (req) => {
-    const role = normalizeRole(req.user?.role);
-    if (!['FINANCE_MANAGER', 'ADMIN', 'SUPER_ADMIN', 'ORG_MANAGER'].includes(role))
-        throw Object.assign(
-            new Error('Insufficient permissions to post this GRN to the ledger.'),
-            { status: 403 }
-        );
-};
-
-/** PATCH /api/grn/:id/status — VALIDATED → APPROVED | REJECTED (Cost Control / Admin / …), or APPROVED → REJECTED (Finance Manager). */
-const GRN_STATUS_UPDATE_ROLES = ['COST_CONTROL', 'ADMIN', 'ORG_MANAGER', 'SUPER_ADMIN'];
-
 const assertPatchGrnStatusRole = (req) => {
-    const role = normalizeRole(req.user?.role);
-    if (role === 'FINANCE_MANAGER') return;
-    if (!GRN_STATUS_UPDATE_ROLES.includes(role))
+    if (!hasPermission(req.user, 'GRN_MANAGE')) {
         throw Object.assign(
-            new Error('Insufficient permissions to approve or reject this GRN at this stage.'),
-            { status: 403 }
+            new Error('Insufficient permissions to update GRN status at this stage.'),
+            { status: 403 },
         );
+    }
 };
 
+const { isGrnCreateActorRole } = require('../services/grnWorkflowContext.util');
+
+/** GRN create: GRN_MANAGE + create-actor role (Storekeeper / Org / Super). Finance cannot create. */
 const assertGrnCreateRole = (req) => {
-    const role = normalizeRole(req.user?.role);
-    if (!GRN_CREATE_ROLES.includes(role)) {
+    if (!hasPermission(req.user, 'GRN_MANAGE')) {
         throw Object.assign(new Error('Permission denied. You cannot create goods receipt notes.'), {
             status: 403,
         });
+    }
+    if (!isGrnCreateActorRole(req.user?.role)) {
+        throw Object.assign(
+            new Error(
+                'Only Storekeeper (or Org/Super governance) may create goods receipt notes. Finance and Cost Control review after submit.',
+            ),
+            { status: 403 },
+        );
     }
 };
 
@@ -104,11 +106,14 @@ const createGrn = async (req, res) => {
         if (!invoiceFile)
             return res.status(400).json({ success: false, message: 'Invoice attachment (PDF or image) is required.' });
 
-        const { supplierId, locationId, grnNumber, receivingDate, notes, lines } = req.body;
+        const { supplierId, locationId, grnNumber, supplierInvoiceNumber, receivingDate, notes, lines } = req.body;
 
         if (!supplierId) return res.status(400).json({ success: false, message: 'supplierId is required.' });
         if (!locationId) return res.status(400).json({ success: false, message: 'locationId is required.' });
-        if (!grnNumber) return res.status(400).json({ success: false, message: 'GRN/Invoice number is required.' });
+        const invoiceRef = (supplierInvoiceNumber || grnNumber || '').trim();
+        if (!invoiceRef) {
+            return res.status(400).json({ success: false, message: 'Supplier invoice number is required.' });
+        }
 
         // lines comes as JSON string from multipart
         let parsedLines;
@@ -127,7 +132,8 @@ const createGrn = async (req, res) => {
         const created = await grnService.createGrn({
             supplierId,
             locationId,
-            grnNumber,
+            supplierInvoiceNumber: invoiceRef,
+            grnNumber: invoiceRef,
             receivingDate,
             invoiceUrl: invoiceKey,
             notes,
@@ -137,17 +143,15 @@ const createGrn = async (req, res) => {
             creatorRole: normalizeRole(req.user.role),
         });
 
-        if (created.autoPosted) {
-            const { autoPosted: _omit, ...data } = created;
-            return res.status(201).json({
-                success: true,
-                message: 'GRN Created and Posted Successfully',
-                data,
-                autoPosted: true,
-            });
-        }
+        // One-shot create for storekeepers: start ACC workflow here (no separate Validate/Submit UI).
+        const submitted = await grnService.submitForApproval(
+            created.id,
+            req.user.tenantId,
+            req.user.id,
+            created.concurrencyVersion,
+        );
 
-        sendSuccess(res, created, 201);
+        sendSuccess(res, submitted, 201);
     } catch (err) {
         sendError(res, err);
     }
@@ -157,11 +161,15 @@ const createGrn = async (req, res) => {
 const listGrns = async (req, res) => {
     try {
         const { status, page, limit } = req.query;
-        const result = await grnService.listGrns(req.user.tenantId, {
-            status,
-            page: +page || 1,
-            limit: +limit || 20,
-        });
+        const result = await grnService.listGrns(
+            req.user.tenantId,
+            {
+                status,
+                page: +page || 1,
+                limit: +limit || 20,
+            },
+            req.user,
+        );
         sendSuccess(res, result);
     } catch (err) {
         sendError(res, err);
@@ -171,7 +179,7 @@ const listGrns = async (req, res) => {
 /** GET /api/grn/:id */
 const getGrn = async (req, res) => {
     try {
-        const grn = await grnService.getGrn(req.params.id, req.user.tenantId);
+        const grn = await grnService.getGrn(req.params.id, req.user.tenantId, req.user);
         sendSuccess(res, grn);
     } catch (err) {
         sendError(res, err);
@@ -192,7 +200,7 @@ const validateGrn = async (req, res) => {
 const submitGrn = async (req, res) => {
     try {
         const grn = await grnService.submitForApproval(
-            req.params.id, req.user.tenantId, req.user.id,
+            req.params.id, req.user.tenantId, req.user.id, parseVersionFromRequest(req),
         );
         sendSuccess(res, grn);
     } catch (err) {
@@ -200,12 +208,11 @@ const submitGrn = async (req, res) => {
     }
 };
 
-/** POST /api/grn/:id/approve — FINANCE only */
+/** POST /api/grn/:id/approve — ACC dual gate */
 const approveGrn = async (req, res) => {
     try {
-        assertFinance(req);
         const grn = await grnService.approveGrn(
-            req.params.id, req.user.tenantId, req.user.id, req.body.comment,
+            req.params.id, req.user.tenantId, req.user, req.body.comment, parseVersionFromRequest(req),
         );
         sendSuccess(res, grn);
     } catch (err) {
@@ -213,15 +220,14 @@ const approveGrn = async (req, res) => {
     }
 };
 
-/** POST /api/grn/:id/reject — FINANCE only */
+/** POST /api/grn/:id/reject — ACC dual gate */
 const rejectGrn = async (req, res) => {
     try {
-        assertFinance(req);
         const { reason } = req.body;
         if (!reason)
             return res.status(400).json({ success: false, message: 'Rejection reason is required.' });
         const grn = await grnService.rejectGrn(
-            req.params.id, req.user.tenantId, req.user.id, reason,
+            req.params.id, req.user.tenantId, req.user, reason, parseVersionFromRequest(req),
         );
         sendSuccess(res, grn);
     } catch (err) {
@@ -229,14 +235,20 @@ const rejectGrn = async (req, res) => {
     }
 };
 
-/** POST /api/grn/:id/resubmit — REJECTED → VALIDATED | APPROVED */
-const resubmitGrn = async (req, res) => {
+/** POST /api/grn/:id/send-back — Ch.3.4 Send Back to creator (Returned workflow) */
+const sendBackGrn = async (req, res) => {
     try {
-        const grn = await grnService.resubmitRejectedGrn(
+        const { reason } = req.body;
+        if (!reason) {
+            return res.status(400).json({ success: false, message: 'Send Back reason is required.' });
+        }
+        const grn = await grnService.sendBackGrn(
             req.params.id,
             req.user.tenantId,
-            req.user.id,
-            normalizeRole(req.user.role),
+            req.user,
+            reason,
+            parseVersionFromRequest(req),
+            req.body.targetStepNumber ?? null,
         );
         sendSuccess(res, grn);
     } catch (err) {
@@ -244,45 +256,42 @@ const resubmitGrn = async (req, res) => {
     }
 };
 
-/** POST /api/grn/:id/post — Finance / Admin only */
+/** POST /api/grn/:id/post — deprecated; Finance approval auto-posts via POST /approve */
 const postGrn = async (req, res) => {
     try {
-        assertPostGrnRole(req);
-        const grn = await grnService.postGrn(
-            req.params.id, req.user.tenantId, req.user.id,
-        );
-        sendSuccess(res, grn);
+        await grnService.postGrn(req.params.id, req.user.tenantId, req.user.id);
     } catch (err) {
         sendError(res, err);
     }
 };
 
-/** PATCH /api/grn/:id/status */
+/** PATCH /api/grn/:id/status — VALIDATED→PENDING_FINANCE | PENDING_FINANCE→POSTED (auto-post) | REJECTED */
 const updateGrnStatus = async (req, res) => {
     try {
-        assertPatchGrnStatusRole(req);
-        const role = normalizeRole(req.user?.role);
         const { status, reason } = req.body || {};
-        if (status !== 'APPROVED' && status !== 'REJECTED')
-            return res.status(400).json({ success: false, message: 'status must be APPROVED or REJECTED.' });
-        if (role === 'FINANCE_MANAGER' && status !== 'REJECTED')
-            return res.status(403).json({
+        const normalized =
+            String(status || '').toUpperCase() === 'APPROVED' ? 'PENDING_FINANCE' : String(status || '').toUpperCase();
+        if (!['PENDING_FINANCE', 'POSTED', 'REJECTED'].includes(normalized)) {
+            return res.status(400).json({
                 success: false,
-                message:
-                    'Finance managers may only set status to REJECTED (to return an approved GRN before posting).',
+                message: 'status must be PENDING_FINANCE, POSTED, or REJECTED.',
             });
-        if (status === 'REJECTED') {
+        }
+        assertPatchGrnStatusRole(req);
+        if (normalized === 'REJECTED') {
             const r = typeof reason === 'string' ? reason.trim() : '';
-            if (!r)
+            if (!r) {
                 return res.status(400).json({ success: false, message: 'Rejection reason is required.' });
+            }
         }
         const grn = await grnService.updateStatus(
             req.params.id,
             req.user.tenantId,
-            status,
-            status === 'REJECTED' ? String(reason).trim() : null,
+            normalized,
+            normalized === 'REJECTED' ? String(reason).trim() : null,
             req.user.id,
-            role,
+            req.user,
+            parseVersionFromRequest(req),
         );
         sendSuccess(res, grn);
     } catch (err) {
@@ -296,6 +305,7 @@ const updateGrn = async (req, res) => {
         const { notes, lines } = req.body || {};
         const updated = await grnService.updateGrn(
             req.params.id, req.user.tenantId, { notes, lines }, req.user.id,
+            parseVersionFromRequest(req),
         );
         sendSuccess(res, updated);
     } catch (err) {
@@ -306,7 +316,12 @@ const updateGrn = async (req, res) => {
 /** DELETE /api/grn/:id — DRAFT only */
 const deleteGrn = async (req, res) => {
     try {
-        await grnService.deleteGrn(req.params.id, req.user.tenantId);
+        await grnService.deleteGrn(
+            req.params.id,
+            req.user.tenantId,
+            req.user.id,
+            parseVersionFromRequest(req),
+        );
         res.status(200).json({ success: true, message: 'GRN deleted.' });
     } catch (err) {
         sendError(res, err);
@@ -333,7 +348,12 @@ const previewExcel = async (req, res) => {
         const xlFile = req.file;
         if (!xlFile)
             return res.status(400).json({ success: false, message: 'Excel file is required.' });
-        const result = await grnService.previewGrnExcel(xlFile.buffer, req.user.tenantId);
+        const locationId = typeof req.body?.locationId === 'string' ? req.body.locationId.trim() : '';
+        const result = await grnService.previewGrnExcel(
+            xlFile.buffer,
+            req.user.tenantId,
+            locationId || null,
+        );
         sendSuccess(res, result);
     } catch (err) {
         sendError(res, err);
@@ -353,6 +373,47 @@ const previewPdf = async (req, res) => {
     }
 };
 
+/** GET /api/grn/:id/evidence */
+const getEvidence = async (req, res) => {
+    try {
+        const evidence = await buildEnrichedEvidence(req, 'GRN', () =>
+            grnService.getEvidence(req.params.id, req.user.tenantId, req.user),
+        );
+        await logEvidenceExport(req, 'GRN', evidence, 'JSON');
+        sendSuccess(res, evidence, 'Evidence pack generated.');
+    } catch (err) {
+        sendError(res, err);
+    }
+};
+
+/** GET /api/grn/:id/evidence/pdf */
+const getEvidencePDF = async (req, res) => {
+    try {
+        const evidence = await buildEnrichedEvidence(req, 'GRN', () =>
+            grnService.getEvidence(req.params.id, req.user.tenantId, req.user),
+        );
+        await logEvidenceExport(req, 'GRN', evidence, 'PDF');
+        const pdfBuffer = await generateGrnEvidencePDF(evidence);
+
+        if (!pdfBuffer || pdfBuffer.length === 0) {
+            return res.status(500).json({
+                success: false,
+                message: 'PDF generation produced an empty file. Please contact support.',
+            });
+        }
+
+        const filename = resolveEvidencePdfFilename(evidence, 'GRN-Report');
+        res.status(200)
+            .set('Content-Type', 'application/pdf')
+            .set('Content-Disposition', `attachment; filename="${filename}"`)
+            .set('Content-Length', String(pdfBuffer.length))
+            .end(pdfBuffer);
+    } catch (err) {
+        console.error('[GRN PDF ERROR]', err.message);
+        sendError(res, err);
+    }
+};
+
 module.exports = {
     uploadInvoice,
     uploadExcel,
@@ -360,13 +421,14 @@ module.exports = {
     createGrn,
     listGrns,
     getGrn,
+    getEvidence,
+    getEvidencePDF,
     validateGrn,
     submitGrn,
     approveGrn,
     rejectGrn,
-    resubmitGrn,
+    sendBackGrn,
     postGrn,
-    updateGrnStatus,
     updateGrn,
     deleteGrn,
     downloadTemplate,

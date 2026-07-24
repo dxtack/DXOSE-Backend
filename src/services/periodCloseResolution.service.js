@@ -2,12 +2,18 @@
 
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
-const { getPeriodRegistryRow } = require('./periodGuard.service');
+const {
+    getPeriodRegistryRow,
+    assertPeriodAllowPostingForResolution,
+    lockPeriodForPosting,
+} = require('./periodGuard.service');
 const { runMonthEndCloseChecklist, getPassIsBlockerForPeriod } = require('./periodCloseGovernance.service');
 const { getPeriodResolutionWorkspace } = require('../platform/periodResolution.service');
 const postingEngine = require('./postingEngine.service');
 const { logAction, EntityType } = require('./auditTrail.service');
-const { assignedPeriodKey } = require('../platform/postingPeriod.util');
+const { assignedPeriodKey, resolutionPostingDate } = require('../platform/postingPeriod.util');
+const { toUtcPeriodYearMonth } = require('../utils/report-date-range.util');
+const { getTenantTimezone } = require('./tenantTimezone.service');
 
 const err = (message, statusCode = 400, code = 'RESOLUTION_ERROR') => {
     const e = new Error(message);
@@ -22,6 +28,12 @@ async function assertPeriodClosing(tenantId, year, month) {
         throw err('Close resolution actions require the period to be in CLOSING state.', 422, 'PERIOD_NOT_CLOSING');
     }
     return row;
+}
+
+async function lockAndAssertResolutionPosting(tx, tenantId, year, month, postingDate) {
+    const period = await lockPeriodForPosting(tx, tenantId, year, month);
+    if (!period) throw err('Period registry record is required for resolution posting.', 422, 'PERIOD_NOT_REGISTERED');
+    await assertPeriodAllowPostingForResolution({ tenantId, year, month, postingDate }, tx);
 }
 
 async function assertNoLedgerForDocument(tenantId, module, documentId) {
@@ -82,14 +94,34 @@ async function getResolutionWorkspace(tenantId, { year, month }) {
         allowedActions: {
             post: 'PERIOD_CLOSE_DOCUMENT_POST',
             delete: 'PERIOD_CLOSE_DOCUMENT_DELETE',
-            getPassResolve: 'PERIOD_CLOSE_GET_PASS_RESOLVE',
             getPassCarryForward: 'PERIOD_CLOSE_GET_PASS_CARRY_FORWARD',
         },
     };
 }
 
 async function postResolutionDocument(tenantId, userId, { year, month, module, documentId }) {
-    await assertPeriodClosing(tenantId, year, month);
+    const y = Number(year);
+    const m = Number(month);
+    await assertPeriodClosing(tenantId, y, m);
+
+    const timezone = await getTenantTimezone(tenantId);
+    const postingDate = resolutionPostingDate(y, m, timezone);
+    const ym = toUtcPeriodYearMonth(postingDate, timezone);
+    if (ym.year !== y || ym.month !== m) {
+        throw err(
+            `Resolution posting date must fall in workspace period ${assignedPeriodKey(y, m)} (got ${assignedPeriodKey(ym.year, ym.month)}).`,
+            422,
+            'RESOLUTION_POSTING_PERIOD_MISMATCH',
+        );
+    }
+    await assertPeriodAllowPostingForResolution({
+        tenantId,
+        year: y,
+        month: m,
+        postingDate,
+    });
+
+    const postOpts = { postingDate, fromResolutionWorkspace: true, timezone };
     const mod = String(module || '').toUpperCase();
 
     if (mod === 'GRN') {
@@ -99,7 +131,8 @@ async function postResolutionDocument(tenantId, userId, { year, month, module, d
         });
         if (!grn) throw err('GRN not found or not in postable state.', 404, 'DOCUMENT_NOT_FOUND');
         await prisma.$transaction(async (tx) => {
-            await postingEngine.postGrnInTransaction(tx, grn, userId);
+            await lockAndAssertResolutionPosting(tx, tenantId, y, m, postingDate);
+            await postingEngine.postGrnInTransaction(tx, grn, userId, postOpts);
         });
     } else if (mod === 'TRANSFER') {
         const trf = await prisma.storeTransfer.findFirst({
@@ -108,7 +141,8 @@ async function postResolutionDocument(tenantId, userId, { year, month, module, d
         });
         if (!trf) throw err('Transfer not found or not in postable state.', 404, 'DOCUMENT_NOT_FOUND');
         await prisma.$transaction(async (tx) => {
-            await postingEngine.postTransferInTransaction(tx, trf, userId);
+            await lockAndAssertResolutionPosting(tx, tenantId, y, m, postingDate);
+            await postingEngine.postTransferInTransaction(tx, trf, userId, [], postOpts);
         });
     } else if (mod === 'BREAKAGE' || mod === 'MOVEMENT') {
         const doc = await prisma.movementDocument.findFirst({
@@ -122,14 +156,34 @@ async function postResolutionDocument(tenantId, userId, { year, month, module, d
         if (!doc) throw err('Movement not found or not in postable state.', 404, 'DOCUMENT_NOT_FOUND');
         if (doc.movementType === 'BREAKAGE') {
             await prisma.$transaction(async (tx) => {
-                await postingEngine.postBreakageMovementInTransaction(tx, doc, tenantId, userId);
+                await lockAndAssertResolutionPosting(tx, tenantId, y, m, postingDate);
+                await postingEngine.postBreakageMovementInTransaction(tx, doc, tenantId, userId, postOpts);
                 await tx.movementDocument.update({
                     where: { id: doc.id },
-                    data: { status: 'POSTED', postedAt: new Date() },
+                    data: {
+                        status: 'POSTED',
+                        postedAt: postingDate,
+                        postingDate,
+                        assignedPostingPeriod: assignedPeriodKey(y, m),
+                    },
+                });
+            });
+        } else if (doc.movementType === 'LOST') {
+            await prisma.$transaction(async (tx) => {
+                await lockAndAssertResolutionPosting(tx, tenantId, y, m, postingDate);
+                await postingEngine.postLostMovementInTransaction(tx, doc, userId, postOpts);
+                await tx.movementDocument.update({
+                    where: { id: doc.id },
+                    data: {
+                        status: 'POSTED',
+                        postedAt: postingDate,
+                        postingDate,
+                        assignedPostingPeriod: assignedPeriodKey(y, m),
+                    },
                 });
             });
         } else {
-            await postingEngine.postMovementDocument(documentId, tenantId, userId);
+            await postingEngine.postMovementDocument(documentId, tenantId, userId, prisma, null, postOpts);
         }
     } else {
         throw err(`Post not supported for module ${mod}`, 422, 'UNSUPPORTED_MODULE');
@@ -141,11 +195,18 @@ async function postResolutionDocument(tenantId, userId, { year, month, module, d
         entityId: documentId,
         action: 'POST',
         changedBy: userId,
-        note: `Resolution workspace post: ${mod} ${documentId} during ${year}/${month} close`,
-        afterValue: { module: mod, documentId, year, month },
+        note: `Resolution workspace post: ${mod} ${documentId} during ${y}/${m} close`,
+        afterValue: {
+            module: mod,
+            documentId,
+            year: y,
+            month: m,
+            postingDate: postingDate.toISOString(),
+            assignedPostingPeriod: assignedPeriodKey(y, m),
+        },
     });
 
-    return getResolutionWorkspace(tenantId, { year, month });
+    return getResolutionWorkspace(tenantId, { year: y, month: m });
 }
 
 async function deleteResolutionDocument(tenantId, userId, { year, month, module, documentId, reason }) {
@@ -208,7 +269,8 @@ async function carryForwardGetPass(tenantId, userId, { year, month, getPassId, r
         },
     });
     if (!gp) throw err('Get Pass not found.', 404, 'GET_PASS_NOT_FOUND');
-    if (!getPassIsBlockerForPeriod(gp, year, month)) {
+    const timezone = await getTenantTimezone(tenantId);
+    if (!getPassIsBlockerForPeriod(gp, year, month, timezone)) {
         throw err('Get Pass is not a blocker for this period.', 422, 'GET_PASS_NOT_BLOCKER');
     }
 

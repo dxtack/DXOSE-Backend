@@ -6,8 +6,43 @@ const fs = require('fs');
 const prisma = new PrismaClient();
 const emailService = require('./email.service');
 const { normalizeRole } = require('./rbac.service');
+const { hasPermission } = require('../middleware/authorize');
+const { assertUserHasGrnManage } = require('../acc-authority/step-permission-enforcement');
+const {
+    resolveWorkflowForDocument,
+    resolveWorkflowByVersionId,
+} = require('./acc-workflow-runtime.service');
+const {
+    assertAwaitingStatusKey,
+} = require('./acc-workflow-status-key-guard.service');
+const { createAccApprovalRequestInTx } = require('./acc-approval-request.util');
+const { assertDualGateApproval } = require('../acc-authority/step-permission-enforcement');
 const { getStorage } = require('../config/storage');
-
+const postingEngine = require('./postingEngine.service');
+const { logGovernedEvent, EntityType } = require('./auditGoverned.service');
+const { buildGrnWorkflowTimeline } = require('./grn-workflow-presentation.util');
+const { buildGrnWorkflowContext } = require('./grnWorkflowContext.util');
+const { enrichTimelineSlotsWithDuration } = require('../platform/timelineDuration.util');
+const { mapUserFacingState, appendSendBackNotes, isSendBackReturned } = require('../platform/lifecyclePresentation.service');
+const { generateDocNumber, DocPrefix } = require('./docNumbering.service');
+const { assertConcurrencyVersion, bumpConcurrencyUpdate } = require('../platform/concurrency.service');
+const {
+    executeWorkflowSendBackInTx,
+    executeCreatorResubmitInTx,
+    normalizeReason,
+} = require('../platform/workflowSendBack.service');
+const { userDisplayName } = require('../utils/timeline-present.util');
+const {
+    assertIntegerQuantity,
+    isIntegerQuantity,
+} = require('./integerQuantityGuard.service');
+const {
+    resolveScopeContext,
+    scopeWhereFor,
+    metaFor,
+    assertInScope,
+    SCOPE_MODULE,
+} = require('./scope/scopeContext');
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 const assertStatus = async (grnId, tenantId, expected) => {
     const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
@@ -29,19 +64,26 @@ const assertStatus = async (grnId, tenantId, expected) => {
  * @param {object} opts
  * @param {string} opts.supplierId      — must exist in suppliers table
  * @param {string} opts.locationId      — destination warehouse
- * @param {string} opts.grnNumber       — external GRN / invoice number
+ * @param {string} opts.supplierInvoiceNumber — supplier invoice / external reference (Ch.9)
+ * @param {string} [opts.grnNumber] — deprecated alias for supplierInvoiceNumber
  * @param {Date}   opts.receivingDate
  * @param {string} opts.invoiceUrl      — mandatory invoice file path
  * @param {string} [opts.notes]
  * @param {Array}  opts.lines           — [{ itemId, uomId, orderedQty, receivedQty, unitPrice, notes? }]
  * @param {string} opts.tenantId
  * @param {string} opts.userId
- * @param {string} opts.creatorRole — JWT role code (normalized): STOREKEEPER → VALIDATED; COST_CONTROL / ADMIN / SUPER_ADMIN / ORG_MANAGER → APPROVED. ADMIN only: immediately POSTED + ledger/stock (via postGrn).
+ * @param {string} opts.creatorRole — JWT role code (normalized). Persists as DRAFT; HTTP create controller may auto-submit.
  */
 const createGrn = async ({
-    supplierId, locationId, grnNumber, receivingDate,
+    supplierId, locationId, grnNumber, supplierInvoiceNumber, receivingDate,
     invoiceUrl, notes, lines, tenantId, userId, creatorRole,
 }) => {
+    const externalInvoice = (supplierInvoiceNumber || grnNumber || '').trim();
+    if (!externalInvoice) {
+        throw Object.assign(new Error('Supplier invoice number is required.'), { status: 400 });
+    }
+
+    const systemGrnNumber = await generateDocNumber(tenantId, DocPrefix.RECEIVE, receivingDate || new Date());
     // ── Validate supplier ──
     const supplier = await prisma.supplier.findFirst({
         where: { id: supplierId, tenantId },
@@ -56,12 +98,12 @@ const createGrn = async ({
     if (!location)
         throw Object.assign(new Error('Warehouse/Location not found.'), { status: 404 });
 
-    // ── Duplicate GRN number check ──
+    // ── Duplicate system number guard (engine uniqueness) ──
     const existing = await prisma.grnImport.findUnique({
-        where: { tenantId_grnNumber: { tenantId, grnNumber } },
+        where: { tenantId_grnNumber: { tenantId, grnNumber: systemGrnNumber } },
     });
     if (existing)
-        throw Object.assign(new Error(`GRN number "${grnNumber}" already exists.`), { status: 409 });
+        throw Object.assign(new Error(`System GRN number collision "${systemGrnNumber}". Retry.`), { status: 409 });
 
     // ── Validate all items exist ──
     if (!lines || lines.length === 0)
@@ -84,35 +126,36 @@ const createGrn = async ({
     const invalidLines = lines.filter(l => Number(l.receivedQty) <= 0);
     if (invalidLines.length > 0)
         throw Object.assign(new Error('All received quantities must be greater than zero.'), { status: 400 });
+    for (const l of lines) {
+        assertIntegerQuantity({
+            qty: l.receivedQty,
+            field: 'receivedQty',
+            message: 'Quantity must be a whole number (integer). Fractional quantities are not allowed.',
+            details: { itemId: l.itemId, receivedQty: Number(l.receivedQty) },
+        });
+    }
 
     // ── Build item lookup for display ──
     const itemMap = Object.fromEntries(foundItems.map(i => [i.id, i]));
 
-    const role = normalizeRole(creatorRole);
-    let initialStatus = 'VALIDATED';
-    let approvedBy = null;
-    if (role === 'STOREKEEPER') {
-        initialStatus = 'VALIDATED';
-    } else if (['COST_CONTROL', 'ADMIN', 'SUPER_ADMIN', 'ORG_MANAGER'].includes(role)) {
-        initialStatus = 'APPROVED';
-        approvedBy = userId;
-    }
+    // ── P12: ACC published GRN workflow required (cutover module) ──
+    await resolveWorkflowForDocument({ moduleKey: 'GRN', tenantId });
 
-    const adminAutoPost = role === 'ADMIN';
-
-    // ── Create GRN atomically ──
+    // ── Create GRN as Draft (HTTP create may auto-submit — storekeeper submit-once UX) ──
     const grn = await prisma.grnImport.create({
         data: {
             tenantId,
-            grnNumber,
+            grnNumber: systemGrnNumber,
+            supplierInvoiceNumber: externalInvoice,
             vendorId: supplierId,
             vendorNameSnapshot: supplier.name,
             locationId,
             receivingDate: receivingDate ? new Date(receivingDate) : new Date(),
             pdfAttachmentUrl: invoiceUrl,
             notes: notes || null,
-            status: initialStatus,
-            approvedBy,
+            status: 'DRAFT',
+            approvedBy: null,
+            approvedAt: null,
             importedBy: userId,
             lines: {
                 create: lines.map(l => {
@@ -146,13 +189,284 @@ const createGrn = async ({
         },
     });
 
-    if (adminAutoPost) {
-        const posted = await postGrn(grn.id, tenantId, userId);
-        return { ...posted, autoPosted: true };
+    await logGovernedEvent({
+        tenantId,
+        entityType: EntityType.GRN,
+        entityId: grn.id,
+        action: 'CREATE',
+        changedBy: userId,
+        eventType: 'GRN_CREATE',
+        note: `GRN created with system number ${systemGrnNumber}`,
+        afterValue: { grnNumber: systemGrnNumber, status: grn.status },
+    });
+
+    if (invoiceUrl) {
+        await logGovernedEvent({
+            tenantId,
+            entityType: EntityType.GRN,
+            entityId: grn.id,
+            action: 'ATTACHMENT_ADD',
+            changedBy: userId,
+            eventType: 'GRN_INVOICE_ATTACHMENT',
+            note: 'Supplier invoice attachment added at create',
+            afterValue: { pdfAttachmentUrl: invoiceUrl },
+        });
     }
 
     return grn;
 };
+
+async function _loadGrnWithApproval(grnId, tenantId) {
+    const grn = await prisma.grnImport.findFirst({
+        where: { id: grnId, tenantId },
+        include: {
+            importedByUser: { select: { firstName: true, lastName: true } },
+            approvalRequest: {
+                include: {
+                    steps: {
+                        orderBy: { stepNumber: 'asc' },
+                        include: {
+                            requiredRole: { select: { code: true, name: true } },
+                            actedByUser: { select: { firstName: true, lastName: true } },
+                        },
+                    },
+                },
+            },
+            lines: true,
+        },
+    });
+    if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
+    return grn;
+}
+
+/**
+ * Send Back targets: Creator (step 0) + prior participants.
+ * Skip STEP rows acted by the document creator.
+ */
+function buildGrnSendBackTargets(grn, approval) {
+    if (!grn || !approval) return [];
+    const currentStepNo = Number(approval.currentStep);
+    if (currentStepNo <= 0) return [];
+
+    const creatorId = grn.importedBy || null;
+    const targets = [
+        {
+            stepNumber: 0,
+            targetType: 'CREATOR',
+            roleCode: null,
+            actorName: userDisplayName(grn.importedByUser) || null,
+        },
+    ];
+
+    const steps = Array.isArray(approval.steps)
+        ? [...approval.steps].sort((a, b) => a.stepNumber - b.stepNumber)
+        : [];
+
+    for (const st of steps) {
+        if (st.stepNumber >= currentStepNo) break;
+        const actedById = st.actedBy || st.actedByUser?.id || null;
+        if (creatorId && actedById && String(actedById) === String(creatorId)) {
+            continue;
+        }
+        const roleCode = st.requiredRole?.code || st.requiredRole || null;
+        targets.push({
+            stepNumber: st.stepNumber,
+            targetType: 'STEP',
+            roleCode,
+            actorName: userDisplayName(st.actedByUser) || null,
+        });
+    }
+
+    return targets;
+}
+
+/** Lock GRN row and compute next cycle inside the same transaction (race-safe). */
+async function _resolveNextGrnCycleNumber(tx, grnId) {
+    await tx.$executeRaw`SELECT id FROM grn_imports WHERE id = ${grnId}::uuid FOR UPDATE`;
+    const agg = await tx.approvalRequest.aggregate({
+        where: { grnImportId: grnId, requestType: 'GRN_IMPORT' },
+        _max: { cycleNumber: true },
+    });
+    return (agg._max.cycleNumber || 0) + 1;
+}
+
+async function _createGrnApprovalRequestInTx(tx, { tenantId, grnId, userId, chain, cycleNumber }) {
+    try {
+        return await createAccApprovalRequestInTx(tx, {
+            tenantId,
+            requestType: 'GRN_IMPORT',
+            createdBy: userId,
+            chain,
+            currentStep: 1,
+            extraData: { grnImportId: grnId, cycleNumber },
+        });
+    } catch (err) {
+        if (err?.code === 'P2002') {
+            throw Object.assign(new Error('Approval cycle already exists for this GRN. Reload and retry.'), {
+                status: 409,
+                code: 'GRN_CYCLE_CONFLICT',
+            });
+        }
+        throw err;
+    }
+}
+
+async function _resolveGrnChain(grn, tenantId) {
+    if (grn.accWorkflowVersionId) {
+        return resolveWorkflowByVersionId(grn.accWorkflowVersionId);
+    }
+    return resolveWorkflowForDocument({ moduleKey: 'GRN', tenantId });
+}
+
+function _statusForGrnStep(chain, stepNumber) {
+    const step = chain.steps?.[stepNumber - 1];
+    if (step?.statusKey) return step.statusKey;
+    const defaults = ['PENDING_APPROVAL', 'PENDING_FINANCE'];
+    return defaults[stepNumber - 1] || 'PENDING_APPROVAL';
+}
+
+/** Status while awaiting step `stepNumber` — shared guard rejects terminal statusKey before final posting. */
+function _statusForGrnAwaitingStep(chain, stepNumber) {
+    const key = _statusForGrnStep(chain, stepNumber);
+    return assertAwaitingStatusKey(key, { moduleKey: 'GRN', stepNumber });
+}
+
+function _assertGrnDualGate(user, approval, chain) {
+    const step = approval.steps.find((s) => s.stepNumber === approval.currentStep);
+    if (!step) throw Object.assign(new Error('No pending approval step'), { status: 422 });
+    const chainStep = chain.steps?.find((s) => s.stepOrder === approval.currentStep);
+    const roleCode = step.requiredRole?.code;
+    const perm = chainStep?.permissionCode || 'GRN_MANAGE';
+    assertDualGateApproval(user, roleCode, perm);
+}
+
+async function _ensureGrnApprovalStarted(grn, tenantId, userId) {
+    if (grn.approvalRequestId) return _loadGrnWithApproval(grn.id, tenantId);
+    throw Object.assign(
+        new Error('GRN must be submitted for approval before workflow actions.'),
+        { status: 422, code: 'GRN_NOT_SUBMITTED' },
+    );
+}
+
+async function _advanceGrnApprovalStep(grnId, tenantId, user, comment, expectedVersion = null) {
+    let grn = await _loadGrnWithApproval(grnId, tenantId);
+    assertConcurrencyVersion(expectedVersion, grn.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GRN, entityId: grnId, changedBy: user.id },
+    });
+    if (!grn.approvalRequest) {
+        grn = await _ensureGrnApprovalStarted(grn, tenantId, user.id);
+    }
+    const approval = grn.approvalRequest;
+    const chain = await _resolveGrnChain(grn, tenantId);
+    const step = approval.steps.find((s) => s.stepNumber === approval.currentStep);
+    if (!step || step.status !== 'PENDING') {
+        throw Object.assign(new Error('No pending approval step'), { status: 422 });
+    }
+    _assertGrnDualGate(user, approval, chain);
+
+    const isFinal = approval.currentStep >= approval.totalSteps;
+    const now = new Date();
+
+    if (isFinal) {
+        if (!grn.lines?.length) {
+            throw Object.assign(new Error('GRN has no lines to post'), { status: 422 });
+        }
+        await prisma.$transaction(async (tx) => {
+            await tx.approvalStep.update({
+                where: { id: step.id },
+                data: { status: 'APPROVED', actedBy: user.id, actedAt: now, comment: comment || null },
+            });
+            await tx.approvalRequest.update({
+                where: { id: approval.id },
+                data: { status: 'APPROVED', resolvedAt: now, currentStep: approval.currentStep },
+            });
+            const freshGrn = await tx.grnImport.findFirst({
+                where: { id: grnId, tenantId },
+                include: { lines: true },
+            });
+            await postingEngine.postGrnInTransaction(tx, freshGrn, user.id);
+        });
+        await logGovernedEvent({
+            tenantId,
+            entityType: EntityType.GRN,
+            entityId: grnId,
+            action: 'POST',
+            changedBy: user.id,
+            eventType: 'GRN_POST',
+            note: `Finance approved and posted GRN ${grn.grnNumber} via ACC workflow`,
+            afterValue: { grnNumber: grn.grnNumber, status: 'POSTED' },
+        });
+    } else {
+        const nextStatus = _statusForGrnAwaitingStep(chain, approval.currentStep + 1);
+        await prisma.$transaction(async (tx) => {
+            await tx.approvalStep.update({
+                where: { id: step.id },
+                data: { status: 'APPROVED', actedBy: user.id, actedAt: now, comment: comment || null },
+            });
+            await tx.approvalRequest.update({
+                where: { id: approval.id },
+                data: { currentStep: approval.currentStep + 1 },
+            });
+            await tx.grnImport.update({
+                where: { id: grnId },
+                data: {
+                    status: nextStatus,
+                    approvedBy: user.id,
+                    approvedAt: now,
+                    rejectionReason: null,
+                    rejectedBy: null,
+                    isEditedAfterRejection: false,
+                    updatedAt: now,
+                },
+            });
+        });
+    }
+    return getGrn(grnId, tenantId);
+}
+
+async function _rejectGrnApproval(grnId, tenantId, user, reason, expectedVersion = null) {
+    let grn = await _loadGrnWithApproval(grnId, tenantId);
+    assertConcurrencyVersion(expectedVersion, grn.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GRN, entityId: grnId, changedBy: user.id },
+    });
+    if (!grn.approvalRequest) {
+        grn = await _ensureGrnApprovalStarted(grn, tenantId, user.id);
+    }
+    const approval = grn.approvalRequest;
+    const chain = await _resolveGrnChain(grn, tenantId);
+    const step = approval.steps.find((s) => s.stepNumber === approval.currentStep);
+    if (step) _assertGrnDualGate(user, approval, chain);
+
+    const now = new Date();
+    await prisma.$transaction(async (tx) => {
+        if (step) {
+            await tx.approvalStep.update({
+                where: { id: step.id },
+                data: { status: 'REJECTED', actedBy: user.id, actedAt: now, comment: reason },
+            });
+        }
+        await tx.approvalRequest.update({
+            where: { id: approval.id },
+            data: { status: 'REJECTED', resolvedAt: now },
+        });
+        await tx.grnImport.update({
+            where: { id: grnId },
+            data: bumpConcurrencyUpdate({
+                status: 'REJECTED',
+                rejectedBy: user.id,
+                rejectionReason: reason,
+                approvedBy: null,
+                approvedAt: null,
+                isEditedAfterRejection: false,
+                lastEditedBy: null,
+                updatedAt: now,
+            }),
+        });
+    });
+    return getGrn(grnId, tenantId);
+}
 
 // ─── State Machine ────────────────────────────────────────────────────────────
 
@@ -167,7 +481,7 @@ const validateGrn = async (grnId, tenantId) => {
     });
     if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
 
-    const LOCKED = ['VALIDATED', 'PENDING_APPROVAL', 'APPROVED', 'POSTED', 'REJECTED'];
+    const LOCKED = ['VALIDATED', 'PENDING_APPROVAL', 'PENDING_FINANCE', 'APPROVED', 'POSTED', 'REJECTED'];
     if (LOCKED.includes(grn.status))
         throw Object.assign(
             new Error(`GRN is in ${grn.status} status and cannot be re-validated.`),
@@ -189,327 +503,385 @@ const validateGrn = async (grnId, tenantId) => {
     });
 };
 
-const submitForApproval = async (grnId, tenantId, userId) => {
-    await assertStatus(grnId, tenantId, 'VALIDATED');
-    const grn = await prisma.grnImport.update({
-        where: { id: grnId },
-        data: { status: 'PENDING_APPROVAL', updatedAt: new Date() },
+const submitForApproval = async (grnId, tenantId, userId, expectedVersion = null) => {
+    const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
+    if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
+
+    const chain = await resolveWorkflowForDocument({ moduleKey: 'GRN', tenantId });
+    const firstStatus = _statusForGrnAwaitingStep(chain, 1);
+
+    let previousCycleNumber = 0;
+    let nextCycleNumber = 1;
+    let isResubmit = false;
+    let reusedApprovalRequest = false;
+
+    await prisma.$transaction(async (tx) => {
+        await tx.$executeRaw`SELECT id FROM grn_imports WHERE id = ${grnId}::uuid FOR UPDATE`;
+        const fresh = await tx.grnImport.findFirst({
+            where: { id: grnId, tenantId },
+            include: {
+                lines: true,
+                approvalRequest: {
+                    include: {
+                        steps: {
+                            orderBy: { stepNumber: 'asc' },
+                            include: { requiredRole: { select: { code: true } } },
+                        },
+                    },
+                },
+            },
+        });
+        if (!fresh) throw Object.assign(new Error('GRN not found'), { status: 404 });
+        const isCreatorResubmit = fresh.approvalRequest && Number(fresh.approvalRequest.currentStep) === 0;
+        if (isCreatorResubmit && fresh.importedBy !== userId) {
+            throw Object.assign(new Error('Only the GRN creator may resubmit after Send Back.'), { status: 403 });
+        }
+        if (!isCreatorResubmit && !['VALIDATED', 'DRAFT'].includes(fresh.status)) {
+            throw Object.assign(
+                new Error(`GRN must be DRAFT or VALIDATED to submit. Current status: ${fresh.status}`),
+                { status: 422 },
+            );
+        }
+        if (!isCreatorResubmit && fresh.status === 'DRAFT') {
+            const draftErrors = [];
+            if (!fresh.vendorId) draftErrors.push('Supplier is not set.');
+            if (!fresh.pdfAttachmentUrl) draftErrors.push('Invoice attachment is required before submit.');
+            if (!fresh.lines?.length) draftErrors.push('At least one line item is required.');
+            if (draftErrors.length) {
+                throw Object.assign(new Error(draftErrors.join(' | ')), { status: 422, details: draftErrors });
+            }
+        }
+        assertConcurrencyVersion(expectedVersion, fresh.concurrencyVersion, {
+            required: true,
+            audit: { tenantId, entityType: EntityType.GRN, entityId: grnId, changedBy: userId },
+        });
+
+        if (isCreatorResubmit) {
+            const pinnedChain = await _resolveGrnChain(fresh, tenantId);
+            const pinnedFirstStatus = _statusForGrnAwaitingStep(pinnedChain, 1);
+            await executeCreatorResubmitInTx(tx, {
+                approvalRequest: fresh.approvalRequest,
+                userId,
+                tenantId,
+                entityType: EntityType.GRN,
+                entityId: grnId,
+                documentStatusBefore: fresh.status,
+                documentStatusAfter: pinnedFirstStatus,
+                resubmitNotePrefix: 'GRN_RESUBMIT',
+            });
+            await tx.grnImport.update({
+                where: { id: grnId },
+                data: bumpConcurrencyUpdate({
+                    status: pinnedFirstStatus,
+                    updatedAt: new Date(),
+                }),
+            });
+            nextCycleNumber = fresh.approvalRequest.cycleNumber || 1;
+            previousCycleNumber = nextCycleNumber;
+            isResubmit = true;
+            reusedApprovalRequest = true;
+            return;
+        }
+
+        nextCycleNumber = await _resolveNextGrnCycleNumber(tx, grnId);
+        previousCycleNumber = nextCycleNumber - 1;
+        isResubmit = previousCycleNumber > 0;
+
+        const ar = await _createGrnApprovalRequestInTx(tx, {
+            tenantId,
+            grnId,
+            userId,
+            chain,
+            cycleNumber: nextCycleNumber,
+        });
+        await tx.grnImport.update({
+            where: { id: grnId },
+            data: bumpConcurrencyUpdate({
+                status: firstStatus,
+                approvalRequestId: ar.id,
+                accWorkflowVersionId: chain.versionId,
+                updatedAt: new Date(),
+            }),
+        });
     });
 
-    // Simulate approval logic integration
-    // Finding admin/manager for email
-    try {
-        const approvers = await prisma.tenantMember.findMany({
-            where: { tenantId, role: { code: { in: ['ADMIN'] } }, isActive: true, user: { isActive: true } },
-            select: { user: { select: { email: true } } }
+    if (isResubmit && !reusedApprovalRequest) {
+        await logGovernedEvent({
+            tenantId,
+            entityType: EntityType.GRN,
+            entityId: grnId,
+            action: 'SUBMIT',
+            changedBy: userId,
+            eventType: 'GRN_RESUBMIT',
+            afterValue: { previousCycleNumber, newCycleNumber: nextCycleNumber },
         });
-        const submitter = await prisma.user.findUnique({ where: { id: userId } });
+    }
 
-        // Mock a pseudo-approval object
-        const pseudoApproval = {
-            type: 'GRN',
-            createdAt: grn.createdAt,
-            notes: `GRN Number: ${grn.grnNumber}`
-        };
-        for (const app of approvers) {
-            await emailService.sendApprovalPendingNotification(pseudoApproval, submitter, app.user.email);
+    try {
+        const firstRole = chain.steps?.[0]?.roleCode;
+        if (firstRole) {
+            const approvers = await prisma.tenantMember.findMany({
+                where: {
+                    tenantId,
+                    role: { code: firstRole },
+                    isActive: true,
+                    user: { isActive: true },
+                },
+                select: { user: { select: { email: true } } },
+            });
+            const submitter = await prisma.user.findUnique({ where: { id: userId } });
+            const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
+            const pseudoApproval = { type: 'GRN', createdAt: grn?.createdAt, notes: `GRN Number: ${grn?.grnNumber}` };
+            for (const app of approvers) {
+                await emailService.sendApprovalPendingNotification(pseudoApproval, submitter, app.user.email);
+            }
         }
     } catch (err) {
-        console.error("Failed to send GRN approval email", err);
+        console.error('Failed to send GRN approval email', err);
     }
-    return grn;
+    return getGrn(grnId, tenantId);
 };
 
-const approveGrn = async (grnId, tenantId, userId, comment) => {
-    await assertStatus(grnId, tenantId, 'PENDING_APPROVAL');
-    return prisma.grnImport.update({
-        where: { id: grnId },
-        data: {
-            status: 'APPROVED',
-            approvedBy: userId,
-            isEditedAfterRejection: false,
-            updatedAt: new Date(),
-        },
-    });
-};
-
-const rejectGrn = async (grnId, tenantId, userId, reason) => {
-    const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
-    if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
-    if (!['PENDING_APPROVAL', 'VALIDATED', 'DRAFT'].includes(grn.status))
-        throw Object.assign(new Error('GRN cannot be rejected in its current state'), { status: 422 });
-    return prisma.grnImport.update({
-        where: { id: grnId },
-        data: {
-            status: 'REJECTED',
-            rejectedBy: userId,
-            rejectionReason: reason,
-            isEditedAfterRejection: false,
-            lastEditedBy: null,
-            updatedAt: new Date(),
-        },
-    });
-};
-
-/**
- * Cost Control / Admin: VALIDATED → APPROVED or REJECTED.
- * Finance Manager: APPROVED → REJECTED only (unwind before ledger post).
- * @param {string} grnId
- * @param {string} tenantId
- * @param {'APPROVED'|'REJECTED'} status
- * @param {string|null} reason Required when status is REJECTED
- * @param {string} userId
- * @param {string} [actorRole] JWT role (normalized) — FINANCE_MANAGER or ADMIN triggers the APPROVED→REJECTED path
- */
-const updateStatus = async (grnId, tenantId, status, reason, userId, actorRole) => {
-    const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
-    if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
-    if (status !== 'APPROVED' && status !== 'REJECTED')
-        throw Object.assign(new Error('Invalid target status.'), { status: 400 });
-
-    const role = normalizeRole(actorRole);
-
-    // Finance Manager / Admin: APPROVED → REJECTED (return before ledger post)
-    if (
-        (role === 'FINANCE_MANAGER' || role === 'ADMIN') &&
-        status === 'REJECTED' &&
-        grn.status === 'APPROVED'
-    ) {
-        const r = (reason || '').trim();
-        if (!r)
-            throw Object.assign(new Error('Rejection reason is required.'), { status: 400 });
-        return prisma.grnImport.update({
-            where: { id: grnId },
-            data: {
-                status: 'REJECTED',
-                rejectedBy: userId,
-                rejectionReason: r,
-                approvedBy: null,
-                isEditedAfterRejection: false,
-                lastEditedBy: null,
-                updatedAt: new Date(),
-            },
-        });
-    }
-
-    if (grn.status !== 'VALIDATED')
+const approveGrn = async (grnId, tenantId, user, comment, expectedVersion = null) => {
+    const grn = await _loadGrnWithApproval(grnId, tenantId);
+    const pending = ['PENDING_APPROVAL', 'PENDING_FINANCE'];
+    if (!pending.includes(grn.status)) {
         throw Object.assign(
-            new Error(`GRN must be VALIDATED to approve or reject. Current status: ${grn.status}`),
-            { status: 422 }
+            new Error(`GRN must be pending approval. Current status: ${grn.status}`),
+            { status: 422 },
         );
-
-    if (status === 'REJECTED') {
-        const r = (reason || '').trim();
-        if (!r)
-            throw Object.assign(new Error('Rejection reason is required.'), { status: 400 });
-        return prisma.grnImport.update({
-            where: { id: grnId },
-            data: {
-                status: 'REJECTED',
-                rejectedBy: userId,
-                rejectionReason: r,
-                isEditedAfterRejection: false,
-                lastEditedBy: null,
-                updatedAt: new Date(),
-            },
-        });
     }
+    return _advanceGrnApprovalStep(grnId, tenantId, user, comment, expectedVersion);
+};
 
-    return prisma.grnImport.update({
-        where: { id: grnId },
-        data: {
-            status: 'APPROVED',
-            approvedBy: userId,
-            rejectionReason: null,
-            rejectedBy: null,
-            isEditedAfterRejection: false,
-            updatedAt: new Date(),
+const rejectGrn = async (grnId, tenantId, user, reason, expectedVersion = null) => {
+    const r = (reason || '').trim();
+    if (!r) throw Object.assign(new Error('Rejection reason is required.'), { status: 400 });
+
+    const grn = await prisma.grnImport.findFirst({
+        where: { id: grnId, tenantId },
+        include: {
+            approvalRequest: { select: { currentStep: true } },
         },
     });
-};
-
-/**
- * After corrections, move REJECTED → VALIDATED (storekeeper) or APPROVED (cost control / admin).
- */
-const resubmitRejectedGrn = async (grnId, tenantId, userId, creatorRole) => {
-    const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
     if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
-    if (grn.status !== 'REJECTED')
-        throw Object.assign(new Error('Only rejected GRNs can be resubmitted.'), { status: 422 });
 
-    const r = normalizeRole(creatorRole);
-    if (r === 'STOREKEEPER') {
-        return prisma.grnImport.update({
-            where: { id: grnId },
-            data: {
-                status: 'VALIDATED',
-                approvedBy: null,
-                rejectionReason: null,
-                rejectedBy: null,
-                updatedAt: new Date(),
-            },
+    const isReturned =
+        isSendBackReturned(grn.status, grn.notes) ||
+        (String(grn.status || '').toUpperCase() === 'DRAFT' &&
+            Number(grn.approvalRequest?.currentStep) === 0);
+
+    if (isReturned && String(grn.status || '').toUpperCase() === 'DRAFT') {
+        if (grn.importedBy !== user.id) {
+            throw Object.assign(new Error('Only the GRN creator can reject a returned document.'), {
+                status: 403,
+            });
+        }
+        assertConcurrencyVersion(expectedVersion, grn.concurrencyVersion, {
+            required: true,
+            audit: { tenantId, entityType: EntityType.GRN, entityId: grnId, changedBy: user.id },
         });
-    }
-    if (['COST_CONTROL', 'ADMIN', 'SUPER_ADMIN', 'ORG_MANAGER'].includes(r)) {
-        return prisma.grnImport.update({
-            where: { id: grnId },
-            data: {
-                status: 'APPROVED',
-                approvedBy: userId,
-                rejectionReason: null,
-                rejectedBy: null,
-                isEditedAfterRejection: false,
+        await prisma.grnImport.updateMany({
+            where: { id: grnId, tenantId, status: 'DRAFT' },
+            data: bumpConcurrencyUpdate({
+                status: 'REJECTED',
+                rejectedBy: user.id,
+                rejectionReason: r,
                 updatedAt: new Date(),
-            },
+            }),
         });
+        await logGovernedEvent({
+            tenantId,
+            entityType: EntityType.GRN,
+            entityId: grnId,
+            action: 'REJECT',
+            changedBy: user.id,
+            eventType: 'GRN_CREATOR_REJECT_RETURNED',
+            note: `Creator rejected returned GRN: ${r}`,
+            beforeValue: { status: grn.status },
+            afterValue: { status: 'REJECTED' },
+        });
+        return getGrn(grnId, tenantId);
     }
-    throw Object.assign(new Error('Your role cannot resubmit this GRN.'), { status: 403 });
+
+    if (!['PENDING_APPROVAL', 'VALIDATED', 'PENDING_FINANCE'].includes(grn.status)) {
+        throw Object.assign(new Error('GRN cannot be rejected in its current state'), { status: 422 });
+    }
+    return _rejectGrnApproval(grnId, tenantId, user, r, expectedVersion);
 };
 
-// ─── Post GRN (Atomic) ───────────────────────────────────────────────────────
-
 /**
- * ATOMIC: Post all GRN lines to InventoryLedger + update StockBalance + WAC,
- * and mirror the receipt on MovementDocument + MovementLine (Inventory Movements UI).
+ * Ch.3.4 Send Back — return to prior participant or creator.
  */
-const postGrn = async (grnId, tenantId, userId) => {
+const sendBackGrn = async (grnId, tenantId, user, reason, expectedVersion, targetStepNumber = null) => {
+    const trimmedReason = normalizeReason(reason);
+    const grn = await _loadGrnWithApproval(grnId, tenantId);
+    const sendBackFrom = new Set(['VALIDATED', 'PENDING_APPROVAL', 'PENDING_FINANCE']);
+    if (!sendBackFrom.has(grn.status)) {
+        throw Object.assign(new Error('GRN cannot be sent back from its current status.'), { status: 422 });
+    }
+    if (!grn.approvalRequest) {
+        throw Object.assign(new Error('GRN has no active approval request.'), { status: 404 });
+    }
+    const chain = await _resolveGrnChain(grn, tenantId);
+    _assertGrnDualGate(user, grn.approvalRequest, chain);
+    assertConcurrencyVersion(expectedVersion, grn.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GRN, entityId: grnId, changedBy: user.id },
+    });
+    const currentStepNo = Number(grn.approvalRequest.currentStep);
+    const allowedTargets = buildGrnSendBackTargets(grn, grn.approvalRequest);
+
+    let targetStepNo;
+    if (targetStepNumber == null || targetStepNumber === '') {
+        targetStepNo = currentStepNo <= 1 ? 0 : currentStepNo - 1;
+    } else {
+        targetStepNo = Number(targetStepNumber);
+        if (!Number.isInteger(targetStepNo) || !allowedTargets.some((t) => t.stepNumber === targetStepNo)) {
+            throw Object.assign(new Error('Send Back target must be a prior workflow participant.'), {
+                status: 422,
+            });
+        }
+    }
+
+    const nextStatus = targetStepNo === 0 ? 'DRAFT' : _statusForGrnAwaitingStep(chain, targetStepNo);
+
+    await prisma.$transaction(async (tx) => {
+        await tx.grnImport.update({
+            where: { id: grnId },
+            data: bumpConcurrencyUpdate({
+                status: nextStatus,
+                ...(targetStepNo === 0
+                    ? { notes: appendSendBackNotes(grn.notes, trimmedReason) }
+                    : {}),
+            }),
+        });
+        await executeWorkflowSendBackInTx(tx, {
+            approvalRequest: grn.approvalRequest,
+            sourceStepNumber: currentStepNo,
+            forceTargetStepNumber: targetStepNo,
+            reason: trimmedReason,
+            userId: user.id,
+            tenantId,
+            entityType: EntityType.GRN,
+            entityId: grnId,
+            documentStatusBefore: grn.status,
+            documentStatusAfter: nextStatus,
+        });
+    });
+
+    return getGrn(grnId, tenantId);
+};
+
+const normalizePatchStatus = (status) => {
+    const s = String(status || '').toUpperCase();
+    if (s === 'APPROVED') return 'PENDING_FINANCE';
+    return s;
+};
+
+/** Governed status transitions — ACC dual gate + GRN_MANAGE permission. */
+const updateStatus = async (grnId, tenantId, status, reason, userId, user, expectedVersion = null) => {
     const grn = await prisma.grnImport.findFirst({
         where: { id: grnId, tenantId },
         include: { lines: true },
     });
     if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
-    if (grn.status !== 'APPROVED')
-        throw Object.assign(new Error('GRN must be APPROVED before posting'), { status: 422 });
-    if (!grn.lines.length)
-        throw Object.assign(new Error('GRN has no lines to post'), { status: 422 });
 
-    await prisma.$transaction(async (tx) => {
-        for (const line of grn.lines) {
-            if (!line.internalItemId || !line.internalUomId)
-                throw new Error(`Line is missing item or UOM — aborting post`);
+    const target = normalizePatchStatus(status);
 
-            const qtyToPost = Number(line.qtyInBaseUnit);
-            if (qtyToPost <= 0)
-                throw new Error(`Line has zero or negative quantity — aborting post`);
+    if (!['PENDING_FINANCE', 'POSTED', 'REJECTED'].includes(target)) {
+        throw Object.assign(
+            new Error('Invalid target status. Use PENDING_FINANCE, POSTED, or REJECTED.'),
+            { status: 400 },
+        );
+    }
 
-            const lineUnitPrice = Number(line.unitPrice);
-            const totalValue = qtyToPost * lineUnitPrice;
+    if (target === 'REJECTED') {
+        const r = (reason || '').trim();
+        if (!r) throw Object.assign(new Error('Rejection reason is required.'), { status: 400 });
+        return _rejectGrnApproval(grnId, tenantId, user, r, expectedVersion);
+    }
 
-            // WAC upsert
-            const balance = await tx.stockBalance.findUnique({
-                where: {
-                    tenantId_itemId_locationId: {
-                        tenantId,
-                        itemId: line.internalItemId,
-                        locationId: grn.locationId,
-                    },
-                },
-            });
-
-            const prevQty = balance ? Number(balance.qtyOnHand) : 0;
-            const prevWac = balance ? Number(balance.wacUnitCost) : 0;
-            const newQty = prevQty + qtyToPost;
-            const newWac = newQty > 0
-                ? ((prevQty * prevWac) + (qtyToPost * lineUnitPrice)) / newQty
-                : lineUnitPrice;
-
-            await tx.stockBalance.upsert({
-                where: {
-                    tenantId_itemId_locationId: {
-                        tenantId,
-                        itemId: line.internalItemId,
-                        locationId: grn.locationId,
-                    },
-                },
-                create: {
-                    tenantId,
-                    itemId: line.internalItemId,
-                    locationId: grn.locationId,
-                    qtyOnHand: newQty,
-                    wacUnitCost: newWac,
-                },
-                update: { qtyOnHand: newQty, wacUnitCost: newWac, lastUpdated: new Date() },
-            });
-
-            await tx.inventoryLedger.create({
-                data: {
-                    tenantId,
-                    itemId: line.internalItemId,
-                    locationId: grn.locationId,
-                    movementType: 'RECEIVE',
-                    qtyIn: qtyToPost,
-                    qtyOut: 0,
-                    unitCost: lineUnitPrice,
-                    totalValue,
-                    balanceAfter: newQty,
-                    referenceType: 'GRN',
-                    referenceId: grn.id,
-                    referenceNo: grn.grnNumber,
-                    notes: `GRN: ${grn.grnNumber} | Supplier: ${grn.vendorNameSnapshot}`,
-                    createdBy: userId,
-                },
-            });
+    if (target === 'PENDING_FINANCE') {
+        if (grn.status !== 'VALIDATED' && grn.status !== 'PENDING_APPROVAL') {
+            throw Object.assign(
+                new Error(`GRN must be VALIDATED for Cost Control review. Current status: ${grn.status}`),
+                { status: 422 },
+            );
         }
+        return _advanceGrnApprovalStep(grnId, tenantId, user, reason, expectedVersion);
+    }
 
-        const postedAt = new Date();
-        const movementLinesCreate = grn.lines.map((line) => {
-            const qtyToPost = Number(line.qtyInBaseUnit);
-            const lineUnitPrice = Number(line.unitPrice);
-            return {
-                itemId: line.internalItemId,
-                locationId: grn.locationId,
-                unitId: line.internalUomId,
-                qtyRequested: qtyToPost,
-                qtyInBaseUnit: qtyToPost,
-                unitCost: lineUnitPrice,
-                totalValue: qtyToPost * lineUnitPrice,
-            };
-        });
+    if (grn.status !== 'PENDING_FINANCE') {
+        throw Object.assign(
+            new Error(`GRN must be awaiting Finance approval. Current status: ${grn.status}`),
+            { status: 422 },
+        );
+    }
+    return _advanceGrnApprovalStep(grnId, tenantId, user, reason, expectedVersion);
+};
 
-        await tx.movementDocument.create({
-            data: {
-                tenantId,
-                documentNo: grn.grnNumber,
-                movementType: 'RECEIVE',
-                status: 'POSTED',
-                destLocationId: grn.locationId,
-                supplierId: grn.vendorId,
-                documentDate: grn.receivingDate,
-                notes: grn.notes
-                    ? `GRN ${grn.grnNumber}: ${grn.notes}`
-                    : `Posted from GRN ${grn.grnNumber}`,
-                createdBy: userId,
-                postedAt,
-                lines: { create: movementLinesCreate },
-            },
-        });
+// ─── Post GRN (Atomic) ───────────────────────────────────────────────────────
 
-        await tx.grnImport.update({
-            where: { id: grnId },
-            data: {
-                status: 'POSTED',
-                postedBy: userId,
-                postedAt,
-                updatedAt: new Date(),
-            },
-        });
-    });
-
-    return prisma.grnImport.findUnique({
-        where: { id: grnId },
-        include: {
-            lines: true,
-            vendor: { select: { name: true } },
-            location: { select: { name: true } },
-            postedByUser: { select: { firstName: true, lastName: true } },
-        },
-    });
+/** @deprecated Manual post removed — use POST /grn/:id/approve (Finance approval auto-posts). */
+const postGrn = async () => {
+    throw Object.assign(
+        new Error(
+            'Manual GRN posting is disabled. Finance must approve via POST /grn/:id/approve.',
+        ),
+        { status: 410 },
+    );
 };
 
 // ─── Queries ─────────────────────────────────────────────────────────────────
 
-const listGrns = async (tenantId, { status, page = 1, limit = 20 } = {}) => {
-    const where = { tenantId, ...(status ? { status } : {}) };
+/** List filter only: comma-separated statuses → `{ status: { in } }` (see breakage `buildStatusWhere`). */
+const buildGrnStatusWhere = (statusRaw) => {
+    const raw = typeof statusRaw === 'string' ? statusRaw.trim() : '';
+    if (!raw) return {};
+    if (raw.includes(',')) {
+        const parts = raw.split(',').map((s) => s.trim()).filter(Boolean);
+        return parts.length === 0
+            ? {}
+            : parts.length === 1
+              ? { status: parts[0] }
+              : { status: { in: parts } };
+    }
+    return { status: raw };
+};
+
+/** GRN.locationId is non-null — drop invalid `{ locationId: null }` branches from shared scopeWhere. */
+const normalizeGrnListScopeWhere = (scopeWhere) => {
+    if (!scopeWhere?.OR || !Array.isArray(scopeWhere.OR)) return scopeWhere;
+    const clauses = scopeWhere.OR.filter((clause) => {
+        if (!clause || !Object.prototype.hasOwnProperty.call(clause, 'locationId')) return true;
+        if (clause.locationId === null) return false;
+        if (clause.locationId?.equals === null) return false;
+        return true;
+    });
+    if (clauses.length === 0) return { locationId: { in: [] } };
+    if (clauses.length === 1) return clauses[0];
+    return { OR: clauses };
+};
+
+const listGrns = async (tenantId, { status, page = 1, limit = 20 } = {}, user = null) => {
+    const scope = user ? await resolveScopeContext(user, tenantId) : null;
+    const scopeWhere = scope
+        ? normalizeGrnListScopeWhere(scopeWhereFor(SCOPE_MODULE.GRN, scope))
+        : {};
+    // Operational register only: hide empty technical DRAFTs (continuity session shells).
+    // Real create always has ≥1 line; empty DRAFT rows are continuity artifacts.
+    const excludeEmptyContinuityDrafts = {
+        NOT: {
+            AND: [{ status: 'DRAFT' }, { lines: { none: {} } }],
+        },
+    };
+    const where = {
+        tenantId,
+        ...scopeWhere,
+        ...buildGrnStatusWhere(status),
+        ...excludeEmptyContinuityDrafts,
+    };
     const [total, data] = await Promise.all([
         prisma.grnImport.count({ where }),
         prisma.grnImport.findMany({
@@ -526,10 +898,15 @@ const listGrns = async (tenantId, { status, page = 1, limit = 20 } = {}) => {
             take: limit,
         }),
     ]);
-    return { total, page, limit, data };
+    const scopeMeta = scope ? metaFor(scope, { total }) : null;
+    const enriched = data.map((row) => ({
+        ...row,
+        userFacingState: mapUserFacingState('GRN', row.status, { notes: row.notes }),
+    }));
+    return { total, page, limit, data: enriched, ...scopeMeta };
 };
 
-const getGrn = async (grnId, tenantId) => {
+const getGrn = async (grnId, tenantId, user = null) => {
     const grn = await prisma.grnImport.findFirst({
         where: { id: grnId, tenantId },
         include: {
@@ -541,17 +918,42 @@ const getGrn = async (grnId, tenantId) => {
             rejectedByUser: { select: { firstName: true, lastName: true } },
             lastEditedByUser: { select: { firstName: true, lastName: true } },
             lines: true,
+            approvalRequest: {
+                include: {
+                    steps: {
+                        orderBy: { stepNumber: 'asc' },
+                        include: {
+                            requiredRole: { select: { code: true, name: true } },
+                            actedByUser: { select: { firstName: true, lastName: true } },
+                        },
+                    },
+                },
+            },
         },
     });
     if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
+    if (user) {
+        const scope = await resolveScopeContext(user, tenantId);
+        await assertInScope(SCOPE_MODULE.GRN, grn, scope, 'read');
+    }
 
     // Enrich lines with item and UOM names via separate queries
     if (grn.lines.length > 0) {
         const itemIds = [...new Set(grn.lines.map(l => l.internalItemId).filter(Boolean))];
         const uomIds = [...new Set(grn.lines.map(l => l.internalUomId).filter(Boolean))];
         const [items, units] = await Promise.all([
-            itemIds.length ? prisma.item.findMany({ where: { id: { in: itemIds } }, select: { id: true, name: true, barcode: true } }) : [],
-            uomIds.length ? prisma.unit.findMany({ where: { id: { in: uomIds } }, select: { id: true, name: true, abbreviation: true } }) : [],
+            itemIds.length
+                ? prisma.item.findMany({
+                      where: { id: { in: itemIds }, tenantId },
+                      select: { id: true, name: true, barcode: true },
+                  })
+                : [],
+            uomIds.length
+                ? prisma.unit.findMany({
+                      where: { id: { in: uomIds }, tenantId },
+                      select: { id: true, name: true, abbreviation: true },
+                  })
+                : [],
         ]);
         const itemMap = Object.fromEntries(items.map(i => [i.id, i]));
         const uomMap = Object.fromEntries(units.map(u => [u.id, u]));
@@ -572,114 +974,191 @@ const getGrn = async (grnId, tenantId) => {
         }
     }
 
+    const workflowTimeline = enrichTimelineSlotsWithDuration(buildGrnWorkflowTimeline(grn));
+
+    let chain = null;
+    try {
+        chain = await _resolveGrnChain(grn, tenantId);
+    } catch {
+        chain = null;
+    }
+    const workflow = buildGrnWorkflowContext(grn, chain);
+    const sendBackTargets =
+        grn.approvalRequest &&
+        ['VALIDATED', 'PENDING_APPROVAL', 'PENDING_FINANCE'].includes(String(grn.status || '').toUpperCase())
+            ? buildGrnSendBackTargets(grn, grn.approvalRequest)
+            : [];
+
     return {
         ...grn,
+        userFacingState: mapUserFacingState('GRN', grn.status, { notes: grn.notes }),
         pdfAttachmentDisplayUrl,
+        workflowTimeline,
+        workflow,
+        sendBackTargets,
     };
 };
 
 // ─── Mutations ────────────────────────────────────────────────────────────────
 
 /**
- * PATCH /api/grn/:id — optional `notes`; optional `lines` (full replacement) only when status is REJECTED.
- * POSTED / APPROVED (and any non-REJECTED status) cannot change line items.
+ * PATCH /api/grn/:id — optional `notes` only (Ch.2.7: rejected/posted documents are read-only).
  */
-const updateGrn = async (grnId, tenantId, body = {}, userId) => {
-    const { notes, lines } = body;
+const updateGrn = async (grnId, tenantId, body = {}, userId, expectedVersion) => {
+    const {
+        notes,
+        lines,
+        supplierId,
+        locationId,
+        receivingDate,
+        supplierInvoiceNumber,
+        grnNumber,
+    } = body;
     const hasLines = lines !== undefined;
     const hasNotes = notes !== undefined;
+    const hasHeader =
+        supplierId !== undefined ||
+        locationId !== undefined ||
+        receivingDate !== undefined ||
+        supplierInvoiceNumber !== undefined ||
+        grnNumber !== undefined;
 
-    if (!hasLines && !hasNotes)
+    if (!hasLines && !hasNotes && !hasHeader)
         throw Object.assign(new Error('No updates provided.'), { status: 400 });
 
-    const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
+    const grn = await prisma.grnImport.findFirst({
+        where: { id: grnId, tenantId },
+        include: { lines: true },
+    });
     if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
 
-    if (hasLines) {
-        if (!Array.isArray(lines))
-            throw Object.assign(new Error('lines must be an array.'), { status: 400 });
-        if (grn.status !== 'REJECTED')
-            throw Object.assign(
-                new Error('Line items can only be edited when the GRN status is REJECTED.'),
-                { status: 422 }
-            );
-        if (lines.length === 0)
-            throw Object.assign(new Error('At least one line item is required.'), { status: 400 });
+    const { assertPostingPeriodFieldsImmutable } = require('../platform/postingPeriod.util');
+    assertPostingPeriodFieldsImmutable(grn, body);
 
-        const itemIds = [...new Set(lines.map(l => l.itemId))];
-        const foundItems = await prisma.item.findMany({
-            where: { id: { in: itemIds }, tenantId },
-            include: { itemUnits: { include: { unit: true } } },
-        });
-        const foundItemIds = new Set(foundItems.map(i => i.id));
-        const missingIds = itemIds.filter(id => !foundItemIds.has(id));
-        if (missingIds.length > 0)
-            throw Object.assign(
-                new Error(`${missingIds.length} item(s) not found in Item Master. Add them first.`),
-                { status: 422, details: missingIds }
-            );
-
-        const invalidLines = lines.filter(l => Number(l.receivedQty) <= 0);
-        if (invalidLines.length > 0)
-            throw Object.assign(new Error('All received quantities must be greater than zero.'), { status: 400 });
-
-        const itemMap = Object.fromEntries(foundItems.map(i => [i.id, i]));
-
-        await prisma.$transaction(async (tx) => {
-            await tx.grnLine.deleteMany({ where: { grnImportId: grnId } });
-
-            const createRows = lines.map(l => {
-                const received = Number(l.receivedQty);
-                const orderedRaw = l.orderedQty;
-                const ordered =
-                    orderedRaw != null && orderedRaw !== ''
-                        ? Number(orderedRaw)
-                        : received;
-                return {
-                    grnImportId: grnId,
-                    futurelogItemCode: itemMap[l.itemId]?.barcode || l.itemId,
-                    futurelogDescription: itemMap[l.itemId]?.name || '',
-                    futurelogUom: l.uomId,
-                    orderedQty: Number.isFinite(ordered) ? ordered : received,
-                    receivedQty: received,
-                    unitPrice: Number(l.unitPrice) || 0,
-                    internalItemId: l.itemId,
-                    internalUomId: l.uomId,
-                    conversionFactor: 1,
-                    qtyInBaseUnit: received,
-                    isMapped: true,
-                };
-            });
-
-            await tx.grnLine.createMany({ data: createRows });
-            const linePatchData = {
-                ...(hasNotes ? { notes: notes ?? null } : {}),
-                updatedAt: new Date(),
-            };
-            if (grn.status === 'REJECTED') {
-                linePatchData.isEditedAfterRejection = true;
-                linePatchData.lastEditedBy = userId || null;
-            }
-            await tx.grnImport.update({
-                where: { id: grnId },
-                data: linePatchData,
-            });
-        });
-
-        return getGrn(grnId, tenantId);
+    if (grn.status === 'REJECTED') {
+        throw Object.assign(
+            new Error('Rejected GRNs are read-only. Create a new GRN to repeat the operation (Ch.2.7).'),
+            { status: 422 },
+        );
     }
 
     if (grn.status === 'POSTED')
         throw Object.assign(new Error('GRN is POSTED and is fully read-only.'), { status: 423 });
 
+    if (grn.status !== 'DRAFT') {
+        if (hasLines) {
+            throw Object.assign(
+                new Error('Line items cannot be changed after draft submission.'),
+                { status: 422 },
+            );
+        }
+        if (hasHeader) {
+            throw Object.assign(
+                new Error('Header fields cannot be changed after draft submission.'),
+                { status: 422 },
+            );
+        }
+    }
+
+    const { assertDocumentEditableByLifecycle } = require('../platform/lifecyclePresentation.service');
+    assertDocumentEditableByLifecycle('GRN', grn.status, { notes: grn.notes });
+
+    assertConcurrencyVersion(expectedVersion, grn.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GRN, entityId: grnId, changedBy: userId },
+    });
+
+    if (grn.status === 'DRAFT' && hasLines) {
+        if (!Array.isArray(lines) || lines.length === 0) {
+            throw Object.assign(new Error('At least one line item is required.'), { status: 400 });
+        }
+        const itemIds = [...new Set(lines.map((l) => l.itemId))];
+        const foundItems = await prisma.item.findMany({
+            where: { id: { in: itemIds }, tenantId },
+        });
+        const foundItemIds = new Set(foundItems.map((i) => i.id));
+        const missingIds = itemIds.filter((id) => !foundItemIds.has(id));
+        if (missingIds.length) {
+            throw Object.assign(
+                new Error(`${missingIds.length} item(s) not found in Item Master.`),
+                { status: 422, details: missingIds },
+            );
+        }
+        const invalidLines = lines.filter((l) => Number(l.receivedQty) <= 0);
+        if (invalidLines.length) {
+            throw Object.assign(new Error('All received quantities must be greater than zero.'), { status: 400 });
+        }
+        for (const l of lines) {
+            assertIntegerQuantity({
+                qty: l.receivedQty,
+                field: 'receivedQty',
+                message: 'Quantity must be a whole number (integer). Fractional quantities are not allowed.',
+                details: { itemId: l.itemId, receivedQty: Number(l.receivedQty) },
+            });
+        }
+        const itemMap = Object.fromEntries(foundItems.map((i) => [i.id, i]));
+        await prisma.$transaction(async (tx) => {
+            await tx.grnLine.deleteMany({ where: { grnImportId: grnId } });
+            await tx.grnImport.update({
+                where: { id: grnId },
+                data: bumpConcurrencyUpdate({
+                    ...(hasNotes ? { notes } : {}),
+                    ...(supplierId ? { vendorId: supplierId } : {}),
+                    ...(locationId ? { locationId } : {}),
+                    ...(receivingDate ? { receivingDate: new Date(receivingDate) } : {}),
+                    ...(supplierInvoiceNumber || grnNumber
+                        ? { supplierInvoiceNumber: (supplierInvoiceNumber || grnNumber || '').trim() }
+                        : {}),
+                    updatedAt: new Date(),
+                }),
+            });
+            await tx.grnLine.createMany({
+                data: lines.map((l) => {
+                    const received = Number(l.receivedQty);
+                    const orderedRaw = l.orderedQty;
+                    const ordered =
+                        orderedRaw != null && orderedRaw !== '' ? Number(orderedRaw) : received;
+                    return {
+                        grnImportId: grnId,
+                        futurelogItemCode: itemMap[l.itemId]?.barcode || l.itemId,
+                        futurelogDescription: itemMap[l.itemId]?.name || '',
+                        futurelogUom: l.uomId,
+                        orderedQty: Number.isFinite(ordered) ? ordered : received,
+                        receivedQty: received,
+                        unitPrice: Number(l.unitPrice) || 0,
+                        internalItemId: l.itemId,
+                        internalUomId: l.uomId,
+                        conversionFactor: 1,
+                        qtyInBaseUnit: received,
+                        isMapped: true,
+                    };
+                }),
+            });
+        });
+        return getGrn(grnId, tenantId);
+    }
+
+    const supplier = supplierId
+        ? await prisma.supplier.findFirst({ where: { id: supplierId, tenantId } })
+        : null;
+
     await prisma.grnImport.update({
         where: { id: grnId },
-        data: { notes, updatedAt: new Date() },
+        data: bumpConcurrencyUpdate({
+            ...(hasNotes ? { notes } : {}),
+            ...(supplierId ? { vendorId: supplierId, vendorNameSnapshot: supplier?.name || grn.vendorNameSnapshot } : {}),
+            ...(locationId ? { locationId } : {}),
+            ...(receivingDate ? { receivingDate: new Date(receivingDate) } : {}),
+            ...(supplierInvoiceNumber || grnNumber
+                ? { supplierInvoiceNumber: (supplierInvoiceNumber || grnNumber || '').trim() }
+                : {}),
+            updatedAt: new Date(),
+        }),
     });
     return getGrn(grnId, tenantId);
 };
 
-const deleteGrn = async (grnId, tenantId) => {
+const deleteGrn = async (grnId, tenantId, userId = null, expectedVersion = null) => {
     const grn = await prisma.grnImport.findFirst({ where: { id: grnId, tenantId } });
     if (!grn) throw Object.assign(new Error('GRN not found'), { status: 404 });
 
@@ -688,6 +1167,11 @@ const deleteGrn = async (grnId, tenantId) => {
             new Error(`Only DRAFT GRNs can be deleted. Current status: ${grn.status}`),
             { status: 423 }
         );
+
+    assertConcurrencyVersion(expectedVersion, grn.concurrencyVersion, {
+        required: true,
+        audit: { tenantId, entityType: EntityType.GRN, entityId: grnId, changedBy: userId ?? grn.importedBy },
+    });
 
     await prisma.grnImport.delete({ where: { id: grnId } });
 };
@@ -739,8 +1223,9 @@ const generateGrnTemplate = async () => {
 
 /**
  * Parse uploaded GRN Excel, validate each row against Item Master.
+ * When locationId is provided, rows must also resolve in RECEIVING catalog for that warehouse.
  */
-const previewGrnExcel = async (fileBufferOrPath, tenantId) => {
+const previewGrnExcel = async (fileBufferOrPath, tenantId, locationId = null) => {
     const wb = new ExcelJS.Workbook();
     try {
         if (Buffer.isBuffer(fileBufferOrPath)) {
@@ -806,6 +1291,26 @@ const previewGrnExcel = async (fileBufferOrPath, tenantId) => {
     if (rawRows.length === 0) throw Object.assign(new Error('No data rows found in the file. Make sure the rows have Item Barcode or Item Name filled in.'), { status: 400 });
     if (rawRows.length > 500) throw Object.assign(new Error('Too many rows. Maximum 500 rows per import.'), { status: 400 });
 
+    let allowedItemIds = null;
+    if (locationId) {
+        const location = await prisma.location.findFirst({
+            where: { id: locationId, tenantId },
+        });
+        if (!location) {
+            throw Object.assign(new Error('Warehouse/Location not found.'), { status: 404 });
+        }
+        const locationItemResolution = require('./location-item-resolution.service');
+        const { items: locItems } = await locationItemResolution.resolveItemsForLocation(
+            tenantId,
+            locationId,
+            {
+                mode: locationItemResolution.MODES.RECEIVING,
+                includeZeroOnHand: 'true',
+            },
+        );
+        allowedItemIds = new Set(locItems.map((i) => i.id));
+    }
+
     // Resolve barcodes → items (primary), then fallback to name (case-insensitive)
     const barcodes = [...new Set(rawRows.map(r => r.barcode).filter(Boolean))];
     const names = [...new Set(rawRows.map(r => r.itemName).filter(Boolean))];
@@ -834,7 +1339,13 @@ const previewGrnExcel = async (fileBufferOrPath, tenantId) => {
         const rcvQty = Number(raw.receivedQty);
 
         if (!item) errors.push(`Item "${raw.barcode || raw.itemName}" not found in Item Master.`);
+        if (item && allowedItemIds && !allowedItemIds.has(item.id)) {
+            errors.push(`Item "${item.name}" is not available at the selected warehouse.`);
+        }
         if (!rcvQty || rcvQty <= 0) errors.push('Qty must be greater than 0.');
+        else if (!isIntegerQuantity(rcvQty)) {
+            errors.push('Quantity must be a whole number (integer). Fractional quantities are not allowed.');
+        }
 
         const baseUnit = item?.itemUnits?.[0];
         const ok = errors.length === 0;
@@ -1053,8 +1564,10 @@ module.exports = {
     postGrn,
     listGrns,
     getGrn,
+    getEvidence: (id, tenantId, user) =>
+        require('./grnEvidence.service').getGrnEvidence(id, tenantId, user),
     updateGrn,
-    resubmitRejectedGrn,
+    sendBackGrn,
     deleteGrn,
     generateGrnTemplate,
     previewGrnExcel,

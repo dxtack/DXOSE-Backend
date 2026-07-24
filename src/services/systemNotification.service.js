@@ -1,7 +1,5 @@
-const { UserRole } = require('@prisma/client');
-
 /**
- * Notify all active ADMIN members of a tenant (e.g. incoming internal Get Pass).
+ * Notify active hotel/org managers of a tenant (e.g. incoming internal Get Pass).
  * @param {import('@prisma/client').Prisma.TransactionClient} tx
  */
 const notifyTenantAdmins = async (tx, tenantId, { type, title, body, payload }) => {
@@ -9,7 +7,7 @@ const notifyTenantAdmins = async (tx, tenantId, { type, title, body, payload }) 
         where: {
             tenantId,
             isActive: true,
-            role: { code: UserRole.ADMIN },
+            role: { code: { in: ['GENERAL_MANAGER', 'ORG_MANAGER'] } },
         },
         select: { userId: true },
     });

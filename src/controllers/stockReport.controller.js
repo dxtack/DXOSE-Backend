@@ -1,4 +1,16 @@
 const stockReportService = require('../services/stockReport.service');
+const { logAction, EntityType } = require('../services/auditTrail.service');
+
+const STOCK_REPORT_RETIRED_MESSAGE =
+    'Stock Report has been retired. Use Inventory Count for all new counting, review, approval, and posting activity.';
+
+const retiredWorkflow = (_req, res) => {
+    return res.status(410).json({
+        error: STOCK_REPORT_RETIRED_MESSAGE,
+        code: 'STOCK_REPORT_RETIRED',
+        redirectTo: '/inventory-count',
+    });
+};
 
 // GET /api/stock-report
 const getReport = async (req, res, next) => {
@@ -74,6 +86,14 @@ const saveReport = async (req, res, next) => {
             req.user.id,
             req.body
         );
+        await logAction({
+            tenantId: req.user.tenantId,
+            entityType: EntityType.STOCK_REPORT,
+            entityId: result.id,
+            action: 'CREATE',
+            changedBy: req.user.id,
+            note: `Saved stock report ${result.reportNo}`,
+        });
         res.status(201).json(result);
     } catch (err) {
         next(err);
@@ -171,6 +191,7 @@ const rejectReport = async (req, res, next) => {
 };
 
 module.exports = {
+    retiredWorkflow,
     getReport,
     exportReport,
     uploadCount,

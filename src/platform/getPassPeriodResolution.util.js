@@ -3,8 +3,8 @@
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 
-async function getCarriedForwardGetPassIds(tenantId, fromPeriod) {
-    const audits = await prisma.auditLog.findMany({
+async function getCarriedForwardGetPassIds(tenantId, fromPeriod, db = prisma) {
+    const audits = await db.auditLog.findMany({
         where: {
             tenantId,
             entityType: 'GET_PASS',

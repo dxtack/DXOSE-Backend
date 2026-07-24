@@ -16,6 +16,7 @@ const supplierRoutes = require('./supplier.routes');
 const stockRoutes = require('./stock.routes');
 const movementRoutes = require('./movement.routes');
 const ledgerRoutes = require('./ledger.routes');
+const inventoryHistoryRoutes = require('./inventory-history.routes');
 
 // M08 - Breakage
 const breakageRoutes = require('./breakage.routes');
@@ -46,6 +47,7 @@ router.use('/suppliers', supplierRoutes);
 router.use('/stock-balances', stockRoutes);
 router.use('/movements', movementRoutes);
 router.use('/ledger', ledgerRoutes);
+router.use('/inventory-history', inventoryHistoryRoutes);
 
 // M05 - Units of Measure
 const unitRoutes = require('./unit.routes');
@@ -55,11 +57,13 @@ router.use('/units', unitRoutes);
 router.use('/breakage', breakageRoutes);
 router.use('/lost', lostItemsRoutes);
 router.use('/lost-items', lostItemsRoutes);
-const lostFoundRoutes = require('./lostFound.routes');
-router.use('/lost-found', lostFoundRoutes);
 
 // M10: Stock Count
 router.use('/stock-count', stockCountRoutes);
+
+// Inventory Count (enterprise workflow) — canonical StockCountSession-based
+const inventoryCountRoutes = require('./inventoryCount.routes');
+router.use('/inventory-count', inventoryCountRoutes);
 
 // M13: Reports
 const reportsRoutes = require('./reports.routes');
@@ -70,12 +74,6 @@ const grnRoutes = require('./grn.routes');
 const mappingRoutes = require('./mapping.routes');
 router.use('/grn', grnRoutes);
 router.use('/mappings', mappingRoutes);
-
-// M05-REQ: Store Requisition & Controlled Issue Gate
-const requisitionRoutes = require('./requisition.routes');
-const issueRoutes = require('./issue.routes');
-router.use('/requisitions', requisitionRoutes);
-router.use('/issues', issueRoutes);
 
 // M06-TRF: Inter-Store Transfer Control Gate
 const transferRoutes = require('./transfer.routes');
@@ -97,6 +95,10 @@ router.use('/departments', departmentRoutes);
 const notificationRoutes = require('./notification.routes');
 router.use('/notifications', notificationRoutes);
 
+// Workflow Pipeline — operational command center (single source for pending work)
+const workflowPipelineRoutes = require('./workflow-pipeline.routes');
+router.use('/workflow-pipeline', workflowPipelineRoutes);
+
 // Stock Report (Inventory Count Report)
 const stockReportRoutes = require('./stockReport.routes');
 router.use('/stock-report', stockReportRoutes);
@@ -104,6 +106,10 @@ router.use('/stock-report', stockReportRoutes);
 // Period Close
 const periodCloseRoutes = require('./periodClose.routes');
 router.use('/period-close', periodCloseRoutes);
+
+// Integrity monitoring & month-end governance (F2/F3)
+const integrityRoutes = require('./integrity.routes');
+router.use('/integrity', integrityRoutes);
 
 // Par Level
 const parLevelRoutes = require('./parLevel.routes');
@@ -117,13 +123,17 @@ router.use('/consumption', consumptionRoutes);
 const reorderRoutes = require('./reorder.routes');
 router.use('/reorder', reorderRoutes);
 
-// Tenant Settings
-const settingRoutes = require('./setting.routes');
-router.use('/settings', settingRoutes);
+// Constitution v2.0 platform (Ch.6–11, 14, 22)
+const constitutionRoutes = require('./constitution.routes');
+router.use('/constitution', constitutionRoutes);
 
 // Inventory status (OB phase) — PATCH contract for SPA
 const inventoryRoutes = require('./inventory.routes');
 router.use('/inventory', inventoryRoutes);
+
+// Tenant settings (OB lock/finalize, inventory-status for settings UI)
+const settingRoutes = require('./setting.routes');
+router.use('/settings', settingRoutes);
 
 // Signed-URL resolver for cloud-stored attachments (authenticated + tenant-scoped)
 const fileRoutes = require('./file.routes');
@@ -140,6 +150,23 @@ router.use('/v1/organizations', organizationRoutes);
 // Tenant-scoped organization helpers (sister hotels, etc.)
 const organizationPortalRoutes = require('./organization.portal.routes');
 router.use('/organization', organizationPortalRoutes);
+
+// User Rights — Phase 2 (Read-Only permission matrix viewer)
+const userRightsRoutes = require('./userRights.routes');
+router.use('/user-rights', userRightsRoutes);
+
+// ACC Workflow Builder — Stage S10 (configuration only)
+const accWorkflowConfigRoutes = require('./accWorkflowConfig.routes');
+router.use('/access-control/workflows', accWorkflowConfigRoutes);
+
+const accAdvancedPolicyRoutes = require('./accAdvancedPolicy.routes');
+router.use('/access-control/policies', accAdvancedPolicyRoutes);
+
+const accEnforcementRoutes = require('./accEnforcement.routes');
+router.use('/access-control/enforcement', accEnforcementRoutes);
+
+const accSystemRoutes = require('./accSystem.routes');
+router.use('/access-control/system', accSystemRoutes);
 
 module.exports = router;
 

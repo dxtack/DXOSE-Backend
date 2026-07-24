@@ -1,0 +1,26 @@
+Area,File_or_Location,CURRENT_Uses_ADMIN,TARGET_Replacement,Remove_ADMIN_From_Code,UI_Hide_ADMIN,API_Block_New_ADMIN,Legacy_User_Compat
+UI assignable roles,OSE-Frontend admin.models ASSIGNABLE_USER_ROLES,Y,Remove ADMIN from array,Y,Y,Y,Existing users keep role until migration script
+UI role filter,users-list.component,Y,Remove ADMIN filter option,Y,Y,N,Show legacy badge as Finance optional
+UI role badges,users-list roleNzColor,Y,No ADMIN color in picker,Y,Y,N,
+API create user,users.service / users routes,May allow ADMIN,Reject roleCode ADMIN 403,Y,Y,Y,GET still returns ADMIN for legacy rows
+API update role,PUT /users/:id/role,May allow ADMIN,Reject ADMIN assignment,Y,Y,Y,
+authorize canActAsAdmin,authorize.js ORG only,N,Prefer permissions; optional FINANCE in elevated routes,N,N,N,ORG keeps until routes migrated
+GRN post,grn.routes.js,Y,FINANCE_MANAGER SUPER break-glass,Y,N,Y,L
+GRN cost review,grn.routes.js,Y,FINANCE COST CONTROL,Y,N,N,L
+GRN notifications,grn.service.js,Y,FINANCE_MANAGER members,Y,N,N,L
+Inventory count manage,inventoryCount.routes COUNT_MANAGE,Y,Add FINANCE_MANAGER,Y,N,N,L
+Inventory count approve,inventoryCount.routes,Y,FINANCE_MANAGER SUPER,Y,N,N,L
+Period reopen,periodClose.routes,Y,FINANCE_MANAGER ORG,Y,N,N,L
+Movement create,movement.routes,Y,FINANCE_MANAGER STOREKEEPER,Y,N,N,L
+Par levels,parLevel.routes,Y,FINANCE_MANAGER STOREKEEPER,Y,N,N,L
+Approval chain bypass,approvalChain.service.js,Y,FINANCE_MANAGER tenant elevated,Y,N,N,L
+Breakage approve bypass,breakage.service.js,Y,FINANCE ORG not ADMIN,Y,N,N,L
+Lost approve bypass,lostItems.service.js,Y,FINANCE ORG not ADMIN,Y,N,N,L
+Get Pass admin bypass,getPass.service.js,Y,FINANCE_MANAGER,Y,N,N,L
+Workflow pipeline label,workflow-pipeline.collectors.js,Y,FINANCE_MANAGER for PENDING_FINAL,Y,N,N,L
+Dashboard elevated,dashboard.service.js,Y,FINANCE in elevated set,Y,N,N,L
+Frontend GRN detail,grn-detail hasRole ADMIN,Y,FINANCE_MANAGER,Y,Y,N,L
+Frontend settings OB,settings-page hasRole ADMIN,Y,ORG SUPER only,Y,Y,N,L
+Frontend inventory count,inventory-count hasRole ADMIN,Y,FINANCE_MANAGER,Y,Y,N,L
+Frontend get pass,get-pass-detail hasRole ADMIN,Y,FINANCE_MANAGER,Y,Y,N,L
+Tenant routes,tenant.routes ADMIN,Y,ORG SUPER only,Y,N,N,L

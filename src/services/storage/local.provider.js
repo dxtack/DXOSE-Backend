@@ -65,6 +65,11 @@ const createLocalProvider = () => ({
             return false;
         }
     },
+
+    async getBuffer(key) {
+        const full = keyToPath(key);
+        return fs.promises.readFile(full);
+    },
 });
 
 module.exports = { createLocalProvider, UPLOADS_ROOT };

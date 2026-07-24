@@ -1,0 +1,15 @@
+Module,ScopeKey_Fields,List_FILTER_RULE_TARGET,Detail_GET_RULE_TARGET,Create_VALIDATE_TARGET,Export_RULE_TARGET,API_Pass_user_ctx,Forbidden_Out_Of_Scope,EmptyState_When_Scoped_Zero,Diagnostic_Code
+Breakage,MovementLine.locationId to Location.departmentId,Lines with location in allowed set OR canViewAll,404 SCOPE_VIOLATION if no accessible line,locationId and department in scope,Same as list,Y,404 or 403 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Lost,Same as Breakage,Same,Same,Same,Same,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Transfer,sourceLocationId destLocationId,source OR dest in allowed locations/dept,404 if transfer outside scope,source location in scope; dest per policy,Same,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Get Pass,departmentId GetPassLine.locationId,department match OR location in scope,404 outside scope,dept and locations in scope,Same,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Inventory Count,session locationId scopedLocations,Session locations intersect scope,404 outside scope,Only scoped locations,Same,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Stock Balances,locationId,locationId in allowed set,N/A per row,—,Filtered export,Y,—,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Ledger,locationId,locationId in allowed set,Entry 404 if outside,—,Filtered,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Reports,departmentIds locationIds,Server rejects filters outside scope; default to user scope,—,—,Enforce on generate,Y,400 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Issues,locationId,location in scope,404,location in scope,Filtered,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Movements,locationId,Same as Issues,404,location in scope,Filtered,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Dashboard,departmentId scopeProfile,Align with resolveUserScope profile,—,—,—,Y,—,SCOPE_NO_DATA,SCOPE_APPLIED
+GRN,receive location context,Locations in scope for stores,404,Receive location in scope,Filtered,Y,404 SCOPE_VIOLATION,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED
+Users Admin,N/A,Finance/ORG all hotel users; scope N/A for list,403 cross-tenant,Assign dept and locations on create,—,Y,403,—,—
+Workflow Pipeline,aggregated per module,Apply underlying module scope rules,404,—,—,Y,404,SCOPE_NO_VISIBLE_RECORDS,SCOPE_APPLIED

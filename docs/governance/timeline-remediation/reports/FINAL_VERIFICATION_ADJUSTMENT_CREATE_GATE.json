@@ -1,0 +1,308 @@
+{
+  "gate": "FINAL_VERIFICATION_ADJUSTMENT_CREATE",
+  "executedAt": "2026-06-26T22:18:33.452Z",
+  "tenantSlug": "dx-marina-hotel",
+  "summary": {
+    "runtime": {
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "total": 12
+    },
+    "crossModuleRegression": "PASS",
+    "frontendBuild": "PASS"
+  },
+  "scenarios": [
+    {
+      "id": "R1",
+      "status": "Passed",
+      "financeManagerEmail": "jonathan.miller@dxuat.com",
+      "hasAdjustmentCreate": true,
+      "templateHasPermissionDirective": true,
+      "templateLabelKey": "MOVEMENTS.NEW_ADJUSTMENT"
+    },
+    {
+      "id": "R2",
+      "status": "Passed",
+      "nzAllowClearFalse": true,
+      "singleOptionSource": "DIRECT_CREATE_MOVEMENT_TYPES = ['ADJUSTMENT']",
+      "dropdownNotHardDisabled": true
+    },
+    {
+      "id": "R3",
+      "status": "Passed",
+      "documentId": "c444fb0e-5ee0-468c-8605-bc1ce4696ab6",
+      "documentNo": "ADJ-2026-00009",
+      "createStatus": 201,
+      "movementType": "ADJUSTMENT"
+    },
+    {
+      "id": "R4",
+      "status": "Passed",
+      "documentId": "c444fb0e-5ee0-468c-8605-bc1ce4696ab6",
+      "ledger": {
+        "id": "6a32fd04-1f7d-4369-9fc8-18ad259f8085",
+        "movementType": "ADJUSTMENT",
+        "qtyIn": 2,
+        "qtyOut": 0,
+        "balanceAfter": 128,
+        "totalValue": 316.819
+      },
+      "stock": {
+        "itemId": "2aeb0cd3-62cc-4230-b92e-239175f43111",
+        "locationId": "fcb5b91a-912b-42f0-a313-a3d87f4504a7",
+        "before": {
+          "qtyOnHand": 126,
+          "wacUnitCost": 158.4095
+        },
+        "after": {
+          "qtyOnHand": 128,
+          "wacUnitCost": 158.4095
+        },
+        "expectedDelta": 2,
+        "actualDelta": 2
+      }
+    },
+    {
+      "id": "R5",
+      "status": "Passed",
+      "storekeeperEmail": "kevin.brooks@dxuat.com",
+      "hasAdjustmentCreate": false,
+      "hasMovementCreate": true
+    },
+    {
+      "id": "R6",
+      "status": "Passed",
+      "routePermission": "ADJUSTMENT_CREATE",
+      "storekeeperWouldPassGuard": false,
+      "note": "permissionGuard denies /movements/new when ADJUSTMENT_CREATE absent from session permissions"
+    },
+    {
+      "id": "R7",
+      "status": "Passed",
+      "adjustmentCreateStatus": 403,
+      "issueCreateStatus": 403,
+      "adjustmentMessage": "Access denied. Insufficient permissions."
+    },
+    {
+      "id": "R8",
+      "status": "Passed",
+      "staleTokenStatus": 401,
+      "staleTokenCode": "PERMISSIONS_STALE",
+      "dbPermissionVersion": 10,
+      "staleTokenPermissionVersion": 9,
+      "freshLoginHasAdjustmentCreate": false
+    },
+    {
+      "id": "R9",
+      "status": "Passed",
+      "documentId": "65c54678-0d16-4bfd-948a-513103adfc17",
+      "storekeeperHasMovementCreate": true,
+      "putStatus": 200
+    },
+    {
+      "id": "R10",
+      "status": "Passed",
+      "legacyAdjustmentDraftId": "9c38a533-97bc-4d04-9a2d-775ddd99e08c",
+      "storekeeperPutStatus": 403,
+      "storekeeperRequired": "ADJUSTMENT_CREATE",
+      "financeManagerPutStatus": 200,
+      "createdByUserId": "92720689-a90f-46f8-b21e-ee80072f66a1"
+    },
+    {
+      "id": "R11",
+      "status": "Passed",
+      "remediationReportPath": "C:\\DX OS&E\\Governance\\timeline-remediation\\reports\\ADJUSTMENT_CREATE_FM_ONLY_REMEDIATION.json",
+      "nonFmGrantCountAfter": 0,
+      "permissionVersionBumpsTotal": 11,
+      "legacyAdjustmentDraftCount": 0
+    },
+    {
+      "id": "R12",
+      "status": "Passed",
+      "movementListApiStatus": 200,
+      "movementFilterApiStatus": 200,
+      "listComponentDiffFiles": [],
+      "crossModule": [
+        {
+          "name": "smoke-movement-register-governed.js",
+          "status": "PASS",
+          "exitCode": 0,
+          "durationMs": 244
+        },
+        {
+          "name": "breakage-get-by-id.test.js",
+          "status": "PASS",
+          "exitCode": 0,
+          "durationMs": 3977
+        },
+        {
+          "name": "movement-direct-adjustment.guard.test.js",
+          "status": "PASS",
+          "exitCode": 0,
+          "durationMs": 586
+        },
+        {
+          "name": "movement-adjustment-rbac.test.js",
+          "status": "PASS",
+          "exitCode": 0,
+          "durationMs": 554
+        },
+        {
+          "name": "GET /api/grn (list)",
+          "status": "PASS",
+          "httpStatus": 200
+        },
+        {
+          "name": "GET /api/inventory-count/sessions",
+          "status": "PASS",
+          "httpStatus": 200
+        },
+        {
+          "name": "GET /api/breakage (list)",
+          "status": "PASS",
+          "httpStatus": 200
+        },
+        {
+          "name": "GET /api/lost-items (list)",
+          "status": "PASS",
+          "httpStatus": 200
+        },
+        {
+          "name": "source-generated BREAKAGE movement register",
+          "status": "PASS",
+          "documentId": "2efd1152-84cc-413c-bc2c-3d5439e1e286",
+          "documentNo": "BRK-2606-0001"
+        }
+      ]
+    }
+  ],
+  "fixtures": {
+    "financeManager": "jonathan.miller@dxuat.com",
+    "storekeeper": "kevin.brooks@dxuat.com",
+    "adjustmentPostedDocumentId": "c444fb0e-5ee0-468c-8605-bc1ce4696ab6",
+    "adjustmentPostedDocumentNo": "ADJ-2026-00009",
+    "legacyOpeningBalanceDocumentId": "65c54678-0d16-4bfd-948a-513103adfc17",
+    "legacyAdjustmentDraftId": "9c38a533-97bc-4d04-9a2d-775ddd99e08c",
+    "stockFixture": {
+      "itemId": "2aeb0cd3-62cc-4230-b92e-239175f43111",
+      "locationId": "fcb5b91a-912b-42f0-a313-a3d87f4504a7",
+      "itemName": "Linnen - Bath Towel Small"
+    }
+  },
+  "ledgerEvidence": {
+    "id": "6a32fd04-1f7d-4369-9fc8-18ad259f8085",
+    "movementType": "ADJUSTMENT",
+    "qtyIn": 2,
+    "qtyOut": 0,
+    "balanceAfter": 128,
+    "totalValue": 316.819
+  },
+  "stockEvidence": {
+    "itemId": "2aeb0cd3-62cc-4230-b92e-239175f43111",
+    "locationId": "fcb5b91a-912b-42f0-a313-a3d87f4504a7",
+    "before": {
+      "qtyOnHand": 126,
+      "wacUnitCost": 158.4095
+    },
+    "after": {
+      "qtyOnHand": 128,
+      "wacUnitCost": 158.4095
+    },
+    "expectedDelta": 2,
+    "actualDelta": 2
+  },
+  "staleJwt": {
+    "status": 401,
+    "code": "PERMISSIONS_STALE"
+  },
+  "remediationReportPath": "C:\\DX OS&E\\Governance\\timeline-remediation\\reports\\ADJUSTMENT_CREATE_FM_ONLY_REMEDIATION.json",
+  "remediationReport": {
+    "nonFmGrantCountAfter": 0,
+    "permissionVersionBumpsTotal": 11,
+    "legacyAdjustmentDraftCount": 0
+  },
+  "crossModule": [
+    {
+      "name": "smoke-movement-register-governed.js",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 244
+    },
+    {
+      "name": "breakage-get-by-id.test.js",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 3977
+    },
+    {
+      "name": "movement-direct-adjustment.guard.test.js",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 586
+    },
+    {
+      "name": "movement-adjustment-rbac.test.js",
+      "status": "PASS",
+      "exitCode": 0,
+      "durationMs": 554
+    },
+    {
+      "name": "GET /api/grn (list)",
+      "status": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "GET /api/inventory-count/sessions",
+      "status": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "GET /api/breakage (list)",
+      "status": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "GET /api/lost-items (list)",
+      "status": "PASS",
+      "httpStatus": 200
+    },
+    {
+      "name": "source-generated BREAKAGE movement register",
+      "status": "PASS",
+      "documentId": "2efd1152-84cc-413c-bc2c-3d5439e1e286",
+      "documentNo": "BRK-2606-0001"
+    }
+  ],
+  "frontendBuild": {
+    "status": "PASS",
+    "durationMs": 125300,
+    "note": "npm run build OSE-Frontend — verified separately after gate runtime"
+  },
+  "rolePermissionFallbackUntouched": true,
+  "modifiedFiles": [
+    "OSE-backend/src/services/movementDirectAdjustment.guard.js",
+    "OSE-backend/src/middleware/movementDocumentPermission.middleware.js",
+    "OSE-backend/src/controllers/movement.controller.js",
+    "OSE-backend/src/routes/movement.routes.js",
+    "OSE-backend/src/services/movement.service.js",
+    "OSE-backend/src/services/item.service.js",
+    "OSE-backend/src/acc-authority/base-role-permissions.js",
+    "OSE-backend/src/acc-authority/catalog.constitution.js",
+    "OSE-backend/scripts/seed-user-rights-phase1.js",
+    "OSE-backend/scripts/remediate-adjustment-create-fm-only.js",
+    "OSE-backend/scripts/final-verification-adjustment-create-gate.js",
+    "OSE-backend/scripts/movement-direct-adjustment.guard.test.js",
+    "OSE-backend/scripts/movement-direct-adjustment-origin.test.js",
+    "OSE-backend/scripts/movement-adjustment-rbac.test.js",
+    "OSE-Frontend/public/i18n/en.json",
+    "OSE-Frontend/public/i18n/ar.json",
+    "OSE-Frontend/src/app/features/movements/movement-list/movement-list.component.html",
+    "OSE-Frontend/src/app/features/movements/movement-list/movement-list.component.ts",
+    "OSE-Frontend/src/app/features/movements/movement-form/movement-form.component.html",
+    "OSE-Frontend/src/app/features/movements/movement-form/movement-form.component.ts",
+    "OSE-Frontend/src/app/app.routes.ts",
+    "OSE-backend/docs/governance/timeline-remediation/reports/ADJUSTMENT_CREATE_FM_ONLY_REMEDIATION.json",
+    "OSE-backend/docs/governance/timeline-remediation/reports/FINAL_VERIFICATION_ADJUSTMENT_CREATE_GATE.json"
+  ]
+}

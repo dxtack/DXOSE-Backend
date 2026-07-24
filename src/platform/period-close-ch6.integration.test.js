@@ -43,6 +43,40 @@ describe('Ch6 period close integration (static/code review evidence)', () => {
         assert.ok(posting.includes('withLedgerPostingFields'), 'posting.service uses ledger posting helper');
     });
 
+    it('posting and close boundaries resolve canonical tenant timezone', () => {
+        for (const file of [
+            'src/services/periodGuard.service.js',
+            'src/services/periodCloseGovernance.service.js',
+            'src/services/periodCloseResolution.service.js',
+            'src/platform/periodResolution.service.js',
+            'src/platform/periodLedgerSnapshot.service.js',
+            'src/services/periodOpeningContinuity.service.js',
+        ]) {
+            const src = fs.readFileSync(path.join(root, file), 'utf8');
+            assert.ok(src.includes('getTenantTimezone'), `${file} loads Tenant.timezone`);
+        }
+        for (const file of [
+            'src/services/postingGovernedGrn.service.js',
+            'src/services/postingGovernedTransfer.service.js',
+            'src/services/postingGovernedMovement.service.js',
+            'src/services/postingGovernedGetPass.service.js',
+        ]) {
+            const src = fs.readFileSync(path.join(root, file), 'utf8');
+            assert.ok(src.includes('getTenantTimezone'), `${file} loads Tenant.timezone`);
+            assert.ok(src.includes(', tx'), `${file} prefers its transaction client`);
+        }
+    });
+
+    it('auth and scheduler expose tenant timezone context', () => {
+        const auth = fs.readFileSync(path.join(root, 'src/services/auth.service.js'), 'utf8');
+        const middleware = fs.readFileSync(path.join(root, 'src/middleware/authenticate.js'), 'utf8');
+        const scheduler = fs.readFileSync(path.join(root, 'src/utils/scheduler.js'), 'utf8');
+        assert.ok(auth.includes('tenantTimezone'), 'login/switch session exposes tenant timezone');
+        assert.ok(auth.includes('timezone: true'), 'me/switch tenant selects canonical timezone');
+        assert.ok(middleware.includes('tenantTimezone'), 'request context carries tenant timezone');
+        assert.ok(scheduler.includes("'*/5 * * * *'"), 'scheduler polls tenant-local due times');
+    });
+
     it('report service wires snapshotVersionId', () => {
         const src = fs.readFileSync(path.join(root, 'src/services/report.service.js'), 'utf8');
         assert.ok(src.includes('resolveSnapshotVersionForReport'), 'snapshot resolver exists');

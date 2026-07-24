@@ -16,7 +16,7 @@ const createCategory = async (req, res, next) => {
 
 const getCategories = async (req, res, next) => {
     try {
-        const result = await categoryService.getCategories(req.user.tenantId, req.query);
+        const result = await categoryService.getCategories(req.user.tenantId, req.query, req.user);
         return success(res, result.categories, 'Categories fetched successfully', 200, {
             total: result.total,
             skip: parseInt(req.query.skip) || 0,
