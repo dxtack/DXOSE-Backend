@@ -53,14 +53,22 @@ async function resolvePipelineAccess(user, tenantId) {
 }
 
 async function loadAllItems(tenantId, scope) {
-    const [transfers, grns, counts, breakageLost, getPasses] = await Promise.all([
+    // Isolate collector failures — a missing published workflow for GRN/GET_PASS/etc.
+    // must not wipe TRANSFER (or other) pending items from the pipeline.
+    const settled = await Promise.allSettled([
         collectTransfers(tenantId, scope),
         collectGrns(tenantId, scope),
         collectInventoryCounts(tenantId, scope),
         collectBreakageAndLost(tenantId, scope),
         collectGetPasses(tenantId, scope),
     ]);
-    return [...transfers, ...grns, ...counts, ...breakageLost, ...getPasses];
+    const items = [];
+    for (const result of settled) {
+        if (result.status === 'fulfilled' && Array.isArray(result.value)) {
+            items.push(...result.value);
+        }
+    }
+    return items;
 }
 
 function emptyPipelinePage(query, userCtx) {

@@ -854,14 +854,39 @@ const getUsers = handle('getUsers', async (req, res) => {
     const users = await prisma.user.findMany({
         where: { isActive: true, ...propertyFilter, ...searchClause },
         select: {
-            id: true, firstName: true, lastName: true, email: true, isActive: true,
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+            phone: true,
+            isActive: true,
             // Only return the membership for the current property (for legacyRole display)
             memberships: {
                 where: { tenantId: currentTenantId, isActive: true },
                 select: { role: { select: { code: true, name: true } } },
                 take: 1,
             },
-            // FY 01 P6 — count active operational assignments in org group (matches assignment grid default)
+            urAssignments: {
+                where: _orgGroupOperationalAssignmentCount(orgGroupIds),
+                select: {
+                    id: true,
+                    isActive: true,
+                    role: { select: { code: true, name: true } },
+                    properties: {
+                        select: {
+                            propertyId: true,
+                            property: { select: { id: true, name: true } },
+                        },
+                    },
+                    departments: {
+                        select: {
+                            departmentId: true,
+                            department: { select: { id: true, name: true } },
+                        },
+                    },
+                },
+                orderBy: { updatedAt: 'desc' },
+            },
             _count: {
                 select: {
                     urAssignments: {
@@ -875,14 +900,37 @@ const getUsers = handle('getUsers', async (req, res) => {
     });
 
     const data = users
-        .map((u) => ({
-            id:              u.id,
-            name:            `${u.firstName} ${u.lastName}`,
-            email:           u.email,
-            isActive:        u.isActive,
-            legacyRole:      u.memberships[0]?.role?.code ?? null,
-            assignmentCount: u._count.urAssignments,
-        }))
+        .map((u) => {
+            const assignments = (u.urAssignments ?? []).map((a) => {
+                const allProperties = (a.properties ?? []).length === 0;
+                const scopeLabel = allProperties
+                    ? 'All Properties'
+                    : (a.properties[0]?.property?.name ?? a.properties[0]?.propertyId ?? '—');
+                const departmentLabels = (a.departments ?? []).length === 0
+                    ? []
+                    : a.departments.map((d) => d.department?.name ?? d.departmentId).filter(Boolean);
+                return {
+                    id: a.id,
+                    roleName: a.role?.name ?? a.role?.code ?? '—',
+                    roleCode: a.role?.code ?? null,
+                    scopeLabel,
+                    departmentLabels,
+                    isActive: a.isActive,
+                };
+            });
+            return {
+                id: u.id,
+                name: `${u.firstName} ${u.lastName}`,
+                firstName: u.firstName,
+                lastName: u.lastName,
+                email: u.email,
+                phone: u.phone ?? null,
+                isActive: u.isActive,
+                legacyRole: u.memberships[0]?.role?.code ?? null,
+                assignmentCount: u._count.urAssignments,
+                assignments,
+            };
+        })
         .filter(
             (u) =>
                 u.assignmentCount > 0
@@ -1346,21 +1394,36 @@ const getAvailableRoles = handle('getAvailableRoles', async (req, res) => {
 });
 
 const getAvailableProperties = handle('getAvailableProperties', async (req, res) => {
-    // Phase 1.2 Final — returns ALL properties in the current org group.
-    // Semantic: "All properties belonging to the current organization/group."
+    // Assignment hotel picker — child hotels in the current org group only.
+    // Excludes the parent Organization entity (type=PROPERTY semantics via parentId).
     // NOT the actor's personal property list (that is the Header Property Switcher).
     const tenantId = req.user?.tenantId ?? null;
     if (!tenantId) return res.status(400).json({ success: false, message: 'No property context.' });
     const currentTenant = await prisma.tenant.findUnique({
         where:  { id: tenantId },
-        select: { parentId: true },
+        select: { id: true, name: true, slug: true, parentId: true, hasBranches: true, isActive: true },
     });
-    const orgRootId  = currentTenant?.parentId ?? tenantId;
-    const properties = await prisma.tenant.findMany({
-        where:   { isActive: true, OR: [{ id: orgRootId }, { parentId: orgRootId }] },
+    if (!currentTenant) {
+        return res.status(400).json({ success: false, message: 'No property context.' });
+    }
+
+    const orgRootId = currentTenant.parentId ?? tenantId;
+    let properties = await prisma.tenant.findMany({
+        where:   { isActive: true, parentId: orgRootId },
         select:  { id: true, name: true, slug: true },
         orderBy: { name: 'asc' },
     });
+
+    // Standalone hotel (no org hierarchy): the current tenant is the only property.
+    if (
+        properties.length === 0 &&
+        !currentTenant.parentId &&
+        currentTenant.hasBranches !== true &&
+        currentTenant.isActive
+    ) {
+        properties = [{ id: currentTenant.id, name: currentTenant.name, slug: currentTenant.slug }];
+    }
+
     return res.json({ success: true, data: properties });
 });
 

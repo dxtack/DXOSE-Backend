@@ -38,6 +38,7 @@ const parseDepartmentPagination = (querySkip, queryTake, defaultTake = 50) => {
 const getDepartments = async (tenantId, query = {}, user = null) => {
     const { search, isActive, includeInactive, slim } = query;
     const { skip, take } = parseDepartmentPagination(query.skip, query.take, 50);
+    const masterDataMode = parseMasterDataTenantWideQuery(query);
 
     const hasExplicitIsActive = Object.prototype.hasOwnProperty.call(query, 'isActive');
     const includeAllInactive = includeInactive === 'true' || includeInactive === true;
@@ -54,6 +55,103 @@ const getDepartments = async (tenantId, query = {}, user = null) => {
         }),
     };
 
+    if (user && isScopeEngineEnabled() && !masterDataMode) {
+        const scope = await resolveUserScope(user, tenantId);
+        where = mergeScopeIntoWhere(where, departmentLookupScopeWhere(scope));
+    }
+
+    const slimMode = !masterDataMode && (slim === 'true' || slim === true);
+    const include = slimMode
+        ? { _count: { select: { locations: true, items: true } } }
+        : {
+              _count: { select: { locations: true, items: true } },
+              locations: {
+                  select: { id: true, name: true, type: true, isActive: true },
+                  orderBy: { name: 'asc' },
+              },
+          };
+
+    const [rows, total] = await Promise.all([
+        prisma.department.findMany({
+            where,
+            skip,
+            take,
+            orderBy: { name: 'asc' },
+            include,
+        }),
+        prisma.department.count({ where }),
+    ]);
+
+    const departments = masterDataMode
+        ? rows.map(mapDepartmentMasterDataRow)
+        : rows;
+
+    return { departments, total, skip, take };
+};
+
+/** Master-data list shape: counts + nested locations (empty array when none). */
+const mapDepartmentMasterDataRow = (dept) => {
+    const locationsCount = dept._count?.locations ?? (dept.locations?.length ?? 0);
+    const itemsCount = dept._count?.items ?? 0;
+    const locations = (dept.locations || []).map((loc) => ({
+        id: loc.id,
+        name: loc.name,
+        // Location has no dedicated code column; expose type for expand-row display.
+        type: loc.type,
+        isActive: loc.isActive,
+    }));
+
+    return {
+        id: dept.id,
+        name: dept.name,
+        code: dept.code,
+        isActive: dept.isActive,
+        createdAt: dept.createdAt,
+        updatedAt: dept.updatedAt,
+        tenantId: dept.tenantId,
+        itemsCount,
+        locationsCount,
+        locations,
+        // Keep Prisma-style _count for existing master-data UI bindings.
+        _count: {
+            locations: locationsCount,
+            items: itemsCount,
+        },
+    };
+};
+
+/**
+ * Lookup: departments that have at least one linked location (any status).
+ * Matches `_count.locations` on the departments list — inactive linked stores still count.
+ * Pass locationIsActive=true|false to require an active/inactive location specifically.
+ * Nested location rows (non-slim) follow the same locationIsActive filter when set.
+ */
+const getDepartmentsWithLocations = async (tenantId, query = {}, user = null) => {
+    const { search, isActive, includeInactive, slim } = query;
+    const { skip, take } = parseDepartmentPagination(query.skip, query.take, 50);
+
+    const hasExplicitIsActive = Object.prototype.hasOwnProperty.call(query, 'isActive');
+    const includeAllInactive = includeInactive === 'true' || includeInactive === true;
+    const hasExplicitLocationIsActive = Object.prototype.hasOwnProperty.call(query, 'locationIsActive');
+
+    // Default: any linked location (align with Locations column). Optional locationIsActive narrows EXISTS.
+    const locationSome = hasExplicitLocationIsActive
+        ? { isActive: parseBoolQuery(query.locationIsActive) }
+        : {};
+
+    let where = {
+        tenantId,
+        locations: { some: locationSome },
+        ...(!hasExplicitIsActive && !includeAllInactive ? { isActive: true } : {}),
+        ...(hasExplicitIsActive ? { isActive: parseBoolQuery(isActive) } : {}),
+        ...(search && {
+            OR: [
+                { name: { contains: search, mode: 'insensitive' } },
+                { code: { contains: search, mode: 'insensitive' } },
+            ],
+        }),
+    };
+
     if (user && isScopeEngineEnabled() && !parseMasterDataTenantWideQuery(query)) {
         const scope = await resolveUserScope(user, tenantId);
         where = mergeScopeIntoWhere(where, departmentLookupScopeWhere(scope));
@@ -64,7 +162,11 @@ const getDepartments = async (tenantId, query = {}, user = null) => {
         ? { _count: { select: { locations: true, items: true } } }
         : {
               _count: { select: { locations: true, items: true } },
-              locations: { select: { id: true, name: true, type: true, isActive: true } },
+              locations: {
+                  ...(hasExplicitLocationIsActive ? { where: locationSome } : {}),
+                  select: { id: true, name: true, type: true, isActive: true },
+                  orderBy: { name: 'asc' },
+              },
           };
 
     const [departments, total] = await Promise.all([
@@ -130,4 +232,12 @@ const toggleDepartment = async (id, tenantId) => {
     });
 };
 
-module.exports = { createDepartment, getDepartments, getDepartmentById, updateDepartment, deleteDepartment, toggleDepartment };
+module.exports = {
+    createDepartment,
+    getDepartments,
+    getDepartmentsWithLocations,
+    getDepartmentById,
+    updateDepartment,
+    deleteDepartment,
+    toggleDepartment,
+};

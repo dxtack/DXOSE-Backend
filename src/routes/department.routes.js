@@ -12,6 +12,11 @@ router.route('/')
     .post(requirePermission('BASIC_DATA_EDIT'), ctrl.createDepartment)
     .get(ctrl.getDepartments);
 
+// Static path before /:id so "with-locations" is not treated as a UUID
+router.get('/with-locations', ctrl.getDepartmentsWithLocations);
+
+router.get('/:id/locations', ctrl.getDepartmentLocations);
+
 router.route('/:id')
     .get(ctrl.getDepartment)
     .put(requirePermission('BASIC_DATA_EDIT'), ctrl.updateDepartment)

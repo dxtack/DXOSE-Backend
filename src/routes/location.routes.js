@@ -13,6 +13,9 @@ router
     .post(requirePermission('BASIC_DATA_EDIT'), locationController.createLocation)
     .get(locationController.getLocations);
 
+/** Must be registered before `/:id` so "with-stock" is not parsed as an id. */
+router.get('/with-stock', locationController.getLocationsWithPositiveStock);
+
 router
     .route('/:id')
     .get(locationController.getLocation)

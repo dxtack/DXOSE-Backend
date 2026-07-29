@@ -7,9 +7,9 @@
 
 const {
   resolveWorkflowForDocument,
-  resolveWorkflowByVersionId,
 } = require('./acc-workflow-runtime.service');
 const { loadWorkflowVersionChain } = require('./acc-workflow-step-resolver.service');
+const { defaultStepsForModule } = require('./acc-workflow-default-chains');
 
 function approvalChainDefinitionFromAcc(chain) {
   return (chain?.steps || []).map((step) => ({
@@ -41,13 +41,40 @@ function stepLabelFromAccChain(chain, stepNumber) {
   return step?.label || step?.roleCode || null;
 }
 
+function defaultPresentationChain(moduleKey) {
+  const key = String(moduleKey || '').trim().toUpperCase();
+  const steps = defaultStepsForModule(key);
+  if (!steps.length) return null;
+  return {
+    moduleKey: key,
+    roleCodes: steps.map((s) => s.roleCode).filter(Boolean),
+    steps,
+    source: 'default-chain',
+    versionId: null,
+  };
+}
+
+/**
+ * Resolve ACC chain for pipeline/PDF presentation.
+ * Soft-fails to the seeded default chain when a module has no published workflow —
+ * collectors must never abort the entire Workflow Pipeline for one missing publish.
+ */
 async function resolvePresentationChain({ moduleKey, tenantId, versionId = null }) {
   if (versionId) {
-    const pinned = await loadWorkflowVersionChain(versionId);
-    if (pinned) return pinned;
+    try {
+      const pinned = await loadWorkflowVersionChain(versionId);
+      if (pinned) return pinned;
+    } catch (_) {
+      // Pinned version missing/corrupt — fall through to live/default.
+    }
   }
   if (moduleKey) {
-    return resolveWorkflowForDocument({ moduleKey: String(moduleKey).trim().toUpperCase(), tenantId });
+    const key = String(moduleKey).trim().toUpperCase();
+    try {
+      return await resolveWorkflowForDocument({ moduleKey: key, tenantId });
+    } catch (_) {
+      return defaultPresentationChain(key);
+    }
   }
   return null;
 }
@@ -71,6 +98,7 @@ module.exports = {
   waitingRoleFromApprovalRequest,
   waitingRoleFromAccStatus,
   stepLabelFromAccChain,
+  defaultPresentationChain,
   resolvePresentationChain,
   createPresentationChainCache,
 };

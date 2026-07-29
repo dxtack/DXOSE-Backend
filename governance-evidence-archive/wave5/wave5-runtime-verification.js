@@ -287,6 +287,7 @@ async function main() {
             destLocationId: destLoc.id,
             reason: 'W5 posting test',
             lines: [{ itemId: item.id, uomId: uom.id, requestedQty: 5 }],
+            keepAsDraft: true, // Opt out of default create→approval so W5 can assert create does not post
         });
 
         const ledgerAfterCreate = await ledgerCountForTransfer(prisma, created.id);

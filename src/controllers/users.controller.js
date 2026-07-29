@@ -60,7 +60,23 @@ const createUser = async (req, res) => {
         phone,
         departmentId,
         existingUserId,
+        initialAssignment,
     } = req.body;
+
+    const prisma = require('../config/database');
+    let orgGroupIds = new Set();
+    if (initialAssignment?.roleId && req.user?.tenantId) {
+        const currentTenant = await prisma.tenant.findUnique({
+            where: { id: req.user.tenantId },
+            select: { parentId: true },
+        });
+        const orgRootId = currentTenant?.parentId ?? req.user.tenantId;
+        const rows = await prisma.tenant.findMany({
+            where: { isActive: true, OR: [{ id: orgRootId }, { parentId: orgRootId }] },
+            select: { id: true },
+        });
+        orgGroupIds = new Set(rows.map((r) => r.id));
+    }
 
     const user = await usersService.createUser(
         req.user.tenantId,
@@ -73,8 +89,13 @@ const createUser = async (req, res) => {
             phone,
             departmentId,
             existingUserId,
+            initialAssignment,
         },
-        req.user.id
+        req.user.id,
+        {
+            actorRoleCode: req.user?.role ?? null,
+            orgGroupIds,
+        },
     );
 
     await auditService.log({
@@ -83,7 +104,11 @@ const createUser = async (req, res) => {
         entityId: user.id,
         action: 'CREATE',
         changedBy: req.user.id,
-        afterValue: { email: user.email, role: user.role },
+        afterValue: {
+            email: user.email,
+            role: user.role,
+            assignmentId: user.assignment?.id ?? null,
+        },
         ipAddress: req.ip,
         userAgent: req.headers['user-agent'],
     });

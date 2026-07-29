@@ -5,11 +5,12 @@
  */
 
 const prisma = require('../config/database');
-const { resolvePublishedWorkflowChain } = require('../engines/workflow-resolution.engine');
+const workflowResolutionEngine = require('../engines/workflow-resolution.engine');
 const {
   loadWorkflowVersionChain,
 } = require('./acc-workflow-step-resolver.service');
 const { validateWorkflowChainForRuntime } = require('./acc-workflow-status-key-guard.service');
+const { defaultStepsForModule } = require('./acc-workflow-default-chains');
 
 const CUTOVER_MODULE_KEYS = Object.freeze(new Set([
   'BREAKAGE', 'TRANSFER', 'GET_PASS', 'GRN', 'STOCK_COUNT', 'STOCK_REPORT',
@@ -39,8 +40,34 @@ async function resolveWorkflowForDocument({ moduleKey, tenantId = null }) {
     throw err;
   }
 
-  const accResolution = await resolvePublishedWorkflowChain(normalizedModuleKey, tenantId);
+  const accResolution = await workflowResolutionEngine.resolvePublishedWorkflowChain(
+    normalizedModuleKey,
+    tenantId,
+  );
   if (!accResolution?.roleCodes?.length) {
+    const FALLBACK_MODULES = ['TRANSFER', 'STOCK_COUNT'];
+    if (FALLBACK_MODULES.includes(normalizedModuleKey)) {
+      const steps = defaultStepsForModule(normalizedModuleKey);
+      const roleCodes = steps.map((s) => s.roleCode).filter(Boolean);
+      if (!roleCodes.length) {
+        const err = new Error(`${normalizedModuleKey} default approval chain is not configured.`);
+        err.statusCode = 500;
+        throw err;
+      }
+      const fallback = {
+        moduleKey: normalizedModuleKey,
+        roleCodes,
+        steps,
+        source: 'default-chain',
+        legacyFallback: false,
+        drift: false,
+        versionId: null,
+        accResolution: null,
+      };
+      validateWorkflowChainForRuntime(fallback, normalizedModuleKey);
+      return fallback;
+    }
+
     const err = new Error(
       `ACC published workflow is required for ${normalizedModuleKey}. Publish in Workflow Builder.`,
     );
@@ -90,7 +117,7 @@ function approvalRequestVersionPin(chain) {
 
 async function getModuleRuntimeReadPath(moduleKey, tenantId = null) {
   const key = String(moduleKey || '').trim().toUpperCase();
-  const published = await resolvePublishedWorkflowChain(key, tenantId);
+  const published = await workflowResolutionEngine.resolvePublishedWorkflowChain(key, tenantId);
   const resolved = await resolveWorkflowForDocument({ moduleKey: key, tenantId });
   return {
     moduleKey: key,

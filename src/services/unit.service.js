@@ -57,7 +57,7 @@ const getUnits = async (tenantId, query = {}) => {
             where,
             skip: parseInt(skip),
             take: parseInt(take),
-            orderBy: { name: 'asc' }
+            orderBy: [{ isActive: 'desc' }, { name: 'asc' }]
         }),
         prisma.unit.count({ where })
     ]);

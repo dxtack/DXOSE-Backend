@@ -215,6 +215,42 @@ const getLocations = async (tenantId, query = {}, user = null) => {
 };
 
 /**
+ * Slim picker: active locations that have at least one StockBalance with qtyOnHand > 0.
+ * Honors the same ACC/operational location scope as the default source lookup
+ * (does NOT use transfer_destination purpose).
+ * Used by transfer From (Source) so empty locations are not offered as sources.
+ */
+const getLocationsWithPositiveStock = async (tenantId, query = {}, user = null) => {
+    let where = {
+        tenantId,
+        isActive: true,
+        stockBalances: {
+            some: {
+                tenantId,
+                qtyOnHand: { gt: 0 },
+            },
+        },
+        ...(query.search && {
+            name: { contains: String(query.search), mode: 'insensitive' },
+        }),
+    };
+
+    if (user && isScopeEngineEnabled() && !parseMasterDataTenantWideQuery(query)) {
+        const scope = await resolveUserScope(user, tenantId);
+        where = mergeScopeIntoWhere(where, resolveLocationLookupScopeWhere(scope));
+    }
+
+    const locations = await prisma.location.findMany({
+        where,
+        take: MAX_LOCATION_SLIM,
+        orderBy: { name: 'asc' },
+        select: { id: true, name: true, type: true, isActive: true },
+    });
+
+    return { locations, slim: true };
+};
+
+/**
  * Get location by ID
  */
 const getLocationById = async (id, tenantId, user = null) => {
@@ -450,6 +486,7 @@ const setLocationCategories = async (locationId, categoryIds, tenantId) => {
 module.exports = {
     createLocation,
     getLocations,
+    getLocationsWithPositiveStock,
     getLocationById,
     updateLocation,
     deleteLocation,

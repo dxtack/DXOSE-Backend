@@ -37,6 +37,24 @@ const getLocations = async (req, res, next) => {
 };
 
 /**
+ * @desc    Get active locations that have positive on-hand stock (transfer source picker)
+ * @route   GET /api/locations/with-stock
+ * @access  Private
+ */
+const getLocationsWithPositiveStock = async (req, res, next) => {
+    try {
+        const result = await locationService.getLocationsWithPositiveStock(
+            req.user.tenantId,
+            req.query,
+            req.user,
+        );
+        return success(res, result.locations, 'Locations with stock fetched successfully', 200);
+    } catch (error) {
+        next(error);
+    }
+};
+
+/**
  * @desc    Get a location by ID
  * @route   GET /api/locations/:id
  * @access  Private
@@ -142,6 +160,7 @@ const setLocationCategories = async (req, res, next) => {
 module.exports = {
     createLocation,
     getLocations,
+    getLocationsWithPositiveStock,
     getLocation,
     updateLocation,
     deleteLocation,

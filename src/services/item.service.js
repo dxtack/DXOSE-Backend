@@ -1035,7 +1035,8 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
 
     // P2 #26 — skip blank padding and official template example (nameless lookup prefill).
     const TEMPLATE_PREFILL_KEYS = new Set([
-        'name', 'department', 'category', 'vendor', 'supplier', 'base unit', 'baseunit', 'unit price', 'unitprice',
+        'name', 'department', 'default store', 'defaultstore', 'location', 'opening quantity', 'openingquantity',
+        'category', 'vendor', 'supplier', 'base unit', 'baseunit', 'unit price', 'unitprice',
     ]);
     const isLogicalEmptyImportRow = (row) =>
         Object.values(row || {}).every((v) => String(v ?? '').trim() === '');
@@ -1081,7 +1082,8 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
     // location columns only if they resolve to an active location; otherwise ignored.
     const FIXED_COLUMNS = new Set([
         'name', 'barcode', 'code', 'item code', 'sku', 'department', 'category', 'base unit', 'unit price',
-        'default store', 'defaultstore', 'vendor', 'supplier', 'description', 'image url', 'imageurl',
+        'default store', 'defaultstore', 'location', 'opening quantity', 'openingquantity', 'opening qty', 'openingqty',
+        'vendor', 'supplier', 'description', 'image url', 'imageurl',
         'reorder point', 'reorder qty', 'reorderpoint', 'reorderqty', 'is active', 'active',
     ]);
 
@@ -1139,7 +1141,11 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
     for (const header of storeHeaders) {
         const locInfo = resolveLocation(header);
         if (locInfo) {
-            storeColumnNames.push({ header, locationId: locInfo.id });
+            storeColumnNames.push({
+                header,
+                locationId: locInfo.id,
+                departmentId: locInfo.departmentId,
+            });
         } else {
             unmappedLocationHeaders.push(header);
         }
@@ -1179,9 +1185,30 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
         const baseUnit = String(row['Base Unit'] || row['baseUnit'] || row['base_unit'] || '').trim();
         const deptName = String(row['Department'] || row['department'] || '').trim();
         const vendorName = String(row['Vendor'] || row['vendor'] || row['Supplier'] || row['supplier'] || '').trim();
+        // Prefer "Location" (current template); keep "Default Store" aliases for older files.
+        const defaultStoreName = String(
+            row['Location'] || row['location']
+            || row['Default Store'] || row['defaultStore'] || row['default_store'] || '',
+        ).trim();
+        const openingQtyRaw =
+            row['Opening Quantity'] ??
+            row['openingQuantity'] ??
+            row['opening_quantity'] ??
+            row['Opening Qty'] ??
+            row['openingQty'] ??
+            '';
+        const hasOpeningQtyRaw =
+            openingQtyRaw !== null && openingQtyRaw !== undefined && String(openingQtyRaw).trim() !== '';
+        const openingQtyParsed = hasOpeningQtyRaw ? parseExcelNumber(openingQtyRaw) : null;
 
         if (!name) addIssue('name', 'Name is required', 'error', 'REQUIRED');
         if (isNaN(unitPrice) || unitPrice < 0) addIssue('unitPrice', 'Invalid unit price', 'error', 'INVALID_NUMBER');
+        if (hasOpeningQtyRaw && Number.isNaN(openingQtyParsed)) {
+            addIssue('openingQuantity', 'Invalid opening quantity', 'error', 'INVALID_NUMBER');
+        }
+        if (hasOpeningQtyRaw && !Number.isNaN(openingQtyParsed) && openingQtyParsed < 0) {
+            addIssue('openingQuantity', 'Opening quantity cannot be negative', 'error', 'INVALID_NUMBER');
+        }
 
         const normalizedName = name.toLowerCase();
         if (name) {
@@ -1216,6 +1243,24 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
         if (deptName && !departmentId) addIssue('department', `Department '${deptName}' not found`, 'error', 'NOT_FOUND');
         if (!deptName) addIssue('department', 'Department is required', 'error', 'REQUIRED');
 
+        // Location column (cascading template) — must resolve and belong to selected department
+        let defaultStoreFromColumn = null;
+        if (defaultStoreName) {
+            const locInfo = resolveLocation(defaultStoreName);
+            if (!locInfo) {
+                addIssue('location', `Location '${defaultStoreName}' not found`, 'error', 'NOT_FOUND');
+            } else if (departmentId && locInfo.departmentId && locInfo.departmentId !== departmentId) {
+                addIssue(
+                    'location',
+                    `Location '${defaultStoreName}' does not belong to department '${deptName}'`,
+                    'error',
+                    'DEPT_LOCATION_MISMATCH',
+                );
+            } else {
+                defaultStoreFromColumn = locInfo.id;
+            }
+        }
+
         // DB existence / update intent (match by name only; barcodes are system-generated)
         const existingByName = name ? existingByNameMap.get(normalizedName) : null;
         const matchedExisting = existingByName || null;
@@ -1229,10 +1274,29 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
             );
         }
 
-        // Parse store quantities from dynamic columns
+        // Parse quantities: prefer row-based Opening Quantity → Location;
+        // legacy wide templates may still use per-location qty columns.
         const storeQuantities = {};
         let firstStoreWithQty = null;
-        for (const { header, locationId } of storeColumnNames) {
+
+        if (
+            defaultStoreFromColumn &&
+            hasOpeningQtyRaw &&
+            !Number.isNaN(openingQtyParsed) &&
+            openingQtyParsed > 0
+        ) {
+            storeQuantities[defaultStoreFromColumn] = openingQtyParsed;
+            firstStoreWithQty = defaultStoreFromColumn;
+        } else if (hasOpeningQtyRaw && !Number.isNaN(openingQtyParsed) && openingQtyParsed > 0 && !defaultStoreFromColumn) {
+            addIssue(
+                'location',
+                'Location is required when Opening Quantity is provided',
+                'error',
+                'REQUIRED',
+            );
+        }
+
+        for (const { header, locationId, departmentId: locDeptId } of storeColumnNames) {
             const rawQty = row[header];
             const qty = parseExcelNumber(rawQty || 0);
             const hasRawValue = rawQty !== null && rawQty !== undefined && String(rawQty).trim() !== '';
@@ -1241,7 +1305,19 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
                 continue;
             }
             if (!isNaN(qty) && qty > 0) {
-                storeQuantities[locationId] = qty;
+                if (departmentId && locDeptId && locDeptId !== departmentId) {
+                    addIssue(
+                        `store__${header}`,
+                        `Store column '${header}' does not belong to department '${deptName}'`,
+                        'error',
+                        'DEPT_LOCATION_MISMATCH',
+                    );
+                    continue;
+                }
+                // Row-based Opening Quantity wins for the same location when both are present.
+                if (storeQuantities[locationId] == null) {
+                    storeQuantities[locationId] = qty;
+                }
                 if (!firstStoreWithQty) firstStoreWithQty = locationId;
             }
         }
@@ -1262,7 +1338,7 @@ const parseImportFile = async (fileBufferOrPath, tenantId, options = {}) => {
             );
         }
 
-        const defaultStoreId = firstStoreWithQty || null;
+        const defaultStoreId = defaultStoreFromColumn || firstStoreWithQty || null;
         const errors = issues.filter((issue) => issue.severity === 'error').map((issue) => issue.message);
 
         return {

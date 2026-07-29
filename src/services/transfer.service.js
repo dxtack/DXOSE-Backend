@@ -305,6 +305,13 @@ const createTransfer = async ({
     reason,
     notes,
     lines = [],
+    /**
+     * Create always enters the approval pipeline (PENDING_DEPT / PENDING_FINANCE).
+     * Opt out only for rare governance/test paths that still need a DRAFT row.
+     * Accepts legacy aliases: submitImmediately=false | keepAsDraft=true.
+     */
+    submitImmediately = true,
+    keepAsDraft = false,
 }) => {
     if (user) {
         const { isTransferCreateActorRole } = require('./transferWorkflowContext.util');
@@ -322,6 +329,19 @@ const createTransfer = async ({
     if (sourceLocationId === destLocationId)
         throw Object.assign(new Error('Source and destination must be different locations'), { status: 400 });
     if (lines.length === 0) throw Object.assign(new Error('At least one line is required'), { status: 400 });
+
+    // Approval-path validation: every line must be complete before workflow entry.
+    for (const [idx, l] of lines.entries()) {
+        if (!l?.itemId) {
+            throw Object.assign(new Error(`lines[${idx}].itemId is required`), { status: 400 });
+        }
+        if (!l?.uomId) {
+            throw Object.assign(new Error(`lines[${idx}].uomId is required`), { status: 400 });
+        }
+        if (l.requestedQty == null || l.requestedQty === '') {
+            throw Object.assign(new Error(`lines[${idx}].requestedQty is required`), { status: 400 });
+        }
+    }
 
     if (user) {
         const scope = await resolveScopeContext(user, tenantId);
@@ -366,7 +386,36 @@ const createTransfer = async ({
         afterValue: { transferNo: created.transferNo, status: created.status },
     });
 
-    return created;
+    const optOutSubmit =
+        keepAsDraft === true ||
+        keepAsDraft === 'true' ||
+        keepAsDraft === 1 ||
+        keepAsDraft === '1' ||
+        submitImmediately === false ||
+        submitImmediately === 'false' ||
+        submitImmediately === 0 ||
+        submitImmediately === '0';
+
+    if (optOutSubmit) {
+        return created;
+    }
+
+    if (!user) {
+        throw Object.assign(
+            new Error('Creating a transfer for approval requires an authenticated user.'),
+            { status: 400 },
+        );
+    }
+    try {
+        // Enter PENDING_DEPT / PENDING_FINANCE in the same request — no DRAFT landing state.
+        return await submitTransfer(created.id, tenantId, user, created.concurrencyVersion ?? 0);
+    } catch (submitErr) {
+        // All-or-nothing: remove orphan DRAFT if workflow entry fails.
+        await prisma.storeTransfer
+            .delete({ where: { id: created.id, tenantId } })
+            .catch(() => {});
+        throw submitErr;
+    }
 };
 
 const updateTransfer = async (id, tenantId, { sourceLocationId, destLocationId, requiredBy, reason, notes, lines, concurrencyVersion, postingDate, assignedPostingPeriod }, user = null, expectedVersion = null) => {
@@ -461,7 +510,7 @@ const submitTransfer = async (id, tenantId, user, expectedVersion = null) => {
             Boolean(firstRole) && Boolean(submitterRole) && firstRole === submitterRole;
         const enterStatus = preApproveFirst ? 'PENDING_FINANCE' : 'PENDING_DEPT';
 
-        const result = await prisma.$transaction(async (tx) => {
+        await prisma.$transaction(async (tx) => {
             await executeCreatorResubmitInTx(tx, {
                 approvalRequest: trf.approvalRequest,
                 userId,
@@ -493,9 +542,8 @@ const submitTransfer = async (id, tenantId, user, expectedVersion = null) => {
                 where: { id, tenantId },
                 data: bumpConcurrencyUpdate({ status: enterStatus, updatedAt: new Date() }),
             });
-            return tx.storeTransfer.findFirst({ where: { id, tenantId }, include: transferInclude });
         });
-        return result;
+        return getTransfer(id, tenantId, user);
     }
 
     let enterStatus = 'PENDING_DEPT';
@@ -556,7 +604,8 @@ const submitTransfer = async (id, tenantId, user, expectedVersion = null) => {
         afterValue: { transferNo: updatedTrf.transferNo, status: updatedTrf.status },
     });
 
-    return updatedTrf;
+    // Full detail (status + approvalRequest + userFacingState) for create/submit callers.
+    return getTransfer(id, tenantId, user);
 };
 
 const approveTransfer = async (id, tenantId, user, expectedVersion = null) => {

@@ -269,6 +269,95 @@ function _styleHeaderRow(sheet, columnCount) {
     sheet.autoFilter = { from: { row: 1, column: 1 }, to: { row: 1, column: columnCount } };
 }
 
+/** Excel named-range safe key from a department label (spaces/special chars → `_`). */
+function _toExcelNamedRangeKey(label) {
+    const cleaned = String(label || '')
+        .trim()
+        .replace(/\s+/g, '_')
+        .replace(/[^A-Za-z0-9_]/g, '_')
+        .replace(/_+/g, '_')
+        .replace(/^_|_$/g, '');
+    const base = cleaned || 'UNNAMED';
+    // Leading underscore avoids collisions with cell refs (A1, C3, …).
+    return `_${base}`.slice(0, 200);
+}
+
+function _excelColLetter(colNumber) {
+    let n = colNumber;
+    let s = '';
+    while (n > 0) {
+        const m = (n - 1) % 26;
+        s = String.fromCharCode(65 + m) + s;
+        n = Math.floor((n - 1) / 26);
+    }
+    return s;
+}
+
+/**
+ * Assign unique Excel named-range keys per department (handles sanitize collisions).
+ */
+function _withUniqueRangeKeys(departmentsWithLocations) {
+    const used = new Map();
+    return departmentsWithLocations.map((dept) => {
+        let rangeKey = _toExcelNamedRangeKey(dept.name);
+        if (used.has(rangeKey)) {
+            const next = used.get(rangeKey) + 1;
+            used.set(rangeKey, next);
+            rangeKey = `${rangeKey}_${next}`.slice(0, 200);
+        } else {
+            used.set(rangeKey, 1);
+        }
+        return { ...dept, rangeKey };
+    });
+}
+
+/**
+ * Hidden Lookups sheet + named ranges for cascading Department → Location lists.
+ * A = department names, B = range keys, C2 = empty sentinel, D+ = per-dept locations.
+ * ExcelJS definedNames.add(location, name) — location first.
+ */
+function _buildCascadingLookupsSheet(wb, departmentsWithLocations) {
+    const depts = _withUniqueRangeKeys(departmentsWithLocations);
+    const ws = wb.addWorksheet('Lookups', {
+        properties: { defaultColWidth: 22 },
+        state: 'veryHidden',
+    });
+
+    ws.getCell('A1').value = 'Department';
+    ws.getCell('B1').value = 'RangeKey';
+    ws.getCell('C1').value = '__EMPTY';
+    ws.getCell('C2').value = '';
+    wb.definedNames.add('Lookups!$C$2:$C$2', '__EMPTY');
+
+    depts.forEach((dept, idx) => {
+        const row = idx + 2;
+        ws.getCell(row, 1).value = dept.name;
+        ws.getCell(row, 2).value = dept.rangeKey;
+
+        const locCol = 4 + idx;
+        const locs = dept.locations || [];
+        if (locs.length === 0) {
+            ws.getCell(2, locCol).value = '';
+        } else {
+            locs.forEach((loc, locIdx) => {
+                ws.getCell(locIdx + 2, locCol).value = loc.name;
+            });
+        }
+        // Always use explicit $Col$2:$Col$N (even for one location) so list DV stays stable.
+        const lastLocRow = Math.max(2, locs.length + 1);
+        const colL = _excelColLetter(locCol);
+        const rangeAddr = `Lookups!$${colL}$2:$${colL}$${lastLocRow}`;
+        wb.definedNames.add(rangeAddr, dept.rangeKey);
+    });
+
+    const deptLastRow = Math.max(2, depts.length + 1);
+    if (depts.length > 0) {
+        wb.definedNames.add(`Lookups!$A$2:$A$${deptLastRow}`, 'Departments');
+    }
+
+    return { deptLastRow, departmentCount: depts.length, depts };
+}
+
 // ── Export Items to Excel ─────────────────────────────────────────────────────
 const exportItems = async (req, res, next) => {
     try {
@@ -342,62 +431,79 @@ const downloadTemplate = async (req, res, next) => {
         const ExcelJS = require('exceljs');
         const tenantId = req.user.tenantId;
 
-        // Fetch lookup data — store columns and Reference sheet use only this data
-        const [categories, units, departments, locations, suppliers] = await Promise.all([
-            prisma.category.findMany({ where: { tenantId, isActive: true }, select: { name: true }, orderBy: { name: 'asc' } }),
-            prisma.unit.findMany({ where: { tenantId, isActive: true }, select: { name: true, abbreviation: true }, orderBy: { name: 'asc' } }),
-            prisma.department.findMany({ where: { tenantId, isActive: true }, select: { name: true }, orderBy: { name: 'asc' } }),
-            prisma.location.findMany({ where: { tenantId, isActive: true }, select: { name: true }, orderBy: { name: 'asc' } }),
-            prisma.supplier.findMany({ where: { tenantId, isActive: true }, select: { name: true }, orderBy: { name: 'asc' } }),
+        // Departments that have ≥1 active location — cascading Department → Location only.
+        const [categories, units, departmentsWithLocations, suppliers] = await Promise.all([
+            prisma.category.findMany({
+                where: { tenantId, isActive: true },
+                select: { name: true },
+                orderBy: { name: 'asc' },
+            }),
+            prisma.unit.findMany({
+                where: { tenantId, isActive: true },
+                select: { name: true, abbreviation: true },
+                orderBy: { name: 'asc' },
+            }),
+            prisma.department.findMany({
+                where: {
+                    tenantId,
+                    isActive: true,
+                    locations: { some: { isActive: true } },
+                },
+                select: {
+                    name: true,
+                    locations: {
+                        where: { isActive: true },
+                        select: { name: true },
+                        orderBy: { name: 'asc' },
+                    },
+                },
+                orderBy: { name: 'asc' },
+            }),
+            prisma.supplier.findMany({
+                where: { tenantId, isActive: true },
+                select: { name: true },
+                orderBy: { name: 'asc' },
+            }),
         ]);
+
+        // Dept—Store pairs for Reference only (not used by dropdowns; avoids flat all-stores list).
+        const deptStorePairs = departmentsWithLocations.flatMap((d) =>
+            (d.locations || []).map((loc) => `${d.name} — ${loc.name}`),
+        );
 
         const wb = new ExcelJS.Workbook();
         wb.creator = 'OS&E Cloud';
         wb.created = new Date();
 
-        // ── Sheet 1: Items Template ──
+        // ── Sheet 1: Items Template (row-based — no cross-dept location qty columns) ──
         const wsItems = wb.addWorksheet('Items', {
             properties: { defaultColWidth: 18 },
         });
 
-        // Fixed columns + dynamic store columns
-        const fixedColumns = [
+        const columns = [
             { header: 'Name', key: 'name', width: 28 },
             { header: 'Department', key: 'department', width: 20 },
+            { header: 'Location', key: 'location', width: 22 },
+            { header: 'Opening Quantity', key: 'openingQuantity', width: 16 },
             { header: 'Category', key: 'category', width: 22 },
             { header: 'Vendor', key: 'vendor', width: 22 },
             { header: 'Base Unit', key: 'baseUnit', width: 14 },
             { header: 'Unit Price', key: 'unitPrice', width: 12 },
         ];
-        const FIXED_COL_COUNT = fixedColumns.length;
+        wsItems.columns = columns;
+        const totalColumns = columns.length;
 
-        // Dynamic store columns — one per active location
-        const storeColumns = locations.map(loc => ({
-            header: loc.name,
-            key: `store__${loc.name}`,
-            width: 14,
-        }));
+        // P2 #26 — no nameless example row; leave row 2 empty for the user.
 
-        wsItems.columns = [...fixedColumns, ...storeColumns];
-        const totalColumns = FIXED_COL_COUNT + storeColumns.length;
+        _styleHeaderRow(wsItems, totalColumns);
 
-        // P2 #26 — no nameless example row (was parsed as a false invalid preview row).
-        // Leave row 2 empty for the user; validation applies to a modest range only.
+        // ── Sheet 2: Hidden Lookups (cascading named ranges) ──
+        const { deptLastRow, departmentCount } = _buildCascadingLookupsSheet(
+            wb,
+            departmentsWithLocations,
+        );
 
-        // Style fixed header columns (blue)
-        _styleHeaderRow(wsItems, FIXED_COL_COUNT);
-
-        // Style store header columns (green) to distinguish them
-        const headerRow = wsItems.getRow(1);
-        for (let col = FIXED_COL_COUNT + 1; col <= totalColumns; col++) {
-            const cell = headerRow.getCell(col);
-            cell.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 10 };
-            cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2E7D32' } };
-            cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
-            cell.border = { bottom: { style: 'thin', color: { argb: 'FF1B5E20' } } };
-        }
-
-        // ── Sheet 2: Reference Data ──
+        // ── Sheet 3: Visible Reference (human-readable) ──
         const wsRef = wb.addWorksheet('Reference', {
             properties: { defaultColWidth: 22 },
         });
@@ -406,39 +512,61 @@ const downloadTemplate = async (req, res, next) => {
             { header: 'Available Departments', key: 'dept', width: 24 },
             { header: 'Available Categories', key: 'cat', width: 26 },
             { header: 'Available Vendors', key: 'vendor', width: 26 },
-            { header: 'Available Stores (Qty Columns)', key: 'loc', width: 28 },
+            { header: 'Department — Store', key: 'deptStore', width: 36 },
             { header: 'Available Units', key: 'unit', width: 22 },
         ];
 
-        const maxRows = Math.max(categories.length, units.length, departments.length, locations.length, suppliers.length, 0);
+        const maxRows = Math.max(
+            categories.length,
+            units.length,
+            departmentsWithLocations.length,
+            deptStorePairs.length,
+            suppliers.length,
+            0,
+        );
         for (let i = 0; i < maxRows; i++) {
             wsRef.addRow({
-                dept: departments[i]?.name || '',
+                dept: departmentsWithLocations[i]?.name || '',
                 cat: categories[i]?.name || '',
                 vendor: suppliers[i]?.name || '',
-                loc: locations[i]?.name || '',
+                deptStore: deptStorePairs[i] || '',
                 unit: units[i] ? `${units[i].name} (${units[i].abbreviation})` : '',
             });
         }
 
         _styleHeaderRow(wsRef, 5);
 
-        // ── Data Validation (Dropdowns) — modest range to avoid expanding used-range ghosts
+        // ── Data Validation ──
         const VALIDATION_ROWS = 30;
-        const deptList = departments.map(d => d.name).filter(Boolean);
-        const catList = categories.map(c => c.name).filter(Boolean);
-        const unitList = units.map(u => `${u.name} (${u.abbreviation})`).filter(Boolean);
-        const vendorList = suppliers.map(s => s.name).filter(Boolean);
+        const catList = categories.map((c) => c.name).filter(Boolean);
+        const unitList = units.map((u) => `${u.name} (${u.abbreviation})`).filter(Boolean);
+        const vendorList = suppliers.map((s) => s.name).filter(Boolean);
 
         const validationConfig = [
-            { col: 'department', list: deptList, formula: `Reference!$A$2:$A$${departments.length + 1}` },
-            { col: 'category', list: catList, formula: `Reference!$B$2:$B$${categories.length + 1}` },
-            { col: 'vendor', list: vendorList, formula: `Reference!$C$2:$C$${suppliers.length + 1}` },
-            { col: 'baseUnit', list: unitList, formula: `Reference!$E$2:$E$${units.length + 1}` },
+            {
+                col: 'department',
+                list: departmentsWithLocations,
+                formula: departmentCount > 0 ? 'Departments' : null,
+            },
+            {
+                col: 'category',
+                list: catList,
+                formula: catList.length ? `Reference!$B$2:$B$${categories.length + 1}` : null,
+            },
+            {
+                col: 'vendor',
+                list: vendorList,
+                formula: vendorList.length ? `Reference!$C$2:$C$${suppliers.length + 1}` : null,
+            },
+            {
+                col: 'baseUnit',
+                list: unitList,
+                formula: unitList.length ? `Reference!$E$2:$E$${units.length + 1}` : null,
+            },
         ];
 
         for (const { col, list, formula } of validationConfig) {
-            if (list.length === 0) continue;
+            if (!list.length || !formula) continue;
             const colIdx = wsItems.getColumn(col).number;
             for (let row = 2; row <= VALIDATION_ROWS; row++) {
                 wsItems.getCell(row, colIdx).dataValidation = {
@@ -452,21 +580,46 @@ const downloadTemplate = async (req, res, next) => {
             }
         }
 
-        // Number format for store quantity columns
-        for (let col = FIXED_COL_COUNT + 1; col <= totalColumns; col++) {
+        // Cascading Location: always pass a named-range *string* into INDIRECT
+        // (IFERROR returning __EMPTY's value breaks Excel list DV when Department is blank).
+        if (departmentCount > 0) {
+            const locationColIdx = wsItems.getColumn('location').number;
+            const deptColLetter = _excelColLetter(wsItems.getColumn('department').number);
             for (let row = 2; row <= VALIDATION_ROWS; row++) {
-                wsItems.getCell(row, col).numFmt = '#,##0';
+                const cascadingFormula =
+                    `INDIRECT(IF($${deptColLetter}${row}="","__EMPTY",VLOOKUP($${deptColLetter}${row},Lookups!$A$2:$B$${deptLastRow},2,FALSE)))`;
+                wsItems.getCell(row, locationColIdx).dataValidation = {
+                    type: 'list',
+                    allowBlank: true,
+                    formulae: [cascadingFormula],
+                    showErrorMessage: true,
+                    errorTitle: 'Invalid Location',
+                    error: 'Select a Location that belongs to the chosen Department.',
+                    showInputMessage: true,
+                    promptTitle: 'Location',
+                    prompt: 'Pick a department first. Only locations for that department appear here.',
+                };
             }
         }
 
-        // Freeze header + first column
-        wsItems.views = [{ state: 'frozen', ySplit: 1, xSplit: 1 }];
-        wsItems.autoFilter = { from: { row: 1, column: 1 }, to: { row: 1, column: totalColumns } };
+        // Opening Quantity — numeric only
+        const qtyColIdx = wsItems.getColumn('openingQuantity').number;
+        for (let row = 2; row <= VALIDATION_ROWS; row++) {
+            wsItems.getCell(row, qtyColIdx).numFmt = '#,##0.####';
+        }
 
-        // Write to buffer
+        wsItems.views = [{ state: 'frozen', ySplit: 1, xSplit: 1 }];
+        wsItems.autoFilter = {
+            from: { row: 1, column: 1 },
+            to: { row: 1, column: totalColumns },
+        };
+
         const buf = await wb.xlsx.writeBuffer();
         res.setHeader('Content-Disposition', 'attachment; filename="Item_Import_Template.xlsx"');
-        res.setHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        res.setHeader(
+            'Content-Type',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        );
         res.send(Buffer.from(buf));
     } catch (err) {
         next(err);
@@ -491,4 +644,9 @@ module.exports = {
     bulkUploadImages,
     downloadTemplate,
     exportItems,
+    // Cascading template helpers (used by consumer smoke tests)
+    _toExcelNamedRangeKey,
+    _excelColLetter,
+    _withUniqueRangeKeys,
+    _buildCascadingLookupsSheet,
 };

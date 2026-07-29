@@ -600,6 +600,8 @@ exports.startSession = async (tenantId, user, id, body = {}) => {
   let uniqueItemCount = 0;
 
   // Create per-location rows for every scoped item×location snapshot cell.
+  // Snapshot is StockBalance-only (no cartesian item×location product). Empty
+  // balances must fail before COUNTING so export/upload are not a dead end.
   await prisma.$transaction(async (tx) => {
     await guardedSessionUpdate(tx, s, expectedVersion, {
       status: 'COUNTING',
@@ -611,6 +613,15 @@ exports.startSession = async (tenantId, user, id, body = {}) => {
     const ensured = await ensureCountSheetCells(tx, tenantId, s, locationIds, 1, { useLiveBalances: true });
     scopedItems = ensured.scopedItems;
     uniqueItemCount = ensured.uniqueItemCount ?? scopedItems.length;
+
+    if (!uniqueItemCount) {
+      throw bizError(
+        400,
+        'COUNT_SESSION_EMPTY_SNAPSHOT',
+        'Cannot start count: no stock balances found for the selected location(s). Receive or open stock first, then start again.',
+        [{ field: 'locationIds', reason: 'No StockBalance rows in session scope' }],
+      );
+    }
   });
 
   return {
@@ -2200,9 +2211,28 @@ exports.uploadExcel = async (tenantId, user, sessionId, fileBuffer, opts = {}) =
     }
   }
 
+  const snapshotCellCount = await prisma.stockCountLocationQty.count({
+    where: {
+      sessionId,
+      roundNo,
+      ...(opts.locationId ? { locationId: opts.locationId } : {}),
+    },
+  });
+  if (!snapshotCellCount) {
+    throw bizError(
+      400,
+      'COUNT_UPLOAD_EMPTY_SNAPSHOT',
+      'This count session has no snapshot lines for the selected location. Excel upload can only update items frozen at start — cancel this session, ensure stock exists at the location, then create and start a new count.',
+    );
+  }
+
   const uploadRows = collectCountSheetUploadRows(wb, uploadSheetOpts);
   if (!uploadRows.length) {
-    throw bizError(400, 'COUNT_UPLOAD_NO_DATA', 'No data rows found in sheet.');
+    throw bizError(
+      400,
+      'COUNT_UPLOAD_NO_DATA',
+      'No data rows found in sheet. Download Export sheet from this session, edit only the Counted Qty column, and upload that file without changing headers.',
+    );
   }
 
   // Build maps for matching (itemId → code → barcode → name)
@@ -2404,6 +2434,8 @@ module.exports.__testCountSheetHelpers = {
   isCountSheetDataRow,
   pickRowValue,
   findCountSheetHeaderRowIndex,
+  collectCountSheetUploadRows,
+  parseCountSheetUploadRows,
   excelImageExtension,
   prepareExcelImageEmbed,
   excelImageCellPlacement,

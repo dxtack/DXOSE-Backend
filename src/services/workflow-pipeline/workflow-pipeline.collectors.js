@@ -118,10 +118,16 @@ async function collectTransfers(tenantId, scope = null) {
             const chain = t.approvalRequest.accWorkflowVersionId
                 ? await chainCache.getChain({ moduleKey: 'TRANSFER', versionId: t.approvalRequest.accWorkflowVersionId })
                 : await chainCache.getChain({ moduleKey: 'TRANSFER' });
+            // Prefer live ApprovalStep role (works for default-chain / unpinned versionId).
             waitingForRole = waitingRoleFromApprovalRequest(t.approvalRequest)
                 || waitingRoleFromAccStatus(chain, t.status)
                 || null;
             currentStep = `Approval step ${t.approvalRequest.currentStep}`;
+        } else if (TRANSFER_APPROVAL_STATUSES.includes(t.status)) {
+            // AR missing/non-PENDING but document still in approval status — derive from chain/status.
+            const chain = await chainCache.getChain({ moduleKey: 'TRANSFER' });
+            waitingForRole = waitingRoleFromAccStatus(chain, t.status) || null;
+            currentStep = t.status;
         } else if (TRANSFER_LEGACY_OPEN_STATUSES.includes(t.status)) {
             waitingForRole = null;
             currentStep = 'Legacy transfer — resolve via migration';

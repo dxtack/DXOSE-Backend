@@ -7,7 +7,7 @@ const ctrl = require('../controllers/transfer.controller');
 
 router.use(authenticate);
 
-router.post('/', requirePermission('TRANSFER_CREATE'), ctrl.createTransfer); // Create DRAFT
+router.post('/', requirePermission('TRANSFER_CREATE'), ctrl.createTransfer); // Create + enter approval (PENDING_DEPT / PENDING_FINANCE)
 router.get('/', requirePermission('TRANSFER_VIEW'), ctrl.listTransfers);
 router.get('/:id/evidence', requirePermission('TRANSFER_VIEW'), ctrl.getEvidence);
 router.get('/:id/evidence/pdf', requirePermission('TRANSFER_VIEW'), ctrl.getEvidencePDF);

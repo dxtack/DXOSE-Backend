@@ -108,14 +108,44 @@ const createUserValidator = [
     body('password').optional().isLength({ min: 8 }).withMessage('Password must be at least 8 characters.'),
     body('firstName').optional().notEmpty().trim(),
     body('lastName').optional().notEmpty().trim(),
+    body('phone').optional({ nullable: true }).isString().trim(),
+    // Legacy Settings path: role code. ACC unified path: initialAssignment.roleId.
     body('role')
+        .optional()
         .isIn([...ASSIGNABLE_ROLE_CODES])
         .withMessage('Invalid role.'),
+    body('initialAssignment')
+        .optional()
+        .isObject()
+        .withMessage('initialAssignment must be an object.'),
+    body('initialAssignment.roleId')
+        .optional()
+        .isUUID()
+        .withMessage('initialAssignment.roleId must be a valid UUID.'),
+    body('initialAssignment.propertyIds')
+        .optional()
+        .isArray()
+        .withMessage('initialAssignment.propertyIds must be an array.'),
+    body('initialAssignment.propertyIds.*').optional().isUUID(),
+    body('initialAssignment.departmentIds')
+        .optional()
+        .isArray()
+        .withMessage('initialAssignment.departmentIds must be an array.'),
+    body('initialAssignment.departmentIds.*').optional().isUUID(),
+    body('initialAssignment.notes').optional({ nullable: true }).isString(),
     body('departmentId').optional({ nullable: true }).isUUID().withMessage('departmentId must be a valid UUID.'),
     body('canViewAllDepartments').optional().isBoolean(),
     body('canViewAllLocations').optional().isBoolean(),
     body('locationIds').optional().isArray(),
     body('locationIds.*').optional().isUUID(),
+    body().custom((_, { req }) => {
+        const hasAssignmentRole = Boolean(req.body?.initialAssignment?.roleId);
+        const hasLegacyRole = Boolean(req.body?.role);
+        if (!hasAssignmentRole && !hasLegacyRole) {
+            throw new Error('Either role or initialAssignment.roleId is required.');
+        }
+        return true;
+    }),
     validate,
 ];
 

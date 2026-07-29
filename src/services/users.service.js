@@ -8,6 +8,7 @@ const {
 const { membershipRoleCode, connectRole, loadOrgManagerUserIdSet, resolveMembershipBusinessRole, userHasOrgManagerMembership, normalizeRole } = require('./rbac.service');
 const { assertAssignableRole } = require('./rbac.constants');
 const { syncMembershipToAssignment } = require('./acc-membership-assignment-sync.service');
+const { createAssignmentsWithProvisioning } = require('./acc-assignment-fanout.service');
 const {
     ACC_OPERATIONAL_EXCLUDED_ROLE_CODES,
     isAccOperationalExcludedRoleCode,
@@ -20,6 +21,99 @@ function throwAccessManagedInAcc() {
         { statusCode: 403, code: 'ACCESS_MANAGED_IN_ACC' },
     );
 }
+
+async function resolveOrgGroupIds(currentTenantId) {
+    if (!currentTenantId) return new Set();
+    const currentTenant = await prisma.tenant.findUnique({
+        where: { id: currentTenantId },
+        select: { parentId: true },
+    });
+    const orgRootId = currentTenant?.parentId ?? currentTenantId;
+    const rows = await prisma.tenant.findMany({
+        where: { isActive: true, OR: [{ id: orgRootId }, { parentId: orgRootId }] },
+        select: { id: true },
+    });
+    return new Set(rows.map((r) => r.id));
+}
+
+/**
+ * Create or resolve User identity only (no TenantMember / assignment).
+ * Used by unified ACC create before fanout provisioning.
+ */
+const ensureUserIdentity = async (tx, data, requestingUserId) => {
+    const hierarchyTenantIds = await resolveOrgHierarchyTenantIds(tx, requestingUserId);
+
+    let targetUser = null;
+    let createdNew = false;
+
+    if (data.existingUserId) {
+        targetUser = await tx.user.findUnique({ where: { id: data.existingUserId } });
+        if (!targetUser) {
+            throw Object.assign(new Error('Existing user not found.'), { statusCode: 404 });
+        }
+        const normalizedEmail = (data.email || targetUser.email || '').trim().toLowerCase();
+        if (normalizedEmail && targetUser.email.toLowerCase() !== normalizedEmail) {
+            throw Object.assign(
+                new Error('Email does not match the selected existing user.'),
+                { statusCode: 400 },
+            );
+        }
+    } else {
+        const email = (data.email || '').trim().toLowerCase();
+        if (!email) {
+            throw Object.assign(new Error('Valid email required.'), { statusCode: 400 });
+        }
+        targetUser = await tx.user.findUnique({ where: { email } });
+        if (!targetUser) {
+            if (!data.password) {
+                throw Object.assign(new Error('Password is required for creating a new user.'), { statusCode: 400 });
+            }
+            if (!data.firstName || !data.lastName) {
+                throw Object.assign(new Error('firstName and lastName are required for creating a new user.'), {
+                    statusCode: 400,
+                });
+            }
+            const passwordHash = await hashPassword(data.password);
+            targetUser = await tx.user.create({
+                data: {
+                    email,
+                    passwordHash,
+                    firstName: data.firstName,
+                    lastName: data.lastName,
+                    phone: data.phone || null,
+                },
+            });
+            createdNew = true;
+        } else if (data.firstName || data.lastName || data.phone !== undefined) {
+            targetUser = await tx.user.update({
+                where: { id: targetUser.id },
+                data: {
+                    ...(data.firstName ? { firstName: data.firstName } : {}),
+                    ...(data.lastName ? { lastName: data.lastName } : {}),
+                    ...(data.phone !== undefined ? { phone: data.phone || null } : {}),
+                },
+            });
+        }
+    }
+
+    if (!createdNew) {
+        if (hierarchyTenantIds.length === 0) {
+            throw Object.assign(new Error('You are not authorized to import existing users.'), { statusCode: 403 });
+        }
+        const inHierarchy = await assertUserInOrgHierarchy(tx, {
+            userId: targetUser.id,
+            hierarchyTenantIds,
+        });
+        if (!inHierarchy) {
+            throw Object.assign(
+                new Error('You can only import users that belong to your managed tenants.'),
+                { statusCode: 403 },
+            );
+        }
+    }
+
+    return { user: targetUser, createdNew };
+};
 
 /**
  * M01 — User Management Service (Admin operations)
@@ -252,7 +346,113 @@ const searchExistingUsers = async (requestingUserId, email) => {
     return users;
 };
 
-const createUser = async (tenantId, data, requestingUserId) => {
+const createUser = async (tenantId, data, requestingUserId, actorContext = {}) => {
+    const initialAssignment = data.initialAssignment && data.initialAssignment.roleId
+        ? data.initialAssignment
+        : null;
+
+    // ── Unified ACC path: identity + assignment via fanout (membership SSOT) ──
+    if (initialAssignment) {
+        const propertyIds = Array.isArray(initialAssignment.propertyIds)
+            ? initialAssignment.propertyIds
+            : [];
+        const departmentIds = Array.isArray(initialAssignment.departmentIds)
+            ? initialAssignment.departmentIds
+            : [];
+
+        if (propertyIds.length === 0 && actorContext.actorRoleCode !== 'ORG_MANAGER') {
+            throw Object.assign(
+                new Error('Only Organization Managers may create All-Properties assignments.'),
+                { statusCode: 403 },
+            );
+        }
+
+        const orgGroupIds =
+            actorContext.orgGroupIds instanceof Set
+                ? actorContext.orgGroupIds
+                : await resolveOrgGroupIds(tenantId);
+
+        if (propertyIds.length > 0) {
+            const outOfScope = propertyIds.filter((pid) => !orgGroupIds.has(pid));
+            if (outOfScope.length > 0) {
+                throw Object.assign(
+                    new Error(
+                        `Cannot assign to properties outside the organization group: ${outOfScope.join(', ')}`,
+                    ),
+                    { statusCode: 403 },
+                );
+            }
+        }
+
+        const { user: identity, createdNew } = await prisma.$transaction(async (tx) =>
+            ensureUserIdentity(tx, data, requestingUserId),
+        );
+
+        try {
+            const result = await createAssignmentsWithProvisioning(
+                requestingUserId,
+                {
+                    userId: identity.id,
+                    roleId: initialAssignment.roleId,
+                    propertyIds,
+                    departmentIds,
+                    notes: initialAssignment.notes ?? null,
+                },
+                {
+                    orgGroupIds,
+                    actorRoleCode: actorContext.actorRoleCode ?? null,
+                },
+            );
+
+            if (!result.assignment) {
+                throw Object.assign(new Error('Failed to create assignment.'), { statusCode: 500 });
+            }
+
+            const assignment = result.assignment;
+            return {
+                id: identity.id,
+                email: identity.email,
+                firstName: identity.firstName,
+                lastName: identity.lastName,
+                phone: identity.phone,
+                isActive: identity.isActive,
+                createdAt: identity.createdAt,
+                role: assignment.role?.code ?? null,
+                departmentId: assignment.departments?.[0]?.departmentId ?? null,
+                department: assignment.departments?.[0]?.department?.name ?? null,
+                assignment: {
+                    id: assignment.id,
+                    roleId: assignment.roleId,
+                    roleCode: assignment.role?.code ?? null,
+                    roleName: assignment.role?.name ?? null,
+                    isActive: assignment.isActive,
+                    properties: (assignment.properties ?? []).map((p) => ({
+                        id: p.propertyId,
+                        name: p.property?.name,
+                    })),
+                    departments: (assignment.departments ?? []).map((d) => ({
+                        id: d.departmentId,
+                        name: d.department?.name,
+                    })),
+                    allProperties: (assignment.properties ?? []).length === 0,
+                    allDepartments: (assignment.departments ?? []).length === 0,
+                },
+            };
+        } catch (err) {
+            // All-or-nothing: remove orphan identity if we just created it and it has no memberships.
+            if (createdNew) {
+                const membershipCount = await prisma.tenantMember.count({
+                    where: { userId: identity.id },
+                });
+                if (membershipCount === 0) {
+                    await prisma.user.delete({ where: { id: identity.id } }).catch(() => {});
+                }
+            }
+            throw err;
+        }
+    }
+
+    // ── Legacy Settings path: role code + membership sync ──
     assertAssignableRole(data.role);
 
     const user = await prisma.$transaction(async (tx) => {
@@ -279,66 +479,14 @@ const createUser = async (tenantId, data, requestingUserId) => {
             }
         }
 
-        const hierarchyTenantIds = await resolveOrgHierarchyTenantIds(tx, requestingUserId);
+        const { user: targetUser } = await ensureUserIdentity(tx, data, requestingUserId);
 
-        let targetUser = null;
-        if (data.existingUserId) {
-            targetUser = await tx.user.findUnique({ where: { id: data.existingUserId } });
-            if (!targetUser) {
-                throw Object.assign(new Error('Existing user not found.'), { statusCode: 404 });
-            }
-            const normalizedEmail = (data.email || targetUser.email || '').trim().toLowerCase();
-            if (normalizedEmail && targetUser.email.toLowerCase() !== normalizedEmail) {
-                throw Object.assign(
-                    new Error('Email does not match the selected existing user.'),
-                    { statusCode: 400 },
-                );
-            }
-        } else {
-            const email = (data.email || '').trim().toLowerCase();
-            if (!email) {
-                throw Object.assign(new Error('Valid email required.'), { statusCode: 400 });
-            }
-            targetUser = await tx.user.findUnique({ where: { email } });
-        }
-
-        if (!targetUser) {
-            const email = (data.email || '').trim().toLowerCase();
-            if (!data.password) {
-                throw Object.assign(new Error('Password is required for creating a new user.'), { statusCode: 400 });
-            }
-            if (!data.firstName || !data.lastName) {
-                throw Object.assign(new Error('firstName and lastName are required for creating a new user.'), { statusCode: 400 });
-            }
-
-            const passwordHash = await hashPassword(data.password);
-            targetUser = await tx.user.create({
-                data: {
-                    email,
-                    passwordHash,
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    phone: data.phone || null,
-                },
-            });
-        } else {
-            // Membership Guard: ORG_MANAGER users cannot be assigned outside their org hierarchy.
-            await assertOrgManagerAssignmentWithinOrgHierarchy(tx, { userId: targetUser.id, targetTenantId: tenantId });
-
-            if (hierarchyTenantIds.length === 0) {
-                throw Object.assign(new Error('You are not authorized to import existing users.'), { statusCode: 403 });
-            }
-
-            const inHierarchy = await assertUserInOrgHierarchy(tx, {
+        // Import path still needs org-manager hierarchy guard when reusing identity.
+        if (data.existingUserId || (await tx.user.findUnique({ where: { id: targetUser.id } }))) {
+            await assertOrgManagerAssignmentWithinOrgHierarchy(tx, {
                 userId: targetUser.id,
-                hierarchyTenantIds,
+                targetTenantId: tenantId,
             });
-            if (!inHierarchy) {
-                throw Object.assign(
-                    new Error('You can only import users that belong to your managed tenants.'),
-                    { statusCode: 403 },
-                );
-            }
         }
 
         const existingMembership = await tx.tenantMember.findUnique({
