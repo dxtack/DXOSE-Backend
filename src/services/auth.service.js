@@ -14,9 +14,11 @@ const {
     connectRole,
 } = require('./rbac.service');
 const accRuntime = require('../acc-runtime');
+const { _findSessionAssignment } = require('../acc-runtime/resolvePermissions');
 const { resolveTenantMembership } = require('../utils/resolveTenantMembership');
 const { findActiveTenantBySlug } = require('../utils/tenantSlugResolve');
 const { ensureTenantSwitchable } = require('../utils/tenantSwitchValidation');
+const { legacyTag, tenantMemberIdFromLegacyNotes } = require('./acc-membership-assignment-sync.service');
 
 /**
  * M01 — Auth Service
@@ -50,6 +52,83 @@ const formatMembershipOptionsForUser = async (memberships, userId) => {
 };
 
 /**
+ * Active ACC assignments for the header role switcher.
+ * When propertyId is set, only include assignments that cover that property
+ * (explicit property row OR all-properties / empty junction).
+ */
+const listAvailableAssignmentsForUser = async (userId, { propertyId } = {}) => {
+    if (!userId) return [];
+
+    const rows = await prisma.urUserAssignment.findMany({
+        where: {
+            userId,
+            isActive: true,
+            ...(propertyId
+                ? {
+                      OR: [
+                          { properties: { some: { propertyId } } },
+                          { properties: { none: {} } },
+                      ],
+                  }
+                : {}),
+        },
+        include: {
+            role: { select: { code: true, name: true } },
+            properties: {
+                select: {
+                    propertyId: true,
+                    property: { select: { id: true, name: true } },
+                },
+            },
+            departments: {
+                select: { department: { select: { name: true } } },
+            },
+        },
+        orderBy: { createdAt: 'asc' },
+    });
+
+    const out = [];
+    for (const row of rows) {
+        const departments = row.departments.length
+            ? row.departments.map((d) => d.department?.name).filter(Boolean)
+            : ['All Departments'];
+
+        if (!row.properties.length) {
+            out.push({
+                id: row.id,
+                roleCode: row.role.code,
+                roleName: row.role.name,
+                propertyId: propertyId ?? null,
+                propertyName: 'All Properties',
+                departments,
+            });
+            continue;
+        }
+
+        const targets = propertyId
+            ? row.properties.filter((p) => p.propertyId === propertyId)
+            : row.properties;
+
+        for (const p of targets) {
+            out.push({
+                id: row.id,
+                roleCode: row.role.code,
+                roleName: row.role.name,
+                propertyId: p.property?.id ?? p.propertyId,
+                propertyName: p.property?.name ?? 'Property',
+                departments,
+            });
+        }
+    }
+    return out;
+};
+
+const resolveActiveAssignmentId = async (userId, membership, roleId, preferredAssignmentId = null) => {
+    const found = await _findSessionAssignment(userId, membership, roleId, preferredAssignmentId);
+    return found?.id ?? null;
+};
+
+/**
  * Login-time tenant choices: org roots only for ORG_MANAGER (branch hotels are chosen on dashboard).
  * Other roles: exclude inherited branch rows from the selection count.
  */
@@ -80,6 +159,80 @@ const buildAccountInactiveError = () => Object.assign(
         code: 'ACCOUNT_INACTIVE',
     }
 );
+
+/**
+ * Count active ACC assignments for login access decisions.
+ * Login is allowed when User.isActive and at least one active assignment exists
+ * (even if TenantMember rows were incorrectly retired).
+ */
+const countActiveAssignmentsForUser = async (userId) => {
+    if (!userId) return 0;
+    return prisma.urUserAssignment.count({
+        where: { userId, isActive: true },
+    });
+};
+
+/**
+ * Re-activate TenantMember seats for properties covered by active assignments.
+ * Recovers login when assignment deactivate wrongly retired a shared membership.
+ * Returns refreshed active memberships (with tenant + role), or [] if none healed.
+ */
+const healMembershipsFromActiveAssignments = async (userId) => {
+    const assignments = await prisma.urUserAssignment.findMany({
+        where: { userId, isActive: true },
+        include: {
+            role: { select: { id: true, code: true } },
+            properties: { select: { propertyId: true } },
+            departments: { select: { departmentId: true } },
+        },
+        orderBy: { createdAt: 'asc' },
+    });
+    if (assignments.length === 0) return [];
+
+    for (const assignment of assignments) {
+        let propertyId = assignment.properties[0]?.propertyId ?? null;
+        if (!propertyId) {
+            const memberId = tenantMemberIdFromLegacyNotes(assignment.notes);
+            if (memberId) {
+                const tagged = await prisma.tenantMember.findUnique({
+                    where: { id: memberId },
+                    select: { tenantId: true, userId: true },
+                });
+                if (tagged?.userId === userId) propertyId = tagged.tenantId;
+            }
+        }
+        if (!propertyId || !assignment.role?.code) continue;
+
+        const primaryDept = assignment.departments[0]?.departmentId ?? null;
+        const departmentOnCreate = primaryDept
+            ? { department: { connect: { id: primaryDept } } }
+            : {};
+        const departmentOnUpdate = primaryDept
+            ? { department: { connect: { id: primaryDept } }, canViewAllDepartments: false }
+            : { department: { disconnect: true }, canViewAllDepartments: true };
+
+        await prisma.tenantMember.upsert({
+            where: { tenantId_userId: { tenantId: propertyId, userId } },
+            create: {
+                tenant: { connect: { id: propertyId } },
+                user: { connect: { id: userId } },
+                role: connectRole(assignment.role.code),
+                isActive: true,
+                ...departmentOnCreate,
+            },
+            update: {
+                role: connectRole(assignment.role.code),
+                isActive: true,
+                ...departmentOnUpdate,
+            },
+        });
+    }
+
+    return prisma.tenantMember.findMany({
+        where: { userId, isActive: true },
+        include: { tenant: true, role: true },
+    });
+};
 
 /** Org manager with legacy inactive branch row: grant active ORG_MANAGER on that hotel. */
 const healOrgManagerBranchAccess = async (userId, branchTenantId, parentOrgId) => {
@@ -223,9 +376,14 @@ const issueSessionForMembership = async ({
     membership,
     ipAddress,
     userAgent,
+    assignmentId = null,
+    sessionRoleCode = null,
 }) => {
-    const roleCodeRaw = membershipRoleCode(membership);
-    const bestRole = await resolveUserBestRole(user.id, roleCodeRaw);
+    const roleCodeRaw = sessionRoleCode || membershipRoleCode(membership);
+    // When an explicit assignment role is selected, do not promote away from it.
+    const bestRole = sessionRoleCode
+        ? sessionRoleCode
+        : await resolveUserBestRole(user.id, roleCodeRaw);
     let roleId = membership.roleId ?? membership.role?.id;
     if (bestRole) {
         const bestRoleId = await getRoleIdByCode(bestRole);
@@ -233,11 +391,33 @@ const issueSessionForMembership = async ({
     } else if (!roleId && roleCodeRaw) {
         roleId = await getRoleIdByCode(roleCodeRaw);
     }
+    const availableAssignments = await listAvailableAssignmentsForUser(user.id, {
+        propertyId: membership.tenantId ?? null,
+    });
+    const activeAssignmentId =
+        assignmentId ||
+        (await resolveActiveAssignmentId(user.id, membership, roleId, assignmentId)) ||
+        availableAssignments[0]?.id ||
+        null;
+
+    // Prefer the active assignment's role for JWT/session when no explicit switch role.
+    let sessionRole = bestRole;
+    let sessionRoleId = roleId;
+    if (!sessionRoleCode && activeAssignmentId) {
+        const fromList = availableAssignments.find((a) => a.id === activeAssignmentId);
+        if (fromList?.roleCode) {
+            sessionRole = fromList.roleCode;
+            const fromListRoleId = await getRoleIdByCode(fromList.roleCode);
+            if (fromListRoleId) sessionRoleId = fromListRoleId;
+        }
+    }
+
     const permissions = await accRuntime.resolvePermissionsForMembership({
         userId: user.id,
         membership,
-        roleId,
-        roleCode: bestRole,
+        roleId: sessionRoleId,
+        roleCode: sessionRole,
+        assignmentId: activeAssignmentId,
     });
     let permissionVersion = user.permissionVersion;
     if (permissionVersion === undefined || permissionVersion === null) {
@@ -250,9 +430,10 @@ const issueSessionForMembership = async ({
     const tokenPayload = {
         userId: user.id,
         tenantId: membership.tenantId,
-        role: bestRole,
+        role: sessionRole,
         email: user.email,
-        ...(roleId ? { roleId } : {}),
+        ...(sessionRoleId ? { roleId: sessionRoleId } : {}),
+        ...(activeAssignmentId ? { assignmentId: activeAssignmentId } : {}),
         permissions,
         permissionVersion,
     };
@@ -286,18 +467,23 @@ const issueSessionForMembership = async ({
     return {
         accessToken,
         refreshToken,
+        permissions,
+        availableAssignments,
+        activeAssignmentId,
         user: {
             id: user.id,
             email: user.email,
             firstName: user.firstName,
             lastName: user.lastName,
-            role: bestRole,
+            role: sessionRole,
             permissions,
             department: user.department,
             departmentId: membership.departmentId ?? null,
             tenantId: membership.tenantId,
             tenantName: tenantSnapshot?.name || membership.tenant?.name || null,
             tenantTimezone: tenantSnapshot?.timezone || membership.tenant?.timezone || null,
+            availableAssignments,
+            activeAssignmentId,
             ...(tenantSnapshot
                 ? {
                       tenant: {
@@ -337,11 +523,16 @@ const login = async ({ email, password, tenantSlug, ipAddress, userAgent }) => {
         where: { email: normalizedEmail },
     });
 
-    if (!user || !user.isActive) {
+    if (!user) {
         throw Object.assign(new Error('Invalid email or password.'), {
             statusCode: 401,
             code: 'INVALID_CREDENTIALS',
         });
+    }
+
+    // Master account explicitly disabled — block with Account Deactivated (not credentials).
+    if (!user.isActive) {
+        throw buildAccountInactiveError();
     }
 
     const passwordValid = await comparePassword(password, user.passwordHash);
@@ -362,6 +553,27 @@ const login = async ({ email, password, tenantSlug, ipAddress, userAgent }) => {
     console.log('DEBUG: Provided tenantSlug:', tenantSlug);
 
     let activeMemberships = memberships.filter((membership) => membership.isActive);
+
+    // If all memberships are inactive but the user still has active ACC assignments,
+    // heal TenantMember seats from those assignments so login can proceed.
+    if (activeMemberships.length === 0) {
+        const activeAssignmentCount = await countActiveAssignmentsForUser(user.id);
+        if (activeAssignmentCount === 0) {
+            if (memberships.length > 0) {
+                throw buildAccountInactiveError();
+            }
+            throw Object.assign(new Error('No active tenant membership found for this user.'), {
+                statusCode: 403,
+                code: 'NO_ACTIVE_MEMBERSHIP',
+            });
+        }
+        const healed = await healMembershipsFromActiveAssignments(user.id);
+        if (healed.length === 0) {
+            throw buildAccountInactiveError();
+        }
+        activeMemberships = healed;
+        memberships.splice(0, memberships.length, ...healed);
+    }
 
     // Strict Membership Guard at login-time:
     // If user is an ORG_MANAGER of any root org, they must only see that org (or orgs)
@@ -819,12 +1031,23 @@ const getMe = async (userId, tenantId) => {
         roleCode: bestRole,
     });
 
+    const availableAssignments = await listAvailableAssignmentsForUser(userId, {
+        propertyId: membership.tenantId ?? null,
+    });
+    const activeAssignmentId = await resolveActiveAssignmentId(
+        userId,
+        membership,
+        roleIdForPerm,
+    );
+
     return {
         ...user,
         role: bestRole,
         permissions,
         tenant: membership.tenant || null,
         departmentId: membership.departmentId ?? null,
+        availableAssignments,
+        activeAssignmentId,
     };
 };
 
@@ -1010,6 +1233,178 @@ const switchTenant = async ({ userId, tenantSlug, ipAddress, userAgent }) => {
 };
 
 /**
+ * Switch active ACC assignment (role context) within the current property.
+ * Updates TenantMember.role to match the assignment, then reissues JWT claims.
+ */
+const switchContext = async ({ userId, assignmentId, ipAddress, userAgent }) => {
+    const normalizedId = typeof assignmentId === 'string' ? assignmentId.trim() : '';
+    if (!normalizedId) {
+        throw Object.assign(new Error('assignmentId is required.'), {
+            statusCode: 400,
+            code: 'ASSIGNMENT_ID_REQUIRED',
+        });
+    }
+
+    const user = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+            id: true,
+            email: true,
+            firstName: true,
+            lastName: true,
+            department: true,
+            isActive: true,
+            permissionVersion: true,
+        },
+    });
+    if (!user || !user.isActive) {
+        throw Object.assign(new Error('User not found or inactive.'), {
+            statusCode: 401,
+            code: 'USER_INACTIVE',
+        });
+    }
+
+    const assignment = await prisma.urUserAssignment.findFirst({
+        where: { id: normalizedId, userId, isActive: true },
+        include: {
+            role: { select: { id: true, code: true, name: true } },
+            properties: {
+                select: {
+                    propertyId: true,
+                    property: { select: { id: true, name: true, slug: true, parentId: true, timezone: true } },
+                },
+            },
+            departments: {
+                select: { departmentId: true },
+            },
+        },
+    });
+    if (!assignment) {
+        throw Object.assign(new Error('Assignment not found or inactive.'), {
+            statusCode: 404,
+            code: 'ASSIGNMENT_NOT_FOUND',
+        });
+    }
+
+    let propertyId = assignment.properties[0]?.propertyId ?? null;
+    if (!propertyId) {
+        const memberIdFromNotes = typeof assignment.notes === 'string'
+            ? assignment.notes.match(/^legacy:([0-9a-f-]{36})/i)?.[1]
+            : null;
+        if (memberIdFromNotes) {
+            const tagged = await prisma.tenantMember.findUnique({
+                where: { id: memberIdFromNotes },
+                select: { tenantId: true },
+            });
+            propertyId = tagged?.tenantId ?? null;
+        }
+    }
+    if (!propertyId) {
+        throw Object.assign(new Error('Assignment has no property context to switch into.'), {
+            statusCode: 400,
+            code: 'ASSIGNMENT_PROPERTY_REQUIRED',
+        });
+    }
+
+    await ensureTenantSwitchable(propertyId, { buildSuspensionError });
+
+    const roleCode = assignment.role.code;
+    const primaryDeptId = assignment.departments[0]?.departmentId ?? null;
+    const allDepartments = assignment.departments.length === 0;
+
+    const membership = await prisma.$transaction(async (tx) => {
+        const existing = await tx.tenantMember.findUnique({
+            where: { tenantId_userId: { tenantId: propertyId, userId } },
+            select: { id: true, isActive: true },
+        });
+        if (!existing) {
+            throw Object.assign(new Error('You are not authorized for this property.'), {
+                statusCode: 403,
+                code: 'TENANT_ACCESS_DENIED',
+            });
+        }
+
+        await tx.tenantMember.update({
+            where: { id: existing.id },
+            data: {
+                role: connectRole(roleCode),
+                isActive: true,
+                canViewAllDepartments: allDepartments,
+                ...(primaryDeptId
+                    ? { department: { connect: { id: primaryDeptId } } }
+                    : { department: { disconnect: true } }),
+            },
+        });
+
+        // Prefer this assignment for the membership via legacy tag (clear tag from siblings).
+        const siblings = await tx.urUserAssignment.findMany({
+            where: {
+                userId,
+                isActive: true,
+                notes: { startsWith: `legacy:${existing.id}` },
+                NOT: { id: assignment.id },
+            },
+            select: { id: true, notes: true },
+        });
+        for (const sibling of siblings) {
+            const rest = typeof sibling.notes === 'string'
+                ? sibling.notes.replace(new RegExp(`^legacy:${existing.id}\\|?`), '').trim()
+                : '';
+            await tx.urUserAssignment.update({
+                where: { id: sibling.id },
+                data: { notes: rest || null },
+            });
+        }
+        const priorNotes = typeof assignment.notes === 'string' ? assignment.notes : '';
+        const withoutLegacy = priorNotes.replace(/^legacy:[0-9a-f-]{36}\|?/i, '').trim();
+        const nextNotes = withoutLegacy
+            ? `${legacyTag(existing.id)}|${withoutLegacy}`
+            : legacyTag(existing.id);
+        await tx.urUserAssignment.update({
+            where: { id: assignment.id },
+            data: { notes: nextNotes },
+        });
+
+        const updatedUser = await tx.user.update({
+            where: { id: userId },
+            data: { permissionVersion: { increment: 1 } },
+            select: { permissionVersion: true },
+        });
+        user.permissionVersion = updatedUser.permissionVersion;
+
+        return tx.tenantMember.findUnique({
+            where: { id: existing.id },
+            include: {
+                tenant: { select: { id: true, slug: true, name: true, parentId: true, timezone: true } },
+                role: { select: { id: true, code: true } },
+            },
+        });
+    });
+
+    const activeMemberships = await prisma.tenantMember.findMany({
+        where: { userId, isActive: true },
+        include: { tenant: true, role: true },
+    });
+    const membershipsWithInheritance = await buildInheritedOrgManagerMemberships(activeMemberships);
+
+    const result = await issueSessionForMembership({
+        user,
+        membership,
+        ipAddress,
+        userAgent,
+        assignmentId: assignment.id,
+        sessionRoleCode: roleCode,
+    });
+
+    await attachSessionMemberships(result, userId, membershipsWithInheritance);
+
+    logger.info(
+        `User switched assignment context: ${user.email} [assignment: ${assignment.id}, role: ${roleCode}]`,
+    );
+    return result;
+};
+
+/**
  * Request password reset: save 6-digit OTP on PasswordReset, email via mailer (active users only).
  */
 const requestPasswordReset = async ({ email }) => {
@@ -1115,6 +1510,7 @@ module.exports = {
     getProfile,
     changePassword,
     switchTenant,
+    switchContext,
     requestPasswordReset,
     resetPasswordWithOtp,
 };

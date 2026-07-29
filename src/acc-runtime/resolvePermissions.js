@@ -75,7 +75,19 @@ async function _loadRolePermissionCodes(roleId, roleCode) {
   return applyRolePermissionPolicy(rc, []);
 }
 
-async function _findSessionAssignment(userId, membership, roleId) {
+async function _findSessionAssignment(userId, membership, roleId, preferredAssignmentId = null) {
+  if (preferredAssignmentId) {
+    const preferred = await prisma.urUserAssignment.findFirst({
+      where: {
+        id: preferredAssignmentId,
+        userId,
+        isActive: true,
+      },
+      select: { id: true, roleId: true },
+    });
+    if (preferred) return preferred;
+  }
+
   if (membership?.id) {
     const byTag = await prisma.urUserAssignment.findFirst({
       where: {
@@ -96,22 +108,43 @@ async function _findSessionAssignment(userId, membership, roleId) {
     const byRole = await prisma.urUserAssignment.findFirst({
       where,
       select: { id: true, roleId: true },
+      orderBy: { createdAt: 'asc' },
     });
     if (byRole) return byRole;
   }
 
-  return null;
+  // Fall back to the first active assignment covering this property (or any
+  // active assignment when membership has no tenant). Keeps login working when
+  // membership.roleId lags behind a sibling role after assignment deactivate.
+  const fallbackWhere = { userId, isActive: true };
+  if (membership?.tenantId) {
+    fallbackWhere.OR = [
+      { properties: { some: { propertyId: membership.tenantId } } },
+      { properties: { none: {} } },
+    ];
+  }
+  return prisma.urUserAssignment.findFirst({
+    where: fallbackWhere,
+    select: { id: true, roleId: true },
+    orderBy: { createdAt: 'asc' },
+  });
 }
 
 /**
  * ACC assignment path for the active session membership.
  * @returns {Promise<string[]>} canonical permission codes (may be empty)
  */
-async function resolveAccPermissionsForMembership({ userId, membership, roleId, roleCode }) {
+async function resolveAccPermissionsForMembership({
+  userId,
+  membership,
+  roleId,
+  roleCode,
+  assignmentId = null,
+}) {
   if (!userId) return [];
 
   const rc = normalizeRole(roleCode);
-  const assignment = await _findSessionAssignment(userId, membership, roleId);
+  const assignment = await _findSessionAssignment(userId, membership, roleId, assignmentId);
   if (!assignment) return [];
 
   let codes = await _loadRolePermissionCodes(assignment.roleId, rc);
@@ -133,6 +166,7 @@ async function resolvePermissionsForMembership({
   tenantId = null,
   tenantSlug = null,
   telemetryContext = null,
+  assignmentId = null,
 }) {
   const enforceActive = isAccEnforcePermissionsActiveForTenant({
     tenantId: tenantId ?? membership?.tenantId ?? membership?.tenant?.id ?? null,
@@ -153,6 +187,7 @@ async function resolvePermissionsForMembership({
       membership,
       roleId,
       roleCode,
+      assignmentId,
     });
     return Array.isArray(acc) ? acc : [];
   } catch (err) {

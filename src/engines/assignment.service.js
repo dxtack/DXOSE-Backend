@@ -110,14 +110,35 @@ async function editAssignment(actorId, assignmentId, dto, options = {}) {
   const notesChanged = validated.notes !== undefined
     && resolveAssignmentNotesForSave(before.notes, validated.notes) !== before.notes;
   const deptChanged = validated.departmentIds !== undefined;
+  const roleChanged = validated.roleId !== undefined && validated.roleId !== before.roleId;
+  const propertyChanged = validated.propertyIds !== undefined;
 
   const updated = await prisma.$transaction(async (tx) => {
+    const assignmentUpdate = {};
     if (validated.notes !== undefined) {
-      const notesToSave = resolveAssignmentNotesForSave(before.notes, validated.notes);
+      assignmentUpdate.notes = resolveAssignmentNotesForSave(before.notes, validated.notes);
+    }
+    if (roleChanged) {
+      assignmentUpdate.roleId = validated.roleId;
+    }
+    if (Object.keys(assignmentUpdate).length > 0) {
       await tx.urUserAssignment.update({
         where: { id: assignmentId },
-        data:  { notes: notesToSave },
+        data:  assignmentUpdate,
       });
+    }
+
+    if (propertyChanged) {
+      await tx.urAssignmentProperty.deleteMany({ where: { assignmentId } });
+      if (validated.propertyIds.length > 0) {
+        await tx.urAssignmentProperty.createMany({
+          data: validated.propertyIds.map((propertyId) => ({
+            assignmentId,
+            propertyId,
+          })),
+          skipDuplicates: true,
+        });
+      }
     }
 
     if (deptChanged) {
@@ -138,7 +159,7 @@ async function editAssignment(actorId, assignmentId, dto, options = {}) {
       include: ASSIGNMENT_INCLUDE,
     });
 
-    if (deptChanged) {
+    if (deptChanged || propertyChanged) {
       await syncTenantMemberDepartmentFromAssignment(tx, full);
     }
 

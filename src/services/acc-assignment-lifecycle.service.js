@@ -221,6 +221,8 @@ async function reactivateMembershipForAssignment(tx, assignment) {
 
 /**
  * Deactivate assignment and linked TenantMember (same assignment row).
+ * Membership is only retired when no sibling active assignment remains for that
+ * property/seat. User.isActive is never flipped here.
  */
 async function deactivateAssignmentWithMembership(actorId, assignmentId, options = {}) {
     validateUuid(actorId, 'actorId');

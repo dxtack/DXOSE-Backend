@@ -104,11 +104,8 @@ function validateCreateAssignment(dto) {
   };
 }
 
-const EDIT_ASSIGNMENT_ALLOWED_FIELDS = new Set(['notes', 'departmentIds']);
+const EDIT_ASSIGNMENT_ALLOWED_FIELDS = new Set(['notes', 'departmentIds', 'roleId', 'propertyIds']);
 const EDIT_ASSIGNMENT_FORBIDDEN_FIELDS = Object.freeze({
-  roleId:       'Role cannot be changed via Edit Assignment. Deactivate and create a new assignment instead.',
-  propertyIds:  'Property cannot be changed from Edit Assignment. Deactivate and create a new assignment instead.',
-  propertyId:   'Property cannot be changed from Edit Assignment. Deactivate and create a new assignment instead.',
   isActive:     'Assignment status cannot be changed via Edit Assignment. Use deactivate or reactivate endpoints.',
 });
 
@@ -145,6 +142,23 @@ function validateEditAssignment(dto) {
 
   const result = {};
 
+  if (dto.roleId !== undefined) {
+    assertUuid(dto.roleId, 'roleId');
+    result.roleId = dto.roleId;
+  }
+
+  if (dto.propertyIds !== undefined) {
+    const propertyIds = dto.propertyIds ?? [];
+    assertUuidArray(propertyIds, 'propertyIds');
+    if (propertyIds.length > 1) {
+      throw Object.assign(
+        new ValidationError('Each assignment may include at most one property.'),
+        { statusCode: 400, code: 'ASSIGNMENT_SINGLE_PROPERTY_ONLY' },
+      );
+    }
+    result.propertyIds = propertyIds;
+  }
+
   if (dto.notes !== undefined) {
     result.notes = typeof dto.notes === 'string' ? dto.notes.trim() || null : null;
   }
@@ -156,7 +170,7 @@ function validateEditAssignment(dto) {
   }
 
   if (Object.keys(result).length === 0) {
-    throw new ValidationError('EditAssignment: at least one of notes or departmentIds must be provided');
+    throw new ValidationError('EditAssignment: at least one editable field must be provided');
   }
 
   return result;

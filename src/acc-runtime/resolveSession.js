@@ -36,6 +36,7 @@ const resolveSession = async ({ userId, membership = null, decoded = {}, tenantI
             roleCode: roleCode === 'ORG_MANAGER' ? 'ORG_MANAGER' : roleCode,
             tenantId: tenantId ?? membership?.tenantId ?? membership?.tenant?.id ?? null,
             tenantSlug: membership?.tenant?.slug ?? null,
+            assignmentId: typeof decoded.assignmentId === 'string' ? decoded.assignmentId : null,
         });
     }
 
@@ -46,6 +47,7 @@ const resolveSession = async ({ userId, membership = null, decoded = {}, tenantI
         roleId: membership?.roleId ?? decoded.roleId ?? null,
         permissions,
         departmentId: membership?.departmentId ?? null,
+        assignmentId: typeof decoded.assignmentId === 'string' ? decoded.assignmentId : null,
     };
 };
 

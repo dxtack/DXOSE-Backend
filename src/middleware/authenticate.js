@@ -182,6 +182,7 @@ const authenticate = async (req, res, next) => {
             permissions: session.permissions,
             email: decoded.email,
             departmentId: session.departmentId,
+            assignmentId: session.assignmentId || decoded.assignmentId || null,
             readOnly: decoded.readOnly || false,
             impersonatedBy: decoded.impersonatedBy || null,
         };

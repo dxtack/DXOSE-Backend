@@ -155,6 +155,25 @@ const switchTenant = async (req, res) => {
     return success(res, result, 'Tenant switched successfully.');
 };
 
+/**
+ * POST /api/auth/switch-context
+ */
+const switchContext = async (req, res) => {
+    const { assignmentId } = req.body;
+
+    const result = await authService.switchContext({
+        userId: req.user.id,
+        assignmentId,
+        ipAddress: req.ip,
+        userAgent: req.headers['user-agent'],
+    });
+
+    if (result.refreshToken) {
+        setRefreshTokenCookie(res, result.refreshToken);
+    }
+    return success(res, result, 'Assignment context switched successfully.');
+};
+
 module.exports = {
     login,
     refresh,
@@ -165,4 +184,5 @@ module.exports = {
     forgotPassword,
     resetPassword,
     switchTenant,
+    switchContext,
 };

@@ -154,6 +154,9 @@ router.get('/me', authenticate, authController.me);
 // POST /api/auth/switch-tenant (requires auth)
 router.post('/switch-tenant', authenticate, authController.switchTenant);
 
+// POST /api/auth/switch-context — switch active ACC assignment / role (requires auth)
+router.post('/switch-context', authenticate, authController.switchContext);
+
 // POST /api/auth/change-password (requires auth)
 router.post('/change-password', authenticate, changePasswordValidator, authController.changePassword);
 

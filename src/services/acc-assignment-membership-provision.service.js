@@ -147,13 +147,61 @@ async function provisionMembershipForProperty(tx, {
 }
 
 /**
+ * True when another active assignment still needs this property/membership seat.
+ * Prevents deactivating one role from locking the user out of sibling roles.
+ */
+async function _findSiblingActiveAssignment(tx, { userId, excludeAssignmentId, propertyId, memberId }) {
+    const orConditions = [];
+    if (memberId) {
+        orConditions.push({ notes: { startsWith: `legacy:${memberId}` } });
+    }
+    if (propertyId) {
+        orConditions.push({ properties: { some: { propertyId } } });
+    }
+    if (orConditions.length === 0) return null;
+
+    return tx.urUserAssignment.findFirst({
+        where: {
+            userId,
+            isActive: true,
+            id: { not: excludeAssignmentId },
+            OR: orConditions,
+        },
+        include: {
+            role: { select: { id: true, code: true } },
+            departments: { select: { departmentId: true } },
+        },
+        orderBy: { createdAt: 'asc' },
+    });
+}
+
+/**
  * Deactivate TenantMember linked to an assignment (legacy tag or property match).
+ *
+ * Does NOT retire the membership when the user still has another active assignment
+ * on the same property / membership. Never flips User.isActive — account disable
+ * is a separate admin action (or only when every assignment is inactive, callers
+ * may choose to deactivate the user separately).
  */
 async function retireMembershipForAssignment(tx, assignment) {
     let memberId = null;
+    let propertyId = null;
+
     memberId = tenantMemberIdFromLegacyNotes(assignment.notes);
+    if (memberId) {
+        const tagged = await tx.tenantMember.findUnique({
+            where: { id: memberId },
+            select: { id: true, tenantId: true, userId: true },
+        });
+        if (!tagged || tagged.userId !== assignment.userId) {
+            memberId = null;
+        } else {
+            propertyId = tagged.tenantId ?? null;
+        }
+    }
+
     if (!memberId && assignment.properties?.length === 1) {
-        const propertyId = assignment.properties[0].propertyId;
+        propertyId = assignment.properties[0].propertyId;
         const member = await tx.tenantMember.findUnique({
             where: {
                 tenantId_userId: {
@@ -166,11 +214,36 @@ async function retireMembershipForAssignment(tx, assignment) {
         memberId = member?.id ?? null;
     }
 
-    if (memberId) {
-        await tx.tenantMember.updateMany({
-            where: { id: memberId, userId: assignment.userId },
-            data: { isActive: false },
+    if (memberId && assignment.userId) {
+        const sibling = await _findSiblingActiveAssignment(tx, {
+            userId: assignment.userId,
+            excludeAssignmentId: assignment.id,
+            propertyId,
+            memberId,
         });
+
+        if (sibling) {
+            // Keep the seat; realign membership role to the remaining active assignment.
+            const siblingRoleCode = normalizeRole(sibling.role?.code);
+            const primaryDept = sibling.departments?.[0]?.departmentId ?? null;
+            const departmentUpdate = primaryDept
+                ? { department: { connect: { id: primaryDept } }, canViewAllDepartments: false }
+                : { department: { disconnect: true }, canViewAllDepartments: true };
+
+            await tx.tenantMember.update({
+                where: { id: memberId },
+                data: {
+                    isActive: true,
+                    role: connectRole(siblingRoleCode),
+                    ...departmentUpdate,
+                },
+            });
+        } else {
+            await tx.tenantMember.updateMany({
+                where: { id: memberId, userId: assignment.userId },
+                data: { isActive: false },
+            });
+        }
     }
 
     if (assignment.userId) {
