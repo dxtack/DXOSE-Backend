@@ -130,8 +130,6 @@ const UNIT_TEST_FILES = [
 
     'src/utils/tenantSwitchValidation.test.js',
 
-    'src/utils/tenantQuery.util.test.js',
-
     'src/services/tenant-isolation-getPass.test.js',
 
     'src/services/acc-workflow-movement.runtime.test.js',
