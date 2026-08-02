@@ -54,6 +54,7 @@ const {
     assertUserHasGetPassStepPermission,
     assertUserHasPermission,
     userHasPermission,
+    buildWorkflowOverrideAuditFields,
 } = require('../acc-authority/step-permission-enforcement');
 const {
   resolveGetPassWorkflowContext,
@@ -2560,6 +2561,10 @@ const sendBackGetPass = async (id, tenantId, user, reason, expectedVersion = nul
             entityId: id,
             documentStatusBefore: getPass.status,
             documentStatusAfter: nextStatus,
+            overrideAudit: buildWorkflowOverrideAuditFields(
+                user,
+                resolveStepRole(wf, getPass.status) || approvalRequest?.steps?.find((s) => s.stepNumber === sourceStepNo)?.requiredRole?.code,
+            ),
         });
     });
 

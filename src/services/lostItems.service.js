@@ -4,7 +4,7 @@ const prisma = require('../config/database');
 const { generateDocNumber } = require('./docNumbering.service');
 const { checkPeriodLock } = require('./periodGuard.service');
 const { normalizeRole } = require('./rbac.service');
-const { assertUserHasBreakageLostStepPermission } = require('../acc-authority/step-permission-enforcement');
+const { assertUserHasBreakageLostStepPermission, buildWorkflowOverrideAuditFields } = require('../acc-authority/step-permission-enforcement');
 const { withUserFacingState, appendSendBackNotes, stripSendBackNotes } = require('../platform/lifecyclePresentation.service');
 const {
     resolveScopeContext,
@@ -636,7 +636,9 @@ const processLostApprovalStep = async (
     if (!step) throw err(`Step ${currentStepNo} not found in approval chain.`, 404);
 
     const requiredRoleCode = step.requiredRole?.code ?? chainMeta?.roleCode;
-    assertUserHasBreakageLostStepPermission(user, 'LOST', doc.status, requiredRoleCode);
+    assertUserHasBreakageLostStepPermission(user, 'LOST', doc.status, requiredRoleCode, {
+        ...(chainMeta?.permissionCode ? { stepPermission: chainMeta.permissionCode } : {}),
+    });
 
     const prevSteps = approval.steps.filter((s) => s.stepNumber < currentStepNo);
     for (const ps of prevSteps) {
@@ -782,8 +784,11 @@ const sendBackLostItem = async (id, tenantId, user, reason, expectedVersion = nu
     if (!step || String(step.status || '').toUpperCase() !== 'PENDING') {
         throw err('No pending approval step found.', 422);
     }
-    const requiredRoleCode = step.requiredRole?.code ?? chain.steps?.[currentStepNo - 1]?.roleCode;
-    assertUserHasBreakageLostStepPermission(user, 'LOST', doc.status, requiredRoleCode);
+    const lostSendBackStep = chain.steps?.[currentStepNo - 1];
+    const requiredRoleCode = step.requiredRole?.code ?? lostSendBackStep?.roleCode;
+    assertUserHasBreakageLostStepPermission(user, 'LOST', doc.status, requiredRoleCode, {
+        ...(lostSendBackStep?.permissionCode ? { stepPermission: lostSendBackStep.permissionCode } : {}),
+    });
 
     const { buildBreakageSendBackTargets, syncBreakageApprovalRequestToDocumentInTx } = require('./breakage.service');
     const allowedTargets = buildBreakageSendBackTargets(doc, approval, chain);
@@ -827,6 +832,7 @@ const sendBackLostItem = async (id, tenantId, user, reason, expectedVersion = nu
             entityId: id,
             documentStatusBefore: doc.status,
             documentStatusAfter: nextStatus,
+            overrideAudit: buildWorkflowOverrideAuditFields(user, requiredRoleCode),
         });
         return tx.movementDocument.findFirst({ where: { id }, include: LOST_INCLUDE });
     });

@@ -18,7 +18,7 @@ const {
     normalizeReason,
 } = require('../platform/workflowSendBack.service');
 const { appendSendBackNotes, isSendBackReturned } = require('../platform/lifecyclePresentation.service');
-const { assertUserHasTransferStepPermission } = require('../acc-authority/step-permission-enforcement');
+const { assertUserHasTransferStepPermission, withWorkflowOverrideAudit, buildWorkflowOverrideAuditFields } = require('../acc-authority/step-permission-enforcement');
 const { normalizeRole } = require('./rbac.service');
 const { resolveWorkflowForDocument } = require('./acc-workflow-runtime.service');
 const { userDisplayName } = require('../utils/timeline-present.util');
@@ -30,6 +30,7 @@ const {
     mapTransferDetailResponse,
     mapTransferListRow,
     TRANSFER_LIST_STATUSES,
+    REJECTED_TAB_STATUSES,
 } = require('./transferWorkflow.util');
 
 const ALLOWED_TRANSFER_WORKFLOW_BUCKETS = new Set([
@@ -58,8 +59,15 @@ const assertTransferDestinationActive = async (destLocationId, tenantId) => {
     }
 };
 
-const TERMINAL_STATUSES = ['POSTED', 'REJECTED'];
-const PENDING_APPROVAL_STATUSES = ['PENDING_DEPT', 'PENDING_FINANCE'];
+const TERMINAL_STATUSES = ['POSTED', 'REJECTED', 'CANCELLED'];
+const PENDING_APPROVAL_STATUSES = [
+    'PENDING_DEPT',
+    'PENDING_COST_CONTROL',
+    'PENDING_FINANCE',
+    'PENDING_GM',
+    'PENDING_APPROVAL',
+    'PENDING_SECURITY',
+];
 
 // ─── Auto-number ──────────────────────────────────────────────────────────────
 
@@ -193,7 +201,7 @@ const buildTransferCheckoutStockGate = async (trf) => {
     if (!Number.isFinite(current) || current < 1) return null;
     if (!Number.isFinite(total) || current > total) return null;
     const status = String(trf.status || '').toUpperCase();
-    if (status === 'POSTED' || status === 'REJECTED') return null;
+    if (status === 'POSTED' || status === 'REJECTED' || status === 'CANCELLED') return null;
     if (!PENDING_APPROVAL_STATUSES.includes(status)) return null;
 
     const sourceLocationId = trf.sourceLocationId;
@@ -231,8 +239,8 @@ const buildTransferCheckoutStockGate = async (trf) => {
 const assertLocked = (trf) => {
     if (trf.status !== 'DRAFT') {
         const message =
-            trf.status === 'REJECTED'
-                ? 'Rejected transfers are read-only. Create a new transfer to repeat the operation (Ch.2.7).'
+            trf.status === 'REJECTED' || trf.status === 'CANCELLED'
+                ? 'Rejected or cancelled transfers are read-only. Create a new transfer to repeat the operation (Ch.2.7).'
                 : `Transfer is locked (status: ${trf.status}) and cannot be modified`;
         throw Object.assign(new Error(message), { status: 423 });
     }
@@ -508,7 +516,8 @@ const submitTransfer = async (id, tenantId, user, expectedVersion = null) => {
         const submitterRole = normalizeRole(user.role);
         const preApproveFirst =
             Boolean(firstRole) && Boolean(submitterRole) && firstRole === submitterRole;
-        const enterStatus = preApproveFirst ? 'PENDING_FINANCE' : 'PENDING_DEPT';
+        const enterStep = preApproveFirst ? Math.min(2, chain.roleCodes.length || 1) : 1;
+        const enterStatus = transferStatusForActiveStep(enterStep, chain);
 
         await prisma.$transaction(async (tx) => {
             await executeCreatorResubmitInTx(tx, {
@@ -535,7 +544,7 @@ const submitTransfer = async (id, tenantId, user, expectedVersion = null) => {
                 }
                 await tx.approvalRequest.update({
                     where: { id: trf.approvalRequest.id },
-                    data: { currentStep: 2, status: 'PENDING' },
+                    data: { currentStep: enterStep, status: 'PENDING' },
                 });
             }
             await tx.storeTransfer.update({
@@ -570,11 +579,19 @@ const submitTransfer = async (id, tenantId, user, expectedVersion = null) => {
     });
 
     try {
-        const notifyRole = enterStatus === 'PENDING_FINANCE' ? 'FINANCE_MANAGER' : 'DEPT_MANAGER';
+        const STATUS_NOTIFY_ROLE = {
+            PENDING_DEPT: 'DEPT_MANAGER',
+            PENDING_COST_CONTROL: 'COST_CONTROL',
+            PENDING_FINANCE: 'FINANCE_MANAGER',
+            PENDING_GM: 'GENERAL_MANAGER',
+            PENDING_APPROVAL: 'COST_CONTROL',
+            PENDING_SECURITY: 'SECURITY',
+        };
+        const roleCode = STATUS_NOTIFY_ROLE[String(enterStatus || '').toUpperCase()] || 'DEPT_MANAGER';
         const approvers = await prisma.tenantMember.findMany({
             where: {
                 tenantId,
-                role: { code: { in: [notifyRole] } },
+                role: { code: { in: [roleCode] } },
                 isActive: true,
                 user: { isActive: true },
             },
@@ -629,6 +646,7 @@ const approveTransfer = async (id, tenantId, user, expectedVersion = null) => {
     }
 
     let posted = false;
+    let overrideMeta = null;
 
     const result = await prisma.$transaction(async (tx) => {
         const outcome = await processStoreTransferApproval({
@@ -640,6 +658,7 @@ const approveTransfer = async (id, tenantId, user, expectedVersion = null) => {
             action: 'APPROVE',
             comment: null,
         });
+        overrideMeta = outcome.overrideMeta || null;
 
         if (outcome.needsPosting) {
             await postingEngine.postTransferInTransaction(tx, outcome.transfer, userId);
@@ -652,6 +671,9 @@ const approveTransfer = async (id, tenantId, user, expectedVersion = null) => {
         });
     });
 
+    const overrideNoteSuffix = overrideMeta?.overriddenStepRole
+        ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})`
+        : '';
     await logAction({
         tenantId,
         entityType: EntityType.TRANSFER,
@@ -659,9 +681,13 @@ const approveTransfer = async (id, tenantId, user, expectedVersion = null) => {
         action: posted ? 'POST' : 'APPROVE',
         changedBy: userId,
         note: posted
-            ? `STORE_TRANSFER_POSTED transferNo=${result.transferNo}`
-            : `STORE_TRANSFER_APPROVE_STEP transferNo=${result.transferNo} status=${result.status}`,
-        afterValue: { transferNo: result.transferNo, status: result.status },
+            ? `STORE_TRANSFER_POSTED transferNo=${result.transferNo}${overrideNoteSuffix}`
+            : `STORE_TRANSFER_APPROVE_STEP transferNo=${result.transferNo} status=${result.status}${overrideNoteSuffix}`,
+        afterValue: withWorkflowOverrideAudit(
+            { transferNo: result.transferNo, status: result.status },
+            user,
+            overrideMeta?.overriddenStepRole,
+        ),
     });
 
     if (posted) {
@@ -698,7 +724,16 @@ const sendBackTransfer = async (id, tenantId, user, reason, expectedVersion = nu
     if (!step || step.status !== 'PENDING') {
         throw Object.assign(new Error('No pending approval step for this transfer.'), { status: 422 });
     }
-    assertUserHasTransferStepPermission(user, trf.status, step.requiredRole?.code);
+    const chain = trf.approvalRequest?.accWorkflowVersionId
+        ? await require('./acc-workflow-runtime.service').resolveWorkflowByVersionId(
+              trf.approvalRequest.accWorkflowVersionId,
+          )
+        : await resolveWorkflowForDocument({ moduleKey: 'TRANSFER', tenantId });
+    const chainStep = chain?.steps?.find((s) => Number(s.stepOrder) === currentStepNo)
+        ?? chain?.steps?.[currentStepNo - 1];
+    assertUserHasTransferStepPermission(user, trf.status, step.requiredRole?.code, {
+        ...(chainStep?.permissionCode ? { stepPermission: chainStep.permissionCode } : {}),
+    });
 
     const allowedTargets = buildTransferSendBackTargets(trf, approval);
     let targetStepNo;
@@ -713,7 +748,7 @@ const sendBackTransfer = async (id, tenantId, user, reason, expectedVersion = nu
         }
     }
 
-    const nextStatus = targetStepNo === 0 ? 'DRAFT' : transferStatusForActiveStep(targetStepNo);
+    const nextStatus = targetStepNo === 0 ? 'DRAFT' : transferStatusForActiveStep(targetStepNo, chain);
     const result = await prisma.$transaction(async (tx) => {
         const updateData = bumpConcurrencyUpdate({
             status: nextStatus,
@@ -743,6 +778,7 @@ const sendBackTransfer = async (id, tenantId, user, reason, expectedVersion = nu
             entityId: id,
             documentStatusBefore: trf.status,
             documentStatusAfter: nextStatus,
+            overrideAudit: buildWorkflowOverrideAuditFields(user, step.requiredRole?.code),
         });
         return tx.storeTransfer.findFirst({ where: { id, tenantId }, include: transferInclude });
     });
@@ -772,21 +808,36 @@ const rejectTransfer = async (id, tenantId, user, reason, expectedVersion = null
         await prisma.storeTransfer.updateMany({
             where: { id, tenantId, status: 'DRAFT' },
             data: bumpConcurrencyUpdate({
-                status: 'REJECTED',
+                status: 'CANCELLED',
                 rejectedBy: userId,
                 rejectionReason: reason,
                 updatedAt: new Date(),
             }),
         });
+        // Close the live approval request so timeline does not keep emitting future steps.
+        if (trf.approvalRequest?.id) {
+            const now = new Date();
+            await prisma.approvalRequest.update({
+                where: { id: trf.approvalRequest.id },
+                data: { status: 'REJECTED', resolvedAt: now },
+            });
+            await prisma.approvalStep.updateMany({
+                where: {
+                    requestId: trf.approvalRequest.id,
+                    status: 'PENDING',
+                },
+                data: { status: 'CANCELLED' },
+            });
+        }
         await logAction({
             tenantId,
             entityType: EntityType.TRANSFER,
             entityId: id,
-            action: 'REJECT',
+            action: 'CANCEL',
             changedBy: userId,
-            note: `Creator rejected returned transfer: ${reason}`,
+            note: `Creator cancelled returned transfer: ${reason}`,
             beforeValue: { status: trf.status },
-            afterValue: { status: 'REJECTED' },
+            afterValue: { status: 'CANCELLED' },
         });
         return prisma.storeTransfer.findFirst({ where: { id, tenantId }, include: transferInclude });
     }
@@ -805,14 +856,23 @@ const rejectTransfer = async (id, tenantId, user, reason, expectedVersion = null
         comment: reason,
     });
     const result = outcome.transfer;
+    const stepRole = outcome.overrideMeta?.overriddenStepRole
+        || trf.approvalRequest?.steps?.find((s) => s.stepNumber === trf.approvalRequest?.currentStep)?.requiredRole?.code;
+    const overrideNoteSuffix = outcome.overrideMeta?.overriddenStepRole
+        ? ` via Manager Override (Step: ${outcome.overrideMeta.overriddenStepRole})`
+        : '';
     await logAction({
         tenantId,
         entityType: EntityType.TRANSFER,
         entityId: id,
         action: 'REJECT',
         changedBy: userId,
-        note: `STORE_TRANSFER_REJECT transferNo=${result.transferNo}`,
-        afterValue: { transferNo: result.transferNo, status: result.status },
+        note: `STORE_TRANSFER_REJECT transferNo=${result.transferNo}${overrideNoteSuffix}`,
+        afterValue: withWorkflowOverrideAudit(
+            { transferNo: result.transferNo, status: result.status },
+            user,
+            stepRole,
+        ),
     });
     return result;
 };
@@ -882,15 +942,19 @@ const listTransfers = async (
 
     if (status) {
         const normalized = String(status).trim().toUpperCase();
-        if (!TRANSFER_LIST_STATUSES.includes(normalized)) {
+        // Rejected tab: include both REJECTED and CANCELLED terminal outcomes.
+        if (normalized === 'REJECTED') {
+            statusFilter = { in: [...REJECTED_TAB_STATUSES] };
+        } else if (!TRANSFER_LIST_STATUSES.includes(normalized)) {
             throw Object.assign(
                 new Error(
                     `Invalid status filter "${status}". Allowed: ${TRANSFER_LIST_STATUSES.join(', ')}`,
                 ),
                 { status: 400 },
             );
+        } else {
+            statusFilter = normalized;
         }
-        statusFilter = normalized;
     }
 
     const listLocationDateFilters = {
@@ -929,6 +993,7 @@ const listTransfers = async (
                     sourceLocation: { select: { name: true } },
                     destLocation: { select: { name: true } },
                     requestedByUser: { select: { firstName: true, lastName: true } },
+                    rejectedByUser: { select: { firstName: true, lastName: true } },
                     _count: { select: { lines: true } },
                     approvalRequest: {
                         select: {
@@ -940,7 +1005,7 @@ const listTransfers = async (
                                 select: {
                                     stepNumber: true,
                                     status: true,
-                                    requiredRole: { select: { code: true } },
+                                    requiredRole: { select: { code: true, name: true } },
                                 },
                             },
                         },
@@ -969,7 +1034,7 @@ const listTransfers = async (
         ) {
             throw Object.assign(
                 new Error(
-                    'Transfer list failed: database status values are out of sync with the application. Run pending Prisma migrations (POSTED / finance-post workflow).',
+                    'Transfer list failed: TransferStatus enum is out of sync (e.g. CANCELLED / POSTED). Run pending Prisma migrations, then `npx prisma generate`, and restart the API.',
                 ),
                 { status: 500 },
             );

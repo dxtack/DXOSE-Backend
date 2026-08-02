@@ -87,6 +87,7 @@ const AuditAction = Object.freeze({
   WORKFLOW_VERSION_DELETED:       'WORKFLOW_VERSION_DELETED',
   WORKFLOW_VERSION_CLONED:        'WORKFLOW_VERSION_CLONED',
   WORKFLOW_VERSION_RESTORED:      'WORKFLOW_VERSION_RESTORED',
+  WORKFLOW_DEFINITION_DELETED:    'WORKFLOW_DEFINITION_DELETED',
 });
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -466,6 +467,21 @@ async function logWorkflowVersionEvent(actorId, action, payload) {
   });
 }
 
+/**
+ * @param {string} actorId
+ * @param {string} action - One of WORKFLOW_DEFINITION_* AuditAction constants
+ * @param {object} payload - { definitionId, key, name, ... }
+ */
+async function logWorkflowDefinitionEvent(actorId, action, payload) {
+  return log({
+    actorId,
+    action,
+    targetEntityId: payload.definitionId ?? null,
+    entityType:     'AccWorkflowDefinition',
+    newValue:       payload,
+  });
+}
+
 // ─── JSDoc Types ──────────────────────────────────────────────────────────────
 
 /**
@@ -504,4 +520,5 @@ module.exports = {
   logRoleRetired,
   logRoleReactivated,
   logWorkflowVersionEvent,
+  logWorkflowDefinitionEvent,
 };

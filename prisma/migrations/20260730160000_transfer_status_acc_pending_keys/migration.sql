@@ -1,0 +1,5 @@
+-- Allow ACC-driven transfer awaiting statuses (role-derived PENDING_* keys).
+ALTER TYPE "TransferStatus" ADD VALUE IF NOT EXISTS 'PENDING_COST_CONTROL';
+ALTER TYPE "TransferStatus" ADD VALUE IF NOT EXISTS 'PENDING_GM';
+ALTER TYPE "TransferStatus" ADD VALUE IF NOT EXISTS 'PENDING_APPROVAL';
+ALTER TYPE "TransferStatus" ADD VALUE IF NOT EXISTS 'PENDING_SECURITY';

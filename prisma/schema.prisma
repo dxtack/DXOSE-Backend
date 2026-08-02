@@ -69,6 +69,7 @@ model Tenant {
   vendorMappings      VendorMapping[]
   incomingGetPasses   GetPass[]            @relation("GetPassTargetTenant")
   systemNotifications    SystemNotification[]
+  workflowAlertReads     WorkflowAlertRead[]
   urAssignmentProperties UrAssignmentProperty[]
   accWorkflowDefinitions AccWorkflowDefinition[]
   accFieldSecurityRules  AccFieldSecurityRule[]
@@ -135,6 +136,7 @@ model User {
   adminLogs                        SuperAdminLog[]      @relation("AdminLogUser")
   memberships                      TenantMember[]
   systemNotifications              SystemNotification[]
+  workflowAlertReads               WorkflowAlertRead[]
   urUserOverrides                  UrUserPermissionOverride[]
   urUserScopes                     UrUserScope[]
   urAssignments                    UrUserAssignment[]
@@ -1548,6 +1550,23 @@ model SystemNotification {
   @@map("system_notifications")
 }
 
+/// Per-user read receipts for Workflow Pipeline header alerts (composite alert ids).
+model WorkflowAlertRead {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  tenantId  String   @db.Uuid
+  /// Pipeline alert id, e.g. "transfer:<documentUuid>"
+  alertId   String
+  readAt    DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, alertId])
+  @@index([userId, tenantId])
+  @@index([tenantId, alertId])
+  @@map("workflow_alert_reads")
+}
+
 model GetPassLine {
   id                          String            @id @default(uuid()) @db.Uuid
   getPassId                   String            @db.Uuid
@@ -1874,7 +1893,11 @@ enum TransferStatus {
   DRAFT
   SUBMITTED
   PENDING_DEPT
+  PENDING_COST_CONTROL
   PENDING_FINANCE
+  PENDING_GM
+  PENDING_APPROVAL
+  PENDING_SECURITY
   PENDING_FINAL
   APPROVED
   IN_TRANSIT
@@ -1882,6 +1905,7 @@ enum TransferStatus {
   CLOSED
   POSTED
   REJECTED
+  CANCELLED
 }
 
 enum GrnStatus {
@@ -2214,8 +2238,10 @@ model UrAuditEvent {
   @@map("ur_audit_events")
 }
 
-// ─── Access Control Center — Workflow Definition (Stage S3 — additive only) ───
-// Configuration store for module-centric approval workflows. Not read by runtime yet.
+// ─── Access Control Center — Workflow Definition ─────────────────────────────
+// Builder config + runtime source of truth. Operational modules resolve the
+// latest PUBLISHED AccWorkflowVersion via acc-workflow-runtime /
+// workflow-resolution.engine. Documents pin a version at submit time.
 
 enum AccWorkflowVersionStatus {
   DRAFT
@@ -2239,6 +2265,10 @@ model AccModule {
 }
 
 /// Workflow template container per module (e.g. Standard Breakage Approval).
+/// DB enforces partial unique index `acc_workflow_definitions_one_default_per_module`
+/// on (moduleId) WHERE "isDefault" = true
+/// (migration 20260729210000_acc_workflow_definition_is_default).
+/// Not declared as @@unique: Prisma cannot express WHERE on @@unique.
 model AccWorkflowDefinition {
   id          String               @id @default(uuid()) @db.Uuid
   moduleId    String               @db.Uuid
@@ -2247,6 +2277,8 @@ model AccWorkflowDefinition {
   description String?
   tenantId    String?              @db.Uuid
   isActive    Boolean              @default(true)
+  /// Canonical template for the module (clone-from-default + UI badge).
+  isDefault   Boolean              @default(false)
   createdAt   DateTime             @default(now())
   updatedAt   DateTime             @updatedAt
   module      AccModule            @relation(fields: [moduleId], references: [id], onDelete: Restrict)
@@ -2256,10 +2288,16 @@ model AccWorkflowDefinition {
   @@unique([moduleId, key, tenantId])
   @@index([moduleId])
   @@index([tenantId])
+  @@index([moduleId, isDefault])
   @@map("acc_workflow_definitions")
 }
 
 /// Immutable-published workflow versions; documents pin a version at submit time.
+/// DB enforces partial unique index `acc_workflow_versions_one_published_per_definition`
+/// on (definitionId) WHERE status = 'PUBLISHED'
+/// (migration 20260729200000_acc_workflow_one_published_per_definition).
+/// Not declared as @@unique: Prisma cannot express WHERE on @@unique.
+/// Publish/restore also archive sibling published versions under the same module.
 model AccWorkflowVersion {
   id            String                   @id @default(uuid()) @db.Uuid
   definitionId  String                   @db.Uuid
@@ -2268,6 +2306,9 @@ model AccWorkflowVersion {
   publishedAt   DateTime?
   publishedById String?                  @db.Uuid
   notes         String?
+  /// Role IDs allowed to CREATE / initiate a request for this workflow version.
+  /// Empty = any user who already has module create/access permission may initiate.
+  allowedCreatorRoleIds String[]         @default([])
   createdAt     DateTime                 @default(now())
   updatedAt     DateTime                 @updatedAt
   definition    AccWorkflowDefinition    @relation(fields: [definitionId], references: [id], onDelete: Cascade)

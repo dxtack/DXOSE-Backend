@@ -29,6 +29,7 @@ const TRANSFER_USER_STATE = {
     CLOSED: 'Posted',
     POSTED: 'Posted',
     REJECTED: 'Rejected',
+    CANCELLED: 'Cancelled',
 };
 
 const MOVEMENT_USER_STATE = {

@@ -55,10 +55,42 @@ test('Dual gate matrix — wrong step + no permission → deny', () => {
   );
 });
 
-test('assertStepRoleMatch — ORG_MANAGER cannot bypass wrong step', () => {
+test('assertStepRoleMatch — ORG_MANAGER may override wrong step (Manager Override)', () => {
+  assert.doesNotThrow(() =>
+    assertStepRoleMatch({ role: 'ORG_MANAGER', permissions: ['APPROVE_BREAKAGE'] }, 'COST_CONTROL'),
+  );
+});
+
+test('assertStepRoleMatch — SUPER_ADMIN may override wrong step', () => {
+  assert.doesNotThrow(() =>
+    assertStepRoleMatch({ role: 'SUPER_ADMIN', permissions: ['APPROVE_BREAKAGE'] }, 'COST_CONTROL'),
+  );
+});
+
+test('assertStepRoleMatch — ORG_MANAGER cannot override when allowGovernanceBypass is false', () => {
   assert.throws(
-    () => assertStepRoleMatch({ role: 'ORG_MANAGER', permissions: ['APPROVE_BREAKAGE'] }, 'COST_CONTROL'),
+    () =>
+      assertStepRoleMatch(
+        { role: 'ORG_MANAGER', permissions: ['GET_PASS_APPROVE_EXIT'] },
+        'SECURITY',
+        undefined,
+        { allowGovernanceBypass: false },
+      ),
     (err) => err.statusCode === 403,
+  );
+});
+
+test('Dual gate — ORG_MANAGER override still requires ACC permission', () => {
+  assert.throws(
+    () => assertDualGateApproval({ role: 'ORG_MANAGER', permissions: [] }, 'COST_CONTROL', 'APPROVE_BREAKAGE'),
+    (err) => err.statusCode === 403,
+  );
+  assert.doesNotThrow(() =>
+    assertDualGateApproval(
+      { role: 'ORG_MANAGER', permissions: ['APPROVE_BREAKAGE'] },
+      'COST_CONTROL',
+      'APPROVE_BREAKAGE',
+    ),
   );
 });
 

@@ -10,17 +10,32 @@ const LEGACY_TRANSFER_STATUSES = Object.freeze([
     'CLOSED',
 ]);
 
-const V2_ACTIVE_APPROVAL_STATUSES = Object.freeze(['PENDING_DEPT', 'PENDING_FINANCE']);
+const V2_ACTIVE_APPROVAL_STATUSES = Object.freeze([
+    'PENDING_DEPT',
+    'PENDING_COST_CONTROL',
+    'PENDING_FINANCE',
+    'PENDING_GM',
+    'PENDING_APPROVAL',
+    'PENDING_SECURITY',
+]);
 
 /** API status filters + virtual bucket for list tabs. */
 const TRANSFER_LIST_STATUSES = Object.freeze([
     'DRAFT',
     'PENDING_DEPT',
+    'PENDING_COST_CONTROL',
     'PENDING_FINANCE',
+    'PENDING_GM',
+    'PENDING_APPROVAL',
+    'PENDING_SECURITY',
     'POSTED',
     'REJECTED',
+    'CANCELLED',
     ...LEGACY_TRANSFER_STATUSES,
 ]);
+
+/** Rejected list tab includes cancelled creator terminations. */
+const REJECTED_TAB_STATUSES = Object.freeze(['REJECTED', 'CANCELLED']);
 
 /** Virtual list filter — not a DB enum. */
 const AWAITING_POSTING_BUCKET = 'AWAITING_POSTING';
@@ -31,7 +46,11 @@ const PENDING_REVIEW_BUCKET = 'PENDING_REVIEW';
 const PENDING_REVIEW_V2_STATUSES = Object.freeze([
     'DRAFT',
     'PENDING_DEPT',
+    'PENDING_COST_CONTROL',
     'PENDING_FINANCE',
+    'PENDING_GM',
+    'PENDING_APPROVAL',
+    'PENDING_SECURITY',
     'SUBMITTED',
 ]);
 
@@ -113,6 +132,16 @@ const resolveTransferDisplayStatus = (trf) => {
             isPosted: posted,
             pendingRoleCode: null,
             badgeVariant: 'rejected',
+        };
+    }
+
+    if (trf.status === 'CANCELLED') {
+        return {
+            workflowStatusKey: 'CANCELLED',
+            postingStatus,
+            isPosted: posted,
+            pendingRoleCode: null,
+            badgeVariant: 'cancelled',
         };
     }
 
@@ -230,13 +259,18 @@ const resolveWorkflowGeneration = (trf) => {
 const isTransferReadOnly = (trf) => {
     if (!trf) return true;
     if (resolveWorkflowGeneration(trf) === 'LEGACY') return true;
-    if (trf.status === 'POSTED' || trf.status === 'REJECTED') return true;
+    if (trf.status === 'POSTED' || trf.status === 'REJECTED' || trf.status === 'CANCELLED') return true;
     if (['RECEIVED', 'CLOSED'].includes(trf.status)) return true;
     if (isTransferPosted(trf)) return true;
     return false;
 };
 
-const { mapUserFacingState } = require('../platform/lifecyclePresentation.service');
+const {
+    mapUserFacingState,
+    isSendBackReturned,
+} = require('../platform/lifecyclePresentation.service');
+const { ROLE_DISPLAY } = require('./workflow-pipeline/workflow-pending.definitions');
+const { userDisplayName } = require('../utils/timeline-present.util');
 
 const num = (v) => (v == null ? v : Number(v));
 
@@ -246,6 +280,97 @@ const attachUserFacingState = (trf) => {
         ...trf,
         userFacingState: mapUserFacingState('TRANSFER', trf.status, { notes: trf.notes }),
     };
+};
+
+/**
+ * Human-readable role label for list/detail target hints.
+ * @param {string | null | undefined} roleCode
+ * @param {string | null | undefined} roleName
+ */
+const pendingRoleDisplayLabel = (roleCode, roleName) => {
+    const code = roleCode ? String(roleCode).trim().toUpperCase() : '';
+    // Prefer transfer-facing labels; Finance Manager is clearer than pipeline short "Finance".
+    if (code === 'FINANCE_MANAGER') return 'Finance Manager';
+    if (code && ROLE_DISPLAY[code]) return ROLE_DISPLAY[code];
+    const name = roleName ? String(roleName).trim() : '';
+    if (name) return name;
+    return code || null;
+};
+
+/**
+ * True when the transfer is Returned / Pending correction (creator desk).
+ * @param {{ status?: string, notes?: string | null, approvalRequest?: { currentStep?: number } | null, userFacingState?: string | null }} trf
+ */
+const isTransferReturnedDocument = (trf) => {
+    if (!trf) return false;
+    if (String(trf.userFacingState || '') === 'Returned') return true;
+    if (isSendBackReturned(trf.status, trf.notes)) return true;
+    const status = String(trf.status || '').toUpperCase();
+    if (status === 'DRAFT' && trf.approvalRequest && Number(trf.approvalRequest.currentStep) === 0) {
+        return true;
+    }
+    return false;
+};
+
+/**
+ * List/detail enrichment: who holds the next action.
+ * @param {object} trf
+ * @param {{ pendingRoleCode?: string | null }} displayStatus
+ * @returns {{ pendingRoleLabel: string | null, targetUserLabel: string | null, workflowTargetText: string | null }}
+ */
+const resolveTransferWorkflowTarget = (trf, displayStatus) => {
+    if (!trf) {
+        return { pendingRoleLabel: null, targetUserLabel: null, workflowTargetText: null };
+    }
+
+    const status = String(trf.status || '').toUpperCase();
+
+    // Terminal documents never show "Waiting for: …".
+    if (status === 'POSTED' || status === 'RECEIVED' || status === 'CLOSED') {
+        return { pendingRoleLabel: null, targetUserLabel: null, workflowTargetText: null };
+    }
+
+    if (status === 'REJECTED' || status === 'CANCELLED') {
+        const actorName =
+            userDisplayName(trf.rejectedByUser) ||
+            userDisplayName(trf.requestedByUser) ||
+            'Unknown';
+        return {
+            pendingRoleLabel: null,
+            targetUserLabel: actorName,
+            workflowTargetText:
+                status === 'CANCELLED'
+                    ? `Cancelled by: ${actorName}`
+                    : `Rejected by: ${actorName}`,
+        };
+    }
+
+    if (isTransferReturnedDocument(trf)) {
+        const creatorName = userDisplayName(trf.requestedByUser);
+        const targetUserLabel = creatorName ? `${creatorName} (Creator)` : 'Creator';
+        return {
+            pendingRoleLabel: null,
+            targetUserLabel,
+            workflowTargetText: `Returned to: ${creatorName || 'Creator'}`,
+        };
+    }
+
+    const pendingRoleCode = displayStatus?.pendingRoleCode || null;
+    const pendingStep = filterBusinessApprovalSteps(trf.approvalRequest?.steps || []).find(
+        (s) => s.status === 'PENDING',
+    );
+    const roleName = pendingStep?.requiredRole?.name || null;
+    const pendingRoleLabel = pendingRoleDisplayLabel(pendingRoleCode, roleName);
+
+    if (pendingRoleLabel) {
+        return {
+            pendingRoleLabel,
+            targetUserLabel: null,
+            workflowTargetText: `Waiting for: ${pendingRoleLabel}`,
+        };
+    }
+
+    return { pendingRoleLabel: null, targetUserLabel: null, workflowTargetText: null };
 };
 
 const attachDisplayStatus = (trf) => {
@@ -258,7 +383,7 @@ const attachDisplayStatus = (trf) => {
         approvalRequest,
         pendingRoleCode: displayStatus.pendingRoleCode,
     });
-    return attachUserFacingState({
+    const withFacing = attachUserFacingState({
         ...trf,
         approvalRequest,
         displayStatus,
@@ -268,6 +393,13 @@ const attachDisplayStatus = (trf) => {
         pendingRoleCode: displayStatus.pendingRoleCode,
         workflow,
     });
+    const target = resolveTransferWorkflowTarget(withFacing, displayStatus);
+    return {
+        ...withFacing,
+        pendingRoleLabel: target.pendingRoleLabel,
+        targetUserLabel: target.targetUserLabel,
+        workflowTargetText: target.workflowTargetText,
+    };
 };
 
 const mapTransferDetailResponse = (trf) => {
@@ -322,6 +454,7 @@ module.exports = {
     LEGACY_TRANSFER_STATUSES,
     V2_ACTIVE_APPROVAL_STATUSES,
     TRANSFER_LIST_STATUSES,
+    REJECTED_TAB_STATUSES,
     AWAITING_POSTING_BUCKET,
     PENDING_REVIEW_BUCKET,
     OBSOLETE_APPROVAL_ROLE_CODES,
@@ -330,6 +463,8 @@ module.exports = {
     isTransferReadOnly,
     isTransferPosted,
     resolveTransferDisplayStatus,
+    resolveTransferWorkflowTarget,
+    isTransferReturnedDocument,
     mapTransferDetailResponse,
     mapTransferListRow,
     awaitingPostingListWhere,

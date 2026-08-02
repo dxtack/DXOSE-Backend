@@ -25,11 +25,14 @@ router.get('/modules/:moduleId/definitions', authenticate, canView, ctrl.getDefi
 router.post('/modules/:moduleId/definitions', authenticate, canManage, ctrl.postDefinition);
 
 router.patch('/definitions/:definitionId', authenticate, canManage, ctrl.patchDefinition);
+router.delete('/definitions/:definitionId', authenticate, canManage, ctrl.removeDefinition);
 
+router.get('/definitions/:definitionId/workspace', authenticate, canView, ctrl.getDefinitionWorkspace);
 router.get('/definitions/:definitionId/audit', authenticate, canView, ctrl.getDefinitionAudit);
 
 router.get('/definitions/:definitionId/versions', authenticate, canView, ctrl.getVersions);
 router.post('/definitions/:definitionId/versions', authenticate, canManage, ctrl.postVersion);
+router.post('/definitions/:definitionId/versions/draft', authenticate, canManage, ctrl.postVersion);
 
 router.get('/versions/:versionId', authenticate, canView, ctrl.getVersionById);
 router.patch('/versions/:versionId', authenticate, canManage, ctrl.patchVersion);

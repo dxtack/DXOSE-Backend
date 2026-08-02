@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
 const emailService = require('./email.service');
 const { connectRole, normalizeRole } = require('./rbac.service');
-const { assertUserHasBreakageLostStepPermission } = require('../acc-authority/step-permission-enforcement');
+const { assertUserHasBreakageLostStepPermission, withWorkflowOverrideAudit, buildWorkflowOverrideAuditFields, appendWorkflowOverrideComment } = require('../acc-authority/step-permission-enforcement');
 const {
     resolveScopeContext,
     scopeWhereFor,
@@ -1322,7 +1322,9 @@ const processApprovalStep = async (id, tenantId, user, action, comment, accounta
     if (!step) throw err(`Step ${currentStepNo} not found in approval chain.`, 404);
 
     const requiredRoleCode = step.requiredRole?.code ?? chainMeta?.roleCode;
-    assertUserHasBreakageLostStepPermission(user, 'BREAKAGE', doc.status, requiredRoleCode);
+    assertUserHasBreakageLostStepPermission(user, 'BREAKAGE', doc.status, requiredRoleCode, {
+        ...(chainMeta?.permissionCode ? { stepPermission: chainMeta.permissionCode } : {}),
+    });
 
     // Ensure all previous steps are approved
     const prevSteps = approval.steps.filter(s => s.stepNumber < currentStepNo);
@@ -1361,7 +1363,7 @@ const processApprovalStep = async (id, tenantId, user, action, comment, accounta
                 status: action === 'APPROVE' ? 'APPROVED' : 'REJECTED',
                 actedBy: userId,
                 actedAt: now,
-                comment: comment?.trim() || null,
+                comment: appendWorkflowOverrideComment(comment?.trim() || null, user, requiredRoleCode),
             };
             if (
                 (doc.sourceType === 'GET_PASS_RETURN' || doc.sourceType === 'INTERNAL')
@@ -1429,15 +1431,22 @@ const processApprovalStep = async (id, tenantId, user, action, comment, accounta
             // Audit APPROVE steps so timeline can reconstruct history after Send Back.
             if (action === 'APPROVE') {
                 const approveRoleCode = requiredRoleCode || chainMeta?.roleCode || '';
+                const overrideMeta = buildWorkflowOverrideAuditFields(user, approveRoleCode);
                 await logAction({
                     tenantId,
                     entityType: EntityType.BREAKAGE,
                     entityId: id,
                     action: 'APPROVE',
                     changedBy: userId,
-                    note: `BREAKAGE_APPROVE_STEP:${currentStepNo}:${approveRoleCode}`,
+                    note: `BREAKAGE_APPROVE_STEP:${currentStepNo}:${approveRoleCode}${
+                        overrideMeta ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})` : ''
+                    }`,
                     beforeValue: { step: currentStepNo, status: doc.status },
-                    afterValue: { step: currentStepNo, roleCode: approveRoleCode },
+                    afterValue: withWorkflowOverrideAudit(
+                        { step: currentStepNo, roleCode: approveRoleCode },
+                        user,
+                        approveRoleCode,
+                    ),
                     tx,
                 });
             }
@@ -1662,8 +1671,11 @@ const sendBackBreakage = async (id, tenantId, user, reason, expectedVersion = nu
     if (!step || String(step.status || '').toUpperCase() !== 'PENDING') {
         throw err('No pending approval step found.', 422);
     }
-    const requiredRoleCode = step.requiredRole?.code ?? chain.steps?.[currentStepNo - 1]?.roleCode;
-    assertUserHasBreakageLostStepPermission(user, 'BREAKAGE', doc.status, requiredRoleCode);
+    const sendBackChainStep = chain.steps?.[currentStepNo - 1];
+    const requiredRoleCode = step.requiredRole?.code ?? sendBackChainStep?.roleCode;
+    assertUserHasBreakageLostStepPermission(user, 'BREAKAGE', doc.status, requiredRoleCode, {
+        ...(sendBackChainStep?.permissionCode ? { stepPermission: sendBackChainStep.permissionCode } : {}),
+    });
 
     const allowedTargets = buildBreakageSendBackTargets(doc, approval, chain);
 
@@ -1708,6 +1720,7 @@ const sendBackBreakage = async (id, tenantId, user, reason, expectedVersion = nu
             entityId: id,
             documentStatusBefore: doc.status,
             documentStatusAfter: nextStatus,
+            overrideAudit: buildWorkflowOverrideAuditFields(user, requiredRoleCode),
         });
         return tx.movementDocument.findFirst({ where: { id }, include: BREAKAGE_INCLUDE });
     });

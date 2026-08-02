@@ -29,9 +29,16 @@ function buildTransferWorkflowContext(trf, chain = null) {
         chain?.versionId ||
         null;
 
-    if (status === 'POSTED' || status === 'REJECTED' || status === 'CLOSED' || status === 'RECEIVED') {
+    if (
+        status === 'POSTED' ||
+        status === 'REJECTED' ||
+        status === 'CANCELLED' ||
+        status === 'CLOSED' ||
+        status === 'RECEIVED'
+    ) {
         return {
-            currentStepKey: status === 'REJECTED' ? 'REJECTED' : 'POSTED',
+            currentStepKey:
+                status === 'REJECTED' ? 'REJECTED' : status === 'CANCELLED' ? 'CANCELLED' : 'POSTED',
             stepType: 'TERMINAL',
             sourceOfTruth: 'Static System Rule',
             actorResolution: null,
@@ -64,21 +71,49 @@ function buildTransferWorkflowContext(trf, chain = null) {
         };
     }
 
-    if (status === 'PENDING_DEPT' || status === 'PENDING_FINANCE') {
+    const isAccApprovalPending =
+        status.startsWith('PENDING_') &&
+        status !== 'PENDING_FINAL' &&
+        !['SUBMITTED', 'APPROVED', 'IN_TRANSIT'].includes(status);
+
+    if (isAccApprovalPending) {
         const ar = trf.approvalRequest;
-        const stepNumber = ar?.currentStep != null ? Number(ar.currentStep) : status === 'PENDING_DEPT' ? 1 : 2;
-        const step = ar?.steps?.find((s) => Number(s.stepNumber) === stepNumber);
-        const chainStep = chain?.steps?.find((s) => Number(s.stepOrder) === stepNumber);
-        const isFinance = status === 'PENDING_FINANCE';
+        const chainStepByStatus = chain?.steps?.find(
+            (s) => String(s.statusKey || '').toUpperCase() === status,
+        );
+        const stepNumber =
+            ar?.currentStep != null
+                ? Number(ar.currentStep)
+                : chainStepByStatus?.stepOrder != null
+                  ? Number(chainStepByStatus.stepOrder)
+                  : status === 'PENDING_DEPT'
+                    ? 1
+                    : null;
+        const step =
+            stepNumber != null ? ar?.steps?.find((s) => Number(s.stepNumber) === stepNumber) : null;
+        const chainStep =
+            (stepNumber != null ? chain?.steps?.find((s) => Number(s.stepOrder) === stepNumber) : null) ||
+            chainStepByStatus ||
+            null;
+        const totalSteps =
+            ar?.totalSteps != null
+                ? Number(ar.totalSteps)
+                : Array.isArray(chain?.steps)
+                  ? chain.steps.length
+                  : null;
+        const isFinalApprovalStep =
+            status === 'PENDING_FINANCE' ||
+            (stepNumber != null && totalSteps != null && stepNumber === totalSteps);
         return {
-            currentStepKey: isFinance ? 'FINANCE_POST' : 'DEPT_APPROVAL',
-            stepType: isFinance ? 'POSTING' : 'APPROVAL',
+            currentStepKey: isFinalApprovalStep ? 'FINANCE_POST' : 'DEPT_APPROVAL',
+            stepType: isFinalApprovalStep ? 'POSTING' : 'APPROVAL',
             sourceOfTruth: 'Published ACC',
-            actorResolution: `ACC.Step(${stepNumber})`,
+            actorResolution: stepNumber != null ? `ACC.Step(${stepNumber})` : `ACC.Status(${status})`,
             requiredPermission: chainStep?.permissionCode || 'TRANSFER_APPROVE',
             requiredRoleCode:
-                normalizeRole(step?.requiredRole?.code || chainStep?.roleCode || trf.pendingRoleCode) || null,
-            allowedActionKeys: isFinance
+                normalizeRole(step?.requiredRole?.code || chainStep?.roleCode || trf.pendingRoleCode) ||
+                null,
+            allowedActionKeys: isFinalApprovalStep
                 ? ['APPROVE_POST', 'REJECT', 'SEND_BACK']
                 : ['APPROVE', 'REJECT', 'SEND_BACK'],
             workflowVersion,

@@ -150,12 +150,12 @@ function pendingApprovalStep(approvalRequest) {
     return pending.sort((a, b) => a.stepNumber - b.stepNumber)[0];
 }
 
-function assertCanActOnApprovalStep(step, user, sessionStatus) {
+function assertCanActOnApprovalStep(step, user, sessionStatus, options = {}) {
     if (!step) {
         throw bizError(403, 'COUNT_SESSION_APPROVAL_ROLE_MISMATCH', 'Approval step has no required role.');
     }
     const required = step?.requiredRole?.code || '';
-    assertUserHasCountStepPermission(user, sessionStatus, required || null);
+    assertUserHasCountStepPermission(user, sessionStatus, required || null, options);
     return { required };
 }
 

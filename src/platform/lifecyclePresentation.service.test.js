@@ -44,6 +44,11 @@ describe('lifecyclePresentation.service — Wave 2 central statuses', () => {
             expect(mapUserFacingState('LOST', 'VOID')).toBe('Voided');
         });
 
+        it('maps TRANSFER CANCELLED to Cancelled', () => {
+            expect(mapUserFacingState('TRANSFER', 'CANCELLED')).toBe('Cancelled');
+            expect(mapUserFacingState('TRANSFER', 'REJECTED')).toBe('Rejected');
+        });
+
         it('maps inventory count VOID/CANCELLED to Voided', () => {
             expect(mapUserFacingState('INVENTORY_COUNT', 'VOID')).toBe('Voided');
             expect(mapUserFacingState('COUNT', 'CANCELLED')).toBe('Voided');

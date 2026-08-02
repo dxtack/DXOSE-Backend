@@ -296,7 +296,11 @@ const processApproval = async (id, tenantId, user, comment, isApproved) => {
 
     if (!step || step.status !== 'PENDING') throw new Error('No pending approval step found');
     const stepRoleCode = step.requiredRole?.code ?? step.requiredRole;
-    assertUserHasCountStepPermission(user, session.status, stepRoleCode);
+    const countChainStep = chain?.steps?.find((s) => Number(s.stepOrder) === currentStepNum)
+        ?? chain?.steps?.[currentStepNum - 1];
+    assertUserHasCountStepPermission(user, session.status, stepRoleCode, {
+        ...(countChainStep?.permissionCode ? { stepPermission: countChainStep.permissionCode } : {}),
+    });
 
     if (!isApproved) {
         // REJECT

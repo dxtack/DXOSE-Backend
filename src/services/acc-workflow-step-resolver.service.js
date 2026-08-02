@@ -1,7 +1,9 @@
 'use strict';
 
 /**
- * P20 — Resolve workflow step role + permission from ACC (not hardcoded maps).
+ * P20 — Resolve workflow step role + permission from ACC step definitions.
+ * Runtime permission comes from AccWorkflowStepDefinition.permissionId
+ * (UrPermission.legacyCode) or capabilityCode — not from static status maps.
  */
 
 const prisma = require('../config/database');
@@ -15,8 +17,14 @@ const _stepInclude = {
 function formatAccStep(step) {
   if (!step) return null;
   const roleCode = step.approverRole?.code ? normalizeRole(step.approverRole.code) : null;
-  const permissionCode = step.permission?.legacyCode
-    ?? (step.capabilityCode ? String(step.capabilityCode).trim().toUpperCase() : null);
+  const fromPermissionId = step.permission?.legacyCode
+    ? String(step.permission.legacyCode).trim().toUpperCase()
+    : null;
+  const fromCapability = step.capabilityCode
+    ? String(step.capabilityCode).trim().toUpperCase()
+    : null;
+  // Prefer catalog permissionId; capabilityCode is the Builder free-text fallback.
+  const permissionCode = fromPermissionId || fromCapability || null;
   return {
     stepOrder: step.stepOrder,
     label: step.label,
@@ -35,6 +43,10 @@ function resolveStepRoleCode(step) {
   return formatted?.roleCode ?? null;
 }
 
+/**
+ * Strict ACC permission for a step row.
+ * Returns permissionCode from permissionId / capabilityCode only — never a status map.
+ */
 function resolveStepPermissionCode(step) {
   const formatted = formatAccStep(step);
   return formatted?.permissionCode ?? null;

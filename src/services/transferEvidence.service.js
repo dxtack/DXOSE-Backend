@@ -195,7 +195,7 @@ const getTransferEvidence = async (id, tenantId, user = null) => {
             approvedBy: userName(trf.approvedByUser),
             approvedAt: trf.approvedAt,
             rejectedBy: userName(trf.rejectedByUser),
-            rejectedAt: trf.status === 'REJECTED' ? trf.updatedAt : null,
+            rejectedAt: trf.status === 'REJECTED' || trf.status === 'CANCELLED' ? trf.updatedAt : null,
         },
         attachments: [],
         photoEvidence: {

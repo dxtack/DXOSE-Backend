@@ -50,6 +50,7 @@ function buildSendBackAuditPayload({
     workflowRound,
     documentStatusBefore,
     documentStatusAfter,
+    overrideAudit = null,
 }) {
     return {
         approvalRequestId: approvalRequest.id,
@@ -63,6 +64,7 @@ function buildSendBackAuditPayload({
         reason,
         documentStatusBefore,
         documentStatusAfter,
+        ...(overrideAudit && typeof overrideAudit === 'object' ? overrideAudit : {}),
     };
 }
 
@@ -95,6 +97,7 @@ async function executeWorkflowSendBackInTx(tx, params) {
         documentStatusBefore = null,
         documentStatusAfter = null,
         forceTargetStepNumber = null,
+        overrideAudit = null,
     } = params;
 
     const trimmedReason = normalizeReason(reason);
@@ -191,6 +194,7 @@ async function executeWorkflowSendBackInTx(tx, params) {
         workflowRound,
         documentStatusBefore,
         documentStatusAfter,
+        overrideAudit,
     });
 
     const targetLabel =
@@ -198,13 +202,17 @@ async function executeWorkflowSendBackInTx(tx, params) {
             ? 'Creator'
             : stepRoleCode(targetStep) || `step ${targetStepNumber}`;
 
+    const overrideNoteSuffix = overrideAudit?.overriddenStepRole
+        ? ` via Manager Override (Step: ${overrideAudit.overriddenStepRole})`
+        : '';
+
     await writeAuditLogTransactional({
         tenantId,
         entityType,
         entityId,
         action: 'SEND_BACK',
         changedBy: userId,
-        note: `WORKFLOW_SEND_BACK round=${workflowRound} from=${sourceStepNumber} to=${targetLabel} reason=${trimmedReason}`,
+        note: `WORKFLOW_SEND_BACK round=${workflowRound} from=${sourceStepNumber} to=${targetLabel} reason=${trimmedReason}${overrideNoteSuffix}`,
         beforeValue: { currentStep: sourceStepNumber, status: documentStatusBefore },
         afterValue: auditPayload,
         tx,

@@ -1,7 +1,7 @@
 'use strict';
 
 /**
- * ACC Workflow Builder — HTTP handlers (configuration only, Stage S10).
+ * ACC Workflow Builder — HTTP handlers (config + publish lifecycle).
  */
 
 const {
@@ -11,6 +11,8 @@ const {
   listDefinitions,
   createDefinition,
   updateDefinition,
+  deleteDefinition,
+  getDefinitionWorkspace,
   listVersions,
   getVersion,
   createDraftVersion,
@@ -61,8 +63,13 @@ const getDefinitions = handle('getDefinitions', async (req, res) => {
 });
 
 const postDefinition = handle('postDefinition', async (req, res) => {
+  const cloneFromDefault =
+    req.query.cloneFromDefault === 'true'
+    || req.query.cloneFromDefault === '1'
+    || req.body?.cloneFromDefault === true;
   const data = await createDefinition(req.params.moduleId, {
     ...req.body,
+    cloneFromDefault,
     tenantId: req.body?.tenantId ?? req.user?.tenantId ?? null,
   });
   return res.status(201).json({ success: true, data });
@@ -73,13 +80,32 @@ const patchDefinition = handle('patchDefinition', async (req, res) => {
   return res.json({ success: true, data });
 });
 
+const removeDefinition = handle('removeDefinition', async (req, res) => {
+  const data = await deleteDefinition(req.params.definitionId, req.user?.id);
+  return res.json({ success: true, data });
+});
+
+const getDefinitionWorkspaceHandler = handle('getDefinitionWorkspace', async (req, res) => {
+  const limit = parseInt(req.query.limit ?? '50', 10);
+  const data = await getDefinitionWorkspace(req.params.definitionId, { auditLimit: limit });
+  return res.json({ success: true, data });
+});
+
 const getVersions = handle('getVersions', async (req, res) => {
   const data = await listVersions(req.params.definitionId);
   return res.json({ success: true, data });
 });
 
 const postVersion = handle('postVersion', async (req, res) => {
-  const data = await createDraftVersion(req.params.definitionId, req.body || {}, req.user?.id);
+  const cloneFromPublished =
+    req.query.cloneFromPublished === 'true'
+    || req.query.cloneFromPublished === '1'
+    || req.body?.cloneFromPublished === true;
+  const data = await createDraftVersion(
+    req.params.definitionId,
+    { ...(req.body || {}), cloneFromPublished },
+    req.user?.id,
+  );
   return res.status(201).json({ success: true, data });
 });
 
@@ -94,13 +120,30 @@ const patchVersion = handle('patchVersion', async (req, res) => {
 });
 
 const putVersionSteps = handle('putVersionSteps', async (req, res) => {
-  const steps = req.body?.steps;
-  const data = await replaceDraftSteps(req.params.versionId, steps, req.user?.id);
+  const body = req.body || {};
+  const steps = body.steps;
+  const data = await replaceDraftSteps(
+    req.params.versionId,
+    {
+      steps,
+      ...(Object.prototype.hasOwnProperty.call(body, 'allowedCreatorRoleIds')
+        ? { allowedCreatorRoleIds: body.allowedCreatorRoleIds }
+        : {}),
+    },
+    req.user?.id,
+  );
   return res.json({ success: true, data });
 });
 
 const postPublish = handle('postPublish', async (req, res) => {
-  const data = await publishVersion(req.params.versionId, req.user?.id);
+  const body = req.body || {};
+  const steps = Array.isArray(body.steps) ? body.steps : undefined;
+  const data = await publishVersion(req.params.versionId, req.user?.id, {
+    steps,
+    ...(Object.prototype.hasOwnProperty.call(body, 'allowedCreatorRoleIds')
+      ? { allowedCreatorRoleIds: body.allowedCreatorRoleIds }
+      : {}),
+  });
   return res.json({ success: true, data });
 });
 
@@ -166,6 +209,8 @@ module.exports = {
   getDefinitions,
   postDefinition,
   patchDefinition,
+  removeDefinition,
+  getDefinitionWorkspace: getDefinitionWorkspaceHandler,
   getVersions,
   postVersion,
   getVersionById,

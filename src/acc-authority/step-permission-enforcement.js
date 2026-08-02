@@ -7,6 +7,7 @@
 
 const { hasPermission } = require('../middleware/authorize');
 const { normalizeRole } = require('../services/rbac.service');
+const { canBypassWorkflowStep } = require('../services/rbac.constants');
 const {
     resolveGetPassPermission,
     resolveBreakageLostPermission,
@@ -41,8 +42,52 @@ function userMatchesStepRole(user, requiredRoleCode) {
     return normalizeRole(user?.role) === normalizeRole(requiredRoleCode);
 }
 
-/** P10 — Workflow Builder step role gate (no ORG/SUPER bypass on wrong step). */
-function assertStepRoleMatch(user, requiredRoleCode, message) {
+/**
+ * Manager Override — ORG_MANAGER / SUPER_ADMIN may act on any pending step role.
+ * Permission (ACC) remains dual-gated separately. Opt out with allowGovernanceBypass: false
+ * (e.g. Get Pass security exit).
+ */
+function canBypassWorkflowStepRole(user, options = {}) {
+    if (options.allowGovernanceBypass === false) return false;
+    return canBypassWorkflowStep(user?.role);
+}
+
+/** True when the actor is overriding a step that is not their native role. */
+function isActingAsWorkflowOverride(user, requiredRoleCode, options = {}) {
+    if (!requiredRoleCode) return false;
+    if (userMatchesStepRole(user, requiredRoleCode)) return false;
+    return canBypassWorkflowStepRole(user, options);
+}
+
+/** Audit / history fields when Manager Override is used. */
+function buildWorkflowOverrideAuditFields(user, requiredRoleCode, options = {}) {
+    if (!isActingAsWorkflowOverride(user, requiredRoleCode, options)) return null;
+    const overrideRole = normalizeRole(user?.role);
+    const overriddenStepRole = normalizeRole(requiredRoleCode);
+    return {
+        isOverride: true,
+        overrideRole,
+        overriddenStepRole,
+        overrideNote: `via Manager Override (Step: ${overriddenStepRole})`,
+    };
+}
+
+function withWorkflowOverrideAudit(afterValue, user, requiredRoleCode, options = {}) {
+    const meta = buildWorkflowOverrideAuditFields(user, requiredRoleCode, options);
+    if (!meta) return afterValue || {};
+    return { ...(afterValue && typeof afterValue === 'object' ? afterValue : {}), ...meta };
+}
+
+function appendWorkflowOverrideComment(comment, user, requiredRoleCode, options = {}) {
+    const meta = buildWorkflowOverrideAuditFields(user, requiredRoleCode, options);
+    if (!meta) return comment || null;
+    const base = String(comment || '').trim();
+    const tag = `Manager Override (${meta.overrideRole} acting on ${meta.overriddenStepRole} step)`;
+    return base ? `${base} — ${tag}` : tag;
+}
+
+/** P10 — Workflow Builder step role gate (+ Manager Override for ORG/SUPER). */
+function assertStepRoleMatch(user, requiredRoleCode, message, options = {}) {
     const required = normalizeRole(requiredRoleCode);
     if (!required) {
         const err = new Error(message || 'Approval step has no required role.');
@@ -50,6 +95,7 @@ function assertStepRoleMatch(user, requiredRoleCode, message) {
         throw err;
     }
     if (userMatchesStepRole(user, required)) return;
+    if (canBypassWorkflowStepRole(user, options)) return;
     throw Object.assign(
         new Error(
             message || `Wrong workflow step. Required role: ${required}. Your role: ${normalizeRole(user?.role)}`,
@@ -81,12 +127,14 @@ function assertUserHasGetPassStepPermission(user, status, options = {}) {
     const stepRole = resolveGetPassStepRole(status, options.waitingForRole, options);
 
     // Security gate exit: ACC/UR may grant EXIT (security) or FINAL (legacy / shared) — either is enough.
+    // No Manager Override on the physical security clearance step.
     if (s === 'PENDING_SECURITY') {
         if (stepRole) {
             assertStepRoleMatch(
                 user,
                 stepRole,
                 `Unauthorized for this Get Pass step (requires ${stepRole}).`,
+                { allowGovernanceBypass: false },
             );
         }
         const ok =
@@ -119,8 +167,8 @@ function assertUserHasGrnManage(user, message) {
     assertUserHasPermission(user, 'GRN_MANAGE', message || 'GRN_MANAGE permission required.');
 }
 
-function assertUserHasCountStepPermission(user, status, requiredRoleCode) {
-    const perm = resolveCountPermission(status);
+function assertUserHasCountStepPermission(user, status, requiredRoleCode, options = {}) {
+    const perm = options.stepPermission || resolveCountPermission(status);
     if (requiredRoleCode) {
         assertDualGateApproval(user, requiredRoleCode, perm, `Inventory count step requires ${requiredRoleCode} + ${perm}.`);
         return;
@@ -128,8 +176,8 @@ function assertUserHasCountStepPermission(user, status, requiredRoleCode) {
     assertUserHasPermission(user, perm, `Inventory count step requires ${perm}.`);
 }
 
-function assertUserHasBreakageLostStepPermission(user, module, status, requiredRoleCode) {
-    const perm = resolveBreakageLostPermission(module, status);
+function assertUserHasBreakageLostStepPermission(user, module, status, requiredRoleCode, options = {}) {
+    const perm = options.stepPermission || resolveBreakageLostPermission(module, status);
     if (requiredRoleCode) {
         assertDualGateApproval(user, requiredRoleCode, perm, `${module} workflow step requires ${requiredRoleCode} + ${perm}.`);
         return;
@@ -137,8 +185,13 @@ function assertUserHasBreakageLostStepPermission(user, module, status, requiredR
     assertUserHasPermission(user, perm, `${module} workflow step requires ${perm}.`);
 }
 
-function assertUserHasTransferStepPermission(user, transferStatus, requiredRoleCode) {
-    const perm = resolveTransferPermission(transferStatus);
+/**
+ * Dual-gate transfer approval.
+ * Prefer ACC step permissionCode (from permissionId / capabilityCode) when provided;
+ * fall back to status map only when the step has no ACC permission configured.
+ */
+function assertUserHasTransferStepPermission(user, transferStatus, requiredRoleCode, options = {}) {
+    const perm = options.stepPermission || resolveTransferPermission(transferStatus);
     if (requiredRoleCode) {
         assertDualGateApproval(user, requiredRoleCode, perm, `Transfer step requires ${requiredRoleCode} + ${perm}.`);
         return;
@@ -149,6 +202,11 @@ function assertUserHasTransferStepPermission(user, transferStatus, requiredRoleC
 module.exports = {
     userHasPermission,
     userMatchesStepRole,
+    canBypassWorkflowStepRole,
+    isActingAsWorkflowOverride,
+    buildWorkflowOverrideAuditFields,
+    withWorkflowOverrideAudit,
+    appendWorkflowOverrideComment,
     requiredRoleCodeFromApprovalStep,
     assertUserHasPermission,
     assertStepRoleMatch,

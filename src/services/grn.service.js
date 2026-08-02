@@ -16,7 +16,7 @@ const {
     assertAwaitingStatusKey,
 } = require('./acc-workflow-status-key-guard.service');
 const { createAccApprovalRequestInTx } = require('./acc-approval-request.util');
-const { assertDualGateApproval } = require('../acc-authority/step-permission-enforcement');
+const { assertDualGateApproval, buildWorkflowOverrideAuditFields } = require('../acc-authority/step-permission-enforcement');
 const { getStorage } = require('../config/storage');
 const postingEngine = require('./postingEngine.service');
 const { logGovernedEvent, EntityType } = require('./auditGoverned.service');
@@ -767,6 +767,10 @@ const sendBackGrn = async (grnId, tenantId, user, reason, expectedVersion, targe
             entityId: grnId,
             documentStatusBefore: grn.status,
             documentStatusAfter: nextStatus,
+            overrideAudit: buildWorkflowOverrideAuditFields(
+                user,
+                grn.approvalRequest.steps?.find((s) => s.stepNumber === currentStepNo)?.requiredRole?.code,
+            ),
         });
     });
 

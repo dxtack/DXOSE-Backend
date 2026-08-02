@@ -1,11 +1,11 @@
 'use strict';
 
+const { TransferStatus } = require('@prisma/client');
 const prisma = require('../../config/database');
 const { hasPermission, resolvePermissionKey } = require('../../middleware/authorize');
 const { resolveWaitingPermission } = require('../../acc-authority/workflow-step-permissions');
 const { normalizeRole } = require('../rbac.service');
 const {
-    TRANSFER_PIPELINE_STATUSES,
     TRANSFER_APPROVAL_STATUSES,
     TRANSFER_LEGACY_OPEN_STATUSES,
     GRN_OPEN_STATUSES,
@@ -17,9 +17,22 @@ const {
     ROLE_DISPLAY,
     SLA_RULES,
 } = require('./workflow-pending.definitions');
-const { hoursSince, computeSla, isExpectedReturnToday, isOverdueReturn } = require('./workflow-pipeline-sla.util');
+const {
+    hoursSince,
+    computeSla,
+    resolveWorkflowPendingSince,
+    isExpectedReturnToday,
+    isOverdueReturn,
+} = require('./workflow-pipeline-sla.util');
 const { buildScopeWhere } = require('../scope/scope.service');
 const { SCOPE_MODULE } = require('../scope/scopeContext');
+
+/** Prisma enum values only — unknown ACC statusKeys must never crash the collector. */
+const TRANSFER_STATUS_ENUM = new Set(Object.values(TransferStatus || {}));
+const filterTransferStatuses = (statuses) =>
+    [...new Set((statuses || []).map((s) => String(s || '').trim().toUpperCase()).filter(Boolean))].filter((s) =>
+        TRANSFER_STATUS_ENUM.has(s),
+    );
 
 function scopeWhereFor(module, scope) {
     if (!scope) return {};
@@ -54,6 +67,7 @@ const baseRow = (fields) => {
         forceCritical: fields.forceCritical,
         forceWarning: fields.forceWarning,
         rule: fields.slaRule,
+        requiredBy: fields.requiredBy,
     });
     const stepGate =
         fields.waitingForPermission != null || fields.waitingForPermissionsAny != null
@@ -71,6 +85,7 @@ const baseRow = (fields) => {
         status: fields.status,
         currentStep: fields.currentStep ?? null,
         waitingForRole: fields.waitingForRole,
+        waitingForRoleId: fields.waitingForRoleId ?? null,
         waitingForPermission: stepGate.waitingForPermission,
         waitingForPermissionsAny: stepGate.waitingForPermissionsAny,
         waitingForUser: fields.waitingForUser ?? null,
@@ -87,10 +102,29 @@ const baseRow = (fields) => {
     };
 };
 
+function waitingRoleIdFromApprovalRequest(approval) {
+    if (!approval || approval.status !== 'PENDING') return null;
+    const step = (approval.steps || []).find(
+        (s) => s.stepNumber === approval.currentStep && s.status === 'PENDING',
+    );
+    return step?.requiredRole?.id || step?.requiredRoleId || null;
+}
+
 async function collectTransfers(tenantId, scope = null) {
     const chainCache = createPresentationChainCache(tenantId);
+    const publishedChain = await chainCache.getChain({ moduleKey: 'TRANSFER' });
+    const chainStatusKeys = (publishedChain?.steps || [])
+        .map((s) => String(s.statusKey || '').trim().toUpperCase())
+        .filter(Boolean);
+    const approvalStatuses = filterTransferStatuses([...TRANSFER_APPROVAL_STATUSES, ...chainStatusKeys]);
+    const pipelineStatuses = filterTransferStatuses([
+        ...approvalStatuses,
+        ...TRANSFER_LEGACY_OPEN_STATUSES,
+    ]);
+    if (!pipelineStatuses.length) return [];
+
     const rows = await prisma.storeTransfer.findMany({
-        where: { tenantId, status: { in: [...TRANSFER_PIPELINE_STATUSES] }, ...scopeWhereFor(SCOPE_MODULE.TRANSFER, scope) },
+        where: { tenantId, status: { in: pipelineStatuses }, ...scopeWhereFor(SCOPE_MODULE.TRANSFER, scope) },
         include: {
             sourceLocation: { select: { name: true } },
             destLocation: { select: { name: true } },
@@ -99,7 +133,7 @@ async function collectTransfers(tenantId, scope = null) {
                 include: {
                     steps: {
                         orderBy: { stepNumber: 'asc' },
-                        include: { requiredRole: { select: { code: true } } },
+                        include: { requiredRole: { select: { id: true, code: true } } },
                     },
                 },
             },
@@ -111,10 +145,11 @@ async function collectTransfers(tenantId, scope = null) {
     const items = [];
     for (const t of rows) {
         let waitingForRole = null;
+        let waitingForRoleId = null;
         let currentStep = t.status;
-        let slaRule = SLA_RULES.DEFAULT;
+        let slaRule = SLA_RULES.TRANSFER;
 
-        if (TRANSFER_APPROVAL_STATUSES.includes(t.status) && t.approvalRequest?.status === 'PENDING') {
+        if (approvalStatuses.includes(t.status) && t.approvalRequest?.status === 'PENDING') {
             const chain = t.approvalRequest.accWorkflowVersionId
                 ? await chainCache.getChain({ moduleKey: 'TRANSFER', versionId: t.approvalRequest.accWorkflowVersionId })
                 : await chainCache.getChain({ moduleKey: 'TRANSFER' });
@@ -122,8 +157,9 @@ async function collectTransfers(tenantId, scope = null) {
             waitingForRole = waitingRoleFromApprovalRequest(t.approvalRequest)
                 || waitingRoleFromAccStatus(chain, t.status)
                 || null;
+            waitingForRoleId = waitingRoleIdFromApprovalRequest(t.approvalRequest);
             currentStep = `Approval step ${t.approvalRequest.currentStep}`;
-        } else if (TRANSFER_APPROVAL_STATUSES.includes(t.status)) {
+        } else if (approvalStatuses.includes(t.status)) {
             // AR missing/non-PENDING but document still in approval status — derive from chain/status.
             const chain = await chainCache.getChain({ moduleKey: 'TRANSFER' });
             waitingForRole = waitingRoleFromAccStatus(chain, t.status) || null;
@@ -134,7 +170,6 @@ async function collectTransfers(tenantId, scope = null) {
             slaRule = SLA_RULES.TRANSFER_LEGACY;
         }
 
-        const pendingSince = t.updatedAt || t.createdAt;
         items.push(
             baseRow({
                 id: `transfer:${t.id}`,
@@ -145,9 +180,14 @@ async function collectTransfers(tenantId, scope = null) {
                 status: t.status,
                 currentStep,
                 waitingForRole,
+                waitingForRoleId,
                 createdBy: `${t.requestedByUser?.firstName || ''} ${t.requestedByUser?.lastName || ''}`.trim(),
                 createdAt: t.createdAt,
-                pendingSince,
+                pendingSince: resolveWorkflowPendingSince({
+                    createdAt: t.createdAt,
+                    approvalRequest: t.approvalRequest,
+                }),
+                requiredBy: t.requiredBy,
                 slaRule,
                 deepLink: `/transfers/${t.id}`,
                 meta: {
@@ -211,7 +251,10 @@ async function collectGrns(tenantId, scope = null) {
                 waitingForRole,
                 createdBy: `${g.importedByUser?.firstName || ''} ${g.importedByUser?.lastName || ''}`.trim(),
                 createdAt: g.createdAt,
-                pendingSince: g.updatedAt || g.createdAt,
+                pendingSince: resolveWorkflowPendingSince({
+                    createdAt: g.createdAt,
+                    approvalRequest: g.approvalRequest,
+                }),
                 slaRule: SLA_RULES.GRN_PENDING,
                 deepLink: `/grn/${g.id}`,
                 meta: {
@@ -288,7 +331,10 @@ async function collectInventoryCounts(tenantId, scope = null) {
                 waitingForRole,
                 createdBy: `${s.createdByUser?.firstName || ''} ${s.createdByUser?.lastName || ''}`.trim(),
                 createdAt: s.createdAt,
-                pendingSince: s.updatedAt || s.createdAt,
+                pendingSince: resolveWorkflowPendingSince({
+                    createdAt: s.createdAt,
+                    approvalRequest: s.approvalRequest,
+                }),
                 slaRule,
                 deepLink: `/inventory-count/${s.id}`,
                 meta: { location: s.location?.name },
@@ -358,7 +404,10 @@ async function collectBreakageAndLost(tenantId, scope = null) {
                 waitingForRole,
                 createdBy: `${d.createdByUser?.firstName || ''} ${d.createdByUser?.lastName || ''}`.trim(),
                 createdAt: d.createdAt,
-                pendingSince: d.updatedAt || d.createdAt,
+                pendingSince: resolveWorkflowPendingSince({
+                    createdAt: d.createdAt,
+                    approvalRequest: ar,
+                }),
                 slaRule: SLA_RULES.BREAKAGE_PENDING,
                 deepLink: module === 'LOST' ? `/lost-items/${d.id}` : `/breakage/${d.id}`,
                 meta: {
@@ -422,7 +471,7 @@ async function collectGetPasses(tenantId, scope = null) {
                     waitingForRole,
                     createdBy: `${p.createdByUser?.firstName || ''} ${p.createdByUser?.lastName || ''}`.trim(),
                     createdAt: p.createdAt,
-                    pendingSince: p.updatedAt || p.createdAt,
+                    pendingSince: resolveWorkflowPendingSince({ createdAt: p.createdAt }),
                     slaRule: SLA_RULES.DEFAULT,
                     deepLink: `/get-passes/${p.id}`,
                     meta: {
@@ -448,7 +497,7 @@ async function collectGetPasses(tenantId, scope = null) {
                     waitingForRole: null,
                     createdBy: `${p.createdByUser?.firstName || ''} ${p.createdByUser?.lastName || ''}`.trim(),
                     createdAt: p.createdAt,
-                    pendingSince: p.updatedAt || p.createdAt,
+                    pendingSince: resolveWorkflowPendingSince({ createdAt: p.createdAt }),
                     priority: 'warning',
                     deepLink: `/get-passes/${p.id}`,
                     meta: { transferType: p.transferType, borrowingEntity: p.borrowingEntity },
@@ -470,7 +519,7 @@ async function collectGetPasses(tenantId, scope = null) {
                     waitingForRole: null,
                     createdBy: `${p.createdByUser?.firstName || ''} ${p.createdByUser?.lastName || ''}`.trim(),
                     createdAt: p.createdAt,
-                    pendingSince: p.checkedOutAt || p.updatedAt || p.createdAt,
+                    pendingSince: p.checkedOutAt || resolveWorkflowPendingSince({ createdAt: p.createdAt }),
                     forceCritical: overdue,
                     forceWarning: dueToday && !overdue,
                     slaRule: SLA_RULES.GET_PASS_OVERDUE,
@@ -499,7 +548,7 @@ async function collectGetPasses(tenantId, scope = null) {
                     waitingForRole: null,
                     createdBy: `${p.createdByUser?.firstName || ''} ${p.createdByUser?.lastName || ''}`.trim(),
                     createdAt: p.createdAt,
-                    pendingSince: p.updatedAt || p.createdAt,
+                    pendingSince: resolveWorkflowPendingSince({ createdAt: p.createdAt }),
                     deepLink: `/get-passes/${p.id}`,
                     meta: { transferType: p.transferType, isInternalTransfer: p.isInternalTransfer },
                 }),
@@ -542,6 +591,11 @@ function userCanActOnItem(item, userCtx) {
     }
 
     const userRole = normalizePipelineRole(user.role);
+    const userRoles = new Set(
+        [user.role, ...(Array.isArray(user.roles) ? user.roles : [])]
+            .map((r) => normalizePipelineRole(r))
+            .filter(Boolean),
+    );
     if (userRole === 'ORG_MANAGER' || userRole === 'SUPER_ADMIN') {
         return true;
     }
@@ -559,7 +613,7 @@ function userCanActOnItem(item, userCtx) {
         item.module === 'GET_PASS' &&
         String(item.status || '').toUpperCase() === 'PENDING_SECURITY'
     ) {
-        if (userRole === 'SECURITY') {
+        if (userRole === 'SECURITY' || userRoles.has('SECURITY')) {
             permissionOk =
                 userHasPipelinePermission(user, 'GET_PASS_APPROVE_EXIT') ||
                 userHasPipelinePermission(user, 'GET_PASS_APPROVE_FINAL');
@@ -568,10 +622,15 @@ function userCanActOnItem(item, userCtx) {
 
     if (!permissionOk) return false;
 
-    // Shared approve permission across steps (BREAKAGE/LOST/TRANSFER/…) — must match waiting role.
+    // Shared approve permission across steps — must match waiting role (code or roleId).
     const waitingRole = normalizePipelineRole(item.waitingForRole);
-    if (waitingRole && userRole && waitingRole !== userRole) {
-        return false;
+    if (waitingRole) {
+        const roleMatch =
+            userRoles.has(waitingRole) ||
+            (user.roleId &&
+                item.waitingForRoleId &&
+                String(user.roleId) === String(item.waitingForRoleId));
+        if (!roleMatch) return false;
     }
 
     return true;

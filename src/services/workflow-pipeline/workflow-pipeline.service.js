@@ -20,6 +20,8 @@ const { resolveScopeContext } = require('../scope/scopeContext');
 const { hasActiveAssignmentForProperty } = require('../scope/assignment-mutation.guard');
 const { normalizeRole } = require('../rbac.service');
 const { toInclusiveUtcEndOfDay } = require('../../utils/report-date-range.util');
+const prisma = require('../../config/database');
+const { randomUUID } = require('crypto');
 
 const PRIORITY_RANK = { critical: 0, warning: 1, info: 2 };
 
@@ -162,15 +164,24 @@ function sortItems(items) {
 }
 
 function enrichDisplay(items) {
-    return items.map((i) => ({
-        ...i,
-        waitingForLabel:
-            permissionLabel(i.waitingForPermission) ||
-            (Array.isArray(i.waitingForPermissionsAny) && i.waitingForPermissionsAny.length
-                ? i.waitingForPermissionsAny.map(permissionLabel).filter(Boolean).join(' / ')
-                : null) ||
-            roleLabel(i.waitingForRole),
-    }));
+    return items.map((i) => {
+        const waitingForRoleLabel = roleLabel(i.waitingForRole);
+        return {
+            ...i,
+            /** Human-readable target role (e.g. "Department Manager"). */
+            waitingForRoleLabel,
+            /**
+             * Display hint for alerts / action context — prefers permission name
+             * ("Approve Transfers"), then falls back to the role label.
+             */
+            waitingForLabel:
+                permissionLabel(i.waitingForPermission) ||
+                (Array.isArray(i.waitingForPermissionsAny) && i.waitingForPermissionsAny.length
+                    ? i.waitingForPermissionsAny.map(permissionLabel).filter(Boolean).join(' / ')
+                    : null) ||
+                waitingForRoleLabel,
+        };
+    });
 }
 
 function buildSummary(items, userCtx) {
@@ -275,7 +286,94 @@ async function getWorkflowPipelineAlerts(tenantId, userCtx, { limit = 15 } = {})
     const criticalFirst = actionable.filter((i) => i.priority === 'critical' || i.overdue);
     const rest = actionable.filter((i) => i.priority !== 'critical' && !i.overdue);
     const merged = [...criticalFirst, ...rest].slice(0, limit);
-    return enrichDisplay(merged);
+    const enriched = enrichDisplay(merged);
+    return attachAlertReadState(enriched, userCtx?.id, tenantId);
+}
+
+/**
+ * Attach per-user `isRead` from workflow_alert_reads.
+ * @param {Array<object>} items
+ * @param {string|null|undefined} userId
+ * @param {string} tenantId
+ */
+async function attachAlertReadState(items, userId, tenantId) {
+    if (!Array.isArray(items) || !items.length) {
+        return items || [];
+    }
+    if (!userId || !tenantId) {
+        return items.map((i) => ({ ...i, isRead: false }));
+    }
+
+    const alertIds = items.map((i) => i.id).filter(Boolean);
+    if (!alertIds.length) {
+        return items.map((i) => ({ ...i, isRead: false }));
+    }
+
+    try {
+        const rows = await prisma.workflowAlertRead.findMany({
+            where: {
+                userId,
+                tenantId,
+                alertId: { in: alertIds },
+            },
+            select: { alertId: true },
+        });
+        const readSet = new Set(rows.map((r) => r.alertId));
+        // Annotate only — never filter pending actions by read state.
+        return items.map((i) => ({ ...i, isRead: readSet.has(i.id) }));
+    } catch {
+        // Read-receipt lookup must not hide actionable pipeline items.
+        return items.map((i) => ({ ...i, isRead: false }));
+    }
+}
+
+/**
+ * Persist read receipts for the logged-in user.
+ * Body: { alertIds?: string[], documentId?: string }
+ */
+async function markWorkflowAlertsRead(tenantId, userCtx, body = {}) {
+    const userId = userCtx?.id;
+    if (!userId || !tenantId) {
+        return { marked: 0, alertIds: [] };
+    }
+
+    const alertIds = new Set();
+    const rawIds = Array.isArray(body.alertIds) ? body.alertIds : [];
+    for (const id of rawIds) {
+        const s = String(id || '').trim();
+        if (s) alertIds.add(s);
+    }
+
+    const documentId = body.documentId ? String(body.documentId).trim() : '';
+    if (documentId) {
+        const open = await getWorkflowPipelineAlerts(tenantId, userCtx, { limit: 200 });
+        for (const item of open) {
+            if (String(item.documentId) === documentId || String(item.id).endsWith(`:${documentId}`)) {
+                alertIds.add(item.id);
+            }
+        }
+        // Cover modules not currently in the top-N window
+        for (const prefix of ['transfer', 'grn', 'count', 'breakage', 'lost', 'getpass']) {
+            alertIds.add(`${prefix}:${documentId}`);
+        }
+    }
+
+    const ids = [...alertIds];
+    if (!ids.length) {
+        return { marked: 0, alertIds: [] };
+    }
+
+    await prisma.workflowAlertRead.createMany({
+        data: ids.map((alertId) => ({
+            id: randomUUID(),
+            userId,
+            tenantId,
+            alertId,
+        })),
+        skipDuplicates: true,
+    });
+
+    return { marked: ids.length, alertIds: ids };
 }
 
 /** Full scoped pipeline items (no actionable filter) for dashboard detail alignment. */
@@ -295,6 +393,7 @@ module.exports = {
     getWorkflowPipeline,
     getWorkflowPipelineSummary,
     getWorkflowPipelineAlerts,
+    markWorkflowAlertsRead,
     getScopedPipelineItems,
     applyFilters,
     userCanActOnItem,

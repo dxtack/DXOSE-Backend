@@ -173,6 +173,7 @@ async function getTransferTimeline(transferId, tenantId) {
         postedByUser: posting.postedByUser,
         includePosting: posting.includePosting,
         autoPosted: true,
+        documentStatus: trf.status,
     });
 
     return attachTimelineEntries({

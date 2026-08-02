@@ -32,6 +32,7 @@ const {
   inferLegacyCountApprovalState,
   submitApprovalProjection,
 } = require('./acc-workflow-count.runtime');
+const { buildWorkflowOverrideAuditFields } = require('../acc-authority/step-permission-enforcement');
 const {
   assertCountPrepareActor,
   assertCountCancelActor,
@@ -1308,7 +1309,12 @@ exports.sendBack = async (tenantId, userId, user, sessionId, body = {}) => {
   if (!step || String(step.status || '').toUpperCase() !== 'PENDING') {
     throw bizError(400, 'COUNT_SESSION_NO_PENDING_STEP', 'No pending approval step found.');
   }
-  assertCanActOnApprovalStep(step, user, s.status);
+  const chain = await resolveChainForSession(s, tenantId);
+  const countChainStep = chain?.steps?.find((st) => Number(st.stepOrder) === currentStepNo)
+    ?? chain?.steps?.[currentStepNo - 1];
+  assertCanActOnApprovalStep(step, user, s.status, {
+    ...(countChainStep?.permissionCode ? { stepPermission: countChainStep.permissionCode } : {}),
+  });
   if (normalizeRole(step.requiredRole?.code) === ROLE_DEPT_MANAGER) {
     await assertDepartmentManagerSessionScope(user, tenantId, s);
   }
@@ -1325,7 +1331,6 @@ exports.sendBack = async (tenantId, userId, user, sessionId, body = {}) => {
     }
   }
 
-  const chain = await resolveChainForSession(s, tenantId);
   // Creator (0) = IC operational desk REVEAL_REVIEW (resubmit); prior ACC steps = statusKey.
   // Same picker + forceTargetStepNumber contract as GRN/Transfer; only the zero-step status label differs by module.
   const returnStatus =
@@ -1360,6 +1365,10 @@ exports.sendBack = async (tenantId, userId, user, sessionId, body = {}) => {
       entityId: s.id,
       documentStatusBefore: s.status,
       documentStatusAfter: returnStatus,
+      overrideAudit: buildWorkflowOverrideAuditFields(
+        user,
+        step.requiredRole?.code,
+      ),
     });
   });
 
@@ -1396,7 +1405,11 @@ exports.approve = async (tenantId, userId, user, sessionId, body = {}) => {
   if (!step) {
     throw bizError(400, 'COUNT_SESSION_NO_PENDING_STEP', 'No pending approval step found.');
   }
-  const { required } = assertCanActOnApprovalStep(step, user, s.status);
+  const approveChainStep = chain?.steps?.find((st) => Number(st.stepOrder) === Number(step.stepNumber))
+    ?? chain?.steps?.[Number(step.stepNumber) - 1];
+  const { required } = assertCanActOnApprovalStep(step, user, s.status, {
+    ...(approveChainStep?.permissionCode ? { stepPermission: approveChainStep.permissionCode } : {}),
+  });
   if (normalizeRole(required) === ROLE_DEPT_MANAGER) {
     await assertDepartmentManagerSessionScope(user, tenantId, s);
   }
@@ -1514,7 +1527,12 @@ exports.reject = async (tenantId, userId, user, sessionId, body = {}) => {
   if (!step) {
     throw bizError(400, 'COUNT_SESSION_NO_PENDING_STEP', 'No pending approval step found.');
   }
-  assertCanActOnApprovalStep(step, user, s.status);
+  const rejectChain = await resolveChainForSession(s, tenantId);
+  const rejectChainStep = rejectChain?.steps?.find((st) => Number(st.stepOrder) === Number(step.stepNumber))
+    ?? rejectChain?.steps?.[Number(step.stepNumber) - 1];
+  assertCanActOnApprovalStep(step, user, s.status, {
+    ...(rejectChainStep?.permissionCode ? { stepPermission: rejectChainStep.permissionCode } : {}),
+  });
 
   const actedAt = new Date();
 

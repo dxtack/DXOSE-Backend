@@ -532,11 +532,14 @@ function buildApprovalTimelineRawEntries(approvalRequest, options = {}) {
     const terminal = isTerminalApprovalRequest(approvalRequest);
     const active = isActiveApprovalRequest(approvalRequest);
     const hasRejectedStep = steps.some((s) => s.status === 'REJECTED');
+    const docStatus = String(options.documentStatus || '').toUpperCase();
+    const documentTerminal =
+        docStatus === 'REJECTED' || docStatus === 'CANCELLED' || docStatus === 'VOID';
     const hasVoidTerminal =
-        String(options.documentStatus || '').toUpperCase() === 'VOID' ||
+        documentTerminal ||
         auditEvents.some((a) => {
             const action = String(a.action || '').toUpperCase();
-            return action === 'CANCEL';
+            return action === 'CANCEL' || action === 'VOID';
         });
 
     for (const step of steps) {
@@ -564,6 +567,10 @@ function buildApprovalTimelineRawEntries(approvalRequest, options = {}) {
             continue;
         }
 
+        if (documentTerminal) {
+            continue;
+        }
+
         if (active && !hasVoidTerminal) {
             if (status === 'PENDING' && stepNumber === approvalRequest.currentStep) {
                 entries.push(currentApprovalEntry(cycleNumber, step, stepNumber));
@@ -581,7 +588,7 @@ function buildApprovalTimelineRawEntries(approvalRequest, options = {}) {
         entries.push(entry);
     }
 
-    if (active && !hasVoidTerminal && Number(approvalRequest.currentStep) === 0) {
+    if (active && !hasVoidTerminal && !documentTerminal && Number(approvalRequest.currentStep) === 0) {
         entries.push(creatorPendingEntry(cycleNumber));
     }
 

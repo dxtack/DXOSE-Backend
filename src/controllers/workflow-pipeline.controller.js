@@ -6,6 +6,7 @@ const workflowPipelineService = require('../services/workflow-pipeline/workflow-
 const userCtx = (req) => ({
     id: req.user?.id,
     role: req.user?.role,
+    roleId: req.user?.roleId || null,
     permissions: Array.isArray(req.user?.permissions) ? req.user.permissions : [],
     departmentId: req.user?.departmentId || null,
 });
@@ -58,6 +59,19 @@ exports.getAlerts = async (req, res, next) => {
             overdue: summary.overdue,
             getPassOverdue: summary.getPassOverdue,
         });
+    } catch (err) {
+        next(err);
+    }
+};
+
+exports.markAlertsRead = async (req, res, next) => {
+    try {
+        const data = await workflowPipelineService.markWorkflowAlertsRead(
+            req.user.tenantId,
+            userCtx(req),
+            req.body || {},
+        );
+        return success(res, data, 'Alerts marked as read');
     } catch (err) {
         next(err);
     }

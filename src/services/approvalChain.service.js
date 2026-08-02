@@ -2,12 +2,14 @@
 
 const prisma = require('../config/database');
 const { connectRole, normalizeRole } = require('./rbac.service');
-const { assertUserHasTransferStepPermission } = require('../acc-authority/step-permission-enforcement');
+const { assertUserHasTransferStepPermission, appendWorkflowOverrideComment, isActingAsWorkflowOverride } = require('../acc-authority/step-permission-enforcement');
 const {
     resolveWorkflowForDocument,
+    resolveWorkflowByVersionId,
     approvalRequestVersionPin,
 } = require('./acc-workflow-runtime.service');
 const { defaultRoleCodesForModule } = require('./acc-workflow-default-chains');
+const { statusKeyFromRoleCode } = require('./acc-workflow-status-key.service');
 
 /** Dept → Finance (final posting triggered from transfer.service on Finance approval). */
 const TRANSFER_APPROVAL_ROLE_CODES = defaultRoleCodesForModule('TRANSFER');
@@ -22,11 +24,52 @@ const TRANSFER_APPROVAL_OVERRIDE_ROLE_CODES = Object.freeze([
     'SUPER_ADMIN',
 ]);
 
-const transferStatusForActiveStep = (stepNumber) => {
-    if (stepNumber === 1) return 'PENDING_DEPT';
-    if (stepNumber === 2) return 'PENDING_FINANCE';
-    return 'PENDING_DEPT';
+const TRANSFER_STATUS_FALLBACKS = Object.freeze([
+    'PENDING_DEPT',
+    'PENDING_FINANCE',
+    'PENDING_COST_CONTROL',
+    'PENDING_GM',
+    'PENDING_APPROVAL',
+    'PENDING_SECURITY',
+]);
+
+/**
+ * Derive transfer document status from ACC step statusKey (dynamic chain length).
+ * Falls back to legacy Dept/Finance keys when statusKey is absent.
+ */
+const transferStatusForActiveStep = (stepNumber, chain = null) => {
+    const n = Number(stepNumber);
+    const step = Array.isArray(chain?.steps)
+        ? chain.steps.find((s) => Number(s.stepOrder) === n) ?? chain.steps[n - 1]
+        : null;
+    if (step?.statusKey) {
+        return String(step.statusKey).trim().toUpperCase();
+    }
+    if (step?.roleCode) {
+        const fromRole = statusKeyFromRoleCode(step.roleCode, 'TRANSFER');
+        if (fromRole) return fromRole;
+    }
+    if (n === 1) return 'PENDING_DEPT';
+    if (n === 2) return 'PENDING_FINANCE';
+    return TRANSFER_STATUS_FALLBACKS[n - 1] || 'PENDING_DEPT';
 };
+
+async function loadTransferApprovalChain(approval, tenantId) {
+    if (approval?.accWorkflowVersionId) {
+        return resolveWorkflowByVersionId(approval.accWorkflowVersionId);
+    }
+    return resolveWorkflowForDocument({ moduleKey: 'TRANSFER', tenantId });
+}
+
+function transferStepPermissionOptions(chain, stepNumber) {
+    const chainStep = Array.isArray(chain?.steps)
+        ? chain.steps.find((s) => Number(s.stepOrder) === Number(stepNumber))
+          ?? chain.steps[Number(stepNumber) - 1]
+        : null;
+    return chainStep?.permissionCode
+        ? { stepPermission: chainStep.permissionCode }
+        : {};
+}
 
 /**
  * Create approval for a store transfer (call inside a transaction).
@@ -40,7 +83,7 @@ const createStoreTransferApprovalRequest = async (tx, { tenantId, transferId, cr
     const preApproveFirst =
         Boolean(firstRole) && Boolean(submitterRole) && firstRole === submitterRole;
     const currentStep = preApproveFirst ? Math.min(2, chain.roleCodes.length) : 1;
-    const enterStatus = transferStatusForActiveStep(currentStep);
+    const enterStatus = transferStatusForActiveStep(currentStep, chain);
     const now = new Date();
 
     await tx.approvalRequest.create({
@@ -121,8 +164,16 @@ const processStoreTransferApproval = async ({
             throw Object.assign(new Error('No pending approval step for this transfer.'), { statusCode: 422 });
         }
 
-        assertUserHasTransferStepPermission(user, trf.status, step.requiredRole?.code);
+        const chain = await loadTransferApprovalChain(approval, tenantId);
+        assertUserHasTransferStepPermission(
+            user,
+            trf.status,
+            step.requiredRole?.code,
+            transferStepPermissionOptions(chain, currentStepNo),
+        );
 
+        const stepRoleCode = step.requiredRole?.code;
+        const stepComment = appendWorkflowOverrideComment(comment, user, stepRoleCode);
         const now = new Date();
 
         if (action === 'REJECT') {
@@ -132,7 +183,7 @@ const processStoreTransferApproval = async ({
                     status: 'REJECTED',
                     actedBy: userId,
                     actedAt: now,
-                    comment: comment || null,
+                    comment: stepComment,
                 },
             });
             await tx.approvalRequest.update({
@@ -157,7 +208,13 @@ const processStoreTransferApproval = async ({
                 },
                 include: { lines: true, sourceLocation: true, destLocation: true },
             });
-            return { transfer, needsPosting: false };
+            return {
+                transfer,
+                needsPosting: false,
+                overrideMeta: isActingAsWorkflowOverride(user, stepRoleCode)
+                    ? { isOverride: true, overrideRole: normalizeRole(user?.role), overriddenStepRole: normalizeRole(stepRoleCode) }
+                    : null,
+            };
         }
 
         await tx.approvalStep.update({
@@ -166,18 +223,21 @@ const processStoreTransferApproval = async ({
                 status: 'APPROVED',
                 actedBy: userId,
                 actedAt: now,
-                comment: comment || null,
+                comment: stepComment,
             },
         });
 
         const isFinal = currentStepNo >= approval.totalSteps;
+        const overrideMeta = isActingAsWorkflowOverride(user, stepRoleCode)
+            ? { isOverride: true, overrideRole: normalizeRole(user?.role), overriddenStepRole: normalizeRole(stepRoleCode) }
+            : null;
 
         if (isFinal) {
             await tx.approvalRequest.update({
                 where: { id: approval.id },
                 data: { status: 'APPROVED', resolvedAt: now, currentStep: currentStepNo },
             });
-            return { transfer: trf, needsPosting: true };
+            return { transfer: trf, needsPosting: true, overrideMeta };
         }
 
         const nextStepNo = currentStepNo + 1;
@@ -189,12 +249,12 @@ const processStoreTransferApproval = async ({
         const transfer = await tx.storeTransfer.update({
             where: { id: transferId },
             data: {
-                status: transferStatusForActiveStep(nextStepNo),
+                status: transferStatusForActiveStep(nextStepNo, chain),
                 updatedAt: now,
             },
             include: { lines: true, sourceLocation: true, destLocation: true },
         });
-        return { transfer, needsPosting: false };
+        return { transfer, needsPosting: false, overrideMeta };
     };
 
     if (externalTx) return run(externalTx);

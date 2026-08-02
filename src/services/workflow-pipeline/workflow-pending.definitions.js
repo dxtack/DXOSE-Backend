@@ -13,8 +13,15 @@ const PIPELINE_MODULES = Object.freeze([
     'GET_PASS',
 ]);
 
-/** Store transfers awaiting approval (finance-controlled posting workflow). */
-const TRANSFER_OPEN_STATUSES = Object.freeze(['PENDING_DEPT', 'PENDING_FINANCE']);
+/** Store transfers awaiting approval (ACC statusKey-driven). */
+const TRANSFER_OPEN_STATUSES = Object.freeze([
+    'PENDING_DEPT',
+    'PENDING_COST_CONTROL',
+    'PENDING_FINANCE',
+    'PENDING_GM',
+    'PENDING_APPROVAL',
+    'PENDING_SECURITY',
+]);
 
 /** Legacy logistics statuses — surfaced for pipeline cleanup until migrated. */
 const TRANSFER_LEGACY_OPEN_STATUSES = Object.freeze([
@@ -29,7 +36,7 @@ const TRANSFER_PIPELINE_STATUSES = Object.freeze([
     ...TRANSFER_LEGACY_OPEN_STATUSES,
 ]);
 
-const TRANSFER_APPROVAL_STATUSES = Object.freeze(['PENDING_DEPT', 'PENDING_FINANCE']);
+const TRANSFER_APPROVAL_STATUSES = Object.freeze([...TRANSFER_OPEN_STATUSES]);
 
 /** Open GRN workflow items only — drafts stay on GRN list until submitted. */
 const GRN_OPEN_STATUSES = Object.freeze([
@@ -87,15 +94,18 @@ const ROLE_DISPLAY = Object.freeze({
     RECEIVER: 'Storekeeper',
 });
 
-/** SLA thresholds in hours (warning / critical). */
+/** SLA thresholds in hours (warning / critical → Overdue). */
 const SLA_RULES = Object.freeze({
+    /** Active transfer approval + logistics waiting. */
+    TRANSFER: { warningHours: 24, criticalHours: 48 },
+    /** Pre–finance-post legacy open statuses (same band as TRANSFER). */
     TRANSFER_LEGACY: { warningHours: 24, criticalHours: 48 },
     GET_PASS_OVERDUE: { criticalHours: 0 },
     GET_PASS_DUE_TODAY: { warningHours: 0 },
     GRN_PENDING: { warningHours: 48, criticalHours: 120 },
     COUNT_PENDING_APPROVAL: { warningHours: 48, criticalHours: 120 },
     BREAKAGE_PENDING: { warningHours: 72, criticalHours: 168 },
-    DEFAULT: { warningHours: 48, criticalHours: 96 },
+    DEFAULT: { warningHours: 48, criticalHours: 72 },
 });
 
 module.exports = {

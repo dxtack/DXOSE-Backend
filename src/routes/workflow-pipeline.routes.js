@@ -36,5 +36,6 @@ router.use(authenticate);
 router.get('/', requireAnyPermission(...PIPELINE_ACCESS), ctrl.getPipeline);
 router.get('/summary', requireAnyPermission(...PIPELINE_ACCESS), ctrl.getSummary);
 router.get('/alerts', requireAnyPermission(...PIPELINE_ACCESS), ctrl.getAlerts);
+router.post('/alerts/mark-read', requireAnyPermission(...PIPELINE_ACCESS), ctrl.markAlertsRead);
 
 module.exports = router;

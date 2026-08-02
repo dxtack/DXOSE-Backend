@@ -34,11 +34,18 @@ app.use(helmet({
 const isDev = (process.env.NODE_ENV || 'development') !== 'production';
 
 // Reflect any request Origin so credentialed cross-origin requests work from any host (not `*` — incompatible with credentials: true).
+// Include cache-busting headers used by Angular HttpClient (e.g. workflow /workspace).
 app.use(cors({
     origin: true,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowedHeaders: [
+        'Content-Type',
+        'Authorization',
+        'X-Requested-With',
+        'Cache-Control',
+        'Pragma',
+    ],
 }));
 
 // ─── Rate Limiting ─────────────────────────────────────────────────────────
