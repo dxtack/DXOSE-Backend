@@ -163,6 +163,33 @@ function assertUserHasGetPassStepPermission(user, status, options = {}) {
     );
 }
 
+/**
+ * Physical gate/security actions on the Get Pass return side (destination receipt,
+ * return exit scan, return arrival inspection). Regular operational users must hold
+ * the literal SECURITY role. ORG_MANAGER / SUPER_ADMIN may act on these steps via
+ * Manager Override (business decision: security personnel are not always available
+ * on-site) — callers MUST log the resulting isOverride/overrideRole/overriddenStepRole
+ * fields via buildWorkflowOverrideAuditFields/withWorkflowOverrideAudit so the audit
+ * trail distinguishes an override from an actual physical security sign-off.
+ * The Get Pass EXIT gate (PENDING_SECURITY, assertUserHasGetPassStepPermission) is a
+ * separate, still non-overridable checkpoint — this relaxation does not apply there.
+ */
+function assertUserHasGetPassGateOperationPermission(user, status, options = {}) {
+    const requiredRole = options.stepRole || 'SECURITY';
+    assertStepRoleMatch(
+        user,
+        requiredRole,
+        `Unauthorized for this Get Pass gate action (requires ${requiredRole}).`,
+    );
+    const perm = options.stepPermission
+        || resolveGetPassPermission(status, options.waitingForRole, options);
+    assertUserHasPermission(
+        user,
+        perm,
+        `Unauthorized for this Get Pass gate action (requires ${perm}).`,
+    );
+}
+
 function assertUserHasGrnManage(user, message) {
     assertUserHasPermission(user, 'GRN_MANAGE', message || 'GRN_MANAGE permission required.');
 }
@@ -212,6 +239,7 @@ module.exports = {
     assertStepRoleMatch,
     assertDualGateApproval,
     assertUserHasGetPassStepPermission,
+    assertUserHasGetPassGateOperationPermission,
     assertUserHasGrnManage,
     assertUserHasCountStepPermission,
     assertUserHasBreakageLostStepPermission,

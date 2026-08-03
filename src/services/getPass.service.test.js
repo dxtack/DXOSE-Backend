@@ -198,7 +198,9 @@ function loadGetPassServiceWithMocks({ getPass }) {
             return { assertAwaitingStatusKey: (key) => key };
         }
         if (request === '../acc-authority/step-permission-enforcement') {
+            const real = originalLoad(request, parent, isMain);
             return {
+                ...real,
                 assertUserHasGetPassStepPermission: () => {},
                 assertDualGateApproval: () => {},
             };

@@ -184,7 +184,9 @@ function loadGrnServiceWithMocks(options = {}) {
             };
         }
         if (request === '../acc-authority/step-permission-enforcement') {
+            const real = originalLoad(request, parent, isMain);
             return {
+                ...real,
                 assertDualGateApproval: () => {
                     if (denyDualGate) throw Object.assign(new Error('Forbidden'), { status: 403, statusCode: 403 });
                 },

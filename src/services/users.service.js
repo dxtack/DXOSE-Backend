@@ -1,6 +1,7 @@
 const prisma = require('../config/database');
 const { hashPassword, comparePassword } = require('../utils/password');
 const { assertOrgManagerAssignmentWithinOrgHierarchy } = require('../utils/membershipGuard');
+const { assertGmMayModifyTargetUser } = require('../utils/roleHierarchyGuard');
 const {
     countActiveSeats,
     assertSingletonRoleAvailable,
@@ -568,7 +569,12 @@ const createUser = async (tenantId, data, requestingUserId, actorContext = {}) =
     return user;
 };
 
-const updateUser = async (tenantId, userId, data, requestingUserId) => {
+const updateUser = async (tenantId, userId, data, requestingUserId, actorRoleCode = null) => {
+    await assertGmMayModifyTargetUser(prisma, {
+        actorRoleCode,
+        targetUserId: userId,
+    });
+
     const membership = await prisma.tenantMember.findUnique({
         where: { tenantId_userId: { tenantId, userId } },
         include: { user: true, role: true },

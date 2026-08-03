@@ -1428,24 +1428,25 @@ const processApprovalStep = async (id, tenantId, user, action, comment, accounta
                 }
             }
 
-            // Audit APPROVE steps so timeline can reconstruct history after Send Back.
-            if (action === 'APPROVE') {
-                const approveRoleCode = requiredRoleCode || chainMeta?.roleCode || '';
-                const overrideMeta = buildWorkflowOverrideAuditFields(user, approveRoleCode);
+            // Audit every step action (approve or reject) so the timeline and
+            // Manager Override compliance reporting can reconstruct full history.
+            {
+                const stepRoleCode = requiredRoleCode || chainMeta?.roleCode || '';
+                const overrideMeta = buildWorkflowOverrideAuditFields(user, stepRoleCode);
                 await logAction({
                     tenantId,
                     entityType: EntityType.BREAKAGE,
                     entityId: id,
-                    action: 'APPROVE',
+                    action,
                     changedBy: userId,
-                    note: `BREAKAGE_APPROVE_STEP:${currentStepNo}:${approveRoleCode}${
+                    note: `BREAKAGE_${action}_STEP:${currentStepNo}:${stepRoleCode}${
                         overrideMeta ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})` : ''
                     }`,
                     beforeValue: { step: currentStepNo, status: doc.status },
                     afterValue: withWorkflowOverrideAudit(
-                        { step: currentStepNo, roleCode: approveRoleCode },
+                        { step: currentStepNo, roleCode: stepRoleCode, action },
                         user,
-                        approveRoleCode,
+                        stepRoleCode,
                     ),
                     tx,
                 });

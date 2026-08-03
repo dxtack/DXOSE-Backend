@@ -341,7 +341,7 @@ test('P0 #9 weighted receipts and Opening Balance preserve committed stock state
             await getPassService.confirmDestinationReceipt(
                 getPass.id,
                 targetTenant.id,
-                userId,
+                { id: userId, role: 'SECURITY' },
                 {
                     receivedCondition: 'GOOD',
                     lines: [{

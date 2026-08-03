@@ -774,6 +774,9 @@ const createTenant = async (data, adminUserId, ipAddress) => {
         : (maxUsers !== undefined ? Number(maxUsers) : limits.maxUsers);
     validateLicenseDateRange(resolvedStartDate, resolvedEndDate);
 
+    const { resolveCreateCurrency, SETTING_KEY: DISPLAY_CURRENCY_KEY } = require('../platform/displayCurrency.service');
+    const currency = resolveCreateCurrency(data.currency);
+
     const tenant = await prisma.$transaction(async (tx) => {
         // 1. Create Tenant
         const t = await tx.tenant.create({
@@ -781,6 +784,7 @@ const createTenant = async (data, adminUserId, ipAddress) => {
                 name,
                 slug,
                 email: email !== undefined ? email : (adminEmail ? adminEmail.toLowerCase() : null),
+                currency,
                 ...(resolvedParentId ? { parent: { connect: { id: resolvedParentId } } } : {}),
                 hasBranches: resolvedHasBranches,
                 maxBranches: resolvedMaxBranches,
@@ -798,8 +802,13 @@ const createTenant = async (data, adminUserId, ipAddress) => {
         await seedDefaultUnitsForTenant(tx, t.id);
 
         await tx.tenantSetting.upsert({
-            where: { tenantId_key: { tenantId: t.id, key: 'allowOpeningBalance' } },
-            update: {
+            where: { tenantId_key: { tenantId: t.id, key: DISPLAY_CURRENCY_KEY } },
+            update: { value: currency },
+            create: { tenantId: t.id, key: DISPLAY_CURRENCY_KEY, value: currency },
+        });
+
+        await tx.tenantSetting.upsert({
+            where: { tenantId_key: { tenantId: t.id, key: 'allowOpeningBalance' } },            update: {
                 value: 'LOCKED',
                 reason: 'Default locked on tenant creation',
             },
@@ -840,16 +849,18 @@ const createTenant = async (data, adminUserId, ipAddress) => {
             // Membership Guard: ORG_MANAGER users cannot be assigned outside their org hierarchy.
             await assertOrgManagerAssignmentWithinOrgHierarchy(tx, { userId: adminUser.id, targetTenantId: t.id });
 
+            // Root org owner → ORG_MANAGER; hotel/branch admin → GENERAL_MANAGER.
+            const adminRoleCode = resolvedParentId ? 'GENERAL_MANAGER' : 'ORG_MANAGER';
             await tx.tenantMember.upsert({
                 where: { tenantId_userId: { tenantId: t.id, userId: adminUser.id } },
                 create: {
                     tenant: { connect: { id: t.id } },
                     user: { connect: { id: adminUser.id } },
-                    role: connectRole('ORG_MANAGER'),
+                    role: connectRole(adminRoleCode),
                     isActive: true,
                 },
                 update: {
-                    role: connectRole('ORG_MANAGER'),
+                    role: connectRole(adminRoleCode),
                     isActive: true,
                 },
             });
@@ -966,6 +977,10 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
     const hotelLicenseStartDate = hotel.licenseStartDate ?? payload?.licenseStartDate;
     const hotelLicenseEndDate = hotel.licenseEndDate ?? payload?.licenseEndDate;
 
+    const { resolveCreateCurrency, SETTING_KEY: DISPLAY_CURRENCY_KEY } = require('../platform/displayCurrency.service');
+    const orgCurrency = resolveCreateCurrency(org.currency ?? payload?.currency);
+    const hotelCurrency = resolveCreateCurrency(hotel.currency ?? org.currency ?? payload?.currency);
+
     if (!orgName || !orgSlug) {
         throw Object.assign(new Error('organization.name and organization.slug are required.'), { statusCode: 400 });
     }
@@ -1043,6 +1058,7 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
                 name: orgName,
                 slug: orgSlug,
                 email: orgEmail,
+                currency: orgCurrency,
                 hasBranches: true,
                 maxBranches: Number(maxBranches) || 0,
                 planType: 'BASIC',
@@ -1057,6 +1073,12 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
 
         // Seed root organization defaults.
         await seedDefaultUnitsForTenant(tx, orgTenant.id);
+
+        await tx.tenantSetting.upsert({
+            where: { tenantId_key: { tenantId: orgTenant.id, key: DISPLAY_CURRENCY_KEY } },
+            update: { value: orgCurrency },
+            create: { tenantId: orgTenant.id, key: DISPLAY_CURRENCY_KEY, value: orgCurrency },
+        });
 
         await tx.tenantSetting.upsert({
             where: { tenantId_key: { tenantId: orgTenant.id, key: 'allowOpeningBalance' } },
@@ -1104,6 +1126,7 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
                 name: hotelName,
                 slug: hotelSlug,
                 email: hotelEmail,
+                currency: hotelCurrency,
                 parent: { connect: { id: orgTenant.id } },
                 hasBranches: false,
                 maxBranches: 0,
@@ -1119,6 +1142,12 @@ const createFullOrganization = async (payload, adminUserId, ipAddress) => {
 
         // Seed first hotel defaults.
         await seedDefaultUnitsForTenant(tx, hotelTenant.id);
+
+        await tx.tenantSetting.upsert({
+            where: { tenantId_key: { tenantId: hotelTenant.id, key: DISPLAY_CURRENCY_KEY } },
+            update: { value: hotelCurrency },
+            create: { tenantId: hotelTenant.id, key: DISPLAY_CURRENCY_KEY, value: hotelCurrency },
+        });
 
         await tx.tenantSetting.upsert({
             where: { tenantId_key: { tenantId: hotelTenant.id, key: 'allowOpeningBalance' } },

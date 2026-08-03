@@ -175,12 +175,18 @@ const createTenant = async (data) => {
             ? new Date()
             : (data.licenseStartDate ? new Date(data.licenseStartDate) : new Date());
         const timezone = assertIanaTimezone(data.timezone || DEFAULT_TENANT_TIMEZONE);
+        const {
+            resolveCreateCurrency,
+            SETTING_KEY: DISPLAY_CURRENCY_KEY,
+        } = require('../platform/displayCurrency.service');
+        const currency = resolveCreateCurrency(data.currency);
 
         const tenant = await tx.tenant.create({
             data: {
                 name: data.name,
                 slug: data.slug,
                 timezone,
+                currency,
                 ...(parentId ? { parent: { connect: { id: parentId } } } : {}),
                 planType: resolvedPlanType,
                 subStatus: normalizedSubStatus,
@@ -196,6 +202,12 @@ const createTenant = async (data) => {
 
         // Seed default units for every newly created tenant.
         await seedDefaultUnitsForTenant(tx, tenant.id);
+
+        await tx.tenantSetting.upsert({
+            where: { tenantId_key: { tenantId: tenant.id, key: DISPLAY_CURRENCY_KEY } },
+            update: { value: currency },
+            create: { tenantId: tenant.id, key: DISPLAY_CURRENCY_KEY, value: currency },
+        });
 
         await tx.tenantSetting.upsert({
             where: { tenantId_key: { tenantId: tenant.id, key: 'allowOpeningBalance' } },
@@ -272,23 +284,25 @@ const createTenant = async (data) => {
                 });
             }
 
-            // 2) Assign branch admin.
-            // If selected admin is already an inherited ORG_MANAGER, keep ORG_MANAGER role
-            // (single membership per tenant), while admin permissions are still covered.
-            const branchAdminRole = parentOrgManagerIds.includes(adminUser.id) ? 'ORG_MANAGER' : 'GENERAL_MANAGER';
-            await tx.tenantMember.upsert({
-                where: { tenantId_userId: { tenantId: tenant.id, userId: adminUser.id } },
-                create: {
-                    tenant: { connect: { id: tenant.id } },
-                    user: { connect: { id: adminUser.id } },
-                    role: connectRole(branchAdminRole),
-                    isActive: true,
-                },
-                update: {
-                    role: connectRole(branchAdminRole),
-                    isActive: true,
-                },
-            });
+            // 2) Assign branch admin as GENERAL_MANAGER.
+            // Parent org managers already received ORG_MANAGER above (visibility / root ownership).
+            // A dedicated branch admin who is not a parent ORG_MANAGER must stay GENERAL_MANAGER
+            // so hotel-scoped /auth/me returns the branch role, not ORG_MANAGER.
+            if (!parentOrgManagerIds.includes(adminUser.id)) {
+                await tx.tenantMember.upsert({
+                    where: { tenantId_userId: { tenantId: tenant.id, userId: adminUser.id } },
+                    create: {
+                        tenant: { connect: { id: tenant.id } },
+                        user: { connect: { id: adminUser.id } },
+                        role: connectRole('GENERAL_MANAGER'),
+                        isActive: true,
+                    },
+                    update: {
+                        role: connectRole('GENERAL_MANAGER'),
+                        isActive: true,
+                    },
+                });
+            }
         }
 
         return tenant;

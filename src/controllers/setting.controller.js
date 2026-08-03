@@ -24,10 +24,10 @@ const setSetting = async (req, res, next) => {
             const e = new Error('Value is required'); e.statusCode = 400; throw e;
         }
 
-        // OB setting requires SUPER_ADMIN or ORG_MANAGER + mandatory reason
+        // OB setting requires SETTINGS_MANAGE (ORG_MANAGER / GENERAL_MANAGER / SUPER_ADMIN) + mandatory reason
         if (key === 'allowOpeningBalance') {
             if (!canManageTenantOpeningBalance(req.user)) {
-                const e = new Error('Only SUPER_ADMIN or ORG_MANAGER can modify Opening Balance setting');
+                const e = new Error('Only tenant administrators can modify Opening Balance setting');
                 e.statusCode = 403; throw e;
             }
             if (value === 'OPEN' && !reason) {
@@ -55,6 +55,14 @@ const getOBEligibility = async (req, res, next) => {
 const getInventoryStatus = async (req, res, next) => {
     try {
         const result = await settingService.getInventoryStatus(req.user.tenantId);
+        return success(res, result);
+    } catch (err) { next(err); }
+};
+
+// ── GET /settings/tenant — active tenant currency + presentation ─────────────
+const getTenantSettings = async (req, res, next) => {
+    try {
+        const result = await settingService.getTenantSettings(req.user.tenantId);
         return success(res, result);
     } catch (err) { next(err); }
 };
@@ -162,6 +170,7 @@ module.exports = {
     setSetting,
     getOBEligibility,
     getInventoryStatus,
+    getTenantSettings,
     lockOB,
     enableOB,
     finalizeOpeningBalance,

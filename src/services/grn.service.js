@@ -16,7 +16,11 @@ const {
     assertAwaitingStatusKey,
 } = require('./acc-workflow-status-key-guard.service');
 const { createAccApprovalRequestInTx } = require('./acc-approval-request.util');
-const { assertDualGateApproval, buildWorkflowOverrideAuditFields } = require('../acc-authority/step-permission-enforcement');
+const {
+    assertDualGateApproval,
+    buildWorkflowOverrideAuditFields,
+    withWorkflowOverrideAudit,
+} = require('../acc-authority/step-permission-enforcement');
 const { getStorage } = require('../config/storage');
 const postingEngine = require('./postingEngine.service');
 const { logGovernedEvent, EntityType } = require('./auditGoverned.service');
@@ -338,6 +342,7 @@ function _assertGrnDualGate(user, approval, chain) {
     const roleCode = step.requiredRole?.code;
     const perm = chainStep?.permissionCode || 'GRN_MANAGE';
     assertDualGateApproval(user, roleCode, perm);
+    return roleCode;
 }
 
 async function _ensureGrnApprovalStarted(grn, tenantId, userId) {
@@ -363,7 +368,11 @@ async function _advanceGrnApprovalStep(grnId, tenantId, user, comment, expectedV
     if (!step || step.status !== 'PENDING') {
         throw Object.assign(new Error('No pending approval step'), { status: 422 });
     }
-    _assertGrnDualGate(user, approval, chain);
+    const roleCode = _assertGrnDualGate(user, approval, chain);
+    const overrideMeta = buildWorkflowOverrideAuditFields(user, roleCode);
+    const overrideNoteSuffix = overrideMeta
+        ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})`
+        : '';
 
     const isFinal = approval.currentStep >= approval.totalSteps;
     const now = new Date();
@@ -394,8 +403,12 @@ async function _advanceGrnApprovalStep(grnId, tenantId, user, comment, expectedV
             action: 'POST',
             changedBy: user.id,
             eventType: 'GRN_POST',
-            note: `Finance approved and posted GRN ${grn.grnNumber} via ACC workflow`,
-            afterValue: { grnNumber: grn.grnNumber, status: 'POSTED' },
+            note: `Finance approved and posted GRN ${grn.grnNumber} via ACC workflow${overrideNoteSuffix}`,
+            afterValue: withWorkflowOverrideAudit(
+                { grnNumber: grn.grnNumber, status: 'POSTED', roleCode },
+                user,
+                roleCode,
+            ),
         });
     } else {
         const nextStatus = _statusForGrnAwaitingStep(chain, approval.currentStep + 1);
@@ -421,6 +434,20 @@ async function _advanceGrnApprovalStep(grnId, tenantId, user, comment, expectedV
                 },
             });
         });
+        await logGovernedEvent({
+            tenantId,
+            entityType: EntityType.GRN,
+            entityId: grnId,
+            action: 'APPROVE',
+            changedBy: user.id,
+            eventType: 'GRN_APPROVE_STEP',
+            note: `GRN_APPROVE_STEP grnNumber=${grn.grnNumber} status=${nextStatus}${overrideNoteSuffix}`,
+            afterValue: withWorkflowOverrideAudit(
+                { grnNumber: grn.grnNumber, status: nextStatus, roleCode },
+                user,
+                roleCode,
+            ),
+        });
     }
     return getGrn(grnId, tenantId);
 }
@@ -437,7 +464,11 @@ async function _rejectGrnApproval(grnId, tenantId, user, reason, expectedVersion
     const approval = grn.approvalRequest;
     const chain = await _resolveGrnChain(grn, tenantId);
     const step = approval.steps.find((s) => s.stepNumber === approval.currentStep);
-    if (step) _assertGrnDualGate(user, approval, chain);
+    const roleCode = step ? _assertGrnDualGate(user, approval, chain) : null;
+    const overrideMeta = roleCode ? buildWorkflowOverrideAuditFields(user, roleCode) : null;
+    const overrideNoteSuffix = overrideMeta
+        ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})`
+        : '';
 
     const now = new Date();
     await prisma.$transaction(async (tx) => {
@@ -464,6 +495,21 @@ async function _rejectGrnApproval(grnId, tenantId, user, reason, expectedVersion
                 updatedAt: now,
             }),
         });
+    });
+    await logGovernedEvent({
+        tenantId,
+        entityType: EntityType.GRN,
+        entityId: grnId,
+        action: 'REJECT',
+        changedBy: user.id,
+        eventType: 'GRN_REJECT',
+        note: `GRN_REJECT grnNumber=${grn.grnNumber}${overrideNoteSuffix}`,
+        beforeValue: { status: grn.status },
+        afterValue: withWorkflowOverrideAudit(
+            { grnNumber: grn.grnNumber, status: 'REJECTED', roleCode },
+            user,
+            roleCode,
+        ),
     });
     return getGrn(grnId, tenantId);
 }

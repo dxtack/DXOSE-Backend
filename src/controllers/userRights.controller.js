@@ -52,6 +52,10 @@ const {
     isAccOperationalExcludedRoleCode,
     PROTECTED_ROLE_CODE_SET,
 } = require('../constants/role-codes.constants');
+const {
+    assertGmMayModifyTargetUser,
+    assertGmMayModifyAssignment,
+} = require('../utils/roleHierarchyGuard');
 
 const prisma = new PrismaClient();
 
@@ -1010,6 +1014,11 @@ const createUserAssignment = handle('createUserAssignment', async (req, res) => 
     const tenantId             = req.user?.tenantId ?? null;
     if (!tenantId) return res.status(400).json({ success: false, message: 'No property context.' });
 
+    await assertGmMayModifyTargetUser(prisma, {
+        actorRoleCode: req.user?.role ?? null,
+        targetUserId: userId,
+    });
+
     const orgGroupIds = await _resolveOrgGroupIds(tenantId);
 
     if (propertyIds.length > 0) {
@@ -1076,6 +1085,10 @@ const updateUserAssignment = handle('updateUserAssignment', async (req, res) => 
     if (!inScope) {
         return res.status(403).json({ success: false, message: 'Assignment is outside the current organization group.' });
     }
+    await assertGmMayModifyAssignment(prisma, {
+        actorRoleCode: req.user?.role ?? null,
+        assignmentId,
+    });
     const assignment = await editAssignment(req.user.id, assignmentId, req.body, {
         actorRoleCode: req.user?.role ?? null,
     });
@@ -1091,6 +1104,10 @@ const deactivateUserAssignment = handle('deactivateUserAssignment', async (req, 
     const orgGroupIds = await _resolveOrgGroupIds(tenantId);
     const inScope     = await _assertAssignmentInScope(assignmentId, orgGroupIds);
     if (!inScope) return res.status(403).json({ success: false, message: 'Assignment is outside the current organization group.' });
+    await assertGmMayModifyAssignment(prisma, {
+        actorRoleCode: req.user?.role ?? null,
+        assignmentId,
+    });
     const assignment = await deactivateAssignmentWithMembership(actorId, assignmentId, {
         actorRoleCode: req.user?.role ?? null,
     });
@@ -1104,6 +1121,10 @@ const reactivateUserAssignment = handle('reactivateUserAssignment', async (req, 
     const orgGroupIds = await _resolveOrgGroupIds(tenantId);
     const inScope     = await _assertAssignmentInScope(assignmentId, orgGroupIds);
     if (!inScope) return res.status(403).json({ success: false, message: 'Assignment is outside the current organization group.' });
+    await assertGmMayModifyAssignment(prisma, {
+        actorRoleCode: req.user?.role ?? null,
+        assignmentId,
+    });
     const assignment = await reactivateAssignmentWithMembership(req.user.id, assignmentId, {
         actorRoleCode: req.user?.role ?? null,
     });
@@ -1117,6 +1138,10 @@ const deleteUserAssignment = handle('deleteUserAssignment', async (req, res) => 
     const orgGroupIds = await _resolveOrgGroupIds(tenantId);
     const inScope     = await _assertAssignmentInScope(assignmentId, orgGroupIds);
     if (!inScope) return res.status(403).json({ success: false, message: 'Assignment is outside the current organization group.' });
+    await assertGmMayModifyAssignment(prisma, {
+        actorRoleCode: req.user?.role ?? null,
+        assignmentId,
+    });
     const result = await deleteAssignmentWithGovernance(req.user.id, assignmentId, {
         actorRoleCode: req.user?.role ?? null,
     });

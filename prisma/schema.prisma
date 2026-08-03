@@ -17,6 +17,8 @@ model Tenant {
   address             String?
   phone               String?
   email               String?
+  /// Primary display currency (ISO 4217). Default SAR for GCC-first deployments.
+  currency            String               @default("SAR")
   isActive            Boolean              @default(true)
   createdAt           DateTime             @default(now())
   updatedAt           DateTime             @updatedAt

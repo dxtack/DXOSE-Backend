@@ -52,9 +52,11 @@ const {
 } = require('./get-pass-force-close.util');
 const {
     assertUserHasGetPassStepPermission,
+    assertUserHasGetPassGateOperationPermission,
     assertUserHasPermission,
     userHasPermission,
     buildWorkflowOverrideAuditFields,
+    withWorkflowOverrideAudit,
 } = require('../acc-authority/step-permission-enforcement');
 const {
   resolveGetPassWorkflowContext,
@@ -1083,7 +1085,9 @@ const checkAndNotifyOverduePasses = async ({ notifyCostControl = false } = {}) =
 /**
  * Destination hotel confirms physical receipt (internal transfers only; prior status must be OUT).
  */
-const confirmDestinationReceipt = async (id, targetTenantId, userId, body) => {
+const confirmDestinationReceipt = async (id, targetTenantId, user, body) => {
+    const userId = user.id;
+    assertUserHasGetPassGateOperationPermission(user, 'RECEIVED_AT_DESTINATION');
     const receivedCondition = typeof body.receivedCondition === 'string' ? body.receivedCondition.trim() : '';
     const receivedNotes = typeof body.notes === 'string' ? body.notes.trim() : '';
     if (!receivedCondition) {
@@ -1222,6 +1226,11 @@ const confirmDestinationReceipt = async (id, targetTenantId, userId, body) => {
             action: 'UPDATE',
             changedBy: userId,
             note: 'GET_PASS_CONFIRM_RECEIPT_DESTINATION',
+            afterValue: withWorkflowOverrideAudit(
+                { action: 'CONFIRM_DESTINATION_RECEIPT', roleCode: 'SECURITY' },
+                user,
+                'SECURITY',
+            ),
         });
     });
 
@@ -1469,7 +1478,7 @@ const confirmReturnExit = async (id, destinationTenantId, user) => {
         throw Object.assign(new Error('Return exit already confirmed by destination security.'), { statusCode: 400 });
     }
 
-    assertGetPassOperationalPermission(user, 'RETURNING', { isInternalTransfer: true });
+    assertUserHasGetPassGateOperationPermission(user, 'RETURNING', { isInternalTransfer: true });
 
     const now = new Date();
     await prisma.$transaction(async (tx) => {
@@ -1509,6 +1518,11 @@ const confirmReturnExit = async (id, destinationTenantId, user) => {
         action: 'UPDATE',
         changedBy: user.id,
         note: 'GET_PASS_CONFIRM_RETURN_EXIT',
+        afterValue: withWorkflowOverrideAudit(
+            { action: 'CONFIRM_RETURN_EXIT', roleCode: 'SECURITY' },
+            user,
+            'SECURITY',
+        ),
     });
 
     return getGetPassById(id, destinationTenantId);
@@ -1559,7 +1573,7 @@ const confirmReturnArrival = async (id, sourceTenantId, user, payload = {}) => {
         );
     }
 
-    assertGetPassOperationalPermission(user, 'RETURNING', { isInternalTransfer: true });
+    assertUserHasGetPassGateOperationPermission(user, 'RETURNING', { isInternalTransfer: true });
 
     const linesPayload = Array.isArray(payload.lines) ? payload.lines : [];
     if (linesPayload.length === 0) {
@@ -1677,6 +1691,11 @@ const confirmReturnArrival = async (id, sourceTenantId, user, payload = {}) => {
         action: 'UPDATE',
         changedBy: user.id,
         note: 'GET_PASS_CONFIRM_RETURN_ARRIVAL',
+        afterValue: withWorkflowOverrideAudit(
+            { action: 'CONFIRM_RETURN_ARRIVAL', roleCode: 'SECURITY' },
+            user,
+            'SECURITY',
+        ),
     });
 
     return getGetPassById(id, sourceTenantId);
@@ -2278,13 +2297,14 @@ const approveGetPass = async (id, tenantId, user, expectedVersion = null) => {
         if (!pendingStatuses.includes(getPass.status)) {
             throw Object.assign(new Error('Get Pass is not pending any approval'), { statusCode: 400 });
         }
-        assertCanActOnStatus(
-            getPass.status,
-            user,
-            buildActOnStatusOptions(getPass.status, getPass, wf, {
-                isInternalTransfer: getPass.isInternalTransfer,
-            }),
-        );
+        const actOptions = buildActOnStatusOptions(getPass.status, getPass, wf, {
+            isInternalTransfer: getPass.isInternalTransfer,
+        });
+        assertCanActOnStatus(getPass.status, user, actOptions);
+        const overrideMeta = buildWorkflowOverrideAuditFields(user, actOptions.stepRole);
+        const overrideNoteSuffix = overrideMeta
+            ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})`
+            : '';
 
         if (getPass.status === securityStatus) {
             step = 'PENDING_SECURITY_CHECKOUT';
@@ -2325,7 +2345,12 @@ const approveGetPass = async (id, tenantId, user, expectedVersion = null) => {
                 entityId: id,
                 action: 'APPROVE',
                 changedBy: user.id,
-                note: 'GET_PASS_APPROVE_PENDING_SECURITY',
+                note: `GET_PASS_APPROVE_PENDING_SECURITY${overrideNoteSuffix}`,
+                afterValue: withWorkflowOverrideAudit(
+                    { status: securityStatus, roleCode: actOptions.stepRole },
+                    user,
+                    actOptions.stepRole,
+                ),
             });
             return getGetPassById(id, tenantId);
         }
@@ -2370,7 +2395,12 @@ const approveGetPass = async (id, tenantId, user, expectedVersion = null) => {
             entityId: id,
             action: 'APPROVE',
             changedBy: user.id,
-            note: `GET_PASS_APPROVE_STEP:${getPass.status}`,
+            note: `GET_PASS_APPROVE_STEP:${getPass.status}${overrideNoteSuffix}`,
+            afterValue: withWorkflowOverrideAudit(
+                { step: getPass.status, roleCode: actOptions.stepRole },
+                user,
+                actOptions.stepRole,
+            ),
         });
         return getGetPassById(id, tenantId);
     } catch (error) {
@@ -2431,13 +2461,14 @@ const rejectGetPass = async (id, tenantId, user, rejectionReason, expectedVersio
         audit: { tenantId, entityType: EntityType.GET_PASS, entityId: id, changedBy: user.id },
     });
 
-    assertCanActOnStatus(
-        getPass.status,
-        user,
-        buildActOnStatusOptions(getPass.status, getPass, wf, {
-            isInternalTransfer: getPass.isInternalTransfer,
-        }),
-    );
+    const rejectOptions = buildActOnStatusOptions(getPass.status, getPass, wf, {
+        isInternalTransfer: getPass.isInternalTransfer,
+    });
+    assertCanActOnStatus(getPass.status, user, rejectOptions);
+    const overrideMeta = buildWorkflowOverrideAuditFields(user, rejectOptions.stepRole);
+    const overrideNoteSuffix = overrideMeta
+        ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})`
+        : '';
 
     const updated = await prisma.getPass.update({
         where: { id },
@@ -2446,7 +2477,20 @@ const rejectGetPass = async (id, tenantId, user, rejectionReason, expectedVersio
             rejectionReason: reason,
         }),
     });
-    await logAction({ tenantId, entityType: EntityType.GET_PASS, entityId: id, action: 'REJECT', changedBy: user.id });
+    await logAction({
+        tenantId,
+        entityType: EntityType.GET_PASS,
+        entityId: id,
+        action: 'REJECT',
+        changedBy: user.id,
+        note: `GET_PASS_REJECT${overrideNoteSuffix}`,
+        beforeValue: { status: getPass.status },
+        afterValue: withWorkflowOverrideAudit(
+            { status: 'REJECTED', roleCode: rejectOptions.stepRole },
+            user,
+            rejectOptions.stepRole,
+        ),
+    });
     return updated;
 };
 

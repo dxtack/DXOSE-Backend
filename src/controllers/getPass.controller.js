@@ -131,7 +131,7 @@ const sendBackGetPass = async (req, res) => {
 const confirmDestinationReceipt = async (req, res) => {
     const { user } = req;
     const { id } = req.params;
-    const result = await getPassService.confirmDestinationReceipt(id, user.tenantId, user.id, req.body);
+    const result = await getPassService.confirmDestinationReceipt(id, user.tenantId, user, req.body);
     res.json({ success: true, data: result });
 };
 

@@ -11,6 +11,7 @@ const {
 } = require('./stockBalanceWacGuard.service');
 const { assertIntegerQuantity } = require('./integerQuantityGuard.service');
 const { getTenantTimezone } = require('./tenantTimezone.service');
+const { applyAtomicWeightedReceipt } = require('./weightedReceipt.service');
 
 const REVERSIBLE_TYPES = ['TEMPORARY', 'CATERING', 'OUTSIDE_CATERING'];
 
@@ -599,45 +600,16 @@ async function postReturnGoodWithStockIncrease(tx, {
         details: { referenceNo, itemId, qtyGood },
     });
 
-    const stockKey = {
-        tenantId_itemId_locationId: { tenantId, itemId, locationId },
-    };
-
-    const currentStock = await tx.stockBalance.findUnique({ where: stockKey });
-    const curQty = currentStock ? Number(currentStock.qtyOnHand) : 0;
-    const newQty = curQty + qtyGood;
-    const curWac = currentStock ? Number(currentStock.wacUnitCost) : 0;
-    const totalValBefore = curQty * curWac;
-    const newVal = totalValBefore + qtyGood * wac;
-    const newWac = newQty > 0 ? newVal / newQty : 0;
-
-    assertPositiveUnitCostForInboundQty({
-        unitCost: wac,
+    // Atomic increment + weighted-average-cost recompute in a single SQL statement —
+    // avoids the lost-update race of a JS read-modify-write under concurrent returns
+    // of the same item+location (see applyAtomicWeightedReceipt for the guard details).
+    const { qtyOnHand: newQty } = await applyAtomicWeightedReceipt(tx, {
+        tenantId,
+        itemId,
+        locationId,
         qty: qtyGood,
-        message:
-            'Cannot post Get Pass return: good quantity return requires a valid unit cost (WAC). ' +
-            'Correct the item cost first, then retry the return.',
-        details: {
-            referenceNo,
-            itemId,
-            locationId,
-            qtyGood,
-            unitCost: wac,
-        },
-    });
-    assertNoZeroWacWithQty({
-        qtyOnHand: newQty,
-        wacUnitCost: newWac,
-        message:
-            'Cannot post Get Pass return: resulting stock would have quantity greater than zero with missing or zero WAC. ' +
-            'Correct the item cost first, then retry.',
-        details: {
-            referenceNo,
-            itemId,
-            locationId,
-            resultingQty: newQty,
-            resultingWac: newWac,
-        },
+        unitCost: wac,
+        context: 'Get Pass return',
     });
 
     await postReturnGoodLedger(tx, {
@@ -651,12 +623,6 @@ async function postReturnGoodWithStockIncrease(tx, {
         userId,
         notes: `Get pass return — good qty back to available (${qtyGood}).`,
         balanceAfter: newQty,
-    });
-
-    await tx.stockBalance.upsert({
-        where: stockKey,
-        update: { qtyOnHand: newQty, wacUnitCost: newWac, lastUpdated: new Date() },
-        create: { tenantId, itemId, locationId, qtyOnHand: qtyGood, wacUnitCost: wac },
     });
 }
 

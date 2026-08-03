@@ -45,8 +45,14 @@ async function getTimeline(req, res) {
 
 async function getCurrency(req, res) {
     try {
-        const code = await getDisplayCurrency(req.user.tenantId);
-        sendSuccess(res, { displayCurrency: code });
+        const { getTenantCurrencyContext } = require('../platform/displayCurrency.service');
+        const ctx = await getTenantCurrencyContext(req.user.tenantId);
+        sendSuccess(res, {
+            displayCurrency: ctx.displayCurrency,
+            currency: ctx.currency,
+            symbol: ctx.symbol,
+            symbolIso: ctx.symbolIso,
+        });
     } catch (err) {
         sendError(res, err);
     }
@@ -67,10 +73,14 @@ async function putCurrency(req, res) {
             );
             throw err;
         }
-        const { displayCurrency } = req.body || {};
-        await setDisplayCurrency(tenantId, displayCurrency);
+        const { displayCurrency, currency } = req.body || {};
+        const code = displayCurrency || currency;
+        const ctx = await setDisplayCurrency(tenantId, code);
         sendSuccess(res, {
-            displayCurrency: String(displayCurrency || 'SAR').toUpperCase(),
+            displayCurrency: ctx.displayCurrency,
+            currency: ctx.currency,
+            symbol: ctx.symbol,
+            symbolIso: ctx.symbolIso,
             tenantId,
         });
     } catch (err) {

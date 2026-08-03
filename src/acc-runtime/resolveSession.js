@@ -12,6 +12,9 @@ const { resolvePermissionsForMembership } = require('./resolvePermissions');
  * S9/S14: ACC primary when enforcement active (global or pilot tenant), legacy fallback on miss/error/drift.
  * Wired from authenticate.js (Stage S2).
  *
+ * Tenant-scoped requests use the membership (or JWT) role as-is — no global
+ * ORG_MANAGER promotion from other tenants. Platform / null-tenant may promote.
+ *
  * @param {object} params
  * @param {string} params.userId
  * @param {object|null} [params.membership]
@@ -20,21 +23,25 @@ const { resolvePermissionsForMembership } = require('./resolvePermissions');
  */
 const resolveSession = async ({ userId, membership = null, decoded = {}, tenantId = null }) => {
     const membershipRole = membership ? membershipRoleCode(membership) : decoded.role;
-    const roleCode =
-        (await resolveUserBestRole(userId, membershipRole)) ?? membershipRole ?? decoded.role;
+    const scopedTenantId = tenantId ?? membership?.tenantId ?? membership?.tenant?.id ?? null;
+    const roleCode = scopedTenantId
+        ? (membershipRole ?? decoded.role)
+        : ((await resolveUserBestRole(userId, membershipRole)) ?? membershipRole ?? decoded.role);
+
+    let roleId = membership?.roleId ?? decoded.roleId ?? null;
+    if (roleCode) {
+        const byCode = await getRoleIdByCode(roleCode);
+        if (byCode) roleId = byCode;
+    }
 
     let permissions = [];
     if (membership || roleCode) {
-        const roleIdForPerm =
-            roleCode === 'ORG_MANAGER'
-                ? (await getRoleIdByCode('ORG_MANAGER')) ?? membership?.roleId ?? decoded.roleId
-                : membership?.roleId ?? decoded.roleId;
         permissions = await resolvePermissionsForMembership({
             userId,
             membership,
-            roleId: roleIdForPerm,
-            roleCode: roleCode === 'ORG_MANAGER' ? 'ORG_MANAGER' : roleCode,
-            tenantId: tenantId ?? membership?.tenantId ?? membership?.tenant?.id ?? null,
+            roleId,
+            roleCode,
+            tenantId: scopedTenantId,
             tenantSlug: membership?.tenant?.slug ?? null,
             assignmentId: typeof decoded.assignmentId === 'string' ? decoded.assignmentId : null,
         });
@@ -42,9 +49,9 @@ const resolveSession = async ({ userId, membership = null, decoded = {}, tenantI
 
     return {
         userId,
-        tenantId,
+        tenantId: scopedTenantId,
         role: roleCode,
-        roleId: membership?.roleId ?? decoded.roleId ?? null,
+        roleId,
         permissions,
         departmentId: membership?.departmentId ?? null,
         assignmentId: typeof decoded.assignmentId === 'string' ? decoded.assignmentId : null,

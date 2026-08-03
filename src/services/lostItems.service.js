@@ -4,7 +4,11 @@ const prisma = require('../config/database');
 const { generateDocNumber } = require('./docNumbering.service');
 const { checkPeriodLock } = require('./periodGuard.service');
 const { normalizeRole } = require('./rbac.service');
-const { assertUserHasBreakageLostStepPermission, buildWorkflowOverrideAuditFields } = require('../acc-authority/step-permission-enforcement');
+const {
+    assertUserHasBreakageLostStepPermission,
+    buildWorkflowOverrideAuditFields,
+    withWorkflowOverrideAudit,
+} = require('../acc-authority/step-permission-enforcement');
 const { withUserFacingState, appendSendBackNotes, stripSendBackNotes } = require('../platform/lifecyclePresentation.service');
 const {
     resolveScopeContext,
@@ -733,17 +737,26 @@ const processLostApprovalStep = async (
             }
         }
 
-        if (action === 'APPROVE') {
-            const approveRoleCode = requiredRoleCode || chainMeta?.roleCode || '';
+        // Audit every step action (approve or reject) so the timeline and
+        // Manager Override compliance reporting can reconstruct full history.
+        {
+            const stepRoleCode = requiredRoleCode || chainMeta?.roleCode || '';
+            const overrideMeta = buildWorkflowOverrideAuditFields(user, stepRoleCode);
             await logAction({
                 tenantId,
                 entityType: EntityType.LOST,
                 entityId: id,
-                action: 'APPROVE',
+                action,
                 changedBy: userId,
-                note: `LOST_APPROVE_STEP:${currentStepNo}:${approveRoleCode}`,
+                note: `LOST_${action}_STEP:${currentStepNo}:${stepRoleCode}${
+                    overrideMeta ? ` via Manager Override (Step: ${overrideMeta.overriddenStepRole})` : ''
+                }`,
                 beforeValue: { step: currentStepNo, status: doc.status },
-                afterValue: { step: currentStepNo, roleCode: approveRoleCode },
+                afterValue: withWorkflowOverrideAudit(
+                    { step: currentStepNo, roleCode: stepRoleCode, action },
+                    user,
+                    stepRoleCode,
+                ),
                 tx,
             });
         }

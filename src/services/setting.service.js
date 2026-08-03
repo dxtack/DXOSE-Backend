@@ -355,7 +355,7 @@ const enableOpeningBalanceStage = async (tenantId, userId, reason = 'Initial Set
 
 // ── Inventory / OB status for settings UI and clients ─────────────────────────
 const getInventoryStatus = async (tenantId) => {
-    const [ob, obStatus, allowRow, snapRow] = await Promise.all([
+    const [ob, obStatus, allowRow, snapRow, currencyCtx] = await Promise.all([
         isOpeningBalanceAllowed(tenantId),
         getObStatus(tenantId),
         prisma.tenantSetting.findUnique({
@@ -364,6 +364,7 @@ const getInventoryStatus = async (tenantId) => {
         prisma.tenantSetting.findUnique({
             where: { tenantId_key: { tenantId, key: OB_SNAPSHOT_SETTING_KEY } },
         }),
+        require('../platform/displayCurrency.service').getTenantCurrencyContext(tenantId),
     ]);
 
     let snapshotSummary = null;
@@ -407,6 +408,32 @@ const getInventoryStatus = async (tenantId) => {
             updatedAt: allowRow?.updatedAt ? allowRow.updatedAt.toISOString() : null,
         },
         snapshotSummary,
+        currency: currencyCtx.currency,
+        currencySymbol: currencyCtx.symbol,
+        currencySymbolIso: currencyCtx.symbolIso,
+        displayCurrency: currencyCtx.displayCurrency,
+    };
+};
+
+/** Active tenant settings summary for FE bootstrap (currency + presentation). */
+const getTenantSettings = async (tenantId) => {
+    const currencyCtx = await require('../platform/displayCurrency.service').getTenantCurrencyContext(
+        tenantId,
+    );
+    const tenant = await prisma.tenant.findUnique({
+        where: { id: tenantId },
+        select: { id: true, name: true, slug: true, timezone: true, currency: true },
+    });
+    return {
+        tenantId,
+        name: tenant?.name ?? null,
+        slug: tenant?.slug ?? null,
+        timezone: tenant?.timezone ?? null,
+        currency: currencyCtx.currency,
+        currencySymbol: currencyCtx.symbol,
+        currencySymbolIso: currencyCtx.symbolIso,
+        displayCurrency: currencyCtx.displayCurrency,
+        symbol: currencyCtx.symbol,
     };
 };
 
@@ -628,6 +655,7 @@ module.exports = {
     buildObSnapshotFromBalances,
     clearObFinalizeSnapshot,
     getInventoryStatus,
+    getTenantSettings,
     OB_FINALIZE_TRANSACTION_OPTIONS,
     enableOpeningBalanceStage,
 };

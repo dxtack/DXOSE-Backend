@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -n 'postGrnInTransaction\\\\|$transaction' src/services/grn.service.js)"
+    ]
+  }
+}
+ 

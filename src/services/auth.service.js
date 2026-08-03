@@ -371,6 +371,48 @@ const ensureTenantNotSuspended = async (tenantId) => {
     }
 };
 
+/**
+ * Role for the active tenant context.
+ * Tenant-scoped: TenantMember roleCode (optionally overridden by ACC assignment).
+ * Platform / null-tenant: may promote via resolveUserBestRole (SUPER_ADMIN paths).
+ * Never globally promotes a hotel membership to ORG_MANAGER because of another tenant.
+ */
+const resolveContextualSessionRole = async ({
+    userId,
+    membership,
+    sessionRoleCode = null,
+    availableAssignments = [],
+    activeAssignmentId = null,
+}) => {
+    if (sessionRoleCode) {
+        const roleId = (await getRoleIdByCode(sessionRoleCode)) ?? membership?.roleId ?? membership?.role?.id ?? null;
+        return { roleCode: sessionRoleCode, roleId };
+    }
+
+    const membershipRole = membershipRoleCode(membership);
+    const scopedTenantId = membership?.tenantId ?? null;
+    let roleCode = scopedTenantId
+        ? membershipRole
+        : (await resolveUserBestRole(userId, membershipRole)) ?? membershipRole;
+    let roleId = membership?.roleId ?? membership?.role?.id ?? null;
+
+    if (activeAssignmentId) {
+        const fromList = (availableAssignments || []).find((a) => a.id === activeAssignmentId);
+        if (fromList?.roleCode) {
+            roleCode = fromList.roleCode;
+            const fromListRoleId = await getRoleIdByCode(fromList.roleCode);
+            if (fromListRoleId) roleId = fromListRoleId;
+        }
+    } else if (roleCode) {
+        const byCode = await getRoleIdByCode(roleCode);
+        if (byCode) roleId = byCode;
+    } else if (!roleId && membershipRole) {
+        roleId = await getRoleIdByCode(membershipRole);
+    }
+
+    return { roleCode, roleId };
+};
+
 const issueSessionForMembership = async ({
     user,
     membership,
@@ -380,15 +422,8 @@ const issueSessionForMembership = async ({
     sessionRoleCode = null,
 }) => {
     const roleCodeRaw = sessionRoleCode || membershipRoleCode(membership);
-    // When an explicit assignment role is selected, do not promote away from it.
-    const bestRole = sessionRoleCode
-        ? sessionRoleCode
-        : await resolveUserBestRole(user.id, roleCodeRaw);
     let roleId = membership.roleId ?? membership.role?.id;
-    if (bestRole) {
-        const bestRoleId = await getRoleIdByCode(bestRole);
-        if (bestRoleId) roleId = bestRoleId;
-    } else if (!roleId && roleCodeRaw) {
+    if (!roleId && roleCodeRaw) {
         roleId = await getRoleIdByCode(roleCodeRaw);
     }
     const availableAssignments = await listAvailableAssignmentsForUser(user.id, {
@@ -400,17 +435,13 @@ const issueSessionForMembership = async ({
         availableAssignments[0]?.id ||
         null;
 
-    // Prefer the active assignment's role for JWT/session when no explicit switch role.
-    let sessionRole = bestRole;
-    let sessionRoleId = roleId;
-    if (!sessionRoleCode && activeAssignmentId) {
-        const fromList = availableAssignments.find((a) => a.id === activeAssignmentId);
-        if (fromList?.roleCode) {
-            sessionRole = fromList.roleCode;
-            const fromListRoleId = await getRoleIdByCode(fromList.roleCode);
-            if (fromListRoleId) sessionRoleId = fromListRoleId;
-        }
-    }
+    const { roleCode: sessionRole, roleId: sessionRoleId } = await resolveContextualSessionRole({
+        userId: user.id,
+        membership,
+        sessionRoleCode,
+        availableAssignments,
+        activeAssignmentId,
+    });
 
     const permissions = await accRuntime.resolvePermissionsForMembership({
         userId: user.id,
@@ -924,28 +955,38 @@ const refresh = async (refreshToken) => {
         }
     }
 
-    const roleCodeRaw = membershipRoleCode(membership);
-    const bestRole = await resolveUserBestRole(user.id, roleCodeRaw);
-    let roleId = membership.roleId ?? membership.role?.id;
-    if (bestRole) {
-        const bestRoleId = await getRoleIdByCode(bestRole);
-        if (bestRoleId) roleId = bestRoleId;
-    } else if (!roleId && roleCodeRaw) {
-        roleId = await getRoleIdByCode(roleCodeRaw);
+    const availableAssignments = await listAvailableAssignmentsForUser(user.id, {
+        propertyId: membership.tenantId ?? null,
+    });
+    let roleIdHint = membership.roleId ?? membership.role?.id;
+    if (!roleIdHint && membershipRoleCode(membership)) {
+        roleIdHint = await getRoleIdByCode(membershipRoleCode(membership));
     }
+    const activeAssignmentId =
+        (await resolveActiveAssignmentId(user.id, membership, roleIdHint)) ||
+        availableAssignments[0]?.id ||
+        null;
+    const { roleCode: sessionRole, roleId } = await resolveContextualSessionRole({
+        userId: user.id,
+        membership,
+        availableAssignments,
+        activeAssignmentId,
+    });
     const permissions = await accRuntime.resolvePermissionsForMembership({
         userId: user.id,
         membership,
         roleId,
-        roleCode: bestRole,
+        roleCode: sessionRole,
+        assignmentId: activeAssignmentId,
     });
 
     const newAccessToken = generateAccessToken({
         userId: user.id,
         tenantId: membership.tenantId,
-        role: bestRole,
+        role: sessionRole,
         email: user.email,
         ...(roleId ? { roleId } : {}),
+        ...(activeAssignmentId ? { assignmentId: activeAssignmentId } : {}),
         permissions,
         permissionVersion: user.permissionVersion ?? 0,
     });
@@ -991,7 +1032,7 @@ const getMe = async (userId, tenantId) => {
     if (tenantId) {
         const resolved = await resolveTenantMembership(prisma, userId, tenantId, {
             include: {
-                tenant: { select: { id: true, name: true, slug: true, logoUrl: true, parentId: true, timezone: true } },
+                tenant: { select: { id: true, name: true, slug: true, logoUrl: true, parentId: true, timezone: true, currency: true } },
                 role: { select: { id: true, code: true } },
             },
             attachTenant: true,
@@ -1005,7 +1046,7 @@ const getMe = async (userId, tenantId) => {
                 isActive: true,
             },
             include: {
-                tenant: { select: { id: true, name: true, slug: true, logoUrl: true, parentId: true, timezone: true } },
+                tenant: { select: { id: true, name: true, slug: true, logoUrl: true, parentId: true, timezone: true, currency: true } },
                 role: { select: { id: true, code: true } },
             },
         });
@@ -1017,34 +1058,49 @@ const getMe = async (userId, tenantId) => {
         });
     }
 
-    const rc = membershipRoleCode(membership);
-    const bestRole = await resolveUserBestRole(userId, rc);
-    let roleIdForPerm = membership.roleId ?? membership.role?.id;
-    if (bestRole) {
-        const bestRoleId = await getRoleIdByCode(bestRole);
-        if (bestRoleId) roleIdForPerm = bestRoleId;
+    const availableAssignments = await listAvailableAssignmentsForUser(userId, {
+        propertyId: membership.tenantId ?? null,
+    });
+    let roleIdHint = membership.roleId ?? membership.role?.id;
+    if (!roleIdHint && membershipRoleCode(membership)) {
+        roleIdHint = await getRoleIdByCode(membershipRoleCode(membership));
     }
+    const activeAssignmentId =
+        (await resolveActiveAssignmentId(userId, membership, roleIdHint)) ||
+        availableAssignments[0]?.id ||
+        null;
+    const { roleCode: contextualRole, roleId: roleIdForPerm } = await resolveContextualSessionRole({
+        userId,
+        membership,
+        availableAssignments,
+        activeAssignmentId,
+    });
     const permissions = await accRuntime.resolvePermissionsForMembership({
         userId,
         membership,
         roleId: roleIdForPerm,
-        roleCode: bestRole,
+        roleCode: contextualRole,
+        assignmentId: activeAssignmentId,
     });
 
-    const availableAssignments = await listAvailableAssignmentsForUser(userId, {
-        propertyId: membership.tenantId ?? null,
-    });
-    const activeAssignmentId = await resolveActiveAssignmentId(
-        userId,
-        membership,
-        roleIdForPerm,
-    );
+    const { getCurrencyPresentation } = require('../platform/displayCurrency.service');
+    let tenantPayload = membership.tenant || null;
+    if (tenantPayload) {
+        const currencyCtx = getCurrencyPresentation(tenantPayload.currency);
+        tenantPayload = {
+            ...tenantPayload,
+            currency: currencyCtx.currency,
+            currencySymbol: currencyCtx.symbol,
+            currencySymbolIso: currencyCtx.symbolIso,
+            displayCurrency: currencyCtx.displayCurrency,
+        };
+    }
 
     return {
         ...user,
-        role: bestRole,
+        role: contextualRole,
         permissions,
-        tenant: membership.tenant || null,
+        tenant: tenantPayload,
         departmentId: membership.departmentId ?? null,
         availableAssignments,
         activeAssignmentId,

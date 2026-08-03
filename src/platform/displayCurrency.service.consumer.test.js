@@ -21,9 +21,12 @@ test('displayCurrency.service — exports and signatures unchanged', () => {
         'SETTING_KEY',
         'DEFAULT_CURRENCY',
         'PRECISION_BY_CURRENCY',
+        'ALLOWED_CURRENCIES',
         'getDisplayCurrency',
         'setDisplayCurrency',
         'formatAmount',
+        'getTenantCurrencyContext',
+        'resolveCreateCurrency',
     ]) {
         assert.ok(key in svc, `export ${key} must exist`);
     }
@@ -31,6 +34,8 @@ test('displayCurrency.service — exports and signatures unchanged', () => {
     assert.equal(typeof svc.setDisplayCurrency, 'function');
     assert.equal(typeof svc.formatAmount, 'function');
     assert.equal(svc.formatAmount(10, 'SAR'), 'SAR 10.00');
+    assert.equal(svc.getCurrencyPresentation('EGP').symbol, 'ج.م');
+    assert.equal(svc.resolveCreateCurrency(undefined), 'SAR');
 });
 
 test('displayCurrency.service — module loads with shared client', () => {

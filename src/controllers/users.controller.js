@@ -126,6 +126,7 @@ const updateUser = async (req, res) => {
         req.params.id,
         req.body,
         req.user.id,
+        req.user.role,
     );
 
     await auditService.log({

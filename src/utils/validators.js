@@ -254,6 +254,10 @@ const createTenantValidator = [
     body('planType').optional().isIn(['BASIC', 'PRO', 'ENTERPRISE', 'CUSTOM']).withMessage('Invalid planType.'),
     body('hasBranches').optional().isBoolean().withMessage('hasBranches must be boolean.'),
     body('maxBranches').optional().isInt({ min: 0 }).withMessage('maxBranches must be a non-negative integer.'),
+    body('currency')
+        .optional()
+        .isIn(['SAR', 'EGP', 'USD', 'AED', 'QAR', 'KWD', 'BHD', 'OMR', 'EUR'])
+        .withMessage('currency must be one of SAR, EGP, USD, AED, QAR, KWD, BHD, OMR, EUR.'),
     body('adminUser.email').isEmail().withMessage('adminUser.email is required.').normalizeEmail(),
     body('adminUser.password').optional().isLength({ min: 8 }).withMessage('adminUser.password must be at least 8 characters.'),
     body('adminUser.firstName').optional().notEmpty().trim(),
@@ -292,6 +296,10 @@ const createSuperAdminTenantValidator = [
     body('licenseStartDate').optional().isISO8601().withMessage('licenseStartDate must be a valid ISO date.'),
     body('licenseEndDate').optional({ nullable: true }).isISO8601().withMessage('licenseEndDate must be a valid ISO date.'),
     body('maxUsers').optional().isInt({ min: 1 }).withMessage('maxUsers must be a positive integer.'),
+    body('currency')
+        .optional()
+        .isIn(['SAR', 'EGP', 'USD', 'AED', 'QAR', 'KWD', 'BHD', 'OMR', 'EUR'])
+        .withMessage('currency must be one of SAR, EGP, USD, AED, QAR, KWD, BHD, OMR, EUR.'),
     body('adminEmail').optional().isEmail().withMessage('adminEmail must be a valid email.').normalizeEmail(),
     body('adminPassword').optional().isLength({ min: 8 }).withMessage('adminPassword must be at least 8 characters.'),
     // Wizard / nested shape (alternative to flat adminEmail / adminPassword)
@@ -308,6 +316,10 @@ const createFullOrganizationValidator = [
     body('organization.slug').notEmpty().withMessage('organization.slug is required.').trim(),
     body('organization.maxBranches').optional().isInt({ min: 0 }).withMessage('organization.maxBranches must be >= 0.'),
     body('organization.email').optional().isEmail().withMessage('organization.email must be a valid email.').normalizeEmail(),
+    body('organization.currency')
+        .optional()
+        .isIn(['SAR', 'EGP', 'USD', 'AED', 'QAR', 'KWD', 'BHD', 'OMR', 'EUR'])
+        .withMessage('organization.currency must be a supported ISO currency code.'),
     // admin user
     body('adminUser.email').isEmail().withMessage('adminUser.email is required.').normalizeEmail(),
     body('adminUser.password').isLength({ min: 8 }).withMessage('adminUser.password must be at least 8 characters.'),
@@ -322,6 +334,10 @@ const createFullOrganizationValidator = [
     body('hotel.licenseStartDate').optional().isISO8601().withMessage('hotel.licenseStartDate must be a valid ISO date.'),
     body('hotel.licenseEndDate').optional({ nullable: true }).isISO8601().withMessage('hotel.licenseEndDate must be a valid ISO date.'),
     body('hotel.trialDays').optional().isInt({ min: 1, max: 365 }).withMessage('hotel.trialDays must be between 1 and 365.'),
+    body('hotel.currency')
+        .optional()
+        .isIn(['SAR', 'EGP', 'USD', 'AED', 'QAR', 'KWD', 'BHD', 'OMR', 'EUR'])
+        .withMessage('hotel.currency must be a supported ISO currency code.'),
     // Optional: distinct first-hotel admin (defaults to top-level adminUser when omitted)
     body('hotel.adminUser.email').optional().isEmail().withMessage('hotel.adminUser.email must be a valid email.').normalizeEmail(),
     body('hotel.adminUser.password').optional().isLength({ min: 8 }).withMessage('hotel.adminUser.password must be at least 8 characters.'),
